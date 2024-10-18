@@ -167,12 +167,13 @@ processResources {
     filterList.addAll(propertyStringList('mixin_configs').collect(config -> "mixins.${config}.json" as String))
 
     filesMatching(filterList) { fcd ->
+        def authors = propertyStringList('mod_authors', ',').join(', ')
         fcd.expand(
                 'mod_id': propertyString('mod_id'),
                 'mod_name': propertyString('mod_name'),
                 'mod_version': propertyString('mod_version'),
                 'mod_description': propertyString('mod_description'),
-                'mod_authors': "[${propertyStringList('mod_authors', ',').join(', ')}]",
+                'mod_authors': authors.isEmpty() ? "" : authors.substring(1, authors.length() - 1),
                 'mod_credits': propertyString('mod_credits'),
                 'mod_url': propertyString('mod_url'),
                 'mod_update_json': propertyString('mod_update_json'),

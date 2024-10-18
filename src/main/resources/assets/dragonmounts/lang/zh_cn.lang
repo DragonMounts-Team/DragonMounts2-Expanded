@@ -1,0 +1,213 @@
+# 简体中文 翻译
+
+# 由@Lintha暮辰 翻译（请以此翻译为准）
+itemGroup.maintab=龙骑士
+itemGroup.armorytab=龙骑士 装备
+
+##
+# 龙的名字
+##
+entity.DragonMount.name=龙
+
+entity.DragonMount.ice.name=冰龙
+entity.DragonMount.end.name=末影龙
+entity.DragonMount.ender.name=末影龙
+entity.DragonMount.aether.name=天境龙
+entity.DragonMount.forest.name=森林龙
+entity.DragonMount.sylphid.name=水龙
+entity.DragonMount.nether.name=下界龙
+entity.DragonMount.fire.name=火龙
+entity.DragonMount.skeleton.name=骷髅龙
+entity.DragonMount.wither.name=凋灵龙
+entity.DragonMount.enchant.name=魔法龙
+entity.DragonMount.sunlight.name=日光龙
+entity.DragonMount.storm.name=风暴龙
+entity.DragonMount.zombie.name=僵尸龙
+entity.DragonMount.terra.name=土龙
+entity.DragonMount.moonlight.name=月光龙
+
+entity.DragonMount.albino.ice.name=白化的冰龙
+entity.DragonMount.albino.ender.name=白化的末影龙
+entity.DragonMount.albino.aether.name=白化的天境龙
+entity.DragonMount.albino.forest.name=白化的森林龙
+entity.DragonMount.albino.sylphid.name=白化的水龙
+entity.DragonMount.albino.nether.name=白化的下界龙
+entity.DragonMount.albino.fire.name=白化的火龙
+entity.DragonMount.albino.skeleton.name=白化的骷髅龙
+entity.DragonMount.albino.wither.name=白化的凋灵龙
+entity.DragonMount.albino.enchant.name=白化的魔法龙
+entity.DragonMount.albino.sunlight.name=白化的日光龙
+entity.DragonMount.albino.storm.name=白化的风暴龙
+entity.DragonMount.albino.zombie.name=白化的僵尸龙
+entity.DragonMount.albino.terra.name=白化的土龙
+entity.DragonMount.albino.moonlight.name=白化的月光龙
+
+entity.DragonMounts.dragon.ice.name=冰龙
+entity.DragonMounts.dragon.ender.name=末影龙
+entity.DragonMounts.dragon.aether.name=天境龙
+entity.DragonMounts.dragon.forest.name=森林龙
+entity.DragonMounts.dragon.sylphid.name=水龙
+entity.DragonMounts.dragon.nether.name=下界龙
+entity.DragonMounts.dragon.fire.name=火龙
+entity.DragonMounts.dragon.skeleton.name=骷髅龙
+entity.DragonMounts.dragon.wither.name=凋灵龙
+entity.DragonMounts.dragon.enchant.name=魔法龙
+entity.DragonMounts.dragon.sunlight.name=日光龙
+entity.DragonMounts.dragon.storm.name=风暴龙
+entity.DragonMounts.dragon.zombie.name=僵尸龙
+entity.DragonMounts.dragon.terra.name=土龙
+entity.DragonMounts.dragon.moonlight.name=月光龙
+
+
+#属性品种
+dragon.forest=森林
+dragon.forest2=森林
+dragon.aether=天境
+dragon.ice=冰属
+dragon.sylphid=水属
+dragon.water=水属
+dragon.fire=火属
+dragon.fire2=火属
+dragon.skeleton=骷髅
+dragon.wither=凋灵
+dragon.nether=下界
+dragon.nether2=下界
+dragon.end=末影
+dragon.ender=末影
+dragon.enchant=魔法
+dragon.sunlight=日光
+dragon.sunlight2=日光
+dragon.moonlight=月光
+dragon.storm=风暴
+dragon.storm2=风暴
+dragon.zombie=僵尸
+dragon.terra=土属
+dragon.terra2=土属
+
+#阶段
+dragon.egg=蛋
+dragon.hatchling=孵化
+dragon.juvenile=幼年
+dragon.adult=成年
+
+
+##
+# 物品名字
+##
+item.diamond_shears.name=钻石剪刀
+item.dragonEgg.name=%s 蛋
+item.dragon_gender.name=龙性别宝石
+item.gui.dragon_gender=用宝石右键单击已驯服的龙将转换其性别
+item.summon_egg.name=生成龙
+item.dragon_essence.name=龙精华
+item.dragon_whistle.name=龙哨
+item.dragon_amulet.name=龙护符
+item.dragon_orb.name=龙宝珠
+
+item.carriage_oak.name=橡木运载坐垫
+item.carriage_birch.name=桦木运载坐垫
+item.carriage_spruce.name=云杉木运载坐垫
+item.carriage_acacia.name=金合欢木运载坐垫
+item.carriage_dark_oak.name=深色橡木运载坐垫
+item.carriage_jungle.name=丛林木运载坐垫
+
+# 模组相关物品
+item.dragonscales.name=龙鳞
+item.dragon_sword.name=龙鳞剑
+item.dragon_pickaxe.name=龙鳞镐
+item.dragon_axe.name=龙鳞斧
+item.dragon_shovel.name=龙鳞锹
+item.dragon_hoe.name=龙鳞锄
+item.dragon_shield.name=龙鳞盾
+item.dragon_bow.name=龙鳞弓
+item.dragonscale_head.name=龙鳞头盔
+item.dragonscale_chest.name=龙鳞胸甲
+item.dragonscale_legs.name=龙鳞护腿
+item.dragonscale_feet.name=龙鳞靴子
+item.dragonarmor_iron.name=铁龙铠
+item.dragonarmor_gold.name=金龙铠
+item.dragonarmor_diamond.name=钻石龙铠
+item.dragonarmor_emerald.name=绿宝石龙铠
+
+# 方块名字
+tile.pileofsticks.name=龙巢方块
+tile.block_dragon_shulker.name=龙核心
+
+tile.storm_egg.name=风暴龙 蛋
+tile.end_egg.name=末影龙 蛋
+tile.zombie_egg.name=僵尸龙 蛋
+tile.sylphid_egg.name=水龙 蛋
+tile.nether_egg.name=下界龙 蛋
+tile.forest_egg.name=森林龙 蛋
+tile.aether_egg.name=天境龙 蛋
+tile.ice_egg.name=冰龙 蛋
+tile.fire_egg.name=火龙 蛋
+tile.skeleton_egg.name=骷髅龙 蛋
+tile.wither_egg.name=凋灵龙 蛋
+tile.enchant_egg.name=魔法龙 蛋
+tile.sunlight_egg.name=日光龙 蛋
+tile.moonlight_egg.name=月光龙 蛋
+tile.terra_egg.name=土龙 蛋
+
+# 物品信息
+item.removeNBT=<潜行+右键 解除绑定一条龙>
+item.armoryitems.info=用龙鳞锻造
+item.diamondshears.info=用于从驯服的龙身上获取龙鳞而不杀死它，野生的会攻击
+item.dragonamulet.info=右键储存一条被驯化过的龙并携带它，并可以通过右键点击地面重新召唤
+item.carriage.info=让龙像一艘船一样携带多个生物
+item.whistle.info=左键单击绑定驯服的龙并通过右键使用此物品来控制它，不必担心左键绑定时会伤害到你的龙
+item.whistle.nullBlockPos=无法传送到那里
+
+
+##
+# 提示信息
+##
+dragon.locked=此龙已被主人锁定
+dragon.notTamed=用生肉或生鱼驯服龙
+dragon.notOwned=你不是这条龙的主人
+entity.dragon.tooYoung=龙年龄太小，让它继续生长吧
+egg.cantHatchEnd.DragonMounts=龙蛋无法在末地孵化
+dragon.growth.paused=使用毒马铃薯阻止龙生长，或使用胡萝卜使龙继续生长
+commands.dragon.nodragons=附近没有龙
+commands.dragon.canttame=你不能驯服龙
+msg.dragon.toggleHover=龙悬停切换
+msg.dragon.toggleFollowYaw=实时跟随玩家视角切换
+msg.dragon.toggleYLock=旧操纵切换（空格和左ALT）
+
+# 龙哨
+whistle.msg.cleared=龙已解除绑定
+whistle.msg.hasDragon=龙已成功绑定该龙哨
+whistle.msg.unBound=该龙哨没有绑定过龙，你必须先绑定一条龙
+whistle.msg.notOwned=你不是这条龙的主人
+whistle.msg.noDragon=龙哨未绑定龙，请先左键点击驯服的龙以完成绑定
+whistle.msg.fail=龙距离您过远，听不到您的哨声
+whistle.command.new_home=新家位置
+
+
+##
+# UI内容
+##
+gui.nothing=未知
+gui.circle=玩家界限（Circle Player）
+gui.followFlying=跟随飞行
+gui.cometoPlayer=传送至玩家身边
+gui.locked.dragon=上锁
+gui.unlocked.dragon=解锁
+gui.sit=坐下
+gui.firesupport=火力支援（Fire Support）
+gui.dragon.hunger=饥饿
+container.dragon_shulker=龙核心
+
+#操纵
+key.categories.dragon=龙骑士
+key.dragon.projectile=未经使用的（UNUSED）
+key.dragon.flyUp=向上飞
+key.dragon.flyDown=向下飞
+key.dragon.breath=龙息
+key.dragon.cancelhover=取消悬停
+key.dragon.f7=更换骑乘摄像机位置
+key.dragon.followYaw=实时跟随玩家视角
+key.dragon.boost=飞行助推
+key.dragon.dismount=肩部卸下（Shoulder Dismount）
+key.dragon.lockY=旧操纵（Old Controls）
+key.dragon.down=下（Down）
