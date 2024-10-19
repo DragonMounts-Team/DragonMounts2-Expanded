@@ -5,6 +5,8 @@ import com.gtnewhorizons.retrofuturagradle.mcp.InjectTagsTask
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.gradle.ext.Gradle
 
+import java.util.regex.Pattern
+
 plugins {
     id 'java'
     id 'java-library'
@@ -182,11 +184,19 @@ processResources {
                 'mixin_package': propertyString('mixin_package')
         )
     }
-    
-    if (propertyBool('use_access_transformer')) {
-        rename '(.+_at.cfg)', 'META-INF/$1'
-    }
 
+    if (propertyBool('use_access_transformer')) {
+        def name = "${propertyString('mod_id')}_at.cfg"
+        exclude name
+        doLast {
+            def meta = project.layout.buildDirectory.get().dir("resources").dir("main").dir("META-INF").asFile
+            meta.mkdirs()
+            def cfg = new File(meta, name)
+            def text = file("src/main/resources/${name}").text
+            def matcher = Pattern.compile('\\s*#\\s?DECOMPILE ONLY:').matcher(text)
+            cfg.text = text.substring(0, matcher.find() ? matcher.start() : text.length())
+        }
+    }
 }
 
 jar {
@@ -200,10 +210,10 @@ jar {
                 if (currentTasks[0] == 'build' || currentTasks[0] == 'prepareObfModsFolder' || currentTasks[0] == 'runObfClient') {
                     attribute_map['ForceLoadAsMod'] = true
                 }
-            }
+        }
         }
         if (propertyBool('use_access_transformer')) {
-            attribute_map['FMLAT'] = propertyString('access_transformer_locations')
+            attribute_map['FMLAT'] = "${propertyString('mod_id')}_at.cfg"
         }
         attributes(attribute_map)
     }

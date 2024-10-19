@@ -34,7 +34,6 @@ import com.TheRPGAdventurer.ROTD.objects.items.ItemDragonEssence;
 import com.TheRPGAdventurer.ROTD.objects.tileentities.TileEntityDragonShulker;
 import com.TheRPGAdventurer.ROTD.util.DMUtils;
 import com.TheRPGAdventurer.ROTD.util.math.MathX;
-import com.TheRPGAdventurer.ROTD.util.reflection.PrivateAccessor;
 import com.google.common.base.Optional;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -94,7 +93,7 @@ import static net.minecraft.entity.SharedMonsterAttributes.FOLLOW_RANGE;
 /**
  * Here be dragons
  */
-public class EntityTameableDragon extends EntityTameable implements IShearable, PrivateAccessor {
+public class EntityTameableDragon extends EntityTameable implements IShearable {
 
     // base attributes
     public static final double BASE_GROUND_SPEED = 0.4;

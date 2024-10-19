@@ -1,11 +1,9 @@
 package com.TheRPGAdventurer.ROTD.objects.items.gemset.armorset;
 
-import java.lang.reflect.Method;
 import java.util.Random;
 
 import com.TheRPGAdventurer.ROTD.inits.ModArmour;
 import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
-import com.google.common.base.Throwables;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,7 +15,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public class DragonArmourEnchant extends DragonArmourBase {
 	
@@ -48,27 +45,12 @@ public class DragonArmourEnchant extends DragonArmourBase {
 	public static class ArmourXPBonus {
 		@SubscribeEvent
 		public static void handleXPDrops(LivingDeathEvent event) {
-				System.out.println("test");
 			if (!check) return;
 			EntityLivingBase target = event.getEntityLiving();
 			if (target.world.isRemote) return;
 			Entity source = event.getSource().getTrueSource();
-			if (target == null || source == null) return;
 			if (!(source instanceof EntityPlayer)) return;
-			
-			target.world.spawnEntity(new EntityXPOrb(target.world, target.posX, target.posY, target.posZ, getValue((EntityPlayer) source, target)));
-		}
-		
-		private static final Method getExperiencePoints = ReflectionHelper.findMethod(EntityLivingBase.class, "getExperiencePoints", "func_70693_a", EntityPlayer.class);
-		
-		@SuppressWarnings("deprecation")
-		private static int getValue(EntityPlayer player, EntityLivingBase target) {
-			try {
-				int xp = (int) getExperiencePoints.invoke(target, player);
-				return Math.round(xp * ((float) Math.log10(3 + 1) * 2));
-			} catch (Exception e) { Throwables.propagate(e); }
-			return 0;
+			target.world.spawnEntity(new EntityXPOrb(target.world, target.posX, target.posY, target.posZ, Math.round(target.getExperiencePoints((EntityPlayer) source) * ((float) Math.log10(3 + 1) * 2))));
 		}
 	}
-	
 }

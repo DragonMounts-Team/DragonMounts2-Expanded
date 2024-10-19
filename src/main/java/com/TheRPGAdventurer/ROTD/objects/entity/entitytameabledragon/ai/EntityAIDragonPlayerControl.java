@@ -12,7 +12,6 @@ package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.ai;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import com.TheRPGAdventurer.ROTD.util.math.MathX;
-import com.TheRPGAdventurer.ROTD.util.reflection.PrivateAccessor;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.Vec3d;
@@ -22,7 +21,7 @@ import net.minecraft.util.math.Vec3d;
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class EntityAIDragonPlayerControl extends EntityAIDragonBase implements PrivateAccessor {
+public class EntityAIDragonPlayerControl extends EntityAIDragonBase {
 
     public EntityAIDragonPlayerControl(EntityTameableDragon dragon) {
         super(dragon);
@@ -86,7 +85,7 @@ public class EntityAIDragonPlayerControl extends EntityAIDragonBase implements P
             }
 
 //         lift off from a jump
-            if (entityIsJumping(rider)) {
+            if (rider.isJumping) {
                 if (!dragon.isFlying()) {
                     dragon.liftOff();
                 } else {

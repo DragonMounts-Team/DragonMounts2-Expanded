@@ -1,14 +1,13 @@
 package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper;
 
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
-import com.TheRPGAdventurer.ROTD.util.reflection.PrivateAccessor;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.util.math.Vec3d;
 
 import static net.minecraft.entity.SharedMonsterAttributes.MOVEMENT_SPEED;
 
-public class DragonMoveHelper extends EntityMoveHelper implements PrivateAccessor {
+public class DragonMoveHelper extends EntityMoveHelper {
 
     private final EntityTameableDragon dragon;
     private static int YAW_SPEED = 5;

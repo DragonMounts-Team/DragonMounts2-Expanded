@@ -4,7 +4,6 @@ import com.TheRPGAdventurer.ROTD.DragonMountsConfig;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathAffectedBlock;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathAffectedEntity;
-import com.TheRPGAdventurer.ROTD.util.reflection.PrivateAccessor;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -38,7 +37,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * Currently does fire only.  Intended to be subclassed later on for different weapon types.
  */
-public class BreathWeaponNether extends BreathWeapon implements PrivateAccessor {
+public class BreathWeaponNether extends BreathWeapon {
 	
   public BreathWeaponNether(EntityTameableDragon dragon) {
     super(dragon);

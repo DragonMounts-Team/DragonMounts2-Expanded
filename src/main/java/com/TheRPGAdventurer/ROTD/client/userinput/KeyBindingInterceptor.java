@@ -26,26 +26,13 @@ package com.TheRPGAdventurer.ROTD.client.userinput;
 *    (b) Will not work in GUI
  */
 
-import com.TheRPGAdventurer.ROTD.DragonMounts;
-import com.google.common.base.Throwables;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.lang.reflect.Field;
-import java.util.Map;
-import com.google.common.collect.Maps;
-import org.lwjgl.input.Keyboard;
 
 @SideOnly(Side.CLIENT)
 public class KeyBindingInterceptor extends KeyBinding
 {
-  private static final Field keybindArrayField = ReflectionHelper.findField(KeyBinding.class, "KEYBIND_ARRAY", "field_74516_a");
-  private static final Field keyCodeField = ReflectionHelper.findField(KeyBinding.class, "keyCode", "field_74512_d");
-  private static final Field pressedField = ReflectionHelper.findField(KeyBinding.class, "pressed", "field_74513");
-  private static final Field pressTimeField = ReflectionHelper.findField(KeyBinding.class, "pressTime", "field_151474_i");
-
   /**
    *  Create an Interceptor based on an existing binding.
    *  The initial interception mode is OFF.
@@ -55,19 +42,6 @@ public class KeyBindingInterceptor extends KeyBinding
   public KeyBindingInterceptor(KeyBinding existingKeyBinding)
   {
     super(existingKeyBinding.getKeyDescription(), existingKeyBinding.getKeyCode(), existingKeyBinding.getKeyCategory());
-    try {
-      // the base constructor automatically adds the class to the keybindArray and hash, which we don't want, so undo it
-//      Map<String, KeyBinding> reflectkeybindArray = (Map<String, KeyBinding>)keybindArrayField.get(this);
-//      reflectkeybindArray.remove(existingKeyBinding.getKeyDescription());
-
-      pressedField.setBoolean(this, false);
-      pressTimeField.setInt(this, 0);
-//      this.pressed = false;
-//      this.pressTime = 0;
-
-    } catch (Exception e) {
-      throw Throwables.propagate(e);
-    }
     this.interceptionActive = false;
 
     if (existingKeyBinding instanceof KeyBindingInterceptor) {
@@ -82,11 +56,7 @@ public class KeyBindingInterceptor extends KeyBinding
   public void setInterceptionActive(boolean newMode)
   {
     if (newMode && !interceptionActive) {
-      try {
-        pressTimeField.setInt(this, 0);
-      } catch (Exception e) {
-        throw Throwables.propagate(e);
-      }
+      this.pressTime = 0;
     }
     interceptionActive = newMode;
   }
@@ -97,11 +67,11 @@ public class KeyBindingInterceptor extends KeyBinding
   @Override
   public boolean isKeyDown()
   {
-    copyKeyCodeToOriginal();
 //    DragonMounts.logger.info("isKeyDown:"+ super.isKeyDown());
     if (interceptionActive) {
       return false;
     } else {
+      copyKeyCodeToOriginal();
       return super.isKeyDown();
     }
   }
@@ -227,19 +197,10 @@ public class KeyBindingInterceptor extends KeyBinding
 //    }
 //  }
 
-  protected void copyKeyCodeToOriginal()
-  {
-    try {
-      // only copy if necessary
-//      if (this.keyCode != interceptedKeyBinding.keyCode) {
-//        this.keyCode = interceptedKeyBinding.keyCode;
-      if (keyCodeField.getInt(this) != keyCodeField.getInt(interceptedKeyBinding)) {
-        keyCodeField.setInt(this, keyCodeField.getInt(interceptedKeyBinding));
+  protected void copyKeyCodeToOriginal() {
+      if (this.keyCode != interceptedKeyBinding.keyCode) {
+        this.keyCode = interceptedKeyBinding.keyCode;
         resetKeyBindingArrayAndHash();
       }
-    } catch (Exception e) {
-      Throwables.propagate(e);
-    }
   }
-
 }
