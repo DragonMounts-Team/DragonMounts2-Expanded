@@ -10,6 +10,7 @@
 package com.TheRPGAdventurer.ROTD.client.gui;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.dragonmounts.Tags;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonBreedHelper;
@@ -161,7 +162,7 @@ public class GuiDragonDebug extends Gui {
     }
 
     private void renderTitle() {
-        String title = String.format("%s %s Debug", DragonMounts.NAME,
+        String title = String.format("%s %s Debug", Tags.MOD_NAME,
                 DragonMounts.instance.getMetadata().version);
         
         text.setOrigin(16, 8);

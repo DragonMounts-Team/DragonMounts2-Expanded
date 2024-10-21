@@ -6,13 +6,10 @@ import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTamea
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import com.TheRPGAdventurer.ROTD.objects.items.entity.EntityDragonAmulet;
 import com.TheRPGAdventurer.ROTD.util.IHasModel;
-import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -20,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Dragon Amulet Item for the use of carrying dragons in an item <p>
@@ -72,17 +70,7 @@ public class ItemDragonAmulet extends Item implements IHasModel {
 	@Nonnull
 	@Override
 	public Entity createEntity(World world, Entity location, ItemStack itemstack) {
-		EntityItem entity = new EntityDragonAmulet(world, location.posX, location.posY, location.posZ, itemstack);
-		if (location instanceof EntityItem) {
-			// workaround for private access on that field >_>
-			NBTTagCompound tag = new NBTTagCompound();
-			location.writeToNBT(tag);
-			entity.setPickupDelay(tag.getShort("PickupDelay"));
-		}
-		entity.motionX = location.motionX;
-		entity.motionY = location.motionY;
-		entity.motionZ = location.motionZ;
-		return entity;
+		return new EntityDragonAmulet(world, location, itemstack);
 	}
 
 	@Override

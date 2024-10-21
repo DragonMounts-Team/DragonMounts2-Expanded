@@ -29,10 +29,15 @@ public enum EnumItemBreedTypes {
 	//LIGHT(TextFormatting.GRAY);
 	//DARK(TextFormatting.GRAY);
 	//Specter(TextFormatting.WHITE);
-	
-	public TextFormatting color;
-	
-	private EnumItemBreedTypes(TextFormatting color) {
+
+	public final TextFormatting color;
+	public final String identifier;
+	public final String translationKey;
+
+	EnumItemBreedTypes(TextFormatting color) {
 		this.color = color;
+		String identifier = this.name().toLowerCase();
+		this.identifier = identifier;
+		this.translationKey = "dragon." + identifier;
 	}
 }

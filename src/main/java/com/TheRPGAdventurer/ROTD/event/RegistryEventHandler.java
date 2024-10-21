@@ -2,17 +2,14 @@ package com.TheRPGAdventurer.ROTD.event;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
 import com.TheRPGAdventurer.ROTD.client.gui.GuiHandler;
-import com.TheRPGAdventurer.ROTD.inits.ModArmour;
-import com.TheRPGAdventurer.ROTD.inits.ModBlocks;
-import com.TheRPGAdventurer.ROTD.inits.ModItems;
-import com.TheRPGAdventurer.ROTD.inits.ModTools;
+import com.TheRPGAdventurer.ROTD.inits.*;
 import com.TheRPGAdventurer.ROTD.objects.blocks.BlockDragonBreedEgg;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import com.TheRPGAdventurer.ROTD.objects.items.ItemDragonBreedEgg;
 import com.TheRPGAdventurer.ROTD.objects.tileentities.TileEntityHandler;
+import com.TheRPGAdventurer.ROTD.registry.CooldownCategory;
 import com.TheRPGAdventurer.ROTD.util.DMUtils;
 import com.TheRPGAdventurer.ROTD.util.IHasModel;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -23,6 +20,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
 
 @Mod.EventBusSubscriber
 public class RegistryEventHandler {
@@ -54,7 +52,19 @@ public class RegistryEventHandler {
 	public static void registerDragonnEggBlock(RegistryEvent.Register<Block> event) {
 		event.getRegistry().register(BlockDragonBreedEgg.DRAGON_BREED_EGG.setRegistryName("dragon_egg"));
 	}
-    
+
+    @SubscribeEvent
+    public static void registerCooldownCategory(RegistryEvent.Register<CooldownCategory> event) {
+        IForgeRegistry<CooldownCategory> registry = event.getRegistry();
+        registry.register(DMArmorEffects.AETHER_EFFECT.setRegistryName("aether"));
+        registry.register(DMArmorEffects.ENDER_EFFECT.setRegistryName("ender"));
+        registry.register(DMArmorEffects.FIRE_EFFECT.setRegistryName("fire"));
+        registry.register(DMArmorEffects.FOREST_EFFECT.setRegistryName("forest"));
+        registry.register(DMArmorEffects.ICE_EFFECT.setRegistryName("ice"));
+        registry.register(DMArmorEffects.NETHER_EFFECT.setRegistryName("nether"));
+        registry.register(DMArmorEffects.SUNLIGHT_EFFECT.setRegistryName("sunlight"));
+        registry.register(DMArmorEffects.ZOMBIE_EFFECT.setRegistryName("zombie"));
+    }
 
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {

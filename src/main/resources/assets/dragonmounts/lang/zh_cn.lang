@@ -1,12 +1,6 @@
-# 简体中文 翻译
-
-# 由@Lintha暮辰 翻译（请以此翻译为准）
 itemGroup.maintab=龙骑士
-itemGroup.armorytab=龙骑士 装备
+itemGroup.armorytab=龙骑士：装备
 
-##
-# 龙的名字
-##
 entity.DragonMount.name=龙
 
 entity.DragonMount.ice.name=冰龙
@@ -90,10 +84,6 @@ dragon.hatchling=孵化
 dragon.juvenile=幼年
 dragon.adult=成年
 
-
-##
-# 物品名字
-##
 item.diamond_shears.name=钻石剪刀
 item.dragonEgg.name=%s 蛋
 item.dragon_gender.name=龙性别宝石
@@ -104,14 +94,13 @@ item.dragon_whistle.name=龙哨
 item.dragon_amulet.name=龙护符
 item.dragon_orb.name=龙宝珠
 
-item.carriage_oak.name=橡木运载坐垫
-item.carriage_birch.name=桦木运载坐垫
-item.carriage_spruce.name=云杉木运载坐垫
-item.carriage_acacia.name=金合欢木运载坐垫
-item.carriage_dark_oak.name=深色橡木运载坐垫
-item.carriage_jungle.name=丛林木运载坐垫
+item.carriage_oak.name=橡木货物装载箱
+item.carriage_birch.name=桦木货物装载箱
+item.carriage_spruce.name=云杉木货物装载箱
+item.carriage_acacia.name=金合欢木货物装载箱
+item.carriage_dark_oak.name=深色橡木货物装载箱
+item.carriage_jungle.name=丛林木货物装载箱
 
-# 模组相关物品
 item.dragonscales.name=龙鳞
 item.dragon_sword.name=龙鳞剑
 item.dragon_pickaxe.name=龙鳞镐
@@ -124,12 +113,11 @@ item.dragonscale_head.name=龙鳞头盔
 item.dragonscale_chest.name=龙鳞胸甲
 item.dragonscale_legs.name=龙鳞护腿
 item.dragonscale_feet.name=龙鳞靴子
+item.dragonarmor_diamond.name=钻石龙铠
 item.dragonarmor_iron.name=铁龙铠
 item.dragonarmor_gold.name=金龙铠
-item.dragonarmor_diamond.name=钻石龙铠
 item.dragonarmor_emerald.name=绿宝石龙铠
 
-# 方块名字
 tile.pileofsticks.name=龙巢方块
 tile.block_dragon_shulker.name=龙核心
 
@@ -149,8 +137,7 @@ tile.sunlight_egg.name=日光龙 蛋
 tile.moonlight_egg.name=月光龙 蛋
 tile.terra_egg.name=土龙 蛋
 
-# 物品信息
-item.removeNBT=<潜行+右键 解除绑定一条龙>
+item.removeNBT=<潜行+右键以解除绑定>
 item.armoryitems.info=用龙鳞锻造
 item.diamondshears.info=用于从驯服的龙身上获取龙鳞而不杀死它，野生的会攻击
 item.dragonamulet.info=右键储存一条被驯化过的龙并携带它，并可以通过右键点击地面重新召唤
@@ -158,10 +145,6 @@ item.carriage.info=让龙像一艘船一样携带多个生物
 item.whistle.info=左键单击绑定驯服的龙并通过右键使用此物品来控制它，不必担心左键绑定时会伤害到你的龙
 item.whistle.nullBlockPos=无法传送到那里
 
-
-##
-# 提示信息
-##
 dragon.locked=此龙已被主人锁定
 dragon.notTamed=用生肉或生鱼驯服龙
 dragon.notOwned=你不是这条龙的主人
@@ -171,43 +154,37 @@ dragon.growth.paused=使用毒马铃薯阻止龙生长，或使用胡萝卜使�
 commands.dragon.nodragons=附近没有龙
 commands.dragon.canttame=你不能驯服龙
 msg.dragon.toggleHover=龙悬停切换
-msg.dragon.toggleFollowYaw=实时跟随玩家视角切换
-msg.dragon.toggleYLock=旧操纵切换（空格和左ALT）
+msg.dragon.toggleFollowYaw=龙跟随偏航
+msg.dragon.toggleYLock=旧操纵（空格和左ALT）
 
-# 龙哨
 whistle.msg.cleared=龙已解除绑定
-whistle.msg.hasDragon=龙已成功绑定该龙哨
-whistle.msg.unBound=该龙哨没有绑定过龙，你必须先绑定一条龙
+whistle.msg.hasDragon=龙已成功绑定该哨子
+whistle.msg.unBound=该哨子没有绑定过龙，你必须先绑定一条龙
 whistle.msg.notOwned=你不是这条龙的主人
 whistle.msg.noDragon=龙哨未绑定龙，请先左键点击驯服的龙以完成绑定
-whistle.msg.fail=龙距离您过远，听不到您的哨声
+whistle.msg.fail=龙距离您过远，听不到您的哨声……
 whistle.command.new_home=新家位置
 
-
-##
-# UI内容
-##
 gui.nothing=未知
-gui.circle=玩家界限（Circle Player）
+gui.circle=玩家界限
 gui.followFlying=跟随飞行
 gui.cometoPlayer=传送至玩家身边
 gui.locked.dragon=上锁
 gui.unlocked.dragon=解锁
 gui.sit=坐下
-gui.firesupport=火力支援（Fire Support）
+gui.firesupport=火力支援
 gui.dragon.hunger=饥饿
 container.dragon_shulker=龙核心
 
-#操纵
 key.categories.dragon=龙骑士
-key.dragon.projectile=未经使用的（UNUSED）
+key.dragon.projectile=未经使用的
 key.dragon.flyUp=向上飞
 key.dragon.flyDown=向下飞
 key.dragon.breath=龙息
 key.dragon.cancelhover=取消悬停
-key.dragon.f7=更换骑乘摄像机位置
-key.dragon.followYaw=实时跟随玩家视角
-key.dragon.boost=飞行助推
+key.dragon.f7=更换骑乘视角
+key.dragon.followYaw=跟随玩家视角
+key.dragon.boost=飞行加速
 key.dragon.dismount=肩部卸下（Shoulder Dismount）
 key.dragon.lockY=旧操纵（Old Controls）
-key.dragon.down=下（Down）
+key.dragon.down=下

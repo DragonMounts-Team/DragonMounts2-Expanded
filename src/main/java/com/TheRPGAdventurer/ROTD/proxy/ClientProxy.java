@@ -26,8 +26,6 @@ import com.TheRPGAdventurer.ROTD.objects.entity.entitycarriage.EntityCarriage;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.effects.*;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
-import com.TheRPGAdventurer.ROTD.objects.items.entity.EntityDragonAmulet;
-import com.TheRPGAdventurer.ROTD.objects.items.gemset.armorset.DragonArmourEnchant;
 import com.TheRPGAdventurer.ROTD.objects.tileentities.TileEntityDragonShulker;
 import com.TheRPGAdventurer.ROTD.util.debugging.StartupDebugClientOnly;
 import net.minecraft.client.Minecraft;
@@ -159,9 +157,7 @@ public class ClientProxy extends ServerProxy {
 
         MinecraftForge.EVENT_BUS.register(new ModKeys());
         MinecraftForge.EVENT_BUS.register(new DragonViewEvent());
-        MinecraftForge.EVENT_BUS.register(new DragonArmourEnchant.ArmourXPBonus());
         MinecraftForge.EVENT_BUS.register(new RenderDM2Cape());
-        MinecraftForge.EVENT_BUS.register(EntityDragonAmulet.EventHandler.instance);
     }
 
     @SideOnly(Side.CLIENT)

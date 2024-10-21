@@ -52,8 +52,10 @@ import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.ContainerHorseChest;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -80,7 +82,6 @@ import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.EnumUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -2157,6 +2158,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
         }
     }
 
+    @Deprecated
     public static boolean hasInteractItemsEquipped(EntityPlayer player) {
         return DMUtils.hasEquippedUsable(player)
                 || DMUtils.hasEquipped(player, ModTools.diamond_shears)
@@ -2165,7 +2167,20 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
                 || DMUtils.hasEquipped(player, ModItems.Amulet)
                 || DMUtils.hasEquipped(player, Items.BONE)
                 || DMUtils.hasEquipped(player, Items.STICK)
-                || DMUtils.hasEquippedFood(player);
+                || player.getHeldItemMainhand().getItem() instanceof ItemFood;
+    }
+
+    public static boolean isNonInteractableItem(EntityPlayer player, EntityEquipmentSlot slot) {
+        ItemStack stack = player.getItemStackFromSlot(slot);
+        if (stack.isEmpty()) return true;
+        if (stack.getItemUseAction() != EnumAction.NONE) return false;
+        Item item = stack.getItem();
+        if (ModItems.DRAGON_INTERACTABLE.contains(item)) return false;
+        return !(item instanceof ItemFood);
+    }
+
+    public static boolean hasNoInteractableItems(EntityPlayer player) {
+        return isNonInteractableItem(player, EntityEquipmentSlot.MAINHAND) && isNonInteractableItem(player, EntityEquipmentSlot.OFFHAND);
     }
 
     /**
@@ -2185,10 +2200,12 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
             return true;
         }
 
+        boolean allow = isAllowed(player);
+
         /*
          * Dragon Riding The Player
          */
-        if (isAllowed(player) && !isSitting() && this.isBaby() && !hasInteractItemsEquipped(player) && !player.isSneaking() && player.getPassengers().size() < 3) {
+        if (allow && !isSitting() && this.isBaby() && hasNoInteractableItems(player) && !player.isSneaking() && player.getPassengers().size() < 3) {
             this.setAttackTarget(null);
             this.getNavigator().clearPath();
             this.getAISit().setSitting(false);
@@ -2200,18 +2217,18 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
         if (player.isPassenger(this)) return false;
 
         if (this.isServer() && !this.isEgg()) {
-            if (isAllowed(player)) {
+            if (allow) {
                 /*
                  * Player Riding the Dragon
                  */
-                if (this.isTamed() && this.isSaddled() && (this.isAdult() || this.isJuvenile()) && !player.isSneaking() && !hasInteractItemsEquipped(player) && this.getPassengers().size() < 3) {
+                if (this.isTamed() && this.isSaddled() && (this.isAdult() || this.isJuvenile()) && !player.isSneaking() && hasNoInteractableItems(player) && this.getPassengers().size() < 3) {
                     this.setRidingPlayer(player);
                 }
 
                 /*
                  * GUI
                  */
-                if (player.isSneaking() && !hasInteractItemsEquipped(player)) {
+                if (player.isSneaking() && hasNoInteractableItems(player)) {
                     // Dragon Inventory
                     this.openGUI(player, GuiHandler.GUI_DRAGON);
                 }
@@ -2229,69 +2246,66 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
         /*
          * Consume
          */
-        if (stack != null && !stack.isEmpty() && stack.getItem() instanceof ItemFood) {
-            ItemFood food = (ItemFood) stack.getItem();
-            if (food.isWolfsFavoriteMeat() ||
-                    DMUtils.hasEquipped(player, Items.PORKCHOP) ||
-                    DMUtils.hasEquipped(player, Items.COOKED_PORKCHOP) ||
-                    DMUtils.hasEquipped(player, Items.BEEF) ||
-                    DMUtils.hasEquipped(player, Items.CHICKEN) ||
-                    DMUtils.hasEquipped(player, Items.COOKED_CHICKEN) ||
-                    DMUtils.hasEquipped(player, Items.COOKED_BEEF) ||
-                    DMUtils.hasEquipped(player, Items.RABBIT) ||
-                    DMUtils.hasEquipped(player, Items.COOKED_RABBIT) ||
-                    DMUtils.hasEquipped(player, Items.MUTTON) ||
-                    DMUtils.hasEquipped(player, Items.COOKED_MUTTON) ||
-                    DMUtils.hasEquipped(player, Items.FISH) ||
-                    DMUtils.hasEquipped(player, Items.COOKED_FISH) ||
-                    DMUtils.hasEquipped(player, Items.ROTTEN_FLESH) ||
-                    DMUtils.hasEquippedOreDicFish(player)) {
-
-                // Taming
-                if (!this.isTamed()) {
-                    consumeItemFromStack(player, stack);
-                    eatEvent(stack.getItem());
-                    tamedFor(player, this.getRNG().nextInt(4) == 0);
-                    return true;
-                }
-
-                //  hunger
-                if (this.getHunger() < 100) {
-                    consumeItemFromStack(player, stack);
-                    eatEvent(stack.getItem());
-                    setHunger(this.getHunger() + (DMUtils.getFoodPoints(player)));
-                    return true;
-                }
-            }
-
-            // Mate
-            if ((DMUtils.hasEquipped(player, getBreed().getBreedingItem()) || DMUtils.hasEquippedOreDicFish(player)) && this.isAdult() && !this.isInLove()) {
-                setInLove(player);
-                eatEvent(stack.getItem());
+        if (stack.isEmpty()) return false;
+        Item item = stack.getItem();
+        if (!(item instanceof ItemFood)) return false;
+        ItemFood food = (ItemFood) item;
+        boolean isAquaticFood;
+        if (food.isWolfsFavoriteMeat()) {
+            if (this.consumeFood(player, stack, food)) return true;
+            isAquaticFood = ModItems.isAquaticFood(food);
+        } else {
+            isAquaticFood = ModItems.isAquaticFood(food);
+            if (isAquaticFood && this.consumeFood(player, stack, food)) return true;
+        }
+        DragonBreed breed = getBreed();
+        if (!allow) return false;
+        if (isGrowthPaused()) {
+            // Continue growth
+            if (breed.getGrowingFood() == food) {
+                setGrowthPaused(false);
+                eatEvent(food);
+                playSound(SoundEvents.ENTITY_PLAYER_BURP, 1, 0.8F);
                 consumeItemFromStack(player, stack);
                 return true;
             }
-
+        } else {
             // Stop Growth
-            if (DMUtils.hasEquipped(player, getBreed().getShrinkingFood()) && !isGrowthPaused() && isAllowed(player)) {
+            if (breed.getShrinkingFood() == food) {
                 setGrowthPaused(true);
-                eatEvent(stack.getItem());
+                eatEvent(food);
                 playSound(SoundEvents.ENTITY_PLAYER_BURP, 1f, 0.8F);
                 player.sendStatusMessage(new TextComponentTranslation("dragon.growth.paused"), true);
                 consumeItemFromStack(player, stack);
                 return true;
             }
+        }
+        // Mate
+        if ((isAquaticFood || breed.getBreedingItem() == food) && this.isAdult() && !this.isInLove()) {
+            setInLove(player);
+            eatEvent(food);
+            consumeItemFromStack(player, stack);
+            return true;
+        }
+        return false;
+    }
 
-            // Continue growth
-            if (DMUtils.hasEquipped(player, getBreed().getGrowingFood()) && isGrowthPaused() && isAllowed(player)) {
-                setGrowthPaused(false);
-                eatEvent(stack.getItem());
-                playSound(SoundEvents.ENTITY_PLAYER_BURP, 1, 0.8F);
-                consumeItemFromStack(player, stack);
-                return true;
-            }
+    public boolean consumeFood(EntityPlayer player, ItemStack stack, ItemFood food) {
+        // Taming
+        if (!this.isTamed()) {
+            consumeItemFromStack(player, stack);
+            eatEvent(food);
+            tamedFor(player, this.getRNG().nextInt(4) == 0);
+            return true;
         }
 
+        //  hunger
+        if (this.getHunger() < 100) {
+            consumeItemFromStack(player, stack);
+            eatEvent(food);
+            setHunger(this.getHunger() + food.getHealAmount(stack) * 2);
+            return true;
+        }
         return false;
     }
 
@@ -2308,21 +2322,8 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
      * Credits: AlexThe 666 Ice and Fire
      */
     public int getIntFromArmor(ItemStack stack) {
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModArmour.dragonarmor_iron) {
-            return 1;
-        }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModArmour.dragonarmor_gold) {
-            return 2;
-        }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModArmour.dragonarmor_diamond) {
-            return 3;
-        }
-
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModArmour.dragonarmor_emerald) {
-            return 4;
-        }
-
-        return 0;
+        if (stack.isEmpty()) return 0;
+        return ModArmour.DRAGON_ARMORS.getInt(stack.getItem());
     }
 
     /**

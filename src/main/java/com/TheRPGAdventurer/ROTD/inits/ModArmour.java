@@ -4,6 +4,7 @@ import com.TheRPGAdventurer.ROTD.DragonMounts;
 import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
 import com.TheRPGAdventurer.ROTD.objects.items.ItemDragonArmor;
 import com.TheRPGAdventurer.ROTD.objects.items.gemset.armorset.*;
+import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModArmour {
-
+    public static final Reference2IntOpenHashMap<Item> DRAGON_ARMORS = new Reference2IntOpenHashMap<>();
     public static final List<Item> ARMOR = new ArrayList<Item>();
 
     public static final ArmorMaterial ForestDragonScaleMaterial = EnumHelper.addArmorMaterial("forest", DragonMounts.MODID + ":forest", 50, new int[]{4, 7, 8, 4}, 11, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 7.0F);
@@ -184,5 +185,12 @@ public class ModArmour {
 //        LightDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.LightDragonScales));
 //        DarkDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.DarkDragonScales));
 //        SpecterDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.SpecterDragonScales));
+    }
+
+    static {
+        DRAGON_ARMORS.put(ModArmour.dragonarmor_iron, 1);
+        DRAGON_ARMORS.put(ModArmour.dragonarmor_gold, 2);
+        DRAGON_ARMORS.put(ModArmour.dragonarmor_diamond, 3);
+        DRAGON_ARMORS.put(ModArmour.dragonarmor_emerald, 4);
     }
 }

@@ -1,75 +1,36 @@
 package com.TheRPGAdventurer.ROTD.util;
 
-import com.TheRPGAdventurer.ROTD.DragonMounts;
-import com.TheRPGAdventurer.ROTD.objects.items.ItemDragonAmuletNEW;
+import com.TheRPGAdventurer.ROTD.dragonmounts.Tags;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Random;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class DMUtils {
+    public static final Object[] NO_ARGS = new Object[0];
 
     private static Logger logger;
 
     public static Logger getLogger() {
         if (logger == null) {
-            logger = LogManager.getFormatterLogger(DragonMounts.MODID);
+            logger = LogManager.getFormatterLogger(Tags.MOD_ID);
         }
         return logger;
     }
 
     public static String translateToLocal(String s) {
-        return I18n.format(s);
-    }
-
-    /**
-     * Consumes the currently equipped item of a player if it matches the item
-     * type in the parameters. The stack will be decreased or removed only if
-     * the player is not in creative mode.
-     *
-     * @param player player to check
-     * @param items one or more types of items that should be consumed. Only the
-     *              first match will be consumed.
-     * @return the consumed item type or null if no matching item was equipped.
-     */
-    public static Item hasEquipped(EntityPlayer player, Item... items) {
-        ItemStack itemStack = player.getHeldItemMainhand();
-
-        if (itemStack == null) {
-            return null;
-        }
-
-        Item equippedItem = itemStack.getItem();
-
-        for (Item item : items) {
-            if (item == equippedItem) {
-                return item;
-            }
-        }
-
-        return null;
+        return I18n.format(s, NO_ARGS);
     }
 
     public static boolean hasEquipped(EntityPlayer player, Item item) {
-        return hasEquipped(player, new Item[]{item}) != null;
-    }
-
-    public static int getFoodPoints(EntityPlayer player) {
-        Item item = player.getHeldItemMainhand().getItem();
-        if (item != null && item instanceof ItemFood) {
-            int points = ((ItemFood) item).getHealAmount(new ItemStack(item)) * 2;
-            return points;
-        }
-        return 4;
+        ItemStack stack = player.getHeldItemMainhand();
+        return !stack.isEmpty() && stack.getItem() == item;
     }
 
     /**
@@ -78,28 +39,8 @@ public class DMUtils {
      * This allows other mods' fishes to be used with dragon taming
      */
     public static boolean hasEquippedOreDicFish(EntityPlayer player) {
-        Set<Item> consumeFish = OreDictionary.getOres("listAllfishraw").stream().map(ItemStack::getItem).collect(Collectors.toSet());
-        ItemStack itemstack = player.getHeldItemMainhand();
-        if (itemstack.getItem() != null) {
-            if (consumeFish.contains(itemstack.getItem())) return true;
-        }
-        return false;
-    }
-
-    /**
-     * Checks if a player has food equipped.
-     *
-     * @param player player to check
-     * @return true if the player has a food item selected
-     */
-    public static boolean hasEquippedFood(EntityPlayer player) {
-        ItemStack itemStack = player.getHeldItemMainhand();
-
-        if (itemStack == null) {
-            return false;
-        }
-
-        return itemStack.getItem() instanceof ItemFood;
+        ItemStack stack = player.getHeldItemMainhand();
+        return !stack.isEmpty() && OreDictionary.getOres("listAllfishraw").stream().anyMatch(stack::isItemEqualIgnoreDurability);
     }
 
     /**
@@ -110,40 +51,8 @@ public class DMUtils {
      * @return true if the player has an usable item equipped
      */
     public static boolean hasEquippedUsable(EntityPlayer player) {
-        ItemStack itemStack = player.getHeldItemMainhand();
-
-        if (itemStack == null) {
-            return false;
-        }
-
-        return itemStack.getItemUseAction() != EnumAction.NONE;
-    }
-
-    /**
-     * Checks if a player has a specific item equipped.
-     *
-     * @param player player to check
-     * @param items   required item type
-     * @return true if the player has the given item equipped
-     */
-    public static boolean hasEquippedArray(EntityPlayer player, Item... items) {
-        ItemStack itemStack = player.getHeldItemMainhand();
-        if (itemStack == null) return false;
-        //found item in mainHand, check if its specified item
-        Item equippedItem = itemStack.getItem();
-        for (Item item : items) {
-            if (item == equippedItem) {
-                return itemStack.getItem() == item;
-            }
-        }
-        return false;
-    }
-
-    public static boolean hasEquippedAmulet(EntityPlayer player) {
-        ItemStack itemStack = player.getHeldItemMainhand();
-        if (itemStack == null) return false;
-        //found amulet in mainHand
-        return itemStack.getItem() instanceof ItemDragonAmuletNEW;
+        ItemStack stack = player.getHeldItemMainhand();
+        return !stack.isEmpty() && stack.getItemUseAction() != EnumAction.NONE;
     }
 
     /**

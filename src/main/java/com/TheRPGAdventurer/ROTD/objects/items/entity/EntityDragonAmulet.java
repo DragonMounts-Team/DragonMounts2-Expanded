@@ -2,33 +2,34 @@ package com.TheRPGAdventurer.ROTD.objects.items.entity;
 
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.items.ItemDragonAmuletNEW;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-import net.minecraftforge.event.entity.item.ItemExpireEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Random;
 
 public class EntityDragonAmulet extends EntityItem {
-
-    ItemStack stack;
-
-    public EntityDragonAmulet(World worldIn, double x, double y, double z) {
-        super(worldIn, x, y, z);
-        this.world = worldIn;
+    public EntityDragonAmulet(World level) {
+        super(level);
+        this.age = -32768;
     }
 
-    public EntityDragonAmulet(World worldIn, double x, double y, double z, ItemStack stack) {
-        super(worldIn, x, y, z, stack);
-        this.stack = stack;
-    }
-
-    public EntityDragonAmulet(World worldIn) {
-        super(worldIn);
+    public EntityDragonAmulet(World level, Entity original, ItemStack stack) {
+        super(level, original.posX, original.posY, original.posZ, stack);
+        this.motionX = original.motionX;
+        this.motionY = original.motionY;
+        this.motionZ = original.motionZ;
+        this.age = -32768;
+        if (original instanceof EntityItem) {
+            EntityItem item = (EntityItem) original;
+            this.setPickupDelay(item.pickupDelay);
+            this.setThrower(item.getThrower());
+            this.setOwner(item.getOwner());
+        }
     }
 
     private boolean containsDragonEntity(ItemStack stack) {
@@ -39,10 +40,12 @@ public class EntityDragonAmulet extends EntityItem {
      * Spawn the dragon when the item gets destroyed
      */
     @Override
-    public void setDead() {
-        ItemStack stack = this.stack;
-        if (stack != null && stack.getItem() instanceof ItemDragonAmuletNEW) {
-            if (containsDragonEntity(stack)) {
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        boolean isDead = this.isDead;
+        super.attackEntityFrom(source, amount);
+        if (isDead != this.isDead) {
+            ItemStack stack = this.getItem();
+            if (stack.getItem() instanceof ItemDragonAmuletNEW && containsDragonEntity(stack)) {
                 EntityTameableDragon dragon = new EntityTameableDragon(this.world);
                 dragon.readEntityFromNBT(stack.getTagCompound());
                 dragon.setPosition(this.posX, this.posY, this.posZ);
@@ -54,21 +57,7 @@ public class EntityDragonAmulet extends EntityItem {
                 world.spawnEntity(dragon);
             }
         }
-        super.setDead();
+        return false;
     }
 
-    public static class EventHandler {
-
-        public static final EntityDragonAmulet.EventHandler instance = new EntityDragonAmulet.EventHandler();
-
-        private EventHandler() {
-        }
-
-        @SubscribeEvent
-        public void onExpire(ItemExpireEvent event) {
-            if (event.getEntityItem() instanceof EntityDragonAmulet) {
-                event.setCanceled(true);
-            }
-        }
-    }
 }

@@ -11,12 +11,16 @@ package com.TheRPGAdventurer.ROTD.proxy;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
 import com.TheRPGAdventurer.ROTD.DragonMountsConfig;
+import com.TheRPGAdventurer.ROTD.capability.ArmorEffectManager;
 import com.TheRPGAdventurer.ROTD.cmd.CommandDragon;
 import com.TheRPGAdventurer.ROTD.event.VanillaEggHandler;
+import com.TheRPGAdventurer.ROTD.inits.DMArmorEffects;
+import com.TheRPGAdventurer.ROTD.inits.DMCapabilities;
 import com.TheRPGAdventurer.ROTD.network.*;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitycarriage.EntityCarriage;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.items.entity.EntityDragonAmulet;
+import com.TheRPGAdventurer.ROTD.registry.CooldownCategory;
 import com.TheRPGAdventurer.ROTD.util.debugging.StartupDebugCommon;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.item.Item;
@@ -44,7 +48,7 @@ public class ServerProxy {
     private final int ENTITY_UPDATE_FREQ = 3;
     private final int ENTITY_ID = 1;
     private final boolean ENTITY_SEND_VELO_UPDATES = true;
-    private static SimpleNetworkWrapper network = NetworkRegistry.INSTANCE.newSimpleChannel("DragonControls");;
+    private static SimpleNetworkWrapper network = NetworkRegistry.INSTANCE.newSimpleChannel("DragonControls");
 
     public SimpleNetworkWrapper getNetwork() {
         return this.network;
@@ -53,12 +57,12 @@ public class ServerProxy {
     public void PreInitialization(FMLPreInitializationEvent event) {
         DragonMountsConfig.PreInit();
         StartupDebugCommon.preInitCommon();
+        CooldownCategory.REGISTRY.register();
     }
 
     @SuppressWarnings("deprecation")
     public void Initialization(FMLInitializationEvent evt) {
         MinecraftForge.EVENT_BUS.register(new VanillaEggHandler());
-//    	MinecraftForge.EVENT_BUS.register(new DragonArmourEnchant.ArmourXPBonus()); Not Currently Functional... >.>
         network.registerMessage(MessageDragonTargetHandlerServer.class, MessageDragonTarget.class, DOT_DISCRIMINATOR_ID, Side.SERVER);
 
         // I wont touch the network the old devs made, seems redundant yeah I know - rpg
@@ -69,7 +73,12 @@ public class ServerProxy {
         DragonMounts.NETWORK_WRAPPER.registerMessage(MessageDragonSit.MessageDragonSitHandler.class, MessageDragonSit.class, 5, Side.SERVER);
         DragonMounts.NETWORK_WRAPPER.registerMessage(MessageDragonTeleport.MessageDragonTeleportHandler.class, MessageDragonTeleport.class, 6, Side.SERVER);
 
+        DragonMounts.NETWORK_WRAPPER.registerMessage(SInitCooldownPacket.Handler.class, SInitCooldownPacket.class, 7, Side.CLIENT);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(SSyncCooldownPacket.Handler.class, SSyncCooldownPacket.class, 8, Side.CLIENT);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(SRiposteEffectPacket.Handler.class, SRiposteEffectPacket.class, 9, Side.CLIENT);
+
         StartupDebugCommon.initCommon();
+        MinecraftForge.EVENT_BUS.register(DMCapabilities.class);
     }
 
     public void PostInitialization(FMLPostInitializationEvent event) {
@@ -77,6 +86,9 @@ public class ServerProxy {
         if (DragonMountsConfig.isDebug()) {
             StartupDebugCommon.postInitCommon();
         }
+        DMCapabilities.register();
+        MinecraftForge.EVENT_BUS.register(DMArmorEffects.class);
+        MinecraftForge.EVENT_BUS.register(ArmorEffectManager.Events.class);
     }
 
     public void ServerStarting(FMLServerStartingEvent evt) {
@@ -96,7 +108,7 @@ public class ServerProxy {
                 2, DragonMounts.instance, 32, ENTITY_UPDATE_FREQ,
                 ENTITY_SEND_VELO_UPDATES);
         EntityRegistry.registerModEntity(new ResourceLocation(DragonMounts.MODID, "indestructible"), EntityDragonAmulet.class, "Indestructible Item",
-                3, DragonMounts.instance, 32, 5, true);
+                3, DragonMounts.instance, 64, 20, true);
     }
 
     public void render() {

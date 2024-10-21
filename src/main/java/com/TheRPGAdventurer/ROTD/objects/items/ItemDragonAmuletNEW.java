@@ -7,7 +7,6 @@ import com.TheRPGAdventurer.ROTD.objects.items.entity.EntityDragonAmulet;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -71,7 +70,7 @@ public class ItemDragonAmuletNEW extends Item {
                 player.setHeldItem(hand, stack);
                 if (dragon.getLeashed()) dragon.clearLeashed(true, true); // Fix Lead Dupe exploit
                 stack.setStackDisplayName(type.color + stack.getDisplayName());
-                player.world.playSound((EntityPlayer) null, player.getPosition(), SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.NEUTRAL, 1, 1);
+                player.world.playSound(null, player.getPosition(), SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.NEUTRAL, 1, 1);
 
                 target.setDead();
                 return true;
@@ -127,17 +126,7 @@ public class ItemDragonAmuletNEW extends Item {
     @Nonnull
     @Override
     public Entity createEntity(World world, Entity location, ItemStack itemstack) {
-        EntityItem entity = new EntityDragonAmulet(world, location.posX, location.posY, location.posZ, itemstack);
-        if (location instanceof EntityItem) {
-            // workaround for private access on that field >_>
-            NBTTagCompound tag = new NBTTagCompound();
-            location.writeToNBT(tag);
-            entity.setPickupDelay(tag.getShort("PickupDelay"));
-        }
-        entity.motionX = location.motionX;
-        entity.motionY = location.motionY;
-        entity.motionZ = location.motionZ;
-        return entity;
+        return new EntityDragonAmulet(world, location, itemstack);
     }
 
     @Override

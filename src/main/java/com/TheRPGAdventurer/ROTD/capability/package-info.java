@@ -1,0 +1,2 @@
+@javax.annotation.ParametersAreNonnullByDefault
+package com.TheRPGAdventurer.ROTD.capability;

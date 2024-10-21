@@ -8,12 +8,19 @@ import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.Enum
 import com.TheRPGAdventurer.ROTD.objects.items.*;
 import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
 import com.TheRPGAdventurer.ROTD.objects.items.ItemDragonScales;
+import com.TheRPGAdventurer.ROTD.util.DMUtils;
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ModItems {
+    public static final ReferenceOpenHashSet<Item> DRAGON_INTERACTABLE = new ReferenceOpenHashSet<>();
+    public static final ReferenceOpenHashSet<Item> HARDCODED_AQUATIC_FOOD = new ReferenceOpenHashSet<>();
     public static final List<Item> ITEMS = new ArrayList<Item>();
 
     //Scales Start
@@ -140,4 +147,20 @@ public class ModItems {
     //public static final Item dark_dragon_shield = new ItemDragonShield(EnumItemBreedTypes.DARK, ModItems.DarkDragonScales);
     //public static final Item specter_dragon_shield = new ItemDragonShield(EnumItemBreedTypes.DARK, ModItems.SpecterDragonScales);
 
+    static {
+        DRAGON_INTERACTABLE.add(ModTools.diamond_shears);
+        DRAGON_INTERACTABLE.add(ModItems.dragon_wand);
+        DRAGON_INTERACTABLE.add(ModItems.dragon_whistle);
+        DRAGON_INTERACTABLE.add(ModItems.Amulet);
+        DRAGON_INTERACTABLE.add(Items.BONE);
+        DRAGON_INTERACTABLE.add(Items.STICK);
+        HARDCODED_AQUATIC_FOOD.add(Items.FISH);
+        HARDCODED_AQUATIC_FOOD.add(Items.COOKED_FISH);
+    }
+
+    public static boolean isAquaticFood(ItemFood food) {
+        return HARDCODED_AQUATIC_FOOD.contains(food) || OreDictionary.getOres("listAllfishraw").stream().anyMatch(
+                stack -> !stack.isEmpty() && stack.getItem() == food
+        );
+    }
 }
