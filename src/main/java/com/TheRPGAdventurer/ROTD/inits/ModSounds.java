@@ -1,6 +1,6 @@
 package com.TheRPGAdventurer.ROTD.inits;
 
-import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.dragonmounts.Tags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -8,9 +8,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 
-@ObjectHolder(DragonMounts.MODID)
+@ObjectHolder(Tags.MOD_ID)
 public class ModSounds {
-	
 	@ObjectHolder("mob.dragon.step")
 	public static final SoundEvent ENTITY_DRAGON_STEP = createSoundEvent("mob.dragon.step");
 
@@ -69,11 +68,11 @@ public class ModSounds {
 	public static final SoundEvent DRAGON_SWITCH = createSoundEvent("item.gender_switch");
 	
 	private static SoundEvent createSoundEvent(final String soundName) {
-		final ResourceLocation soundID = new ResourceLocation(DragonMounts.MODID, soundName);
+		final ResourceLocation soundID = new ResourceLocation(Tags.MOD_ID, soundName);
 		return new SoundEvent(soundID).setRegistryName(soundID);
 	}
 
-	@Mod.EventBusSubscriber(modid = DragonMounts.MODID)
+	@Mod.EventBusSubscriber(modid = Tags.MOD_ID)
 	public static class RegistrationHandler {
 		@SubscribeEvent
 		public static void registerSoundEvents(final RegistryEvent.Register<SoundEvent> event) {
@@ -100,12 +99,4 @@ public class ModSounds {
 			);
 		}
 	}
-	
-	  public final String getJsonName() {return DragonMounts.MODID + ":" + jsonName;}
-
-	  private ModSounds(String i_jsonName) {
-	    jsonName = i_jsonName;
-	  }
-	  
-	  private final String jsonName;
 }

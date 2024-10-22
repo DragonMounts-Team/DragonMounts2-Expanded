@@ -12,9 +12,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntityLockableLoot;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -31,8 +31,7 @@ import java.util.List;
  */
 
 public class TileEntityDragonShulker extends TileEntityLockableLoot implements ITickable {
-
-    private NonNullList<ItemStack> chestContents = NonNullList.<ItemStack>withSize(72, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> chestContents = NonNullList.withSize(1, ItemStack.EMPTY);
     public int numPlayersUsing, ticksSinceSync;
     private float progress, progressOld;
     private TileEntityDragonShulker.AnimationStatus animationStatus;
@@ -72,11 +71,7 @@ public class TileEntityDragonShulker extends TileEntityLockableLoot implements I
     
     @Override
     public boolean isEmpty() {
-        for (ItemStack stack : this.chestContents) {
-            if (stack.isEmpty()) return true;
-        }
-
-        return false;
+        return this.chestContents.get(0).isEmpty();
     }
 
     @Override
@@ -87,19 +82,32 @@ public class TileEntityDragonShulker extends TileEntityLockableLoot implements I
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        this.chestContents = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
-
-        if (!this.checkLootAndRead(compound)) ItemStackHelper.loadAllItems(compound, chestContents);
+        if (!this.checkLootAndRead(compound)) {
+            NBTTagCompound stack = compound.getCompoundTag("Item");
+            if (stack.isEmpty()) {
+                NBTTagList list = compound.getTagList("Items", 10);
+                for (int i = 0; i < list.tagCount(); ++i) {
+                    stack = list.getCompoundTagAt(i);
+                    if ((stack.getByte("Slot") & 255) == 0) {
+                        this.chestContents.set(0, new ItemStack(stack));
+                    }
+                }
+            } else {
+                this.chestContents.set(0, new ItemStack(stack));
+            }
+        }
         if (compound.hasKey("CustomName", 8)) this.customName = compound.getString("CustomName");
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
-
-        if (!this.checkLootAndWrite(compound)) ItemStackHelper.saveAllItems(compound, chestContents);
+        if (!this.checkLootAndWrite(compound)) {
+            NBTTagCompound item = new NBTTagCompound();
+            this.chestContents.get(0).writeToNBT(item);
+            compound.setTag("Item", item);
+        }
         if (compound.hasKey("CustomName", 8)) compound.setString("CustomName", this.customName);
-
         return compound;
     }
 
@@ -214,10 +222,12 @@ public class TileEntityDragonShulker extends TileEntityLockableLoot implements I
                 break;
             case CLOSING:
                 this.progress -= 0.1F;
-
                 if (this.progress <= 0.0F) {
                     this.animationStatus = TileEntityDragonShulker.AnimationStatus.CLOSED;
                     this.progress = 0.0F;
+                    if (this.world.isRemote && this.isEmpty()) {
+                        this.world.destroyBlock(this.getPos(), false);
+                    }
                 }
                 break;
             case OPENED:

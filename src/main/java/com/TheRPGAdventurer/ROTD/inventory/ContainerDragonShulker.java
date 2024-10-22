@@ -1,7 +1,6 @@
 package com.TheRPGAdventurer.ROTD.inventory;
 
 import com.TheRPGAdventurer.ROTD.objects.tileentities.TileEntityDragonShulker;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -48,9 +47,6 @@ public class ContainerDragonShulker extends Container {
     public void onContainerClosed(EntityPlayer playerIn) {
         super.onContainerClosed(playerIn);
         shulkerInventory.closeInventory(playerIn);
-        if(shulkerInventory.isEmpty()) {
-            playerIn.world.setBlockToAir(shulkerInventory.getPos());
-        }
     }
 
     @Override

@@ -20,6 +20,7 @@ import com.TheRPGAdventurer.ROTD.client.render.dragon.DragonRenderer;
 import com.TheRPGAdventurer.ROTD.client.render.dragon.breathweaponFX.*;
 import com.TheRPGAdventurer.ROTD.client.userinput.DragonOrbControl;
 import com.TheRPGAdventurer.ROTD.event.DragonViewEvent;
+import com.TheRPGAdventurer.ROTD.inits.ModBlocks;
 import com.TheRPGAdventurer.ROTD.inits.ModItems;
 import com.TheRPGAdventurer.ROTD.inits.ModKeys;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitycarriage.EntityCarriage;
@@ -78,6 +79,7 @@ public class ClientProxy extends ServerProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityCarriage.class, RenderCarriage::new);
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDragonShulker.class, new TileEntityDragonShulkerRenderer());
+        ModBlocks.DRAGONSHULKER.item.setTileEntityItemStackRenderer(new TileEntityDragonShulkerRenderer.ItemStackRenderer());
 
         //Override mcmod.info - This looks cooler :)
         TextFormatting t = null, r = TextFormatting.RESET;

@@ -5,15 +5,15 @@ import com.TheRPGAdventurer.ROTD.client.gui.GuiHandler;
 import com.TheRPGAdventurer.ROTD.inits.ModBlocks;
 import com.TheRPGAdventurer.ROTD.inits.ModItems;
 import com.TheRPGAdventurer.ROTD.objects.tileentities.TileEntityDragonShulker;
-
+import com.TheRPGAdventurer.ROTD.util.IHasModel;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockShulkerBox;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
@@ -26,6 +26,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -37,9 +38,11 @@ import java.util.Random;
  * @author WolfShotz
  */
 
-public class BlockDragonShulker extends BlockContainer {
+public class BlockDragonShulker extends BlockContainer implements IHasModel {
 
     public static final PropertyEnum<EnumFacing> FACING = PropertyDirection.create("facing");
+
+    public final ItemBlock item = new ItemBlock(this);
 
     public BlockDragonShulker(String name) {
         super(Material.ROCK);
@@ -48,7 +51,7 @@ public class BlockDragonShulker extends BlockContainer {
         setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP));
         ModBlocks.BLOCKS.add(this);
         setHardness(2000);
-        ModItems.ITEMS.add(new ItemBlock(this).setRegistryName(this.getRegistryName()));
+        ModItems.ITEMS.add(this.item.setRegistryName(name));
     }
 
     @Override
@@ -159,4 +162,9 @@ public class BlockDragonShulker extends BlockContainer {
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileEntityDragonShulker();
 	}
+
+    @Override
+    public void RegisterModels() {
+        ModelLoader.setCustomModelResourceLocation(this.item, 0, new ModelResourceLocation(this.item.getRegistryName(), "inventory"));
+    }
 }
