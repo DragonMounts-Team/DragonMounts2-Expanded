@@ -225,7 +225,7 @@ public class TileEntityDragonShulker extends TileEntityLockableLoot implements I
                 if (this.progress <= 0.0F) {
                     this.animationStatus = TileEntityDragonShulker.AnimationStatus.CLOSED;
                     this.progress = 0.0F;
-                    if (this.world.isRemote && this.isEmpty()) {
+                    if (!this.world.isRemote && this.isEmpty()) {
                         this.world.destroyBlock(this.getPos(), false);
                     }
                 }

@@ -8,6 +8,8 @@ class Encoder(json.JSONEncoder):
 
 class Output:
   def __init__(self, root: str, namespace: str):
+    assert os.getcwd().endswith('data')
+    self.count = 0
     if (root.endswith('/')):
       self.root = root + namespace + '/'
     else:
@@ -19,6 +21,11 @@ class Output:
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, 'w') as file:
       json.dump(content, file, cls = Encoder, indent = 2)
+    self.count += 1
+  
+  def log(self, type: str):
+    print('generated', self.count, type)
+    self.count = 0
 
 class ConsoleOutput(Output):
   def __init__(self, root: str, namespace: str):
@@ -26,3 +33,6 @@ class ConsoleOutput(Output):
 
   def accept(self, name: str, content: dict):
     print('save to', self.root + name + '.json', '\n', json.dumps(content, cls = Encoder, indent = 2))
+
+  def log(self, type: str):
+    pass

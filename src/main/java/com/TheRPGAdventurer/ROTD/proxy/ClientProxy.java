@@ -105,7 +105,6 @@ public class ClientProxy extends ServerProxy {
                 t.GREEN + "WalterTheMighty" + r + "-" + t.AQUA + "for giving me a modded erver experience\n" +
                 t.GREEN + "GandalfTheDank" + r + "-" + t.AQUA + "for making me realize on what happens to me if I'm being a terrible person\n" +
                 t.GREEN + "TGG/TheGreyGhost" + r + "-" + t.AQUA + "old dm1 dev and prototype breath\n\n";
-                // t.GREEN + "如果您是哔哩哔哩用户，您可以在哔哩哔哩中搜索：" + t.GOLD + "Lintha暮辰 " + t.GREEN + "来获取有关龙骑士3代模组基岩版或Java版的最新状态\n\n";
         metadata.authorList = Arrays.asList(StringUtils.split(t.GOLD + "" + t.BOLD + "Lintha, TheRPGAdventurer, BarracudaATA, WolfShotz", ','));
         metadata.description =
                 "\nTips:\n" +

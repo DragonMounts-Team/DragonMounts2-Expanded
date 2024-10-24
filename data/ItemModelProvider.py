@@ -31,3 +31,4 @@ def generateItemModels(output: Output):
         .model(makeId('item/' + blocking))\
       .end()\
       .save(output, root)
+  output.log('model(s)')

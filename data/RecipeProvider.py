@@ -96,9 +96,9 @@ def generateRecipes(output: Output):
       .save(output, 'combat')
     shaped(base.withSuffix('_dragonscale_tunic'))\
       .define('#', dragonScales)\
+      .pattern('# #')\
       .pattern('###')\
-      .pattern('# #')\
-      .pattern('# #')\
+      .pattern('###')\
       .groupBy('dragon_scale_chestplate')\
       .unlockedBy('has_scales', unlock)\
       .save(output, 'combat')
@@ -211,3 +211,4 @@ def generateRecipes(output: Output):
     .pattern('###')\
     .unlockedBy('has_stick', has('stick'))\
     .save(output, 'building_blocks')
+  output.log('recipe(s)')

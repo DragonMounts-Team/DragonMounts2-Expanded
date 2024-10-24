@@ -55,11 +55,12 @@ public class BlockDragonShulker extends BlockContainer implements IHasModel {
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        TileEntityDragonShulker tileentity = (TileEntityDragonShulker) worldIn.getTileEntity(pos);
-        // NOT a normal shulker box. so drop items on ground if destroyed.
-        InventoryHelper.dropInventoryItems(worldIn, pos, tileentity);
-        super.breakBlock(worldIn, pos, state);
+    public void breakBlock(World level, BlockPos pos, IBlockState state) {
+        TileEntity tileentity = level.getTileEntity(pos);
+        if (tileentity instanceof TileEntityDragonShulker) {
+            InventoryHelper.dropInventoryItems(level, pos, (TileEntityDragonShulker) tileentity);
+        }
+        super.breakBlock(level, pos, state);
     }
 
     @Override

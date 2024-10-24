@@ -349,6 +349,11 @@ tasks.register('prioritizeCoremods') {
     }
 }
 
+tasks.register('runData', Exec) {
+    workingDir './data'
+    commandLine 'python', 'DataGenerator.py'
+}
+
 idea.project.settings {
     taskTriggers {
         afterSync 'cleanroomAfterSync'
