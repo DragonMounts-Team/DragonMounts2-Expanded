@@ -6,6 +6,7 @@ import com.TheRPGAdventurer.ROTD.objects.entity.entitycarriage.EntityCarriage;
 import com.TheRPGAdventurer.ROTD.util.DMUtils;
 import com.TheRPGAdventurer.ROTD.util.IHasModel;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -24,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -37,7 +39,7 @@ public class ItemCarriage extends Item implements IHasModel {
         this.type=type;
         this.setMaxDamage(1);
         this.setMaxStackSize(64);
-        this.setCreativeTab(DragonMounts.mainTab);
+        this.setCreativeTab(CreativeTabs.TRANSPORTATION);
 
         ModItems.ITEMS.add(this);
     }
@@ -107,6 +109,14 @@ public class ItemCarriage extends Item implements IHasModel {
                 }
             }
         }
+    }
+
+    /**
+     * This method determines where the item is displayed
+     */
+    @Override
+    public @Nonnull CreativeTabs[] getCreativeTabs() {
+        return new CreativeTabs[]{DragonMounts.mainTab};
     }
 
     @Override

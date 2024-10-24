@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "dragon_scale_helmet",
+  "pattern": [
+    "###",
+    "# #"
+  ],
+  "key": {
+    "#": {
+      "item": "dragonmounts:sunlight2_dragonscales"
+    }
+  },
+  "result": {
+    "item": "dragonmounts:sunlight2_dragonscale_cap"
+  }
+}

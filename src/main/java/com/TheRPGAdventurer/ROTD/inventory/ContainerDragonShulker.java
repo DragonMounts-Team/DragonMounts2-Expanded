@@ -19,7 +19,7 @@ public class ContainerDragonShulker extends Container {
 
     public ContainerDragonShulker(InventoryPlayer playerInv, TileEntityDragonShulker tileEntityDragonShulker, EntityPlayer player) {
         this.shulkerInventory=tileEntityDragonShulker;
-        this.numRows=tileEntityDragonShulker.getSizeInventory() / 1;
+        this.numRows = tileEntityDragonShulker.getSizeInventory();
         tileEntityDragonShulker.openInventory(player);
 
         //Build Dragon Core Inventory Slots

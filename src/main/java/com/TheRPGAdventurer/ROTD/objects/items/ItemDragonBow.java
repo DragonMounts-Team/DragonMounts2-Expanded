@@ -5,6 +5,7 @@ import com.TheRPGAdventurer.ROTD.inits.ModTools;
 import com.TheRPGAdventurer.ROTD.util.DMUtils;
 import com.TheRPGAdventurer.ROTD.util.IHasModel;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,7 +13,10 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArrow;
+import net.minecraft.item.ItemBow;
+import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
@@ -22,6 +26,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -36,24 +41,7 @@ public class ItemDragonBow extends ItemBow implements IHasModel {
 
         setMaxDamage(725);
         setTranslationKey("dragon_bow");
-        setCreativeTab(DragonMounts.armoryTab);
         setRegistryName(new ResourceLocation(DragonMounts.MODID, "dragon_bow_" + type.toString().toLowerCase()));
-
-        addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter()
-        {
-            @SideOnly(Side.CLIENT)
-            public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-                if (entityIn == null) return 0.0F;
-                else return entityIn.getActiveItemStack().getItem() instanceof ItemDragonBow ? (float) (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
-            }
-        });
-        addPropertyOverride(new ResourceLocation("pulling"), new IItemPropertyGetter()
-        {
-            @SideOnly(Side.CLIENT)
-            public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-                return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
-            }
-        });
         ModTools.TOOLS.add(this);
     }
 
@@ -181,6 +169,14 @@ public class ItemDragonBow extends ItemBow implements IHasModel {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         tooltip.add(DMUtils.translateToLocal("item.armoryitems.info") + type.color +" "+ TextFormatting.BOLD + DMUtils.translateToLocal("dragon." + type.toString().toLowerCase()));
+    }
+
+    /**
+     * This method determines where the item is displayed
+     */
+    @Override
+    public @Nonnull CreativeTabs[] getCreativeTabs() {
+        return new CreativeTabs[]{DragonMounts.armoryTab};
     }
 
     @Override

@@ -50,6 +50,8 @@ base {
     archivesName.set(propertyString('mod_id'))
 }
 
+sourceSets.main.resources.srcDir('src/generated/')
+
 tasks.decompressDecompiledSources.enabled !propertyBool('change_minecraft_sources')
 
 java {

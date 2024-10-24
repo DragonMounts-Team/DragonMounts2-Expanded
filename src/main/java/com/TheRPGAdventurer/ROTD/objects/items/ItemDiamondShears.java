@@ -6,6 +6,7 @@ import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTamea
 import com.TheRPGAdventurer.ROTD.util.DMUtils;
 import com.TheRPGAdventurer.ROTD.util.IHasModel;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -22,6 +23,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -35,7 +37,7 @@ public class ItemDiamondShears extends ItemShears implements IHasModel {
         this.setRegistryName(new ResourceLocation(DragonMounts.MODID, unlocalizedName));
         this.setMaxDamage(345);
         this.setMaxStackSize(1);
-        this.setCreativeTab(DragonMounts.mainTab);
+        this.setCreativeTab(CreativeTabs.TOOLS);
 
         ModTools.TOOLS.add(this);
     }
@@ -92,6 +94,14 @@ public class ItemDiamondShears extends ItemShears implements IHasModel {
             return super.itemInteractionForEntity(itemstack, player, entity, hand);
         }
 
+    }
+
+    /**
+     * This method determines where the item is displayed
+     */
+    @Override
+    public @Nonnull CreativeTabs[] getCreativeTabs() {
+        return new CreativeTabs[]{DragonMounts.mainTab};
     }
 
     @Override

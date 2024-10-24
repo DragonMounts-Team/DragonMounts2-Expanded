@@ -5,6 +5,7 @@ import com.TheRPGAdventurer.ROTD.inits.ModItems;
 import com.TheRPGAdventurer.ROTD.util.DMUtils;
 import com.TheRPGAdventurer.ROTD.util.IHasModel;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemShield;
@@ -15,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -30,7 +32,6 @@ public class ItemDragonShield extends ItemShield implements IHasModel {
         this.setTranslationKey("dragon_shield");
         this.setMaxDamage(2500);
         this.setMaxStackSize(1);
-        this.setCreativeTab(DragonMounts.armoryTab);
         this.type = type;
 
         ModItems.ITEMS.add(this);
@@ -60,6 +61,14 @@ public class ItemDragonShield extends ItemShield implements IHasModel {
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack item) {
         return item.getItem() == repair ? true : super.getIsRepairable(toRepair, new ItemStack(repair));
+    }
+
+    /**
+     * This method determines where the item is displayed
+     */
+    @Override
+    public @Nonnull CreativeTabs[] getCreativeTabs() {
+        return new CreativeTabs[]{DragonMounts.armoryTab};
     }
 
     @Override

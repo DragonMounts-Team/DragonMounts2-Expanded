@@ -10,6 +10,7 @@ import com.TheRPGAdventurer.ROTD.util.DMUtils;
 import com.TheRPGAdventurer.ROTD.util.IHasModel;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
@@ -19,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -32,7 +34,6 @@ public abstract class DragonArmourBase extends ItemArmor implements IHasModel, I
 	public DragonArmourBase(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn, String unlocalizedName, EnumItemBreedTypes type, IArmorEffect effect) {
 		super(materialIn, renderIndexIn, equipmentSlotIn);
 		this.effect = effect;
-		setCreativeTab(DragonMounts.armoryTab);
 		setTranslationKey("dragonscale_" + equipmentSlotIn.toString().toLowerCase());
 		setRegistryName(makeId(unlocalizedName));
 		this.type = type;
@@ -61,5 +62,13 @@ public abstract class DragonArmourBase extends ItemArmor implements IHasModel, I
 	@Override
 	public void RegisterModels() {
 		DragonMounts.proxy.registerItemRenderer(this, 0, "inventory");
+	}
+
+	/**
+	 * This method determines where the item is displayed
+	 */
+	@Override
+	public @Nonnull CreativeTabs[] getCreativeTabs() {
+		return new CreativeTabs[]{DragonMounts.armoryTab};
 	}
 }

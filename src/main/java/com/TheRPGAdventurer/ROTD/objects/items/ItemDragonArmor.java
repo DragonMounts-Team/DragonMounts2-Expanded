@@ -3,7 +3,10 @@ package com.TheRPGAdventurer.ROTD.objects.items;
 import com.TheRPGAdventurer.ROTD.DragonMounts;
 import com.TheRPGAdventurer.ROTD.inits.ModArmour;
 import com.TheRPGAdventurer.ROTD.util.IHasModel;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+
+import javax.annotation.Nonnull;
 
 
 public class ItemDragonArmor extends Item implements IHasModel {
@@ -15,9 +18,17 @@ public class ItemDragonArmor extends Item implements IHasModel {
         this.setTranslationKey(name);
         this.maxStackSize = 1;
         this.setRegistryName(DragonMounts.MODID, name);
-        this.setCreativeTab(DragonMounts.armoryTab);
+        this.setCreativeTab(CreativeTabs.COMBAT);
 
         ModArmour.ARMOR.add(this);
+    }
+
+    /**
+     * This method determines where the item is displayed
+     */
+    @Override
+    public @Nonnull CreativeTabs[] getCreativeTabs() {
+        return new CreativeTabs[]{DragonMounts.armoryTab};
     }
 
     @Override
