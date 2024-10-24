@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=up": {
+      "model": "dragonmounts:block_dragon_shulker"
+    },
+    "facing=down": {
+      "model": "dragonmounts:block_dragon_shulker"
+    },
+    "facing=south": {
+      "model": "dragonmounts:block_dragon_shulker"
+    },
+    "facing=west": {
+      "model": "dragonmounts:block_dragon_shulker"
+    },
+    "facing=north": {
+      "model": "dragonmounts:block_dragon_shulker"
+    },
+    "facing=east": {
+      "model": "dragonmounts:block_dragon_shulker"
+    }
+  }
+}

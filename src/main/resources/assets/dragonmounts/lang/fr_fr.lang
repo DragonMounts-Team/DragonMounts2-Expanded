@@ -1,0 +1,213 @@
+# French Translations
+
+# Creative Menu's
+itemGroup.maintab=Dragon Mounts
+itemGroup.armorytab=Equipement Dragon Mounts
+
+##
+# Dragon Names
+##
+entity.DragonMount.name=Dragon
+
+entity.DragonMount.ice.name=Dragon de Givre
+entity.DragonMount.end.name=Ender Dragon
+entity.DragonMount.ender.name=Ender Dragon
+entity.DragonMount.aether.name=Dragon Ethéré
+entity.DragonMount.forest.name=Dragon des Forêts
+entity.DragonMount.sylphid.name=Dragon Océanique
+entity.DragonMount.nether.name=Dragon du Nether
+entity.DragonMount.fire.name=Dragon de Flammes
+entity.DragonMount.skeleton.name=Dragon Squelettique
+entity.DragonMount.wither.name=Wither Dragon
+entity.DragonMount.enchant.name=Dragon Enchanté
+entity.DragonMount.sunlight.name=Dragon Solaire
+entity.DragonMount.storm.name=Dragon des Tempêtes
+entity.DragonMount.zombie.name=Dragon Zombifié
+entity.DragonMount.terra.name=Dragon Terrestre 
+entity.DragonMount.moonlight.name=Dragon Lunaire
+
+entity.DragonMount.albino.ice.name=Dragon de Givre Albinos
+entity.DragonMount.albino.ender.name=Ender Dragon Albinos
+entity.DragonMount.albino.aether.name=Albino Dragon Ethéré Albinos
+entity.DragonMount.albino.forest.name=Dragon des Forêts Albinos
+entity.DragonMount.albino.sylphid.name=Dragon Océanique Albinos
+entity.DragonMount.albino.nether.name=Dragon du Nether Albinos
+entity.DragonMount.albino.fire.name=Dragon de Flammes Albinos
+entity.DragonMount.albino.skeleton.name=Dragon Squelettique Albinos
+entity.DragonMount.albino.wither.name=Wither Dragon Albinos
+entity.DragonMount.albino.enchant.name=Dragon Enchanté Albinos
+entity.DragonMount.albino.sunlight.name=Dragon Solaire Albinos
+entity.DragonMount.albino.storm.name=Dragon des Tempêtes Albinos
+entity.DragonMount.albino.zombie.name=Dragon Zombifié Albinos
+entity.DragonMount.albino.terra.name=Dragon Terrestre Albinos
+entity.DragonMount.albino.moonlight.name=Dragon Lunaire Albinos
+
+entity.DragonMounts.dragon.ice.name=Dragon de Givre
+entity.DragonMounts.dragon.ender.name=Ender Dragon
+entity.DragonMounts.dragon.aether.name=Dragon Ethéré
+entity.DragonMounts.dragon.forest.name=Dragon des Forêts
+entity.DragonMounts.dragon.sylphid.name=Dragon Océanique
+entity.DragonMounts.dragon.nether.name=Dragon du Nether
+entity.DragonMounts.dragon.fire.name=Dragon de Flammes
+entity.DragonMounts.dragon.skeleton.name=Dragon Squelettique
+entity.DragonMounts.dragon.wither.name=Wither Dragon
+entity.DragonMounts.dragon.enchant.name=Dragon Enchanté
+entity.DragonMounts.dragon.sunlight.name=Dragon Solaire
+entity.DragonMounts.dragon.storm.name=Dragon des Tempêtes
+entity.DragonMounts.dragon.zombie.name=Dragon Zombifié
+entity.DragonMounts.dragon.terra.name=Dragon Terrestre
+entity.DragonMounts.dragon.moonlight.name=Dragon Lunaire
+
+
+#Breeds
+dragon.forest=Forêts
+dragon.forest2=Forêts
+dragon.aether=Ethéré
+dragon.ice=Givre
+dragon.sylphid=Océanique
+dragon.water=Océanique
+dragon.fire=Flammes
+dragon.fire2=Flammes
+dragon.skeleton=Squelettique
+dragon.wither=Wither
+dragon.nether=Nether
+dragon.nether2=Nether
+dragon.end=Ender
+dragon.ender=Ender
+dragon.enchant=Enchanté
+dragon.sunlight=Solaire
+dragon.sunlight2=Solaire
+dragon.moonlight=Lunaire
+dragon.storm=Tempêtes
+dragon.storm2=Tempêtes
+dragon.zombie=Zombifié
+dragon.terra=Terrestre
+dragon.terra2=Terrestre
+
+#Stage
+dragon.egg=Oeuf
+dragon.hatchling=Nouveau Né
+dragon.juvenile=Juvenile
+dragon.adult=Adulte
+
+
+##
+# Item Names
+##
+item.diamond_shears.name=Cisailles en Diamants
+item.dragonEgg.name=Oeuf de Dragon
+item.dragon_gender.name=Gemme de changement de genre
+item.gui.dragon_gender=Right Cliquez sur un de vos dragons pour changer son genre
+item.summon_egg.name=Faire Apparaitre un Dragon
+item.dragon_essence.name=Essence Draconique 
+item.dragon_whistle.name=Flute Draconique
+item.dragon_amulet.name=Amulette Draconique
+item.dragon_orb.name=Orbe Draconique
+
+item.carriage_oak.name=Nacelle en Chêne
+item.carriage_birch.name=Nacelle en Bouleau
+item.carriage_spruce.name=Nacelle en Sapin
+item.carriage_acacia.name=Nacelle en Acacia
+item.carriage_dark_oak.name=Nacelle en Chêne Noir
+item.carriage_jungle.name=Nacelle en Acajou
+
+# Armory Items
+item.dragonscales.name=Ecailles de Dragon
+item.dragon_sword.name=Epée Draconique
+item.dragon_pickaxe.name=Pioche Draconique
+item.dragon_axe.name=Hache Draconique 
+item.dragon_shovel.name=Pelle Draconique
+item.dragon_hoe.name=Houe Draconique
+item.dragon_shield.name=Bouclier Draconique
+item.dragon_bow.name=Arc Draconique
+item.dragonscale_head.name=Casque en Ecailles de Dragon
+item.dragonscale_chest.name=Plastron en Ecailles de Dragon
+item.dragonscale_legs.name=Jambières en Ecailles de Dragon
+item.dragonscale_feet.name=Bottes en Ecailles de Dragon
+item.dragonarmor_diamond.name=Armure en Diamant pour Dragon
+item.dragonarmor_iron.name=Armure en Fer pour Dragon
+item.dragonarmor_gold.name=Armure en Or pour Dragon
+item.dragonarmor_emerald.name=Armure en Emeraude pour Dragon
+
+# Tiles
+tile.pileofsticks.name=Pile de bois
+tile.block_dragon_shulker.name=Coeur Draconique
+
+tile.storm_egg.name=Oeuf de Dragon des Tempêtes
+tile.end_egg.name=Oeuf d'Ender Dragon
+tile.zombie_egg.name=Oeuf de Dragon Zombifié
+tile.sylphid_egg.name=Oeuf de Dragon Océanique
+tile.nether_egg.name=Oeuf de Dragon du Nether
+tile.forest_egg.name=Oeuf de Dragon des Forests
+tile.aether_egg.name=Oeuf de Dragon Ethéré
+tile.ice_egg.name=Oeuf de Dragon de Givre
+tile.fire_egg.name=Oeuf de Dragon de Flammes
+tile.skeleton_egg.name=Oeuf de Dragon Squelettique
+tile.wither_egg.name=Oeuf de Wither Dragon
+tile.enchant_egg.name=Oeuf de Dragon Enchanté
+tile.sunlight_egg.name=Oeuf de Dragon Solaire
+tile.moonlight_egg.name=Oeuf de Dragon Lunaire
+tile.terra_egg.name=Oeuf de Dragon Terrestre
+
+# Item Info
+item.removeNBT=<Sneak + Clic Droit pour délier un Dragon>
+item.armoryitems.info=Forgé avec les écailles d'un
+item.diamondshears.info=Utilisées pour récolter les écailles d'un Dragon apprivoisé. Ceux sauvages vous attaquerons
+item.dragonamulet.info=Clic Droit pour stocker un Dragon et le transporter, Clic Droit sur le sol pour le faire apparaitre
+item.carriage.info=Utilisé pour faire en sorte que les Dragons puissent transporter plusieurs passagers
+item.whistle.info=Clic Droit sur un Dragon possédé et apprivoisé pour le contrôler
+item.whistle.nullBlockPos=Téléportation impossible
+
+
+##
+# Messages
+##
+dragon.locked=Ce dragon a été verrouillé par son propriétaire 
+dragon.notTamed=Utilisez de la viande ou du poisson pour apprivoiser ce Dragon
+dragon.notOwned=Vous n'êtes pas le propriétaire de ce Dragon
+entity.dragon.tooYoung=Ce Dragon est trop jeune pour cela, attendez qu'il grandisse
+egg.cantHatchEnd.DragonMounts=Les oeufs de Dragons ne peuvent pas éclore dans l'End
+dragon.growth.paused=Les pommes de terres empoisonnées stoppent la croissance des dragons, utilisez des carottes pour continuer leur croissance
+commands.dragon.nodragons=Il n'y a pas de dragons à proximité
+commands.dragon.canttame=Vous ne pouvez pas apprivoiser de dragons
+msg.dragon.toggleHover=Passer en vol stationnaire
+msg.dragon.toggleFollowYaw=Ce Dragon vous suis
+msg.dragon.toggleYLock=Controles par défauts (Espace et Alt Gauche)
+
+# Whistle
+whistle.msg.cleared=Ce Dragon a été délié
+whistle.msg.hasDragon=Ce Dragon a été lié avec cette flute
+whistle.msg.unBound=Vous devez d'abord y lier un Dragon
+whistle.msg.notOwned=You Vous n'êtes pas le propriétaire de ce Dragon
+whistle.msg.noDragon=Cette Flute Draconique n'est pas liée à un Dragon, Utilisez le Clic Droit sur un Dragon aprivoisé et dont vous êtes le propriétaire
+whistle.msg.fail=Ce Dragon n'entend pas la Flute Draconique...
+whistle.command.new_home=Nouvelle HomePos à
+
+
+##
+# Gui Names
+##
+gui.nothing=Vide
+gui.circle=Orbiter le Joueur
+gui.followFlying=Suivre en vol 
+gui.cometoPlayer=Revenir vers le Joueur
+gui.locked.dragon=Verouiller
+gui.unlocked.dragon=Déverouiller
+gui.sit=Asseoir
+gui.firesupport=Appui-feu Draconique
+gui.dragon.hunger=Barre de faim
+container.dragon_shulker=Coeur Draconique
+
+#Controls
+key.categories.dragon=Dragon Mounts
+key.dragon.projectile=Inutilisée
+key.dragon.flyUp=Monter
+key.dragon.flyDown=Descendre
+key.dragon.breath=Souffle du Dragon
+key.dragon.cancelhover=Stopper le vol stationnaire
+key.dragon.f7=Changer de caméra sur la monture
+key.dragon.followYaw=Suivre 
+key.dragon.boost=Boost de vitesse
+key.dragon.dismount=Faire descendre de l'épaule
+key.dragon.lockY=Controles par défaults
+key.dragon.down=Descendre du Dragon

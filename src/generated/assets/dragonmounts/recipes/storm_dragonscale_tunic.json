@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "dragon_scale_chestplate",
+  "pattern": [
+    "# #",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "dragonmounts:storm_dragonscales"
+    }
+  },
+  "result": {
+    "item": "dragonmounts:storm_dragonscale_tunic"
+  }
+}

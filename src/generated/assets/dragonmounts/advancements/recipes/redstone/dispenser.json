@@ -1,0 +1,83 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "dragonmounts:dispenser"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "dragonmounts:dispenser"
+      }
+    },
+    "has_bow": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "dragonmounts:dragon_bow_aether"
+          },
+          {
+            "item": "dragonmounts:dragon_bow_water"
+          },
+          {
+            "item": "dragonmounts:dragon_bow_ice"
+          },
+          {
+            "item": "dragonmounts:dragon_bow_fire"
+          },
+          {
+            "item": "dragonmounts:dragon_bow_fire2"
+          },
+          {
+            "item": "dragonmounts:dragon_bow_forest"
+          },
+          {
+            "item": "dragonmounts:dragon_bow_nether"
+          },
+          {
+            "item": "dragonmounts:dragon_bow_nether2"
+          },
+          {
+            "item": "dragonmounts:dragon_bow_end"
+          },
+          {
+            "item": "dragonmounts:dragon_bow_enchant"
+          },
+          {
+            "item": "dragonmounts:dragon_bow_sunlight"
+          },
+          {
+            "item": "dragonmounts:dragon_bow_sunlight2"
+          },
+          {
+            "item": "dragonmounts:dragon_bow_moonlight"
+          },
+          {
+            "item": "dragonmounts:dragon_bow_storm"
+          },
+          {
+            "item": "dragonmounts:dragon_bow_storm2"
+          },
+          {
+            "item": "dragonmounts:dragon_bow_terra"
+          },
+          {
+            "item": "dragonmounts:dragon_bow_terra2"
+          },
+          {
+            "item": "dragonmounts:dragon_bow_zombie"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_bow"
+    ]
+  ]
+}

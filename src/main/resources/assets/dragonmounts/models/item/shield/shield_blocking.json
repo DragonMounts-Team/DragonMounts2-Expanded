@@ -1,0 +1,25 @@
+{
+  "parent": "dragonmounts:item/shield/shield",
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [32, 32, 6],
+      "translation": [6.8, 1.32, -3.4],
+      "scale": [1, 1, 1]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [32, -148, -6],
+      "translation": [6.8, 1.32, -2.4],
+      "scale": [1, 1, 1]
+    },
+    "firstperson_righthand": {
+      "rotation": [0, 90, 0],
+      "translation": [-2.19, 2.5, -1.77],
+      "scale": [1, 1, 1]
+    },
+    "firstperson_lefthand": {
+      "rotation": [0, 90, 0],
+      "translation": [-1.43, 2.5, 7.68],
+      "scale": [1, 1, 1]
+    }
+  }
+}
