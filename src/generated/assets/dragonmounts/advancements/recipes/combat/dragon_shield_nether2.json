@@ -2,22 +2,22 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "dragonmounts:easter_egg"
+      "dragonmounts:dragon_shield_nether2"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "dragonmounts:easter_egg"
+        "recipe": "dragonmounts:dragon_shield_nether2"
       }
     },
-    "has_leather": {
+    "has_scales": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minecraft:leather"
+            "item": "dragonmounts:nether2_dragonscales"
           }
         ]
       }
@@ -26,7 +26,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_leather"
+      "has_scales"
     ]
   ]
 }

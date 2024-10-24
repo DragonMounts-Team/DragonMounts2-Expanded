@@ -1,6 +1,6 @@
 package com.TheRPGAdventurer.ROTD.inits;
 
-import com.TheRPGAdventurer.ROTD.dragonmounts.Tags;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 
-@ObjectHolder(Tags.MOD_ID)
+@ObjectHolder(DragonMountsTags.MOD_ID)
 public class ModSounds {
 	@ObjectHolder("mob.dragon.step")
 	public static final SoundEvent ENTITY_DRAGON_STEP = createSoundEvent("mob.dragon.step");
@@ -68,11 +68,11 @@ public class ModSounds {
 	public static final SoundEvent DRAGON_SWITCH = createSoundEvent("item.gender_switch");
 	
 	private static SoundEvent createSoundEvent(final String soundName) {
-		final ResourceLocation soundID = new ResourceLocation(Tags.MOD_ID, soundName);
+		final ResourceLocation soundID = new ResourceLocation(DragonMountsTags.MOD_ID, soundName);
 		return new SoundEvent(soundID).setRegistryName(soundID);
 	}
 
-	@Mod.EventBusSubscriber(modid = Tags.MOD_ID)
+	@Mod.EventBusSubscriber(modid = DragonMountsTags.MOD_ID)
 	public static class RegistrationHandler {
 		@SubscribeEvent
 		public static void registerSoundEvents(final RegistryEvent.Register<SoundEvent> event) {

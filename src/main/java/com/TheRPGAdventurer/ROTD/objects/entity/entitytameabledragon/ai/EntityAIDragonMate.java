@@ -39,7 +39,7 @@ public class EntityAIDragonMate extends EntityAIDragonBase {
      */
     @Override
     public boolean shouldExecute() {
-        if (!dragon.isInLove()) {
+        if (dragon.isSitting() || !dragon.isInLove()) {
             return false;
         } else {
             dragonMate = getNearbyMate();

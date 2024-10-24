@@ -1,0 +1,14 @@
+{
+  "parent": "dragonmounts:item/shield/shield",
+  "textures": {
+    "base": "dragonmounts:entities/dragon_shield/fire2"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "minecraft:blocking": 1.0
+      },
+      "model": "dragonmounts:item/dragon_shield_fire2_blocking"
+    }
+  ]
+}

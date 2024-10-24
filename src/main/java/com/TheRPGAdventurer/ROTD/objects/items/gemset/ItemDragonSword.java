@@ -1,7 +1,7 @@
 package com.TheRPGAdventurer.ROTD.objects.items.gemset;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
-import com.TheRPGAdventurer.ROTD.dragonmounts.Tags;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.inits.ModTools;
 import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
 import com.TheRPGAdventurer.ROTD.util.DMUtils;
@@ -28,7 +28,7 @@ public class ItemDragonSword extends ItemSword {
     public ItemDragonSword(ToolMaterial material, String name, EnumItemBreedTypes type) {
         super(material);
         this.setTranslationKey("dragon_sword");
-        this.setRegistryName(Tags.MOD_ID, name);
+        this.setRegistryName(DragonMountsTags.MOD_ID, name);
         this.type = type;
 
         ModTools.TOOLS.add(this);
@@ -62,5 +62,12 @@ public class ItemDragonSword extends ItemSword {
     @Override
     public @Nonnull CreativeTabs[] getCreativeTabs() {
         return new CreativeTabs[]{DragonMounts.armoryTab};
+    }
+
+    @Override
+    protected boolean isInCreativeTab(CreativeTabs targetTab) {
+        for (CreativeTabs tab : this.getCreativeTabs())
+            if (tab == targetTab) return true;
+        return targetTab == CreativeTabs.SEARCH;
     }
 }

@@ -1,6 +1,6 @@
 package com.TheRPGAdventurer.ROTD.util;
 
-import com.TheRPGAdventurer.ROTD.dragonmounts.Tags;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -19,7 +19,7 @@ public class DMUtils {
 
     public static Logger getLogger() {
         if (logger == null) {
-            logger = LogManager.getFormatterLogger(Tags.MOD_ID);
+            logger = LogManager.getFormatterLogger(DragonMountsTags.MOD_ID);
         }
         return logger;
     }
@@ -28,6 +28,7 @@ public class DMUtils {
         return I18n.format(s, NO_ARGS);
     }
 
+    @Deprecated
     public static boolean hasEquipped(EntityPlayer player, Item item) {
         ItemStack stack = player.getHeldItemMainhand();
         return !stack.isEmpty() && stack.getItem() == item;
@@ -38,6 +39,7 @@ public class DMUtils {
      * @WolfShotz Checks if held item is any kind of Fish (Registered under listAllfishraw in OreDict)
      * This allows other mods' fishes to be used with dragon taming
      */
+    @Deprecated
     public static boolean hasEquippedOreDicFish(EntityPlayer player) {
         ItemStack stack = player.getHeldItemMainhand();
         return !stack.isEmpty() && OreDictionary.getOres("listAllfishraw").stream().anyMatch(stack::isItemEqualIgnoreDurability);
@@ -50,6 +52,7 @@ public class DMUtils {
      * @param player player to check
      * @return true if the player has an usable item equipped
      */
+    @Deprecated
     public static boolean hasEquippedUsable(EntityPlayer player) {
         ItemStack stack = player.getHeldItemMainhand();
         return !stack.isEmpty() && stack.getItemUseAction() != EnumAction.NONE;
@@ -93,5 +96,22 @@ public class DMUtils {
             random++;
         }
         return random;
+    }
+
+    public static boolean anyMatches(ItemStack stack, int... ore) {
+        if (stack.isEmpty()) return false;
+        int len = ore.length;
+        int[] ores = OreDictionary.getOreIDs(stack);
+        int i = ores.length;
+        while (--i >= 0) {
+            int v = ores[i];
+            int j = len;
+            while (--j >= 0) {
+                if (v == ore[j]) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

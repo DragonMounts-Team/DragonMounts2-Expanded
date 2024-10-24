@@ -9,8 +9,8 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
@@ -58,42 +58,20 @@ public class ItemDiamondShears extends ItemShears implements IHasModel {
             BlockPos pos = new BlockPos(target.posX, target.posY, target.posZ);
             if (target.isShearable(itemstack, target.world, pos)) {
                 List<ItemStack> drops = target.onSheared(itemstack, target.world, pos,
-                        EnchantmentHelper.getEnchantmentLevel(net.minecraft.init.Enchantments.FORTUNE, itemstack));
-
+                        EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemstack));
                 for (ItemStack stack : drops) {
-                    boolean flag = player.inventory.addItemStackToInventory(stack);
-
-                    if (flag) {
-                        player.world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                        player.inventoryContainer.detectAndSendChanges();
-                    }
-
-                    if (flag && stack.isEmpty()) {
-                        stack.setCount(1);
-                        EntityItem entityitem1 = player.dropItem(stack, false);
-
-                        if (entityitem1 != null) {
-                            entityitem1.makeFakeItem();
-                        }
+                    if (player.inventory.addItemStackToInventory(stack)) {
+                        player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.7F + 1.0F) * 2.0F);
                     } else {
-                        EntityItem entityitem = player.entityDropItem(stack, 1F);
-
-                        if (entityitem != null) {
-                            entityitem.setNoPickupDelay();
-                            entityitem.setOwner(player.getName());
-                        }
+                        player.dropItem(stack, false);
                     }
                 }
-
                 itemstack.damageItem(20, target);
             }
-
             return true;
-
         } else {
             return super.itemInteractionForEntity(itemstack, player, entity, hand);
         }
-
     }
 
     /**
@@ -102,6 +80,13 @@ public class ItemDiamondShears extends ItemShears implements IHasModel {
     @Override
     public @Nonnull CreativeTabs[] getCreativeTabs() {
         return new CreativeTabs[]{DragonMounts.mainTab};
+    }
+
+    @Override
+    protected boolean isInCreativeTab(CreativeTabs targetTab) {
+        for (CreativeTabs tab : this.getCreativeTabs())
+            if (tab == targetTab) return true;
+        return targetTab == CreativeTabs.SEARCH;
     }
 
     @Override

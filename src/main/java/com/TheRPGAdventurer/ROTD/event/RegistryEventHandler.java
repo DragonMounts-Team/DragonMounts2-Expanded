@@ -1,8 +1,8 @@
 package com.TheRPGAdventurer.ROTD.event;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.client.gui.GuiHandler;
-import com.TheRPGAdventurer.ROTD.dragonmounts.Tags;
 import com.TheRPGAdventurer.ROTD.inits.*;
 import com.TheRPGAdventurer.ROTD.objects.blocks.BlockDragonBreedEgg;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
@@ -99,7 +99,7 @@ public class RegistryEventHandler {
 
         // register item renderer for dragon egg block variants
         Item eggItem = ItemDragonBreedEgg.DRAGON_BREED_EGG;
-        String modelLocation = Tags.MOD_ID + ":dragon_egg";
+        String modelLocation = DragonMountsTags.MOD_ID + ":dragon_egg";
         EnumDragonBreed.META_MAPPING.forEach(
                 (breed, meta) -> ModelLoader.setCustomModelResourceLocation(eggItem, meta, new ModelResourceLocation(modelLocation, "breed=" + breed.getName()))
         );

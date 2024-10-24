@@ -6,14 +6,12 @@ import com.TheRPGAdventurer.ROTD.items.ItemTestRunner;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitycarriage.EntityCarriage;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import com.TheRPGAdventurer.ROTD.objects.items.*;
-import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
-import com.TheRPGAdventurer.ROTD.objects.items.ItemDragonScales;
-import com.TheRPGAdventurer.ROTD.util.DMUtils;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -158,9 +156,7 @@ public class ModItems {
         HARDCODED_AQUATIC_FOOD.add(Items.COOKED_FISH);
     }
 
-    public static boolean isAquaticFood(ItemFood food) {
-        return HARDCODED_AQUATIC_FOOD.contains(food) || OreDictionary.getOres("listAllfishraw").stream().anyMatch(
-                stack -> !stack.isEmpty() && stack.getItem() == food
-        );
+    public static boolean isAquaticFood(ItemStack stack) {
+        return HARDCODED_AQUATIC_FOOD.contains(stack.getItem()) || ArrayUtils.contains(OreDictionary.getOreIDs(stack), OreDictionary.getOreID("listAllfishraw"));
     }
 }

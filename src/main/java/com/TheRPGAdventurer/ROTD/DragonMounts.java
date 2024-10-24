@@ -10,7 +10,6 @@
 package com.TheRPGAdventurer.ROTD;
 
 import com.TheRPGAdventurer.ROTD.client.gui.GuiHandler;
-import com.TheRPGAdventurer.ROTD.dragonmounts.Tags;
 import com.TheRPGAdventurer.ROTD.event.EventLiving;
 import com.TheRPGAdventurer.ROTD.event.IItemColorRegistration;
 import com.TheRPGAdventurer.ROTD.event.RegistryEventHandler;
@@ -43,15 +42,15 @@ import java.util.Locale;
 /**
  * Main control class for Forge.
  */
-@Mod(modid = Tags.MOD_ID, name = Tags.MOD_NAME, version = Tags.VERSION, useMetadata = true, guiFactory = DragonMounts.GUI_FACTORY)
+@Mod(modid = DragonMountsTags.MOD_ID, name = DragonMountsTags.MOD_NAME, version = DragonMountsTags.VERSION, useMetadata = true, guiFactory = DragonMounts.GUI_FACTORY)
 public class DragonMounts {
 
     public static SimpleNetworkWrapper NETWORK_WRAPPER = NetworkRegistry.INSTANCE.newSimpleChannel(DragonMounts.MODID);
     /**
-     * @deprecated use {@link Tags#MOD_ID} or {@link DragonMounts#makeId}
+     * @deprecated use {@link DragonMountsTags#MOD_ID} or {@link DragonMounts#makeId}
      */
     @Deprecated
-    public static final String MODID = Tags.MOD_ID;
+    public static final String MODID = DragonMountsTags.MOD_ID;
     public static final String GUI_FACTORY="com.TheRPGAdventurer.ROTD.DragonMountsConfigGuiFactory";
 
     @SidedProxy(serverSide="com.TheRPGAdventurer.ROTD.proxy.ServerProxy", clientSide="com.TheRPGAdventurer.ROTD.proxy.ClientProxy")
@@ -61,7 +60,7 @@ public class DragonMounts {
     public static DragonMounts instance;
 
     public static ResourceLocation makeId(String name) {
-        return new ResourceLocation(Tags.MOD_ID, name.toLowerCase(Locale.ROOT));
+        return new ResourceLocation(DragonMountsTags.MOD_ID, name.toLowerCase(Locale.ROOT));
     }
 
     private ModMetadata metadata;

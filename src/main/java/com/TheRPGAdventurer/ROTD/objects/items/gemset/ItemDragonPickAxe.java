@@ -43,4 +43,11 @@ public class ItemDragonPickAxe extends ItemPickaxe {
 	public @Nonnull CreativeTabs[] getCreativeTabs() {
 		return new CreativeTabs[]{DragonMounts.armoryTab};
 	}
+
+	@Override
+	protected boolean isInCreativeTab(CreativeTabs targetTab) {
+		for (CreativeTabs tab : this.getCreativeTabs())
+			if (tab == targetTab) return true;
+		return targetTab == CreativeTabs.SEARCH;
+	}
 }

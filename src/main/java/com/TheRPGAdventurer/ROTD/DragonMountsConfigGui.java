@@ -9,7 +9,6 @@
  */
 package com.TheRPGAdventurer.ROTD;
 
-import com.TheRPGAdventurer.ROTD.dragonmounts.Tags;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
@@ -30,6 +29,6 @@ public class DragonMountsConfigGui extends GuiConfig {
     }
 
     public DragonMountsConfigGui(GuiScreen parent) {
-        super(parent, getConfigElements(), Tags.MOD_ID, false, false, Tags.MOD_NAME);
+        super(parent, getConfigElements(), DragonMountsTags.MOD_ID, false, false, DragonMountsTags.MOD_NAME);
     }
 }

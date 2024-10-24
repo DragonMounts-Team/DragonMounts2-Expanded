@@ -32,6 +32,13 @@ public class ItemDragonArmor extends Item implements IHasModel {
     }
 
     @Override
+    protected boolean isInCreativeTab(CreativeTabs targetTab) {
+        for (CreativeTabs tab : this.getCreativeTabs())
+            if (tab == targetTab) return true;
+        return targetTab == CreativeTabs.SEARCH;
+    }
+
+    @Override
     public void RegisterModels() {
         DragonMounts.proxy.registerItemRenderer(this, 0, "inventory");
     }
