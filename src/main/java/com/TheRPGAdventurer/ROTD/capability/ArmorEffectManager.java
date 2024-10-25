@@ -5,12 +5,14 @@ import com.TheRPGAdventurer.ROTD.api.IArmorEffectSource;
 import com.TheRPGAdventurer.ROTD.network.SInitCooldownPacket;
 import com.TheRPGAdventurer.ROTD.network.SSyncCooldownPacket;
 import com.TheRPGAdventurer.ROTD.registry.CooldownCategory;
+import com.TheRPGAdventurer.ROTD.util.CooldownOverlayCompat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.CooldownTracker;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
@@ -31,6 +33,7 @@ import static java.util.Arrays.fill;
 
 public final class ArmorEffectManager implements IArmorEffectManager {
     private static ArmorEffectManager LOCAL_MANAGER = null;
+    private static SInitCooldownPacket LOCAL_CACHE = null;
     public static final int INITIAL_COOLDOWN_SIZE = 8;
     public static final int INITIAL_LEVEL_SIZE = 5;
 
@@ -63,8 +66,21 @@ public final class ArmorEffectManager implements IArmorEffectManager {
 
     public ArmorEffectManager(EntityPlayer player) {
         this.player = player;
+        this.lvlSize = INITIAL_LEVEL_SIZE;
+        this.lvlRef = new int[INITIAL_LEVEL_SIZE];
+        this.lvlKey = new IArmorEffect[INITIAL_LEVEL_SIZE];
+        this.lvlDat = new int[INITIAL_LEVEL_SIZE];
         if (player.isUser()) {
             LOCAL_MANAGER = this;
+            if (LOCAL_CACHE != null) {
+                this.cdMask = INITIAL_COOLDOWN_SIZE - 1;
+                this.cdRef = new int[INITIAL_COOLDOWN_SIZE];
+                this.cdKey = new int[INITIAL_COOLDOWN_SIZE];
+                this.cdDat = new int[INITIAL_COOLDOWN_SIZE];
+                init(LOCAL_CACHE);
+                LOCAL_CACHE = null;
+                return;
+            }
             // capabilities are attached to entities in <init>,
             // while assignments occur after <init>.
             // if we try to read a field when running <init>,
@@ -79,10 +95,6 @@ public final class ArmorEffectManager implements IArmorEffectManager {
                     this.cdDat = manager.cdDat;
                     this.cdMask = manager.cdMask;
                     this.cdN = manager.cdN;
-                    this.lvlSize = INITIAL_LEVEL_SIZE;
-                    this.lvlRef = new int[INITIAL_LEVEL_SIZE];
-                    this.lvlKey = new IArmorEffect[INITIAL_LEVEL_SIZE];
-                    this.lvlDat = new int[INITIAL_LEVEL_SIZE];
                     return;
                 }
             }
@@ -91,10 +103,6 @@ public final class ArmorEffectManager implements IArmorEffectManager {
         this.cdRef = new int[INITIAL_COOLDOWN_SIZE];
         fill(this.cdKey = new int[INITIAL_COOLDOWN_SIZE], -1);
         this.cdDat = new int[INITIAL_COOLDOWN_SIZE];
-        this.lvlSize = INITIAL_LEVEL_SIZE;
-        this.lvlRef = new int[INITIAL_LEVEL_SIZE];
-        this.lvlKey = new IArmorEffect[INITIAL_LEVEL_SIZE];
-        this.lvlDat = new int[INITIAL_LEVEL_SIZE];
     }
 
     public static ArmorEffectManager getLocal() {
@@ -106,23 +114,33 @@ public final class ArmorEffectManager implements IArmorEffectManager {
     }
 
     public static void init(SInitCooldownPacket packet) {
-        if (LOCAL_MANAGER == null) return;//?
-        LOCAL_MANAGER.cdN = 0;
+        ArmorEffectManager manager = LOCAL_MANAGER;
+        if (manager == null) {
+            LOCAL_CACHE = packet;
+            return;
+        }
+        manager.cdN = 0;
         final int length = packet.size;
         final int[] data = packet.data;
-        if (length > LOCAL_MANAGER.cdMask) {
-            int size = LOCAL_MANAGER.cdRef.length << 1;
+        if (length > manager.cdMask) {
+            int size = manager.cdRef.length << 1;
             while (length >= size) size <<= 1;
-            LOCAL_MANAGER.cdMask = size - 1;
-            LOCAL_MANAGER.cdRef = new int[size];
-            fill(LOCAL_MANAGER.cdKey = new int[size], -1);
-            LOCAL_MANAGER.cdDat = new int[size];
+            manager.cdMask = size - 1;
+            manager.cdRef = new int[size];
+            fill(manager.cdKey = new int[size], -1);
+            manager.cdDat = new int[size];
         } else {
-            fill(LOCAL_MANAGER.cdKey, -1);
+            fill(manager.cdKey, -1);
         }
-        for (int i = 0, j = 0, k; i < length; ++i) {
+        CooldownTracker vanilla = manager.player.getCooldownTracker();
+        for (int i = 0, j = 0, k, n; i < length; ++i) {
             if ((k = data[i++]) >= 0) {
-                j = LOCAL_MANAGER.setCdImpl(k, data[i], j);
+                CooldownCategory category = CooldownCategory.REGISTRY.getValue(k);
+                if (category == null) continue;
+                j = manager.setCdImpl(k, n = data[i], j);
+                for (Item item : CooldownOverlayCompat.getItems(category)) {
+                    vanilla.setCooldown(item, n);
+                }
             }
         }
     }

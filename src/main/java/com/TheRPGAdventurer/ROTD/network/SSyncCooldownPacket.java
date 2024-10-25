@@ -2,7 +2,10 @@ package com.TheRPGAdventurer.ROTD.network;
 
 import com.TheRPGAdventurer.ROTD.capability.ArmorEffectManager;
 import com.TheRPGAdventurer.ROTD.registry.CooldownCategory;
+import com.TheRPGAdventurer.ROTD.util.CooldownOverlayCompat;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.item.Item;
+import net.minecraft.util.CooldownTracker;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -42,7 +45,12 @@ public class SSyncCooldownPacket implements IMessage {
             if (manager == null) return null;
             CooldownCategory category = CooldownCategory.REGISTRY.getValue(packet.id);
             if (category == null) return null;
-            manager.setCooldown(category, packet.cd);
+            int cd = packet.cd;
+            manager.setCooldown(category, cd);
+            CooldownTracker vanilla = manager.player.getCooldownTracker();
+            for (Item item : CooldownOverlayCompat.getItems(category)) {
+                vanilla.setCooldown(item, cd);
+            }
             return null;
         }
     }

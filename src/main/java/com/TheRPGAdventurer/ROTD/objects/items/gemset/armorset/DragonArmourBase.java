@@ -6,9 +6,10 @@ import com.TheRPGAdventurer.ROTD.api.IArmorEffectSource;
 import com.TheRPGAdventurer.ROTD.capability.IArmorEffectManager;
 import com.TheRPGAdventurer.ROTD.inits.ModArmour;
 import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
+import com.TheRPGAdventurer.ROTD.registry.CooldownCategory;
+import com.TheRPGAdventurer.ROTD.util.CooldownOverlayCompat;
 import com.TheRPGAdventurer.ROTD.util.DMUtils;
 import com.TheRPGAdventurer.ROTD.util.IHasModel;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,7 +28,6 @@ import java.util.List;
 import static com.TheRPGAdventurer.ROTD.DragonMounts.makeId;
 
 public abstract class DragonArmourBase extends ItemArmor implements IHasModel, IArmorEffectSource {
-	public static final Reference2ObjectOpenHashMap<EntityPlayer, EnumItemBreedTypes> ARMOR_SET = new Reference2ObjectOpenHashMap<>();
 	private final EnumItemBreedTypes type;
 	public final IArmorEffect effect;
 
@@ -38,6 +38,9 @@ public abstract class DragonArmourBase extends ItemArmor implements IHasModel, I
 		setRegistryName(makeId(unlocalizedName));
 		this.type = type;
 		ModArmour.ARMOR.add(this);
+		if (effect instanceof CooldownCategory) {
+			CooldownOverlayCompat.register((CooldownCategory) effect, this);
+		}
 	}
 
 	@Deprecated
