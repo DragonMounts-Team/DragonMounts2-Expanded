@@ -35,6 +35,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 
+import static com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonLifeStage.getLifeStageFromTickCount;
 import static net.minecraft.entity.SharedMonsterAttributes.*;
 
 /**
@@ -148,7 +149,7 @@ public class DragonLifeStageHelper extends DragonHelper {
      */
     public DragonLifeStage getLifeStage() {
         int age = getTicksSinceCreation();
-        return DragonLifeStage.getLifeStageFromTickCount(age);
+        return getLifeStageFromTickCount(age);
     }
 
     /**
@@ -194,6 +195,11 @@ public class DragonLifeStageHelper extends DragonHelper {
         ticksRead = DragonLifeStage.clipTickCountToValid(ticksRead);
         ticksSinceCreationServer = ticksRead;
         dataWatcher.set(dataParam, ticksSinceCreationServer);
+        float health = this.dragon.getHealth();
+        DragonLifeStage stage = getLifeStageFromTickCount(ticksRead);
+        this.onNewLifeStage(stage, this.lifeStagePrev);
+        this.lifeStagePrev = stage;
+        this.dragon.setHealth(health);
     }
 
     /**
@@ -252,6 +258,7 @@ public class DragonLifeStageHelper extends DragonHelper {
             // heal dragon to updated full health
             dragon.setHealth(dragon.getMaxHealth());
         }
+        dragon.onLifeStageChange(lifeStage);
     }
 
     @Override

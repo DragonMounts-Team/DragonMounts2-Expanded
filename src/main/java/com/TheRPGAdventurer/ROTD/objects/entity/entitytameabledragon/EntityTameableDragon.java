@@ -2326,7 +2326,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
         int numberOfInventoryforChest = 27;
         int numberOfPlayerArmor = 5;
         DragonInventory dragonInv = this.dragonInv;
-        this.dragonInv = new DragonInventory("dragonInv", 6 + numberOfInventoryforChest + 6 + numberOfPlayerArmor, this);
+        this.dragonInv = new DragonInventory("dragonInv", 6 + numberOfInventoryforChest + 6 + numberOfPlayerArmor);
         this.dragonInv.setCustomName(this.getName());
         if (dragonInv != null) {
             int i = Math.min(dragonInv.getSizeInventory(), this.dragonInv.getSizeInventory());
@@ -2481,30 +2481,27 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
         return event.getResult() == Event.Result.DEFAULT ? effect.getPotion() != MobEffects.WEAKNESS : event.getResult() == Event.Result.ALLOW;
     }
 
-    /**
-     * Credits: AlexThe 666 Ice and Fire
-     */
-    public class DragonInventory extends ContainerHorseChest {
-
-        public DragonInventory(String inventoryTitle, int slotCount, EntityTameableDragon dragon) {
-            super(inventoryTitle, slotCount);
-            this.addInventoryChangeListener(new DragonInventoryListener(dragon));
+    public final void onLifeStageChange(DragonLifeStage stage) {
+        if (stage.isEgg()) {
+            this.setSize(3.5F, 4.0F);
+        } else {
+            Pair<Float, Float> size = this.getBreed().getAdultEntitySize();
+            this.setSize(size.getFirst(), size.getSecond());
         }
     }
 
     /**
      * Credits: AlexThe 666 Ice and Fire
      */
-    public class DragonInventoryListener implements IInventoryChangedListener {
-        EntityTameableDragon dragon;
-
-        public DragonInventoryListener(EntityTameableDragon dragon) {
-            this.dragon = dragon;
+    public class DragonInventory extends ContainerHorseChest implements IInventoryChangedListener {
+        public DragonInventory(String inventoryTitle, int slotCount) {
+            super(inventoryTitle, slotCount);
+            this.addInventoryChangeListener(this);
         }
 
         @Override
-        public void onInventoryChanged(IInventory invBasic) {
-            refreshInventory();
+        public void onInventoryChanged(IInventory inventory) {
+            EntityTameableDragon.this.refreshInventory();
         }
     }
 
