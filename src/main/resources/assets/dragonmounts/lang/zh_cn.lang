@@ -178,13 +178,11 @@ container.dragon_shulker=龙核心
 
 key.categories.dragon=龙骑士
 key.dragon.projectile=未经使用的
-key.dragon.flyUp=向上飞
-key.dragon.flyDown=向下飞
 key.dragon.breath=龙息
 key.dragon.cancelhover=取消悬停
 key.dragon.f7=更换骑乘视角
 key.dragon.followYaw=跟随玩家视角
 key.dragon.boost=飞行加速
-key.dragon.dismount=肩部卸下（Shoulder Dismount）
-key.dragon.lockY=旧操纵（Old Controls）
-key.dragon.down=下
+key.dragon.dismount= 肩部卸下（Shoulder Dismount）
+key.dragon.lockY=锁定高度
+key.dragon.down=降落

@@ -248,6 +248,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
         attributes.getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(RESISTANCE);
         attributes.getAttributeInstance(SharedMonsterAttributes.ARMOR).setBaseValue(BASE_ARMOR);
         attributes.getAttributeInstance(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(BASE_TOUGHNESS);
+        attributes.getAttributeInstance(SWIM_SPEED).setBaseValue(5.0);
     }
 
     /**
@@ -782,7 +783,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
                 inAirTicks++;
             }
 
-            boolean flying = canFly() && inAirTicks > IN_AIR_THRESH && (!isInWater() || !isInLava() && getControllingPlayer() != null);
+            boolean flying = inAirTicks > IN_AIR_THRESH && canFly() && (!isInWater() && !isInLava() || getControllingPlayer() != null);
             if (flying != isFlying()) {
 
                 // notify client
@@ -796,7 +797,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
                 getEntityAttribute(FOLLOW_RANGE).setBaseValue(getDragonSpeed());
 
                 // update pathfinding method
-                if (isFlying()) {
+                if (flying) {
                     navigator = new PathNavigateFlying(this, world);
                 } else {
                     navigator = new PathNavigateGround(this, world);
@@ -1218,7 +1219,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
 
     @Override
     protected float getWaterSlowDown() {
-        return 1.1F;
+        return 0.925F;// Vanilla: 0.8F
     }
 
     public void tamedFor(EntityPlayer player, boolean successful) {
@@ -2102,6 +2103,15 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
         addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 35 * 20));
     }
 
+    @Nullable
+    public String checkAccess(EntityPlayer player) {
+        if (!this.isTamed() && !isEgg()) {
+            return "dragon.notTamed";
+        } else if (!this.allowedOtherPlayers() && !this.isTamedFor(player) && this.isTamed()) {
+            return "dragon.locked";
+        } else return null;
+    }
+
     /**
      * is the dragon allowed to be controlled by other players? Uses dragon is not owned status messages
      *
@@ -2109,17 +2119,10 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
      * @return
      */
     public boolean isAllowed(EntityPlayer player) {
-        // can Interact when holding food, player can feed dragon whether they are allowed or not
-        boolean hasFood = player.getHeldItemMainhand().getItem() instanceof ItemFood;
-
-        if (!this.isTamed() && !hasFood && !isEgg()) {
-            player.sendStatusMessage(new TextComponentTranslation("dragon.notTamed"), true);
-            L.debug("dragon.notTamed");
-            return this.isTamedFor(player);
-        } else if (!this.allowedOtherPlayers() && !this.isTamedFor(player) && this.isTamed() && !(this.getHunger() < 100 && hasFood)) {
-            player.sendStatusMessage(new TextComponentTranslation("dragon.locked"), true);
-            return false;
-        } else return true;
+        String warn = this.checkAccess(player);
+        if (warn == null) return true;
+        player.sendStatusMessage(new TextComponentTranslation(warn), true);
+        return false;
     }
 
     private void eatEvent(Item item) {
@@ -2171,7 +2174,8 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
             return true;
         }
 
-        boolean allow = isAllowed(player);
+        final String warn = checkAccess(player);
+        final boolean allow = warn == null;
 
         /*
          * Dragon Riding The Player
@@ -2213,11 +2217,17 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
                             this.setRidingPlayer(player);
                         }
                     } else if (!isSaddled() && stack.getItem() == Items.SADDLE && isOldEnoughToBreathe()) {
-                        dragonInv.setInventorySlotContents(0, stack.splitStack(1));
+                        if (player.capabilities.isCreativeMode) {
+                            ItemStack copy = stack.copy();
+                            copy.setCount(1);
+                            dragonInv.setInventorySlotContents(0, copy);
+                        } else {
+                            dragonInv.setInventorySlotContents(0, stack.splitStack(1));
+                        }
+                        player.swingArm(hand);
                         world.playSound(posX, posY, posZ, SoundEvents.ENTITY_HORSE_SADDLE, SoundCategory.PLAYERS, 1F, 1.0F, false);
                     }
                 }
-
             }
         }
 
@@ -2227,6 +2237,8 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
         if (stack.isEmpty()) return false;
         Item item = stack.getItem();
         if (!(item instanceof ItemFood)) return false;
+        boolean isTamed = this.isTamed();
+        if (isTamed && this.getHunger() >= 100) return false;
         ItemFood food = (ItemFood) item;
         boolean isAquaticFood;
         if (food.isWolfsFavoriteMeat()) {
@@ -2236,8 +2248,11 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
             isAquaticFood = ModItems.isAquaticFood(stack);
             if (isAquaticFood && this.consumeFood(player, stack, food)) return true;
         }
+        if (!allow) {
+            player.sendStatusMessage(new TextComponentTranslation(warn), true);
+            return false;
+        }
         DragonBreed breed = getBreed();
-        if (!allow) return false;
         if (isGrowthPaused()) {
             // Continue growth
             if (breed.getGrowingFood() == food) {
@@ -2259,7 +2274,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
             }
         }
         // Mate
-        if ((isAquaticFood || breed.getBreedingItem() == food) && this.isTamed() && this.isAdult() && !this.isInLove()) {
+        if ((isAquaticFood || breed.getBreedingItem() == food) && isTamed && this.isAdult() && !this.isInLove()) {
             setInLove(player);
             eatEvent(food);
             consumeItemFromStack(player, stack);

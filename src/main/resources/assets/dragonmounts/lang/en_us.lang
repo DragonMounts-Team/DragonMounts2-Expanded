@@ -201,8 +201,6 @@ container.dragon_shulker=Dragon Core
 #Controls
 key.categories.dragon=Dragon Mounts
 key.dragon.projectile=UNUSED
-key.dragon.flyUp=Fly Up
-key.dragon.flyDown=Fly Down
 key.dragon.breath=Dragon Breath
 key.dragon.cancelhover=Cancel Hover
 key.dragon.f7=Change Mount Camera
@@ -210,4 +208,4 @@ key.dragon.followYaw=Follow Yaw
 key.dragon.boost=Flight Boost
 key.dragon.dismount=Shoulder Dismount
 key.dragon.lockY=Old Controls
-key.dragon.down=Down
+key.dragon.down=Descent

@@ -51,7 +51,10 @@ public class DragonMounts {
      */
     @Deprecated
     public static final String MODID = DragonMountsTags.MOD_ID;
-    public static final String GUI_FACTORY="com.TheRPGAdventurer.ROTD.DragonMountsConfigGuiFactory";
+    /**
+     * the canonical name of {@link DragonMountsConfigGuiFactory}
+     */
+    public static final String GUI_FACTORY = "com.TheRPGAdventurer.ROTD.DragonMountsConfigGuiFactory";
 
     @SidedProxy(serverSide="com.TheRPGAdventurer.ROTD.proxy.ServerProxy", clientSide="com.TheRPGAdventurer.ROTD.proxy.ClientProxy")
     public static ServerProxy proxy;

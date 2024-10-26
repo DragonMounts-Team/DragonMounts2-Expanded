@@ -45,7 +45,7 @@ public class ItemDragonEssence extends Item implements IHasModel {
     	
         EntityTameableDragon dragon = new EntityTameableDragon(world);
         dragon.readFromNBT(stack.getTagCompound());
-        
+
         if (dragon.isAllowed(player)) {
         	dragon.setPosition(pos.getX(), pos.getY() + 1, pos.getZ());
         	world.spawnEntity(dragon);

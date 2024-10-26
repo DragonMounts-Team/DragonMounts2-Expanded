@@ -26,16 +26,14 @@ import net.minecraftforge.fml.common.IWorldGenerator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+
+import static com.TheRPGAdventurer.ROTD.util.DMUtils.getSurface;
 
 /**
  * Handles world generation for dragon nests, make a separate package if we are gonna use Mappers to optimize instead of the IWorldGenerator
  */
 public class DragonMountsWorldGenerator implements IWorldGenerator {
-
-    public static BlockPos getHeight(World world, BlockPos pos) {
-        return world.getHeight(pos);
-    }
-
     @Override
     public void generate(Random random, int x, int z, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
         if (world.provider.getDimensionType() == DimensionType.NETHER) {
@@ -103,17 +101,17 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
     public void generateNestAtSurface(World world, Random random, int chunkX, int chunkZ) {
         int x = (chunkX * 16) + random.nextInt(16);
         int z = (chunkZ * 16) + random.nextInt(16);
-        BlockPos height = getHeight(world, new BlockPos(x, 0, z));
-
-        boolean isMountainOrBeach = BiomeDictionary.hasType(world.getBiome(height), Type.MOUNTAIN) || world.getBiomeForCoordsBody(height) == Biomes.STONE_BEACH;
-        boolean isSnowy = BiomeDictionary.hasType(world.getBiome(height), Type.SNOWY);
-        boolean isJungle = BiomeDictionary.hasType(world.getBiome(height), Type.JUNGLE);
-        boolean isForest = BiomeDictionary.hasType(world.getBiome(height), Type.FOREST);
-        boolean isSwamp = BiomeDictionary.hasType(world.getBiome(height), Type.SWAMP);
-        boolean isDesert = BiomeDictionary.hasType(world.getBiome(height), Type.SANDY);
-        boolean isPlains = BiomeDictionary.hasType(world.getBiome(height), Type.PLAINS);
-        boolean isMesa = BiomeDictionary.hasType(world.getBiome(height), Type.MESA);
-        boolean isOcean = BiomeDictionary.hasType(world.getBiome(height), Type.OCEAN);
+        BlockPos height = getSurface(world, x, z);
+        Set<Type> types = BiomeDictionary.getTypes(world.getBiome(height));
+        boolean isMountainOrBeach = types.contains(Type.MOUNTAIN) || world.getBiomeForCoordsBody(height) == Biomes.STONE_BEACH;
+        boolean isSnowy = types.contains(Type.SNOWY);
+        boolean isJungle = types.contains(Type.JUNGLE);
+        boolean isForest = types.contains(Type.FOREST);
+        boolean isSwamp = types.contains(Type.SWAMP);
+        boolean isDesert = types.contains(Type.SANDY);
+        boolean isPlains = types.contains(Type.PLAINS);
+        boolean isMesa = types.contains(Type.MESA);
+        boolean isOcean = types.contains(Type.OCEAN);
 
         if (DragonMountsConfig.canSpawnSurfaceDragonNest && !world.isRemote) {
             if (isOcean && random.nextInt((DragonMountsConfig.OceanNestRarity)) == 1) {
@@ -268,7 +266,7 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
         if (DragonMountsConfig.canSpawnEndNest && random.nextInt(DragonMountsConfig.EnchantNestRarity) == 1) {
             int x = (chunkX * 16) + random.nextInt(16);
             int z = (chunkZ * 16) + random.nextInt(16);
-            BlockPos height = getHeight(world, new BlockPos(x, 0, z));
+            BlockPos height = getSurface(world, x, z);
 
             if (canSpawnHere(world, height, 5)) {
                 loadStructure(new BlockPos(height.getX(), height.getY() - 1, height.getZ()), worldserver, "enchant", LootTableList.CHESTS_END_CITY_TREASURE, true, random);

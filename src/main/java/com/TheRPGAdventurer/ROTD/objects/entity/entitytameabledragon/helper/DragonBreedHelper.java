@@ -26,10 +26,7 @@ import org.apache.commons.lang3.EnumUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -198,9 +195,7 @@ public class DragonBreedHelper extends DragonHelper {
 
                 // update most dominant breed
                 EnumDragonBreed newType = breedPoints.entrySet().stream()
-                        .max((breed1, breed2) -> Integer.compare(
-                                breed1.getValue().get(),
-                                breed2.getValue().get()))
+                        .max(Comparator.comparingInt(breed -> breed.getValue().get()))
                         .get().getKey();
 
                 if (newType != currentType) {

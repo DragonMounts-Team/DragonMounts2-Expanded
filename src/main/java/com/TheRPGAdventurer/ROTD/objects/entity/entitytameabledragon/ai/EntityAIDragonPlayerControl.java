@@ -98,4 +98,9 @@ public class EntityAIDragonPlayerControl extends EntityAIDragonBase {
             dragon.getMoveHelper().setMoveTo(x, y, z, 1.2);
         }
     }
+
+    @Override
+    public void resetTask() {
+        this.dragon.setUsingBreathWeapon(false);
+    }
 }

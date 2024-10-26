@@ -201,8 +201,6 @@ container.dragon_shulker=Coeur Draconique
 #Controls
 key.categories.dragon=Dragon Mounts
 key.dragon.projectile=Inutilisée
-key.dragon.flyUp=Monter
-key.dragon.flyDown=Descendre
 key.dragon.breath=Souffle du Dragon
 key.dragon.cancelhover=Stopper le vol stationnaire
 key.dragon.f7=Changer de caméra sur la monture

@@ -6,6 +6,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -113,5 +115,9 @@ public class DMUtils {
             }
         }
         return false;
+    }
+
+    public static BlockPos getSurface(World level, int x, int z) {
+        return new BlockPos(x, level.getHeight(x, z), z);
     }
 }

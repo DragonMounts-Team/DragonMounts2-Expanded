@@ -342,7 +342,7 @@ public class GuiDragonDebug extends Gui {
         text.setColor(YELLOW);
         text.println("Navigation (Air)");
         text.setColor(WHITE);
-        
+
         text.println("Can fly: " + dragonClient.canFly());
         text.println("Flying: " + dragonClient.isFlying());
         text.println("Altitude: " + dfLong.format(dragonClient.getAltitude()));
