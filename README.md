@@ -1,4 +1,3 @@
-===============
 ![LOGO](src/main/resources/logo.png)
 
 # Dragon-Mounts-2
