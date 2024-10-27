@@ -16,6 +16,7 @@ import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.Enum
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonBreedHelper;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonLifeStageHelper;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonReproductionHelper;
+import com.TheRPGAdventurer.ROTD.util.DMUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -97,6 +98,7 @@ public class GuiDragonDebug extends Gui {
                 renderProbe();
             } catch (Exception ex) {
                 renderException(ex);
+                DMUtils.getLogger().error("Error rendering", ex);
             }
 
             if (dragonClient.isDead) {
@@ -150,7 +152,7 @@ public class GuiDragonDebug extends Gui {
         
         for (WorldServer ws : mcs.worlds) {
             Entity ent = ws.getEntityByID(dragonClient.getEntityId());
-            if (ent != null && ent instanceof EntityTameableDragon) {
+            if (ent instanceof EntityTameableDragon) {
                 dragonServer = (EntityTameableDragon) ent;
                 return;
             }
@@ -292,21 +294,27 @@ public class GuiDragonDebug extends Gui {
         
         text.println();
     }
-    
-  private void renderBreedPoints() {
-     if (dragonServer == null) {
-         return;
-     }
-        
-     text.setColor(YELLOW);
-     text.println("Breed points");
-     text.setColor(WHITE);
-        
-      DragonBreedHelper breedHelper = dragonServer.getBreedHelper();
-      breedHelper.getBreedPoints().forEach((breedType, points) -> {
-        text.setColor(breedType.getBreed().getColor());
-        text.printf("%s: %d\n", breedType, points.get());
-      });
+
+    private void renderBreedPoints() {
+        if (dragonServer == null) return;
+        text.setColor(YELLOW);
+        text.println("Breed points");
+        text.setColor(WHITE);
+        int top = text.getY();
+        int[] data = {0, 0};// lines, end
+        DragonBreedHelper breedHelper = dragonServer.getBreedHelper();
+        breedHelper.getBreedPoints().forEach((breedType, points) -> {
+            text.setColor(breedType.getBreed().getColor());
+            text.printf("%s: %d", breedType, points.get());
+            if (text.getX() > data[1]) {
+                data[1] = text.getX();
+            }
+            text.println();
+            if (++data[0] > 4) {
+                data[0] = 0;
+                text.setOrigin(data[1] + 5, top);
+            }
+        });
     }
 
     private void renderNavigation() {

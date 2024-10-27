@@ -14,7 +14,6 @@ import com.TheRPGAdventurer.ROTD.DragonMountsConfig;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonLifeStage;
-import com.TheRPGAdventurer.ROTD.util.DMUtils;
 import net.minecraft.block.BlockDragonEgg;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.SoundType;
@@ -43,10 +42,9 @@ import java.util.Random;
  * 
  */
 public class BlockDragonBreedEgg extends BlockDragonEgg {
-    
+
     public static final PropertyEnum<EnumDragonBreed> BREED = PropertyEnum.create("breed", EnumDragonBreed.class);
     public static BlockDragonBreedEgg DRAGON_BREED_EGG;
-    public static int meta; 
     
     public BlockDragonBreedEgg() {
         setTranslationKey("dragonEgg");
@@ -62,19 +60,17 @@ public class BlockDragonBreedEgg extends BlockDragonEgg {
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, BREED);
     }
-    
+
     @Override
     public IBlockState getStateFromMeta(int meta) {
-    	this.meta = meta;
         return getDefaultState().withProperty(BREED, EnumDragonBreed.META_MAPPING.inverse().get(meta));
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        EnumDragonBreed type = state.getValue(BREED);
-        return EnumDragonBreed.META_MAPPING.get(type);
+        return EnumDragonBreed.META_MAPPING.get(state.getValue(BREED));
     }
-    
+
     @Override
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
         EnumDragonBreed.META_MAPPING.values().forEach(index -> items.add(new ItemStack(this, 1, index)));
@@ -87,7 +83,7 @@ public class BlockDragonBreedEgg extends BlockDragonEgg {
     
     @Override 
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        this.checkFall(worldIn, pos);
+        this.checkFall(worldIn, pos, state);
     }
     
     @Override
@@ -100,11 +96,16 @@ public class BlockDragonBreedEgg extends BlockDragonEgg {
      */
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-    	if (worldIn.isRemote || DragonMountsConfig.isDisableBlockOverride()) return false;
+        if (DragonMountsConfig.isDisableBlockOverride()) return false;
     	if (worldIn.provider.getDimensionType() == DimensionType.THE_END) {
-    		player.sendStatusMessage(new TextComponentTranslation(DMUtils.translateToLocal("egg.cantHatchEnd.DragonMounts")), true);
+            if (!worldIn.isRemote) {
+                player.sendStatusMessage(new TextComponentTranslation("egg.cantHatchEnd.DragonMounts"), true);
+            }
     		return false;
-    	}
+        } else if (worldIn.isRemote) {
+            worldIn.playSound(player, pos, SoundEvents.BLOCK_WOOD_HIT, SoundCategory.PLAYERS, 1, 1);
+            return true;
+        }
 
     	EntityTameableDragon dragon = new EntityTameableDragon(worldIn);
         dragon.setBreedType(state.getValue(BlockDragonBreedEgg.BREED));
@@ -112,34 +113,28 @@ public class BlockDragonBreedEgg extends BlockDragonEgg {
     	dragon.getLifeStageHelper().setLifeStage(DragonLifeStage.EGG);
     	dragon.getReproductionHelper().setBreeder(player);
         dragon.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-        if(worldIn.isRemote) dragon.world.playSound(player, dragon.getPosition(), SoundEvents.BLOCK_WOOD_HIT, SoundCategory.PLAYERS, 1, 1);
-
-
         worldIn.spawnEntity(dragon);
-
         return true;
-        
     }
-    
-    private void checkFall(World worldIn, BlockPos pos) {
-        if (worldIn.isAirBlock(pos.down()) && BlockFalling.canFallThrough(worldIn.getBlockState(pos.down())) && pos.getY() >= 0) {
-            int i = 32;
 
+    private void checkFall(World worldIn, BlockPos pos, IBlockState state) {
+        if (pos.getY() < 0) return;
+        BlockPos bottom = pos.down();
+        if (worldIn.isAirBlock(bottom) && BlockFalling.canFallThrough(worldIn.getBlockState(bottom))) {
             if (!BlockFalling.fallInstantly && worldIn.isAreaLoaded(pos.add(-32, -32, -32), pos.add(32, 32, 32))) {
-                worldIn.spawnEntity(new EntityFallingBlock(worldIn, (double)((float)pos.getX() + 0.5F), (double)pos.getY(), (double)((float)pos.getZ() + 0.5F), this.getStateFromMeta(meta)));
+                worldIn.spawnEntity(new EntityFallingBlock(worldIn, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, state));
             } else {
                 worldIn.setBlockToAir(pos);
-                BlockPos blockpos;
-
-                for (blockpos = pos; worldIn.isAirBlock(blockpos) && BlockFalling.canFallThrough(worldIn.getBlockState(blockpos)) && blockpos.getY() > 0; blockpos = blockpos.down()) {}
-
-                if (blockpos.getY() > 0) {
-                    worldIn.setBlockState(blockpos, this.getStateFromMeta(meta), 2);
+                BlockPos blockpos = pos;
+                while (worldIn.isAirBlock(blockpos) && BlockFalling.canFallThrough(worldIn.getBlockState(blockpos))) {
+                    if (blockpos.getY() <= 0) return;
+                    blockpos = blockpos.down();
                 }
+                worldIn.setBlockState(blockpos, state, 2);
             }
         }
     }
-    
+
+    @Deprecated
     public static final BlockDragonBreedEgg[] BLOCK_EGG = {DRAGON_BREED_EGG = new BlockDragonBreedEgg()};
-     
 }

@@ -24,7 +24,7 @@ import static net.minecraft.entity.SharedMonsterAttributes.FOLLOW_RANGE;
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public abstract class EntityAIDragonBase extends EntityAIBase {
-    
+
     protected EntityTameableDragon dragon;
     protected World world;
     protected Random random;
@@ -36,11 +36,11 @@ public abstract class EntityAIDragonBase extends EntityAIBase {
         this.random = dragon.getRNG(); 
         rider = dragon.getControllingPlayer();
     }
-    
+
     protected boolean tryMoveToBlockPos(BlockPos pos, double speed) {
         return dragon.getNavigator().tryMoveToXYZ(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, speed);
     }
-    
+
     protected double getFollowRange() {
         return dragon.getAttributeMap().getAttributeInstance(FOLLOW_RANGE).getAttributeValue();
     }

@@ -149,7 +149,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
     private static final DataParameter<Integer> DATA_BREATH_WEAPON_MODE = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.VARINT);
     public static int ticksShear;
     // server/client delegates
-    private final Map<Class, DragonHelper> helpers = new HashMap<>();
+    private final Map<Class<?>, DragonHelper> helpers = new HashMap<>();
     // client-only delegates
     private final DragonBodyHelper dragonBodyHelper = new DragonBodyHelper(this);
     public EntityEnderCrystal healingEnderCrystal;
