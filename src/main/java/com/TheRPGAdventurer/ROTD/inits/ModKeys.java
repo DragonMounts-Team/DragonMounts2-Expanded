@@ -8,8 +8,8 @@ public class ModKeys {
 	
     public static final String KEY_CATEGORY = "key.categories.dragon";
     public static KeyBinding FOLLOW_YAW;
-    public static  KeyBinding KEY_BREATH;
-    public static  KeyBinding KEY_PROJECTILE;
+    public static KeyBinding KEY_BREATH;
+    public static KeyBinding KEY_PROJECTILE;
     public static KeyBinding KEY_HOVERCANCEL;
     public static KeyBinding KEY_LOCKEDY;
     public static KeyBinding BOOST;

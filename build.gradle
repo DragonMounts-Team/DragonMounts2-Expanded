@@ -47,7 +47,7 @@ version = propertyString('mod_version')
 group = propertyString('root_package')
 
 base {
-    archivesName.set(propertyString('mod_id'))
+    archivesName.set((propertyString('mod_name') as String).replaceAll(' ', ''))
 }
 
 sourceSets.main.resources.srcDir('src/generated/')
@@ -175,7 +175,7 @@ processResources {
         fcd.expand(
                 'mod_id': propertyString('mod_id'),
                 'mod_name': propertyString('mod_name'),
-                'mod_version': propertyString('mod_version'),
+                'mod_version': project.version,
                 'mod_description': propertyString('mod_description'),
                 'mod_authors': authors.isEmpty() ? "" : authors.substring(1, authors.length() - 1),
                 'mod_credits': propertyString('mod_credits'),
@@ -212,7 +212,7 @@ jar {
                 if (currentTasks[0] == 'build' || currentTasks[0] == 'prepareObfModsFolder' || currentTasks[0] == 'runObfClient') {
                     attribute_map['ForceLoadAsMod'] = true
                 }
-        }
+            }
         }
         if (propertyBool('use_access_transformer')) {
             attribute_map['FMLAT'] = "${propertyString('mod_id')}_at.cfg"
@@ -352,6 +352,30 @@ tasks.register('prioritizeCoremods') {
 tasks.register('runData', Exec) {
     workingDir './data'
     commandLine 'python', 'DataGenerator.py'
+}
+
+tasks.register('appendSnapshot') {
+    String prefix = String.format("%dw%02d", Calendar.instance.get(Calendar.YEAR) % 100, Calendar.instance.get(Calendar.WEEK_OF_YEAR))
+    def lastBuild = new File("run", "lastBuild.txt")
+    lastBuild.parentFile.mkdirs()
+    String snapshot
+    if (lastBuild.exists()) {
+        String text = lastBuild.text
+        if (text.length() == 6 && text.startsWith(prefix)) {
+            snapshot = prefix + (char) (text.charAt(5) + 1)
+        } else {
+            snapshot = prefix + 'a'
+        }
+    } else {
+        snapshot = prefix + 'a'
+    }
+    project.version += '-' + snapshot
+    lastBuild.text = snapshot
+}
+
+tasks.register('buildSnapshot') {
+    dependsOn appendSnapshot
+    dependsOn build
 }
 
 idea.project.settings {
