@@ -5,7 +5,6 @@ import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTamea
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathAffectedBlock;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathAffectedEntity;
 import com.TheRPGAdventurer.ROTD.util.math.MathX;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -55,20 +54,19 @@ public class BreathWeapon {
     protected float POISON_DAMAGE = 0.6F;
     protected float WITHER_DAMAGE = 0.6F;
 
-    public BreathWeapon(EntityTameableDragon i_dragon) {
-        dragon = i_dragon;
+    public BreathWeapon(EntityTameableDragon dragon) {
+        this.dragon = dragon;
     }
 
     /**
      * Used this to be compatible for Biomes O Plenty, BOP Author made a switch statement on his/her blocks
      * Instead of programming the blocks one by one. I dunno if that was allowed
      */
-    public int processFlammability(Block block, World world, BlockPos sideToIgnite, EnumFacing facing) {
-        int flammability = 0;
+    public int getFlammabilityCompat(Block block, World world, BlockPos sideToIgnite, EnumFacing facing) {
         try {
-            return flammability = block.getFlammability(world, sideToIgnite, facing);
+            return block.getFlammability(world, sideToIgnite, facing);
         } catch (IllegalArgumentException e) {
-            return flammability = 3;
+            return 3;
         }
     }
 
@@ -99,23 +97,24 @@ public class BreathWeapon {
         // 2) If the block can be smelted (eg sand), then convert the block to the smelted version
         // 3) If the block can't be smelted then convert to lava
 
-        for (EnumFacing facing : EnumFacing.values()) {
-            BlockPos sideToIgnite = pos.offset(facing);
-            if (processFlammability(block, world, sideToIgnite, facing) > 0) {
-                int flammability = processFlammability(block, world, sideToIgnite, facing);
-                float thresholdForIgnition = convertFlammabilityToHitDensityThreshold(flammability);
-                float thresholdForDestruction = thresholdForIgnition * 10;
-                float densityOfThisFace = currentHitDensity.getHitDensity(facing);
-                if (densityOfThisFace >= thresholdForIgnition && world.isAirBlock(sideToIgnite) && thresholdForIgnition != 0 && DragonMountsConfig.canFireBreathAffectBlocks) {
-                    final float MIN_PITCH = 0.8F;
-                    final float MAX_PITCH = 1.2F;
-                    final float VOLUME = 1.0F;
-                    world.playSound(sideToIgnite.getX() + 0.5, sideToIgnite.getY() + 0.5, sideToIgnite.getZ() + 0.5,
-                            SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, VOLUME, MIN_PITCH + rand.nextFloat() * (MAX_PITCH - MIN_PITCH), false);
-                    burnBlocks(sideToIgnite, rand, 22, world);
+        if (DragonMountsConfig.canFireBreathAffectBlocks) {
+            for (EnumFacing facing : EnumFacing.values()) {
+                BlockPos sideToIgnite = pos.offset(facing);
+                int flammability = getFlammabilityCompat(block, world, sideToIgnite, facing);
+                if (flammability > 0) {
+                    float thresholdForIgnition = convertFlammabilityToHitDensityThreshold(flammability);
+                    float thresholdForDestruction = thresholdForIgnition * 10;
+                    if (currentHitDensity.getHitDensity(facing) >= thresholdForIgnition && world.isAirBlock(sideToIgnite)) {
+                        final float MIN_PITCH = 0.8F;
+                        final float MAX_PITCH = 1.2F;
+                        final float VOLUME = 1.0F;
+                        world.playSound(sideToIgnite.getX() + 0.5, sideToIgnite.getY() + 0.5, sideToIgnite.getZ() + 0.5,
+                                SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, VOLUME, MIN_PITCH + rand.nextFloat() * (MAX_PITCH - MIN_PITCH), false);
+                        burnBlocks(sideToIgnite, rand, 22, world);
 
-                    //    if (densityOfThisFace >= thresholdForDestruction && state.getBlockHardness(world, pos) != -1 && DragonMountsConfig.canFireBreathAffectBlocks) {
-                    //   world.setBlockToAir(pos);
+                        //    if (densityOfThisFace >= thresholdForDestruction && state.getBlockHardness(world, pos) != -1 && DragonMountsConfig.canFireBreathAffectBlocks) {
+                        //   world.setBlockToAir(pos);
+                    }
                 }
             }
         }
@@ -258,11 +257,10 @@ public class BreathWeapon {
         }
 
         if (entity instanceof EntityTameable) {
-            EntityTameable entityTameable = (EntityTameable) entity;
-            if (entityTameable.isTamed()) {
+            if (((EntityTameable) entity).isTamed()) {
                 return null;
             } else {
-                entityTameable.attackEntityFrom(DamageSource.causeMobDamage(dragon), DAMAGE_PER_HIT_DENSITY);
+                entity.attackEntityFrom(DamageSource.causeMobDamage(dragon), DAMAGE_PER_HIT_DENSITY);
             }
         }
 
@@ -272,19 +270,15 @@ public class BreathWeapon {
 
     protected BreathAffectedEntity triggerDamageExceptionsForFire(Entity entity, Integer entityID, float DAMAGE_PER_HIT_DENSITY, BreathAffectedEntity currentHitDensity) {
         triggerDamageExceptions(entity, DAMAGE_PER_HIT_DENSITY, entityID, currentHitDensity);
-        if (dragon.getControllingPlayer() != null && entity != dragon.getControllingPlayer()) {
+        if (!dragon.isPassenger(entity) && !entity.isPassenger(dragon)) {
             entity.setFire((4));
-        } else if (entity instanceof EntityTameable) {
-            EntityTameable entityTameable = (EntityTameable) entity;
-            if (entityTameable.isTamed()) {
-                entityTameable.attackEntityFrom(DamageSource.causeMobDamage(dragon), 0);
-            }
+        } else if (entity instanceof EntityTameable && ((EntityTameable) entity).isTamed()) {
+            entity.attackEntityFrom(DamageSource.causeMobDamage(dragon), 0);
         } else if (entity instanceof EntityLivingBase) {
-            EntityLivingBase entity1 = (EntityLivingBase) entity;
-            if (entity1.isPotionActive(MobEffects.FIRE_RESISTANCE)) {
+            if (((EntityLivingBase) entity).isPotionActive(MobEffects.FIRE_RESISTANCE)) {
                 return null;
             } else {
-                entity1.attackEntityFrom(DamageSource.causeMobDamage(dragon), DAMAGE_PER_HIT_DENSITY);
+                entity.attackEntityFrom(DamageSource.causeMobDamage(dragon), DAMAGE_PER_HIT_DENSITY);
             }
         } else if (dragon.isBeingRidden()) {
             if (dragon.isPassenger(entity)) return null;
@@ -318,7 +312,7 @@ public class BreathWeapon {
         final float BURN_SECONDS_PER_HIT_DENSITY = 1.0F;
         float hitDensity = currentHitDensity.getHitDensity();
         final float DAMAGE_PER_HIT_DENSITY = FIRE_DAMAGE * hitDensity;
-        MathX.clamp(hitDensity, 0, 2);
+        MathX.clamp(hitDensity, 0, 2);// ?
 
         this.xp(entity);
 
@@ -350,8 +344,7 @@ public class BreathWeapon {
         // want: leaves & flowers to burn instantly; gates to take ~1 second at full power, coal / logs to take ~3 seconds
         // hitDensity of 1 is approximately 1-2 ticks of full exposure from a single beam, so 3 seconds is ~30
 
-        float threshold = 15.0F / flammability;
-        return threshold;
+        return 15.0F / flammability;
     }
 
 }

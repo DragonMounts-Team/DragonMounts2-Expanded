@@ -4,7 +4,6 @@ import com.TheRPGAdventurer.ROTD.DragonMountsConfig;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathAffectedBlock;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathAffectedEntity;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -42,20 +41,6 @@ public class BreathWeaponNether extends BreathWeapon {
   public BreathWeaponNether(EntityTameableDragon dragon) {
     super(dragon);
   }
-  
-  /**
-   * Used this to be compatible for Biomes O Plenty, BOP Author made a switch statement on his/her blocks
-   * Instead of programming the blocks one by one. I dunno if that was allowed
-   * 
-   */
-  public int processFlammability(Block block, World world, BlockPos sideToIgnite, EnumFacing facing) {
-	  int flammability = 0;
-	  try {
-	      return flammability = block.getFlammability(world, sideToIgnite, facing);
-	  } catch (IllegalArgumentException e) {
-		  return flammability = 3;		  
-	  }	 	
-  }
 
   /** if the hitDensity is high enough, manipulate the block (eg set fire to it)
    * @param world
@@ -80,22 +65,21 @@ public class BreathWeaponNether extends BreathWeapon {
     // 1) liquids (except lava) evaporate
     // 2) If the block can be smelted (eg sand), then convert the block to the smelted version
     // 3) If the block can't be smelted then convert to lava
+    if (DragonMountsConfig.canFireBreathAffectBlocks) {
+      for (EnumFacing facing : EnumFacing.values()) {
+        BlockPos sideToIgnite = pos.offset(facing);
+        int flammability = getFlammabilityCompat(block, world, sideToIgnite, facing);
+        if (flammability > 0) {
+          float thresholdForIgnition = convertFlammabilityToHitDensityThreshold(flammability);
+          float thresholdForDestruction = thresholdForIgnition * 70;
+          if (currentHitDensity.getHitDensity(facing) >= thresholdForIgnition && world.isAirBlock(sideToIgnite)) {
+            burnBlocks(sideToIgnite, rand, 77, world);
+          }
 
-    for (EnumFacing facing : EnumFacing.values()) {
-      BlockPos sideToIgnite = pos.offset(facing);
-      if (processFlammability(block, world, sideToIgnite, facing) > 0) {
-        int flammability = processFlammability(block, world, sideToIgnite, facing);     	
-        float thresholdForIgnition = convertFlammabilityToHitDensityThreshold(flammability);
-        float thresholdForDestruction = thresholdForIgnition * 70;
-        float densityOfThisFace = currentHitDensity.getHitDensity(facing);
-        if (densityOfThisFace >= thresholdForIgnition && world.isAirBlock(sideToIgnite) && DragonMountsConfig.canFireBreathAffectBlocks) {
-
-          burnBlocks(sideToIgnite, rand, 77, world);
+          //   if (densityOfThisFace >= thresholdForDestruction && state.getBlockHardness(world, pos) != -1 && DragonMountsConfig.canFireBreathAffectBlocks) {
+          //   world.setBlockToAir(pos);
+          //   }
         }
-        
-     //   if (densityOfThisFace >= thresholdForDestruction && state.getBlockHardness(world, pos) != -1 && DragonMountsConfig.canFireBreathAffectBlocks) {
-       //   world.setBlockToAir(pos);
-     //   }
       }
     }
 
