@@ -10,7 +10,6 @@ import com.TheRPGAdventurer.ROTD.util.IHasModel;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -30,16 +29,18 @@ public class ItemDragonSpawner extends Item implements IHasModel {
 
     private EnumDragonBreed breed;
     private EnumItemBreedTypes type;
+    public final int backgroundColor;
+    public final int highlightColor;
 
-    public ItemDragonSpawner(EnumItemBreedTypes type, EnumDragonBreed breed, CreativeTabs tAB) {
-        String unlocalizedName=type.toString().toLowerCase();
+    public ItemDragonSpawner(EnumItemBreedTypes type, EnumDragonBreed breed, int background, int highlight) {
         this.setTranslationKey("summon_egg"); //  ItemMonsterPlacer
-        this.setRegistryName("summon_" + unlocalizedName);
+        this.setRegistryName("summon_" + type.toString().toLowerCase());
         this.setMaxStackSize(1);
-        this.setCreativeTab(tAB);
+        this.setCreativeTab(DragonMounts.mainTab);
         this.breed=breed;
         this.type=type;
-
+        this.backgroundColor = background;
+        this.highlightColor = highlight;
         ModItems.ITEMS.add(this);
     }
 

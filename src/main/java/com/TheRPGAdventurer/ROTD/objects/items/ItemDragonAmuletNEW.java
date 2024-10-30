@@ -4,8 +4,11 @@ import com.TheRPGAdventurer.ROTD.DragonMounts;
 import com.TheRPGAdventurer.ROTD.inits.ModItems;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.items.entity.EntityDragonAmulet;
+import com.TheRPGAdventurer.ROTD.util.DMUtils;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -33,9 +36,11 @@ import java.util.List;
  * @author WolfShotz
  */
 public class ItemDragonAmuletNEW extends Item {
+    private static final Object2ObjectOpenHashMap<String, EnumItemBreedTypes> BREEDS = new Object2ObjectOpenHashMap<>();
 
-    private EnumItemBreedTypes type;
-
+    static {
+        BREEDS.put("", EnumItemBreedTypes.END);
+    }
     public ItemDragonAmuletNEW() {
         String name = "dragon_amulet";
         this.setRegistryName(DragonMounts.MODID, name);
@@ -46,7 +51,7 @@ public class ItemDragonAmuletNEW extends Item {
         ModItems.ITEMS.add(this);
     }
 
-    private boolean containsDragonEntity(ItemStack stack) {
+    public static boolean containsDragonEntity(ItemStack stack) {
         return !stack.isEmpty() && stack.hasTagCompound() && stack.getTagCompound().hasKey("breed");
     }
 
@@ -60,16 +65,22 @@ public class ItemDragonAmuletNEW extends Item {
         if (target instanceof EntityTameableDragon) {
             EntityTameableDragon dragon = (EntityTameableDragon) target;
             if (dragon.isTamedFor(player)) {
-                NBTTagCompound tag = new NBTTagCompound();
-                tag.setString("breed", dragon.getBreedType().toString().toLowerCase());
-                this.type = EnumItemBreedTypes.valueOf(dragon.getBreedType().toString());
-                tag.setString("Name", type.color + dragon.getDisplayName().getFormattedText());
+                NBTTagCompound tag = stack.getTagCompound();
+                if (tag == null) {
+                    tag = new NBTTagCompound();
+                    stack.setTagCompound(tag);
+                }
+                String type = dragon.getBreedType().toString().toLowerCase();
+                tag.setString("breed", type);
+                if (dragon.hasCustomName()) {
+                    stack.setStackDisplayName(dragon.getCustomNameTag());
+                } else {
+                    tag.setString("LocName", "entity." + EntityList.getEntityString(dragon) + "." + dragon.getBreed().getSkin().toLowerCase() + ".name");
+                }
                 tag.setString("OwnerName", dragon.getOwner().getName());
                 target.writeToNBT(tag);
-                stack.setTagCompound(tag);
                 player.setHeldItem(hand, stack);
                 if (dragon.getLeashed()) dragon.clearLeashed(true, true); // Fix Lead Dupe exploit
-                stack.setStackDisplayName(type.color + stack.getDisplayName());
                 player.world.playSound(null, player.getPosition(), SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.NEUTRAL, 1, 1);
 
                 target.setDead();
@@ -88,8 +99,7 @@ public class ItemDragonAmuletNEW extends Item {
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (world.isRemote || !player.isServerWorld()) return EnumActionResult.FAIL;
         ItemStack stack = player.getHeldItem(hand);
-        if (!containsDragonEntity(stack) || !stack.hasTagCompound()) return EnumActionResult.FAIL;
-
+        if (!containsDragonEntity(stack)) return EnumActionResult.FAIL;
         EntityTameableDragon dragon = new EntityTameableDragon(world);
         dragon.readFromNBT(stack.getTagCompound());
 
@@ -99,8 +109,7 @@ public class ItemDragonAmuletNEW extends Item {
             stack.setTagCompound(null);
             player.setHeldItem(hand, stack);
             world.spawnEntity(dragon);
-            player.world.playSound((EntityPlayer) null, player.getPosition(), SoundEvents.ENTITY_ILLAGER_MIRROR_MOVE, SoundCategory.NEUTRAL, 1, 1);
-            stack.clearCustomName();
+            player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ILLAGER_MIRROR_MOVE, SoundCategory.NEUTRAL, 1, 1);
             return EnumActionResult.SUCCESS;
         } else player.sendStatusMessage(new TextComponentTranslation("dragon.notOwned"), true);
         return EnumActionResult.FAIL;
@@ -112,15 +121,30 @@ public class ItemDragonAmuletNEW extends Item {
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flagIn) {
         TextFormatting t = null;
         if (containsDragonEntity(stack)) {
-            tooltip.add("Name: " + stack.getTagCompound().getString("Name"));
-            tooltip.add("Health: " + t.GREEN + Math.round(stack.getTagCompound().getDouble("Health")));
-            tooltip.add("Owner: " + t.GOLD + stack.getTagCompound().getString("OwnerName"));
-            String gender = stack.getTagCompound().getBoolean("IsMale") ? t.BLUE + "M" : t.RED + "FM";
+            NBTTagCompound compound = stack.getTagCompound();
+            if (compound.hasKey("CustomName")) {
+                tooltip.add("Name: " + compound.getString("CustomName"));
+            } else {
+                String name = DMUtils.translateToLocal(compound.getString("LocName"), compound, "Name");
+                String type = compound.getString("breed");
+                tooltip.add(type.isEmpty() ? "Name: " + name : "Name: " + EnumItemBreedTypes.byName(type).color + name);
+            }
+            tooltip.add("Health: " + t.GREEN + Math.round(compound.getDouble("Health")));
+            tooltip.add("Owner: " + t.GOLD + compound.getString("OwnerName"));
+            String gender = compound.getBoolean("IsMale") ? t.BLUE + "M" : t.RED + "FM";
             tooltip.add("Gender: " + gender);
         } else {
             tooltip.add(t.GREEN + new TextComponentTranslation("item.dragonamulet.info").getUnformattedText());
-            stack.setStackDisplayName(TextFormatting.RESET + stack.getDisplayName());
         }
+    }
+
+    @Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        String name = super.getItemStackDisplayName(stack);
+        NBTTagCompound root = stack.getTagCompound();
+        if (root == null) return name;
+        String type = root.getString("breed");
+        return type.isEmpty() ? name : EnumItemBreedTypes.byName(type).color + name;
     }
 
     @Nonnull

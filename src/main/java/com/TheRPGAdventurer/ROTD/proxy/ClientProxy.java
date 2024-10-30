@@ -27,11 +27,13 @@ import com.TheRPGAdventurer.ROTD.objects.entity.entitycarriage.EntityCarriage;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.effects.*;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
+import com.TheRPGAdventurer.ROTD.objects.items.ItemDragonSpawner;
 import com.TheRPGAdventurer.ROTD.objects.tileentities.TileEntityDragonShulker;
 import com.TheRPGAdventurer.ROTD.util.debugging.StartupDebugClientOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.Item;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.model.ModelLoader;
@@ -125,11 +127,19 @@ public class ClientProxy extends ServerProxy {
         StartupDebugClientOnly.initClientOnly();
 
         // Dragon Whistle String Color
-        Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
+        ItemColors colors = Minecraft.getMinecraft().getItemColors();
+        colors.registerItemColorHandler((stack, tintIndex) -> {
             if (stack.hasTagCompound() && stack.getTagCompound().hasKey("Color") && tintIndex == 1)
                 return stack.getTagCompound().getInteger("Color");
             return 0xFFFFFF;
         }, ModItems.dragon_whistle);
+
+        colors.registerItemColorHandler((stack, tintIndex) -> {
+            Item item = stack.getItem();
+            return item instanceof ItemDragonSpawner ? (
+                    tintIndex == 0 ? ((ItemDragonSpawner) item).backgroundColor : ((ItemDragonSpawner) item).highlightColor
+            ) : -1;
+        }, ModItems.SpawnAether, ModItems.SpawnEnchant, ModItems.SpawnEnd, ModItems.SpawnFire, ModItems.SpawnForest, ModItems.SpawnIce, ModItems.SpawnMoonlight, ModItems.SpawnNether, ModItems.SpawnSkeleton, ModItems.SpawnStorm, ModItems.SpawnSunlight, ModItems.SpawnTerra, ModItems.SpawnWater, ModItems.SpawnWither, ModItems.SpawnZombie);
 
         System.out.println("Registered Amulets");
         ModelLoader.setCustomMeshDefinition(ModItems.Amulet, new ModelAmuletMesh());

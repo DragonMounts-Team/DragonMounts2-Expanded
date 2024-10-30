@@ -36,6 +36,7 @@ public enum EnumDragonBreed implements IStringSerializable {
     public static final BiMap<EnumDragonBreed, Integer> META_MAPPING = ImmutableBiMap.copyOf(Arrays.asList(values()).stream().collect(Collectors.toMap(Function.identity(), EnumDragonBreed::getMeta)));
     public static final PropertyEnum<EnumDragonBreed> BREED = PropertyEnum.create("breed", EnumDragonBreed.class);
     private final DragonBreed breed;
+    public final String identifier;
 
     // this field is used for block metadata and is technically the same as
     // ordinal(), but it is saved separately to make sure the values stay
@@ -45,6 +46,7 @@ public enum EnumDragonBreed implements IStringSerializable {
     EnumDragonBreed(int meta, Supplier<DragonBreed> factory) {
         this.breed = factory.get();
         this.meta = meta;
+        this.identifier = name().toLowerCase();
     }
 
 
@@ -58,7 +60,7 @@ public enum EnumDragonBreed implements IStringSerializable {
 
     @Override
     public String getName() {
-        return name().toLowerCase();
+        return this.identifier;
     }
 
     public int getNumberOfNeckSegments() {
@@ -72,6 +74,5 @@ public enum EnumDragonBreed implements IStringSerializable {
     public int getNumberOfWingFingers() {
         return 4;
     }
-
 }
 

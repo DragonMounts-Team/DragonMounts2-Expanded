@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
@@ -26,8 +27,12 @@ public class DMUtils {
         return logger;
     }
 
-    public static String translateToLocal(String s) {
-        return I18n.format(s, NO_ARGS);
+    public static String translateToLocal(String key) {
+        return I18n.format(key, NO_ARGS);
+    }
+
+    public static String translateToLocal(String key, NBTTagCompound fallbackSrc, String fallbackKey) {
+        return I18n.hasKey(key) ? I18n.format(key, NO_ARGS) : fallbackSrc.getString(fallbackKey);
     }
 
     @Deprecated

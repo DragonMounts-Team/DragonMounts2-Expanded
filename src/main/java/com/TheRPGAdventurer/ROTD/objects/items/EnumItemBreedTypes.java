@@ -1,6 +1,11 @@
 package com.TheRPGAdventurer.ROTD.objects.items;
 
+import com.google.common.base.Functions;
 import net.minecraft.util.text.TextFormatting;
+
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public enum EnumItemBreedTypes {
 	
@@ -30,6 +35,8 @@ public enum EnumItemBreedTypes {
 	//DARK(TextFormatting.GRAY);
 	//Specter(TextFormatting.WHITE);
 
+	private static final Map<String, EnumItemBreedTypes> BY_NAME;
+
 	public final TextFormatting color;
 	public final String identifier;
 	public final String translationKey;
@@ -39,5 +46,13 @@ public enum EnumItemBreedTypes {
 		String identifier = this.name().toLowerCase();
 		this.identifier = identifier;
 		this.translationKey = "dragon." + identifier;
+	}
+
+	static {
+		BY_NAME = Arrays.stream(values()).collect(Collectors.toMap(type -> type.identifier, Functions.identity()));
+	}
+
+	public static EnumItemBreedTypes byName(String name) {
+		return BY_NAME.getOrDefault(name, END);
 	}
 }

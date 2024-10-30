@@ -1,6 +1,5 @@
 package com.TheRPGAdventurer.ROTD.inits;
 
-import com.TheRPGAdventurer.ROTD.DragonMounts;
 import com.TheRPGAdventurer.ROTD.items.ItemDragonOrb;
 import com.TheRPGAdventurer.ROTD.items.ItemTestRunner;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitycarriage.EntityCarriage;
@@ -46,21 +45,21 @@ public class ModItems {
     //Scales end
 
     //Spawn eggs start
-    public static final Item SpawnForest = new ItemDragonSpawner(EnumItemBreedTypes.FOREST, EnumDragonBreed.FOREST, DragonMounts.mainTab);
-    public static final Item SpawnAether = new ItemDragonSpawner(EnumItemBreedTypes.AETHER, EnumDragonBreed.AETHER, DragonMounts.mainTab);
-    public static final Item SpawnFire = new ItemDragonSpawner(EnumItemBreedTypes.FIRE, EnumDragonBreed.FIRE, DragonMounts.mainTab);
-    public static final Item SpawnIce = new ItemDragonSpawner(EnumItemBreedTypes.ICE, EnumDragonBreed.ICE, DragonMounts.mainTab);
-    public static final Item SpawnWater = new ItemDragonSpawner(EnumItemBreedTypes.WATER, EnumDragonBreed.SYLPHID, DragonMounts.mainTab);
-    public static final Item SpawnSkeleton = new ItemDragonSpawner(EnumItemBreedTypes.SKELETON, EnumDragonBreed.SKELETON, DragonMounts.mainTab);
-    public static final Item SpawnWither = new ItemDragonSpawner(EnumItemBreedTypes.WITHER, EnumDragonBreed.WITHER, DragonMounts.mainTab);
-    public static final Item SpawnEnd = new ItemDragonSpawner(EnumItemBreedTypes.END, EnumDragonBreed.END, DragonMounts.mainTab);
-    public static final Item SpawnNether = new ItemDragonSpawner(EnumItemBreedTypes.NETHER, EnumDragonBreed.NETHER, DragonMounts.mainTab);
-    public static final Item SpawnEnchant = new ItemDragonSpawner(EnumItemBreedTypes.ENCHANT, EnumDragonBreed.ENCHANT, DragonMounts.mainTab);
-    public static final Item SpawnSunlight = new ItemDragonSpawner(EnumItemBreedTypes.SUNLIGHT, EnumDragonBreed.SUNLIGHT, DragonMounts.mainTab);
-    public static final Item SpawnStorm = new ItemDragonSpawner(EnumItemBreedTypes.STORM, EnumDragonBreed.STORM, DragonMounts.mainTab);
-    public static final Item SpawnZombie = new ItemDragonSpawner(EnumItemBreedTypes.ZOMBIE, EnumDragonBreed.ZOMBIE, DragonMounts.mainTab);
-    public static final Item SpawnTerra = new ItemDragonSpawner(EnumItemBreedTypes.TERRA, EnumDragonBreed.TERRA, DragonMounts.mainTab);
-    public static final Item SpawnMoonlight = new ItemDragonSpawner(EnumItemBreedTypes.MOONLIGHT, EnumDragonBreed.MOONLIGHT, DragonMounts.mainTab);
+    public static final Item SpawnAether = new ItemDragonSpawner(EnumItemBreedTypes.AETHER, EnumDragonBreed.AETHER, 0x06E9FA, 0x281EE7);
+    public static final Item SpawnEnchant = new ItemDragonSpawner(EnumItemBreedTypes.ENCHANT, EnumDragonBreed.ENCHANT, 0xF30FFF, 0xD7D7D7);
+    public static final Item SpawnEnd = new ItemDragonSpawner(EnumItemBreedTypes.END, EnumDragonBreed.END, 0x1D1D24, 0x900996);
+    public static final Item SpawnFire = new ItemDragonSpawner(EnumItemBreedTypes.FIRE, EnumDragonBreed.FIRE, 0x9F2909, 0xF7A502);
+    public static final Item SpawnForest = new ItemDragonSpawner(EnumItemBreedTypes.FOREST, EnumDragonBreed.FOREST, 0x28AA29, 0x024F06);
+    public static final Item SpawnIce = new ItemDragonSpawner(EnumItemBreedTypes.ICE, EnumDragonBreed.ICE, 0xD7D7D7, 0xB3FFF8);
+    public static final Item SpawnMoonlight = new ItemDragonSpawner(EnumItemBreedTypes.MOONLIGHT, EnumDragonBreed.MOONLIGHT, 0x002A95, 0xDAF3AF);
+    public static final Item SpawnNether = new ItemDragonSpawner(EnumItemBreedTypes.NETHER, EnumDragonBreed.NETHER, 0xF79C03, 0x9E4B2B);
+    public static final Item SpawnSkeleton = new ItemDragonSpawner(EnumItemBreedTypes.SKELETON, EnumDragonBreed.SKELETON, 0xD7D7D7, 0x727F82);
+    public static final Item SpawnStorm = new ItemDragonSpawner(EnumItemBreedTypes.STORM, EnumDragonBreed.STORM, 0x023C54, 0x0DA2C7);
+    public static final Item SpawnSunlight = new ItemDragonSpawner(EnumItemBreedTypes.SUNLIGHT, EnumDragonBreed.SUNLIGHT, 0xF07F07, 0xF2EA04);
+    public static final Item SpawnTerra = new ItemDragonSpawner(EnumItemBreedTypes.TERRA, EnumDragonBreed.TERRA, 0x543813, 0xB3782A);
+    public static final Item SpawnWater = new ItemDragonSpawner(EnumItemBreedTypes.WATER, EnumDragonBreed.SYLPHID, 0x4F6AA6, 0x223464);
+    public static final Item SpawnWither = new ItemDragonSpawner(EnumItemBreedTypes.WITHER, EnumDragonBreed.WITHER, 0x839292, 0x383F40);
+    public static final Item SpawnZombie = new ItemDragonSpawner(EnumItemBreedTypes.ZOMBIE, EnumDragonBreed.ZOMBIE, 0x56562E, 0xA7BF2F);
     //public static final Item Spawnlight = new ItemDragonSpawner(EnumItemBreedTypes.LIGHT, EnumDragonBreed.LIGHT, DragonMounts.mainTab);
     //public static final Item Spawndark = new ItemDragonSpawner(EnumItemBreedTypes.DARK, EnumDragonBreed.DARK, DragonMounts.mainTab);
     //public static final Item Spawnspecter = new ItemDragonSpawner(EnumItemBreedTypes.SPECTER, EnumDragonBreed.SPECTER, DragonMounts.mainTab);

@@ -41,10 +41,11 @@ class ModelBuilder:
     return self
 
   def save(self, output: Output, path: str):
-    json = {
-      'parent': self.parent,
-      'textures': self._textures
-    }
+    json = {}
+    if (self.parent is not None):
+      json['parent'] = self.parent
+    if (len(self._textures)):
+      json['textures'] = self._textures
     if (len(self._overrides)):
       json['overrides'] = self._overrides
     output.accept('models/item/' + path, json)
