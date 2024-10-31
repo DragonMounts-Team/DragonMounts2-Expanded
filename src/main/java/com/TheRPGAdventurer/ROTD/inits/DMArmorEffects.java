@@ -1,9 +1,11 @@
 package com.TheRPGAdventurer.ROTD.inits;
 
-import com.TheRPGAdventurer.ROTD.api.IArmorEffect;
+import com.TheRPGAdventurer.ROTD.api.IDescribableArmorEffect;
+import com.TheRPGAdventurer.ROTD.api.IDescribableArmorEffect.Advanced;
 import com.TheRPGAdventurer.ROTD.capability.IArmorEffectManager;
 import com.TheRPGAdventurer.ROTD.network.SRiposteEffectPacket;
-import com.TheRPGAdventurer.ROTD.registry.CooldownCategory;
+import com.TheRPGAdventurer.ROTD.util.DMUtils;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -11,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumParticleTypes;
@@ -24,14 +27,16 @@ import java.util.List;
 import java.util.Random;
 
 import static com.TheRPGAdventurer.ROTD.DragonMounts.NETWORK_WRAPPER;
+import static com.TheRPGAdventurer.ROTD.DragonMounts.makeId;
 import static com.TheRPGAdventurer.ROTD.inits.DMCapabilities.ARMOR_EFFECT_MANAGER;
 import static com.TheRPGAdventurer.ROTD.util.EntityUtil.addOrMergeEffect;
 import static com.TheRPGAdventurer.ROTD.util.EntityUtil.addOrResetEffect;
 
 public class DMArmorEffects {
+    public static final String FISHING_LUCK = "tooltip.dragonmounts.armor_effect_fishing_luck";
     public static final float EXP_BONUS_FACTOR = 2.0F * (float) Math.log10(4.0);
 
-    public static Advanced AETHER_EFFECT = new Advanced(300) {
+    public static final Advanced AETHER_EFFECT = new Advanced(makeId("aether"), 300) {
         @Override
         public boolean activate(IArmorEffectManager manager, EntityPlayer player, int level) {
             boolean flag = level > 3;
@@ -44,36 +49,46 @@ public class DMArmorEffects {
         }
     };
 
-    public static IArmorEffect ENCHANT_EFFECT = (manager, player, level) -> {
-        World world = player.world;
-        if (world.isRemote) {
-            Random random = player.getRNG();
-            double x = player.posX;
-            double y = player.posY + 1.5;
-            double z = player.posZ;
-            for (int i = -2; i <= 2; ++i) {
-                for (int j = -2; j <= 2; ++j) {
-                    if (i > -2 && i < 2 && j == -1) j = 2;
-                    if (random.nextInt(30) == 0) {
-                        for (int k = 0; k <= 1; ++k) {
-                            world.spawnParticle(
-                                    EnumParticleTypes.ENCHANTMENT_TABLE,
-                                    x,
-                                    y + random.nextFloat(),
-                                    z,
-                                    i + random.nextFloat() - 0.5D,
-                                    k - random.nextFloat() - 1.0F,
-                                    j + random.nextFloat() - 0.5D
-                            );
+    public static final IDescribableArmorEffect ENCHANT_EFFECT = new IDescribableArmorEffect() {
+        @Override
+        public boolean activate(IArmorEffectManager manager, EntityPlayer player, int level) {
+            World world = player.world;
+            if (world.isRemote) {
+                Random random = player.getRNG();
+                double x = player.posX;
+                double y = player.posY + 1.5;
+                double z = player.posZ;
+                for (int i = -2; i <= 2; ++i) {
+                    for (int j = -2; j <= 2; ++j) {
+                        if (i > -2 && i < 2 && j == -1) j = 2;
+                        if (random.nextInt(30) == 0) {
+                            for (int k = 0; k <= 1; ++k) {
+                                world.spawnParticle(
+                                        EnumParticleTypes.ENCHANTMENT_TABLE,
+                                        x,
+                                        y + random.nextFloat(),
+                                        z,
+                                        i + random.nextFloat() - 0.5D,
+                                        k - random.nextFloat() - 1.0F,
+                                        j + random.nextFloat() - 0.5D
+                                );
+                            }
                         }
                     }
                 }
             }
+            return level > 3;
         }
-        return level > 3;
+
+        @Override
+        public void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {
+            tooltips.add("");
+            this.appendTriggerInfo(stack, tooltips);
+            tooltips.add(DMUtils.translateToLocal("tooltip.armor_effect.dragonmounts.enchant"));
+        }
     };
 
-    public static Advanced ENDER_EFFECT = new Advanced(1200) {
+    public static final Advanced ENDER_EFFECT = new Advanced(makeId("ender"), 1200) {
         @Override
         public boolean activate(IArmorEffectManager manager, EntityPlayer player, int level) {
             if (player.world.isRemote) {
@@ -103,7 +118,7 @@ public class DMArmorEffects {
         }
     };
 
-    public static Advanced FIRE_EFFECT = new Advanced(900) {
+    public static final Advanced FIRE_EFFECT = new Advanced(makeId("fire"), 900) {
         @Override
         public boolean activate(IArmorEffectManager manager, EntityPlayer player, int level) {
             boolean flag = level > 3;
@@ -117,7 +132,7 @@ public class DMArmorEffects {
         }
     };
 
-    public static Advanced FOREST_EFFECT = new Advanced(900) {
+    public static final Advanced FOREST_EFFECT = new Advanced(makeId("forest"), 900) {
         @Override
         public boolean activate(IArmorEffectManager manager, EntityPlayer player, int level) {
             boolean flag = level > 3;
@@ -126,23 +141,54 @@ public class DMArmorEffects {
             }
             return flag;
         }
-    };
 
-    public static final Advanced ICE_EFFECT = new Advanced(1200);
-
-    public static final IArmorEffect MOONLIGHT_EFFECT = (manager, player, level) -> {
-        boolean flag = level > 3;
-        if (flag && !player.world.isRemote) {
-            addOrResetEffect(player, MobEffects.NIGHT_VISION, 600, 0, true, true, 201);
+        @Override
+        public void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {
+            tooltips.add("");
+            this.appendTriggerInfo(stack, tooltips);
+            tooltips.add(DMUtils.translateToLocal(FISHING_LUCK));
+            tooltips.add(DMUtils.translateToLocal(this.description));
+            this.appendCooldownInfo(tooltips);
         }
-        return flag;
     };
 
-    public static final Advanced NETHER_EFFECT = new Advanced(1200);
+    public static final Advanced ICE_EFFECT = new Advanced(makeId("ice"), 1200);
 
-    public static final IArmorEffect STORM_EFFECT = (manager, player, level) -> level > 3;
+    public static final IDescribableArmorEffect MOONLIGHT_EFFECT = new IDescribableArmorEffect() {
+        @Override
+        public boolean activate(IArmorEffectManager manager, EntityPlayer player, int level) {
+            boolean flag = level > 3;
+            if (flag && !player.world.isRemote) {
+                addOrResetEffect(player, MobEffects.NIGHT_VISION, 600, 0, true, true, 201);
+            }
+            return flag;
+        }
 
-    public static final Advanced SUNLIGHT_EFFECT = new Advanced(1160) {
+        @Override
+        public void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {
+            tooltips.add("");
+            this.appendTriggerInfo(stack, tooltips);
+            tooltips.add(DMUtils.translateToLocal("tooltip.armor_effect.dragonmounts.moonlight"));
+        }
+    };
+
+    public static final Advanced NETHER_EFFECT = new Advanced(makeId("nether"), 1200);
+
+    public static final IDescribableArmorEffect STORM_EFFECT = new IDescribableArmorEffect() {
+        @Override
+        public boolean activate(IArmorEffectManager manager, EntityPlayer player, int level) {
+            return level > 3;
+        }
+
+        @Override
+        public void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {
+            tooltips.add("");
+            this.appendTriggerInfo(stack, tooltips);
+            tooltips.add(DMUtils.translateToLocal("tooltip.armor_effect.dragonmounts.storm"));
+        }
+    };
+
+    public static final Advanced SUNLIGHT_EFFECT = new Advanced(makeId("sunlight"), 1160) {
         @Override
         public boolean activate(IArmorEffectManager manager, EntityPlayer player, int level) {
             boolean flag = level > 3;
@@ -164,25 +210,54 @@ public class DMArmorEffects {
             }
             return flag;
         }
-    };
 
-    public static final IArmorEffect TERRA_EFFECT = (manager, player, level) -> {
-        boolean flag = level > 3;
-        if (flag && !player.world.isRemote) {
-            addOrResetEffect(player, MobEffects.HASTE, 600, 0, true, true, 201);
+        @Override
+        public void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {
+            tooltips.add("");
+            this.appendTriggerInfo(stack, tooltips);
+            tooltips.add(DMUtils.translateToLocal(FISHING_LUCK));
+            tooltips.add(DMUtils.translateToLocal(this.description));
+            this.appendCooldownInfo(tooltips);
         }
-        return flag;
     };
 
-    public static final IArmorEffect WATER_EFFECT = (manager, player, level) -> {
-        boolean flag = level > 3;
-        if (flag && !player.world.isRemote && player.isInWater()) {
-            addOrResetEffect(player, MobEffects.WATER_BREATHING, 600, 0, true, true, 201);
+    public static final IDescribableArmorEffect TERRA_EFFECT = new IDescribableArmorEffect() {
+        @Override
+        public boolean activate(IArmorEffectManager manager, EntityPlayer player, int level) {
+            boolean flag = level > 3;
+            if (flag && !player.world.isRemote) {
+                addOrResetEffect(player, MobEffects.HASTE, 600, 0, true, true, 201);
+            }
+            return flag;
         }
-        return flag;
+
+        @Override
+        public void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {
+            tooltips.add("");
+            this.appendTriggerInfo(stack, tooltips);
+            tooltips.add(DMUtils.translateToLocal("tooltip.armor_effect.dragonmounts.terra"));
+        }
     };
 
-    public static final Advanced ZOMBIE_EFFECT = new Advanced(400) {
+    public static final IDescribableArmorEffect WATER_EFFECT = new IDescribableArmorEffect() {
+        @Override
+        public boolean activate(IArmorEffectManager manager, EntityPlayer player, int level) {
+            boolean flag = level > 3;
+            if (flag && !player.world.isRemote && player.isInWater()) {
+                addOrResetEffect(player, MobEffects.WATER_BREATHING, 600, 0, true, true, 201);
+            }
+            return flag;
+        }
+
+        @Override
+        public void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {
+            tooltips.add("");
+            this.appendTriggerInfo(stack, tooltips);
+            tooltips.add(DMUtils.translateToLocal("tooltip.armor_effect.dragonmounts.water"));
+        }
+    };
+
+    public static final Advanced ZOMBIE_EFFECT = new Advanced(makeId("zombie"), 400) {
         @Override
         public boolean activate(IArmorEffectManager manager, EntityPlayer player, int level) {
             boolean flag = level > 3;
@@ -253,24 +328,6 @@ public class DMArmorEffects {
         NETWORK_WRAPPER.sendToAllTracking(packet, self);
         if (self instanceof EntityPlayerMP) {
             NETWORK_WRAPPER.sendTo(packet, (EntityPlayerMP) self);
-        }
-    }
-
-
-    public static class Advanced extends CooldownCategory implements IArmorEffect {
-        public final int cooldown;
-
-        protected Advanced(int cooldown) {
-            this.cooldown = cooldown;
-        }
-
-        public final void applyCooldown(IArmorEffectManager manager) {
-            manager.setCooldown(this, this.cooldown);
-        }
-
-        @Override
-        public boolean activate(IArmorEffectManager manager, EntityPlayer player, int level) {
-            return level > 3;
         }
     }
 }

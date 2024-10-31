@@ -60,14 +60,14 @@ public class RegistryEventHandler {
     @SubscribeEvent
     public static void registerCooldownCategory(RegistryEvent.Register<CooldownCategory> event) {
         IForgeRegistry<CooldownCategory> registry = event.getRegistry();
-        registry.register(DMArmorEffects.AETHER_EFFECT.setRegistryName("aether"));
-        registry.register(DMArmorEffects.ENDER_EFFECT.setRegistryName("ender"));
-        registry.register(DMArmorEffects.FIRE_EFFECT.setRegistryName("fire"));
-        registry.register(DMArmorEffects.FOREST_EFFECT.setRegistryName("forest"));
-        registry.register(DMArmorEffects.ICE_EFFECT.setRegistryName("ice"));
-        registry.register(DMArmorEffects.NETHER_EFFECT.setRegistryName("nether"));
-        registry.register(DMArmorEffects.SUNLIGHT_EFFECT.setRegistryName("sunlight"));
-        registry.register(DMArmorEffects.ZOMBIE_EFFECT.setRegistryName("zombie"));
+        registry.register(DMArmorEffects.AETHER_EFFECT);
+        registry.register(DMArmorEffects.ENDER_EFFECT);
+        registry.register(DMArmorEffects.FIRE_EFFECT);
+        registry.register(DMArmorEffects.FOREST_EFFECT);
+        registry.register(DMArmorEffects.ICE_EFFECT);
+        registry.register(DMArmorEffects.NETHER_EFFECT);
+        registry.register(DMArmorEffects.SUNLIGHT_EFFECT);
+        registry.register(DMArmorEffects.ZOMBIE_EFFECT);
     }
 
     @SubscribeEvent

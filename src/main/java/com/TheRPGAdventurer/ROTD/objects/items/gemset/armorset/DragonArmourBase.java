@@ -1,8 +1,8 @@
 package com.TheRPGAdventurer.ROTD.objects.items.gemset.armorset;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
-import com.TheRPGAdventurer.ROTD.api.IArmorEffect;
 import com.TheRPGAdventurer.ROTD.api.IArmorEffectSource;
+import com.TheRPGAdventurer.ROTD.api.IDescribableArmorEffect;
 import com.TheRPGAdventurer.ROTD.capability.IArmorEffectManager;
 import com.TheRPGAdventurer.ROTD.inits.ModArmour;
 import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
@@ -29,9 +29,9 @@ import static com.TheRPGAdventurer.ROTD.DragonMounts.makeId;
 
 public abstract class DragonArmourBase extends ItemArmor implements IHasModel, IArmorEffectSource {
 	private final EnumItemBreedTypes type;
-	public final IArmorEffect effect;
+	public final IDescribableArmorEffect effect;
 
-	public DragonArmourBase(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn, String unlocalizedName, EnumItemBreedTypes type, IArmorEffect effect) {
+	public DragonArmourBase(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn, String unlocalizedName, EnumItemBreedTypes type, IDescribableArmorEffect effect) {
 		super(materialIn, renderIndexIn, equipmentSlotIn);
 		this.effect = effect;
 		setTranslationKey("dragonscale_" + equipmentSlotIn.toString().toLowerCase());
@@ -57,9 +57,11 @@ public abstract class DragonArmourBase extends ItemArmor implements IHasModel, I
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flag) {
 		tooltip.add(type.color + DMUtils.translateToLocal(type.translationKey));
-		stack.setStackDisplayName(type.color + stack.getDisplayName());
+		if (this.effect != null) {
+			this.effect.appendHoverText(stack, tooltip, flag);
+		}
 	}
 	
 	@Override
@@ -77,8 +79,9 @@ public abstract class DragonArmourBase extends ItemArmor implements IHasModel, I
 
 	@Override
 	protected boolean isInCreativeTab(CreativeTabs targetTab) {
-		for (CreativeTabs tab : this.getCreativeTabs())
+		for (CreativeTabs tab : this.getCreativeTabs()) {
 			if (tab == targetTab) return true;
+		}
 		return targetTab == CreativeTabs.SEARCH;
 	}
 }

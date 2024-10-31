@@ -9,6 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,12 +29,27 @@ public class DMUtils {
         return logger;
     }
 
+    @SideOnly(Side.CLIENT)
     public static String translateToLocal(String key) {
         return I18n.format(key, NO_ARGS);
     }
 
+    @SideOnly(Side.CLIENT)
     public static String translateToLocal(String key, NBTTagCompound fallbackSrc, String fallbackKey) {
         return I18n.hasKey(key) ? I18n.format(key, NO_ARGS) : fallbackSrc.getString(fallbackKey);
+    }
+
+
+    /**
+     * @param value raw time (in ticks)
+     * @return formatted time (in seconds)
+     */
+    @SideOnly(Side.CLIENT)
+    public static String quickFormatAsFloat(String key, int value) {
+        if (value < 19) return I18n.format(key, "0." + ((value + 1) >> 1));
+        StringBuilder builder = new StringBuilder().append((value + 1) >> 1);//value: ticks
+        builder.append(builder.charAt(value = builder.length() - 1)).setCharAt(value, '.');//value: index
+        return I18n.format(key, builder.toString());
     }
 
     @Deprecated
