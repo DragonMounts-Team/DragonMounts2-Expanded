@@ -81,7 +81,9 @@ dragon.terra2=土属
 #阶段
 dragon.egg=蛋
 dragon.hatchling=孵化
-dragon.juvenile=幼年
+dragon.infant=幼年
+dragon.prejuvenile=青少年
+dragon.juvenile=少年
 dragon.adult=成年
 
 item.diamond_shears.name=钻石剪刀
@@ -158,8 +160,8 @@ msg.dragon.toggleFollowYaw=龙跟随偏航
 msg.dragon.toggleYLock=旧操纵（空格和左ALT）
 
 whistle.msg.cleared=龙已解除绑定
-whistle.msg.hasDragon=龙已成功绑定该哨子
-whistle.msg.unBound=该哨子没有绑定过龙，你必须先绑定一条龙
+whistle.msg.hasDragon=龙已成功绑定该龙哨
+whistle.msg.unBound=该龙哨没有绑定过龙，你必须先绑定一条龙
 whistle.msg.notOwned=你不是这条龙的主人
 whistle.msg.noDragon=龙哨未绑定龙，请先左键点击驯服的龙以完成绑定
 whistle.msg.fail=龙距离您过远，听不到您的哨声……
@@ -204,3 +206,9 @@ tooltip.dragonmounts.armor_effect_cooldown=冷却时间：%s秒
 tooltip.dragonmounts.armor_effect_fishing_luck=当装备者钓鱼时，给予其持续10秒的幸运 I效果，该效果不受冷却时间影响
 tooltip.dragonmounts.armor_effect_piece_4=4件套：
 tooltip.dragonmounts.armor_effect_remaining_cooldown=剩余冷却时间：%s秒
+tooltip.dragonmounts.whistle.name=龙哨（%s）
+tooltip.dragonmounts.name=名称：%s
+tooltip.dragonmounts.age=年龄：%s
+tooltip.dragonmounts.health=生命值：%s
+tooltip.dragonmounts.owner=主人：%s
+tooltip.dragonmounts.gender=性别：%s

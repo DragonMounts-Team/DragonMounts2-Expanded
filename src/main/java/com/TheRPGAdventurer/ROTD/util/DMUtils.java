@@ -1,6 +1,7 @@
 package com.TheRPGAdventurer.ROTD.util;
 
 import com.TheRPGAdventurer.ROTD.DragonMountsTags;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -39,6 +40,10 @@ public class DMUtils {
         return I18n.hasKey(key) ? I18n.format(key, NO_ARGS) : fallbackSrc.getString(fallbackKey);
     }
 
+    public static boolean isAir(World world, BlockPos pos) {
+        IBlockState state = world.getBlockState(pos);
+        return state.getBlock().isAir(state, world, pos);
+    }
 
     /**
      * @param value raw time (in ticks)

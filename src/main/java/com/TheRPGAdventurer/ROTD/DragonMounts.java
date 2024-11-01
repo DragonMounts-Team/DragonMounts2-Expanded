@@ -11,19 +11,16 @@ package com.TheRPGAdventurer.ROTD;
 
 import com.TheRPGAdventurer.ROTD.client.gui.GuiHandler;
 import com.TheRPGAdventurer.ROTD.event.EventLiving;
-import com.TheRPGAdventurer.ROTD.event.IItemColorRegistration;
 import com.TheRPGAdventurer.ROTD.event.RegistryEventHandler;
+import com.TheRPGAdventurer.ROTD.inits.DMItemGroups;
 import com.TheRPGAdventurer.ROTD.inits.ModArmour;
 import com.TheRPGAdventurer.ROTD.inits.ModTools;
-import com.TheRPGAdventurer.ROTD.inventory.tabs.ArmoryTab;
-import com.TheRPGAdventurer.ROTD.inventory.tabs.CreativeTab;
 import com.TheRPGAdventurer.ROTD.proxy.ServerProxy;
 import com.TheRPGAdventurer.ROTD.util.debugging.testclasses.LoggerLimit;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -33,7 +30,6 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -68,8 +64,10 @@ public class DragonMounts {
 
     private ModMetadata metadata;
     private DragonMountsConfig config;
-    public static CreativeTabs mainTab=new CreativeTab("maintab");
-    public static CreativeTabs armoryTab=new ArmoryTab("armorytab");
+    @Deprecated
+    public static CreativeTabs mainTab = DMItemGroups.MAIN;
+    @Deprecated
+    public static CreativeTabs armoryTab = DMItemGroups.COMBAT;
 
     public DragonMountsConfig getConfig() {
         return config;
@@ -90,12 +88,9 @@ public class DragonMounts {
     public void PreInitialization(FMLPreInitializationEvent event) {
         DragonMountsLootTables.registerLootTables();
         MinecraftForge.EVENT_BUS.register(new EventLiving());
-        if (FMLCommonHandler.instance().getSide() == Side.CLIENT)
-        {
-          MinecraftForge.EVENT_BUS.register(IItemColorRegistration.class);
-        }
-      proxy.PreInitialization(event);
+        proxy.PreInitialization(event);
         metadata=event.getModMetadata();
+        DMItemGroups.init();
     }
 
     @EventHandler

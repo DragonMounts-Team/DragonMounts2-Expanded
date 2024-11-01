@@ -6,9 +6,9 @@ import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTamea
 import com.TheRPGAdventurer.ROTD.objects.items.entity.EntityDragonAmulet;
 import com.TheRPGAdventurer.ROTD.util.DMUtils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -70,12 +70,11 @@ public class ItemDragonAmuletNEW extends Item {
                     tag = new NBTTagCompound();
                     stack.setTagCompound(tag);
                 }
-                String type = dragon.getBreedType().toString().toLowerCase();
-                tag.setString("breed", type);
+                tag.setString("breed", dragon.getBreedType().identifier);
                 if (dragon.hasCustomName()) {
                     stack.setStackDisplayName(dragon.getCustomNameTag());
                 } else {
-                    tag.setString("LocName", "entity." + EntityList.getEntityString(dragon) + "." + dragon.getBreed().getSkin().toLowerCase() + ".name");
+                    tag.setString("LocName", dragon.makeTranslationKey());
                 }
                 tag.setString("OwnerName", dragon.getOwner().getName());
                 target.writeToNBT(tag);
@@ -119,22 +118,24 @@ public class ItemDragonAmuletNEW extends Item {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flagIn) {
-        TextFormatting t = null;
         if (containsDragonEntity(stack)) {
-            NBTTagCompound compound = stack.getTagCompound();
-            if (compound.hasKey("CustomName")) {
-                tooltip.add("Name: " + compound.getString("CustomName"));
+            NBTTagCompound nbt = stack.getTagCompound();
+            if (nbt.hasKey("CustomName")) {
+                tooltip.add(I18n.format("tooltip.dragonmounts.name", nbt.getString("CustomName")));
             } else {
-                String name = DMUtils.translateToLocal(compound.getString("LocName"), compound, "Name");
-                String type = compound.getString("breed");
-                tooltip.add(type.isEmpty() ? "Name: " + name : "Name: " + EnumItemBreedTypes.byName(type).color + name);
+                String name = DMUtils.translateToLocal(nbt.getString("LocName"), nbt, "Name");
+                String type = nbt.getString("breed");
+                tooltip.add(I18n.format("tooltip.dragonmounts.name", type.isEmpty() ? name : EnumItemBreedTypes.byName(type).color + name));
+
             }
-            tooltip.add("Health: " + t.GREEN + Math.round(compound.getDouble("Health")));
-            tooltip.add("Owner: " + t.GOLD + compound.getString("OwnerName"));
-            String gender = compound.getBoolean("IsMale") ? t.BLUE + "M" : t.RED + "FM";
-            tooltip.add("Gender: " + gender);
+            tooltip.add(I18n.format("tooltip.dragonmounts.health", TextFormatting.GREEN.toString() + Math.round(nbt.getDouble("Health"))));
+            tooltip.add(I18n.format("tooltip.dragonmounts.owner", TextFormatting.GOLD + nbt.getString("OwnerName")));
+            tooltip.add(I18n.format("tooltip.dragonmounts.gender", nbt.getBoolean("IsMale")
+                    ? TextFormatting.BLUE + "M"
+                    : TextFormatting.RED + "FM"
+            ));
         } else {
-            tooltip.add(t.GREEN + new TextComponentTranslation("item.dragonamulet.info").getUnformattedText());
+            tooltip.add(TextFormatting.GREEN + DMUtils.translateToLocal("item.dragonamulet.info"));
         }
     }
 

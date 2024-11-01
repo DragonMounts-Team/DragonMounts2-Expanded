@@ -1043,9 +1043,11 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
         // return custom name if set
         if (this.hasCustomName()) return new TextComponentString(this.getCustomNameTag());
         // return default breed name otherwise
-        String entName = EntityList.getEntityString(this);
-        String breedName = getBreed().getSkin().toLowerCase();
-        return new TextComponentTranslation("entity." + entName + "." + breedName + ".name");
+        return new TextComponentTranslation(this.makeTranslationKey());
+    }
+
+    public String makeTranslationKey() {
+        return "entity." + EntityList.getEntityString(this) + "." + this.getBreed().getSkin().toLowerCase() + ".name";
     }
 
     public void roar() {
@@ -2131,7 +2133,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
         return false;
     }
 
-    private void eatEvent(Item item) {
+    private void eatEvent(ItemStack stack) {
         playSound(this.getEatSound(), 1f, 0.75f);
         double motionX = this.getRNG().nextGaussian() * 0.07D;
         double motionY = this.getRNG().nextGaussian() * 0.07D;
@@ -2139,7 +2141,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
         Vec3d pos = this.getAnimator().getThroatPosition();
 
         if (world.isRemote) {
-            world.spawnParticle(EnumParticleTypes.ITEM_CRACK, pos.x, pos.y, pos.z, motionX, motionY, motionZ, Item.getIdFromItem(item));
+            world.spawnParticle(EnumParticleTypes.ITEM_CRACK, pos.x, pos.y, pos.z, motionX, motionY, motionZ, Item.getIdFromItem(stack.getItem()), stack.getMetadata());
         }
     }
 
@@ -2263,7 +2265,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
             // Continue growth
             if (breed.getGrowingFood() == food) {
                 setGrowthPaused(false);
-                eatEvent(food);
+                eatEvent(stack);
                 playSound(SoundEvents.ENTITY_PLAYER_BURP, 1, 0.8F);
                 consumeItemFromStack(player, stack);
                 return true;
@@ -2272,7 +2274,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
             // Stop Growth
             if (breed.getShrinkingFood() == food) {
                 setGrowthPaused(true);
-                eatEvent(food);
+                eatEvent(stack);
                 playSound(SoundEvents.ENTITY_PLAYER_BURP, 1f, 0.8F);
                 player.sendStatusMessage(new TextComponentTranslation("dragon.growth.paused"), true);
                 consumeItemFromStack(player, stack);
@@ -2282,7 +2284,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
         // Mate
         if ((isAquaticFood || breed.getBreedingItem() == food) && isTamed && this.isAdult() && !this.isInLove()) {
             setInLove(player);
-            eatEvent(food);
+            eatEvent(stack);
             consumeItemFromStack(player, stack);
             return true;
         }
@@ -2293,7 +2295,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
         // Taming
         if (!this.isTamed()) {
             consumeItemFromStack(player, stack);
-            eatEvent(food);
+            eatEvent(stack);
             tamedFor(player, this.getRNG().nextInt(4) == 0);
             return true;
         }
@@ -2301,7 +2303,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
         //  hunger
         if (this.getHunger() < 100) {
             consumeItemFromStack(player, stack);
-            eatEvent(food);
+            eatEvent(stack);
             setHunger(this.getHunger() + food.getHealAmount(stack) * 2);
             return true;
         }

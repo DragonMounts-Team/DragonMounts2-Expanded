@@ -132,7 +132,7 @@ public class DragonBreathHelper extends DragonHelper {
             Vec3d endOfLook=origin.add(lookDirection.x, lookDirection.y, lookDirection.z);
             BreathNode.Power power=dragon.getLifeStageHelper().getBreathPower();
             if (endOfLook!=null && currentBreathState==BreathState.SUSTAIN) {
-                dragon.getBreed().continueAndUpdateBreathing(dragon.getEntityWorld(), origin, endOfLook, power, dragon);
+                dragon.getBreed().continueAndUpdateBreathing(this, dragon.getEntityWorld(), origin, endOfLook, power, dragon);
             }
         }
     }
@@ -146,7 +146,7 @@ public class DragonBreathHelper extends DragonHelper {
             Vec3d endOfLook=origin.add(lookDirection.x, lookDirection.y, lookDirection.z);
             if (endOfLook!=null && currentBreathState==BreathState.SUSTAIN && dragon.getBreed().canUseBreathWeapon()) {
                 BreathNode.Power power=dragon.getLifeStageHelper().getBreathPower();
-                dragon.getBreed().spawnBreathParticles(dragon.getEntityWorld(), power, tickCounter, origin, endOfLook, dragon);
+                dragon.getBreed().spawnBreathParticles(this, dragon.getEntityWorld(), power, tickCounter, origin, endOfLook);
             }
         }
 
@@ -159,7 +159,7 @@ public class DragonBreathHelper extends DragonHelper {
     private void updateBreathState(boolean isBreathing) {
         switch (currentBreathState) {
             case IDLE: {
-                if (isBreathing==true) {
+                if (isBreathing) {
                     transitionStartTick=tickCounter;
                     currentBreathState=BreathState.STARTING;
                 }
@@ -169,12 +169,12 @@ public class DragonBreathHelper extends DragonHelper {
                 int ticksSpentStarting=tickCounter - transitionStartTick;
                 if (ticksSpentStarting >= BREATH_START_DURATION) {
                     transitionStartTick=tickCounter;
-                    currentBreathState=(isBreathing==true) ? BreathState.SUSTAIN : BreathState.STOPPING;
+                    currentBreathState = isBreathing ? BreathState.SUSTAIN : BreathState.STOPPING;
                 }
                 break;
             }
             case SUSTAIN: {
-                if (isBreathing==false) {
+                if (!isBreathing) {
                     transitionStartTick=tickCounter;
                     currentBreathState=BreathState.STOPPING;
                 }

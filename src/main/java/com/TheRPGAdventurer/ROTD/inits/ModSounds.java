@@ -1,12 +1,14 @@
 package com.TheRPGAdventurer.ROTD.inits;
 
 import com.TheRPGAdventurer.ROTD.DragonMountsTags;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundEffectName;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
+import net.minecraftforge.registries.IForgeRegistry;
 
 @ObjectHolder(DragonMountsTags.MOD_ID)
 public class ModSounds {
@@ -76,7 +78,8 @@ public class ModSounds {
 	public static class RegistrationHandler {
 		@SubscribeEvent
 		public static void registerSoundEvents(final RegistryEvent.Register<SoundEvent> event) {
-			event.getRegistry().registerAll(
+			IForgeRegistry<SoundEvent> registry = event.getRegistry();
+			registry.registerAll(
 					ENTITY_DRAGON_STEP,
 					ENTITY_DRAGON_BREATHE,
 					ENTITY_DRAGON_DEATH,
@@ -97,6 +100,9 @@ public class ModSounds {
 					HATCHLING_DRAGON_ROAR,
 					DRAGON_SWITCH
 			);
+			for (SoundEffectName sound : SoundEffectName.values()) {
+				registry.register(sound.sound);
+			}
 		}
 	}
 }

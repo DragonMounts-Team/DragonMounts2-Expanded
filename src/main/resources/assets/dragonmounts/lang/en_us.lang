@@ -87,6 +87,8 @@ dragon.terra2=Terra
 #Stage
 dragon.egg=Egg
 dragon.hatchling=Hatchling
+dragon.infant=Infant
+dragon.prejuvenile=Pre-Juvenile
 dragon.juvenile=Juvenile
 dragon.adult=Adult
 
@@ -227,3 +229,9 @@ tooltip.dragonmounts.armor_effect_cooldown=CD: %ss
 tooltip.dragonmounts.armor_effect_fishing_luck=When the wearer is fishing, apply Luck I effect for 10s without cooldown
 tooltip.dragonmounts.armor_effect_piece_4=4-Piece Set:
 tooltip.dragonmounts.armor_effect_remaining_cooldown=Remaining CD: %ss
+tooltip.dragonmounts.whistle.name=Dragon Whistle (%s)
+tooltip.dragonmounts.age=Age: %s
+tooltip.dragonmounts.name=Name: %s
+tooltip.dragonmounts.health=Health: %s
+tooltip.dragonmounts.owner=Owner: %s
+tooltip.dragonmounts.gender=Gender: %s

@@ -3,7 +3,6 @@ package com.TheRPGAdventurer.ROTD.client.gui;
 import com.TheRPGAdventurer.ROTD.DragonMounts;
 import com.TheRPGAdventurer.ROTD.network.MessageDragonSit;
 import com.TheRPGAdventurer.ROTD.network.MessageDragonTeleport;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -50,11 +49,11 @@ public class GuiDragonWhistle extends GuiScreen {
             if (button == sit)
                 DragonMounts.NETWORK_WRAPPER.sendToServer(new MessageDragonSit(uuid));
 
-            if (button == teleport)
+            else if (button == teleport)
                 DragonMounts.NETWORK_WRAPPER.sendToServer(new MessageDragonTeleport(uuid));
 
             //Close GUI when option is selected
-            Minecraft.getMinecraft().displayGuiScreen(null);
+            this.mc.displayGuiScreen(null);
         }
     }
 

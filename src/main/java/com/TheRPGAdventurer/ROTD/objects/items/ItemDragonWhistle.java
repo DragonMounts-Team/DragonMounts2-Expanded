@@ -1,13 +1,16 @@
 package com.TheRPGAdventurer.ROTD.objects.items;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.client.gui.GuiDragonWhistle;
+import com.TheRPGAdventurer.ROTD.inits.DMItemGroups;
 import com.TheRPGAdventurer.ROTD.inits.ModItems;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.util.DMUtils;
 import com.TheRPGAdventurer.ROTD.util.IHasModel;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -18,7 +21,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -38,12 +40,22 @@ import static net.minecraft.tileentity.TileEntitySkull.updateGameProfile;
  * @modifier WolfShotz
  */
 public class ItemDragonWhistle extends Item implements IHasModel {
+    public final String DRAGON_UUID_KEY = DragonMountsTags.MOD_ID + "dragon";
+
+    public static String getDragonName(NBTTagCompound tag) {
+        if (tag.hasKey("Name")) {
+            return tag.getString("Name");
+        }
+        String name = DMUtils.translateToLocal(tag.getString("LocName"));
+        String type = tag.getString("Breed");
+        return type.isEmpty() ? name : EnumItemBreedTypes.byName(type).color + name + TextFormatting.RESET;
+    }
+
     public ItemDragonWhistle() {
         this.setTranslationKey("dragon_whistle");
-        this.setRegistryName(new ResourceLocation(DragonMounts.MODID, "dragon_whistle"));
+        this.setRegistryName(DragonMountsTags.MOD_ID, "dragon_whistle");
         this.setMaxStackSize(1);
-        this.setCreativeTab(DragonMounts.mainTab);
-
+        this.setCreativeTab(DMItemGroups.MAIN);
         ModItems.ITEMS.add(this);
     }
 
@@ -88,13 +100,17 @@ public class ItemDragonWhistle extends Item implements IHasModel {
             EntityLivingBase owner = dragon.getOwner();
             if (owner != null && dragon.isAllowed(player)) {
                 NBTTagCompound nbt = new NBTTagCompound();
-                nbt.setUniqueId(DragonMounts.MODID.toLowerCase() + "dragon", dragon.getUniqueID());
-                EnumItemBreedTypes type = EnumItemBreedTypes.valueOf(dragon.getBreedType().toString());
-                nbt.setString("Name", type.color + (dragon.hasCustomName() ? dragon.getCustomNameTag() : DMUtils.translateToLocal("dragon." + type.toString().toLowerCase()) + " Dragon"));
-                nbt.setString("Age", DMUtils.translateToLocal("dragon." + dragon.getLifeStageHelper().getLifeStage().toString().toLowerCase()));
+                nbt.setUniqueId(DRAGON_UUID_KEY, dragon.getUniqueID());
+                if (dragon.hasCustomName()) {
+                    nbt.setString("Name", dragon.getCustomNameTag());
+                } else {
+                    nbt.setString("LocName", dragon.makeTranslationKey());
+                }
+                nbt.setString("Age", "dragon." + dragon.getLifeStageHelper().getLifeStage().name().toLowerCase());
                 nbt.setString("OwnerName", owner.getName());
                 nbt.setUniqueId("Owner", owner.getUniqueID());
                 nbt.setInteger("Color", dragon.getBreed().getColor());
+                nbt.setString("Breed", dragon.getBreedType().identifier);
 
                 stack.setTagCompound(nbt);
                 dragon.setControllingWhistle(stack);
@@ -113,7 +129,7 @@ public class ItemDragonWhistle extends Item implements IHasModel {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
-        if (!stack.hasTagCompound() || !stack.getTagCompound().hasUniqueId(DragonMounts.MODID.toLowerCase() + "dragon")) {
+        if (!stack.hasTagCompound() || !stack.getTagCompound().hasUniqueId(DRAGON_UUID_KEY)) {
             player.sendStatusMessage(new TextComponentTranslation("whistle.msg.unBound"), true);
             return new ActionResult<>(EnumActionResult.FAIL, stack);
         }
@@ -131,7 +147,7 @@ public class ItemDragonWhistle extends Item implements IHasModel {
             return new ActionResult<>(EnumActionResult.SUCCESS, stack);
         }
 
-        this.openDragonWhistleGui(stack.getTagCompound().getUniqueId(DragonMounts.MODID + "dragon"), world);
+        this.openDragonWhistleGui(stack.getTagCompound().getUniqueId(DRAGON_UUID_KEY), world);
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
 
@@ -139,21 +155,24 @@ public class ItemDragonWhistle extends Item implements IHasModel {
     @Override
     @SideOnly(Side.CLIENT)
     public String getItemStackDisplayName(ItemStack stack) {
-        if (stack.hasTagCompound() && stack.getTagCompound().hasUniqueId(DragonMounts.MODID.toLowerCase() + "dragon")) {
-            return new TextComponentTranslation(super.getTranslationKey(stack) + ".name").getUnformattedComponentText() + " (" + stack.getTagCompound().getString("Name") + TextFormatting.RESET + ")";
-        } else
-            return new TextComponentTranslation(super.getTranslationKey(stack) + ".name").getUnformattedComponentText();
+        if (stack.hasTagCompound() && stack.getTagCompound().hasUniqueId(DRAGON_UUID_KEY)) {
+            return I18n.format("tooltip.dragonmounts.whistle.name", getDragonName(stack.getTagCompound()));
+        }
+        return super.getItemStackDisplayName(stack);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        if (stack.hasTagCompound() && stack.getTagCompound().hasUniqueId(DragonMounts.MODID.toLowerCase() + "dragon")) {
-            tooltip.add(TextFormatting.GRAY + "Name: " + stack.getTagCompound().getString("Name"));
-            tooltip.add(TextFormatting.GRAY + "Age: " + TextFormatting.AQUA + stack.getTagCompound().getString("Age"));
-            tooltip.add(TextFormatting.GRAY + "Owner: " + TextFormatting.GOLD + stack.getTagCompound().getString("OwnerName"));
-            tooltip.add(TextFormatting.GRAY + "" + TextFormatting.ITALIC + DMUtils.translateToLocal("item.removeNBT"));
-        } else tooltip.add(DMUtils.translateToLocal("item.whistle.info"));
+        NBTTagCompound nbt = stack.getTagCompound();
+        if (nbt == null || !nbt.hasUniqueId(DRAGON_UUID_KEY)) {
+            tooltip.add(DMUtils.translateToLocal("item.whistle.info"));
+            return;
+        }
+        tooltip.add(I18n.format("tooltip.dragonmounts.name", getDragonName(nbt)));
+        tooltip.add(I18n.format("tooltip.dragonmounts.age", TextFormatting.AQUA + DMUtils.translateToLocal(nbt.getString("Age")) + TextFormatting.RESET));
+        tooltip.add(I18n.format("tooltip.dragonmounts.owner", TextFormatting.GOLD + nbt.getString("OwnerName") + TextFormatting.RESET));
+        tooltip.add(TextFormatting.ITALIC + DMUtils.translateToLocal("item.removeNBT"));
     }
 
     @Override

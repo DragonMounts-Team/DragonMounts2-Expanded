@@ -4,22 +4,21 @@ import com.TheRPGAdventurer.ROTD.DragonMountsConfig;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathAffectedBlock;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathAffectedEntity;
-
+import com.TheRPGAdventurer.ROTD.util.DMUtils;
+import com.TheRPGAdventurer.ROTD.util.EntityUtil;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -34,8 +33,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class BreathWeaponIce extends BreathWeapon {
 
-    public BreathWeaponIce(EntityTameableDragon i_dragon) {
-        super(i_dragon);
+    public BreathWeaponIce(EntityTameableDragon dragon) {
+        super(dragon);
     }
 
     /**
@@ -52,36 +51,25 @@ public class BreathWeaponIce extends BreathWeapon {
         checkNotNull(blockPosition);
         checkNotNull(currentHitDensity);
 
-        BlockPos blockPos = new BlockPos(blockPosition);
-        IBlockState iBlockState = world.getBlockState(blockPos);
-        Block block = iBlockState.getBlock();
-
-        Random rand = new Random();
-        BlockPos sideToIgnite = blockPos.offset(EnumFacing.UP);
-        if (DragonMountsConfig.canIceBreathBePermanent) {
-            world.setBlockState(sideToIgnite, Blocks.SNOW_LAYER.getDefaultState());
-        } else if ((world.getBlockState(blockPos).getBlock() == Blocks.WATER || world.getBlockState(blockPos).getBlock() == Blocks.FLOWING_WATER)
-                && world.getBlockState(blockPos.up()).getBlock() == Blocks.AIR) {
-            if (DragonMountsConfig.canIceBreathBePermanent) {
-//                world.mayPlace(Blocks.ICE, blockPos, false, EnumFacing.DOWN, null);
-                world.setBlockState(blockPos, Blocks.ICE.getDefaultState(), 1);
-            } else if (!DragonMountsConfig.canIceBreathBePermanent) {
-//                world.mayPlace(Blocks.FROSTED_ICE, blockPos, false, EnumFacing.DOWN, null);
-                world.setBlockState(blockPos, Blocks.FROSTED_ICE.getDefaultState(), 1);
+        BlockPos hitPos = new BlockPos(blockPosition);
+        IBlockState hitState = world.getBlockState(hitPos);
+        Block block = hitState.getBlock();
+        BlockPos upperPos = hitPos.offset(EnumFacing.UP);
+        if (block == Blocks.LAVA) {
+            world.setBlockState(hitPos, Blocks.OBSIDIAN.getDefaultState());
+        } else if (block == Blocks.FLOWING_LAVA) {
+            world.setBlockState(hitPos, Blocks.COBBLESTONE.getDefaultState());
+        } else if (block == Blocks.FIRE) {
+            world.setBlockState(hitPos, Blocks.AIR.getDefaultState());
+        } else if (DMUtils.isAir(world, upperPos)) {
+            if ((block == Blocks.WATER || block == Blocks.FLOWING_WATER)) {
+                world.setBlockState(hitPos, (DragonMountsConfig.canIceBreathBePermanent ? Blocks.ICE : Blocks.FROSTED_ICE).getDefaultState());
+            } else if (DragonMountsConfig.canIceBreathBePermanent && (
+                    block.isLeaves(hitState, world, hitPos) || hitState.getBlockFaceShape(world, hitPos, EnumFacing.UP) == BlockFaceShape.SOLID
+            )) {
+                world.setBlockState(upperPos, Blocks.SNOW_LAYER.getDefaultState());
             }
         }
-
-        if (block == Blocks.LAVA) {
-            world.setBlockState(blockPos, Blocks.OBSIDIAN.getDefaultState());
-        }
-
-        if (block == Blocks.FLOWING_LAVA) {
-            world.setBlockState(blockPos, Blocks.COBBLESTONE.getDefaultState());
-        }
-        if (block == Blocks.FIRE) {
-            world.setBlockState(blockPos, Blocks.AIR.getDefaultState());
-        }
-
         return new BreathAffectedBlock();  // reset to zero
     }
 
@@ -101,26 +89,20 @@ public class BreathWeaponIce extends BreathWeapon {
         checkNotNull(currentHitDensity);
 
         Entity entity = world.getEntityByID(entityID);
-        if (entity == null || !(entity instanceof EntityLivingBase) || entity.isDead) {
-            return null;
-        }
-
+        if (!(entity instanceof EntityLivingBase) || entity.isDead) return null;
         float hitDensity = currentHitDensity.getHitDensity();
-        final float DAMAGE_PER_HIT_DENSITY = ICE_DAMAGE * hitDensity;
-        triggerDamageExceptions(entity, DAMAGE_PER_HIT_DENSITY, entityID, currentHitDensity);
-        entity.attackEntityFrom(DamageSource.causeMobDamage(dragon), DAMAGE_PER_HIT_DENSITY);
-        ((EntityLivingBase) entity).knockBack(entity, 0.1F, dragon.posX - entity.posX, dragon.posZ - entity.posZ);
-
-
+        float damage = ICE_DAMAGE * hitDensity;
         if (entity.isBurning()) {
             entity.extinguish();
             entity.playSound(SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 1.0f, 0.0f);
+            damage *= 2;
         }
+        triggerDamageExceptions(entity, damage, entityID, currentHitDensity);
+        entity.attackEntityFrom(DamageSource.causeMobDamage(dragon), damage);
+        ((EntityLivingBase) entity).knockBack(entity, 0.1F, dragon.posX - entity.posX, dragon.posZ - entity.posZ);
 
-        if((dragon.getControllingPlayer() != null && dragon.getControllingPlayer() != entity) || (dragon.getRidingEntity() != entity && dragon.getRidingEntity() != null)) {
-            entity.isWet();
-            PotionEffect iceEffect=new PotionEffect(MobEffects.SLOWNESS, 100);
-            ((EntityLivingBase) entity).addPotionEffect(iceEffect); // Apply a copy of the PotionEffect to the player
+        if (dragon.getRidingEntity() != entity && !dragon.isPassenger(entity)) {
+            EntityUtil.addOrMergeEffect((EntityLivingBase) entity, MobEffects.SLOWNESS, 100, 0, false, true);
         }
 
         this.xp(entity);

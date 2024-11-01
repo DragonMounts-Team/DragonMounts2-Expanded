@@ -8,6 +8,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public interface IDescribableArmorEffect extends IArmorEffect {
     @SideOnly(Side.CLIENT)
     default void appendTriggerInfo(ItemStack stack, List<String> tooltips) {
-        tooltips.add(DMUtils.translateToLocal("tooltip.dragonmounts.armor_effect_piece_4"));
+        tooltips.add(TextFormatting.RESET + DMUtils.translateToLocal("tooltip.dragonmounts.armor_effect_piece_4"));
     }
 
     @SideOnly(Side.CLIENT)
@@ -40,9 +41,9 @@ public interface IDescribableArmorEffect extends IArmorEffect {
         public final void appendCooldownInfo(List<String> tooltips) {
             int value = ArmorEffectManager.getLocalCooldown(this);
             if (value > 0) {
-                tooltips.add(DMUtils.quickFormatAsFloat("tooltip.dragonmounts.armor_effect_remaining_cooldown", value));
+                tooltips.add(TextFormatting.RESET + DMUtils.quickFormatAsFloat("tooltip.dragonmounts.armor_effect_remaining_cooldown", value));
             } else if (this.cooldown > 0) {
-                tooltips.add(DMUtils.quickFormatAsFloat("tooltip.dragonmounts.armor_effect_cooldown", this.cooldown));
+                tooltips.add(TextFormatting.RESET + DMUtils.quickFormatAsFloat("tooltip.dragonmounts.armor_effect_cooldown", this.cooldown));
             }
         }
 
@@ -51,7 +52,7 @@ public interface IDescribableArmorEffect extends IArmorEffect {
         public void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {
             tooltips.add("");
             this.appendTriggerInfo(stack, tooltips);
-            tooltips.add(DMUtils.translateToLocal(this.description));
+            tooltips.add(TextFormatting.RESET + DMUtils.translateToLocal(this.description));
             this.appendCooldownInfo(tooltips);
         }
 

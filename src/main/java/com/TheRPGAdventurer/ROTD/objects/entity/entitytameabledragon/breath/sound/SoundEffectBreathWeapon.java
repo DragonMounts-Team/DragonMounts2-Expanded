@@ -125,7 +125,7 @@ public class SoundEffectBreathWeapon {
         case IDLE: {
           //          breathingStopTick = ticksElapsed;
           stopAllHeadSounds();
-          headStoppingSound = new BreathWeaponSound(weaponSound(SoundPart.STOP, weaponSoundInfo.lifeStage, dragon),
+          headStoppingSound = new BreathWeaponSound(weaponSound(SoundState.STOP, weaponSoundInfo.lifeStage, dragon),
                   HEAD_MIN_VOLUME, RepeatType.NO_REPEAT,
                   headSoundSettings);
           headStoppingSound.setPlayCountdown(HEAD_STOPPING_TICKS);
@@ -135,13 +135,13 @@ public class SoundEffectBreathWeapon {
         case BREATHING: {
           //          breathingStartTick = ticksElapsed;
           stopAllHeadSounds();
-          BreathWeaponSound preloadLoop = new BreathWeaponSound(weaponSound(SoundPart.LOOP, weaponSoundInfo.lifeStage, dragon),
+          BreathWeaponSound preloadLoop = new BreathWeaponSound(weaponSound(SoundState.LOOP, weaponSoundInfo.lifeStage, dragon),
                   Mode.PRELOAD);
           soundController.playSound(preloadLoop);
-          BreathWeaponSound preLoadStop = new BreathWeaponSound(weaponSound(SoundPart.STOP, weaponSoundInfo.lifeStage, dragon),
+          BreathWeaponSound preLoadStop = new BreathWeaponSound(weaponSound(SoundState.STOP, weaponSoundInfo.lifeStage, dragon),
                   Mode.PRELOAD);
           soundController.playSound(preLoadStop);
-          headStartupSound = new BreathWeaponSound(weaponSound(SoundPart.START, weaponSoundInfo.lifeStage, dragon),
+          headStartupSound = new BreathWeaponSound(weaponSound(SoundState.START, weaponSoundInfo.lifeStage, dragon),
                   HEAD_MIN_VOLUME, RepeatType.NO_REPEAT,
                   headSoundSettings);
           headStartupSound.setPlayCountdown(HEAD_STARTUP_TICKS);
@@ -163,7 +163,7 @@ public class SoundEffectBreathWeapon {
       case BREATHING: {
         if (headStartupSound != null && headStartupSound.getPlayCountdown() <= 0) {
           stopAllHeadSounds();
-          headLoopSound = new BreathWeaponSound(weaponSound(SoundPart.LOOP, weaponSoundInfo.lifeStage, dragon),
+          headLoopSound = new BreathWeaponSound(weaponSound(SoundState.LOOP, weaponSoundInfo.lifeStage, dragon),
                   HEAD_MIN_VOLUME, RepeatType.REPEAT, headSoundSettings);
           soundController.playSound(headLoopSound);
         }
@@ -303,16 +303,13 @@ public class SoundEffectBreathWeapon {
     }
   }
 
-  protected enum SoundPart {START, LOOP, STOP}
-
   /**
    * Returns the sound for the given breed, lifestage, and sound part
    * @param soundPart which part of the breathing sound?
    * @param lifeStage how old is the dragon?
    * @return the resourcelocation corresponding to the desired sound
    */
-  protected ResourceLocation weaponSound(SoundPart soundPart, DragonLifeStage lifeStage, EntityTameableDragon dragon) {
-    return new ResourceLocation(dragon.getBreed().getBreathWeaponSoundEffects(lifeStage)[soundPart.ordinal()].getJsonName());
+  protected ResourceLocation weaponSound(SoundState soundPart, DragonLifeStage lifeStage, EntityTameableDragon dragon) {
+    return dragon.getBreed().getBreathWeaponSoundEffect(lifeStage, soundPart).location;
   }
-
 }

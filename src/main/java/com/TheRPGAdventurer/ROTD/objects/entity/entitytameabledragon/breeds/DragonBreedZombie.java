@@ -3,7 +3,9 @@ package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds;
 import com.TheRPGAdventurer.ROTD.inits.ModSounds;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathNode;
-import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundEffectNames;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.DragonBreathHelper;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundEffectName;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundState;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonLifeStage;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
@@ -27,33 +29,24 @@ public class DragonBreedZombie extends DragonBreed {
     }
 
     @Override
-    public void onEnable(EntityTameableDragon dragon) {
+    public void onEnable(EntityTameableDragon dragon) {}
 
+    @Override
+    public void onDisable(EntityTameableDragon dragon) {}
 
+    @Override
+    public void onDeath(EntityTameableDragon dragon) {}
+
+    @Override
+    public void continueAndUpdateBreathing(DragonBreathHelper helper, World world, Vec3d origin, Vec3d endOfLook, BreathNode.Power power, EntityTameableDragon dragon) {
+        helper.getbreathAffectedAreaPoison().continueBreathing(world, origin, endOfLook, power, dragon);
+        helper.getbreathAffectedAreaPoison().updateTick(world);
     }
 
     @Override
-    public void onDisable(EntityTameableDragon dragon) {
-
-
-    }
-
-    @Override
-    public void onDeath(EntityTameableDragon dragon) {
-
-
-    }
-
-    @Override
-    public void continueAndUpdateBreathing(World world, Vec3d origin, Vec3d endOfLook, BreathNode.Power power, EntityTameableDragon dragon) {
-        dragon.getBreathHelper().getbreathAffectedAreaPoison().continueBreathing(world, origin, endOfLook, power, dragon);
-        dragon.getBreathHelper().getbreathAffectedAreaPoison().updateTick(world);
-    }
-
-    @Override
-    public void spawnBreathParticles(World world, BreathNode.Power power, int tickCounter, Vec3d origin, Vec3d endOfLook, EntityTameableDragon dragon) {
-        dragon.getBreathHelper().getEmitter().setBeamEndpoints(origin, endOfLook);
-        dragon.getBreathHelper().getEmitter().spawnBreathParticlesforPoisonDragon(world, power, tickCounter);
+    public void spawnBreathParticles(DragonBreathHelper helper, World world, BreathNode.Power power, int tickCounter, Vec3d origin, Vec3d endOfLook) {
+        helper.getEmitter().setBeamEndpoints(origin, endOfLook);
+        helper.getEmitter().spawnBreathParticlesforPoisonDragon(world, power, tickCounter);
     }
 
     @Override
@@ -61,20 +54,15 @@ public class DragonBreedZombie extends DragonBreed {
         return dragon.isBaby() ?  ModSounds.ENTITY_DRAGON_HATCHLING_GROWL : ModSounds.ZOMBIE_DRAGON_GROWL;
     }
 
-    @Override
-    public SoundEvent getDeathSound() {
-        return ModSounds.ENTITY_DRAGON_DEATH;
-    }
 
 //	@Override
 //	public boolean isInfertile() {
 //		return true;
 //	}
 
-    public SoundEffectNames[] getBreathWeaponSoundEffects(DragonLifeStage stage) {
-
-        final SoundEffectNames soundEffectNames[]={SoundEffectNames.ADULT_BREATHE_ICE_START, SoundEffectNames.ADULT_BREATHE_ICE_LOOP, SoundEffectNames.ADULT_BREATHE_ICE_STOP};
-        return soundEffectNames;
+    @Override
+    public SoundEffectName getBreathWeaponSoundEffect(DragonLifeStage stage, SoundState state) {
+        return state.ice;// why
     }
 
     @Override

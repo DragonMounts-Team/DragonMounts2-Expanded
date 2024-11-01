@@ -1,6 +1,9 @@
 package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds;
 
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundEffectName;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundState;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonLifeStage;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
@@ -65,6 +68,11 @@ public class DragonBreedForest extends DragonBreed {
         } else {
             dragon.setForestType(EntityTameableDragon.EnumForestType.FOREST.getName());
         }
+    }
+
+    @Override
+    public SoundEffectName getBreathWeaponSoundEffect(DragonLifeStage stage, SoundState state) {
+        return state.forest;
     }
 }
 	

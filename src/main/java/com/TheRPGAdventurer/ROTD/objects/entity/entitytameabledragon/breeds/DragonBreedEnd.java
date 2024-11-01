@@ -3,7 +3,7 @@ package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds;
 import com.TheRPGAdventurer.ROTD.inits.ModSounds;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathNode;
-
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.DragonBreathHelper;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -46,28 +46,21 @@ public class DragonBreedEnd extends DragonBreed {
 	public boolean canChangeBreed() {
 		return false;
 	}
-	
-	@Override
-	public void onLivingUpdate(EntityTameableDragon dragon) {
 
-	}
-
-	
 	@Override
-    public void continueAndUpdateBreathing(World world, Vec3d origin, Vec3d endOfLook, BreathNode.Power power, EntityTameableDragon dragon) {
-		dragon.getBreathHelper().getBreathAffectedAreaEnd().continueBreathing(world, origin, endOfLook, power, dragon);
-		dragon.getBreathHelper().getBreathAffectedAreaEnd().updateTick(world);
+    public void continueAndUpdateBreathing(DragonBreathHelper helper, World world, Vec3d origin, Vec3d endOfLook, BreathNode.Power power, EntityTameableDragon dragon) {
+        helper.getBreathAffectedAreaEnd().continueBreathing(world, origin, endOfLook, power, dragon);
+        helper.getBreathAffectedAreaEnd().updateTick(world);
     }
-    
-	@Override
-    public void spawnBreathParticles(World world, BreathNode.Power power, int tickCounter, Vec3d origin, Vec3d endOfLook, EntityTameableDragon dragon) {
-		dragon.getBreathHelper().getEmitter().setBeamEndpoints(origin, endOfLook);
-		dragon.getBreathHelper().getEmitter().spawnBreathParticlesforEnderDragon(world, power, tickCounter);
+
+    @Override
+    public void spawnBreathParticles(DragonBreathHelper helper, World world, BreathNode.Power power, int tickCounter, Vec3d origin, Vec3d endOfLook) {
+        helper.getEmitter().setBeamEndpoints(origin, endOfLook);
+        helper.getEmitter().spawnBreathParticlesforEnderDragon(world, power, tickCounter);
     }
 
     public EnumParticleTypes getSneezeParticle() {
         return EnumParticleTypes.PORTAL;
     }
-    
 }
 	

@@ -3,7 +3,7 @@ package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds;
 import com.TheRPGAdventurer.ROTD.inits.ModSounds;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathNode;
-
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.DragonBreathHelper;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
@@ -47,15 +47,15 @@ public class DragonBreedWither extends DragonBreed {
 	}
 	
 	@Override
-    public void continueAndUpdateBreathing(World world, Vec3d origin, Vec3d endOfLook, BreathNode.Power power, EntityTameableDragon dragon) {
-        dragon.getBreathHelper().getbreathAffectedAreaWither().continueBreathing(world, origin, endOfLook, power, dragon);
-        dragon.getBreathHelper().getbreathAffectedAreaWither().updateTick(world);
+    public void continueAndUpdateBreathing(DragonBreathHelper helper, World world, Vec3d origin, Vec3d endOfLook, BreathNode.Power power, EntityTameableDragon dragon) {
+        helper.getbreathAffectedAreaWither().continueBreathing(world, origin, endOfLook, power, dragon);
+        helper.getbreathAffectedAreaWither().updateTick(world);
     }
     
 	@Override
-    public void spawnBreathParticles(World world, BreathNode.Power power, int tickCounter, Vec3d origin, Vec3d endOfLook, EntityTameableDragon dragon) {
-        dragon.getBreathHelper().getEmitter().setBeamEndpoints(origin, endOfLook);
-        dragon.getBreathHelper().getEmitter().spawnBreathParticlesforWitherDragon(world, power, tickCounter);
+    public void spawnBreathParticles(DragonBreathHelper helper, World world, BreathNode.Power power, int tickCounter, Vec3d origin, Vec3d endOfLook) {
+        helper.getEmitter().setBeamEndpoints(origin, endOfLook);
+        helper.getEmitter().spawnBreathParticlesforWitherDragon(world, power, tickCounter);
     }
 
 	@Override
