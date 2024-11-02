@@ -1,6 +1,6 @@
 package com.TheRPGAdventurer.ROTD.objects.tileentities;
 
-import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.inventory.ContainerDragonShulker;
 import com.TheRPGAdventurer.ROTD.objects.blocks.BlockDragonShulker;
 import net.minecraft.block.Block;
@@ -117,7 +117,7 @@ public class TileEntityDragonShulker extends TileEntityLockableLoot implements I
 
     @Override
     public String getGuiID() {
-        return DragonMounts.MODID + ":dragon_shulker";
+        return DragonMountsTags.MOD_ID + ":dragon_shulker";
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.TheRPGAdventurer.ROTD.client.gui;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.inventory.ContainerDragon;
 import com.TheRPGAdventurer.ROTD.network.MessageDragonGui;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
@@ -24,13 +25,13 @@ import java.io.IOException;
 @SideOnly(Side.CLIENT)
 public class GuiDragon extends GuiContainer {
 
-    public static final ResourceLocation lockOpen = new ResourceLocation(DragonMounts.MODID, "textures/gui/lock_1.png");
-    public static final ResourceLocation lockLocked = new ResourceLocation(DragonMounts.MODID, "textures/gui/lock_2.png");
-    public static final ResourceLocation lockDisabled = new ResourceLocation(DragonMounts.MODID, "textures/lock_3.png");
-    private static final ResourceLocation mainGui = new ResourceLocation(DragonMounts.MODID, "textures/gui/dragon.png");
-    private static final ResourceLocation offhand = new ResourceLocation(DragonMounts.MODID, "textures/gui/offhand.png");
-    private static final ResourceLocation hunger_full = new ResourceLocation(DragonMounts.MODID, "textures/gui/hunger_full.png");
-    private static final ResourceLocation dismountTex = new ResourceLocation(DragonMounts.MODID, "textures/items/carriage/carriage_oak.png");
+    public static final ResourceLocation lockOpen = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/lock_1.png");
+    public static final ResourceLocation lockLocked = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/lock_2.png");
+    public static final ResourceLocation lockDisabled = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/lock_3.png");
+    private static final ResourceLocation mainGui = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/dragon.png");
+    private static final ResourceLocation offhand = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/offhand.png");
+    private static final ResourceLocation hunger_full = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/hunger_full.png");
+    private static final ResourceLocation dismountTex = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/items/carriage/carriage_oak.png");
     private EntityTameableDragon dragon;
     private float mousePosX;
     private float mousePosY;

@@ -443,4 +443,17 @@ public class MathX {
         return value;
     }
 
+    /**
+     * interpolate from vector 1 to vector 2 using fraction
+     *
+     * @param fraction 0 - 1; 0 = vector1, 1 = vector2
+     * @return interpolated vector
+     */
+    public static Vec3d interpolateVec(Vec3d start, Vec3d end, float fraction) {
+        return new Vec3d(
+                start.x * (1 - fraction) + end.x * fraction,
+                start.y * (1 - fraction) + end.y * fraction,
+                start.z * (1 - fraction) + end.z * fraction
+        );
+    }
 }

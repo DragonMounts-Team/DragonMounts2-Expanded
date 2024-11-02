@@ -69,7 +69,7 @@ public class DragonBreedSkeleton extends DragonBreed {
     }
 
     @Override
-    public void continueAndUpdateBreathing(DragonBreathHelper helper, World world, Vec3d origin, Vec3d endOfLook, BreathNode.Power power, EntityTameableDragon dragon) {}
+    public void continueAndUpdateBreathing(DragonBreathHelper helper, World world, Vec3d origin, Vec3d endOfLook, BreathNode.Power power) {}
 
 //	@Override
 //	public boolean isInfertile() {

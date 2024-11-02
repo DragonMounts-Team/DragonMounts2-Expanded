@@ -1,7 +1,6 @@
 package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath;
 
-import com.TheRPGAdventurer.ROTD.DragonMounts;
-import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
+import com.TheRPGAdventurer.ROTD.DragonMountsConfig;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.nodes.BreathNodeFactory;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.nodes.BreathNodeP;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.nodes.EntityBreathNodeP;
@@ -10,6 +9,7 @@ import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.weap
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.util.Pair;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumFacing;
@@ -56,17 +56,24 @@ public class BreathAffectedArea {
 
   /**
    * Tell BreathAffectedArea that breathing is ongoing.  Call once per tick before updateTick()
+   *
    * @param world
-   * @param origin  the origin of the beam
+   * @param origin      the origin of the beam
    * @param destination the destination of the beam, used to calculate direction
    * @param power
    */
-  public void continueBreathing(World world, Vec3d origin, Vec3d destination, BreathNode.Power power, EntityTameableDragon dragon) {
+  public void continueBreathing(World world, Vec3d origin, Vec3d destination, BreathNode.Power power) {
     Vec3d direction = destination.subtract(origin).normalize();
-
-    EntityBreathNode newNode = EntityBreathNode.createEntityBreathNodeServer(world, origin.x, origin.y, origin.z, direction.x, direction.y, direction.z, power);
-
-    entityBreathNodes.add(newNode);
+    this.entityBreathNodes.add(EntityBreathNode.createEntityBreathNodeServer(
+            world,
+            origin.x,
+            origin.y,
+            origin.z,
+            direction.x,
+            direction.y,
+            direction.z,
+            power
+    ));
   }
 
   /**
@@ -93,21 +100,16 @@ public class BreathAffectedArea {
   /** updates the BreathAffectedArea, called once per tick
    */
   public void updateTick(World world) {
-    ArrayList<NodeLineSegment> segments = new ArrayList<>();
+    ObjectArrayList<NodeLineSegment> segments = new ObjectArrayList<>(this.entityBreathNodes.size());
 
     // create a list of NodeLineSegments from the motion path of the BreathNodes
-    Iterator<EntityBreathNode> it = entityBreathNodes.iterator();
+    Iterator<EntityBreathNode> it = this.entityBreathNodes.iterator();
     while (it.hasNext()) {
       EntityBreathNode entity = it.next();
       if (entity.isDead) {
         it.remove();
       } else {
-        float radius = entity.getCurrentRadius();
-        Vec3d initialPosition = entity.getPositionVector();
-        entity.onUpdate();
-        Collection<Pair<EnumFacing, AxisAlignedBB>> recentCollisions = entity.getRecentCollisions();
-        Vec3d finalPosition = entity.getPositionVector();
-        segments.add(new NodeLineSegment(initialPosition, finalPosition, radius, recentCollisions));
+        segments.add(entity.onServerTick());
       }
     }
 
@@ -157,9 +159,7 @@ public class BreathAffectedArea {
   }
 
   private void implementEffectsOnBlocksTick(World world, HashMap<Vec3i, BreathAffectedBlock> affectedBlocks ) {
-    if (!DragonMounts.instance.getConfig().doBreathweaponsAffectBlocks()) {
-      return;
-    }
+    if (!DragonMountsConfig.doBreathweaponsAffectBlocks()) return;
     for (Map.Entry<Vec3i, BreathAffectedBlock> blockInfo : affectedBlocks.entrySet()) {
       BreathAffectedBlock newHitDensity = breathWeapon.affectBlock(world, blockInfo.getKey(), blockInfo.getValue());
       blockInfo.setValue(newHitDensity);
@@ -220,8 +220,8 @@ public class BreathAffectedArea {
    *                         been touched.
    */
   private void updateBlockAndEntityHitDensities(World world,
-                                                ArrayList<NodeLineSegment> nodeLineSegments,
-                                                ArrayList<EntityBreathNode> entityBreathNodes,
+                                                List<NodeLineSegment> nodeLineSegments,
+                                                List<EntityBreathNode> entityBreathNodes,
                                                 HashMap<Vec3i, BreathAffectedBlock> affectedBlocks,
                                                 HashMap<Integer, BreathAffectedEntity> affectedEntities) {
     checkNotNull(nodeLineSegments);

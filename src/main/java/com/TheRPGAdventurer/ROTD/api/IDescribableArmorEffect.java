@@ -17,7 +17,8 @@ import java.util.List;
 public interface IDescribableArmorEffect extends IArmorEffect {
     @SideOnly(Side.CLIENT)
     default void appendTriggerInfo(ItemStack stack, List<String> tooltips) {
-        tooltips.add(TextFormatting.RESET + DMUtils.translateToLocal("tooltip.dragonmounts.armor_effect_piece_4"));
+        ArmorEffectManager manager = ArmorEffectManager.getLocal();
+        tooltips.add((manager != null && manager.isActive(this) ? TextFormatting.GREEN : TextFormatting.RESET) + DMUtils.translateToLocal("tooltip.dragonmounts.armor_effect_piece_4"));
     }
 
     @SideOnly(Side.CLIENT)
@@ -60,6 +61,5 @@ public interface IDescribableArmorEffect extends IArmorEffect {
         public boolean activate(IArmorEffectManager manager, EntityPlayer player, int level) {
             return level > 3;
         }
-
     }
 }

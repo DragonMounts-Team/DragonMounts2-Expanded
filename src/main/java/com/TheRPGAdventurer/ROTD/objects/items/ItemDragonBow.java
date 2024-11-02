@@ -1,6 +1,7 @@
 package com.TheRPGAdventurer.ROTD.objects.items;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.inits.ModTools;
 import com.TheRPGAdventurer.ROTD.util.DMUtils;
 import com.TheRPGAdventurer.ROTD.util.IHasModel;
@@ -41,7 +42,7 @@ public class ItemDragonBow extends ItemBow implements IHasModel {
 
         setMaxDamage(725);
         setTranslationKey("dragon_bow");
-        setRegistryName(new ResourceLocation(DragonMounts.MODID, "dragon_bow_" + type.toString().toLowerCase()));
+        setRegistryName(new ResourceLocation(DragonMountsTags.MOD_ID, "dragon_bow_" + type.toString().toLowerCase()));
         ModTools.TOOLS.add(this);
     }
 

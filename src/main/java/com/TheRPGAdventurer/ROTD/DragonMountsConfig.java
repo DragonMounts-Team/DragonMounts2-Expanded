@@ -96,7 +96,7 @@ public class DragonMountsConfig {
   private static int configHasLoadedErrorCount = 0; // used to detect code which tries to access a property before the config has been loaded
 
 	public static void PreInit() {
-		File configFile = new File(Loader.instance().getConfigDir(), DragonMounts.MODID + ".cfg");
+		File configFile = new File(Loader.instance().getConfigDir(), DragonMountsTags.MOD_ID + ".cfg");
 		config = new Configuration(configFile);
 		syncFromFiles();
 	}
@@ -345,7 +345,7 @@ public class DragonMountsConfig {
 
 		@SubscribeEvent(priority = EventPriority.LOWEST)
 		public void onEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
-			if(event.getModID().equals(DragonMounts.MODID)) {
+			if(event.getModID().equals(DragonMountsTags.MOD_ID)) {
 				syncFromGui();
 			}
 		}

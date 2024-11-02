@@ -1,6 +1,7 @@
 package com.TheRPGAdventurer.ROTD.objects.items.gemset;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.inits.ModTools;
 import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
 import com.TheRPGAdventurer.ROTD.util.DMUtils;
@@ -23,7 +24,7 @@ public class ItemDragonHoe extends ItemHoe {
 
     public ItemDragonHoe(ToolMaterial material, String name, EnumItemBreedTypes type) {
         super(material);
-        this.setRegistryName(new ResourceLocation(DragonMounts.MODID, name));
+        this.setRegistryName(new ResourceLocation(DragonMountsTags.MOD_ID, name));
         this.setTranslationKey("dragon_hoe");
         this.type=type;
 

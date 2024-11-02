@@ -1,9 +1,8 @@
 package com.TheRPGAdventurer.ROTD.client.gui;
 
-import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.inventory.ContainerDragonShulker;
 import com.TheRPGAdventurer.ROTD.objects.tileentities.TileEntityDragonShulker;
-
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,7 +10,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiDragonShulker extends GuiContainer {
-    private static final ResourceLocation GUI_DRAGON_SHULKER=new ResourceLocation(DragonMounts.MODID + ":textures/gui/dragon_core.png");
+    private static final ResourceLocation GUI_DRAGON_SHULKER = new ResourceLocation(DragonMountsTags.MOD_ID + ":textures/gui/dragon_core.png");
     private final InventoryPlayer playerInventory;
     private final TileEntityDragonShulker te;
 

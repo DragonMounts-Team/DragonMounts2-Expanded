@@ -9,7 +9,7 @@
  */
 package com.TheRPGAdventurer.ROTD.client.render.dragon.breeds;
 
-import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.client.model.dragon.DragonModel;
 import com.TheRPGAdventurer.ROTD.client.render.dragon.DragonRenderer;
 import com.TheRPGAdventurer.ROTD.client.render.dragon.layer.*;
@@ -75,35 +75,35 @@ public class DefaultDragonBreedRenderer {
         // textures
         String skin = breed.getBreed().getSkin();
         // male
-        maleBodyTexture = new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + skin + "/bodym.png");
-        maleGlowTexture = new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + skin + "/glowm.png");
-        hmaleBodyTexture = new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + skin + "/hbodym.png");
-        hmaleGlowTexture = new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + skin + "/hglowm.png");
+        maleBodyTexture = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + skin + "/bodym.png");
+        maleGlowTexture = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + skin + "/glowm.png");
+        hmaleBodyTexture = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + skin + "/hbodym.png");
+        hmaleGlowTexture = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + skin + "/hglowm.png");
 
         // female
-        femaleBodyTexture = new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + skin + "/bodyfm.png");
-        femaleGlowTexture = new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + skin + "/glowfm.png");
-        hfemaleBodyTexture = new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + skin + "/hbodyfm.png");
-        hfemaleGlowTexture = new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + skin + "/hglowfm.png");
+        femaleBodyTexture = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + skin + "/bodyfm.png");
+        femaleGlowTexture = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + skin + "/glowfm.png");
+        hfemaleBodyTexture = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + skin + "/hbodyfm.png");
+        hfemaleGlowTexture = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + skin + "/hglowfm.png");
 
         // male alt
-        maleBodyTexturealt = new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + skin + "/alt/bodymalt.png");
-        maleGlowTexturealt = new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + skin + "/alt/glowmalt.png");
-        hmaleBodyTexturealt = new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + skin + "/alt/hbodymalt.png");
-        hmaleGlowTexturealt = new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + skin + "/alt/hglowmalt.png");
+        maleBodyTexturealt = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + skin + "/alt/bodymalt.png");
+        maleGlowTexturealt = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + skin + "/alt/glowmalt.png");
+        hmaleBodyTexturealt = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + skin + "/alt/hbodymalt.png");
+        hmaleGlowTexturealt = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + skin + "/alt/hglowmalt.png");
 
         // female alt
-        femaleBodyTexturealt = new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + skin + "/alt/bodyfmalt.png");
-        femaleGlowTexturealt = new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + skin + "/alt/glowfmalt.png");
-        hfemaleBodyTexturealt = new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + skin + "/alt/hbodyfmalt.png");
-        hfemaleGlowTexturealt = new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + skin + "/alt/hglowfmalt.png");
+        femaleBodyTexturealt = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + skin + "/alt/bodyfmalt.png");
+        femaleGlowTexturealt = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + skin + "/alt/glowfmalt.png");
+        hfemaleBodyTexturealt = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + skin + "/alt/hbodyfmalt.png");
+        hfemaleGlowTexturealt = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + skin + "/alt/hglowfmalt.png");
 
         // mic
-        glowAnimTexture = new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + skin + "/glow_anim.png");
-        saddleTexture = new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + skin + "/saddle.png");
-        eggTexture = new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + skin + "/egg.png");
-        dissolveTexture = new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + "dissolve.png");
-        chestTexture = new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + skin + "/chest.png");
+        glowAnimTexture = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + skin + "/glow_anim.png");
+        saddleTexture = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + skin + "/saddle.png");
+        eggTexture = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + skin + "/egg.png");
+        dissolveTexture = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + "dissolve.png");
+        chestTexture = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + skin + "/chest.png");
     }
 
     public List<LayerRenderer<EntityTameableDragon>> getLayers() {
@@ -120,20 +120,20 @@ public class DefaultDragonBreedRenderer {
 
 
     public ResourceLocation getMaleForestBodyTexture(boolean hatchling, String type) {
-        return new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + "forest/" + type + "/bodym" + type + ".png");
+        return new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + "forest/" + type + "/bodym" + type + ".png");
     }
 
     public ResourceLocation getFemaleForestBodyTexture(boolean hatchling, String type) {
-        return new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + "forest/" + type + "/bodyfm" + type + ".png");
+        return new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + "forest/" + type + "/bodyfm" + type + ".png");
     }
 
     public ResourceLocation getMaleForestGlowTexture(boolean hatchling, String type) {
-        return new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + "forest/" + type + "/glowfm" + type + ".png");
+        return new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + "forest/" + type + "/glowfm" + type + ".png");
 
     }
 
     public ResourceLocation getFemaleForestGlowTexture(boolean hatchling, String type) {
-        return new ResourceLocation(DragonMounts.MODID, DragonRenderer.TEX_BASE + "forest/" + type + "/glowfm" + type + ".png");
+        return new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + "forest/" + type + "/glowfm" + type + ".png");
 
     }
 

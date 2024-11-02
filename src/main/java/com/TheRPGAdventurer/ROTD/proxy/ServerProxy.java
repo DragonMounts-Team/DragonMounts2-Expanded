@@ -11,6 +11,7 @@ package com.TheRPGAdventurer.ROTD.proxy;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
 import com.TheRPGAdventurer.ROTD.DragonMountsConfig;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.capability.ArmorEffectManager;
 import com.TheRPGAdventurer.ROTD.cmd.CommandDragon;
 import com.TheRPGAdventurer.ROTD.event.VanillaEggHandler;
@@ -101,13 +102,13 @@ public class ServerProxy {
     }
 
     private void registerEntities() {
-        EntityRegistry.registerModEntity(new ResourceLocation(DragonMounts.MODID, "dragon"), EntityTameableDragon.class, "DragonMount",
+        EntityRegistry.registerModEntity(new ResourceLocation(DragonMountsTags.MOD_ID, "dragon"), EntityTameableDragon.class, "DragonMount",
                 ENTITY_ID, DragonMounts.instance, ENTITY_TRACKING_RANGE, ENTITY_UPDATE_FREQ,
                 ENTITY_SEND_VELO_UPDATES);
-        EntityRegistry.registerModEntity(new ResourceLocation(DragonMounts.MODID, "carriage"), EntityCarriage.class, "DragonCarriage",
+        EntityRegistry.registerModEntity(new ResourceLocation(DragonMountsTags.MOD_ID, "carriage"), EntityCarriage.class, "DragonCarriage",
                 2, DragonMounts.instance, 32, ENTITY_UPDATE_FREQ,
                 ENTITY_SEND_VELO_UPDATES);
-        EntityRegistry.registerModEntity(new ResourceLocation(DragonMounts.MODID, "indestructible"), EntityDragonAmulet.class, "Indestructible Item",
+        EntityRegistry.registerModEntity(new ResourceLocation(DragonMountsTags.MOD_ID, "indestructible"), EntityDragonAmulet.class, "Indestructible Item",
                 3, DragonMounts.instance, 64, 20, true);
     }
 

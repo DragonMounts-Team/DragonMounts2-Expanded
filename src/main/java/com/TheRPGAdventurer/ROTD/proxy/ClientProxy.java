@@ -13,20 +13,18 @@ import com.TheRPGAdventurer.ROTD.DragonMountsConfig;
 import com.TheRPGAdventurer.ROTD.client.gui.GuiDragonDebug;
 import com.TheRPGAdventurer.ROTD.client.model.ModelAmuletMesh;
 import com.TheRPGAdventurer.ROTD.client.other.TargetHighlighter;
-import com.TheRPGAdventurer.ROTD.client.render.RenderCarriage;
 import com.TheRPGAdventurer.ROTD.client.render.RenderDM2Cape;
 import com.TheRPGAdventurer.ROTD.client.render.TileEntityDragonShulkerRenderer;
 import com.TheRPGAdventurer.ROTD.client.render.dragon.DragonRenderer;
-import com.TheRPGAdventurer.ROTD.client.render.dragon.breathweaponFX.*;
+import com.TheRPGAdventurer.ROTD.client.render.dragon.breathweaponFX.ClientBreathNodeRenderer;
 import com.TheRPGAdventurer.ROTD.client.userinput.DragonOrbControl;
 import com.TheRPGAdventurer.ROTD.event.DragonViewEvent;
 import com.TheRPGAdventurer.ROTD.event.IItemColorRegistration;
 import com.TheRPGAdventurer.ROTD.inits.ModBlocks;
 import com.TheRPGAdventurer.ROTD.inits.ModItems;
 import com.TheRPGAdventurer.ROTD.inits.ModKeys;
-import com.TheRPGAdventurer.ROTD.objects.entity.entitycarriage.EntityCarriage;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
-import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.effects.*;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.effects.ClientBreathNodeEntity;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import com.TheRPGAdventurer.ROTD.objects.tileentities.TileEntityDragonShulker;
 import com.TheRPGAdventurer.ROTD.util.debugging.StartupDebugClientOnly;
@@ -69,16 +67,7 @@ public class ClientProxy extends ServerProxy {
         // register dragon entity renderer
         DragonMountsConfig.clientPreInit();
         RenderingRegistry.registerEntityRenderingHandler(EntityTameableDragon.class, DragonRenderer::new);
-
-        RenderingRegistry.registerEntityRenderingHandler(HydroBreathFX.class, RenderHydroBreathFX::new);
-        RenderingRegistry.registerEntityRenderingHandler(FlameBreathFX.class, RenderFlameBreathFX::new);
-        RenderingRegistry.registerEntityRenderingHandler(EnderBreathFX.class, RenderEnderBreathFX::new);
-        RenderingRegistry.registerEntityRenderingHandler(NetherBreathFX.class, RenderNetherBreathFX::new);
-        RenderingRegistry.registerEntityRenderingHandler(WitherBreathFX.class, RenderWitherBreathFX::new);
-        RenderingRegistry.registerEntityRenderingHandler(IceBreathFX.class, RenderIceBreathFX::new);
-        RenderingRegistry.registerEntityRenderingHandler(PoisonBreathFX.class, RenderPoisonBreathFX::new);
-        RenderingRegistry.registerEntityRenderingHandler(AetherBreathFX.class, RenderAetherBreathFX::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityCarriage.class, RenderCarriage::new);
+        RenderingRegistry.registerEntityRenderingHandler(ClientBreathNodeEntity.class, ClientBreathNodeRenderer::new);
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDragonShulker.class, new TileEntityDragonShulkerRenderer());
         ModBlocks.DRAGONSHULKER.item.setTileEntityItemStackRenderer(new TileEntityDragonShulkerRenderer.ItemStackRenderer());

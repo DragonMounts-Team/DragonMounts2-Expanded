@@ -6,6 +6,7 @@ import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTamea
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundController;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundEffectBreathWeapon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.weapons.*;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.DragonBreed;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -132,22 +133,28 @@ public class DragonBreathHelper extends DragonHelper {
             Vec3d endOfLook=origin.add(lookDirection.x, lookDirection.y, lookDirection.z);
             BreathNode.Power power=dragon.getLifeStageHelper().getBreathPower();
             if (endOfLook!=null && currentBreathState==BreathState.SUSTAIN) {
-                dragon.getBreed().continueAndUpdateBreathing(this, dragon.getEntityWorld(), origin, endOfLook, power, dragon);
+                dragon.getBreed().continueAndUpdateBreathing(this, dragon.getEntityWorld(), origin, endOfLook, power);
             }
         }
     }
 
     private void onLivingUpdateClient() {
+        EntityTameableDragon dragon = this.dragon;
+        DragonBreed breed = dragon.getBreed();
+        if (!breed.canUseBreathWeapon()) {
+            this.currentBreathState = BreathState.IDLE;
+            return;
+        }
         updateBreathState(dragon.isUsingBreathWeapon());
-
-        if (dragon.isUsingBreathWeapon()) {
-            Vec3d origin=dragon.getAnimator().getThroatPosition();
-            Vec3d lookDirection=dragon.getLook(1.0f);
-            Vec3d endOfLook=origin.add(lookDirection.x, lookDirection.y, lookDirection.z);
-            if (endOfLook!=null && currentBreathState==BreathState.SUSTAIN && dragon.getBreed().canUseBreathWeapon()) {
-                BreathNode.Power power=dragon.getLifeStageHelper().getBreathPower();
-                dragon.getBreed().spawnBreathParticles(this, dragon.getEntityWorld(), power, tickCounter, origin, endOfLook);
-            }
+        if (this.currentBreathState == BreathState.SUSTAIN) {
+            this.getEmitter().spawnBreathParticles(
+                    dragon.world,
+                    dragon.getAnimator().getThroatPosition(),
+                    dragon.getLook(1.0f),
+                    dragon.getLifeStageHelper().getBreathPower(),
+                    this.tickCounter,
+                    breed
+            );
         }
 
         if (soundEffectBreathWeapon==null) {

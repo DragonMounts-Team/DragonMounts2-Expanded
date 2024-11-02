@@ -278,7 +278,7 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
         WorldServer worldserver = (WorldServer) world;
         MinecraftServer minecraftserver = world.getMinecraftServer();
         TemplateManager templatemanager = worldserver.getStructureTemplateManager();
-        ResourceLocation loc = new ResourceLocation(DragonMounts.MODID, name);
+        ResourceLocation loc = new ResourceLocation(DragonMountsTags.MOD_ID, name);
         Template template = templatemanager.getTemplate(minecraftserver, loc);
 
         if (template != null) {

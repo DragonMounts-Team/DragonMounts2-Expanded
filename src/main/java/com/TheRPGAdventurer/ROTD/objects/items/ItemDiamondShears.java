@@ -1,6 +1,7 @@
 package com.TheRPGAdventurer.ROTD.objects.items;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.inits.ModTools;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.util.DMUtils;
@@ -34,7 +35,7 @@ public class ItemDiamondShears extends ItemShears implements IHasModel {
 
     public ItemDiamondShears(ToolMaterial material, String unlocalizedName) {
         this.setTranslationKey(unlocalizedName);
-        this.setRegistryName(new ResourceLocation(DragonMounts.MODID, unlocalizedName));
+        this.setRegistryName(new ResourceLocation(DragonMountsTags.MOD_ID, unlocalizedName));
         this.setMaxDamage(345);
         this.setMaxStackSize(1);
         this.setCreativeTab(CreativeTabs.TOOLS);

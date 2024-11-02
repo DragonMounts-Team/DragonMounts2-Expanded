@@ -1,6 +1,7 @@
 package com.TheRPGAdventurer.ROTD.objects.items.gemset;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.inits.ModTools;
 import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
 import com.TheRPGAdventurer.ROTD.util.DMUtils;
@@ -24,7 +25,7 @@ public class ItemDragonAxe extends ItemAxe {
 	public ItemDragonAxe(ToolMaterial material, String unlocalizedName, float damage, float speed, EnumItemBreedTypes type) {
 		super(material, damage, speed);
 		this.setTranslationKey("dragon_axe");
-		this.setRegistryName(new ResourceLocation(DragonMounts.MODID, unlocalizedName));
+		this.setRegistryName(new ResourceLocation(DragonMountsTags.MOD_ID, unlocalizedName));
 		this.type = type;
 
 		ModTools.TOOLS.add(this);

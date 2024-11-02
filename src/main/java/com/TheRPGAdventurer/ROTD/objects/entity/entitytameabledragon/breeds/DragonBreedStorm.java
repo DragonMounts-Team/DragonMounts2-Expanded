@@ -3,6 +3,7 @@ package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathNode;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.DragonBreathHelper;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.effects.HydroBreathFX;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundEffectName;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundState;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonLifeStage;
@@ -42,16 +43,15 @@ public class DragonBreedStorm extends DragonBreed {
 		
 	}
 	@Override
-	public void continueAndUpdateBreathing(DragonBreathHelper helper, World world, Vec3d origin, Vec3d endOfLook, BreathNode.Power power, EntityTameableDragon dragon) {
-		helper.getbreathAffectedAreaHydro().continueBreathing(world, origin, endOfLook, power, dragon);
+	public void continueAndUpdateBreathing(DragonBreathHelper helper, World world, Vec3d origin, Vec3d endOfLook, BreathNode.Power power) {
+		helper.getbreathAffectedAreaHydro().continueBreathing(world, origin, endOfLook, power);
 		helper.getbreathAffectedAreaHydro().updateTick(world);
     }
-    
+
 	@Override
-	public void spawnBreathParticles(DragonBreathHelper helper, World world, BreathNode.Power power, int tickCounter, Vec3d origin, Vec3d endOfLook) {
-		helper.getEmitter().setBeamEndpoints(origin, endOfLook);
-		helper.getEmitter().spawnBreathParticlesforWaterDragon(world, power, tickCounter);
-    }
+	public void spawnClientNodeEntity(World world, Vec3d position, Vec3d direction, BreathNode.Power power, float partialTicks) {
+		world.spawnEntity(new HydroBreathFX(world, position, direction, power, partialTicks));
+	}
 	
 //	@Override
 //	public boolean isInfertile() {

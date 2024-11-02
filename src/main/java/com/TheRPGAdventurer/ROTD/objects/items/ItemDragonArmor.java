@@ -1,6 +1,7 @@
 package com.TheRPGAdventurer.ROTD.objects.items;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.inits.ModArmour;
 import com.TheRPGAdventurer.ROTD.util.IHasModel;
 import net.minecraft.creativetab.CreativeTabs;
@@ -17,7 +18,7 @@ public class ItemDragonArmor extends Item implements IHasModel {
         this.name = name;
         this.setTranslationKey(name);
         this.maxStackSize = 1;
-        this.setRegistryName(DragonMounts.MODID, name);
+        this.setRegistryName(DragonMountsTags.MOD_ID, name);
         this.setCreativeTab(CreativeTabs.COMBAT);
 
         ModArmour.ARMOR.add(this);

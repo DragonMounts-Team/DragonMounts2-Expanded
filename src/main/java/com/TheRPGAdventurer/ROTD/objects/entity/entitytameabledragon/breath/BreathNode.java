@@ -175,9 +175,7 @@ public class BreathNode {
 
 
   public float getLifetimeFraction() {
-    float lifetimeFraction=ageTicks / getMaxLifeTime();
-    lifetimeFraction=MathHelper.clamp(lifetimeFraction, 0.0F, 1.0F);
-    return lifetimeFraction;
+    return MathHelper.clamp(this.ageTicks / this.getMaxLifeTime(), 0.0F, 1.0F);
   }
 
   private static final float INITIAL_SPEED = 1.2F; // blocks per tick at full speed

@@ -1,11 +1,11 @@
 package com.TheRPGAdventurer.ROTD.items;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.inits.ModItems;
 import com.TheRPGAdventurer.ROTD.util.IHasModel;
 import com.TheRPGAdventurer.ROTD.util.debugging.TestRunner;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
@@ -33,7 +33,7 @@ public class ItemTestRunner extends Item implements IHasModel
   {
     final int MAX_TEST_NUMBER = 64;
     this.setTranslationKey("test_runner");
-    this.setRegistryName(new ResourceLocation(DragonMounts.MODID, "test_runner"));
+    this.setRegistryName(new ResourceLocation(DragonMountsTags.MOD_ID, "test_runner"));
 
     this.setMaxStackSize(MAX_TEST_NUMBER);
 

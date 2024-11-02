@@ -1,6 +1,6 @@
 package com.TheRPGAdventurer.ROTD.client.render;
 
-import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -18,11 +18,11 @@ import java.util.UUID;
 
 @SideOnly(Side.CLIENT)
 public class RenderDM2Cape {
-    public static final ResourceLocation SUN_CAPE = new ResourceLocation(DragonMounts.MODID, "textures/models/misc/sun_cape.png");
-    public static final ResourceLocation ICE_CAPE = new ResourceLocation(DragonMounts.MODID, "textures/models/misc/wolfs_cape.png");
-    public static final ResourceLocation STORM_CAPE = new ResourceLocation(DragonMounts.MODID, "textures/models/misc/storm_cape.png");
-    public static final ResourceLocation NETHER_CAPE = new ResourceLocation(DragonMounts.MODID, "textures/models/misc/nether_cape.png");
-    public static final ResourceLocation FOREST_CATE = new ResourceLocation(DragonMounts.MODID, "textures/models/misc/forest_cape.png");
+    public static final ResourceLocation SUN_CAPE = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/models/misc/sun_cape.png");
+    public static final ResourceLocation ICE_CAPE = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/models/misc/wolfs_cape.png");
+    public static final ResourceLocation STORM_CAPE = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/models/misc/storm_cape.png");
+    public static final ResourceLocation NETHER_CAPE = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/models/misc/nether_cape.png");
+    public static final ResourceLocation FOREST_CATE = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/models/misc/forest_cape.png");
     public static final Object2ObjectMap<UUID, ResourceLocation> PLAYER_CAPES = new Object2ObjectOpenHashMap<>();
     static {
         PLAYER_CAPES.put(UUID.fromString("003b050f-f6fd-43b5-9738-669b23c3452f"), SUN_CAPE);// GundunUkan

@@ -1,6 +1,7 @@
 package com.TheRPGAdventurer.ROTD.objects.items;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.inits.ModItems;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitycarriage.EntityCarriage;
 import com.TheRPGAdventurer.ROTD.util.DMUtils;
@@ -34,7 +35,7 @@ public class ItemCarriage extends Item implements IHasModel {
     EntityCarriage.Type type;
 
     public ItemCarriage(String name, EntityCarriage.Type type) {
-        this.setRegistryName(new ResourceLocation(DragonMounts.MODID, name + type.getName()));
+        this.setRegistryName(new ResourceLocation(DragonMountsTags.MOD_ID, name + type.getName()));
         this.setTranslationKey(name + type.getName());
         this.type=type;
         this.setMaxDamage(1);

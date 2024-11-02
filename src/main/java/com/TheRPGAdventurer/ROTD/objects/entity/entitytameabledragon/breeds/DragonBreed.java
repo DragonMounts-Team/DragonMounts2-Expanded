@@ -6,6 +6,7 @@ import com.TheRPGAdventurer.ROTD.inits.ModSounds;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathNode;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.DragonBreathHelper;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.effects.FlameBreathFX;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.nodes.BreathNodeFactory;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.nodes.BreathProjectileFactory;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.*;
@@ -225,14 +226,13 @@ public abstract class DragonBreed {
         return true;
     }
 
-    public void continueAndUpdateBreathing(DragonBreathHelper helper, World world, Vec3d origin, Vec3d endOfLook, BreathNode.Power power, EntityTameableDragon dragon) {
-        helper.getBreathAffectedArea().continueBreathing(world, origin, endOfLook, power, dragon);
+    public void continueAndUpdateBreathing(DragonBreathHelper helper, World world, Vec3d origin, Vec3d endOfLook, BreathNode.Power power) {
+        helper.getBreathAffectedArea().continueBreathing(world, origin, endOfLook, power);
         helper.getBreathAffectedArea().updateTick(world);
     }
 
-    public void spawnBreathParticles(DragonBreathHelper helper, World world, BreathNode.Power power, int tickCounter, Vec3d origin, Vec3d endOfLook) {
-        helper.getEmitter().setBeamEndpoints(origin, endOfLook);
-        helper.getEmitter().spawnBreathParticles(world, power, tickCounter);
+    public void spawnClientNodeEntity(World world, Vec3d position, Vec3d direction, BreathNode.Power power, float partialTicks) {
+        world.spawnEntity(new FlameBreathFX(world, position, direction, power, partialTicks));
     }
 
     public SoundEffectName getBreathWeaponSoundEffect(DragonLifeStage stage, SoundState state) {

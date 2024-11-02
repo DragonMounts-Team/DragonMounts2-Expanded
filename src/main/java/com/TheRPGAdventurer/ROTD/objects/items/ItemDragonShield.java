@@ -1,6 +1,7 @@
 package com.TheRPGAdventurer.ROTD.objects.items;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.inits.ModItems;
 import com.TheRPGAdventurer.ROTD.util.DMUtils;
 import com.TheRPGAdventurer.ROTD.util.IHasModel;
@@ -27,7 +28,7 @@ public class ItemDragonShield extends ItemShield implements IHasModel {
     public Item repair;
 
     public ItemDragonShield(EnumItemBreedTypes type, Item repair) {
-        this.setRegistryName(new ResourceLocation(DragonMounts.MODID, "dragon_shield_" + type.toString().toLowerCase()));
+        this.setRegistryName(new ResourceLocation(DragonMountsTags.MOD_ID, "dragon_shield_" + type.toString().toLowerCase()));
         this.repair = repair;
         this.setTranslationKey("dragon_shield");
         this.setMaxDamage(2500);

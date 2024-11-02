@@ -1,11 +1,11 @@
 package com.TheRPGAdventurer.ROTD.objects.items;
 
-import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
+import com.TheRPGAdventurer.ROTD.inits.DMItemGroups;
 import com.TheRPGAdventurer.ROTD.inits.ModItems;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.items.entity.EntityDragonAmulet;
 import com.TheRPGAdventurer.ROTD.util.DMUtils;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -36,17 +36,12 @@ import java.util.List;
  * @author WolfShotz
  */
 public class ItemDragonAmuletNEW extends Item {
-    private static final Object2ObjectOpenHashMap<String, EnumItemBreedTypes> BREEDS = new Object2ObjectOpenHashMap<>();
-
-    static {
-        BREEDS.put("", EnumItemBreedTypes.END);
-    }
     public ItemDragonAmuletNEW() {
         String name = "dragon_amulet";
-        this.setRegistryName(DragonMounts.MODID, name);
+        this.setRegistryName(DragonMountsTags.MOD_ID, name);
         this.setTranslationKey(name);
         this.setMaxStackSize(1);
-        this.setCreativeTab(DragonMounts.mainTab);
+        this.setCreativeTab(DMItemGroups.MAIN);
 
         ModItems.ITEMS.add(this);
     }
@@ -61,10 +56,11 @@ public class ItemDragonAmuletNEW extends Item {
      */
     @Override
     public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
-        if (containsDragonEntity(stack) || !target.isEntityAlive() || !target.isServerWorld()) return false;
+        if (containsDragonEntity(stack) || !target.isEntityAlive()) return false;
         if (target instanceof EntityTameableDragon) {
             EntityTameableDragon dragon = (EntityTameableDragon) target;
             if (dragon.isTamedFor(player)) {
+                if (target.world.isRemote) return true;
                 NBTTagCompound tag = stack.getTagCompound();
                 if (tag == null) {
                     tag = new NBTTagCompound();
@@ -81,12 +77,12 @@ public class ItemDragonAmuletNEW extends Item {
                 player.setHeldItem(hand, stack);
                 if (dragon.getLeashed()) dragon.clearLeashed(true, true); // Fix Lead Dupe exploit
                 player.world.playSound(null, player.getPosition(), SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.NEUTRAL, 1, 1);
-
                 target.setDead();
                 return true;
+            } else {
+                player.sendStatusMessage(new TextComponentTranslation("dragon.notOwned"), true);
             }
-            return true;
-        } else player.sendStatusMessage(new TextComponentTranslation("dragon.notOwned"), true);
+        }
         return false;
     }
 
@@ -96,7 +92,7 @@ public class ItemDragonAmuletNEW extends Item {
      */
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (world.isRemote || !player.isServerWorld()) return EnumActionResult.FAIL;
+        if (world.isRemote) return EnumActionResult.FAIL;
         ItemStack stack = player.getHeldItem(hand);
         if (!containsDragonEntity(stack)) return EnumActionResult.FAIL;
         EntityTameableDragon dragon = new EntityTameableDragon(world);
@@ -150,8 +146,8 @@ public class ItemDragonAmuletNEW extends Item {
 
     @Nonnull
     @Override
-    public Entity createEntity(World world, Entity location, ItemStack itemstack) {
-        return new EntityDragonAmulet(world, location, itemstack);
+    public Entity createEntity(World world, Entity location, ItemStack stack) {
+        return new EntityDragonAmulet(world, location, stack);
     }
 
     @Override

@@ -1,9 +1,8 @@
 package com.TheRPGAdventurer.ROTD.client.render;
 
-import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.client.model.ModelDragonCarriage;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitycarriage.EntityCarriage;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
@@ -17,13 +16,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class RenderCarriage extends Render<EntityCarriage> {
 	
     private static final ResourceLocation[] CARRIAGE_TEXTURES = new ResourceLocation[] {
-    		new ResourceLocation(DragonMounts.MODID, "textures/entities/dragon_carriage/carriage_oak.png"),
-    		new ResourceLocation(DragonMounts.MODID, "textures/entities/dragon_carriage/carriage_spruce.png"),
-    		new ResourceLocation(DragonMounts.MODID, "textures/entities/dragon_carriage/carriage_birch.png"),
-    		new ResourceLocation(DragonMounts.MODID, "textures/entities/dragon_carriage/carriage_jungle.png"),
-    		new ResourceLocation(DragonMounts.MODID, "textures/entities/dragon_carriage/carriage_acacia.png"),
-    		new ResourceLocation(DragonMounts.MODID, "textures/entities/dragon_carriage/carriage_dark_oak.png"),
-    		};
+            new ResourceLocation(DragonMountsTags.MOD_ID, "textures/entities/dragon_carriage/carriage_oak.png"),
+            new ResourceLocation(DragonMountsTags.MOD_ID, "textures/entities/dragon_carriage/carriage_spruce.png"),
+            new ResourceLocation(DragonMountsTags.MOD_ID, "textures/entities/dragon_carriage/carriage_birch.png"),
+            new ResourceLocation(DragonMountsTags.MOD_ID, "textures/entities/dragon_carriage/carriage_jungle.png"),
+            new ResourceLocation(DragonMountsTags.MOD_ID, "textures/entities/dragon_carriage/carriage_acacia.png"),
+            new ResourceLocation(DragonMountsTags.MOD_ID, "textures/entities/dragon_carriage/carriage_dark_oak.png"),
+    };
     /** instance of modelCarriage for rendering */
     protected ModelBase modelCarriage = new ModelDragonCarriage();  
 

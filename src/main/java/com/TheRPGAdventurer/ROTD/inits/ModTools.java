@@ -1,6 +1,6 @@
 package com.TheRPGAdventurer.ROTD.inits;
 
-import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
 import com.TheRPGAdventurer.ROTD.objects.items.ItemDiamondShears;
 import com.TheRPGAdventurer.ROTD.objects.items.ItemDragonBow;
@@ -20,28 +20,28 @@ public class ModTools {
 	static float damage = 10.0F; static float speed = -2.8F;
 	static float netherDamage = 12.0F; static float netherSpeed = -2.9F;
 	static float enderDamage = 9.0F; static float enderSpeed = -2.9F;
- 
-	public static final ToolMaterial ForestDragonScaleMaterial	  = EnumHelper.addToolMaterial(DragonMounts.MODID + ":forestdragonscales",   4, 2700, 8.0F, 5.0F, 11);
-	public static final ToolMaterial FireDragonScaleMaterial	  = EnumHelper.addToolMaterial(DragonMounts.MODID + ":icedragonscales",      4, 2700, 8.0F, 5.0F, 11);
-	public static final ToolMaterial FireDragonScaleMaterial2	  = EnumHelper.addToolMaterial(DragonMounts.MODID + ":icedragonscales2",      4, 2700, 8.0F, 5.0F, 11);
-	public static final ToolMaterial AetherDragonScaleMaterial	  = EnumHelper.addToolMaterial(DragonMounts.MODID + ":aetherdragonscales",   5, 2700, 8.0F, 5.0F, 11);
-	public static final ToolMaterial IceDragonScaleMaterial	      = EnumHelper.addToolMaterial(DragonMounts.MODID + ":firedragonscales",     4, 2700, 8.0F, 5.0F, 11);
-	public static final ToolMaterial WaterDragonScaleMaterial	  = EnumHelper.addToolMaterial(DragonMounts.MODID + ":waterdragonscales",    4, 2700, 8.0F, 5.0F, 11);
-	public static final ToolMaterial NetherDragonScaleMaterial	  = EnumHelper.addToolMaterial(DragonMounts.MODID + ":netherdragonscales",   5, 2700, 8.0F, 6.0F, 11);
-	public static final ToolMaterial NetherDragonScaleMaterial2	  = EnumHelper.addToolMaterial(DragonMounts.MODID + ":netherdragonscales2",   5, 2700, 8.0F, 6.0F, 11);
-	public static final ToolMaterial EnderDragonScaleMaterial	  = EnumHelper.addToolMaterial(DragonMounts.MODID + ":enderdragonscales",    5, 3000, 8.0F, 6.0F, 11);
-	public static final ToolMaterial EnchantDragonScaleMaterial	  = EnumHelper.addToolMaterial(DragonMounts.MODID + ":enchantdragonscales",  4, 2700, 8.0F, 5.0F, 11);
-	public static final ToolMaterial StormDragonScaleMaterial     = EnumHelper.addToolMaterial(DragonMounts.MODID + ":stormdragonscales",    4, 2700, 8.0F, 5.0F, 11);
-	public static final ToolMaterial SunlightDragonScaleMaterial  = EnumHelper.addToolMaterial(DragonMounts.MODID + ":sunlightdragonscales", 4, 2700, 8.0F, 5.0F, 11);
-	public static final ToolMaterial StormDragonScaleMaterial2    = EnumHelper.addToolMaterial(DragonMounts.MODID + ":stormdragonscales2",    4, 2700, 8.0F, 5.0F, 11);
-	public static final ToolMaterial SunlightDragonScaleMaterial2 = EnumHelper.addToolMaterial(DragonMounts.MODID + ":sunlightdragonscales2", 4, 2700, 8.0F, 5.0F, 11);
-	public static final ToolMaterial TerraDragonScaleMaterial     = EnumHelper.addToolMaterial(DragonMounts.MODID + ":terradragonscales", 4, 2700, 8.0F, 5.0F, 11);
-	public static final ToolMaterial TerraDragonScaleMaterial2    = EnumHelper.addToolMaterial(DragonMounts.MODID + ":terra2dragonscales", 4, 2700, 8.0F, 5.0F, 11);
-	public static final ToolMaterial MoonlightDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMounts.MODID + ":moonlightdragonscales", 4, 2700, 8.0F, 5.0F, 11);
-	public static final ToolMaterial ZombieDragonScaleMaterial	  = EnumHelper.addToolMaterial(DragonMounts.MODID + ":zombiedragonscales", 4, 2700, 8.0F, 5.0F, 11);
-	//public static final ToolMaterial LightDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMounts.MODID + ":lightdragonscales", 4, 2700, 8.0F, 5.0F, 11);
-	//public static final ToolMaterial DarkDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMounts.MODID + ":darkdragonscales", 4, 2700, 8.0F, 5.0F, 11);
-	//public static final ToolMaterial SpecterDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMounts.MODID + ":specterdragonscales", 4, 2700, 8.0F, 5.0F, 11);
+
+	public static final ToolMaterial ForestDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":forestdragonscales", 4, 2700, 8.0F, 5.0F, 11);
+	public static final ToolMaterial FireDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":icedragonscales", 4, 2700, 8.0F, 5.0F, 11);
+	public static final ToolMaterial FireDragonScaleMaterial2 = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":icedragonscales2", 4, 2700, 8.0F, 5.0F, 11);
+	public static final ToolMaterial AetherDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":aetherdragonscales", 5, 2700, 8.0F, 5.0F, 11);
+	public static final ToolMaterial IceDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":firedragonscales", 4, 2700, 8.0F, 5.0F, 11);
+	public static final ToolMaterial WaterDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":waterdragonscales", 4, 2700, 8.0F, 5.0F, 11);
+	public static final ToolMaterial NetherDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":netherdragonscales", 5, 2700, 8.0F, 6.0F, 11);
+	public static final ToolMaterial NetherDragonScaleMaterial2 = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":netherdragonscales2", 5, 2700, 8.0F, 6.0F, 11);
+	public static final ToolMaterial EnderDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":enderdragonscales", 5, 3000, 8.0F, 6.0F, 11);
+	public static final ToolMaterial EnchantDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":enchantdragonscales", 4, 2700, 8.0F, 5.0F, 11);
+	public static final ToolMaterial StormDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":stormdragonscales", 4, 2700, 8.0F, 5.0F, 11);
+	public static final ToolMaterial SunlightDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":sunlightdragonscales", 4, 2700, 8.0F, 5.0F, 11);
+	public static final ToolMaterial StormDragonScaleMaterial2 = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":stormdragonscales2", 4, 2700, 8.0F, 5.0F, 11);
+	public static final ToolMaterial SunlightDragonScaleMaterial2 = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":sunlightdragonscales2", 4, 2700, 8.0F, 5.0F, 11);
+	public static final ToolMaterial TerraDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":terradragonscales", 4, 2700, 8.0F, 5.0F, 11);
+	public static final ToolMaterial TerraDragonScaleMaterial2 = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":terra2dragonscales", 4, 2700, 8.0F, 5.0F, 11);
+	public static final ToolMaterial MoonlightDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":moonlightdragonscales", 4, 2700, 8.0F, 5.0F, 11);
+	public static final ToolMaterial ZombieDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":zombiedragonscales", 4, 2700, 8.0F, 5.0F, 11);
+	//public static final ToolMaterial LightDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":lightdragonscales", 4, 2700, 8.0F, 5.0F, 11);
+	//public static final ToolMaterial DarkDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":darkdragonscales", 4, 2700, 8.0F, 5.0F, 11);
+	//public static final ToolMaterial SpecterDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":specterdragonscales", 4, 2700, 8.0F, 5.0F, 11);
 	
 	//Forest Start
 	public static final ItemDragonSword forestDragonSword = new ItemDragonSword(ForestDragonScaleMaterial, "forest_dragon_sword", EnumItemBreedTypes.FOREST);

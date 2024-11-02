@@ -2,10 +2,9 @@ package com.TheRPGAdventurer.ROTD.items;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
 import com.TheRPGAdventurer.ROTD.DragonMountsConfig;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.inits.ModItems;
 import com.TheRPGAdventurer.ROTD.util.IHasModel;
-import com.TheRPGAdventurer.ROTD.util.math.MathX;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
@@ -13,11 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
-import java.awt.*;
 
 /**
  * Created by TGG on 3/07/2015.
@@ -29,7 +25,7 @@ public class ItemDragonOrb extends Item implements IHasModel {
   {
     final int MAXIMUM_NUMBER_OF_ORBS = 1;
     this.setTranslationKey("dragon_orb");
-    this.setRegistryName(new ResourceLocation(DragonMounts.MODID, "dragon_orb"));
+    this.setRegistryName(new ResourceLocation(DragonMountsTags.MOD_ID, "dragon_orb"));
     this.setMaxStackSize(MAXIMUM_NUMBER_OF_ORBS);
 
     if (DragonMountsConfig.isPrototypeBreathweapons()) {

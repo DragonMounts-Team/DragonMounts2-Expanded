@@ -1,6 +1,7 @@
 package com.TheRPGAdventurer.ROTD.objects.items;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.inits.ModItems;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
@@ -36,7 +37,7 @@ public class ItemDragonAmulet extends Item implements IHasModel {
     public ItemDragonAmulet(@Nullable EnumItemBreedTypes type, @Nullable EnumDragonBreed breed) {
          this.type = type;
          this.setTranslationKey("dragon_amulet");
-         this.setRegistryName(DragonMounts.MODID, type.toString().toLowerCase() + "_dragon_amulet");
+		this.setRegistryName(DragonMountsTags.MOD_ID, type.toString().toLowerCase() + "_dragon_amulet");
          this.setMaxStackSize(1);
         
         ModItems.ITEMS.add(this);

@@ -1,6 +1,7 @@
 package com.TheRPGAdventurer.ROTD.objects.items;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.inits.ModItems;
 import com.TheRPGAdventurer.ROTD.util.IHasModel;
 import net.minecraft.block.Block;
@@ -17,7 +18,7 @@ public class ItemDragonShulker extends ItemBlock implements IHasModel {
         super(p_i47260_1_);
         this.setMaxStackSize(1);
         this.setTranslationKey("item_dragon_shulker");
-        this.setRegistryName(new ResourceLocation(DragonMounts.MODID, "item_dragon_shulker"));
+        this.setRegistryName(new ResourceLocation(DragonMountsTags.MOD_ID, "item_dragon_shulker"));
 
         ModItems.ITEMS.add(this);
     }
