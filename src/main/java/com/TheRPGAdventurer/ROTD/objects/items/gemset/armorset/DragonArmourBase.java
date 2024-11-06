@@ -31,10 +31,10 @@ public abstract class DragonArmourBase extends ItemArmor implements IHasModel, I
 	private final EnumItemBreedTypes type;
 	public final IDescribableArmorEffect effect;
 
-	public DragonArmourBase(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn, String unlocalizedName, EnumItemBreedTypes type, IDescribableArmorEffect effect) {
-		super(materialIn, renderIndexIn, equipmentSlotIn);
+	public DragonArmourBase(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot slot, String unlocalizedName, EnumItemBreedTypes type, IDescribableArmorEffect effect) {
+		super(materialIn, renderIndexIn, slot);
 		this.effect = effect;
-		setTranslationKey("dragonscale_" + equipmentSlotIn.toString().toLowerCase());
+		setTranslationKey("dragonscale_" + slot.getName());
 		setRegistryName(makeId(unlocalizedName));
 		this.type = type;
 		ModArmour.ARMOR.add(this);

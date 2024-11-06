@@ -5,7 +5,7 @@ import com.TheRPGAdventurer.ROTD.client.render.dragon.breathweaponFX.BreathWeapo
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundController;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundEffectBreathWeapon;
-import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.weapons.*;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.weapons.BreathWeapon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.DragonBreed;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonHelper;
 import net.minecraft.client.Minecraft;
@@ -52,14 +52,8 @@ public class DragonBreathHelper extends DragonHelper {
     private int transitionStartTick;
     private int tickCounter=0;
     protected BreathWeaponEmitter breathWeaponEmitter=null;
-    public BreathAffectedArea breathAffectedArea;
-    public BreathAffectedArea breathAffectedAreaEnder=null;
-    public BreathAffectedArea breathAffectedAreaNether=null;
-    public BreathAffectedArea breathAffectedAreaIce=null;
-    public BreathAffectedArea breathAffectedAreaHydro=null;
-    public BreathAffectedArea breathAffectedAreaWither=null;
-    public BreathAffectedArea breathAffectedAreaPoison=null;
-    public BreathAffectedArea breathAffectedAreaAether=null;
+    public final BreathAffectedArea breathAffectedArea;
+    private BreathWeapon weapon;
     private static final Logger L=LogManager.getLogger();
 
     public DragonBreathHelper(EntityTameableDragon dragon, DataParameter<String> i_dataParamBreathWeaponTarget, DataParameter<Integer> i_dataParamBreathWeaponMode) {
@@ -70,14 +64,7 @@ public class DragonBreathHelper extends DragonHelper {
         dataParamBreathWeaponTarget=i_dataParamBreathWeaponTarget;
         dataParamBreathWeaponMode=i_dataParamBreathWeaponMode;
         //dataWatcher.register(dataParamBreathWeaponTarget, "");  //already registered by caller
-        breathAffectedArea=new BreathAffectedArea(new BreathWeapon(dragon));
-        breathAffectedAreaNether=new BreathAffectedArea(new BreathWeaponNether(dragon));
-        breathAffectedAreaIce=new BreathAffectedArea(new BreathWeaponIce(dragon));
-        breathAffectedAreaHydro=new BreathAffectedArea(new BreathWeaponHydro(dragon));
-        breathAffectedAreaEnder=new BreathAffectedArea(new BreathWeaponEnder(dragon));
-        breathAffectedAreaWither=new BreathAffectedArea(new BreathWeaponWither(dragon));
-        breathAffectedAreaPoison=new BreathAffectedArea(new BreathWeaponPoison(dragon));
-        breathAffectedAreaAether=new BreathAffectedArea(new BreathWeaponAether(dragon));
+        breathAffectedArea = new BreathAffectedArea();
     }
 
     public enum BreathState {IDLE, STARTING, SUSTAIN, STOPPING}
@@ -125,15 +112,17 @@ public class DragonBreathHelper extends DragonHelper {
     }
 
     private void onLivingUpdateServer() {
+        EntityTameableDragon dragon = this.dragon;
         updateBreathState(dragon.isUsingBreathWeapon());
 
-        if (dragon.isUsingBreathWeapon()) {
+        if (this.weapon != null && dragon.isUsingBreathWeapon()) {
             Vec3d origin=dragon.getAnimator().getThroatPosition();
             Vec3d lookDirection=dragon.getLook(1.0f);
             Vec3d endOfLook=origin.add(lookDirection.x, lookDirection.y, lookDirection.z);
             BreathNode.Power power=dragon.getLifeStageHelper().getBreathPower();
-            if (endOfLook!=null && currentBreathState==BreathState.SUSTAIN) {
-                dragon.getBreed().continueAndUpdateBreathing(this, dragon.getEntityWorld(), origin, endOfLook, power);
+            if (currentBreathState == BreathState.SUSTAIN) {
+                this.breathAffectedArea.continueBreathing(dragon.world, origin, endOfLook, power);
+                this.breathAffectedArea.updateTick(dragon.world, this.weapon);
             }
         }
     }
@@ -244,36 +233,7 @@ public class DragonBreathHelper extends DragonHelper {
         return breathWeaponEmitter;
     }
 
-    public BreathAffectedArea getBreathAffectedArea() {
-        return breathAffectedArea;
+    public void onBreedChange(DragonBreed breed) {
+        this.weapon = breed.createBreathWeapon(this.dragon);
     }
-
-    public BreathAffectedArea getBreathAffectedAreaNether() {
-        return breathAffectedAreaNether;
-    }
-
-    public BreathAffectedArea getBreathAffectedAreaIce() {
-        return breathAffectedAreaIce;
-    }
-
-    public BreathAffectedArea getBreathAffectedAreaEnd() {
-        return breathAffectedAreaEnder;
-    }
-
-    public BreathAffectedArea getbreathAffectedAreaHydro() {
-        return breathAffectedAreaHydro;
-    }
-
-    public BreathAffectedArea getbreathAffectedAreaWither() {
-        return breathAffectedAreaWither;
-    }
-
-    public BreathAffectedArea getbreathAffectedAreaPoison() {
-        return breathAffectedAreaPoison;
-    }
-
-    public BreathAffectedArea getbreathAffectedAreaAether() {
-        return breathAffectedAreaAether;
-    }
-
 }

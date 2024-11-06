@@ -1,24 +1,20 @@
 package com.TheRPGAdventurer.ROTD.objects.items;
 
-
-import com.TheRPGAdventurer.ROTD.DragonMounts;
 import com.TheRPGAdventurer.ROTD.objects.blocks.BlockDragonBreedEgg;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
-
-import net.minecraft.item.Item;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.translation.I18n;
 
 public class ItemDragonBreedEgg extends ItemBlock {
-    
-    public static ItemDragonBreedEgg DRAGON_BREED_EGG;
+    public static final ItemDragonBreedEgg DRAGON_BREED_EGG = new ItemDragonBreedEgg();
+    private static final Int2ObjectOpenHashMap<String> BREED_CACHE = new Int2ObjectOpenHashMap<>();
     
     public ItemDragonBreedEgg() {
         super(BlockDragonBreedEgg.DRAGON_BREED_EGG);
         this.setMaxDamage(0);
-        this.setMaxStackSize(1);
         this.setHasSubtypes(true);
-        this.setCreativeTab(DragonMounts.mainTab);
     }
 
     @Override
@@ -28,12 +24,12 @@ public class ItemDragonBreedEgg extends ItemBlock {
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        EnumDragonBreed breed = EnumDragonBreed.META_MAPPING.inverse().get(stack.getMetadata());
-        String breedName = net.minecraft.util.text.translation.I18n.translateToLocal("entity.DragonMount." + breed.getName() + ".name");
-        return net.minecraft.util.text.translation.I18n.translateToLocalFormatted("item.dragonEgg.name", breedName);
+        int meta = stack.getMetadata();
+        String breed = BREED_CACHE.get(meta);
+        if (breed == null) {
+            breed = "entity.DragonMount." + EnumDragonBreed.META_MAPPING.inverse().get(meta).getName() + ".name";
+            BREED_CACHE.put(meta, breed);
+        }
+        return I18n.translateToLocalFormatted("item.dragonEgg.name", I18n.translateToLocal(breed));
     }
-    
-   public static final Item[] ITEM_EGG =  {
-    	DRAGON_BREED_EGG = new ItemDragonBreedEgg()
-    };
 }

@@ -7,8 +7,7 @@ import net.minecraft.util.EnumFacing;
  * Models a block which is being affected by the breath weapon
  * Every tick that a block is exposed to the breath weapon, its "hit density" increases.
 */
-public class BreathAffectedBlock {
-	
+public class BreathAffectedBlock implements IBreathEffectHandler {
   public BreathAffectedBlock() {
     hitDensity = new float[EnumFacing.values().length];
     timeSinceLastHit = 0;
@@ -53,30 +52,35 @@ public class BreathAffectedBlock {
    *   for example - a block being gently bathed in flame might gain 0.2 every time from the beam, and lose 0.2 every
    *     tick in this method.
    */
-  public void decayBlockEffectTick()
-  {
-    if (++timeSinceLastHit < TICKS_BEFORE_DECAY_STARTS) return;
-
+  @Override
+  public boolean decayEffectTick() {
+    if (++timeSinceLastHit < TICKS_BEFORE_DECAY_STARTS) return this.isUnaffected();
+    boolean flag = true;
     for (EnumFacing facing : EnumFacing.values()) {
-      final float EXPIRED_VALUE = 0.0F;
       float density = hitDensity[facing.getIndex()];
       density *= (1.0F - BLOCK_DECAY_PERCENTAGE_PER_TICK / 100.0F);
-      density = (density < BLOCK_RESET_EFFECT_THRESHOLD) ? EXPIRED_VALUE : density;
+      if (density < BLOCK_RESET_EFFECT_THRESHOLD) {
+        density = 0.0F;//expired
+      } else {
+        flag = false;
+      }
       hitDensity[facing.getIndex()] = density;
     }
+    return flag;
   }
 
   /**
    * Check if this block is unaffected by the breath weapon
    * @return true if the block is currently unaffected
    */
+  @Override
   public boolean isUnaffected() {
     for (EnumFacing facing : EnumFacing.values()) {
-      if (hitDensity[facing.getIndex()] > BLOCK_RESET_EFFECT_THRESHOLD) return false;
+      if (hitDensity[facing.getIndex()] >= BLOCK_RESET_EFFECT_THRESHOLD) return false;
     }
     return true;
   }
 
-  private float [] hitDensity;
+  private final float[] hitDensity;
   private int timeSinceLastHit;
 }

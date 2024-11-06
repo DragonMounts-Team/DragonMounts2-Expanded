@@ -20,7 +20,7 @@ import net.minecraft.util.math.Vec3d;
  *     damage so that armour doesn't protect so much (eg 20 damage delivered once per second instead of 1 damage
  *     delivered twenty times per second - (a player with armour is invulnerable to that)  )
  */
-public class BreathAffectedEntity {
+public class BreathAffectedEntity implements IBreathEffectHandler {
 	
 
   private float hitDensity;
@@ -82,26 +82,29 @@ public class BreathAffectedEntity {
    *   for example - an entity being gently bathed in flame might gain 0.2 every time from the beam, and lose 0.2 every
    *     tick in this method.
    */
-  public void decayEntityEffectTick() {
+  @Override
+  public boolean decayEffectTick() {
     if (timeSinceLastHit == 0 && ticksUntilDamageApplied > 0) {
       ticksUntilDamageApplied = 0;
     }
-    if (++timeSinceLastHit < TICKS_BEFORE_DECAY_STARTS) return;
+    if (++timeSinceLastHit < TICKS_BEFORE_DECAY_STARTS) return this.isUnaffected();
 //    hitDensity *= (1.0F - ENTITY_DECAY_PERCENTAGE_PER_TICK / 100.0F);
-    hitDensity = 0;
+    hitDensity = 0.0F;
     if (hitDensity < ENTITY_RESET_EFFECT_THRESHOLD){
       hitDensity = 0.0F;
+      return true;
     }
     ++ticksUntilDamageApplied;
     ticksUntilDamageApplied = Math.min(ticksUntilDamageApplied, TICKS_BETWEEN_DAMAGE_APPLICATION);
+    return false;
   }
 
   /**
    * Check if this block is unaffected by the breath weapon
    * @return true if the block is currently unaffected
    */
+  @Override
   public boolean isUnaffected() {
     return hitDensity < ENTITY_RESET_EFFECT_THRESHOLD;
   }
-
 }

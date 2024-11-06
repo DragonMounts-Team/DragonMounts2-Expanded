@@ -4,8 +4,7 @@ import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTamea
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathAffectedBlock;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathAffectedEntity;
 import com.TheRPGAdventurer.ROTD.util.math.MathX;
-
-import com.google.common.collect.Maps;
+import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -19,9 +18,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-
-import java.util.Map;
-import java.util.Random;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -42,10 +38,8 @@ public class BreathWeaponAether extends BreathWeapon {
         checkNotNull(currentHitDensity);
 
         BlockPos blockPos=new BlockPos(blockPosition);
-        IBlockState iBlockState=world.getBlockState(blockPos);
-        Block block=iBlockState.getBlock();
-
-        Random rand=new Random();
+        IBlockState state = world.getBlockState(blockPos);
+        Block block = state.getBlock();
 
         // effects- which occur after the block has been exposed for sufficient time
         // soft blocks such as sand, leaves, grass, flowers, plants, etc get blown away (destroyed)
@@ -54,18 +48,12 @@ public class BreathWeaponAether extends BreathWeapon {
         // extinguish torches
         // causes fire to spread rapidly - NO, this looks stupid, so delete it
 
-        if (block==null) return currentHitDensity;
-        Material material=block.getMaterial(iBlockState);
-        if (material==null) return currentHitDensity;
+        Material material = state.getMaterial();
 
-        if (materialDisintegrateTime.containsKey(material)) {
-            Integer disintegrationTime=materialDisintegrateTime.get(material);
-            if (disintegrationTime!=null && currentHitDensity.getMaxHitDensity() > disintegrationTime) {
-                final boolean DROP_BLOCK=true;
-                world.destroyBlock(blockPos, DROP_BLOCK);
-                return new BreathAffectedBlock();
-            }
-            return currentHitDensity;
+        int destroyDensity = DESTROY_DENSITY.getInt(material);
+        if (destroyDensity != -1 && currentHitDensity.getMaxHitDensity() > destroyDensity) {
+            world.destroyBlock(blockPos, true);
+            return new BreathAffectedBlock();
         }
 
         if (material==Material.FIRE) {
@@ -148,8 +136,7 @@ public class BreathWeaponAether extends BreathWeapon {
         ((EntityLivingBase) entity).knockBack(entity, 0.8F, dragon.posX - entity.posX, dragon.posZ - entity.posZ);
         entity.attackEntityFrom(DamageSource.causeMobDamage(dragon), DAMAGE_PER_HIT_DENSITY);
         triggerDamageExceptions(entity, DAMAGE_PER_HIT_DENSITY,entityID, currentHitDensity);
-        final double UPFORCE_THRESHOLD=1.0;
-        if (airForce > UPFORCE_THRESHOLD) {
+        if (airForce > 1.0) {
             final double GRAVITY_OFFSET=-0.08;
             Vec3d up=new Vec3d(0, 1, 0);
             Vec3d upMotion=MathX.multiply(up, VERTICAL_FORCE_MULTIPLIER * airForce);
@@ -167,25 +154,24 @@ public class BreathWeaponAether extends BreathWeapon {
         return currentHitDensity;
     }
 
-    private static Map<Material, Integer> materialDisintegrateTime=Maps.newHashMap();  // lazy initialisation
+    private static final Reference2IntOpenHashMap<Material> DESTROY_DENSITY = new Reference2IntOpenHashMap<>();
 
     private void initialiseStatics() {
-        if (!materialDisintegrateTime.isEmpty()) return;
-        final int INSTANT=0;
-        final int MODERATE=10;
-        final int SLOW=100;
-        
-        materialDisintegrateTime.put(Material.LEAVES, INSTANT);
-        materialDisintegrateTime.put(Material.PLANTS, INSTANT);
-        materialDisintegrateTime.put(Material.FIRE, INSTANT);
-        materialDisintegrateTime.put(Material.VINE, SLOW);
-        materialDisintegrateTime.put(Material.WEB, SLOW);
-        materialDisintegrateTime.put(Material.GOURD, SLOW);
-        materialDisintegrateTime.put(Material.SPONGE, SLOW);
-        materialDisintegrateTime.put(Material.SAND, SLOW);
-        materialDisintegrateTime.put(Material.SNOW, SLOW);
-        materialDisintegrateTime.put(Material.CRAFTED_SNOW, SLOW);
-        materialDisintegrateTime.put(Material.CACTUS, SLOW);
+        if (!DESTROY_DENSITY.isEmpty()) return;
+        DESTROY_DENSITY.defaultReturnValue(-1);
+        //instant
+        DESTROY_DENSITY.put(Material.LEAVES, 0);
+        DESTROY_DENSITY.put(Material.PLANTS, 0);
+        DESTROY_DENSITY.put(Material.FIRE, 0);
+        //slow
+        DESTROY_DENSITY.put(Material.VINE, 100);
+        DESTROY_DENSITY.put(Material.WEB, 100);
+        DESTROY_DENSITY.put(Material.GOURD, 100);
+        DESTROY_DENSITY.put(Material.SPONGE, 100);
+        DESTROY_DENSITY.put(Material.SAND, 100);
+        DESTROY_DENSITY.put(Material.SNOW, 100);
+        DESTROY_DENSITY.put(Material.CRAFTED_SNOW, 100);
+        DESTROY_DENSITY.put(Material.CACTUS, 100);
+        //moderate (10)
     }
-
 }

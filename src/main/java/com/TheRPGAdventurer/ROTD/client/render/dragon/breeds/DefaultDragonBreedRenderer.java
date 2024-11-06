@@ -15,19 +15,18 @@ import com.TheRPGAdventurer.ROTD.client.render.dragon.DragonRenderer;
 import com.TheRPGAdventurer.ROTD.client.render.dragon.layer.*;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public class DefaultDragonBreedRenderer {
 
-    protected final List<LayerRenderer<EntityTameableDragon>> layers = new ArrayList<>();
+    protected final ObjectArrayList<LayerRenderer<EntityTameableDragon>> layers = new ObjectArrayList<>();
 
     private final DragonRenderer renderer;
     private final DragonModel model;
@@ -106,8 +105,8 @@ public class DefaultDragonBreedRenderer {
         chestTexture = new ResourceLocation(DragonMountsTags.MOD_ID, DragonRenderer.TEX_BASE + skin + "/chest.png");
     }
 
-    public List<LayerRenderer<EntityTameableDragon>> getLayers() {
-        return Collections.unmodifiableList(layers);
+    public void forEachLayer(Consumer<LayerRenderer<EntityTameableDragon>> action) {
+        this.layers.forEach(action);
     }
 
     public DragonRenderer getRenderer() {

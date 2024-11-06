@@ -1,5 +1,6 @@
 package com.TheRPGAdventurer.ROTD.event;
 
+import com.TheRPGAdventurer.ROTD.DragonMountsConfig;
 import com.TheRPGAdventurer.ROTD.objects.items.ItemDragonAmuletNEW;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,6 +16,7 @@ public class AmuletRenameHandler {
 
     @SubscribeEvent
     public static void onTake(AnvilRepairEvent event) {
+        if (!DragonMountsConfig.forcedRename) return;
         ItemStack output = event.getItemResult();
         if (!output.isEmpty() && output.getItem() instanceof ItemDragonAmuletNEW) {
             NBTTagCompound root = output.getTagCompound();

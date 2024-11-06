@@ -1,10 +1,15 @@
 package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds;
 
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonLifeStage;
+import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
+
+import java.util.Random;
 
 public class DragonBreedTerra extends DragonBreed {
 
@@ -39,21 +44,29 @@ public class DragonBreedTerra extends DragonBreed {
 
     @Override
     public void onLivingUpdate(EntityTameableDragon dragon) {
-        boolean isMesa=BiomeDictionary.hasType(dragon.world.getBiome(dragon.getPosition()), BiomeDictionary.Type.MESA);
-        if (isMesa && dragon.posY > dragon.world.getHeight() + 8) doParticles(dragon);
-    }
-
-    private void doParticles(EntityTameableDragon dragon) {
-        if (!dragon.isEgg() && !dragon.isBaby()) {
-          float s=dragon.getScale() * 1.2f;
-            for (double x1=0; x1 < s; ++x1) {
-                double x=dragon.posX + (rand.nextDouble() - 0.5) * (dragon.width - 0.65) * s;
-                double y=dragon.posY + (rand.nextDouble() - 0.5) * dragon.height * s;
-                double z=dragon.posZ + (rand.nextDouble() - 0.5) * (dragon.width - 0.65) * s;
-
-                dragon.world.spawnParticle(EnumParticleTypes.FALLING_DUST, x, y - 1, z, 0, 0, 0, (dragon.isMale() ? 3 : 5));
+        World level = dragon.world;
+        if (BiomeDictionary.hasType(level.getBiome(dragon.getPosition()), BiomeDictionary.Type.MESA) && dragon.posY > level.getHeight() + 8 && dragon.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE)) {
+            Random random = this.rand;
+            float s = dragon.getScale() * 1.2f;
+            float h = dragon.height * s;
+            float f = (dragon.width - 0.65F) * s;
+            for (int i = 0; i < s; ++i) {
+                level.spawnParticle(
+                        EnumParticleTypes.FALLING_DUST,
+                        dragon.posX + (random.nextDouble() - 0.5) * f,
+                        dragon.posY + (random.nextDouble() - 0.5) * h,
+                        dragon.posZ + (random.nextDouble() - 0.5) * f,
+                        0,
+                        0,
+                        0,
+                        (dragon.isMale() ? 3 : 5)
+                );
             }
         }
     }
 
+    @Override
+    public EnumItemBreedTypes getItemBreed(EntityTameableDragon dragon) {
+        return dragon.isMale() ? EnumItemBreedTypes.TERRA : EnumItemBreedTypes.TERRA2;
+    }
 }

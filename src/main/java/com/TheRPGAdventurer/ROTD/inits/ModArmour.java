@@ -37,6 +37,7 @@ public class ModArmour {
     public static final ArmorMaterial TerraDragonScaleMaterial = EnumHelper.addArmorMaterial("terra", DragonMountsTags.MOD_ID + ":terra", 50, new int[]{3, 7, 8, 3}, 11, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 7.0F);
     public static final ArmorMaterial TerraDragonScaleMaterial2 = EnumHelper.addArmorMaterial("terra2", DragonMountsTags.MOD_ID + ":terra2", 50, new int[]{3, 7, 8, 3}, 11, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 7.0F);
     public static final ArmorMaterial MoonlightDragonScaleMaterial = EnumHelper.addArmorMaterial("moonlight", DragonMountsTags.MOD_ID + ":moonlight", 50, new int[]{3, 7, 8, 3}, 11, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 7.0F);
+    public static final ArmorMaterial MOONLIGHT_MALE_DRAGON_SCALE_MATERIAL = EnumHelper.addArmorMaterial("moonlight2", DragonMountsTags.MOD_ID + ":moonlight2", 50, new int[]{3, 7, 8, 3}, 11, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 7.0F);
     public static final ArmorMaterial GhostDragonScaleMaterial = EnumHelper.addArmorMaterial("ghost", DragonMountsTags.MOD_ID + ":ghost", 50, new int[]{3, 7, 8, 3}, 11, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 7.0F);
     public static final ArmorMaterial WitherDragonScaleMaterial = EnumHelper.addArmorMaterial("wither", DragonMountsTags.MOD_ID + ":wither", 50, new int[]{3, 7, 8, 3}, 11, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 7.0F);
 //    public static final ArmorMaterial LightDragonScaleMaterial = EnumHelper.addArmorMaterial("light", DragonMountsTags.MOD_ID + ":light", 50, new int[]{4, 7, 8, 4}, 11, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 7.0F);
@@ -137,6 +138,11 @@ public class ModArmour {
     public static final Item moonlightDragonScaleTunic = new DragonArmourMoon(MoonlightDragonScaleMaterial, 1, EntityEquipmentSlot.CHEST, "moonlight_dragonscale_tunic");
     public static final Item moonlightDragonScaleLeggings = new DragonArmourMoon(MoonlightDragonScaleMaterial, 2, EntityEquipmentSlot.LEGS, "moonlight_dragonscale_leggings");
     public static final Item moonlightDragonScaleBoots = new DragonArmourMoon(MoonlightDragonScaleMaterial, 1, EntityEquipmentSlot.FEET, "moonlight_dragonscale_boots");
+
+    public static final Item MOONLIGHT_MALE_DRAGON_SCALE_HELMET = new DragonArmourMoon(MOONLIGHT_MALE_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.HEAD, "moonlight2_dragonscale_cap");
+    public static final Item MOONLIGHT_MALE_DRAGON_SCALE_CHESTPLATE = new DragonArmourMoon(MOONLIGHT_MALE_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.CHEST, "moonlight2_dragonscale_tunic");
+    public static final Item MOONLIGHT_MALE_DRAGON_SCALE_LEGGINGS = new DragonArmourMoon(MOONLIGHT_MALE_DRAGON_SCALE_MATERIAL, 2, EntityEquipmentSlot.LEGS, "moonlight2_dragonscale_leggings");
+    public static final Item MOONLIGHT_MALE_DRAGON_SCALE_BOOTS = new DragonArmourMoon(MOONLIGHT_MALE_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.FEET, "moonlight2_dragonscale_boots");
 /*
     public static final Item lightDragonScaleCap = new DragonArmourLight(LightDragonScaleMaterial, 1, EntityEquipmentSlot.HEAD, "light_dragonscale_cap");
     public static final Item lightDragonScaleTunic = new DragonArmourLight(LightDragonScaleMaterial, 1, EntityEquipmentSlot.CHEST, "light_dragonscale_tunic");
@@ -182,6 +188,7 @@ public class ModArmour {
         StormDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.StormDragonScales));
         StormDragonScaleMaterial2.setRepairItem(new ItemStack(ModItems.StormDragonScales2));
         MoonlightDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.MoonlightDragonScales));
+        MOONLIGHT_MALE_DRAGON_SCALE_MATERIAL.setRepairItem(new ItemStack(ModItems.MOONLIGHT_MALE_DRAGON_SCALES));
 //        LightDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.LightDragonScales));
 //        DarkDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.DarkDragonScales));
 //        SpecterDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.SpecterDragonScales));

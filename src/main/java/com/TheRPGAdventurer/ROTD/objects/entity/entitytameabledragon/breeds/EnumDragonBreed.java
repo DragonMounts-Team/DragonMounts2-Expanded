@@ -1,5 +1,6 @@
 package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds;
 
+import com.TheRPGAdventurer.ROTD.util.EnumSerializer;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 import net.minecraft.block.properties.PropertyEnum;
@@ -35,6 +36,7 @@ public enum EnumDragonBreed implements IStringSerializable {
     // lookups
     public static final BiMap<EnumDragonBreed, Integer> META_MAPPING = ImmutableBiMap.copyOf(Arrays.asList(values()).stream().collect(Collectors.toMap(Function.identity(), EnumDragonBreed::getMeta)));
     public static final PropertyEnum<EnumDragonBreed> BREED = PropertyEnum.create("breed", EnumDragonBreed.class);
+    public static final EnumSerializer<EnumDragonBreed> SERIALIZER = new EnumSerializer<>(EnumDragonBreed.class, EnumDragonBreed.END);
     private final DragonBreed breed;
     public final String identifier;
 

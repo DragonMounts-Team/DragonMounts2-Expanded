@@ -3,8 +3,10 @@ package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds;
 import com.TheRPGAdventurer.ROTD.inits.ModSounds;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathNode;
-import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.DragonBreathHelper;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.effects.WitherBreathFX;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.weapons.BreathWeapon;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.weapons.BreathWeaponWither;
+import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
@@ -35,23 +37,13 @@ public class DragonBreedWither extends DragonBreed {
     public void onDeath(EntityTameableDragon dragon) {}
 
     public SoundEvent getLivingSound(EntityTameableDragon dragon) {
-        if (dragon.isBaby()) {
-            return ModSounds.ENTITY_DRAGON_HATCHLING_GROWL;
-        } else {
-            return ModSounds.ENTITY_NETHER_DRAGON_GROWL;
-        }
+        return dragon.isBaby() ? ModSounds.ENTITY_DRAGON_HATCHLING_GROWL : ModSounds.ENTITY_NETHER_DRAGON_GROWL;
     }
     
 	@Override
 	public boolean canChangeBreed() {
 		return false;
 	}
-	
-	@Override
-    public void continueAndUpdateBreathing(DragonBreathHelper helper, World world, Vec3d origin, Vec3d endOfLook, BreathNode.Power power) {
-        helper.getbreathAffectedAreaWither().continueBreathing(world, origin, endOfLook, power);
-        helper.getbreathAffectedAreaWither().updateTick(world);
-    }
 
     @Override
     public void spawnClientNodeEntity(World world, Vec3d position, Vec3d direction, BreathNode.Power power, float partialTicks) {
@@ -60,13 +52,20 @@ public class DragonBreedWither extends DragonBreed {
 
 	@Override
 	public void onLivingUpdate(EntityTameableDragon dragon) {
-		World world = dragon.world;
-		if(dragon.isUsingBreathWeapon()) {
-			if (world instanceof WorldServer && !dragon.isDead && !dragon.isEgg()) {
-				((WorldServer) world).spawnParticle(EnumParticleTypes.SMOKE_NORMAL, dragon.posX,
-						dragon.posY + dragon.getEyeHeight(), dragon.posZ, 1, 0.5D, 0.25D, 0.5D, 0.0D);
-			}
-		}
+        World level = dragon.world;
+        if (level instanceof WorldServer && !dragon.isDead && dragon.isUsingBreathWeapon() && !dragon.isEgg()) {
+            ((WorldServer) level).spawnParticle(
+                    EnumParticleTypes.SMOKE_NORMAL,
+                    dragon.posX,
+                    dragon.posY + dragon.getEyeHeight(),
+                    dragon.posZ,
+                    1,
+                    0.5,
+                    0.25,
+                    0.5,
+                    0.0
+            );
+        }
 	}
 	
 //	@Override
@@ -79,5 +78,15 @@ public class DragonBreedWither extends DragonBreed {
 		return null;
 	}
 
+    @Override
+    public BreathWeapon createBreathWeapon(EntityTameableDragon dragon) {
+        return new BreathWeaponWither(dragon);
+    }
+
+
+    @Override
+    public EnumItemBreedTypes getItemBreed(EntityTameableDragon dragon) {
+        return EnumItemBreedTypes.WITHER;
+    }
 }
 	

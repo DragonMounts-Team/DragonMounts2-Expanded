@@ -18,7 +18,6 @@ import com.TheRPGAdventurer.ROTD.inits.ModTools;
 import com.TheRPGAdventurer.ROTD.proxy.ServerProxy;
 import com.TheRPGAdventurer.ROTD.util.debugging.testclasses.LoggerLimit;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -73,8 +72,6 @@ public class DragonMounts {
         return metadata;
     }
 
-    public static DamageSource dragons_fire;
-
   // Add this field to your main class
   public static final Logger logger = LogManager.getLogger(DragonMountsTags.MOD_ID);
     public static final LoggerLimit loggerLimit = new LoggerLimit(logger);
@@ -96,7 +93,6 @@ public class DragonMounts {
         ModArmour.InitializaRepairs();
         GameRegistry.registerWorldGenerator(new DragonMountsWorldGenerator(), 0);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
-        initDamageSources();
         RegistryEventHandler.initRegistries();
     }
 
@@ -113,10 +109,5 @@ public class DragonMounts {
     @EventHandler
     public void ServerStopped(FMLServerStoppedEvent event) {
         proxy.ServerStopped(event);
-    }
-
-    private void initDamageSources() {
-        dragons_fire=new DamageSource("dragons_fire") {
-        };
     }
 }

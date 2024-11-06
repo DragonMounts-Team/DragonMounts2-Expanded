@@ -19,6 +19,10 @@ import org.apache.logging.log4j.Logger;
 import java.util.Random;
 
 public class DMUtils {
+    /**
+     * // 20 (ticks/real life second) * 60 (seconds / min) * 20 (real life minutes per minecraft day) / 24 (hours/day)
+     */
+    public static final int TICKS_PER_MINECRAFT_HOUR = 20 * 60 * 20 / 24;
     public static final Object[] NO_ARGS = new Object[0];
 
     private static Logger logger;

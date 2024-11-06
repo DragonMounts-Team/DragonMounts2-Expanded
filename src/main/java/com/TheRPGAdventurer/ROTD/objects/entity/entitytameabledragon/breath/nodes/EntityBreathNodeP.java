@@ -3,8 +3,8 @@ package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.nod
 
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.DragonBreathMode;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.IEntityParticle;
-import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.util.EntityMoveAndResizeHelper;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.util.Pair;
+import com.TheRPGAdventurer.ROTD.util.EntityUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -28,7 +28,6 @@ import java.util.Random;
  */
 public class EntityBreathNodeP extends Entity implements IEntityParticle {
     private BreathNodeP breathNode;
-    private EntityMoveAndResizeHelper entityMoveAndResizeHelper;
     private Collection<Pair<EnumFacing, AxisAlignedBB>> collisions;
     private float intensityAtCollision;
 
@@ -46,7 +45,6 @@ public class EntityBreathNodeP extends Entity implements IEntityParticle {
         motionX = motion.x;
         motionY = motion.y;
         motionZ = motion.z;
-        entityMoveAndResizeHelper = new EntityMoveAndResizeHelper(this);
     }
 
     public static EntityBreathNodeP createEntityBreathNodeServer(World world, double x, double y, double z,
@@ -85,7 +83,7 @@ public class EntityBreathNodeP extends Entity implements IEntityParticle {
         prevPosY = posY;
         prevPosZ = posZ;
         breathNode.modifyEntityVelocity(this);
-        collisions = entityMoveAndResizeHelper.moveAndResizeEntity(motionX, motionY, motionZ, newAABBDiameter, newAABBDiameter);
+        collisions = EntityUtil.moveAndResize(this, motionX, motionY, motionZ, newAABBDiameter, newAABBDiameter);
         intensityAtCollision = getCurrentIntensity();
 
         if (collided && onGround) {

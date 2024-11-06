@@ -5,6 +5,7 @@ import com.TheRPGAdventurer.ROTD.items.ItemTestRunner;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitycarriage.EntityCarriage;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import com.TheRPGAdventurer.ROTD.objects.items.*;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -12,33 +13,33 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ModItems {
     public static final ReferenceOpenHashSet<Item> DRAGON_INTERACTABLE = new ReferenceOpenHashSet<>();
     public static final ReferenceOpenHashSet<Item> HARDCODED_AQUATIC_FOOD = new ReferenceOpenHashSet<>();
-    public static final List<Item> ITEMS = new ArrayList<Item>();
+    public static final List<Item> ITEMS = new ObjectArrayList<>();
 
     //Scales Start
     public static final Item ForestDragonScales = new ItemDragonScales("forest_dragonscales", EnumItemBreedTypes.FOREST);
     public static final Item FireDragonScales = new ItemDragonScales("fire_dragonscales", EnumItemBreedTypes.FIRE);
-    public static final Item FireDragonScales2 = new ItemDragonScales("fire2_dragonscales", EnumItemBreedTypes.FIRE);
+    public static final Item FireDragonScales2 = new ItemDragonScales("fire2_dragonscales", EnumItemBreedTypes.FIRE2);
     public static final Item IceDragonScales = new ItemDragonScales("ice_dragonscales", EnumItemBreedTypes.ICE);
     public static final Item WaterDragonScales = new ItemDragonScales("water_dragonscales", EnumItemBreedTypes.WATER);
     public static final Item AetherDragonScales = new ItemDragonScales("aether_dragonscales", EnumItemBreedTypes.AETHER);
     public static final Item NetherDragonScales = new ItemDragonScales("nether_dragonscales", EnumItemBreedTypes.NETHER);
-    public static final Item NetherDragonScales2 = new ItemDragonScales("nether2_dragonscales", EnumItemBreedTypes.NETHER);
+    public static final Item NetherDragonScales2 = new ItemDragonScales("nether2_dragonscales", EnumItemBreedTypes.NETHER2);
     public static final Item EnderDragonScales = new ItemDragonScales("ender_dragonscales", EnumItemBreedTypes.END);
     public static final Item SunlightDragonScales = new ItemDragonScales("sunlight_dragonscales", EnumItemBreedTypes.SUNLIGHT);
-    public static final Item SunlightDragonScales2 = new ItemDragonScales("sunlight2_dragonscales", EnumItemBreedTypes.SUNLIGHT);
+    public static final Item SunlightDragonScales2 = new ItemDragonScales("sunlight2_dragonscales", EnumItemBreedTypes.SUNLIGHT2);
     public static final Item EnchantDragonScales = new ItemDragonScales("enchant_dragonscales", EnumItemBreedTypes.ENCHANT);
     public static final Item StormDragonScales = new ItemDragonScales("storm_dragonscales", EnumItemBreedTypes.STORM);
-    public static final Item StormDragonScales2 = new ItemDragonScales("storm2_dragonscales", EnumItemBreedTypes.STORM);
+    public static final Item StormDragonScales2 = new ItemDragonScales("storm2_dragonscales", EnumItemBreedTypes.STORM2);
     public static final Item TerraDragonScales = new ItemDragonScales("terra_dragonscales", EnumItemBreedTypes.TERRA);
     public static final Item TerraDragonScales2 = new ItemDragonScales("terra2_dragonscales", EnumItemBreedTypes.TERRA2);
     public static final Item ZombieDragonScales = new ItemDragonScales("zombie_dragonscales", EnumItemBreedTypes.ZOMBIE);
     public static final Item MoonlightDragonScales = new ItemDragonScales("moonlight_dragonscales", EnumItemBreedTypes.MOONLIGHT);
+    public static final Item MOONLIGHT_MALE_DRAGON_SCALES = new ItemDragonScales("moonlight2_dragonscales", EnumItemBreedTypes.MOONLIGHT_MALE);
     //public static final Item LightDragonScales = new ItemDragonScales("light_dragonscales", EnumItemBreedTypes.LIGHT);
     //public static final Item DarkDragonScales = new ItemDragonScales("dark_dragonscales", EnumItemBreedTypes.DARK);
     //public static final Item SpecterDragonScales = new ItemDragonScales("specter_dragonscales", EnumItemBreedTypes.SPECTER);
@@ -140,6 +141,7 @@ public class ModItems {
     public static final Item terra2_dragon_shield = new ItemDragonShield(EnumItemBreedTypes.TERRA2, ModItems.TerraDragonScales2);
     public static final Item zombie_dragon_shield = new ItemDragonShield(EnumItemBreedTypes.ZOMBIE, ModItems.ZombieDragonScales);
     public static final Item moonlight_dragon_shield = new ItemDragonShield(EnumItemBreedTypes.MOONLIGHT, ModItems.MoonlightDragonScales);
+    public static final Item MOONLIGHT_MALE_DRAGON_SHIELD = new ItemDragonShield(EnumItemBreedTypes.MOONLIGHT_MALE, ModItems.MOONLIGHT_MALE_DRAGON_SCALES);
     //public static final Item light_dragon_shield = new ItemDragonShield(EnumItemBreedTypes.LIGHT, ModItems.lightDragonScales);
     //public static final Item dark_dragon_shield = new ItemDragonShield(EnumItemBreedTypes.DARK, ModItems.DarkDragonScales);
     //public static final Item specter_dragon_shield = new ItemDragonShield(EnumItemBreedTypes.DARK, ModItems.SpecterDragonScales);
@@ -153,6 +155,7 @@ public class ModItems {
         DRAGON_INTERACTABLE.add(Items.STICK);
         HARDCODED_AQUATIC_FOOD.add(Items.FISH);
         HARDCODED_AQUATIC_FOOD.add(Items.COOKED_FISH);
+        ITEMS.addAll(ItemDragonScales.getInstances());
     }
 
     public static boolean isAquaticFood(ItemStack stack) {

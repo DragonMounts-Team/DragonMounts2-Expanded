@@ -28,7 +28,7 @@ public class ItemDragonShield extends ItemShield implements IHasModel {
     public Item repair;
 
     public ItemDragonShield(EnumItemBreedTypes type, Item repair) {
-        this.setRegistryName(new ResourceLocation(DragonMountsTags.MOD_ID, "dragon_shield_" + type.toString().toLowerCase()));
+        this.setRegistryName(new ResourceLocation(DragonMountsTags.MOD_ID, "dragon_shield_" + type.identifier));
         this.repair = repair;
         this.setTranslationKey("dragon_shield");
         this.setMaxDamage(2500);
@@ -47,7 +47,7 @@ public class ItemDragonShield extends ItemShield implements IHasModel {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(type.color + DMUtils.translateToLocal("dragon." + type.toString().toLowerCase()));
+        tooltip.add(type.color + DMUtils.translateToLocal(type.translationKey));
     }
     
     //Necessary because were extending from ItemShield, which creates its own displayname method

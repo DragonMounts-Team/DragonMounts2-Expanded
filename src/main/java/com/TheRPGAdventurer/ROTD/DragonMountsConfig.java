@@ -10,7 +10,6 @@
 package com.TheRPGAdventurer.ROTD;
 
 import com.google.common.collect.Lists;
-
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -90,6 +89,7 @@ public class DragonMountsConfig {
 	public static int minimumDistance = 16;
 
 	public static boolean useDimensionBlackList = true;
+	public static boolean forcedRename = false;
 
   private static boolean configHasLoaded = false; // used to detect code which tries to access a property before the config has been loaded
       // can be caused by static instantiation of classes especially Items Blocks and similar
@@ -215,6 +215,10 @@ public class DragonMountsConfig {
 		prop.setComment("Allow or disallow breeding");
 		allowBreeding = prop.getBoolean();
 		propOrder.add(prop.getName());
+
+	  prop = config.get(CATEGORY_MAIN, "Forced Rename", false, "Whether to rename dragon when renaming amulet");
+	  forcedRename = prop.getBoolean(false);
+	  propOrder.add(prop.getName());
 
 		prop = config.get(CATEGORY_CLIENTDM2, "Max Flight Height", maxFLightHeight);
 		prop.setComment("Max flight for dragons circling players on a whistle");

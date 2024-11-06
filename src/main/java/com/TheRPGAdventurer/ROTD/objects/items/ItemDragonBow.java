@@ -22,10 +22,10 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,16 +33,17 @@ import java.util.List;
 
 public class ItemDragonBow extends ItemBow implements IHasModel {
 
-    private EnumItemBreedTypes type;
-    private Item repair;
+    private final EnumItemBreedTypes type;
+    private final Item repairItem;
+    private ItemStack repairStack;
 
     public ItemDragonBow(EnumItemBreedTypes type, Item repair) {
         this.type = type;
-        this.repair = repair;
+        this.repairItem = repair;
 
         setMaxDamage(725);
         setTranslationKey("dragon_bow");
-        setRegistryName(new ResourceLocation(DragonMountsTags.MOD_ID, "dragon_bow_" + type.toString().toLowerCase()));
+        setRegistryName(new ResourceLocation(DragonMountsTags.MOD_ID, "dragon_bow_" + type.identifier));
         ModTools.TOOLS.add(this);
     }
 
@@ -158,18 +159,20 @@ public class ItemDragonBow extends ItemBow implements IHasModel {
         return f;
     }
 
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack item) {
-        return item.getItem() == repair ? true : super.getIsRepairable(toRepair, new ItemStack(repair));
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack ingredient) {
+        ItemStack material = this.repairStack;
+        if (material == null) {
+            this.repairStack = material = new ItemStack(this.repairItem, 1, OreDictionary.WILDCARD_VALUE);
+        }
+        if (OreDictionary.itemMatches(material, ingredient, false)) return true;
+        return super.getIsRepairable(toRepair, ingredient);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public String getItemStackDisplayName(ItemStack stack) { return type.color + super.getItemStackDisplayName(stack); }
-
-    @Override
-    @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(DMUtils.translateToLocal("item.armoryitems.info") + type.color +" "+ TextFormatting.BOLD + DMUtils.translateToLocal("dragon." + type.toString().toLowerCase()));
+        tooltip.add(type.color + DMUtils.translateToLocal(type.translationKey));
     }
 
     /**

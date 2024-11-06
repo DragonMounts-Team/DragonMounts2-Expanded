@@ -9,8 +9,8 @@
  */
 package com.TheRPGAdventurer.ROTD.objects.blocks;
 
-import com.TheRPGAdventurer.ROTD.DragonMounts;
 import com.TheRPGAdventurer.ROTD.DragonMountsConfig;
+import com.TheRPGAdventurer.ROTD.inits.DMItemGroups;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonLifeStage;
@@ -44,7 +44,7 @@ import java.util.Random;
 public class BlockDragonBreedEgg extends BlockDragonEgg {
 
     public static final PropertyEnum<EnumDragonBreed> BREED = PropertyEnum.create("breed", EnumDragonBreed.class);
-    public static BlockDragonBreedEgg DRAGON_BREED_EGG;
+    public static BlockDragonBreedEgg DRAGON_BREED_EGG = new BlockDragonBreedEgg();
     
     public BlockDragonBreedEgg() {
         setTranslationKey("dragonEgg");
@@ -52,7 +52,7 @@ public class BlockDragonBreedEgg extends BlockDragonEgg {
         setResistance(30);
         setSoundType(SoundType.WOOD);
         setLightLevel(0.125f);
-        setCreativeTab(DragonMounts.mainTab);
+        setCreativeTab(DMItemGroups.MAIN);
 
     }
 
@@ -134,7 +134,4 @@ public class BlockDragonBreedEgg extends BlockDragonEgg {
             }
         }
     }
-
-    @Deprecated
-    public static final BlockDragonBreedEgg[] BLOCK_EGG = {DRAGON_BREED_EGG = new BlockDragonBreedEgg()};
 }

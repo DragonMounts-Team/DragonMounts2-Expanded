@@ -2,19 +2,20 @@ package com.TheRPGAdventurer.ROTD.client.gui;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
 import com.TheRPGAdventurer.ROTD.DragonMountsTags;
+import com.TheRPGAdventurer.ROTD.client.model.dragon.anim.DragonAnimator;
 import com.TheRPGAdventurer.ROTD.inventory.ContainerDragon;
 import com.TheRPGAdventurer.ROTD.network.MessageDragonGui;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
+import com.TheRPGAdventurer.ROTD.util.DMUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -40,51 +41,13 @@ public class GuiDragon extends GuiContainer {
     private GuiButton sit;
     private EntityPlayer player;
 
-    public GuiDragon(IInventory playerInv, EntityTameableDragon dragon) {
-        super(new ContainerDragon(dragon, Minecraft.getMinecraft().player));
-        this.player = Minecraft.getMinecraft().player;
+    public GuiDragon(EntityPlayer player, EntityTameableDragon dragon) {
+        super(new ContainerDragon(dragon, player));
+        this.player = player;
         this.dragon = dragon;
         this.allowUserInput = false;
-        this.ySize = 214;
+        this.ySize = 213;
         this.xSize = 176;
-    }
-
-    /**
-     * Draws an entity on the screen looking toward the cursor.
-     */
-    public static void drawEntityOnScreen(int posX, int posY, int scale, float mouseX, float mouseY, EntityLivingBase ent) {
-        GlStateManager.enableColorMaterial();
-        GlStateManager.pushMatrix();
-        GlStateManager.translate((float) posX, (float) posY, 50.0F);
-        GlStateManager.scale((float) (-scale), (float) scale, (float) scale);
-        GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
-        float f = ent.renderYawOffset;
-        float f1 = ent.rotationYaw;
-        float f2 = ent.rotationPitch;
-        GlStateManager.rotate(135.0F, 0.0F, 1.0F, 0.0F);
-        RenderHelper.enableStandardItemLighting();
-        GlStateManager.rotate(-135.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(-((float) Math.atan((double) (mouseY / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
-        ent.renderYawOffset = (float) Math.atan((double) (mouseX / 40.0F)) * 20.0F;
-        ent.rotationYaw = (float) Math.atan((double) (mouseX / 40.0F)) * 40.0F;
-        ent.rotationPitch = -((float) Math.atan((double) (mouseY / 40.0F))) * 20.0F;
-        ent.rotationYawHead = ent.rotationYaw;
-        ent.prevRotationYawHead = ent.rotationYaw;
-        GlStateManager.translate(0.0F, 0.0F, 0.0F);
-        RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
-        rendermanager.setPlayerViewY(180.0F);
-        rendermanager.setRenderShadow(false);
-        rendermanager.renderEntity(ent, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
-        rendermanager.setRenderShadow(true);
-        ent.renderYawOffset = f;
-        ent.rotationYaw = f1;
-        ent.rotationPitch = f2;
-        GlStateManager.popMatrix();
-        RenderHelper.disableStandardItemLighting();
-        GlStateManager.disableRescaleNormal();
-        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-        GlStateManager.disableTexture2D();
-        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
 
     /**
@@ -92,8 +55,12 @@ public class GuiDragon extends GuiContainer {
      * items)
      */
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        this.fontRenderer.drawString(dragon.hasCustomName() ? dragon.getCustomNameTag() : "Dragon Inventory", 8, 6, dragon.getBreed().getColor());
-        this.fontRenderer.drawString(dragon.isMale() ? "M" : "FM", 155, 6, dragon.isMale() ? 0x0079be : 0Xff8b8b);
+        this.fontRenderer.drawString(dragon.hasCustomName() ? dragon.getCustomNameTag() : DMUtils.translateToLocal(dragon.makeTranslationKey()), 8, 6, dragon.getBreed().getColor());
+        if (dragon.isMale()) {
+            this.fontRenderer.drawString("M", 155, 6, 0x0079be);
+        } else {
+            this.fontRenderer.drawString("FM", 155, 6, 0Xff8b8b);
+        }
         GlStateManager.pushMatrix();
         GlStateManager.scale(0.6, 0.6, 0.6);
         this.fontRenderer.drawString(dragon.getHunger() + "/100", 60, 106, 0Xe99e0c);
@@ -119,7 +86,7 @@ public class GuiDragon extends GuiContainer {
         hunger(x, y);
 
         this.mc.getTextureManager().bindTexture(offhand);
-        drawModalRectWithCustomSizedTexture(x - 18, y + 184, 0.0F, 0.0F, 22, 28, 22, 28);
+        drawModalRectWithCustomSizedTexture(x - 18, y + 185, 0.0F, 0.0F, 22, 28, 22, 28);
 
         int size = 0;
         switch (dragon.getLifeStageHelper().getLifeStage()) {
@@ -144,7 +111,10 @@ public class GuiDragon extends GuiContainer {
         }
 
         //draw dragon entity
-        drawEntityOnScreen(x + 90, y + 60, size, x + 125 - this.mousePosX, y + 28 - this.mousePosY, this.dragon);
+        DragonAnimator animator = this.dragon.getAnimator();
+        animator.isInGui = true;
+        GuiInventory.drawEntityOnScreen(x + 90, y + 60, size, x + 125 - this.mousePosX, y + 28 - this.mousePosY, this.dragon);
+        animator.isInGui = false;
     }
 
     @Override
@@ -152,8 +122,8 @@ public class GuiDragon extends GuiContainer {
         this.buttonList.clear();
         Keyboard.enableRepeatEvents(true);
 
-        lock = new LockButton(0, width / 2 + 66, height / 2 - 53, 18, 14, dragon);
-        sit = new GuiButton(1, width / 2 + 47, height / 2 - 53, 18, 14, "SIT");
+        lock = new LockButton(0, width / 2 + 65, height / 2 - 53, 18, 20, dragon);
+        sit = new GuiButton(1, width / 2 + 47, height / 2 - 53, 18, 20, DMUtils.translateToLocal("gui.dragon.sit"));
 
         buttonList.add(lock);
         buttonList.add(sit);
@@ -188,8 +158,8 @@ public class GuiDragon extends GuiContainer {
 
         private EntityTameableDragon dragon;
 
-        public LockButton(int buttonId, int x, int y, int i, int j, EntityTameableDragon dragon) {
-            super(buttonId, x, y, i, j, "");
+        public LockButton(int buttonId, int x, int y, int width, int height, EntityTameableDragon dragon) {
+            super(buttonId, x, y, width, height, "");
             this.dragon = dragon;
         }
 
@@ -199,6 +169,17 @@ public class GuiDragon extends GuiContainer {
         @Override
         public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
             if (visible) {
+                int x = this.x, y = this.y, width = this.width, height = this.height, halfWidth = width / 2;
+                mc.getTextureManager().bindTexture(BUTTON_TEXTURES);
+                GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+                this.hovered = mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + height;
+                int i = this.getHoverState(this.hovered);
+                GlStateManager.enableBlend();
+                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+                GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+                this.drawTexturedModalRect(x, y, 0, 46 + i * 20, halfWidth, height);
+                this.drawTexturedModalRect(x + halfWidth, y, 200 - halfWidth, 46 + i * 20, halfWidth, height);
+                this.mouseDragged(mc, mouseX, mouseY);
                 if (dragon.allowedOtherPlayers()) {
                     mc.getTextureManager().bindTexture(lockOpen);
                 } else if (!dragon.allowedOtherPlayers()) {
@@ -206,12 +187,17 @@ public class GuiDragon extends GuiContainer {
                 } else if (!enabled) {
                     mc.getTextureManager().bindTexture(lockDisabled);
                 }
-
-                GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-                this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
-                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-                GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-                drawModalRectWithCustomSizedTexture(x, y, 0.0F, 0.0F, 16, 16, 16, 16);
+                float uv = 0.0625F * 16;
+                double renderX = x + 0.5;
+                double renderY = y + 2;
+                Tessellator tessellator = Tessellator.getInstance();
+                BufferBuilder bufferbuilder = tessellator.getBuffer();
+                bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+                bufferbuilder.pos(renderX, renderY + 16, 0.0D).tex(0, uv).endVertex();
+                bufferbuilder.pos(renderX + 16, renderY + 16, 0.0D).tex(uv, uv).endVertex();
+                bufferbuilder.pos(renderX + 16, renderY, 0.0D).tex(uv, 0).endVertex();
+                bufferbuilder.pos(renderX, renderY, 0.0D).tex(0, 0).endVertex();
+                tessellator.draw();
             }
         }
     }

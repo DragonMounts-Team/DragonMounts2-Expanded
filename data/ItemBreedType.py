@@ -17,6 +17,7 @@ class ItemBreedType(Enum):
   SUNLIGHT = makeId('sunlight')
   SUNLIGHT2 = makeId('sunlight2')
   MOONLIGHT = makeId('moonlight')
+  MOONLIGHT_MALE = makeId('moonlight2')
   STORM = makeId('storm')
   STORM2 = makeId('storm2')
   TERRA = makeId('terra')

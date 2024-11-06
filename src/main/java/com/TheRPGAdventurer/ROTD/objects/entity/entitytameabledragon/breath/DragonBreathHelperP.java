@@ -322,7 +322,7 @@ public class DragonBreathHelperP extends DragonHelper
             breathAffectedArea.continueBreathing(dragon.getEntityWorld(), origin, destination, breathNodeFactory, power, dragonBreathMode);
           }
         }
-        breathAffectedArea.updateTick(dragon.world, dragonBreathMode);
+        breathAffectedArea.updateTick(dragon.world, null, dragonBreathMode);
         break;
       }
       case PROJECTILE: {

@@ -1,7 +1,6 @@
 package com.TheRPGAdventurer.ROTD.inventory;
 
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -39,7 +38,7 @@ public class ContainerDragon extends Container {
 		});
 
 		// location of the slot for chest in the dragon inventory
-		this.addSlotToContainer(new Slot(dragonInv, 1, 8, 35) {
+		this.addSlotToContainer(new Slot(dragonInv, 1, 8, 36) {
 
 			public boolean isItemValid(ItemStack stack) {
 				return stack.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !this.getHasStack();
@@ -57,7 +56,7 @@ public class ContainerDragon extends Container {
 		});
 
 		// location of the slot for armor in the dragon inventory
-		this.addSlotToContainer(new Slot(dragonInv, 2, 8, 53) {
+		this.addSlotToContainer(new Slot(dragonInv, 2, 8, 54) {
 
 			public boolean isItemValid(ItemStack stack) {
 				return dragon.getIntFromArmor(stack) != 0 && dragon.isOldEnoughToBreathe();
@@ -67,7 +66,7 @@ public class ContainerDragon extends Container {
 		
 		// Build Banner Slots
 		for (int b = 0; b <= 3; ++b) {
-			this.addSlotToContainer(new Slot(dragonInv, 31 + b, b == 1 || b == 2 ? 135 : 153, b < 2 ? 36 : 18) {
+			this.addSlotToContainer(new Slot(dragonInv, 31 + b, b == 1 || b == 2 ? 136 : 154, b < 2 ? 36 : 18) {
 				public boolean isItemValid(ItemStack stack) {
 					return stack.getItem() == Items.BANNER && !this.getHasStack();
 				}
@@ -82,7 +81,7 @@ public class ContainerDragon extends Container {
 		// Build Chest Inventory Slots
 		for (int k = 0; k < 3; ++k) {
 			for (int l = 0; l < 9; ++l) {
-				this.addSlotToContainer(new Slot(dragonInv, chestStartIndex + l + k * inventoryColumn, 8 + l * 18, 74 + k * 18) {
+				this.addSlotToContainer(new Slot(dragonInv, chestStartIndex + l + k * inventoryColumn, 8 + l * 18, 75 + k * 18) {
 
 					@SideOnly(Side.CLIENT)
 					public boolean isEnabled() {
@@ -99,15 +98,15 @@ public class ContainerDragon extends Container {
 		// Build Inventory Slots
 		for (int j = 0; j < 3; ++j) {
 			for (int k = 0; k < 9; ++k) {
-				this.addSlotToContainer(new Slot(player.inventory, k + j * 9 + 9, 8 + k * 18, 149 + j * 18 - 18));
+				this.addSlotToContainer(new Slot(player.inventory, k + j * 9 + 9, 8 + k * 18, 150 + j * 18 - 18));
 			}
 		}
 		// Build hotbar slots
 		for (int j = 0; j < 9; ++j) {
-			this.addSlotToContainer(new Slot(player.inventory, j, 8 + j * 18, 189));
+			this.addSlotToContainer(new Slot(player.inventory, j, 8 + j * 18, 190));
 		}
 		// offhand
-		this.addSlotToContainer(new Slot(player.inventory, 40, -13, 189));
+		this.addSlotToContainer(new Slot(player.inventory, 40, -13, 190));
 	}
 		
 	public boolean canInteractWith(EntityPlayer playerIn) {

@@ -10,11 +10,15 @@
 package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds;
 
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
-
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonLifeStage;
+import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.world.World;
+
+import java.util.Random;
 
 /**
  *
@@ -58,19 +62,28 @@ public class DragonBreedFire extends DragonBreed {
 	
 	@Override
 	public void onLivingUpdate(EntityTameableDragon dragon) {
-		if(dragon.isInLava() || dragon.world.isMaterialInBB(dragon.getEntityBoundingBox().grow(-0.10000000149011612D, -0.4000000059604645D, -0.10000000149011612D), Material.FIRE)) doParticles(dragon);
-	}
-	
-    private void doParticles(EntityTameableDragon dragon) {
-        if (!dragon.isEgg() && !dragon.isBaby()) {
-	        float s = dragon.getScale() * 1.2f;
-	        for (double x1 = 0; x1 < s + 1; ++x1) {
-		        double x = dragon.posX + (rand.nextDouble() - 0.5) * (dragon.width - 0.65) * s;
-		        double y = dragon.posY + (rand.nextDouble() - 0.5) * dragon.height * s;
-		        double z = dragon.posZ + (rand.nextDouble() - 0.5) * (dragon.width - 0.65) * s;
-		        
-		        dragon.world.spawnParticle(EnumParticleTypes.FLAME, x, y, z, 0, 0, 0);
-	        }
+        World level = dragon.world;
+        if (dragon.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE) && (dragon.isInLava() || level.isMaterialInBB(dragon.getEntityBoundingBox().grow(-0.10000000149011612D, -0.4000000059604645D, -0.10000000149011612D), Material.FIRE))) {
+            Random random = this.rand;
+            float s = dragon.getScale() * 1.2f;
+            float h = dragon.height * s;
+            float f = (dragon.width - 0.65F) * s;
+            for (int i = -2; i < s; ++i) {
+                level.spawnParticle(
+                        EnumParticleTypes.FLAME,
+                        dragon.posX + (random.nextDouble() - 0.5) * f,
+                        dragon.posY - 1 + (random.nextDouble() - 0.5) * h,
+                        dragon.posZ + (random.nextDouble() - 0.5) * f,
+                        0,
+                        0,
+                        0
+                );
+            }
         }
+    }
+
+    @Override
+    public EnumItemBreedTypes getItemBreed(EntityTameableDragon dragon) {
+        return dragon.isMale() ? EnumItemBreedTypes.FIRE : EnumItemBreedTypes.FIRE2;
     }
 }

@@ -2,16 +2,12 @@ package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds;
 
 import com.TheRPGAdventurer.ROTD.inits.ModSounds;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
-import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathNode;
-import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.DragonBreathHelper;
+import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 
 
 public class DragonBreedSkeleton extends DragonBreed {
@@ -26,18 +22,13 @@ public class DragonBreedSkeleton extends DragonBreed {
 
     @Override
     public boolean isHabitatEnvironment(EntityTameableDragon dragon) {
-        if (dragon.posY > dragon.world.getHeight() * 0.25) {
+        if (dragon.posY * 4 > dragon.world.getHeight()) {
             // woah dude, too high!
             return false;
         }
 
-        int bx = MathHelper.floor(dragon.posX);
-        int by = MathHelper.floor(dragon.posY);
-        int bz = MathHelper.floor(dragon.posZ);
-        BlockPos blockPos = new BlockPos(bx, by, bz);
-
         // too bright!
-        return dragon.world.getLightBrightness(blockPos) < 4;
+        return dragon.world.getLightBrightness(new BlockPos(dragon)) < 4;
     }
 
     @Override
@@ -53,11 +44,7 @@ public class DragonBreedSkeleton extends DragonBreed {
     }
 
     public SoundEvent getLivingSound(EntityTameableDragon dragon) {
-        if (dragon.isBaby()) {
-            return ModSounds.ENTITY_DRAGON_HATCHLING_GROWL;
-        } else {
-            return ModSounds.ENTITY_SKELETON_DRAGON_GROWL;
-        }
+        return dragon.isBaby() ? ModSounds.ENTITY_DRAGON_HATCHLING_GROWL : ModSounds.ENTITY_SKELETON_DRAGON_GROWL;
     }
 
 //	@Override
@@ -67,9 +54,6 @@ public class DragonBreedSkeleton extends DragonBreed {
     public boolean canUseBreathWeapon() {
         return false;
     }
-
-    @Override
-    public void continueAndUpdateBreathing(DragonBreathHelper helper, World world, Vec3d origin, Vec3d endOfLook, BreathNode.Power power) {}
 
 //	@Override
 //	public boolean isInfertile() {
@@ -81,5 +65,9 @@ public class DragonBreedSkeleton extends DragonBreed {
         return null;
     }
 
+    @Override
+    public EnumItemBreedTypes getItemBreed(EntityTameableDragon dragon) {
+        return EnumItemBreedTypes.SKELETON;
+    }
 }
 	

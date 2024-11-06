@@ -34,7 +34,7 @@ public class ItemDragonSpawner extends Item implements IHasModel {
 
     public ItemDragonSpawner(EnumItemBreedTypes type, EnumDragonBreed breed, int background, int highlight) {
         this.setTranslationKey("summon_egg"); //  ItemMonsterPlacer
-        this.setRegistryName("summon_" + type.toString().toLowerCase());
+        this.setRegistryName("summon_" + type.identifier);
         this.setMaxStackSize(1);
         this.setCreativeTab(DragonMounts.mainTab);
         this.breed=breed;
@@ -105,7 +105,7 @@ public class ItemDragonSpawner extends Item implements IHasModel {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(type.color + DMUtils.translateToLocal("dragon." + type.toString().toLowerCase()));
+        tooltip.add(type.color + DMUtils.translateToLocal(type.translationKey));
     }
 
     @Override

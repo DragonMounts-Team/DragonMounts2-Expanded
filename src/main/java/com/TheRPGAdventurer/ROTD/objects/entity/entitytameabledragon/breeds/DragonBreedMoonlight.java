@@ -2,15 +2,19 @@ package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds;
 
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathNode;
-import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.DragonBreathHelper;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.effects.IceBreathFX;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundEffectName;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundState;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.weapons.BreathWeapon;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.weapons.BreathWeaponAether;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonLifeStage;
+import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class DragonBreedMoonlight extends DragonBreed {
 
@@ -32,24 +36,21 @@ public class DragonBreedMoonlight extends DragonBreed {
 	
 	@Override
 	public void onLivingUpdate(EntityTameableDragon dragon) {
-		if(dragon.posY > dragon.world.getHeight() && !dragon.world.isDaytime()) doParticles(dragon);
-	}
-	
-    private void doParticles(EntityTameableDragon dragon) {
-        if (!dragon.isEgg() && !dragon.isBaby()) {
-	        float s = dragon.getScale() * 1.2f;
-	        double x = dragon.posX + (rand.nextDouble() - 0.5) * (dragon.width - 0.65) * s;
-	        double y = dragon.posY + (rand.nextDouble() - 0.5) * dragon.height * s;
-	        double z = dragon.posZ + (rand.nextDouble() - 0.5) * (dragon.width - 0.65) * s;
-		        
-	        dragon.world.spawnParticle(EnumParticleTypes.FIREWORKS_SPARK, x, y, z, 0, 0, 0);
-        }
-    }
-
-	@Override
-	public void continueAndUpdateBreathing(DragonBreathHelper helper, World world, Vec3d origin, Vec3d endOfLook, BreathNode.Power power) {
-		helper.getBreathAffectedAreaIce().continueBreathing(world, origin, endOfLook, power);
-		helper.getBreathAffectedAreaIce().updateTick(world);
+		World level = dragon.world;
+		if (dragon.posY > level.getHeight() && !level.isDaytime() && dragon.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE)) {
+			Random random = this.rand;
+			float s = dragon.getScale() * 1.2f;
+			float f = (dragon.width - 0.65F) * s;
+			level.spawnParticle(
+					EnumParticleTypes.FIREWORKS_SPARK,
+					dragon.posX + (random.nextDouble() - 0.5) * f,
+					dragon.posY + (random.nextDouble() - 0.5) * dragon.height * s,
+					dragon.posZ + (random.nextDouble() - 0.5) * f,
+					0,
+					0,
+					0
+			);
+		}
 	}
 
 	@Override
@@ -65,5 +66,15 @@ public class DragonBreedMoonlight extends DragonBreed {
 	@Override
 	public EnumParticleTypes getSneezeParticle() {
 		return null;
+	}
+
+	@Override
+	public BreathWeapon createBreathWeapon(EntityTameableDragon dragon) {
+		return new BreathWeaponAether(dragon);
+	}
+
+	@Override
+	public EnumItemBreedTypes getItemBreed(EntityTameableDragon dragon) {
+		return dragon.isMale() ? EnumItemBreedTypes.MOONLIGHT_MALE : EnumItemBreedTypes.MOONLIGHT;
 	}
 }

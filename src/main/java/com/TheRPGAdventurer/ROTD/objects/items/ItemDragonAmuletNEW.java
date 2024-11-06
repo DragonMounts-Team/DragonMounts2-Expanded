@@ -66,7 +66,7 @@ public class ItemDragonAmuletNEW extends Item {
                     tag = new NBTTagCompound();
                     stack.setTagCompound(tag);
                 }
-                tag.setString("breed", dragon.getBreedType().identifier);
+                tag.setString("breed", dragon.getBreed().getItemBreed(dragon).identifier);
                 if (dragon.hasCustomName()) {
                     stack.setStackDisplayName(dragon.getCustomNameTag());
                 } else {

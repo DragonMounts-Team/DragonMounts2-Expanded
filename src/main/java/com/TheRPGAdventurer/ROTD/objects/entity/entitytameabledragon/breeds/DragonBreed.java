@@ -5,14 +5,15 @@ import com.TheRPGAdventurer.ROTD.client.render.dragon.breathweaponFX.BreathWeapo
 import com.TheRPGAdventurer.ROTD.inits.ModSounds;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathNode;
-import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.DragonBreathHelper;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.effects.FlameBreathFX;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.nodes.BreathNodeFactory;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.nodes.BreathProjectileFactory;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.*;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.weapons.BreathWeapon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.weapons.BreathWeaponP;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonLifeStage;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.util.Pair;
+import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.init.Items;
@@ -21,7 +22,6 @@ import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -120,58 +120,6 @@ public abstract class DragonBreed {
         return Items.FISH;
     }
 
-    public void onUpdate(EntityTameableDragon dragon) {
-        placeFootprintBlocks(dragon);
-    }
-
-    protected void placeFootprintBlocks(EntityTameableDragon dragon) {
-        // only apply on server
-        if (!dragon.isServer()) {
-            return;
-        }
-
-        // only apply on adult dragons that don't fly
-        if (!dragon.isAdult() || dragon.isFlying()) {
-            return;
-        }
-
-        // only apply if footprints are enabled
-        float footprintChance = getFootprintChance();
-        if (footprintChance == 1) {
-            return;
-        }
-
-        // footprint loop, from EntitySnowman.onLivingUpdate with slight tweaks
-        World world = dragon.world;
-        for (int i = 0; i < 4; i++) {
-            // place only if randomly selected
-            if (world.rand.nextFloat() > footprintChance) {
-                continue;
-            }
-
-            // get footprint position
-            double bx = dragon.posX + (i % 2 * 2 - 1) * 0.25;
-            double by = dragon.posY + 0.5;
-            double bz = dragon.posZ + (i / 2 % 2 * 2 - 1) * 0.25;
-            BlockPos pos = new BlockPos(bx, by, bz);
-
-            // footprints can only be placed on empty space
-            if (world.isAirBlock(pos)) {
-                continue;
-            }
-
-            placeFootprintBlock(dragon, pos);
-        }
-    }
-
-    protected void placeFootprintBlock(EntityTameableDragon dragon, BlockPos blockPos) {
-
-    }
-
-    protected float getFootprintChance() {
-        return 1;
-    }
-
     public abstract void onEnable(EntityTameableDragon dragon);
 
     public abstract void onDisable(EntityTameableDragon dragon);
@@ -224,11 +172,6 @@ public abstract class DragonBreed {
 
     public boolean canUseBreathWeapon() {
         return true;
-    }
-
-    public void continueAndUpdateBreathing(DragonBreathHelper helper, World world, Vec3d origin, Vec3d endOfLook, BreathNode.Power power) {
-        helper.getBreathAffectedArea().continueBreathing(world, origin, endOfLook, power);
-        helper.getBreathAffectedArea().updateTick(world);
     }
 
     public void spawnClientNodeEntity(World world, Vec3d position, Vec3d direction, BreathNode.Power power, float partialTicks) {
@@ -418,7 +361,12 @@ public abstract class DragonBreed {
         return new Vec3d(0, yoffset, 2.2);
     }
 
+    public abstract EnumItemBreedTypes getItemBreed(EntityTameableDragon dragon);
+
     public enum BreathWeaponSpawnType {PROJECTILE, NODES}
 
+    public BreathWeapon createBreathWeapon(EntityTameableDragon dragon) {
+        return new BreathWeapon(dragon);
+    }
 }
 

@@ -104,6 +104,8 @@ public class DragonAnimator {
     private final int NECK_SEGMENTS;
     private final int TAIL_SEGMENTS;
 
+    public boolean isInGui = false;
+
 /*    // final X rotation angles for ground
     private float[] xGround = {0, 0, 0, 0};
 

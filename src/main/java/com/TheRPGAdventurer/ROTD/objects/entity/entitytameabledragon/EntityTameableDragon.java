@@ -26,11 +26,12 @@ import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.ai.path.Pat
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.DragonBreathHelper;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.DragonBreathHelperP;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.DragonBreed;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.DragonBreedForest;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.*;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.util.Pair;
-import com.TheRPGAdventurer.ROTD.objects.items.ItemDragonAmulet;
 import com.TheRPGAdventurer.ROTD.objects.items.ItemDragonEssence;
+import com.TheRPGAdventurer.ROTD.objects.items.ItemDragonScales;
 import com.TheRPGAdventurer.ROTD.objects.tileentities.TileEntityDragonShulker;
 import com.TheRPGAdventurer.ROTD.util.DMUtils;
 import com.TheRPGAdventurer.ROTD.util.math.MathX;
@@ -132,8 +133,8 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
     private static final DataParameter<Boolean> ALT_TEXTURE = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> FOLLOW_YAW = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Optional<UUID>> DATA_BREEDER = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-    private static final DataParameter<String> DATA_BREED = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.STRING);
-    private static final DataParameter<String> FOREST_TEXTURES = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.STRING);
+    private static final DataParameter<EnumDragonBreed> DATA_BREED = EntityDataManager.createKey(EntityTameableDragon.class, EnumDragonBreed.SERIALIZER);
+    private static final DataParameter<DragonBreedForest.SubType> FOREST_TEXTURES = EntityDataManager.createKey(EntityTameableDragon.class, DragonBreedForest.SubType.SERIALIZER);
     private static final DataParameter<Integer> DATA_REPRO_COUNT = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> HUNGER = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> DATA_TICKS_SINCE_CREATION = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.VARINT);
@@ -231,7 +232,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
         //        manager.register(SLEEP, false); //unused as of now
         manager.register(FOLLOW_YAW, true);
         manager.register(DATA_BREATH_WEAPON_TARGET, "");
-        manager.register(FOREST_TEXTURES, "");
+        manager.register(FOREST_TEXTURES, DragonBreedForest.SubType.NONE);
         manager.register(DATA_BREATH_WEAPON_MODE, 0);
         manager.register(HUNGER, 100);
     }
@@ -584,11 +585,11 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
         dataManager.set(ALT_TEXTURE, alt);
     }
 
-    public String getForestType() {
+    public DragonBreedForest.SubType getForestType() {
         return dataManager.get(FOREST_TEXTURES);
     }
 
-    public void setForestType(String forest) {
+    public void setForestType(DragonBreedForest.SubType forest) {
         dataManager.set(FOREST_TEXTURES, forest);
     }
 
@@ -1170,6 +1171,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
         else world.playSound(null, posX, posY, posZ, sound, getSoundCategory(), volume, pitch);
     }
 
+    @Override
     public void playSound(SoundEvent sound, float volume, float pitch) {
         playSound(sound, volume, pitch, false);
     }
@@ -1358,82 +1360,6 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
             case END:
             default:
                 return ModItems.EssenceEnd;
-
-        }
-    }
-
-    /**
-     * @deprecated TODO Method used for temporary amulet datafix. REMOVE THIS BEFORE NEXT PATCH!
-     */
-    public ItemDragonAmulet dragonAmulet() {
-        switch (getBreedType()) {
-            case AETHER:
-                return ModItems.AmuletAether;
-            case ENCHANT:
-                return ModItems.AmuletEnchant;
-            case FIRE:
-                return ModItems.AmuletFire;
-            case FOREST:
-                return ModItems.AmuletForest;
-            case ICE:
-                return ModItems.AmuletIce;
-            case NETHER:
-                return ModItems.AmuletNether;
-            case SKELETON:
-                return ModItems.AmuletSkeleton;
-            case STORM:
-                return ModItems.AmuletStorm;
-            case SUNLIGHT:
-                return ModItems.AmuletSunlight;
-            case SYLPHID:
-                return ModItems.AmuletWater;
-            case TERRA:
-                return ModItems.AmuletTerra;
-            case WITHER:
-                return ModItems.AmuletWither;
-            case ZOMBIE:
-                return ModItems.AmuletZombie;
-            case MOONLIGHT:
-                return ModItems.AmuletMoonlight;
-            case END:
-            default:
-                return ModItems.AmuletEnd;
-
-        }
-    }
-
-    public Item shearItem() {
-        switch (getBreedType()) {
-            case AETHER:
-                return ModItems.AetherDragonScales;
-            case ENCHANT:
-                return ModItems.EnchantDragonScales;
-            case FIRE:
-                return isMale() ? ModItems.FireDragonScales : ModItems.FireDragonScales2;
-            case FOREST:
-                return ModItems.ForestDragonScales;
-            case ICE:
-                return ModItems.IceDragonScales;
-            case NETHER:
-                return isMale() ? ModItems.NetherDragonScales : ModItems.NetherDragonScales2;
-            case SKELETON:
-            case WITHER:
-                return null;
-            case STORM:
-                return isMale() ? ModItems.StormDragonScales : ModItems.SunlightDragonScales2;
-            case SUNLIGHT:
-                return isMale() ? ModItems.SunlightDragonScales : ModItems.SunlightDragonScales2;
-            case SYLPHID:
-                return ModItems.WaterDragonScales;
-            case TERRA:
-                return isMale() ? ModItems.TerraDragonScales : ModItems.TerraDragonScales2;
-            case ZOMBIE:
-                return ModItems.ZombieDragonScales;
-            case MOONLIGHT:
-                return ModItems.MoonlightDragonScales;
-            case END:
-            default:
-                return ModItems.EnderDragonScales;
 
         }
     }
@@ -1989,7 +1915,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
     }
 
     public boolean isOldEnoughToBreathe() {
-        return getLifeStageHelper().isOldEnoughToBreathe();
+        return getLifeStageHelper().isOldEnough(DragonLifeStage.INFANT);
     }
 
     public boolean isJuvenile() {
@@ -2012,6 +1938,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
      *
      * @return true if the entity runs on a client or false if it runs on a server
      */
+    @Deprecated
     public final boolean isClient() {
         return world.isRemote;
     }
@@ -2021,6 +1948,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
      *
      * @return true if the entity runs on a server or false if it runs on a client
      */
+    @Deprecated
     public final boolean isServer() {
         return !world.isRemote;
     }
@@ -2076,7 +2004,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
 
     @Override
     public List<ItemStack> onSheared(ItemStack stack, net.minecraft.world.IBlockAccess world, BlockPos pos, int fortune) {
-        Item item = this.shearItem();
+        Item item = ItemDragonScales.byBreed(this.getBreed().getItemBreed(this));
         if (item == null) return Collections.emptyList();
         this.setSheared(true);
         ticksShear = 3000;
@@ -2510,6 +2438,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
         }
     }
 
+    @Deprecated
     public enum EnumForestType implements IStringSerializable {
         FOREST, TAIGA, DRY;
 

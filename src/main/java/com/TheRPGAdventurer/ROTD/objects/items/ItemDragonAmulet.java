@@ -18,7 +18,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * Dragon Amulet Item for the use of carrying dragons in an item <p>
@@ -30,14 +29,12 @@ import javax.annotation.Nullable;
  * @deprecated
  */
 public class ItemDragonAmulet extends Item implements IHasModel {
-	
 	EnumItemBreedTypes type;
 
-    @Deprecated
-    public ItemDragonAmulet(@Nullable EnumItemBreedTypes type, @Nullable EnumDragonBreed breed) {
+	public ItemDragonAmulet(EnumItemBreedTypes type, EnumDragonBreed breed) {
          this.type = type;
          this.setTranslationKey("dragon_amulet");
-		this.setRegistryName(DragonMountsTags.MOD_ID, type.toString().toLowerCase() + "_dragon_amulet");
+		this.setRegistryName(DragonMountsTags.MOD_ID, type.identifier + "_dragon_amulet");
          this.setMaxStackSize(1);
         
         ModItems.ITEMS.add(this);

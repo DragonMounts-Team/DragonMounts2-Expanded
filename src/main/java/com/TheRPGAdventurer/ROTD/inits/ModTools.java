@@ -38,6 +38,7 @@ public class ModTools {
 	public static final ToolMaterial TerraDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":terradragonscales", 4, 2700, 8.0F, 5.0F, 11);
 	public static final ToolMaterial TerraDragonScaleMaterial2 = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":terra2dragonscales", 4, 2700, 8.0F, 5.0F, 11);
 	public static final ToolMaterial MoonlightDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":moonlightdragonscales", 4, 2700, 8.0F, 5.0F, 11);
+	public static final ToolMaterial MOONLIGHT_MALE_DRAGON_SCALE_MATERIAL = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":moonlightdragonscales2", 4, 2700, 8.0F, 5.0F, 11);
 	public static final ToolMaterial ZombieDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":zombiedragonscales", 4, 2700, 8.0F, 5.0F, 11);
 	//public static final ToolMaterial LightDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":lightdragonscales", 4, 2700, 8.0F, 5.0F, 11);
 	//public static final ToolMaterial DarkDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":darkdragonscales", 4, 2700, 8.0F, 5.0F, 11);
@@ -168,7 +169,13 @@ public class ModTools {
 	public static final ItemDragonAxe moonlightDragonAxe = new ItemDragonAxe(MoonlightDragonScaleMaterial, "moonlight_dragon_axe", damage, speed, EnumItemBreedTypes.MOONLIGHT);
 	public static final ItemDragonShovel moonlightDragonShovel = new ItemDragonShovel(MoonlightDragonScaleMaterial, "moonlight_dragon_shovel", EnumItemBreedTypes.MOONLIGHT);
 	public static final ItemDragonHoe moonlightDragonHoe = new ItemDragonHoe(MoonlightDragonScaleMaterial, "moonlight_dragon_hoe", EnumItemBreedTypes.MOONLIGHT);
-	
+	//Moonlight Male Start
+	public static final ItemDragonSword MOONLIGHT_MALE_DRAGON_SCALE_SWORD = new ItemDragonSword(MOONLIGHT_MALE_DRAGON_SCALE_MATERIAL, "moonlight2_dragon_sword", EnumItemBreedTypes.MOONLIGHT_MALE);
+	public static final ItemDragonPickAxe MOONLIGHT_MALE_DRAGON_SCALE_PICKAXE = new ItemDragonPickAxe(MOONLIGHT_MALE_DRAGON_SCALE_MATERIAL, "moonlight2_dragon_pickaxe", EnumItemBreedTypes.MOONLIGHT_MALE);
+	public static final ItemDragonAxe MOONLIGHT_MALE_DRAGON_SCALE_AXE = new ItemDragonAxe(MOONLIGHT_MALE_DRAGON_SCALE_MATERIAL, "moonlight2_dragon_axe", damage, speed, EnumItemBreedTypes.MOONLIGHT_MALE);
+	public static final ItemDragonShovel MOONLIGHT_MALE_DRAGON_SCALE_SHOVEL = new ItemDragonShovel(MOONLIGHT_MALE_DRAGON_SCALE_MATERIAL, "moonlight2_dragon_shovel", EnumItemBreedTypes.MOONLIGHT_MALE);
+	public static final ItemDragonHoe MOONLIGHT_MALE_DRAGON_SCALE_HOE = new ItemDragonHoe(MOONLIGHT_MALE_DRAGON_SCALE_MATERIAL, "moonlight2_dragon_hoe", EnumItemBreedTypes.MOONLIGHT_MALE);
+
 	//Light Start
 	//public static final ItemDragonSword lightDragonSword = new ItemDragonSword(LightDragonScaleMaterial, "light_dragon_sword", EnumItemBreedTypes.LIGHT);
 	//public static final ItemDragonPickAxe lightDragonPickaxe = new ItemDragonPickAxe(lightDragonScaleMaterial, "light_dragon_pickaxe", EnumItemBreedTypes.LIGHT);
@@ -211,6 +218,7 @@ public class ModTools {
     public static final Item terra_dragon_bow = new ItemDragonBow(EnumItemBreedTypes.TERRA, ModItems.TerraDragonScales);
     public static final Item terra2_dragon_bow = new ItemDragonBow(EnumItemBreedTypes.TERRA2, ModItems.TerraDragonScales2);
     public static final Item moonlight_dragon_bow = new ItemDragonBow(EnumItemBreedTypes.MOONLIGHT, ModItems.MoonlightDragonScales);
+	public static final Item MOONLIGHT_MALE_DRAGON_SCALE_BOW = new ItemDragonBow(EnumItemBreedTypes.MOONLIGHT_MALE, ModItems.MOONLIGHT_MALE_DRAGON_SCALES);
 //    public static final Item light_dragon_bow = new ItemDragonBow(EnumItemBreedTypes.LIGHT, ModItems.LightDragonScales);
 //    public static final Item dark_dragon_bow = new ItemDragonBow(EnumItemBreedTypes.DARK, ModItems.DarkDragonScales);
 //    public static final Item specter_dragon_bow = new ItemDragonBow(EnumItemBreedTypes.SPECTER, ModItems.SpecterDragonScales);
@@ -237,6 +245,7 @@ public class ModTools {
 		TerraDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.TerraDragonScales));
 		TerraDragonScaleMaterial2.setRepairItem(new ItemStack(ModItems.TerraDragonScales2));
 		MoonlightDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.MoonlightDragonScales));
+		MOONLIGHT_MALE_DRAGON_SCALE_MATERIAL.setRepairItem(new ItemStack(ModItems.MOONLIGHT_MALE_DRAGON_SCALES));
 //		LightDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.LightDragonScales));
 //		DarkDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.DarkDragonScales));
 //		SpecterDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.SpecterDragonScales));

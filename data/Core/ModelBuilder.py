@@ -1,5 +1,6 @@
 from Core.Util import ResourceLocation, JsonSerializable
 from Core.Output import Output
+
 class OverrideBuilder(JsonSerializable):
   _model = None
   def __init__(self, parent):
@@ -7,6 +8,7 @@ class OverrideBuilder(JsonSerializable):
     self._predicates = {}
 
   def predicate(self, name: ResourceLocation, value: float): 
+    if (value == 0): return self
     self._predicates[str(name)] = value
     return self
 
@@ -25,7 +27,6 @@ class OverrideBuilder(JsonSerializable):
     }
 
 class ModelBuilder:
-
   def __init__(self, parent: ResourceLocation):
     self.parent = parent
     self._textures = {}

@@ -34,7 +34,7 @@ public class ItemDragonAxe extends ItemAxe {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(type.color + DMUtils.translateToLocal("dragon." + type.toString().toLowerCase()));
+		tooltip.add(type.color + DMUtils.translateToLocal(type.translationKey));
 	}
 
 	/**

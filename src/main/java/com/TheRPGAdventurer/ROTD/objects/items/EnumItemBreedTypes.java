@@ -25,6 +25,7 @@ public enum EnumItemBreedTypes {
 	SUNLIGHT(TextFormatting.YELLOW),
 	SUNLIGHT2(TextFormatting.LIGHT_PURPLE),
 	MOONLIGHT(TextFormatting.BLUE),
+	MOONLIGHT_MALE(TextFormatting.BLUE, "moonlight2"),
 	STORM(TextFormatting.BLUE),
 	STORM2(TextFormatting.BLUE),
 	TERRA(TextFormatting.GOLD),
@@ -41,11 +42,17 @@ public enum EnumItemBreedTypes {
 	public final String identifier;
 	public final String translationKey;
 
-	EnumItemBreedTypes(TextFormatting color) {
+	EnumItemBreedTypes(TextFormatting color, String identifier) {
 		this.color = color;
-		String identifier = this.name().toLowerCase();
+		if (identifier == null) {
+			identifier = this.name().toLowerCase();
+		}
 		this.identifier = identifier;
 		this.translationKey = "dragon." + identifier;
+	}
+
+	EnumItemBreedTypes(TextFormatting color) {
+		this(color, null);
 	}
 
 	static {

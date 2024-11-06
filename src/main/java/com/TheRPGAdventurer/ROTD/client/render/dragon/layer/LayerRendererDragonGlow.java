@@ -22,7 +22,7 @@ public class LayerRendererDragonGlow extends LayerRendererDragon {
     @Override
     public void doRenderLayer(EntityTameableDragon dragon, float moveTime, float moveSpeed, float partialTicks, float ticksExisted, float lookYaw, float lookPitch, float scale) {
         if(dragon.getBreedType()==EnumDragonBreed.FOREST) {
-            renderer.bindTexture(dragon.isMale() ? breedRenderer.getMaleForestGlowTexture(dragon.isBaby(), dragon.getForestType()) : breedRenderer.getFemaleForestGlowTexture(dragon.isBaby(), dragon.getForestType()));
+            renderer.bindTexture(dragon.isMale() ? breedRenderer.getMaleForestGlowTexture(dragon.isBaby(), dragon.getForestType().identifier) : breedRenderer.getFemaleForestGlowTexture(dragon.isBaby(), dragon.getForestType().identifier));
         } else {
             renderer.bindTexture(dragon.isMale() ? breedRenderer.getMaleGlowTexture(dragon.isBaby(), dragon.altTextures()) : breedRenderer.getFemaleGlowTexture(dragon.isBaby(), dragon.altTextures()));
         }

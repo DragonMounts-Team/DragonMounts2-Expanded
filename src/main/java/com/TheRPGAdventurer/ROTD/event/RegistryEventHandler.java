@@ -5,6 +5,7 @@ import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.client.gui.GuiHandler;
 import com.TheRPGAdventurer.ROTD.inits.*;
 import com.TheRPGAdventurer.ROTD.objects.blocks.BlockDragonBreedEgg;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.DragonBreedForest;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import com.TheRPGAdventurer.ROTD.objects.items.ItemDragonBreedEgg;
 import com.TheRPGAdventurer.ROTD.objects.tileentities.TileEntityDragonShulker;
@@ -21,6 +22,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.DataSerializerEntry;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.function.Consumer;
@@ -33,6 +35,7 @@ public class RegistryEventHandler {
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
         ModBlocks.BLOCKS.forEach(event.getRegistry()::register);
+        event.getRegistry().register(BlockDragonBreedEgg.DRAGON_BREED_EGG.setRegistryName("dragon_egg"));
         GameRegistry.registerTileEntity(TileEntityDragonShulker.class, makeId("dragon_shulker"));
         DMUtils.getLogger().info("Block Registries Successfully Registered");
     }
@@ -43,19 +46,9 @@ public class RegistryEventHandler {
         ModItems.ITEMS.forEach(register);
         ModTools.TOOLS.forEach(register);
         ModArmour.ARMOR.forEach(register);
-        
+        register.accept(ItemDragonBreedEgg.DRAGON_BREED_EGG.setRegistryName("dragon_egg"));
         DMUtils.getLogger().info("Item Registries Successfully Registered!");
     }
-    
-	@SubscribeEvent
-	public static void registerDragonEggItem(RegistryEvent.Register<Item> event) {
-		event.getRegistry().register(ItemDragonBreedEgg.DRAGON_BREED_EGG.setRegistryName("dragon_egg"));
-	}
-
-	@SubscribeEvent
-	public static void registerDragonnEggBlock(RegistryEvent.Register<Block> event) {
-		event.getRegistry().register(BlockDragonBreedEgg.DRAGON_BREED_EGG.setRegistryName("dragon_egg"));
-	}
 
     @SubscribeEvent
     public static void registerCooldownCategory(RegistryEvent.Register<CooldownCategory> event) {
@@ -68,6 +61,13 @@ public class RegistryEventHandler {
         registry.register(DMArmorEffects.NETHER_EFFECT);
         registry.register(DMArmorEffects.SUNLIGHT_EFFECT);
         registry.register(DMArmorEffects.ZOMBIE_EFFECT);
+    }
+
+    @SubscribeEvent
+    public static void registerDataSerializer(RegistryEvent.Register<DataSerializerEntry> event) {
+        IForgeRegistry<DataSerializerEntry> registry = event.getRegistry();
+        registry.register(new DataSerializerEntry(EnumDragonBreed.SERIALIZER).setRegistryName(DragonMountsTags.MOD_ID + ":dragon_breed"));
+        registry.register(new DataSerializerEntry(DragonBreedForest.SubType.SERIALIZER).setRegistryName(DragonMountsTags.MOD_ID + ":forest_type"));
     }
 
     @SubscribeEvent

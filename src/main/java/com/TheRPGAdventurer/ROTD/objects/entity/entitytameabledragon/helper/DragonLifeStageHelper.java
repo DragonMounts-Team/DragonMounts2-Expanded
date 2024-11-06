@@ -160,7 +160,7 @@ public class DragonLifeStageHelper extends DragonHelper {
     public final void setLifeStage(DragonLifeStage lifeStage) {
         L.trace("setLifeStage({})", lifeStage);
         if (dragon.isServer()) {
-            ticksSinceCreationServer = lifeStage.getStartTickCount();
+            ticksSinceCreationServer = lifeStage.boundaryTick - lifeStage.durationTicks;
             dataWatcher.set(dataParam, ticksSinceCreationServer);
         } else {
             L.error("setLifeStage called on Client");
@@ -407,8 +407,8 @@ public class DragonLifeStageHelper extends DragonHelper {
         return getLifeStage().isJuvenile();
     }
 
-    public boolean isOldEnoughToBreathe() {
-        return getLifeStage().isOldEnoughToBreathe();
+    public boolean isOldEnough(DragonLifeStage stage) {
+        return getLifeStage().isOldEnough(stage);
     }
 
     public BreathNode.Power getBreathPower() {

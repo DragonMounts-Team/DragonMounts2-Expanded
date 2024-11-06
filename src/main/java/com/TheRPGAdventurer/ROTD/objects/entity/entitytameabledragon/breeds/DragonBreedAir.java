@@ -2,16 +2,20 @@ package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds;
 
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathNode;
-import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.DragonBreathHelper;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.effects.AetherBreathFX;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundEffectName;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundState;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.weapons.BreathWeapon;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.weapons.BreathWeaponAether;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonLifeStage;
+import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class DragonBreedAir extends DragonBreed {
 	// The amount of the aether dragons flight speed bonus (Added to the dragon base air speed)
@@ -51,31 +55,33 @@ public class DragonBreedAir extends DragonBreed {
 
     @Override
     public void onLivingUpdate(EntityTameableDragon dragon) {
-        super.onLivingUpdate(dragon);
-        
-        if(dragon.posY > dragon.world.getHeight() * 1.2 && dragon.world.isDaytime()) doParticles(dragon);
-    }
-
-    private void doParticles(EntityTameableDragon dragon) {
-        if (!dragon.isEgg() && !dragon.isBaby()) {
-	        float s = dragon.getScale() * 1.2f;
-	        for (double x1 = 0; x1 < s; ++x1) {
-		        double x = dragon.posX + (rand.nextDouble() - 0.5) * (dragon.width - 0.65) * s;
-		        double y = dragon.posY + (rand.nextDouble() - 0.5) * dragon.height * s;
-		        double z = dragon.posZ + (rand.nextDouble() - 0.5) * (dragon.width - 0.65) * s;
-		        
-		        if (rand.nextInt(5) == 0)
-		        	dragon.world.spawnParticle(EnumParticleTypes.SPELL_MOB, x, y, z, 1, 1, 0, 0, 0, 0); //yellow
-		        else
-		        	dragon.world.spawnParticle(EnumParticleTypes.SPELL_MOB, x, y, z, 0, 1, 1, 0, 0, 0); //aqua
-	        }
+        World level = dragon.world;
+        if (dragon.posY > level.getHeight() * 1.2 && level.isDaytime() && dragon.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE)) {
+            Random random = this.rand;
+            float s = dragon.getScale() * 1.2f;
+            float h = dragon.height * s;
+            float f = (dragon.width - 0.65F) * s;
+            for (int i = 0; i < s; ++i) {
+                double x = dragon.posX + (random.nextDouble() - 0.5) * f;
+                double y = dragon.posY + (random.nextDouble() - 0.5) * h;
+                double z = dragon.posZ + (random.nextDouble() - 0.5) * f;
+                if (random.nextInt(5) == 0) {
+                    level.spawnParticle(EnumParticleTypes.SPELL_MOB, x, y, z, 1, 1, 0, 0, 0, 0); //yellow
+                } else {
+                    level.spawnParticle(EnumParticleTypes.SPELL_MOB, x, y, z, 0, 1, 1, 0, 0, 0); //aqua
+                }
+            }
         }
     }
 
     @Override
-    public void continueAndUpdateBreathing(DragonBreathHelper helper, World world, Vec3d origin, Vec3d endOfLook, BreathNode.Power power) {
-        helper.getbreathAffectedAreaAether().continueBreathing(world, origin, endOfLook, power);
-        helper.getbreathAffectedAreaAether().updateTick(world);
+    public BreathWeapon createBreathWeapon(EntityTameableDragon dragon) {
+        return new BreathWeaponAether(dragon);
+    }
+
+    @Override
+    public EnumItemBreedTypes getItemBreed(EntityTameableDragon dragon) {
+        return EnumItemBreedTypes.AETHER;
     }
 
     @Override

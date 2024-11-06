@@ -1,10 +1,14 @@
 package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds;
 
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
-
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonLifeStage;
+import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class DragonBreedEnchant extends DragonBreed {
 
@@ -31,19 +35,23 @@ public class DragonBreedEnchant extends DragonBreed {
 	
 	@Override
 	public void onLivingUpdate(EntityTameableDragon dragon) {
-		doParticles(dragon);
+		if (dragon.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE)) {
+			World level = dragon.world;
+			Random random = this.rand;
+			float s = dragon.getScale() * 1.2f;
+			float h = dragon.height * s;
+			float f = (dragon.width - 0.65F) * s;
+			for (int i = -25; i < s; ++i) {
+				double x = dragon.posX + (random.nextDouble() - 0.5) * f;
+				double y = dragon.posY + (random.nextDouble() - 0.5) * h;
+				double z = dragon.posZ + (random.nextDouble() - 0.5) * f;
+				level.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, x, y, z, 0, 0, 0);
+			}
+		}
 	}
-	
-    private void doParticles(EntityTameableDragon dragon) {
-        if (!dragon.isEgg() && !dragon.isBaby()) {
-	        float s = dragon.getScale() * 1.2f;
-	        for (double x1 = 0; x1 < s + 25; ++x1) {
-		        double x = dragon.posX + (rand.nextDouble() - 0.5) * (dragon.width - 1.2) * s;
-		        double y = dragon.posY + (rand.nextDouble() - 0.5) * dragon.height * s;
-		        double z = dragon.posZ + (rand.nextDouble() - 0.5) * (dragon.width - 1.2) * s;
-		        
-		        dragon.world.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, x, y, z, 0, 0, 0);
-	        }
-        }
-    }
+
+	@Override
+	public EnumItemBreedTypes getItemBreed(EntityTameableDragon dragon) {
+		return EnumItemBreedTypes.ENCHANT;
+	}
 }

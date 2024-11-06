@@ -115,7 +115,7 @@ def generateRecipes(output: Output):
       .groupBy('dragon_scale_bow')\
       .unlockedBy('has_scales', unlock)\
       .save(output, 'combat')
-    if (breed is ItemBreedType.NETHER2 or breed is ItemBreedType.STORM2):
+    if (breed is ItemBreedType.NETHER2 or breed is ItemBreedType.STORM2 or breed is ItemBreedType.MOONLIGHT_MALE):
       name = 'dragon_shield_' + breed.value.path[:-1]
       shaped(makeId(name))\
         .define('W', dragonScales)\

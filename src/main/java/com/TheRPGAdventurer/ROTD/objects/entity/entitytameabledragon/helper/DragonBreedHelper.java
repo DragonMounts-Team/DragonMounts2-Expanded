@@ -21,6 +21,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.logging.log4j.LogManager;
@@ -48,11 +49,11 @@ public class DragonBreedHelper extends DragonHelper {
     private static final String NBT_BREED = "Breed";
     private static final String NBT_BREED_POINTS = "breedPoints";
 
-    private final DataParameter<String> DATA_BREED;
+    private final DataParameter<EnumDragonBreed> DATA_BREED;
     private final Map<EnumDragonBreed, AtomicInteger> breedPoints = new EnumMap<>(EnumDragonBreed.class);
 
     public DragonBreedHelper(EntityTameableDragon dragon,
-                             DataParameter<String> DATA_BREED) {
+                             DataParameter<EnumDragonBreed> DATA_BREED) {
         super(dragon);
 
         this.DATA_BREED = DATA_BREED;
@@ -67,7 +68,7 @@ public class DragonBreedHelper extends DragonHelper {
             breedPoints.get(EnumDragonBreed.FIRE).set(POINTS_INITIAL);
         }
 
-        dataWatcher.register(DATA_BREED, EnumDragonBreed.END.getName());
+        dataWatcher.register(DATA_BREED, EnumDragonBreed.END);
     }
 
     @Override
@@ -105,25 +106,20 @@ public class DragonBreedHelper extends DragonHelper {
     }
 
     public EnumDragonBreed getBreedType() {
-        String breedName = dataWatcher.get(DATA_BREED);
-        return EnumUtils.getEnum(EnumDragonBreed.class, breedName.toUpperCase());
+        return dataWatcher.get(DATA_BREED);
     }
 
     public void setBreedType(EnumDragonBreed newType) {
         L.trace("setBreed({})", newType);
 
         // ignore breed changes on client side, it's controlled by the server
-        if (dragon.isClient()) {
-            return;
-        }
+        if (dragon.world.isRemote) return;
 
         Objects.requireNonNull(newType);
 
         // check if the breed actually changed
         EnumDragonBreed oldType = getBreedType();
-        if (oldType == newType) {
-            return;
-        }
+        if (oldType == newType) return;
 
         DragonBreed oldBreed = oldType.getBreed();
         DragonBreed newBreed = newType.getBreed();
@@ -136,7 +132,8 @@ public class DragonBreedHelper extends DragonHelper {
         dragon.setImmuneToFire(newBreed.isImmuneToDamage(DamageSource.IN_FIRE) || newBreed.isImmuneToDamage(DamageSource.ON_FIRE) || newBreed.isImmuneToDamage(DamageSource.LAVA));
 
         // update breed name
-        dataWatcher.set(DATA_BREED, newType.getName());
+        dataWatcher.set(DATA_BREED, newType);
+        dragon.getBreathHelper().onBreedChange(newBreed);
 
         // reset breed points
         if (dragon.isEgg()) {
@@ -149,22 +146,23 @@ public class DragonBreedHelper extends DragonHelper {
     @Override
     public void onLivingUpdate() {
         EnumDragonBreed currentType = getBreedType();
-
         if (dragon.isEgg()) {
+            World level = this.dragon.world;
             // spawn breed-specific particles every other tick
-            if (dragon.isClient() && dragon.ticksExisted % TICK_RATE_PARTICLES == 0) {
-                if (currentType != EnumDragonBreed.END) {
+            if (level.isRemote) {
+                if (currentType != EnumDragonBreed.END && dragon.ticksExisted % TICK_RATE_PARTICLES == 0) {
                     double px = dragon.posX + (rand.nextDouble() - 0.5);
                     double py = dragon.posY + (rand.nextDouble() - 0.5);
                     double pz = dragon.posZ + (rand.nextDouble() - 0.5);
                     DragonBreed current = currentType.getBreed();
-                    dragon.world.spawnParticle(EnumParticleTypes.REDSTONE, px, py + 1, pz,
+                    level.spawnParticle(EnumParticleTypes.REDSTONE, px, py + 1, pz,
                             current.getColorR(), current.getColorG(), current.getColorB());
                 }
+                return;
             }
 
             // update egg breed every second on the server
-            if (dragon.getBreed().canChangeBreed() && dragon.isServer() && dragon.ticksExisted % TICK_RATE_BLOCK == 0) {
+            if (currentType.getBreed().canChangeBreed() && dragon.ticksExisted % TICK_RATE_BLOCK == 0) {
                 BlockPos eggPos = dragon.getPosition();
 
                 // scan surrounding for breed-loving blocks
@@ -172,14 +170,14 @@ public class DragonBreedHelper extends DragonHelper {
                 BlockPos eggPosTo = eggPos.add(-BLOCK_RANGE, -BLOCK_RANGE, -BLOCK_RANGE);
 
                 BlockPos.getAllInBoxMutable(eggPosFrom, eggPosTo).forEach(blockPos -> {
-                    Block block = dragon.world.getBlockState(blockPos).getBlock();
+                    Block block = level.getBlockState(blockPos).getBlock();
                     breedPoints.entrySet().stream()
                             .filter(breed -> (breed.getKey().getBreed().isHabitatBlock(block)))
                             .forEach(breed -> breed.getValue().addAndGet(POINTS_BLOCK));
                 });
 
                 // check biome
-                Biome biome = dragon.world.getBiome(eggPos);
+                Biome biome = level.getBiome(eggPos);
 
                 breedPoints.keySet().forEach(breed -> {
                     // check for biomes
@@ -194,18 +192,12 @@ public class DragonBreedHelper extends DragonHelper {
                 });
 
                 // update most dominant breed
-                EnumDragonBreed newType = breedPoints.entrySet().stream()
+                breedPoints.entrySet().stream()
                         .max(Comparator.comparingInt(breed -> breed.getValue().get()))
-                        .get().getKey();
-
-                if (newType != currentType) {
-                    setBreedType(newType);
-
-                }
+                        .map(Map.Entry::getKey)
+                        .ifPresent(this::setBreedType);
             }
         }
-
-        currentType.getBreed().onUpdate(dragon);
     }
 
     @Override

@@ -4,15 +4,19 @@ package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds;
 import com.TheRPGAdventurer.ROTD.inits.ModSounds;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathNode;
-import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.DragonBreathHelper;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.effects.NetherBreathFX;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.weapons.BreathWeapon;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.weapons.BreathWeaponNether;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonLifeStage;
+import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+
+import java.util.Random;
 
 public class DragonBreedNether extends DragonBreed {
 
@@ -43,17 +47,7 @@ public class DragonBreedNether extends DragonBreed {
     }
 
     public SoundEvent getLivingSound(EntityTameableDragon dragon) {
-        if (dragon.isBaby()) {
-            return ModSounds.ENTITY_DRAGON_HATCHLING_GROWL;
-        } else {
-            return ModSounds.ENTITY_NETHER_DRAGON_GROWL;
-        }
-    }
-
-    @Override
-    public void continueAndUpdateBreathing(DragonBreathHelper helper, World world, Vec3d origin, Vec3d endOfLook, BreathNode.Power power) {
-        helper.getBreathAffectedAreaNether().continueBreathing(world, origin, endOfLook, power);
-        helper.getBreathAffectedAreaNether().updateTick(world);
+        return dragon.isBaby() ? ModSounds.ENTITY_DRAGON_HATCHLING_GROWL : ModSounds.ENTITY_NETHER_DRAGON_GROWL;
     }
 
     @Override
@@ -63,26 +57,45 @@ public class DragonBreedNether extends DragonBreed {
 
     @Override
     public void onLivingUpdate(EntityTameableDragon dragon) {
-        World world=dragon.world;
-        if (world instanceof WorldServer && dragon.isWet() && !dragon.isEgg()) {
-            doParticles(dragon, EnumParticleTypes.SMOKE_NORMAL);
-        }
-
-        if (world instanceof WorldServer && !dragon.isDead && !dragon.isEgg()) {
-            doParticles(dragon, EnumParticleTypes.DRIP_LAVA);
+        World level = dragon.world;
+        if (level.isRemote || dragon.isDead || !dragon.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE))
+            return;
+        Random random = this.rand;
+        float s = dragon.getScale();
+        float h = dragon.height * s;
+        float f = (dragon.width - 0.65F) * s;
+        boolean isWet = dragon.isWet();
+        for (int i = -1; i < s; ++i) {
+            level.spawnParticle(
+                    EnumParticleTypes.DRIP_LAVA,
+                    dragon.posX + (random.nextDouble() - 0.5) * f,
+                    dragon.posY + (random.nextDouble() - 0.5) * h,
+                    dragon.posZ + (random.nextDouble() - 0.5) * f,
+                    0,
+                    0,
+                    0
+            );
+            if (isWet) {
+                level.spawnParticle(
+                        EnumParticleTypes.SMOKE_NORMAL,
+                        dragon.posX + (random.nextDouble() - 0.5) * f,
+                        dragon.posY + (random.nextDouble() - 0.5) * h,
+                        dragon.posZ + (random.nextDouble() - 0.5) * f,
+                        0,
+                        0,
+                        0
+                );
+            }
         }
     }
 
-    private void doParticles(EntityTameableDragon dragon, EnumParticleTypes types) {
-        if (!dragon.isEgg() && !dragon.isBaby()) {
-            float s = dragon.getScale(); //  * 1.2f
-            for (double x1 = 0; x1 < s + 1; ++x1) {
-                double x = dragon.posX + (rand.nextDouble() - 0.5) * (dragon.width - 0.65) * s;
-                double y = dragon.posY + (rand.nextDouble() - 0.5) * dragon.height * s;
-                double z = dragon.posZ + (rand.nextDouble() - 0.5) * (dragon.width - 0.65) * s;
+    @Override
+    public BreathWeapon createBreathWeapon(EntityTameableDragon dragon) {
+        return new BreathWeaponNether(dragon);
+    }
 
-                dragon.world.spawnParticle(types, x, y, z, 0, 0, 0);
-            }
-        }
+    @Override
+    public EnumItemBreedTypes getItemBreed(EntityTameableDragon dragon) {
+        return dragon.isMale() ? EnumItemBreedTypes.NETHER : EnumItemBreedTypes.NETHER2;
     }
 }

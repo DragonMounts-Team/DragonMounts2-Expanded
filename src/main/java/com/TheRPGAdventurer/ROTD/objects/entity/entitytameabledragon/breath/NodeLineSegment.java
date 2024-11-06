@@ -2,7 +2,6 @@ package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath;
 
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.util.Pair;
 import com.TheRPGAdventurer.ROTD.util.math.MathX;
-
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.*;
 
@@ -256,12 +255,17 @@ public class NodeLineSegment {
      * i.e. the density of points is highest in the centre which is roughly what we want.
      * Each call to addStochasticCloud adds a total of totalDensity to the world grid -
      * eg if totalDensity = 1.0, it adds 1.0 to a single location, or 0.2 to location 1 and 0.8 to location 2, etc
+     * Then:
+     * For each of the direct collisions for this node (overlaps between the node AABB and the world, as calculated
+     * in the entity movement), increment the hit density of the corresponding blocks
+     * (The collision may have been caused by an entity not the blocks, however if the block actually has nothing in
+     * it then it won't be affected anyway.)
      *
      * @param hitDensity          the density of points at each world grid location - is updated by the method
      * @param totalDensity        the total density to be added (eg 1.0F)
      * @param numberOfCloudPoints number of cloud points to use (1 - 1000) - clamped if out of range
      */
-    public void addStochasticCloud(Map<Vec3i, BreathAffectedBlock> hitDensity, float totalDensity, int numberOfCloudPoints) {
+    public void addBlockCollisionsAndStochasticCloud(Map<Vec3i, BreathAffectedBlock> hitDensity, float totalDensity, int numberOfCloudPoints) {
         initialiseTables();
         final int MINIMUM_REASONABLE_CLOUD_POINTS=1;
         final int MAXIMUM_REASONABLE_CLOUD_POINTS=1000;
@@ -275,6 +279,7 @@ public class NodeLineSegment {
         //    x = r.cos(theta).sin(phi)
         //    y = r.sin(theta).sin(phi)
         //    z = r.cos(phi)
+        //TODO: Deprecated
         Random random=new Random();
         for (int i=0; i < NUMBER_OF_CLOUD_POINTS; ++i) {
             double linePos=i * SUBSEGMENT_WIDTH;
@@ -300,18 +305,6 @@ public class NodeLineSegment {
             breathAffectedBlock.addHitDensity(faceHit, DENSITY_PER_POINT);
             hitDensity.put(gridLoc, breathAffectedBlock);
         }
-    }
-
-    /**
-     * For each of the direct collisions for this node (overlaps between the node AABB and the world, as calculated
-     * in the entity movement), increment the hit density of the corresponding blocks
-     * (The collision may have been caused by an entity not the blocks, however if the block actually has nothing in
-     * it then it won't be affected anyway.)
-     *
-     * @param hitDensity          the density of points at each world grid location - is updated by the method
-     * @param densityPerCollision the total density to be added (eg 1.0F)
-     */
-    public void addBlockCollisions(Map<Vec3i, BreathAffectedBlock> hitDensity, float densityPerCollision) {
 
         for (Pair<EnumFacing, AxisAlignedBB> collision : collisions) {
             final double CONTRACTION=0.001;
@@ -321,14 +314,12 @@ public class NodeLineSegment {
                 BlockPos blockposMin=new BlockPos(aabb.minX, aabb.minY, aabb.minZ);
                 BlockPos blockposMax=new BlockPos(aabb.maxX, aabb.maxY, aabb.maxZ);
 
-                Iterator<BlockPos> iterator=BlockPos.getAllInBox(blockposMin, blockposMax).iterator();
-                while (iterator.hasNext()) {
-                    BlockPos blockpos=iterator.next();
-                    BreathAffectedBlock breathAffectedBlock=hitDensity.get(blockpos);
-                    if (breathAffectedBlock==null) {
-                        breathAffectedBlock=new BreathAffectedBlock();
+                for (BlockPos blockpos : BlockPos.getAllInBox(blockposMin, blockposMax)) {
+                    BreathAffectedBlock breathAffectedBlock = hitDensity.get(blockpos);
+                    if (breathAffectedBlock == null) {
+                        breathAffectedBlock = new BreathAffectedBlock();
                     }
-                    breathAffectedBlock.addHitDensity(collision.getFirst().getOpposite(), densityPerCollision);
+                    breathAffectedBlock.addHitDensity(collision.getFirst().getOpposite(), totalDensity);
                     hitDensity.put(blockpos, breathAffectedBlock);
                 }
             }

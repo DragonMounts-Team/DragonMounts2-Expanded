@@ -4,14 +4,15 @@ import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTamea
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundEffectName;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundState;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonLifeStage;
+import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
+import com.TheRPGAdventurer.ROTD.util.EnumSerializer;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.common.BiomeDictionary;
 
-;
-
+import java.util.Set;
 
 public class DragonBreedForest extends DragonBreed {
 
@@ -50,29 +51,39 @@ public class DragonBreedForest extends DragonBreed {
 
     @Override
     public void onLivingUpdate(EntityTameableDragon dragon) {
-        Biome biome = dragon.world.getBiome(dragon.getPosition());
-
-        boolean isSavanna = BiomeDictionary.hasType(biome, BiomeDictionary.Type.SAVANNA)
-                || BiomeDictionary.hasType(biome, BiomeDictionary.Type.DRY)
-                || BiomeDictionary.hasType(biome, BiomeDictionary.Type.MESA)
-                || BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY);
-
-        boolean isTaiga = BiomeDictionary.hasType(biome, BiomeDictionary.Type.COLD)
-                || BiomeDictionary.hasType(biome, BiomeDictionary.Type.MOUNTAIN);
-
-
-        if (isSavanna) {
-            dragon.setForestType(EntityTameableDragon.EnumForestType.DRY.getName());
-        } else if (isTaiga) {
-            dragon.setForestType(EntityTameableDragon.EnumForestType.TAIGA.getName());
+        Set<BiomeDictionary.Type> types = BiomeDictionary.getTypes(dragon.world.getBiome(dragon.getPosition()));
+        if (types.contains(BiomeDictionary.Type.SAVANNA) || types.contains(BiomeDictionary.Type.DRY) || types.contains(BiomeDictionary.Type.MESA) || types.contains(BiomeDictionary.Type.SANDY)) {
+            dragon.setForestType(SubType.DRY);
+        } else if (types.contains(BiomeDictionary.Type.COLD) || types.contains(BiomeDictionary.Type.MOUNTAIN)) {
+            dragon.setForestType(SubType.TAIGA);
         } else {
-            dragon.setForestType(EntityTameableDragon.EnumForestType.FOREST.getName());
+            dragon.setForestType(SubType.FOREST);
         }
     }
 
     @Override
     public SoundEffectName getBreathWeaponSoundEffect(DragonLifeStage stage, SoundState state) {
         return state.forest;
+    }
+
+    @Override
+    public EnumItemBreedTypes getItemBreed(EntityTameableDragon dragon) {
+        return EnumItemBreedTypes.FOREST;
+    }
+
+    public enum SubType implements IStringSerializable {
+        NONE,
+        FOREST,
+        TAIGA,
+        DRY;
+        public static final EnumSerializer<SubType> SERIALIZER = new EnumSerializer<>(SubType.class, SubType.NONE);
+
+        public final String identifier = this.name().toLowerCase();
+
+        @Override
+        public String getName() {
+            return this.identifier;
+        }
     }
 }
 	

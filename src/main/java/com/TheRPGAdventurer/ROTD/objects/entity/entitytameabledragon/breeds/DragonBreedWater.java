@@ -11,27 +11,31 @@ package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds;
 
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathNode;
-import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.DragonBreathHelper;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.effects.HydroBreathFX;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundEffectName;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundState;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.weapons.BreathWeapon;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.weapons.BreathWeaponHydro;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonLifeStage;
+import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
+import com.TheRPGAdventurer.ROTD.util.EntityUtil;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 /**
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public class DragonBreedWater extends DragonBreed {
 
-    public DragonBreedWater() {
-        super("sylphid", 0x4f69a8);
+    public DragonBreedWater(String skin, int color) {
+        super(skin, color);
 
         setImmunity(DamageSource.DROWN);
         setImmunity(DamageSource.MAGIC);
@@ -44,6 +48,10 @@ public class DragonBreedWater extends DragonBreed {
 
         setHabitatBiome(Biomes.OCEAN);
         setHabitatBiome(Biomes.RIVER);
+    }
+
+    public DragonBreedWater() {
+        this("sylphid", 0x4f69a8);
     }
 
     @Override
@@ -59,34 +67,30 @@ public class DragonBreedWater extends DragonBreed {
     }
 
     @Override
-    public void continueAndUpdateBreathing(DragonBreathHelper helper, World world, Vec3d origin, Vec3d endOfLook, BreathNode.Power power) {
-        helper.getbreathAffectedAreaHydro().continueBreathing(world, origin, endOfLook, power);
-        helper.getbreathAffectedAreaHydro().updateTick(world);
-    }
-
-    @Override
     public void spawnClientNodeEntity(World world, Vec3d position, Vec3d direction, BreathNode.Power power, float partialTicks) {
         world.spawnEntity(new HydroBreathFX(world, position, direction, power, partialTicks));
     }
 
 	public void onLivingUpdate(EntityTameableDragon dragon) {
-		PotionEffect watereffect = new PotionEffect(MobEffects.WATER_BREATHING, 20*10, 0, false,false);
-    	if (!dragon.isPotionActive(watereffect.getPotion()) && dragon.isInWater()) { // If the Potion isn't currently active,
-    		dragon.addPotionEffect(watereffect); // Apply a copy of the PotionEffect to the player
+        if (dragon.isInWater()) {
+            EntityUtil.addOrResetEffect(dragon, MobEffects.WATER_BREATHING, 200, 0, false, false, 21);
 		}
-    	doParticles(dragon);
-	}
-	
-
-    private void doParticles(EntityTameableDragon dragon) {
-        if (!dragon.isEgg() && !dragon.isBaby()) {
+        if (dragon.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE)) {
+            World level = dragon.world;
+            Random random = this.rand;
             float s = dragon.getScale() * 1.2f;
-            for (double x1 = 0; x1 < s + 2; ++x1) {
-                double x = dragon.posX + (rand.nextDouble() - 0.5) * (dragon.width - 0.65) * s;
-                double y = dragon.posY + (rand.nextDouble() - 0.5) * dragon.height * s;
-                double z = dragon.posZ + (rand.nextDouble() - 0.5) * (dragon.width - 0.65) * s;
-
-                dragon.world.spawnParticle(EnumParticleTypes.DRIP_WATER, x, y - 1, z, 0, 0, 0);
+            float h = dragon.height * s;
+            float f = (dragon.width - 0.65F) * s;
+            for (int i = -2; i < s; ++i) {
+                level.spawnParticle(
+                        EnumParticleTypes.DRIP_WATER,
+                        dragon.posX + (random.nextDouble() - 0.5) * f,
+                        dragon.posY - 1 + (random.nextDouble() - 0.5) * h,
+                        dragon.posZ + (random.nextDouble() - 0.5) * f,
+                        0,
+                        0,
+                        0
+                );
             }
         }
     }
@@ -99,5 +103,16 @@ public class DragonBreedWater extends DragonBreed {
     @Override
     public SoundEffectName getBreathWeaponSoundEffect(DragonLifeStage stage, SoundState state) {
         return state.water;
+    }
+
+    @Override
+    public BreathWeapon createBreathWeapon(EntityTameableDragon dragon) {
+        return new BreathWeaponHydro(dragon);
+    }
+
+
+    @Override
+    public EnumItemBreedTypes getItemBreed(EntityTameableDragon dragon) {
+        return EnumItemBreedTypes.WATER;
     }
 }
