@@ -1,8 +1,8 @@
 package com.TheRPGAdventurer.ROTD.network;
 
 import com.TheRPGAdventurer.ROTD.capability.ArmorEffectManager;
+import com.TheRPGAdventurer.ROTD.compat.CooldownOverlayCompat;
 import com.TheRPGAdventurer.ROTD.registry.CooldownCategory;
-import com.TheRPGAdventurer.ROTD.util.CooldownOverlayCompat;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.Item;
 import net.minecraft.util.CooldownTracker;
@@ -35,7 +35,7 @@ public class SSyncCooldownPacket implements IMessage {
 
     @Override
     public void toBytes(ByteBuf buffer) {
-        writeVarInt(writeVarInt(buffer, this.id), this.cd);
+        writeVarInt(buffer, this.id, this.cd);
     }
 
     public static class Handler implements IMessageHandler<SSyncCooldownPacket, IMessage> {

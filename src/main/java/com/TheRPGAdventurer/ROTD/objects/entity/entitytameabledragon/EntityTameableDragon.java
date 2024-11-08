@@ -730,7 +730,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
     @SideOnly(Side.CLIENT)
     public void updateKeys() {
         Minecraft mc = Minecraft.getMinecraft();
-        if ((hasControllingPlayer(mc.player) && getControllingPlayer() != null) || mc.player.equals(this.getRidingEntity())) {
+        if (mc.player != null && (hasControllingPlayer(mc.player) || mc.player.equals(this.getRidingEntity()))) {
             boolean isBoosting = ModKeys.BOOST.isKeyDown();
             boolean isDown = ModKeys.DOWN.isKeyDown();
             boolean projectile = ModKeys.KEY_PROJECTILE.isPressed();
@@ -756,7 +756,6 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
 //        }
         if (world.isRemote) {
             this.updateKeys();
-            helpers.values().forEach(DragonHelper::onUpdate);
         }
     }
 
@@ -2252,7 +2251,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
      */
     public int getIntFromArmor(ItemStack stack) {
         if (stack.isEmpty()) return 0;
-        return ModArmour.DRAGON_ARMORS.getInt(stack.getItem());
+        return DMArmors.DRAGON_ARMORS.getInt(stack.getItem());
     }
 
     /**
@@ -2387,7 +2386,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
         }
 
         // figure out to break the boolean loop and make it play armor equip sounds
-        if (ticksExisted > 20 && armor != armor1 && armor1 != 0 && armorStack.getItem() == ModArmour.dragonarmor_diamond && isOldEnoughToBreathe()) {
+        if (ticksExisted > 20 && armor != armor1 && armor1 != 0 && armorStack.getItem() == DMArmors.DIAMOND_DRAGON_ARMOR && isOldEnoughToBreathe()) {
             this.setArmor(armor);
         }
 
@@ -2423,6 +2422,10 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
         }
     }
 
+    public final boolean isFirstUpdate() {
+        return this.firstUpdate;
+    }
+
     /**
      * Credits: AlexThe 666 Ice and Fire
      */
@@ -2435,16 +2438,6 @@ public class EntityTameableDragon extends EntityTameable implements IShearable {
         @Override
         public void onInventoryChanged(IInventory inventory) {
             EntityTameableDragon.this.refreshInventory();
-        }
-    }
-
-    @Deprecated
-    public enum EnumForestType implements IStringSerializable {
-        FOREST, TAIGA, DRY;
-
-        @Override
-        public String getName() {
-            return name().toLowerCase();
         }
     }
 }

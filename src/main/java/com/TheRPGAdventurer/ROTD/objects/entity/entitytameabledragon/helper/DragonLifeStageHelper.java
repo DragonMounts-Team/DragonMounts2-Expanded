@@ -159,11 +159,11 @@ public class DragonLifeStageHelper extends DragonHelper {
      */
     public final void setLifeStage(DragonLifeStage lifeStage) {
         L.trace("setLifeStage({})", lifeStage);
-        if (dragon.isServer()) {
+        if (dragon.world.isRemote) {
+            L.error("setLifeStage called on Client");
+        } else {
             ticksSinceCreationServer = lifeStage.boundaryTick - lifeStage.durationTicks;
             dataWatcher.set(dataParam, ticksSinceCreationServer);
-        } else {
-            L.error("setLifeStage called on Client");
         }
         updateLifeStage();
     }
@@ -242,7 +242,7 @@ public class DragonLifeStageHelper extends DragonHelper {
     private void onNewLifeStage(DragonLifeStage lifeStage, DragonLifeStage prevLifeStage) {
         L.trace("onNewLifeStage({},{})", prevLifeStage, lifeStage);
 
-        if (dragon.isClient()) {
+        if (dragon.world.isRemote) {
             // play particle and sound effects when the dragon hatches
             if (prevLifeStage != null && prevLifeStage.isEgg() && !lifeStage.isBaby()) {
                 playEggCrackEffect();
@@ -251,12 +251,14 @@ public class DragonLifeStageHelper extends DragonHelper {
         } else {
             // update AI
             dragon.getBrain().updateAITasks();
-
             // update attribute modifier
             applyEntityAttributes();
 
             // heal dragon to updated full health
             dragon.setHealth(dragon.getMaxHealth());
+            if (lifeStage.isEgg()) {
+                dragon.getBreedHelper().resetPoints(null);
+            }
         }
         dragon.onLifeStageChange(lifeStage);
     }
@@ -264,15 +266,15 @@ public class DragonLifeStageHelper extends DragonHelper {
     @Override
     public void onLivingUpdate() {
         // if the dragon is not an adult pr paused, update its growth ticks
-        if (dragon.isServer()) {
+        if (dragon.world.isRemote) {
+            ticksSinceCreationClient.updateFromServer(dataWatcher.get(dataParam));
+            if (!isFullyGrown()) ticksSinceCreationClient.tick();
+        } else {
             if (!isFullyGrown() && !dragon.isGrowthPaused()) {
                 ticksSinceCreationServer++;
                 if (ticksSinceCreationServer % TICKS_SINCE_CREATION_UPDATE_INTERVAL == 0)
                     dataWatcher.set(dataParam, ticksSinceCreationServer);
             }
-        } else {
-            ticksSinceCreationClient.updateFromServer(dataWatcher.get(dataParam));
-            if (!isFullyGrown()) ticksSinceCreationClient.tick();
         }
 
         updateLifeStage();
@@ -353,8 +355,8 @@ public class DragonLifeStageHelper extends DragonHelper {
 
     @Override
     public void onDeath() {
-        if (dragon.isClient() && isEgg()) {
-            playEggCrackEffect();
+        if (this.dragon.world.isRemote && this.isEgg()) {
+            this.playEggCrackEffect();
         }
     }
 

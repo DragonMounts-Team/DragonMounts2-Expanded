@@ -98,7 +98,6 @@ public class GuiDragonDebug extends Gui {
                 renderProbe();
             } catch (Exception ex) {
                 renderException(ex);
-                DMUtils.getLogger().error("Error rendering", ex);
             }
 
             if (dragonClient.isDead) {
@@ -282,13 +281,13 @@ public class GuiDragonDebug extends Gui {
         text.setColor(YELLOW);
         text.println("Attributes");
         text.setColor(WHITE);
-        
-        Collection<IAttributeInstance> attribs = dragon.getAttributeMap().getAllAttributes();
-        
-        attribs.forEach(attrib -> {
-            String attribName = net.minecraft.util.text.translation.I18n.translateToLocal("attribute.name." + attrib.getAttribute().getName());
-            String attribValue = dfShort.format(attrib.getAttributeValue());
-            String attribBase = dfShort.format(attrib.getBaseValue());
+
+        Collection<IAttributeInstance> attrs = dragon.getAttributeMap().getAllAttributes();
+
+        attrs.forEach(attr -> {
+            String attribName = DMUtils.translateToLocal("attribute.name." + attr.getAttribute().getName());
+            String attribValue = dfShort.format(attr.getAttributeValue());
+            String attribBase = dfShort.format(attr.getBaseValue());
             text.println(attribName + " = " + attribValue + " (" + attribBase + ")");
         });
         
@@ -369,21 +368,17 @@ public class GuiDragonDebug extends Gui {
     }
     
     private void renderProbe() {
-        if (probe == null) {
-            return;
-        }
-        
+        if (probe == null) return;
         text.setOrigin(16, res.getScaledHeight() - text.getLineSpace() * 2);
-        
-        text.println(probe.getClass().getSimpleName() + ":" + String.valueOf(probe));
+        text.println(probe.getClass().getSimpleName() + ":" + probe);
     }
 
     private void renderException(Exception ex) {
         text.setOrigin(16, 32);
-
         text.setColor(RED);
         text.println("GUI exception:");
         text.printf(ExceptionUtils.getStackTrace(ex));
         text.setColor(WHITE);
+        DMUtils.getLogger().error("Error rendering", ex);
     }
 }

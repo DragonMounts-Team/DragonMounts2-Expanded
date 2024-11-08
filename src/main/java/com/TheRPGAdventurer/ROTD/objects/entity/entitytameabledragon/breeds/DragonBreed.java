@@ -120,11 +120,11 @@ public abstract class DragonBreed {
         return Items.FISH;
     }
 
-    public abstract void onEnable(EntityTameableDragon dragon);
+    public void onEnable(EntityTameableDragon dragon) {}
 
-    public abstract void onDisable(EntityTameableDragon dragon);
+    public void onDisable(EntityTameableDragon dragon) {}
 
-    public abstract void onDeath(EntityTameableDragon dragon);
+    public void onDeath(EntityTameableDragon dragon) {}
 
     public SoundEvent getLivingSound(EntityTameableDragon dragon) {
         if (dragon.isBaby()) {

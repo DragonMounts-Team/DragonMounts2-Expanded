@@ -18,7 +18,6 @@ import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.ai.ground.E
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.ai.ground.EntityAIDragonWatchIdle;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.ai.ground.EntityAIDragonWatchLiving;
 import com.TheRPGAdventurer.ROTD.util.EntityClassPredicate;
-import com.google.common.base.Predicate;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.IMob;
@@ -28,7 +27,7 @@ import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nullable;
+import java.util.Iterator;
 import java.util.stream.Collectors;
 
 /**
@@ -73,6 +72,7 @@ public class DragonBrain extends DragonHelper {
     }
 
     public void updateAITasks() {
+        EntityTameableDragon dragon = this.dragon;
         // only hatchlings are small enough for doors
         // (eggs don't move on their own anyway and are ignored)
         // guessed, based on EntityAIRestrictOpenDoor - break the door down, don't open it
@@ -83,16 +83,23 @@ public class DragonBrain extends DragonHelper {
 
         // clear current navigation target
         dragon.getNavigator().clearPath();
-
-        // clear existing tasks
-        //     clearTasks();
+        EntityAITasks tasks = dragon.tasks;
 
         // eggs don't have any tasks
         if (dragon.isEgg()) {
+            Iterator<EntityAITasks.EntityAITaskEntry> iterator = tasks.taskEntries.iterator();
+            while (iterator.hasNext()) {
+                EntityAITasks.EntityAITaskEntry entry = iterator.next();
+                if (entry.using) {
+                    entry.using = false;
+                    entry.action.resetTask();
+                    tasks.executingTaskEntries.remove(entry);
+                }
+                iterator.remove();
+            }
             return;
         }
 
-        tasks.addTask(0, new EntityAIDragonEgg(dragon));
         tasks.addTask(0, new EntityAIDragonCatchOwner(dragon)); // mutex all
         tasks.addTask(1, new EntityAIDragonPlayerControl(dragon)); // mutex all
         tasks.addTask(2, dragon.getAISit()); // mutex 4+1
@@ -109,11 +116,7 @@ public class DragonBrain extends DragonHelper {
         tasks.addTask(11, new EntityAIDragonWatchLiving(dragon, 16, 0.05f)); // mutex 2
 
 
-        targetTasks.addTask(5, new EntityAINearestAttackableTarget<EntityLiving>(dragon, EntityLiving.class, 10, false, true, new Predicate<EntityLiving>() {
-            public boolean apply(@Nullable EntityLiving p_apply_1_) {
-                return p_apply_1_ != null && IMob.VISIBLE_MOB_SELECTOR.apply(p_apply_1_);
-            }
-        }));
+        targetTasks.addTask(5, new EntityAINearestAttackableTarget<>(dragon, EntityLiving.class, 10, false, true, IMob.VISIBLE_MOB_SELECTOR));
         targetTasks.addTask(5, new EntityAIDragonHunt(dragon, EntityAnimal.class, false, new EntityClassPredicate(EntitySheep.class, EntityPig.class, EntityChicken.class, EntityRabbit.class, EntityLlama.class))); // mutex 1
 
         if (dragon.isBaby() && dragon.onGround) {

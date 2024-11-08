@@ -7,14 +7,18 @@ import com.TheRPGAdventurer.ROTD.inits.*;
 import com.TheRPGAdventurer.ROTD.objects.blocks.BlockDragonBreedEgg;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.DragonBreedForest;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
+import com.TheRPGAdventurer.ROTD.objects.items.EnumItemBreedTypes;
 import com.TheRPGAdventurer.ROTD.objects.items.ItemDragonBreedEgg;
 import com.TheRPGAdventurer.ROTD.objects.tileentities.TileEntityDragonShulker;
 import com.TheRPGAdventurer.ROTD.registry.CooldownCategory;
 import com.TheRPGAdventurer.ROTD.util.DMUtils;
 import com.TheRPGAdventurer.ROTD.util.IHasModel;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
@@ -25,6 +29,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.DataSerializerEntry;
 import net.minecraftforge.registries.IForgeRegistry;
 
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 import static com.TheRPGAdventurer.ROTD.DragonMounts.makeId;
@@ -45,7 +50,7 @@ public class RegistryEventHandler {
         Consumer<Item> register = event.getRegistry()::register;
         ModItems.ITEMS.forEach(register);
         ModTools.TOOLS.forEach(register);
-        ModArmour.ARMOR.forEach(register);
+        DMArmors.ARMOR.forEach(register);
         register.accept(ItemDragonBreedEgg.DRAGON_BREED_EGG.setRegistryName("dragon_egg"));
         DMUtils.getLogger().info("Item Registries Successfully Registered!");
     }
@@ -73,10 +78,6 @@ public class RegistryEventHandler {
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
         //DragonMounts.proxy.registerModel(Item.getItemFromBlock(ModBlocks.DRAGONSHULKER), 0);
-
-        // Register item render for amulet item variants
-        DragonMounts.proxy.registerAmuletRenderer();
-        
         for (Block block : ModBlocks.BLOCKS) {
         	if (block instanceof IHasModel) {
         		((IHasModel) block).RegisterModels();
@@ -93,18 +94,38 @@ public class RegistryEventHandler {
             ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName().toString(), "inventory"));
         }
 
-        for (Item item : ModArmour.ARMOR) {
+        for (Item item : DMArmors.ARMOR) {
             ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName().toString(), "inventory"));
         }
 
         // register item renderer for dragon egg block variants
-        Item eggItem = ItemDragonBreedEgg.DRAGON_BREED_EGG;
         String modelLocation = DragonMountsTags.MOD_ID + ":dragon_egg";
-        EnumDragonBreed.META_MAPPING.forEach(
-                (breed, meta) -> ModelLoader.setCustomModelResourceLocation(eggItem, meta, new ModelResourceLocation(modelLocation, "breed=" + breed.getName()))
-        );
+        Arrays.stream(EnumDragonBreed.values()).forEach(breed -> ModelLoader.setCustomModelResourceLocation(
+                ItemDragonBreedEgg.DRAGON_BREED_EGG,
+                breed.meta,
+                new ModelResourceLocation(modelLocation, "breed=" + breed.identifier)
+        ));
 
-      DMUtils.getLogger().info("Models Sucessfully Registered");
+        {// Amulets
+            EnumItemBreedTypes[] types = EnumItemBreedTypes.values();
+            int size = types.length;
+            Object2ObjectOpenHashMap<String, ModelResourceLocation> mapping = new Object2ObjectOpenHashMap<>();
+            ModelResourceLocation empty = new ModelResourceLocation("dragonmounts:dragon_amulet");
+            ModelResourceLocation[] models = new ModelResourceLocation[size + 1];
+            models[0] = empty;
+            for (int i = 0; i < size; ) {
+                EnumItemBreedTypes breed = types[i];
+                ModelResourceLocation model = new ModelResourceLocation("dragonmounts:" + breed.identifier + "_dragon_amulet");
+                mapping.put(breed.identifier, model);
+                models[++i] = model;
+            }
+            ModelLoader.setCustomMeshDefinition(ModItems.Amulet, stack -> {
+                NBTTagCompound root = stack.getTagCompound();
+                return root == null ? empty : mapping.get(root.getString("breed"));
+            });
+            ModelBakery.registerItemVariants(ModItems.Amulet, models);
+        }
+        DMUtils.getLogger().info("Models Sucessfully Registered");
     }
 
     public static void preInitRegistries() {

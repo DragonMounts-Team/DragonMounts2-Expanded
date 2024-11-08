@@ -9,6 +9,7 @@ bowModel = ResourceLocation('item/bow')
 blockingPredicate = ResourceLocation('blocking')
 pullingPredicate = ResourceLocation('pulling')
 pullPredicate = ResourceLocation('pull')
+amuletModel = makeId('item/dragon_amulet')
 
 def basicItem(output: Output, identifier: ResourceLocation, texture: ResourceLocation = None):
   model(generatedModel)\
@@ -57,6 +58,11 @@ def dragonScaleBowItem(output: Output, breed: ItemBreedType):
     .end()\
     .save(output, pathBase.path)
 
+def dragonAmuletItem(output, breed: str, name: str):
+  model(amuletModel)\
+    .texture('layer0', makeId('items/amulet/' + name + '_dragon_amulet'))\
+    .save(output, breed + '_dragon_amulet')
+
 def generateItemModels(output: Output):
   shieldModel = makeId('item/shield/shield')
   blockingShieldModel = makeId('item/shield/shield_blocking')
@@ -66,8 +72,10 @@ def generateItemModels(output: Output):
       name = 'end'
     else:
       name = breed.value.path
-    if (breed is ItemBreedType.NETHER2 or breed is ItemBreedType.STORM2): continue
-    if breed is ItemBreedType.MOONLIGHT_MALE:
+    if (breed is ItemBreedType.NETHER2 or breed is ItemBreedType.STORM2):
+      dragonAmuletItem(output, name, name[:-1])
+      continue
+    if breed is ItemBreedType.MOONLIGHT_FEMALE:
       dragonScalesItem(output, breed)
       dragonScaleArmorItem(output, name, 'boots')
       dragonScaleArmorItem(output, name, 'cap')
@@ -79,7 +87,11 @@ def generateItemModels(output: Output):
       dragonScaleToolItem(output, breed, 'shovel')
       dragonScaleToolItem(output, breed, 'sword')
       dragonScaleBowItem(output, breed)
-    elif (breed is not ItemBreedType.FIRE2 and breed is not ItemBreedType.SUNLIGHT2 and breed is not ItemBreedType.TERRA2):
+      dragonAmuletItem(output, name, name[:-1])
+    elif (breed is ItemBreedType.FIRE2 or breed is ItemBreedType.SUNLIGHT2 or breed is ItemBreedType.TERRA2):
+      dragonAmuletItem(output, name, name[:-1])
+    else:
+      dragonAmuletItem(output, name, name)
       model(spawnEggModel).save(output, 'summon_' + name)
     if (breed is ItemBreedType.SKELETON or breed is ItemBreedType.WITHER): continue
     root = 'dragon_shield_' + name

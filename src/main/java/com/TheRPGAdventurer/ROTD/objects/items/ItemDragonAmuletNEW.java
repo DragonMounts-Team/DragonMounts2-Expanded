@@ -6,6 +6,7 @@ import com.TheRPGAdventurer.ROTD.inits.ModItems;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.items.entity.EntityDragonAmulet;
 import com.TheRPGAdventurer.ROTD.util.DMUtils;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -23,6 +24,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -35,7 +38,13 @@ import java.util.List;
  *
  * @author WolfShotz
  */
-public class ItemDragonAmuletNEW extends Item {
+public class ItemDragonAmuletNEW extends Item implements ICapabilityProvider {
+    private static final Reference2ObjectOpenHashMap<Capability<?>, Object> CAPABILITIES = new Reference2ObjectOpenHashMap<>();
+
+    public static <T> void registerCapability(Capability<T> capability, T instance) {
+        CAPABILITIES.put(capability, instance);
+    }
+
     public ItemDragonAmuletNEW() {
         String name = "dragon_amulet";
         this.setRegistryName(DragonMountsTags.MOD_ID, name);
@@ -72,7 +81,7 @@ public class ItemDragonAmuletNEW extends Item {
                 } else {
                     tag.setString("LocName", dragon.makeTranslationKey());
                 }
-                tag.setString("OwnerName", dragon.getOwner().getName());
+                tag.setString("OwnerName", player.getName());
                 target.writeToNBT(tag);
                 player.setHeldItem(hand, stack);
                 if (dragon.getLeashed()) dragon.clearLeashed(true, true); // Fix Lead Dupe exploit
@@ -100,7 +109,7 @@ public class ItemDragonAmuletNEW extends Item {
 
         if (dragon.isAllowed(player)) {
             BlockPos blockPos = pos.offset(facing);
-            dragon.setPosition(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+            dragon.setPosition(blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5);
             stack.setTagCompound(null);
             player.setHeldItem(hand, stack);
             world.spawnEntity(dragon);
@@ -122,7 +131,6 @@ public class ItemDragonAmuletNEW extends Item {
                 String name = DMUtils.translateToLocal(nbt.getString("LocName"), nbt, "Name");
                 String type = nbt.getString("breed");
                 tooltip.add(I18n.format("tooltip.dragonmounts.name", type.isEmpty() ? name : EnumItemBreedTypes.byName(type).color + name));
-
             }
             tooltip.add(I18n.format("tooltip.dragonmounts.health", TextFormatting.GREEN.toString() + Math.round(nbt.getDouble("Health"))));
             tooltip.add(I18n.format("tooltip.dragonmounts.owner", TextFormatting.GOLD + nbt.getString("OwnerName")));
@@ -153,5 +161,23 @@ public class ItemDragonAmuletNEW extends Item {
     @Override
     public boolean hasCustomEntity(ItemStack stack) {
         return true;
+    }
+
+    @Nullable
+    @Override
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+        return this;
+    }
+
+    @Override
+    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+        return CAPABILITIES.containsKey(capability);
+    }
+
+    @Nullable
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+        return (T) CAPABILITIES.get(capability);
     }
 }

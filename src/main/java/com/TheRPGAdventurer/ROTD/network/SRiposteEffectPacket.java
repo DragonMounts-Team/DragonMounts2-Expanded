@@ -37,7 +37,7 @@ public class SRiposteEffectPacket implements IMessage {
 
     @Override
     public void toBytes(ByteBuf buffer) {
-        writeVarInt(writeVarInt(buffer, this.id), this.flag);
+        writeVarInt(buffer, this.id, this.flag);
     }
 
     public static class Handler implements IMessageHandler<SRiposteEffectPacket, IMessage> {

@@ -17,7 +17,7 @@ public class DMCapabilities {
     public static final ResourceLocation ARMOR_EFFECT_MANAGER_ID = makeId("armor_effect_manager");
 
     @CapabilityInject(IArmorEffectManager.class)
-    public static Capability<IArmorEffectManager> ARMOR_EFFECT_MANAGER;
+    public static final Capability<IArmorEffectManager> ARMOR_EFFECT_MANAGER = null;
 
     public static void register() {
         CapabilityManager.INSTANCE.register(IArmorEffectManager.class, new ArmorEffectManager.Storage(), () -> null);

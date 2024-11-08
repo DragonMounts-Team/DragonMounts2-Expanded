@@ -100,7 +100,7 @@ public class BreathWeaponHydro extends BreathWeapon {
      * or otherwise not affected
      */
     @Override
-    public BreathAffectedEntity affectEntity(World world, Integer entityID, BreathAffectedEntity currentHitDensity) {
+    public BreathAffectedEntity affectEntity(World world, int entityID, BreathAffectedEntity currentHitDensity) {
         checkNotNull(world);
         checkNotNull(entityID);
         checkNotNull(currentHitDensity);

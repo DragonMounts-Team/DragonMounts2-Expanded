@@ -27,7 +27,7 @@ public class ItemDragonBreedEgg extends ItemBlock {
         int meta = stack.getMetadata();
         String breed = BREED_CACHE.get(meta);
         if (breed == null) {
-            breed = "entity.DragonMount." + EnumDragonBreed.META_MAPPING.inverse().get(meta).getName() + ".name";
+            breed = "entity.DragonMount." + EnumDragonBreed.byMeta(meta).getName() + ".name";
             BREED_CACHE.put(meta, breed);
         }
         return I18n.translateToLocalFormatted("item.dragonEgg.name", I18n.translateToLocal(breed));

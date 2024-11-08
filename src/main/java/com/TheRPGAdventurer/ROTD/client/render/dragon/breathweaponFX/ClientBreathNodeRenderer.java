@@ -18,6 +18,7 @@ public class ClientBreathNodeRenderer extends Render<ClientBreathNodeEntity> {
     @Override
     public void doRender(ClientBreathNodeEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
         GlStateManager.pushMatrix();
+        GlStateManager.disableLighting();
         this.bindEntityTexture(entity);
         GlStateManager.translate(x, y, z);
         GlStateManager.enableRescaleNormal();
@@ -55,6 +56,7 @@ public class ClientBreathNodeRenderer extends Render<ClientBreathNodeEntity> {
             GlStateManager.disableColorMaterial();
         }
         GlStateManager.disableRescaleNormal();
+        GlStateManager.enableLighting();
         GlStateManager.popMatrix();
     }
 

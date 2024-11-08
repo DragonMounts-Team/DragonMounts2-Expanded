@@ -34,6 +34,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -63,17 +64,17 @@ public class BlockDragonBreedEgg extends BlockDragonEgg {
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(BREED, EnumDragonBreed.META_MAPPING.inverse().get(meta));
+        return getDefaultState().withProperty(BREED, EnumDragonBreed.byMeta(meta));
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return EnumDragonBreed.META_MAPPING.get(state.getValue(BREED));
+        return state.getValue(BREED).meta;
     }
 
     @Override
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
-        EnumDragonBreed.META_MAPPING.values().forEach(index -> items.add(new ItemStack(this, 1, index)));
+        Arrays.stream(EnumDragonBreed.values()).forEach(breed -> items.add(new ItemStack(this, 1, breed.meta)));
     }
 
     @Override

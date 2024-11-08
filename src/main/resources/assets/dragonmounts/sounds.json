@@ -246,5 +246,8 @@
     "sounds": [
       "dragonmounts:mob/dragon/breathweapon/air/breatheairstop"
     ]
+  },
+  "silence": {
+    "sounds": []
   }
 }

@@ -1,0 +1,240 @@
+# 日本語訳
+
+# Creative Menu's
+itemGroup.maintab=ドラゴンマウント
+itemGroup.armorytab=ドラゴンマウント装備
+
+##
+# Dragon Names
+##
+entity.DragonMount.name=ドラゴン
+
+entity.DragonMount.ice.name=アイスドラゴン
+entity.DragonMount.end.name=エンダードラゴン
+entity.DragonMount.ender.name=エンダードラゴン
+entity.DragonMount.aether.name=エーテルドラゴン
+entity.DragonMount.forest.name=フォレストドラゴン
+entity.DragonMount.sylphid.name=ウォータードラゴン
+entity.DragonMount.nether.name=ネザードラゴン
+entity.DragonMount.fire.name=ファイアドラゴン
+entity.DragonMount.skeleton.name=スケルトンドラゴン
+entity.DragonMount.wither.name=ウィザードラゴン
+entity.DragonMount.enchant.name=エンチャントドラゴン
+entity.DragonMount.sunlight.name=サンライトドラゴン
+entity.DragonMount.storm.name=ストームドラゴン
+entity.DragonMount.zombie.name=ゾンビドラゴン
+entity.DragonMount.terra.name=テラドラゴン
+entity.DragonMount.moonlight.name=ムーンライトドラゴン
+
+entity.DragonMount.albino.ice.name=アルビノアイスドラゴン
+entity.DragonMount.albino.ender.name=アルビノエンダードラゴン
+entity.DragonMount.albino.aether.name=アルビノエーテルドラゴン
+entity.DragonMount.albino.forest.name=アルビノフォレストドラゴン
+entity.DragonMount.albino.sylphid.name=アルビノウォータードラゴン
+entity.DragonMount.albino.nether.name=アルビノネザードラゴン
+entity.DragonMount.albino.fire.name=アルビノファイアドラゴン
+entity.DragonMount.albino.skeleton.name=アルビノスケルトンドラゴン
+entity.DragonMount.albino.wither.name=アルビノウィザードラゴン
+entity.DragonMount.albino.enchant.name=アルビノエンチャントドラゴン
+entity.DragonMount.albino.sunlight.name=アルビノサンライトドラゴン
+entity.DragonMount.albino.storm.name=アルビノストームドラゴン
+entity.DragonMount.albino.zombie.name=アルビノゾンビドラゴン
+entity.DragonMount.albino.terra.name=アルビノテラドラゴン
+entity.DragonMount.albino.moonlight.name=アルビノムーンライトドラゴン
+
+entity.DragonMounts.dragon.ice.name=アイスドラゴン
+entity.DragonMounts.dragon.ender.name=エンダードラゴン
+entity.DragonMounts.dragon.aether.name=エーテルドラゴン
+entity.DragonMounts.dragon.forest.name=フォレストドラゴン
+entity.DragonMounts.dragon.sylphid.name=ウォータードラゴン
+entity.DragonMounts.dragon.nether.name=ネザードラゴン
+entity.DragonMounts.dragon.fire.name=ファイアドラゴン
+entity.DragonMounts.dragon.skeleton.name=スケルトンドラゴン
+entity.DragonMounts.dragon.wither.name=ウィザードラゴン
+entity.DragonMounts.dragon.enchant.name=エンチャントドラゴン
+entity.DragonMounts.dragon.sunlight.name=サンライトドラゴン
+entity.DragonMounts.dragon.storm.name=ストームドラゴン
+entity.DragonMounts.dragon.zombie.name=ゾンビドラゴン
+entity.DragonMounts.dragon.terra.name=テラドラゴン
+entity.DragonMounts.dragon.moonlight.name=ムーンライトドラゴン
+
+
+#Breeds
+dragon.forest=フォレスト
+dragon.forest2=フォレスト
+dragon.aether=エーテル
+dragon.ice=アイス
+dragon.sylphid=ウォーター
+dragon.water=ウォーター
+dragon.fire=ファイア
+dragon.fire2=ファイヤ
+dragon.skeleton=スケルトン
+dragon.wither=ウィザー
+dragon.nether=ネザー
+dragon.nether2=ネザー
+dragon.end=エンダー
+dragon.ender=エンダー
+dragon.enchant=エンチャント
+dragon.sunlight=サンライト
+dragon.sunlight2=サンライト
+dragon.moonlight=ムーンライト
+dragon.moonlight2=ムーンライト
+dragon.storm=ストーム
+dragon.storm2=ストーム
+dragon.zombie=ゾンビ
+dragon.terra=テラ
+dragon.terra2=テラ
+
+#Stage
+dragon.egg=ドラゴンの卵
+#Untranslated
+dragon.infant=Infant
+dragon.hatchling=幼生
+#Untranslated
+dragon.prejuvenile=Pre-Juvenile
+dragon.juvenile=幼体
+dragon.adult=成体
+
+
+##
+# Item Names
+##
+item.diamond_shears.name=ダイヤのハサミ
+item.dragonEgg.name=%s ドラゴンの卵
+item.dragon_gender.name=ドラゴンジェンダージェム
+item.gui.dragon_gender=所有しているドラゴンを宝石で右クリックすると性別が切り替わります
+item.summon_egg.name=ドラゴンのスポーンエッグ
+item.dragon_essence.name=ドラゴンエッセンス
+item.dragon_whistle.name=ドラゴンホイッスル
+item.dragon_amulet.name=ドラゴンアミュレット
+item.dragon_orb.name=ドラゴンオーブ
+
+item.carriage_oak.name=オークのカーゴボブ
+item.carriage_birch.name=白樺のカーゴボブ
+item.carriage_spruce.name=トウヒのカーゴボブ
+item.carriage_acacia.name=アカシアのカーゴボブ
+item.carriage_dark_oak.name=ダークオークのカーゴボブ
+item.carriage_jungle.name=ジャングルのカーゴボブ
+
+# Armory Items
+item.dragonscales.name=ドラゴンスケール
+item.dragon_sword.name=ドラゴンソード
+item.dragon_pickaxe.name=ドラゴンピッケル
+item.dragon_axe.name=ドラゴンアックス
+item.dragon_shovel.name=ドラゴンシャベル
+item.dragon_hoe.name=ドラゴンのクワ
+item.dragon_shield.name=ドラゴンシールド
+item.dragon_bow.name=ドラゴンボウ
+item.dragonscale_head.name=ドラゴンスケールキャップ
+item.dragonscale_chest.name=ドラゴンスケールチェスト
+item.dragonscale_legs.name=ドラゴンスケールレギンス
+item.dragonscale_feet.name=ドラゴンスケールブーツ
+item.dragonarmor_diamond.name=ダイヤモンドドラゴンアーマー
+item.dragonarmor_iron.name=アイアンドラゴンアーマー
+item.dragonarmor_gold.name=ゴールドドラゴンアーマー
+item.dragonarmor_emerald.name=エメラルドドラゴンアーマー
+
+# Tiles
+tile.pileofsticks.name=ネストブロック
+tile.block_dragon_shulker.name=ドラゴンコア
+
+tile.storm_egg.name=ストームドラゴンエッグ
+tile.end_egg.name=エンダードラゴンエッグ
+tile.zombie_egg.name=ゾンビドラゴンエッグ
+tile.sylphid_egg.name=ウォータードラゴンエッグ
+tile.nether_egg.name=ネザードラゴンエッグ
+tile.forest_egg.name=フォレストドラゴンエッグ
+tile.aether_egg.name=エーテルドラゴンエッグ
+tile.ice_egg.name=アイスドラゴンエッグ
+tile.fire_egg.name=ファイアドラゴンエッグ
+tile.skeleton_egg.name=スケルトンドラゴンエッグ
+tile.wither_egg.name=ウィザードラゴンエッグ
+tile.enchant_egg.name=エンチャントドラゴンエッグ
+tile.sunlight_egg.name=サンライトドラゴンエッグ
+tile.moonlight_egg.name=ムーンライトドラゴンエッグ
+tile.terra_egg.name=テラドラゴンエッグ
+
+# Item Info
+item.removeNBT=<スニーク+右クリックでドラゴンの拘束を解除>
+item.armoryitems.info=の鱗で鍛えられた
+item.diamondshears.info=飼いならされたドラゴンを殺さずに鱗を手に入れるために使用します。飼いならされていないドラゴンは攻撃してきます
+item.dragonamulet.info=右クリックしてドラゴンを保管して運び、地面を右クリックすると召喚できます
+item.carriage.info=ドラゴンがボートのように複数の乗客を運ぶために使用される
+item.whistle.info=所有している飼いならしたドラゴンを右クリックして操作します
+item.whistle.nullBlockPos=テレポートできません
+
+
+##
+# Messages
+##
+dragon.locked=このドラゴンはオーナーによってロックされています
+dragon.notTamed=肉や魚を使ってドラゴンを飼いならします
+dragon.notOwned=このドラゴンはあなたのものではありません
+entity.dragon.tooYoung=ドラゴンはまだ若すぎます、成長させましょう
+egg.cantHatchEnd.DragonMounts=ドラゴンの卵はジ・エンドでは孵化できません
+dragon.growth.paused=毒ジャガイモはドラゴンの成長を止めますが、成長を続けるにはニンジンを使用してください
+commands.dragon.nodragons=近くにドラゴンがいません
+commands.dragon.canttame=ドラゴンを飼いならすことが出来ません
+msg.dragon.toggleHover=ドラゴンのホバリング ON OFF
+msg.dragon.toggleFollowYaw=プレイヤーの水平視点に追従して回転 ON OFF
+msg.dragon.toggleYLock=プレイヤーの垂直視点に追従して上昇、降下を無視 ON OFF(スペースと左 ALT)
+
+# Whistle
+whistle.msg.cleared=ドラゴンは解放された
+whistle.msg.hasDragon=ドラゴンはホイッスルにバインドされた
+whistle.msg.unBound=先にドラゴンをバインドしなければならない
+whistle.msg.notOwned=このドラゴンはあなたのものではありません
+whistle.msg.noDragon=ドラゴンホイッスルはドラゴンにバインドされていません。まず所有して飼いならしたドラゴンを左クリックしてください
+whistle.msg.fail=ドラゴンは笛の音を聞くことができません...
+whistle.command.new_home=新しいホームポジション
+
+
+##
+# Gui Names
+##
+gui.nothing=無し
+gui.circle=サークルプレイヤー
+gui.followFlying=飛行を追跡
+gui.cometoPlayer=プレイヤーの元に来る
+gui.locked.dragon=ロック
+gui.unlocked.dragon=アンロック
+gui.dragon.sit=座る
+gui.firesupport=火力支援
+gui.dragon.hunger=飢え
+container.dragon_shulker=ドラゴンコンテナー
+
+#Controls
+key.categories.dragon=ドラゴンマウント
+key.dragon.projectile=未使用
+key.dragon.breath=ドラゴンブレス
+key.dragon.cancelhover=ホバリングの停止
+key.dragon.f7=マウントカメラの変更
+key.dragon.followYaw=プレイヤーの水平視点に追従
+key.dragon.boost=スピードブースト
+key.dragon.dismount=肩から降りる
+key.dragon.lockY=プレイヤーの垂直視点に追従して上昇、下降を無視
+key.dragon.down=降下
+
+tooltip.armor_effect.dragonmounts.aether=着用者が全力疾走しているとき、5秒間移動速度上昇 IIを適用します
+tooltip.armor_effect.dragonmounts.enchant=着用者が倒したターゲットは120%の追加EXPをドロップする
+tooltip.armor_effect.dragonmounts.ender=着用者の体力が5未満のとき、30秒間耐性 IIIを適用し、15秒間攻撃力上昇 IIを適用します
+tooltip.armor_effect.dragonmounts.fire=着用者が炎上すると、30秒間火炎耐性 Iが適用されます
+tooltip.armor_effect.dragonmounts.forest=着用者がダメージを受けると、10秒間再生能力 IIを適用します
+tooltip.armor_effect.dragonmounts.ice=着用者がダメージを受けると、5メートル以内のターゲットに10秒間の移動速度低下 IIを適用し、ノックバックする
+tooltip.armor_effect.dragonmounts.moonlight=暗視 Iを30秒間適用する
+tooltip.armor_effect.dragonmounts.nether=着用者がダメージを受けると、5メートル以内のターゲットを10秒間炎上させ、ノックバックさせる。
+tooltip.armor_effect.dragonmounts.storm=着用者からの攻撃は、対象にダメージを与えた後に5%%の確率で稲妻を召喚する。
+tooltip.armor_effect.dragonmounts.sunlight=着用者の飢餓値が10未満のとき、10秒間満腹度 Iを適用する。
+tooltip.armor_effect.dragonmounts.terra=30秒間、採掘速度上昇 Iを適用します。
+tooltip.armor_effect.dragonmounts.water=着用者が水中にいる場合、水中呼吸Iを30秒間適用する
+tooltip.armor_effect.dragonmounts.zombie=夜に15秒間、攻撃力上昇 Iを適用します
+tooltip.dragonmounts.armor_effect_cooldown=クールダウン: %ss
+tooltip.dragonmounts.armor_effect_fishing_luck=着用者が釣りをしているとき、クールダウンなしで10秒間幸運 Iを適用します。
+tooltip.dragonmounts.armor_effect_piece_4=4セット効果:
+tooltip.dragonmounts.armor_effect_remaining_cooldown=残りのクールダウン: %ss
+tooltip.dragonmounts.whistle.name=ドラゴンホイッスル (%s)
+tooltip.dragonmounts.age=年齢: %s
+tooltip.dragonmounts.name=名前: %s
+tooltip.dragonmounts.health=健康: %s
+tooltip.dragonmounts.owner=所有者: %s
+tooltip.dragonmounts.gender=性別: %s

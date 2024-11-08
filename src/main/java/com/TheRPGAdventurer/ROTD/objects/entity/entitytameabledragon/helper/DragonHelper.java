@@ -9,12 +9,11 @@
  */
 package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper;
 
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.EntityDataManager;
 
 import java.util.Random;
-
-import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 
 /**
  *
@@ -36,7 +35,6 @@ public abstract class DragonHelper {
     public void readFromNBT(NBTTagCompound nbt) {}
     public void applyEntityAttributes() {}
     public void onLivingUpdate() {}
-    public void onUpdate() {}
     public void onDeathUpdate() {}
     public void onDeath() {}
 }

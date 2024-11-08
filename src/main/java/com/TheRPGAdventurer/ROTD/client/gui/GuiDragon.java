@@ -36,9 +36,8 @@ public class GuiDragon extends GuiContainer {
     private EntityTameableDragon dragon;
     private float mousePosX;
     private float mousePosY;
-    private LockButton lock;
+    private LockButton lockButton;
     //    private GuiButton dismount;
-    private GuiButton sit;
     private EntityPlayer player;
 
     public GuiDragon(EntityPlayer player, EntityTameableDragon dragon) {
@@ -46,7 +45,7 @@ public class GuiDragon extends GuiContainer {
         this.player = player;
         this.dragon = dragon;
         this.allowUserInput = false;
-        this.ySize = 213;
+        this.ySize = 214;
         this.xSize = 176;
     }
 
@@ -86,7 +85,7 @@ public class GuiDragon extends GuiContainer {
         hunger(x, y);
 
         this.mc.getTextureManager().bindTexture(offhand);
-        drawModalRectWithCustomSizedTexture(x - 18, y + 185, 0.0F, 0.0F, 22, 28, 22, 28);
+        drawModalRectWithCustomSizedTexture(x - 22, y + 184, 0.0F, 0.0F, 25, 30, 25, 30);
 
         int size = 0;
         switch (dragon.getLifeStageHelper().getLifeStage()) {
@@ -119,30 +118,23 @@ public class GuiDragon extends GuiContainer {
 
     @Override
     public void initGui() {
+        super.initGui();
         this.buttonList.clear();
         Keyboard.enableRepeatEvents(true);
-
-        lock = new LockButton(0, width / 2 + 65, height / 2 - 53, 18, 20, dragon);
-        sit = new GuiButton(1, width / 2 + 47, height / 2 - 53, 18, 20, DMUtils.translateToLocal("gui.dragon.sit"));
-
-        buttonList.add(lock);
-        buttonList.add(sit);
-        super.initGui();
+        buttonList.add(lockButton = new LockButton(2, width / 2 + 63, height / 2 - 54, 18, 20, dragon));
+        buttonList.add(new GuiButton(1, width / 2 + 45, height / 2 - 54, 18, 20, DMUtils.translateToLocal("gui.dragon.sit")));
     }
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
-        boolean sit = button == this.sit;
-        boolean lock = button == this.lock;
-        if (sit) {
-            DragonMounts.NETWORK_WRAPPER.sendToServer(new MessageDragonGui(dragon.getUniqueID(), 1));
-        } else if (lock) {
-            DragonMounts.NETWORK_WRAPPER.sendToServer(new MessageDragonGui(dragon.getUniqueID(), 2));
+        int id = button.id;
+        if (id == 1 || id == 2) {
+            DragonMounts.NETWORK_WRAPPER.sendToServer(new MessageDragonGui(dragon.getEntityId(), id));
         }
     }
 
     public void updateScreen() {
-        lock.enabled = (player == dragon.getOwner());
+        lockButton.enabled = (player == dragon.getOwner());
     }
 
     @Override

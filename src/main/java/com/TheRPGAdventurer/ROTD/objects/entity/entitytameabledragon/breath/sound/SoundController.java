@@ -1,8 +1,8 @@
 package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound;
 
+import com.TheRPGAdventurer.ROTD.util.DMUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSound;
-import net.minecraft.client.multiplayer.WorldClient;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -15,22 +15,22 @@ import java.util.Map;
  */
 public class SoundController {
     private HashMap<PositionedSound, SoundEffectTickLink> soundEffectsToTick = new HashMap<PositionedSound, SoundEffectTickLink>();
-    private WorldClient worldClient;
 
-    public SoundController(WorldClient i_world) {
-        worldClient = i_world;
-    }
+    public SoundController() {}
 
     public void playSound(PositionedSound sound) {
+        DMUtils.getLogger().info("play sound 1");
         Minecraft.getMinecraft().getSoundHandler().playSound(sound);
     }
 
     public void playSound(PositionedSound sound, SoundEffectTickLink soundEffectTickLink) {
+        DMUtils.getLogger().info("play sound 2");
         Minecraft.getMinecraft().getSoundHandler().playSound(sound);
         soundEffectsToTick.put(sound, soundEffectTickLink);
     }
 
     public void stopSound(PositionedSound sound) {
+        DMUtils.getLogger().info("stop sound");
         Minecraft.getMinecraft().getSoundHandler().stopSound(sound);
         soundEffectsToTick.remove(sound);
     }

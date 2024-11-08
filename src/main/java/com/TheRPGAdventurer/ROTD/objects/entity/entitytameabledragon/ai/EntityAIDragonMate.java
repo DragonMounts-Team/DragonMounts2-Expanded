@@ -43,7 +43,7 @@ public class EntityAIDragonMate extends EntityAIDragonBase {
             return false;
         } else {
             dragonMate = getNearbyMate();
-            return dragonMate != null && (dragon.isMale() && !dragonMate.isMale() || !dragon.isMale() && dragonMate.isMale()) && !dragonMate.isInLove();
+            return dragonMate != null && dragon.isMale() ^ dragonMate.isMale() && /*!*/dragonMate.isInLove();
         }
     }
 

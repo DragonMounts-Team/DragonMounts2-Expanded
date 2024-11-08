@@ -2,10 +2,10 @@ package com.TheRPGAdventurer.ROTD.capability;
 
 import com.TheRPGAdventurer.ROTD.api.IArmorEffect;
 import com.TheRPGAdventurer.ROTD.api.IArmorEffectSource;
+import com.TheRPGAdventurer.ROTD.compat.CooldownOverlayCompat;
 import com.TheRPGAdventurer.ROTD.network.SInitCooldownPacket;
 import com.TheRPGAdventurer.ROTD.network.SSyncCooldownPacket;
 import com.TheRPGAdventurer.ROTD.registry.CooldownCategory;
-import com.TheRPGAdventurer.ROTD.util.CooldownOverlayCompat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;

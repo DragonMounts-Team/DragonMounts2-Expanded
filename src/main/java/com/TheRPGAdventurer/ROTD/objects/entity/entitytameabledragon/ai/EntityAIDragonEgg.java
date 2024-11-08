@@ -2,6 +2,7 @@ package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.ai;
 
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 
+@Deprecated
 public class EntityAIDragonEgg extends EntityAIDragonBase {
     public EntityAIDragonEgg(EntityTameableDragon dragon) {
         super(dragon);

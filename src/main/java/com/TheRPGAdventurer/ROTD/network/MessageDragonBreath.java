@@ -7,56 +7,53 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
+import static com.TheRPGAdventurer.ROTD.util.VarInt.readVarInt;
+import static com.TheRPGAdventurer.ROTD.util.VarInt.writeVarInt;
+
 public class MessageDragonBreath implements IMessage {
+    public int dragonId;
+    public boolean isBreathing;
 
-	public int dragonId;
-	public boolean isBreathing;
-//	public boolean isProjectile;
+    //	public boolean isProjectile;
+    public MessageDragonBreath() {}
 
-	public MessageDragonBreath(int dragonId, boolean isBreathing) {
-		this.dragonId = dragonId;
-		this.isBreathing = isBreathing;
+    public MessageDragonBreath(int dragonId, boolean isBreathing) {
+        this.dragonId = dragonId;
+        this.isBreathing = isBreathing;
 //		this.isProjectile=isProjectile;
-	}
+    }
 
-	public MessageDragonBreath() {
-	}
 
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		dragonId = buf.readInt();
-		isBreathing = buf.readBoolean();
+    @Override
+    public void fromBytes(ByteBuf buf) {
+        this.dragonId = readVarInt(buf);
+        this.isBreathing = buf.readBoolean();
 //		isProjectile = buf.readBoolean();
-	}
+    }
 
-	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(dragonId);
-		buf.writeBoolean(isBreathing);
+    @Override
+    public void toBytes(ByteBuf buf) {
+        writeVarInt(buf, this.dragonId);
+        buf.writeBoolean(this.isBreathing);
 //		buf.writeBoolean(isProjectile);
-	}
+    }
 
-	public static class MessageDragonBreathHandler implements IMessageHandler<MessageDragonBreath, IMessage> {
-		@Override
-		public IMessage onMessage(MessageDragonBreath message, MessageContext ctx) {
-			Entity entity = ctx.getServerHandler().player.world.getEntityByID(message.dragonId);
-			if (entity instanceof EntityTameableDragon) {
-				EntityTameableDragon dragon = (EntityTameableDragon) entity;
-				if (message.isBreathing) {
-					dragon.setUsingBreathWeapon(true);
-				} else {
-					dragon.setUsingBreathWeapon(false);
-				}
+    public static class MessageDragonBreathHandler implements IMessageHandler<MessageDragonBreath, IMessage> {
+        @Override
+        public IMessage onMessage(MessageDragonBreath message, MessageContext ctx) {
+            Entity entity = ctx.getServerHandler().player.world.getEntityByID(message.dragonId);
+            if (entity instanceof EntityTameableDragon) {
+                ((EntityTameableDragon) entity).setUsingBreathWeapon(message.isBreathing);
 
 //			if(message.isProjectile) {
 //				dragon.setUsingProjectile(true);
 //			} else {
 //				dragon.setUsingProjectile(false);
 //			}
-			}
-			return null;
-		}
-	}
+            }
+            return null;
+        }
+    }
 }
 
 //	@Override

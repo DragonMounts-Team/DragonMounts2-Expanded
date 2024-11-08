@@ -83,9 +83,8 @@ public class BreathWeaponIce extends BreathWeapon {
      * @return the updated hit density; null if the entity is dead, doesn't exist, or otherwise not affected
      */
     @Override
-    public BreathAffectedEntity affectEntity(World world, Integer entityID, BreathAffectedEntity currentHitDensity) {
+    public BreathAffectedEntity affectEntity(World world, int entityID, BreathAffectedEntity currentHitDensity) {
         checkNotNull(world);
-        checkNotNull(entityID);
         checkNotNull(currentHitDensity);
 
         Entity entity = world.getEntityByID(entityID);

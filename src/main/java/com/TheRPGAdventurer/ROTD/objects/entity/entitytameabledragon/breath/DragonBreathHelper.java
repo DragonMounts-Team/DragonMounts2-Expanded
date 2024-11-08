@@ -9,7 +9,6 @@ import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.weap
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.DragonBreed;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.DragonHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -195,7 +194,7 @@ public class DragonBreathHelper extends DragonHelper {
             throw new IllegalArgumentException("getSoundController() only valid for WorldClient");
         }
         if (soundController==null) {
-            soundController=new SoundController((WorldClient) world);
+            soundController = new SoundController();
         }
 
         return soundController;

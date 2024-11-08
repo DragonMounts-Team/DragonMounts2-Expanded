@@ -300,13 +300,12 @@ public class BreathWeapon {
      * @param currentHitDensity the hit density
      * @return the updated hit density; null if entity dead, doesn't exist, or otherwise not affected
      */
-    public BreathAffectedEntity affectEntity(World world, Integer entityID, BreathAffectedEntity currentHitDensity) {
+    public BreathAffectedEntity affectEntity(World world, int entityID, BreathAffectedEntity currentHitDensity) {
         checkNotNull(world);
-        checkNotNull(entityID);
         checkNotNull(currentHitDensity);
-        
+
         Entity entity = world.getEntityByID(entityID);
-        if (entity == null || !(entity instanceof EntityLivingBase) || entity.isDead) return null;
+        if (!(entity instanceof EntityLivingBase) || entity.isDead) return null;
 
         final float CATCH_FIRE_THRESHOLD = 1.4F;
         final float BURN_SECONDS_PER_HIT_DENSITY = 1.0F;
@@ -343,7 +342,6 @@ public class BreathWeapon {
         // typical values for items are 5 (coal, logs), 20 (gates etc), 60 - 100 for leaves & flowers & grass
         // want: leaves & flowers to burn instantly; gates to take ~1 second at full power, coal / logs to take ~3 seconds
         // hitDensity of 1 is approximately 1-2 ticks of full exposure from a single beam, so 3 seconds is ~30
-
         return 15.0F / flammability;
     }
 

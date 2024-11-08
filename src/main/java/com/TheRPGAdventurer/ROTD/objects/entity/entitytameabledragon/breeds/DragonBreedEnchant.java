@@ -23,15 +23,6 @@ public class DragonBreedEnchant extends DragonBreed {
         setHabitatBlock(Blocks.BOOKSHELF);
         setHabitatBlock(Blocks.ENCHANTING_TABLE);
 	}
-
-	@Override
-	public void onEnable(EntityTameableDragon dragon) {}
-
-	@Override
-	public void onDisable(EntityTameableDragon dragon) {}
-
-	@Override
-	public void onDeath(EntityTameableDragon dragon) {}
 	
 	@Override
 	public void onLivingUpdate(EntityTameableDragon dragon) {

@@ -223,16 +223,12 @@ public class BreathWeaponNether extends BreathWeapon {
    * @return the updated hit density; null if entity dead, doesn't exist, or otherwise not affected
    */
   @Override
-  public BreathAffectedEntity affectEntity(World world, Integer entityID, BreathAffectedEntity currentHitDensity) {
+  public BreathAffectedEntity affectEntity(World world, int entityID, BreathAffectedEntity currentHitDensity) {
     checkNotNull(world);
-    checkNotNull(entityID);
     checkNotNull(currentHitDensity);
 
     Entity entity = world.getEntityByID(entityID);
-    if (entity == null || !(entity instanceof EntityLivingBase) || entity.isDead) {
-      return null;
-    }
-    
+    if (!(entity instanceof EntityLivingBase) || entity.isDead) return null;
     if (entityID == dragon.getEntityId()) return null;
 
     final float CATCH_FIRE_THRESHOLD = 1.4F;

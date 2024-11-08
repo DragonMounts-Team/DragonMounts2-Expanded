@@ -27,7 +27,11 @@ import org.apache.commons.lang3.EnumUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -36,7 +40,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public class DragonBreedHelper extends DragonHelper {
-
     private static final Logger L = LogManager.getLogger();
     private static final int BLOCK_RANGE = 2;
     private static final int POINTS_BLOCK = 1;
@@ -58,14 +61,11 @@ public class DragonBreedHelper extends DragonHelper {
 
         this.DATA_BREED = DATA_BREED;
 
-        if (dragon.isServer()) {
+        if (!dragon.world.isRemote) {
             // initialize map to avoid future checkings
             for (EnumDragonBreed type : EnumDragonBreed.values()) {
                 breedPoints.put(type, new AtomicInteger());
             }
-
-            // default breed has initial points
-            breedPoints.get(EnumDragonBreed.FIRE).set(POINTS_INITIAL);
         }
 
         dataWatcher.register(DATA_BREED, EnumDragonBreed.END);
@@ -76,9 +76,7 @@ public class DragonBreedHelper extends DragonHelper {
         nbt.setString(NBT_BREED, getBreedType().getName());
 
         NBTTagCompound breedPointTag = new NBTTagCompound();
-        breedPoints.forEach((type, points) -> {
-            breedPointTag.setInteger(type.getName(), points.get());
-        });
+        breedPoints.forEach((type, points) -> breedPointTag.setInteger(type.getName(), points.get()));
         nbt.setTag(NBT_BREED_POINTS, breedPointTag);
     }
 
@@ -92,13 +90,11 @@ public class DragonBreedHelper extends DragonHelper {
             L.warn("Dragon {} loaded with invalid breed type {}, using {} instead",
                     dragon.getEntityId(), breedName, breed);
         }
-        setBreedType(breed);
+        this.setBreedType(breed);
 
         // read breed points
         NBTTagCompound breedPointTag = nbt.getCompoundTag(NBT_BREED_POINTS);
-        breedPoints.forEach((type, points) -> {
-            points.set(breedPointTag.getInteger(type.getName()));
-        });
+        breedPoints.forEach((type, points) -> points.set(breedPointTag.getInteger(type.getName())));
     }
 
     public Map<EnumDragonBreed, AtomicInteger> getBreedPoints() {
@@ -110,19 +106,18 @@ public class DragonBreedHelper extends DragonHelper {
     }
 
     public void setBreedType(EnumDragonBreed newType) {
-        L.trace("setBreed({})", newType);
-
+        EntityTameableDragon dragon = this.dragon;
         // ignore breed changes on client side, it's controlled by the server
-        if (dragon.world.isRemote) return;
-
-        Objects.requireNonNull(newType);
+        if (dragon.world.isRemote || newType == null) return;
+        L.trace("setBreed({})", newType);
 
         // check if the breed actually changed
         EnumDragonBreed oldType = getBreedType();
-        if (oldType == newType) return;
+        if (oldType == newType && !dragon.isFirstUpdate()) return;
 
         DragonBreed oldBreed = oldType.getBreed();
         DragonBreed newBreed = newType.getBreed();
+        dragon.getBreathHelper().onBreedChange(newBreed);
 
         // switch breed stats
         oldBreed.onDisable(dragon);
@@ -133,21 +128,20 @@ public class DragonBreedHelper extends DragonHelper {
 
         // update breed name
         dataWatcher.set(DATA_BREED, newType);
-        dragon.getBreathHelper().onBreedChange(newBreed);
 
         // reset breed points
         if (dragon.isEgg()) {
-            breedPoints.values().forEach(points -> points.set(0));
-            breedPoints.get(newType).set(POINTS_INITIAL);
+            this.resetPoints(newType);
         }
     }
 
 
     @Override
     public void onLivingUpdate() {
+        EntityTameableDragon dragon = this.dragon;
         EnumDragonBreed currentType = getBreedType();
         if (dragon.isEgg()) {
-            World level = this.dragon.world;
+            World level = dragon.world;
             // spawn breed-specific particles every other tick
             if (level.isRemote) {
                 if (currentType != EnumDragonBreed.END && dragon.ticksExisted % TICK_RATE_PARTICLES == 0) {
@@ -241,5 +235,10 @@ public class DragonBreedHelper extends DragonHelper {
                 health.setBaseValue(base);
                 break;
         }
+    }
+
+    public void resetPoints(@Nullable EnumDragonBreed breed) {
+        this.breedPoints.values().forEach(points -> points.set(0));
+        this.breedPoints.get(breed == null ? this.getBreedType() : breed).set(POINTS_INITIAL);
     }
 }

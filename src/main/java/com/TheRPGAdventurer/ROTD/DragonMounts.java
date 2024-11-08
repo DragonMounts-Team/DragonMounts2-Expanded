@@ -10,16 +10,18 @@
 package com.TheRPGAdventurer.ROTD;
 
 import com.TheRPGAdventurer.ROTD.client.gui.GuiHandler;
+import com.TheRPGAdventurer.ROTD.compat.BaublesCompat;
 import com.TheRPGAdventurer.ROTD.event.EventLiving;
 import com.TheRPGAdventurer.ROTD.event.RegistryEventHandler;
+import com.TheRPGAdventurer.ROTD.inits.DMArmors;
 import com.TheRPGAdventurer.ROTD.inits.DMItemGroups;
-import com.TheRPGAdventurer.ROTD.inits.ModArmour;
 import com.TheRPGAdventurer.ROTD.inits.ModTools;
 import com.TheRPGAdventurer.ROTD.proxy.ServerProxy;
 import com.TheRPGAdventurer.ROTD.util.debugging.testclasses.LoggerLimit;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -90,10 +92,12 @@ public class DragonMounts {
         proxy.Initialization(event);
         proxy.render();
         ModTools.InitializaRepairs();
-        ModArmour.InitializaRepairs();
+        DMArmors.InitializaRepairs();
         GameRegistry.registerWorldGenerator(new DragonMountsWorldGenerator(), 0);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
         RegistryEventHandler.initRegistries();
+        // Mod Compat Initialization
+        if (Loader.isModLoaded("baubles")) BaublesCompat.load();
     }
 
     @EventHandler

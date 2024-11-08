@@ -111,7 +111,6 @@ public class SoundEffectBreathWeapon {
     headSoundSettings.playing = true;
     headSoundSettings.masterVolume = weaponSoundInfo.relativeVolume;
     headSoundSettings.soundEpicentre = weaponSoundInfo.dragonHeadLocation;
-
     headSoundSettings.playerDistanceToEpicentre =
             (float) weaponSoundInfo.dragonHeadLocation.distanceTo(entityPlayerSP.getPositionVector());
 
@@ -215,7 +214,7 @@ public class SoundEffectBreathWeapon {
   public enum RepeatType {REPEAT, NO_REPEAT}
   public enum Mode {PRELOAD, PLAY}
 
-  private class BreathWeaponSound extends PositionedSound implements ITickableSound {
+  private static class BreathWeaponSound extends PositionedSound implements ITickableSound {
     public BreathWeaponSound(ResourceLocation i_resourceLocation, float i_volume, RepeatType i_repeat,
                              ComponentSoundSettings i_soundSettings) {
       super(i_resourceLocation, SoundCategory.HOSTILE);
@@ -306,10 +305,10 @@ public class SoundEffectBreathWeapon {
   /**
    * Returns the sound for the given breed, lifestage, and sound part
    * @param soundPart which part of the breathing sound?
-   * @param lifeStage how old is the dragon?
+   * @param stage how old is the dragon?
    * @return the resourcelocation corresponding to the desired sound
    */
-  protected ResourceLocation weaponSound(SoundState soundPart, DragonLifeStage lifeStage, EntityTameableDragon dragon) {
-    return dragon.getBreed().getBreathWeaponSoundEffect(lifeStage, soundPart).location;
+  protected ResourceLocation weaponSound(SoundState soundPart, DragonLifeStage stage, EntityTameableDragon dragon) {
+    return dragon.getBreed().getBreathWeaponSoundEffect(stage, soundPart).location;
   }
 }

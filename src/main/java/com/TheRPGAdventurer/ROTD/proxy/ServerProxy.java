@@ -149,9 +149,6 @@ public class ServerProxy {
     public void registerItemRenderer(Item item, int meta, String id) {
     }
 
-    public void registerAmuletRenderer() {
-    }
-
     // get the directory on disk used for storing the game files
     // is different for dedicated server vs client
     public File getDataDirectory() {

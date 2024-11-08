@@ -50,10 +50,6 @@ public class DragonBreedAir extends DragonBreed {
     }
 
     @Override
-    public void onDeath(EntityTameableDragon dragon) {
-    }
-
-    @Override
     public void onLivingUpdate(EntityTameableDragon dragon) {
         World level = dragon.world;
         if (dragon.posY > level.getHeight() * 1.2 && level.isDaytime() && dragon.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE)) {

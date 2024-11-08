@@ -3,14 +3,15 @@ package com.TheRPGAdventurer.ROTD.network;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.util.DMUtils;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
+import static com.TheRPGAdventurer.ROTD.util.VarInt.readVarInt;
+import static com.TheRPGAdventurer.ROTD.util.VarInt.writeVarInt;
 
 public class MessageDragonExtras implements IMessage {
 
@@ -36,7 +37,7 @@ public class MessageDragonExtras implements IMessage {
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        dragonId = buf.readInt();
+        dragonId = readVarInt(buf);
         isHoverCancel = buf.readBoolean();
         isFollowYaw = buf.readBoolean();
         locky = buf.readBoolean();
@@ -47,7 +48,7 @@ public class MessageDragonExtras implements IMessage {
 
     @Override
     public void toBytes(ByteBuf buf) {
-        buf.writeInt(dragonId);
+        writeVarInt(buf, this.dragonId);
         buf.writeBoolean(isHoverCancel);
         buf.writeBoolean(isFollowYaw);
         buf.writeBoolean(locky);
@@ -80,11 +81,8 @@ public class MessageDragonExtras implements IMessage {
                     player.sendStatusMessage(new TextComponentTranslation(DMUtils.translateToLocal("msg.dragon.toggleYLock") + (dragon.isYLocked() ? ": On" : ": Off")), false);
                 }
 
-                if (message.down) dragon.setGoingDown(true);
-                else dragon.setGoingDown(false);
-
-                if (message.isBoosting) dragon.setBoosting(true);
-                else dragon.setBoosting(false);
+                dragon.setGoingDown(message.down);
+                dragon.setBoosting(message.isBoosting);
             }
             return null;
         }

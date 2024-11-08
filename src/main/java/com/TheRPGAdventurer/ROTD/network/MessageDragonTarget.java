@@ -35,14 +35,14 @@ public class MessageDragonTarget implements IMessage {
 
 
   /** Creates a message specifying the current target
-   * @param i_target the target
+   * @param target the target
    * @return the message for sending
    */
-    public static MessageDragonTarget createTargetMessage(BreathWeaponTarget i_target)
+  public static MessageDragonTarget createTargetMessage(BreathWeaponTarget target)
     {
       MessageDragonTarget retval = new MessageDragonTarget();
       retval.targeting = true;
-      retval.target = i_target;
+      retval.target = target;
       retval.packetIsValid = true;
       return retval;
     }
@@ -73,12 +73,7 @@ public class MessageDragonTarget implements IMessage {
       if (targeting) {
         target = BreathWeaponTarget.fromBytes(buf);
       }
-    } catch (IndexOutOfBoundsException ioe) {
-      if (printedError) return;
-      printedError = true;
-      System.err.println("Exception while reading MessageDragonTarget: " + ioe);
-      return;
-    } catch (IllegalArgumentException ioe) {
+    } catch (IndexOutOfBoundsException | IllegalArgumentException ioe) {
       if (printedError) return;
       printedError = true;
       System.err.println("Exception while reading MessageDragonTarget: " + ioe);

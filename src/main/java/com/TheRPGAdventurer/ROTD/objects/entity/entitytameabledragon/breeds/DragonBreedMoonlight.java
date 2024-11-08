@@ -2,7 +2,7 @@ package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds;
 
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.BreathNode;
-import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.effects.IceBreathFX;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.effects.AetherBreathFX;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundEffectName;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.sound.SoundState;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.weapons.BreathWeapon;
@@ -24,15 +24,6 @@ public class DragonBreedMoonlight extends DragonBreed {
 		setHabitatBlock(Blocks.DAYLIGHT_DETECTOR_INVERTED);
 		setHabitatBlock(Blocks.BLUE_GLAZED_TERRACOTTA);
 	}
-
-	@Override
-	public void onEnable(EntityTameableDragon dragon) {}
-
-	@Override
-	public void onDisable(EntityTameableDragon dragon) {}
-
-	@Override
-	public void onDeath(EntityTameableDragon dragon) {}
 	
 	@Override
 	public void onLivingUpdate(EntityTameableDragon dragon) {
@@ -55,7 +46,7 @@ public class DragonBreedMoonlight extends DragonBreed {
 
 	@Override
 	public void spawnClientNodeEntity(World world, Vec3d position, Vec3d direction, BreathNode.Power power, float partialTicks) {
-		world.spawnEntity(new IceBreathFX(world, position, direction, power, partialTicks));
+		world.spawnEntity(new AetherBreathFX(world, position, direction, power, partialTicks));
 	}
 
 	@Override
@@ -75,6 +66,6 @@ public class DragonBreedMoonlight extends DragonBreed {
 
 	@Override
 	public EnumItemBreedTypes getItemBreed(EntityTameableDragon dragon) {
-		return dragon.isMale() ? EnumItemBreedTypes.MOONLIGHT_MALE : EnumItemBreedTypes.MOONLIGHT;
+		return dragon.isMale() ? EnumItemBreedTypes.MOONLIGHT : EnumItemBreedTypes.MOONLIGHT_FEMALE;
 	}
 }

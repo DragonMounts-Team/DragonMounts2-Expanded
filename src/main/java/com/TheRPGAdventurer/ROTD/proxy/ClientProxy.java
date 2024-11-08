@@ -11,7 +11,6 @@ package com.TheRPGAdventurer.ROTD.proxy;
 
 import com.TheRPGAdventurer.ROTD.DragonMountsConfig;
 import com.TheRPGAdventurer.ROTD.client.gui.GuiDragonDebug;
-import com.TheRPGAdventurer.ROTD.client.model.ModelAmuletMesh;
 import com.TheRPGAdventurer.ROTD.client.other.TargetHighlighter;
 import com.TheRPGAdventurer.ROTD.client.render.RenderDM2Cape;
 import com.TheRPGAdventurer.ROTD.client.render.TileEntityDragonShulkerRenderer;
@@ -21,15 +20,12 @@ import com.TheRPGAdventurer.ROTD.client.userinput.DragonOrbControl;
 import com.TheRPGAdventurer.ROTD.event.DragonViewEvent;
 import com.TheRPGAdventurer.ROTD.event.IItemColorRegistration;
 import com.TheRPGAdventurer.ROTD.inits.ModBlocks;
-import com.TheRPGAdventurer.ROTD.inits.ModItems;
 import com.TheRPGAdventurer.ROTD.inits.ModKeys;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breath.effects.ClientBreathNodeEntity;
-import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import com.TheRPGAdventurer.ROTD.objects.tileentities.TileEntityDragonShulker;
 import com.TheRPGAdventurer.ROTD.util.debugging.StartupDebugClientOnly;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.text.TextFormatting;
@@ -114,13 +110,6 @@ public class ClientProxy extends ServerProxy {
             MinecraftForge.EVENT_BUS.register(new GuiDragonDebug());
         }
         StartupDebugClientOnly.initClientOnly();
-        System.out.println("Registered Amulets");
-        ModelLoader.setCustomMeshDefinition(ModItems.Amulet, new ModelAmuletMesh());
-        ModelBakery.registerItemVariants(ModItems.Amulet, new ModelResourceLocation("dragonmounts:dragon_amulet"));
-        EnumDragonBreed.META_MAPPING.forEach((breed, meta) -> {
-            ModelBakery.registerItemVariants(ModItems.Amulet, new ModelResourceLocation("dragonmounts:" + breed.getName() + "_dragon_amulet"));
-        });
-
     }
 
     @Override
@@ -182,16 +171,6 @@ public class ClientProxy extends ServerProxy {
 
     public void registerItemRenderer(Item item, int meta, String id) {
         ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), id));
-    }
-
-    @Override
-    /**Handles Amulet Model Variations*/
-    public void registerAmuletRenderer() {
-        ModelLoader.setCustomMeshDefinition(ModItems.Amulet, new ModelAmuletMesh());
-        ModelBakery.registerItemVariants(ModItems.Amulet, new ModelResourceLocation("dragonmounts:dragon_amulet"));
-        EnumDragonBreed.META_MAPPING.forEach((breed, meta) -> {
-            ModelBakery.registerItemVariants(ModItems.Amulet, new ModelResourceLocation("dragonmounts:" + breed.getName() + "_dragon_amulet"));
-        });
     }
 
     @Override

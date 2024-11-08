@@ -23,4 +23,16 @@ public class VarInt {
         buffer.writeByte(value);
         return buffer;
     }
+
+    public static <T extends ByteBuf> T writeVarInt(T buffer, int... values) {
+        for (int v, i = 0, size = values.length; i < size; ++i) {
+            v = values[i];
+            while ((v & -128) != 0) {
+                buffer.writeByte(v & 127 | 128);
+                v >>>= 7;
+            }
+            buffer.writeByte(v);
+        }
+        return buffer;
+    }
 }

@@ -66,7 +66,7 @@ public class ContainerDragon extends Container {
 		
 		// Build Banner Slots
 		for (int b = 0; b <= 3; ++b) {
-			this.addSlotToContainer(new Slot(dragonInv, 31 + b, b == 1 || b == 2 ? 136 : 154, b < 2 ? 36 : 18) {
+			this.addSlotToContainer(new Slot(dragonInv, 31 + b, b == 1 || b == 2 ? 134 : 152, b < 2 ? 36 : 18) {
 				public boolean isItemValid(ItemStack stack) {
 					return stack.getItem() == Items.BANNER && !this.getHasStack();
 				}
@@ -95,6 +95,8 @@ public class ContainerDragon extends Container {
 		/*
 		 * Player Inventory Slots within Dragon GUI
 		 */
+		// Offhand
+		this.addSlotToContainer(new Slot(player.inventory, 40, -14, 190));
 		// Build Inventory Slots
 		for (int j = 0; j < 3; ++j) {
 			for (int k = 0; k < 9; ++k) {
@@ -105,12 +107,10 @@ public class ContainerDragon extends Container {
 		for (int j = 0; j < 9; ++j) {
 			this.addSlotToContainer(new Slot(player.inventory, j, 8 + j * 18, 190));
 		}
-		// offhand
-		this.addSlotToContainer(new Slot(player.inventory, 40, -13, 190));
 	}
 		
 	public boolean canInteractWith(EntityPlayer playerIn) {
-		return this.dragonInv.isUsableByPlayer(playerIn) && this.dragon.isEntityAlive() && this.dragon.getDistance(playerIn) < 8.0F;
+		return this.dragonInv.isUsableByPlayer(playerIn) && this.dragon.isEntityAlive() && this.dragon.getDistance(playerIn) < 16.0F;
 	}
 
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {

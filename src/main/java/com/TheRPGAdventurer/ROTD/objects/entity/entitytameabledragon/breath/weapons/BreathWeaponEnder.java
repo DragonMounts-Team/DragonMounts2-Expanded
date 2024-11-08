@@ -75,15 +75,12 @@ public class BreathWeaponEnder extends BreathWeapon {
      * @return the updated hit density; null if the entity is dead, doesn't exist, or otherwise not affected
      */
     @Override
-    public BreathAffectedEntity affectEntity(World world, Integer entityID, BreathAffectedEntity currentHitDensity) {
+    public BreathAffectedEntity affectEntity(World world, int entityID, BreathAffectedEntity currentHitDensity) {
         checkNotNull(world);
-        checkNotNull(entityID);
         checkNotNull(currentHitDensity);
 
         Entity entity = world.getEntityByID(entityID);
-        if (entity == null || !(entity instanceof EntityLivingBase) || entity.isDead) {
-            return null;
-        }
+        if (!(entity instanceof EntityLivingBase) || entity.isDead) return null;
 
         float hitDensity = currentHitDensity.getHitDensity();
         final float DAMAGE_PER_HIT_DENSITY = ENDER_DAMAGE * hitDensity;

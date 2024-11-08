@@ -8,11 +8,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public enum EnumItemBreedTypes {
-	
 	AETHER(TextFormatting.DARK_AQUA), 
 	WATER(TextFormatting.BLUE),
-	SYLPHID(TextFormatting.BLUE), //Register Sylphid for other purposes
-	ICE(TextFormatting.AQUA), 
+	ICE(TextFormatting.AQUA),
 	FIRE(TextFormatting.RED), 
 	FIRE2(TextFormatting.GOLD), 
 	FOREST(TextFormatting.DARK_GREEN),
@@ -25,12 +23,11 @@ public enum EnumItemBreedTypes {
 	SUNLIGHT(TextFormatting.YELLOW),
 	SUNLIGHT2(TextFormatting.LIGHT_PURPLE),
 	MOONLIGHT(TextFormatting.BLUE),
-	MOONLIGHT_MALE(TextFormatting.BLUE, "moonlight2"),
+	MOONLIGHT_FEMALE(TextFormatting.BLUE, "moonlight2"),
 	STORM(TextFormatting.BLUE),
 	STORM2(TextFormatting.BLUE),
 	TERRA(TextFormatting.GOLD),
 	TERRA2(TextFormatting.GOLD),
-	GHOST(TextFormatting.YELLOW),
 	ZOMBIE(TextFormatting.DARK_GREEN);
 	//LIGHT(TextFormatting.GRAY);
 	//DARK(TextFormatting.GRAY);

@@ -95,11 +95,10 @@ public class BreathWeaponAether extends BreathWeapon {
     }
 
     @Override
-    public BreathAffectedEntity affectEntity(World world, Integer entityID, BreathAffectedEntity currentHitDensity) {
+    public BreathAffectedEntity affectEntity(World world, int entityID, BreathAffectedEntity currentHitDensity) {
         // 1) extinguish fire on entity
         // 2) pushes entity in the direction of the air, with upward thrust added
         checkNotNull(world);
-        checkNotNull(entityID);
         checkNotNull(currentHitDensity);
         float hitDensity=currentHitDensity.getHitDensity();
         if (entityID==dragon.getEntityId()) return null;

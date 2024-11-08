@@ -61,7 +61,7 @@ entity.DragonMounts.dragon.moonlight.name=Dragon Lunaire
 
 #Breeds
 dragon.forest=Forêts
-dragon.forest2=Forêts
+dragon.forest2=Forged
 dragon.aether=Ethéré
 dragon.ice=Givre
 dragon.sylphid=Océanique
@@ -78,6 +78,7 @@ dragon.enchant=Enchanté
 dragon.sunlight=Solaire
 dragon.sunlight2=Solaire
 dragon.moonlight=Lunaire
+dragon.moonlight2=Lunaire
 dragon.storm=Tempêtes
 dragon.storm2=Tempêtes
 dragon.zombie=Zombifié
@@ -87,6 +88,8 @@ dragon.terra2=Terrestre
 #Stage
 dragon.egg=Oeuf
 dragon.hatchling=Nouveau Né
+dragon.infant=Enfant
+dragon.prejuvenile=Pré-Juvenile
 dragon.juvenile=Juvenile
 dragon.adult=Adulte
 
@@ -209,3 +212,27 @@ key.dragon.boost=Boost de vitesse
 key.dragon.dismount=Faire descendre de l'épaule
 key.dragon.lockY=Controles par défaults
 key.dragon.down=Descendre du Dragon
+
+tooltip.armor_effect.dragonmounts.aether=Quand le porteur court, applique l'effet Rapidité II pendant5s
+tooltip.armor_effect.dragonmounts.enchant=La cible tuée par le porteur rapporte 120% d'EXP suplémentaire
+tooltip.armor_effect.dragonmounts.ender=Quand la vie du porteur est en dessous de 5, applique l'effet Résistance III pendant 30s et l'éffet Force II pendant 15s
+tooltip.armor_effect.dragonmounts.fire=Quand le pôrteur est en feu, applique l'effet Résistance au feu I pendant 30s
+tooltip.armor_effect.dragonmounts.forest=Quand le porteur est bléssé, applique l'effet Régénération II pendant 10s
+tooltip.armor_effect.dragonmounts.ice=Quand le porteur est bléssé, inflige 1 dégat qui applique également l'effet Lenteur II pendant 10s aux cibles à moins de 5 blocs et les repousses
+tooltip.armor_effect.dragonmounts.moonlight=Applique l'effet Vision Nocturne I pendant 30s
+tooltip.armor_effect.dragonmounts.nether=Quand le porteur est bléssé, enflame toutes cibles à moins de 5 blocs pendant 10s et les repousses
+tooltip.armor_effect.dragonmounts.storm=Les attaques du porteur ont 5% de chance de faire apparaitre un éclair après avoir touchées la cible
+tooltip.armor_effect.dragonmounts.sunlight=Quand la valeur de la barre de faim du porteur est inférieure à 10, applique l'effet Saturation I pendant 10s
+tooltip.armor_effect.dragonmounts.terra=Applique l'effet Célérité I pendant 30s
+tooltip.armor_effect.dragonmounts.water=Quand le porteur est sous l'eau, applique l'effet Apnée I pendant 30s
+tooltip.armor_effect.dragonmounts.zombie=Applique l'effet Force I pendant 15s s'il fait nuit
+tooltip.dragonmounts.armor_effect_cooldown=Temps de recharge: %ss
+tooltip.dragonmounts.armor_effect_fishing_luck=Quand le porteur pêche, applique l'effett Chance I pendant 10s sans temps de recharge
+tooltip.dragonmounts.armor_effect_piece_4=Ensemble de 4 pièces:
+tooltip.dragonmounts.armor_effect_remaining_cooldown=Temps de recharge restant : %ss
+tooltip.dragonmounts.whistle.name=Flute draconique (%s)
+tooltip.dragonmounts.age=Age: %s
+tooltip.dragonmounts.name=Nom: %s
+tooltip.dragonmounts.health=Vie: %s
+tooltip.dragonmounts.owner=Propriétaire: %s
+tooltip.dragonmounts.gender=Genre: %s

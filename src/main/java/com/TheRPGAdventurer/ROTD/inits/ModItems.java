@@ -39,7 +39,7 @@ public class ModItems {
     public static final Item TerraDragonScales2 = new ItemDragonScales("terra2_dragonscales", EnumItemBreedTypes.TERRA2);
     public static final Item ZombieDragonScales = new ItemDragonScales("zombie_dragonscales", EnumItemBreedTypes.ZOMBIE);
     public static final Item MoonlightDragonScales = new ItemDragonScales("moonlight_dragonscales", EnumItemBreedTypes.MOONLIGHT);
-    public static final Item MOONLIGHT_MALE_DRAGON_SCALES = new ItemDragonScales("moonlight2_dragonscales", EnumItemBreedTypes.MOONLIGHT_MALE);
+    public static final Item MOONLIGHT_FEMALE_DRAGON_SCALES = new ItemDragonScales("moonlight2_dragonscales", EnumItemBreedTypes.MOONLIGHT_FEMALE);
     //public static final Item LightDragonScales = new ItemDragonScales("light_dragonscales", EnumItemBreedTypes.LIGHT);
     //public static final Item DarkDragonScales = new ItemDragonScales("dark_dragonscales", EnumItemBreedTypes.DARK);
     //public static final Item SpecterDragonScales = new ItemDragonScales("specter_dragonscales", EnumItemBreedTypes.SPECTER);
@@ -141,7 +141,7 @@ public class ModItems {
     public static final Item terra2_dragon_shield = new ItemDragonShield(EnumItemBreedTypes.TERRA2, ModItems.TerraDragonScales2);
     public static final Item zombie_dragon_shield = new ItemDragonShield(EnumItemBreedTypes.ZOMBIE, ModItems.ZombieDragonScales);
     public static final Item moonlight_dragon_shield = new ItemDragonShield(EnumItemBreedTypes.MOONLIGHT, ModItems.MoonlightDragonScales);
-    public static final Item MOONLIGHT_MALE_DRAGON_SHIELD = new ItemDragonShield(EnumItemBreedTypes.MOONLIGHT_MALE, ModItems.MOONLIGHT_MALE_DRAGON_SCALES);
+    public static final Item MOONLIGHT_FEMALE_DRAGON_SHIELD = new ItemDragonShield(EnumItemBreedTypes.MOONLIGHT_FEMALE, ModItems.MOONLIGHT_FEMALE_DRAGON_SCALES);
     //public static final Item light_dragon_shield = new ItemDragonShield(EnumItemBreedTypes.LIGHT, ModItems.lightDragonScales);
     //public static final Item dark_dragon_shield = new ItemDragonShield(EnumItemBreedTypes.DARK, ModItems.DarkDragonScales);
     //public static final Item specter_dragon_shield = new ItemDragonShield(EnumItemBreedTypes.DARK, ModItems.SpecterDragonScales);

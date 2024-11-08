@@ -37,12 +37,8 @@ public class SInitCooldownPacket implements IMessage {
 
     @Override
     public void toBytes(ByteBuf buffer) {
-        int[] data = this.data;
-        int size = this.size;
-        writeVarInt(buffer, size);
-        for (int i = 0; i < size; ++i) {
-            writeVarInt(buffer, data[i]);
-        }
+        writeVarInt(buffer, this.size);
+        writeVarInt(buffer, this.data);
     }
 
     public static class Handler implements IMessageHandler<SInitCooldownPacket, IMessage> {
