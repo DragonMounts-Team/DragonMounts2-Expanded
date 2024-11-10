@@ -73,26 +73,26 @@ public class ClientProxy extends ServerProxy {
         ModMetadata metadata = event.getModMetadata();
         metadata.name = t.DARK_AQUA + "" + t.BOLD + "Dragon Mounts";
         metadata.credits = "\n" +
-                t.GREEN + "BarracudaATA4" + r + "-" + t.AQUA + "The Original Owner\n\n" +
-                t.GREEN + "TheRPGAdventurer" + r + "-" + t.AQUA + "Former author of Dragon Mounts 2\n\n" +
-                t.GREEN + "Merpou/Kingdomall/Masked_Ares" + r + "-" + t.AQUA + "First Dev for DM2. Has Made 500+ Textures and has put forth so much effort.\n\n" +
-                t.GREEN + "Shannieanne" + r + "-" + t.AQUA + "Zombie Textures, Terra textures, Texture Fixes, Overall Second Dev\n\n" +
-                t.GREEN + "GundunUkan/Lord Ukan" + r + "-" + t.AQUA + "for new fire texures, sunlight textures, and more.... I Hope he finishes his university hes hardworking working student\n\n" +
-                t.GREEN + "Wolf" + r + "-" + t.AQUA + "Second Coder, started making small fixes then started doing big ones, I hope his dreams of becoming computer engineer succeeds\n\n" +
-                t.GREEN + "FlaemWing" + r + "-" + t.AQUA + "for new nest block textures and dragonarmor item textures, new tool textures\n\n" +
-                t.GREEN + "AlexThe666" + r + "-" + t.AQUA + "for open source code, Ice and Fire owner, Older Matured and more experience than me\n\n" +
-                t.GREEN + "Majty/Guinea Owl" + r + "-" + t.AQUA + "for amulet textures\n" +
-                t.GREEN + "NightScale" + r + "-" + t.AQUA + "for new ideas and once funding a server for DM2\n" +
-                t.GREEN + "Unakitononeko" + r + "-" + t.AQUA + "for the new and improved forest textures\n" +
-                t.GREEN + "Crafty" + r + "-" + t.AQUA + "for the new and improved ice textures\n" +
-                t.GREEN + "Charles Xavier" + r + "-" + t.AQUA + "Moderator\n" +
-                t.GREEN + "qnebra" + r + "-" + t.AQUA + "Moderator\n" +
-                t.GREEN + "Jester" + r + "-" + t.AQUA + "Ex Marine over 23 years old when this version is released, gave me life advices on how to improve myself\n" +
-                t.GREEN + "WheezieFreeBreezie and Eden" + r + "-" + t.AQUA + "for being friends with me while playing on a modded server along with our faction Atlas\n" +
-                t.GREEN + "WalterTheMighty" + r + "-" + t.AQUA + "for giving me a modded erver experience\n" +
-                t.GREEN + "GandalfTheDank" + r + "-" + t.AQUA + "for making me realize on what happens to me if I'm being a terrible person\n" +
-                t.GREEN + "TGG/TheGreyGhost" + r + "-" + t.AQUA + "old dm1 dev and prototype breath\n\n";
-        metadata.authorList = Arrays.asList(StringUtils.split(t.GOLD + "" + t.BOLD + "Lintha, TheRPGAdventurer, BarracudaATA, WolfShotz", ','));
+                t.GREEN + "BarracudaATA" + r + "-" + t.AQUA + "The Original Owner of Dragon Mounts.\n\n" +
+                t.GREEN + "TheRPGAdventurer" + r + "-" + t.AQUA + "Former author of Dragon Mounts 2.\n\n" +
+                t.GREEN + "Kingdomall" + r + "-" + t.AQUA + "First Developer for DM2. Overhauling many textures.\n\n" +
+                t.GREEN + "Shannieann" + r + "-" + t.AQUA + "Second Developer for DM2. Zombie and Terra textures. Texture artist.\n\n" +
+                t.GREEN + "UkanGundun" + r + "-" + t.AQUA + "Fire and Sunlight textures. Texture artist.\n\n" +
+                t.GREEN + "WolfShotz (Kay9Unit)" + r + "-" + t.AQUA + "Coder and codebase improvements\n\n" +
+                t.GREEN + "FlaemWing" + r + "-" + t.AQUA + "New nest textures, tool textures and dragon armor item textures.\n\n" +
+                t.GREEN + "AlexThe666" + r + "-" + t.AQUA + "Open sourcing the code for I&F, Ice and Fire Owner.\n\n" +
+                t.GREEN + "Majty/Guinea Owl" + r + "-" + t.AQUA + "For Amulet textures.\n" +
+                t.GREEN + "NightScale" + r + "-" + t.AQUA + "For new ideas and once funding a server for DM2.\n" +
+                t.GREEN + "Unakitononeko" + r + "-" + t.AQUA + "For the new and improved forest textures.\n" +
+                t.GREEN + "Crafty" + r + "-" + t.AQUA + "For the new and improved ice textures.\n" +
+                t.GREEN + "Charles Xavier" + r + "-" + t.AQUA + "Moderator.\n" +
+                t.GREEN + "qnebra" + r + "-" + t.AQUA + "Moderator.\n" +
+                t.GREEN + "Jester" + r + "-" + t.AQUA + "Ex Marine over 23 years old when this version is released, gave me life advices on how to improve myself.\n" +
+                t.GREEN + "WheezieFreeBreezie and Eden" + r + "-" + t.AQUA + "For being friends with me while playing on a modded server along with our faction Atlas.\n" +
+                t.GREEN + "WalterTheMighty" + r + "-" + t.AQUA + "For giving me a modded server experience.\n" +
+                t.GREEN + "GandalfTheDank" + r + "-" + t.AQUA + "For making me realize on what happens to me if I'm being a terrible person.\n" +
+                t.GREEN + "TheGreyGhost" + r + "-" + t.AQUA + "Old DM1 Developer. Prototype Dragon Breath\n\n";
+        metadata.authorList = Arrays.asList(StringUtils.split(t.GOLD + "" + t.BOLD + "TheRPGAdventurer, Kingdomall, Shannieann, UkanGundun, WolfShotz (Kay9Unit), BarracudaATA", ','));
         metadata.description =
                 "\nTips:\n" +
                         "1. Don't forget to right click the egg to start the hatching process\n" +
@@ -177,4 +177,4 @@ public class ClientProxy extends ServerProxy {
     public File getDataDirectory() {
         return Minecraft.getMinecraft().gameDir;
     }
-}
+            }
