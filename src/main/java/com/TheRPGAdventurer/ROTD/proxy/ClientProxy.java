@@ -71,7 +71,7 @@ public class ClientProxy extends ServerProxy {
         //Override mcmod.info - This looks cooler :)
         TextFormatting t = null, r = TextFormatting.RESET;
         ModMetadata metadata = event.getModMetadata();
-        metadata.name = t.DARK_AQUA + "" + t.BOLD + "Dragon Mounts";
+        metadata.name = t.DARK_AQUA + "" + t.BOLD + "Dragon Mounts 2";
         metadata.credits = "\n" +
                 t.GREEN + "BarracudaATA" + r + "-" + t.AQUA + "The Original Owner of Dragon Mounts.\n\n" +
                 t.GREEN + "TheRPGAdventurer" + r + "-" + t.AQUA + "Former author of Dragon Mounts 2.\n\n" +
@@ -91,7 +91,7 @@ public class ClientProxy extends ServerProxy {
                 t.GREEN + "WheezieFreeBreezie and Eden" + r + "-" + t.AQUA + "For being friends with me while playing on a modded server along with our faction Atlas.\n" +
                 t.GREEN + "WalterTheMighty" + r + "-" + t.AQUA + "For giving me a modded server experience.\n" +
                 t.GREEN + "GandalfTheDank" + r + "-" + t.AQUA + "For making me realize on what happens to me if I'm being a terrible person.\n" +
-                t.GREEN + "TheGreyGhost" + r + "-" + t.AQUA + "Old DM1 Developer. Prototype Dragon Breath\n\n";
+                t.GREEN + "TheGreyGhost" + r + "-" + t.AQUA + "Old DM1 Developer. Prototype Dragon Breath.\n\n";
         metadata.authorList = Arrays.asList(StringUtils.split(t.GOLD + "" + t.BOLD + "TheRPGAdventurer, Kingdomall, Shannieann, UkanGundun, WolfShotz (Kay9Unit), BarracudaATA", ','));
         metadata.description =
                 "\nTips:\n" +
