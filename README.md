@@ -1,7 +1,7 @@
 ![LOGO](src/main/resources/logo2.png)
 
 # [Dragon-Mounts-2](https://www.curseforge.com/minecraft/mc-mods/dragon-mounts-2)
-Dragon Mounts was made for the purpose of making useless ender dragon eggs hatcheable, you can tame the dragon like a pet and make it ride for you and soar in the skies.
+Dragon Mounts 2 is a sequel to Dragon Mounts, created by TheRPGAdventurer. It was created on July 8 2018. A mod which adds over 15 new dragons to your game. In addition to new dragons, the mod adds in new armors and tools for players, Armors for Dragons, Nests that generates in every worlds, New Dragon breeds, and much more.
 # Licenses
 The mods binaries, as well as its textures and code are licensed under **Public Domain**.
 
