@@ -1,4 +1,4 @@
-![LOGO](src/main/resources/logo.png)
+![LOGO](src/main/resources/logo2.png)
 
 # [Dragon-Mounts-2](https://www.curseforge.com/minecraft/mc-mods/dragon-mounts-2)
 Dragon Mounts was made for the purpose of making useless ender dragon eggs hatcheable, you can tame the dragon like a pet and make it ride for you and soar in the skies.
@@ -10,25 +10,25 @@ Feel free to use the mod in any modpacks. You are allowed to use it, you do not 
 Any modpack which uses Dragon Mounts 2 takes full responsibility for user support queries.
 For anyone else, we only support official builds from Curse/Curseforge, Modrinth, and GitHub, not custom built jars. We also do not take bug reports for outdated builds of Minecraft.
 # Credits
-**Dragon Mounts 2 Credits:**
-- **BarracudaATA** - Open sourcing the mod to let others create projects under the Dragon Mounts name
-- **Kingdomall & Shannieann** - Giving us permission to continue maintenance of DM2, officially endorsing our continuation
-- **Tomanex** - Project Owner. Revamped textures and server management
-- **JDSK0ala_** - Project Partner and Developer
-- **2190303755 (Number-Man)** - Maintaining the codebase and cleaning it up
+Dragon Mounts 2 Credits:
+- BarracudaATA - Open sourcing the mod to let others create projects under the Dragon Mounts name
+- Kingdomall & Shannieann - Giving us permission to continue maintenance of DM2, officially endorsing our continuation
+- Tomanex - Project Owner. Revamped textures and server management
+- JDSK0ala_ - Project Partner and Developer
+- 2190303755 (Number-Man) - Maintaining the codebase and cleaning it up
 - Various translators who made this mod more accessible to players around the world and others who have provided small but welcome contributions such as textures
 
-**Former Dragon Mounts 2 Developers:**
-- **TheRPGAdventurer** - Former author of Dragon Mounts 2
-- **Kingdomall** - First Developer for DM2. Overhauling many textures
-- **Shannieann** - 2nd Developer and artist for Zombie and Terra textures. Texture improvements
-- **UkanGundun** - Fire and Sunlight textures. General texture artist
-- **WolfShotz (Kay9Unit)** - Coder and codebase improvements
-- F**laemWing** - New nest textures, tool textures and dragon armor item textures
-- **cesar_zorak** - Dragon armor model textures, breed textures and more
-- **Alexthe666 (AlexModGuy)** - Open sourcing the code for I&F, Ice and Fire Owner
-- **Majty/GuineaOwl** - Amulet textures
-- **NightScale** - For new ideas and feedback
-- **Unakitononeko** - New and improved Forest textures
-- **Crafty** - New and improved Ice textures
-- **TheGreyGhost** - Old DM1 Developer. Prototype Dragon Breath
+Former Dragon Mounts 2 Developers:
+- TheRPGAdventurer - Former author of Dragon Mounts 2
+- Kingdomall - First Developer for DM2. Overhauling many textures
+- Shannieann - 2nd Developer and artist for Zombie and Terra textures. Texture artist
+- UkanGundun - Fire and Sunlight textures. Texture artist
+- WolfShotz (Kay9Unit) - Coder and codebase improvements
+- FlaemWing - New nest textures, tool textures and dragon armor item textures
+- cesar_zorak - Dragon armor model textures, breed textures and more
+- Alexthe666 (AlexModGuy) - Open sourcing the code for I&F, Ice and Fire Owner
+- Majty/GuineaOwl - Amulet textures
+- NightScale - For new ideas and feedback
+- Unakitononeko - New and improved Forest textures
+- Crafty - New and improved Ice textures
+- TheGreyGhost - Old DM1 Developer. Prototype Dragon Breath
