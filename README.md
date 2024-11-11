@@ -2,14 +2,14 @@
 
 # [Dragon-Mounts-2](https://www.curseforge.com/minecraft/mc-mods/dragon-mounts-2)
 Dragon Mounts 2 is a sequel to Dragon Mounts, created by TheRPGAdventurer. A mod which adds over 15 new dragons to your game. In addition to new dragons, the mod adds in new armors and tools for players, Armors for Dragons, Nests that generates in every worlds, New Dragon breeds, and much more.
-# Licenses
+## Licenses
 The mods binaries, as well as its textures and code are licensed under **Public Domain**.
 
 Feel free to use the mod in any modpacks. You are allowed to use it, you do not need to ask for permission, in fact permission requests will usually be ignored. When using the mod, please use the Curse/Curseforge, Modrinth, or GitHub download and do not rehost the files.
 
 Any modpack which uses Dragon Mounts 2 takes full responsibility for user support queries.
 For anyone else, we only support official builds from Curse/Curseforge, Modrinth, and GitHub, not custom built jars. We also do not take bug reports for outdated builds of Minecraft.
-# Credits
+## Credits
 Dragon Mounts 2 Credits:
 - BarracudaATA - Open sourcing the mod to let others create projects under the Dragon Mounts name
 - Kingdomall & Shannieann - Giving us permission to continue maintenance of DM2, officially endorsing our continuation
