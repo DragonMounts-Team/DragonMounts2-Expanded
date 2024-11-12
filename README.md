@@ -13,10 +13,11 @@ For anyone else, we only support official builds from Curse/Curseforge, Modrinth
 Dragon Mounts 2 Credits:
 - BarracudaATA - Open sourcing the mod to let others create projects under the Dragon Mounts name
 - Kingdomall & Shannieann - Giving us permission to continue maintenance of DM2, officially endorsing our continuation
-- Tomanex - Project Owner. Revamped textures and server management
-- JDSK0ala - Project Partner and Developer
-- 2190303755 (Number-Man) - Maintaining the codebase and cleaning it up
-- Various translators who made this mod more accessible to players around the world and others who have provided small but welcome contributions such as textures
+- Tomanex - Dragon Mounts Team Founder and Texture Artist. Revamped various textures
+- JDSK0ala - Dragon Mounts Team Founder and Beta Tester
+- 2190303755 (Number-Man) - Updating the code and continuing Dragon Mounts 2 on Java 1.12.2 after the Dragon Mounts team was founded
+- EnderEXE - Beta Tester
+- Tomohiko, Signis Kerman - For making the Japanese and French translations respectively
 
 Former Dragon Mounts 2 Developers:
 - TheRPGAdventurer - Former author of Dragon Mounts 2
