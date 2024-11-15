@@ -1245,23 +1245,23 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
             case ENCHANT:
                 return DragonMountsLootTables.ENTITIES_DRAGON_ENCHANT;
             case FIRE:
-                return isMale() ? DragonMountsLootTables.ENTITIES_DRAGON_FIRE : DragonMountsLootTables.ENTITIES_DRAGON_FIRE2;
+                return DragonMountsLootTables.ENTITIES_DRAGON_FIRE;
             case FOREST:
                 return DragonMountsLootTables.ENTITIES_DRAGON_FOREST;
             case ICE:
                 return DragonMountsLootTables.ENTITIES_DRAGON_ICE;
             case NETHER:
-                return isMale() ? DragonMountsLootTables.ENTITIES_DRAGON_NETHER : DragonMountsLootTables.ENTITIES_DRAGON_NETHER2;
+                return  DragonMountsLootTables.ENTITIES_DRAGON_NETHER;
             case SKELETON:
                 return DragonMountsLootTables.ENTITIES_DRAGON_SKELETON;
             case STORM:
-                return isMale() ? DragonMountsLootTables.ENTITIES_DRAGON_STORM : DragonMountsLootTables.ENTITIES_DRAGON_STORM2;
+                return DragonMountsLootTables.ENTITIES_DRAGON_STORM;
             case SUNLIGHT:
-                return isMale() ? DragonMountsLootTables.ENTITIES_DRAGON_SUNLIGHT : DragonMountsLootTables.ENTITIES_DRAGON_SUNLIGHT2;
+                return  DragonMountsLootTables.ENTITIES_DRAGON_SUNLIGHT ;
             case SYLPHID:
                 return DragonMountsLootTables.ENTITIES_DRAGON_WATER;
             case TERRA:
-                return isMale() ? DragonMountsLootTables.ENTITIES_DRAGON_TERRA : DragonMountsLootTables.ENTITIES_DRAGON_TERRA2;
+                return DragonMountsLootTables.ENTITIES_DRAGON_TERRA;
             case WITHER:
                 return LootTableList.ENTITIES_WITHER_SKELETON;
             case ZOMBIE:

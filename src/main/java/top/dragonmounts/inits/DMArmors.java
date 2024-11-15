@@ -89,11 +89,6 @@ public class DMArmors {
     public static final DragonScaleArmorItem FIRE_DRAGON_SCALE_LEGGINGS = new DragonScaleArmorItem(FIRE_DRAGON_SCALE_MATERIAL, 2, EntityEquipmentSlot.LEGS, "fire_dragonscale_leggings", EnumItemBreedTypes.FIRE, DMArmorEffects.FIRE_EFFECT);
     public static final DragonScaleArmorItem FIRE_DRAGON_SCALE_BOOTS = new DragonScaleArmorItem(FIRE_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.FEET, "fire_dragonscale_boots", EnumItemBreedTypes.FIRE, DMArmorEffects.FIRE_EFFECT);
 
-    public static final DragonScaleArmorItem FIRE2_DRAGON_SCALE_HELMET = new DragonScaleArmorItem(FIRE2_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.HEAD, "fire2_dragonscale_cap", EnumItemBreedTypes.FIRE2, DMArmorEffects.FIRE_EFFECT);
-    public static final DragonScaleArmorItem FIRE2_DRAGON_SCALE_CHESTPLATE = new DragonScaleArmorItem(FIRE2_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.CHEST, "fire2_dragonscale_tunic", EnumItemBreedTypes.FIRE2, DMArmorEffects.FIRE_EFFECT);
-    public static final DragonScaleArmorItem FIRE2_DRAGON_SCALE_LEGGINGS = new DragonScaleArmorItem(FIRE2_DRAGON_SCALE_MATERIAL, 2, EntityEquipmentSlot.LEGS, "fire2_dragonscale_leggings", EnumItemBreedTypes.FIRE2, DMArmorEffects.FIRE_EFFECT);
-    public static final DragonScaleArmorItem FIRE2_DRAGON_SCALE_BOOTS = new DragonScaleArmorItem(FIRE2_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.FEET, "fire2_dragonscale_boots", EnumItemBreedTypes.FIRE2, DMArmorEffects.FIRE_EFFECT);
-
     public static final DragonScaleArmorItem FOREST_DRAGON_SCALE_HELMET = new DragonScaleArmorItem(FOREST_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.HEAD, "forest_dragonscale_cap", EnumItemBreedTypes.FOREST, DMArmorEffects.FOREST_EFFECT);
     public static final DragonScaleArmorItem FOREST_DRAGON_SCALE_CHESTPLATE = new DragonScaleArmorItem(FOREST_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.CHEST, "forest_dragonscale_tunic", EnumItemBreedTypes.FOREST, DMArmorEffects.FOREST_EFFECT);
     public static final DragonScaleArmorItem FOREST_DRAGON_SCALE_LEGGINGS = new DragonScaleArmorItem(FOREST_DRAGON_SCALE_MATERIAL, 2, EntityEquipmentSlot.LEGS, "forest_dragonscale_leggings", EnumItemBreedTypes.FOREST, DMArmorEffects.FOREST_EFFECT);
@@ -103,11 +98,6 @@ public class DMArmors {
     public static final DragonScaleArmorItem NETHER_DRAGON_SCALE_CHESTPLATE = new DragonScaleArmorItem(NETHER_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.CHEST, "nether_dragonscale_tunic", EnumItemBreedTypes.NETHER, DMArmorEffects.NETHER_EFFECT);
     public static final DragonScaleArmorItem NETHER_DRAGON_SCALE_LEGGINGS = new DragonScaleArmorItem(NETHER_DRAGON_SCALE_MATERIAL, 2, EntityEquipmentSlot.LEGS, "nether_dragonscale_leggings", EnumItemBreedTypes.NETHER, DMArmorEffects.NETHER_EFFECT);
     public static final DragonScaleArmorItem NETHER_DRAGON_SCALE_BOOTS = new DragonScaleArmorItem(NETHER_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.FEET, "nether_dragonscale_boots", EnumItemBreedTypes.NETHER, DMArmorEffects.NETHER_EFFECT);
-
-    public static final DragonScaleArmorItem NETHER2_DRAGON_SCALE_HELMET = new DragonScaleArmorItem(NETHER2_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.HEAD, "nether2_dragonscale_cap", EnumItemBreedTypes.NETHER2, DMArmorEffects.NETHER_EFFECT);
-    public static final DragonScaleArmorItem NETHER2_DRAGON_SCALE_CHESTPLATE = new DragonScaleArmorItem(NETHER2_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.CHEST, "nether2_dragonscale_tunic", EnumItemBreedTypes.NETHER2, DMArmorEffects.NETHER_EFFECT);
-    public static final DragonScaleArmorItem NETHER2_DRAGON_SCALE_LEGGINGS = new DragonScaleArmorItem(NETHER2_DRAGON_SCALE_MATERIAL, 2, EntityEquipmentSlot.LEGS, "nether2_dragonscale_leggings", EnumItemBreedTypes.NETHER2, DMArmorEffects.NETHER_EFFECT);
-    public static final DragonScaleArmorItem NETHER2_DRAGON_SCALE_BOOTS = new DragonScaleArmorItem(NETHER2_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.FEET, "nether2_dragonscale_boots", EnumItemBreedTypes.NETHER2, DMArmorEffects.NETHER_EFFECT);
 
     public static final DragonScaleArmorItem ENDER_DRAGON_SCALE_HELMET = new DragonScaleArmorItem(ENDER_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.HEAD, "ender_dragonscale_cap", EnumItemBreedTypes.END, DMArmorEffects.ENDER_EFFECT);
     public static final DragonScaleArmorItem ENDER_DRAGON_SCALE_CHESTPLATE = new DragonScaleArmorItem(ENDER_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.CHEST, "ender_dragonscale_tunic", EnumItemBreedTypes.END, DMArmorEffects.ENDER_EFFECT);
@@ -124,40 +114,20 @@ public class DMArmors {
     public static final DragonScaleArmorItem SUNLIGHT_DRAGON_SCALE_LEGGINGS = new DragonScaleArmorItem(SUNLIGHT_DRAGON_SCALE_MATERIAL, 2, EntityEquipmentSlot.LEGS, "sunlight_dragonscale_leggings", EnumItemBreedTypes.SUNLIGHT, DMArmorEffects.SUNLIGHT_EFFECT);
     public static final DragonScaleArmorItem SUNLIGHT_DRAGON_SCALE_BOOTS = new DragonScaleArmorItem(SUNLIGHT_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.FEET, "sunlight_dragonscale_boots", EnumItemBreedTypes.SUNLIGHT, DMArmorEffects.SUNLIGHT_EFFECT);
 
-    public static final DragonScaleArmorItem SUNLIGHT2_DRAGON_SCALE_HELMET = new DragonScaleArmorItem(SUNLIGHT2_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.HEAD, "sunlight2_dragonscale_cap", EnumItemBreedTypes.SUNLIGHT2, DMArmorEffects.SUNLIGHT_EFFECT);
-    public static final DragonScaleArmorItem SUNLIGHT2_DRAGON_SCALE_CHESTPLATE = new DragonScaleArmorItem(SUNLIGHT2_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.CHEST, "sunlight2_dragonscale_tunic", EnumItemBreedTypes.SUNLIGHT2, DMArmorEffects.SUNLIGHT_EFFECT);
-    public static final DragonScaleArmorItem SUNLIGHT2_DRAGON_SCALE_LEGGINGS = new DragonScaleArmorItem(SUNLIGHT2_DRAGON_SCALE_MATERIAL, 2, EntityEquipmentSlot.LEGS, "sunlight2_dragonscale_leggings", EnumItemBreedTypes.SUNLIGHT2, DMArmorEffects.SUNLIGHT_EFFECT);
-    public static final DragonScaleArmorItem SUNLIGHT2_DRAGON_SCALE_BOOTS = new DragonScaleArmorItem(SUNLIGHT2_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.FEET, "sunlight2_dragonscale_boots", EnumItemBreedTypes.SUNLIGHT2, DMArmorEffects.SUNLIGHT_EFFECT);
-
     public static final DragonScaleArmorItem MOONLIGHT_DRAGON_SCALE_HELMET = new DragonScaleArmorItem(MOONLIGHT_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.HEAD, "moonlight_dragonscale_cap", EnumItemBreedTypes.MOONLIGHT, DMArmorEffects.MOONLIGHT_EFFECT);
     public static final DragonScaleArmorItem MOONLIGHT_DRAGON_SCALE_CHESTPLATE = new DragonScaleArmorItem(MOONLIGHT_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.CHEST, "moonlight_dragonscale_tunic", EnumItemBreedTypes.MOONLIGHT, DMArmorEffects.MOONLIGHT_EFFECT);
     public static final DragonScaleArmorItem MOONLIGHT_DRAGON_SCALE_LEGGINGS = new DragonScaleArmorItem(MOONLIGHT_DRAGON_SCALE_MATERIAL, 2, EntityEquipmentSlot.LEGS, "moonlight_dragonscale_leggings", EnumItemBreedTypes.MOONLIGHT, DMArmorEffects.MOONLIGHT_EFFECT);
     public static final DragonScaleArmorItem MOONLIGHT_DRAGON_SCALE_BOOTS = new DragonScaleArmorItem(MOONLIGHT_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.FEET, "moonlight_dragonscale_boots", EnumItemBreedTypes.MOONLIGHT, DMArmorEffects.MOONLIGHT_EFFECT);
-
-    public static final DragonScaleArmorItem MOONLIGHT_FEMALE_DRAGON_SCALE_HELMET = new DragonScaleArmorItem(MOONLIGHT_FEMALE_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.HEAD, "moonlight2_dragonscale_cap", EnumItemBreedTypes.MOONLIGHT_FEMALE, DMArmorEffects.MOONLIGHT_EFFECT);
-    public static final DragonScaleArmorItem MOONLIGHT_FEMALE_DRAGON_SCALE_CHESTPLATE = new DragonScaleArmorItem(MOONLIGHT_FEMALE_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.CHEST, "moonlight2_dragonscale_tunic", EnumItemBreedTypes.MOONLIGHT_FEMALE, DMArmorEffects.MOONLIGHT_EFFECT);
-    public static final DragonScaleArmorItem MOONLIGHT_FEMALE_DRAGON_SCALE_LEGGINGS = new DragonScaleArmorItem(MOONLIGHT_FEMALE_DRAGON_SCALE_MATERIAL, 2, EntityEquipmentSlot.LEGS, "moonlight2_dragonscale_leggings", EnumItemBreedTypes.MOONLIGHT_FEMALE, DMArmorEffects.MOONLIGHT_EFFECT);
-    public static final DragonScaleArmorItem MOONLIGHT_FEMALE_DRAGON_SCALE_BOOTS = new DragonScaleArmorItem(MOONLIGHT_FEMALE_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.FEET, "moonlight2_dragonscale_boots", EnumItemBreedTypes.MOONLIGHT_FEMALE, DMArmorEffects.MOONLIGHT_EFFECT);
 
     public static final DragonScaleArmorItem STORM_DRAGON_SCALE_HELMET = new DragonScaleArmorItem(STORM_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.HEAD, "storm_dragonscale_cap", EnumItemBreedTypes.STORM, DMArmorEffects.STORM_EFFECT);
     public static final DragonScaleArmorItem STORM_DRAGON_SCALE_CHESTPLATE = new DragonScaleArmorItem(STORM_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.CHEST, "storm_dragonscale_tunic", EnumItemBreedTypes.STORM, DMArmorEffects.STORM_EFFECT);
     public static final DragonScaleArmorItem STORM_DRAGON_SCALE_LEGGINGS = new DragonScaleArmorItem(STORM_DRAGON_SCALE_MATERIAL, 2, EntityEquipmentSlot.LEGS, "storm_dragonscale_leggings", EnumItemBreedTypes.STORM, DMArmorEffects.STORM_EFFECT);
     public static final DragonScaleArmorItem STORM_DRAGON_SCALE_BOOTS = new DragonScaleArmorItem(STORM_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.FEET, "storm_dragonscale_boots", EnumItemBreedTypes.STORM, DMArmorEffects.STORM_EFFECT);
 
-    public static final DragonScaleArmorItem STORM2_DRAGON_SCALE_HELMET = new DragonScaleArmorItem(STORM2_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.HEAD, "storm2_dragonscale_cap", EnumItemBreedTypes.STORM2, DMArmorEffects.STORM_EFFECT);
-    public static final DragonScaleArmorItem STORM2_DRAGON_SCALE_CHESTPLATE = new DragonScaleArmorItem(STORM2_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.CHEST, "storm2_dragonscale_tunic", EnumItemBreedTypes.STORM2, DMArmorEffects.STORM_EFFECT);
-    public static final DragonScaleArmorItem STORM2_DRAGON_SCALE_LEGGINGS = new DragonScaleArmorItem(STORM2_DRAGON_SCALE_MATERIAL, 2, EntityEquipmentSlot.LEGS, "storm2_dragonscale_leggings", EnumItemBreedTypes.STORM2, DMArmorEffects.STORM_EFFECT);
-    public static final DragonScaleArmorItem STORM2_DRAGON_SCALE_BOOTS = new DragonScaleArmorItem(STORM2_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.FEET, "storm2_dragonscale_boots", EnumItemBreedTypes.STORM2, DMArmorEffects.STORM_EFFECT);
-
     public static final DragonScaleArmorItem TERRA_DRAGON_SCALE_HELMET = new DragonScaleArmorItem(TERRA_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.HEAD, "terra_dragonscale_cap", EnumItemBreedTypes.TERRA, DMArmorEffects.TERRA_EFFECT);
     public static final DragonScaleArmorItem TERRA_DRAGON_SCALE_CHESTPLATE = new DragonScaleArmorItem(TERRA_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.CHEST, "terra_dragonscale_tunic", EnumItemBreedTypes.TERRA, DMArmorEffects.TERRA_EFFECT);
     public static final DragonScaleArmorItem TERRA_DRAGON_SCALE_LEGGINGS = new DragonScaleArmorItem(TERRA_DRAGON_SCALE_MATERIAL, 2, EntityEquipmentSlot.LEGS, "terra_dragonscale_leggings", EnumItemBreedTypes.TERRA, DMArmorEffects.TERRA_EFFECT);
     public static final DragonScaleArmorItem TERRA_DRAGON_SCALE_BOOTS = new DragonScaleArmorItem(TERRA_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.FEET, "terra_dragonscale_boots", EnumItemBreedTypes.TERRA, DMArmorEffects.TERRA_EFFECT);
-
-    public static final DragonScaleArmorItem TERRA2_DRAGON_SCALE_HELMET = new DragonScaleArmorItem(TERRA2_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.HEAD, "terra2_dragonscale_cap", EnumItemBreedTypes.TERRA2, DMArmorEffects.TERRA_EFFECT);
-    public static final DragonScaleArmorItem TERRA2_DRAGON_SCALE_CHESTPLATE = new DragonScaleArmorItem(TERRA2_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.CHEST, "terra2_dragonscale_tunic", EnumItemBreedTypes.TERRA2, DMArmorEffects.TERRA_EFFECT);
-    public static final DragonScaleArmorItem TERRA2_DRAGON_SCALE_LEGGINGS = new DragonScaleArmorItem(TERRA2_DRAGON_SCALE_MATERIAL, 2, EntityEquipmentSlot.LEGS, "terra2_dragonscale_leggings", EnumItemBreedTypes.TERRA2, DMArmorEffects.TERRA_EFFECT);
-    public static final DragonScaleArmorItem TERRA2_DRAGON_SCALE_BOOTS = new DragonScaleArmorItem(TERRA2_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.FEET, "terra2_dragonscale_boots", EnumItemBreedTypes.TERRA2, DMArmorEffects.TERRA_EFFECT);
 
     public static final DragonScaleArmorItem ZOMBIE_DRAGON_SCALE_HELMET = new DragonScaleArmorItem(ZOMBIE_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.HEAD, "zombie_dragonscale_cap", EnumItemBreedTypes.ZOMBIE, DMArmorEffects.ZOMBIE_EFFECT);
     public static final DragonScaleArmorItem ZOMBIE_DRAGON_SCALE_CHESTPLATE = new DragonScaleArmorItem(ZOMBIE_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.CHEST, "zombie_dragonscale_tunic", EnumItemBreedTypes.ZOMBIE, DMArmorEffects.ZOMBIE_EFFECT);
@@ -169,21 +139,15 @@ public class DMArmors {
         AETHER_DRAGON_SCALE_MATERIAL.setRepairItem(new ItemStack(ModItems.AetherDragonScales));
         FOREST_DRAGON_SCALE_MATERIAL.setRepairItem(new ItemStack(ModItems.ForestDragonScales));
         FIRE_DRAGON_SCALE_MATERIAL.setRepairItem(new ItemStack(ModItems.FireDragonScales));
-        FIRE2_DRAGON_SCALE_MATERIAL.setRepairItem(new ItemStack(ModItems.FireDragonScales2));
         ICE_DRAGON_SCALE_MATERIAL.setRepairItem(new ItemStack(ModItems.IceDragonScales));
         NETHER_DRAGON_SCALE_MATERIAL.setRepairItem(new ItemStack(ModItems.NetherDragonScales));
-        NETHER2_DRAGON_SCALE_MATERIAL.setRepairItem(new ItemStack(ModItems.NetherDragonScales2));
         ENDER_DRAGON_SCALE_MATERIAL.setRepairItem(new ItemStack(ModItems.EnderDragonScales));
         ENCHANT_DRAGON_SCALE_MATERIAL.setRepairItem(new ItemStack(ModItems.EnchantDragonScales));
         ZOMBIE_DRAGON_SCALE_MATERIAL.setRepairItem(new ItemStack(ModItems.ZombieDragonScales));
         TERRA_DRAGON_SCALE_MATERIAL.setRepairItem(new ItemStack(ModItems.TerraDragonScales));
-        TERRA2_DRAGON_SCALE_MATERIAL.setRepairItem(new ItemStack(ModItems.TerraDragonScales2));
         SUNLIGHT_DRAGON_SCALE_MATERIAL.setRepairItem(new ItemStack(ModItems.SunlightDragonScales));
-        SUNLIGHT2_DRAGON_SCALE_MATERIAL.setRepairItem(new ItemStack(ModItems.SunlightDragonScales2));
         STORM_DRAGON_SCALE_MATERIAL.setRepairItem(new ItemStack(ModItems.StormDragonScales));
-        STORM2_DRAGON_SCALE_MATERIAL.setRepairItem(new ItemStack(ModItems.StormDragonScales2));
         MOONLIGHT_DRAGON_SCALE_MATERIAL.setRepairItem(new ItemStack(ModItems.MoonlightDragonScales));
-        MOONLIGHT_FEMALE_DRAGON_SCALE_MATERIAL.setRepairItem(new ItemStack(ModItems.MOONLIGHT_FEMALE_DRAGON_SCALES));
     }
 
     static {
