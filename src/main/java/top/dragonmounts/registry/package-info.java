@@ -1,0 +1,2 @@
+@javax.annotation.ParametersAreNonnullByDefault
+package top.dragonmounts.registry;

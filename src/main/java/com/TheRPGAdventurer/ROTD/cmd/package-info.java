@@ -1,3 +1,0 @@
-@javax.annotation.ParametersAreNonnullByDefault
-@mcp.MethodsReturnNonnullByDefault
-package com.TheRPGAdventurer.ROTD.cmd;
