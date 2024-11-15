@@ -9,8 +9,6 @@ import com.TheRPGAdventurer.ROTD.util.IHasModel;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -32,6 +30,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
+import static net.minecraft.block.BlockDirectional.FACING;
+
 /**
  * Physical Block of the Dragon Core
  *
@@ -39,9 +39,6 @@ import java.util.Random;
  */
 
 public class BlockDragonShulker extends BlockContainer implements IHasModel {
-
-    public static final PropertyEnum<EnumFacing> FACING = PropertyDirection.create("facing");
-
     public final ItemBlock item = new ItemBlock(this);
 
     public BlockDragonShulker(String name) {
@@ -50,7 +47,7 @@ public class BlockDragonShulker extends BlockContainer implements IHasModel {
         setRegistryName(name);
         setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP));
         ModBlocks.BLOCKS.add(this);
-        setHardness(2000);
+        setHardness(50);
         ModItems.ITEMS.add(this.item.setRegistryName(name));
     }
 
@@ -167,5 +164,10 @@ public class BlockDragonShulker extends BlockContainer implements IHasModel {
     @Override
     public void RegisterModels() {
         ModelLoader.setCustomModelResourceLocation(this.item, 0, new ModelResourceLocation(this.item.getRegistryName(), "inventory"));
+    }
+
+    @Override
+    public boolean hasCustomBreakingProgress(IBlockState state) {
+        return true;
     }
 }

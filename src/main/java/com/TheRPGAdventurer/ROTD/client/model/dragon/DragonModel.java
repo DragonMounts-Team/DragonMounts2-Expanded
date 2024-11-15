@@ -469,7 +469,7 @@ public class DragonModel extends ModelBase {
         dragonAnimator.animate();
 
         // update flags
-        back.isHidden=dragon.isSaddled();
+        back.isHidden = dragon.isSaddled();
 
         // update offsets
         offsetX=dragonAnimator.getModelOffsetX();

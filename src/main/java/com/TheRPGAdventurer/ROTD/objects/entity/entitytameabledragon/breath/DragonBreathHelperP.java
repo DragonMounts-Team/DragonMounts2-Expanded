@@ -14,7 +14,6 @@ import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.helper.Drag
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -239,20 +238,6 @@ public class DragonBreathHelperP extends DragonHelper
     }
   }
 
-  @Override
-  public void writeToNBT(NBTTagCompound nbt) {}
-
-  @Override
-  public void readFromNBT(NBTTagCompound nbt) {}
-
-  @Override
-  public void applyEntityAttributes() {}
-
-  @Override
-  public void onDeathUpdate() {}
-
-  @Override
-  public void onDeath() {}
   private static final Logger L = LogManager.getLogger();
 
   private void updateBreathState(BreathWeaponTarget targetBeingBreathedAt)

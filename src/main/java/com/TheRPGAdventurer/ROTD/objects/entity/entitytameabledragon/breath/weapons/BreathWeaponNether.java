@@ -66,39 +66,26 @@ public class BreathWeaponNether extends BreathWeapon {
     // 2) If the block can be smelted (eg sand), then convert the block to the smelted version
     // 3) If the block can't be smelted then convert to lava
     if (DragonMountsConfig.canFireBreathAffectBlocks) {
+      float max = 0.0F;
       for (EnumFacing facing : EnumFacing.values()) {
-        BlockPos sideToIgnite = pos.offset(facing);
-        int flammability = getFlammabilityCompat(block, world, sideToIgnite, facing);
+        float density = currentHitDensity.getHitDensity(facing);
+        if (density > max) {
+          max = density;
+        }
+        int flammability = getFlammabilityCompat(block, world, pos, facing);
         if (flammability > 0) {
           float thresholdForIgnition = convertFlammabilityToHitDensityThreshold(flammability);
-          float thresholdForDestruction = thresholdForIgnition * 70;
+          //float thresholdForDestruction = thresholdForIgnition * 10;
+          BlockPos sideToIgnite = pos.offset(facing);
           if (currentHitDensity.getHitDensity(facing) >= thresholdForIgnition && world.isAirBlock(sideToIgnite)) {
             burnBlocks(sideToIgnite, rand, 77, world);
+            //    if (densityOfThisFace >= thresholdForDestruction && state.getBlockHardness(world, pos) != -1 && DragonMountsConfig.canFireBreathAffectBlocks) {
+            //   world.setBlockToAir(pos);
           }
-
-          //   if (densityOfThisFace >= thresholdForDestruction && state.getBlockHardness(world, pos) != -1 && DragonMountsConfig.canFireBreathAffectBlocks) {
-          //   world.setBlockToAir(pos);
-          //   }
         }
       }
-    }
-
-    Block block1 = state.getBlock();
-    Item itemFromBlock = Item.getItemFromBlock(block1);
-    ItemStack itemStack;
-    if (itemFromBlock != null && itemFromBlock.getHasSubtypes()) {
-      int metadata = block1.getMetaFromState(state);
-      itemStack = new ItemStack(itemFromBlock, 1, metadata);
-    } else {
-      itemStack = new ItemStack(itemFromBlock);
-    }
-
-    ItemStack smeltingResult = FurnaceRecipes.instance().getSmeltingResult(itemStack);
-    if (smeltingResult != null) {
-      Block smeltedResultBlock = Block.getBlockFromItem(smeltingResult.getItem());
-      if (smeltedResultBlock != null) {
-        IBlockState iBlockStateSmelted = world.getBlockState(pos);
-        iBlockStateSmelted = smeltedResultBlock.getStateFromMeta(smeltingResult.getMetadata());
+      if (max > 0.25F) {
+        this.smeltBlock(world, pos, state);
       }
     }
     return new BreathAffectedBlock();  // reset to zero
@@ -239,8 +226,6 @@ public class BreathWeaponNether extends BreathWeapon {
     
     triggerDamageExceptionsForFire(entity, entityID, DAMAGE_PER_HIT_DENSITY, currentHitDensity);
     entity.attackEntityFrom(DamageSource.causeMobDamage(dragon), DAMAGE_PER_HIT_DENSITY);
-
-    this.xp(entity);
 
     return currentHitDensity;
   }

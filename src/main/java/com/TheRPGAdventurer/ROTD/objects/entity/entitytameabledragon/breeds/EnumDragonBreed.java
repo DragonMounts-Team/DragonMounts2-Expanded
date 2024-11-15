@@ -2,14 +2,13 @@ package com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.breeds;
 
 import com.TheRPGAdventurer.ROTD.util.EnumSerializer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minecraft.block.properties.PropertyEnum;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.util.IStringSerializable;
 
-import java.util.Arrays;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public enum EnumDragonBreed implements IStringSerializable {
-
     AETHER(0, DragonBreedAir::new),
     FIRE(1, DragonBreedFire::new),
     FOREST(2, DragonBreedForest::new),
@@ -29,11 +28,9 @@ public enum EnumDragonBreed implements IStringSerializable {
 //	DARK(16, DragonBreedDark::new);
 //	SPECTER(17, DragonBreedSpecter::new);
 
-    // create static bimap between enums and meta data for faster and easier
-    // lookups
-    public static final PropertyEnum<EnumDragonBreed> BREED = PropertyEnum.create("breed", EnumDragonBreed.class);
     public static final EnumSerializer<EnumDragonBreed> SERIALIZER = new EnumSerializer<>(EnumDragonBreed.class, EnumDragonBreed.END);
-    private static final Int2ObjectOpenHashMap<EnumDragonBreed> META_MAPPING = new Int2ObjectOpenHashMap<>();
+    public static final Function<String, EnumDragonBreed> NAME_MAPPING;
+    private static final Int2ObjectOpenHashMap<EnumDragonBreed> META_MAPPING;
 
     public static EnumDragonBreed byMeta(int meta) {
         return META_MAPPING.get(meta);
@@ -50,7 +47,7 @@ public enum EnumDragonBreed implements IStringSerializable {
     EnumDragonBreed(int meta, Supplier<DragonBreed> factory) {
         this.breed = factory.get();
         this.meta = meta;
-        this.identifier = name().toLowerCase();
+        this.identifier = this.name().toLowerCase();
     }
 
 
@@ -80,7 +77,14 @@ public enum EnumDragonBreed implements IStringSerializable {
     }
 
     static {
-        Arrays.stream(EnumDragonBreed.values()).forEach(breed -> META_MAPPING.put(breed.meta, breed));
+        Object2ObjectOpenHashMap<String, EnumDragonBreed> name = new Object2ObjectOpenHashMap<>();
+        Int2ObjectOpenHashMap<EnumDragonBreed> meta = new Int2ObjectOpenHashMap<>();
+        for (EnumDragonBreed breed : EnumDragonBreed.values()) {
+            name.put(breed.identifier, breed);
+            meta.put(breed.meta, breed);
+        }
+        NAME_MAPPING = name::get;
+        META_MAPPING = meta;
     }
 }
 

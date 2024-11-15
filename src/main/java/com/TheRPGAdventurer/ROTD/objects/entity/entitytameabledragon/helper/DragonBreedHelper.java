@@ -23,7 +23,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import org.apache.commons.lang3.EnumUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -84,7 +83,7 @@ public class DragonBreedHelper extends DragonHelper {
     public void readFromNBT(NBTTagCompound nbt) {
         // read breed name and convert it to the corresponding breed object
         String breedName = nbt.getString(NBT_BREED);
-        EnumDragonBreed breed = EnumUtils.getEnum(EnumDragonBreed.class, breedName.toUpperCase());
+        EnumDragonBreed breed = EnumDragonBreed.NAME_MAPPING.apply(breedName);
         if (breed == null) {
             breed = EnumDragonBreed.FIRE;
             L.warn("Dragon {} loaded with invalid breed type {}, using {} instead",
@@ -156,7 +155,7 @@ public class DragonBreedHelper extends DragonHelper {
             }
 
             // update egg breed every second on the server
-            if (currentType.getBreed().canChangeBreed() && dragon.ticksExisted % TICK_RATE_BLOCK == 0) {
+            if (DragonMountsConfig.shouldChangeBreedViaHabitatOrBlock && currentType.getBreed().canChangeBreed() && dragon.ticksExisted % TICK_RATE_BLOCK == 0) {
                 BlockPos eggPos = dragon.getPosition();
 
                 // scan surrounding for breed-loving blocks

@@ -24,7 +24,7 @@ public class LayerRendererDragonArmor extends LayerRendererDragon {
     
     @Override
     public void doRenderLayer(EntityTameableDragon dragon, float moveTime, float moveSpeed, float partialTicks, float ticksExisted, float lookYaw, float lookPitch, float scale) {
-        int armor = dragon.getArmor();
+        int armor = dragon.getArmorType();
         if (armor < 1 || armor > 4) return;
         this.renderer.bindTexture(TEXTURES[armor - 1]);
         this.model.render(dragon, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
@@ -34,5 +34,4 @@ public class LayerRendererDragonArmor extends LayerRendererDragon {
     public boolean shouldCombineTextures() {
         return false;
     }
-  
 }

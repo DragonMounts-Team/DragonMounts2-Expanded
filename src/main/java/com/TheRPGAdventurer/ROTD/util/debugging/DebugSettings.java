@@ -1,6 +1,7 @@
 package com.TheRPGAdventurer.ROTD.util.debugging;
 
 import com.TheRPGAdventurer.ROTD.DragonMounts;
+import com.TheRPGAdventurer.ROTD.DragonMountsConfig;
 
 import java.util.HashMap;
 
@@ -14,14 +15,14 @@ public class DebugSettings
 
   public static boolean isDebugGuiEnabled()
   {
-    return DragonMounts.instance.getConfig().isDebug() && debugGuiEnabled;
+    return DragonMountsConfig.isDebug() && debugGuiEnabled;
   }
   public static void setDebugGuiEnabled(boolean newstate) {debugGuiEnabled = newstate;}
   private static boolean debugGuiEnabled;
 
   public static boolean isSpawningInhibited()
   {
-    return DragonMounts.instance.getConfig().isDebug() && spawningInhibited;
+    return DragonMountsConfig.isDebug() && spawningInhibited;
   }
   public static void setSpawningInhibited(boolean newstate) {spawningInhibited = newstate;}
   private static boolean spawningInhibited;

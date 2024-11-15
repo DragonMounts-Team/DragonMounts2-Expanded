@@ -3,6 +3,7 @@ package com.TheRPGAdventurer.ROTD.client.render.dragon.layer;
 import com.TheRPGAdventurer.ROTD.client.model.dragon.DragonModel;
 import com.TheRPGAdventurer.ROTD.client.render.dragon.DragonRenderer;
 import com.TheRPGAdventurer.ROTD.client.render.dragon.breeds.DefaultDragonBreedRenderer;
+import com.TheRPGAdventurer.ROTD.inventory.DragonInventory;
 import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.TheRPGAdventurer.ROTD.util.math.Interpolation;
 import net.minecraft.client.Minecraft;
@@ -29,16 +30,17 @@ public class LayerRendererDragonBanner extends LayerRendererDragon {
 
     @Override
     public void doRenderLayer(EntityTameableDragon dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        ItemStack itemstack1=dragon.getBanner1();
-        ItemStack itemstack2=dragon.getBanner2();
-        ItemStack itemstack3=dragon.getBanner3();
-        ItemStack itemstack4=dragon.getBanner4();
+        DragonInventory inventory = dragon.inventory;
+        ItemStack itemstack1 = inventory.getBanner(0);
+        ItemStack itemstack2 = inventory.getBanner(1);
+        ItemStack itemstack3 = inventory.getBanner(2);
+        ItemStack itemstack4 = inventory.getBanner(3);
 
         Minecraft mc = Minecraft.getMinecraft();
 
         GlStateManager.pushMatrix();
 
-        if (itemstack1!=null && itemstack1.getItem()==Items.BANNER && banner1!=null) {
+        if (itemstack1.getItem() == Items.BANNER) {
             banner1.setItemValues(itemstack1, false);
             model.body.postRender(0.0625F);
             ResourceLocation resourcelocation1=this.getBannerResourceLocation(banner1);
@@ -61,7 +63,7 @@ public class LayerRendererDragonBanner extends LayerRendererDragon {
 
         GlStateManager.pushMatrix();
 
-        if (itemstack2!=null && itemstack2.getItem()==Items.BANNER && banner2!=null) {
+        if (itemstack2.getItem() == Items.BANNER) {
             banner2.setItemValues(itemstack2, false);
             model.body.postRender(0.0625F);
             ResourceLocation resourcelocation2=this.getBannerResourceLocation(banner2);
@@ -84,7 +86,7 @@ public class LayerRendererDragonBanner extends LayerRendererDragon {
 
         GlStateManager.pushMatrix();
 
-        if (itemstack3!=null && itemstack3.getItem()==Items.BANNER && banner3!=null) {
+        if (itemstack3.getItem() == Items.BANNER) {
             banner3.setItemValues(itemstack3, false);
             model.body.postRender(0.0625F);
             ResourceLocation resourcelocation3=this.getBannerResourceLocation(banner3);
@@ -105,7 +107,7 @@ public class LayerRendererDragonBanner extends LayerRendererDragon {
 
         GlStateManager.pushMatrix();
 
-        if (itemstack4!=null && itemstack4.getItem()==Items.BANNER && banner4!=null) {
+        if (itemstack4.getItem() == Items.BANNER) {
             banner4.setItemValues(itemstack4, false);
             model.body.postRender(0.0625F);
             ResourceLocation resourcelocation4=this.getBannerResourceLocation(banner4);

@@ -9,18 +9,26 @@
  */
 package com.TheRPGAdventurer.ROTD.cmd;
 
-import net.minecraft.command.CommandBase;
+import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.minecraft.command.CommandException;
+import net.minecraft.command.EntityNotFoundException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentTranslation;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class CommandDragonUnlock extends CommandBase implements IDragonModifier {
-    
+public class CommandDragonUnlock extends DragonHandlerCommand {
+    public CommandDragonUnlock() {
+        super(1);
+    }
+
     @Override
     public String getName() {
         return "unlock";
@@ -28,23 +36,26 @@ public class CommandDragonUnlock extends CommandBase implements IDragonModifier 
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return String.format("%s [username]", getName());
+        return "commands.dragon.unlock.usage";
     }
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        if (sender instanceof EntityPlayerMP) {
-            EntityPlayerMP player;
-            if (args.length > 0) {
-                player = getPlayer(server, sender, args[0]);
-            } else {
-                player = (EntityPlayerMP) sender;    
-            }
-
-            applyModifier(server, sender, dragon -> dragon.setToAllowedOtherPlayers(true));
-        } else {
-            // console can't tame dragons
-            throw new CommandException("commands.dragon.unlock");
+        List<EntityTameableDragon> dragons;
+        switch (args.length) {
+            case 0:
+                dragons = Collections.singletonList(getClosestDragon(sender));
+                break;
+            case 1:
+                dragons = getSelectedDragons(server, sender, args[0]);
+                if (dragons.isEmpty()) throw new EntityNotFoundException("commands.dragon.notFound", args[0]);
+                break;
+            default:
+                throw new WrongUsageException("commands.dragon.unlock.usage");
+        }
+        for (EntityTameableDragon dragon : dragons) {
+            dragon.setToAllowedOtherPlayers(true);
+            sender.sendMessage(new TextComponentTranslation("commands.dragon.unlock.success", dragon.getDisplayName()));
         }
     }
 }

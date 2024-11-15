@@ -12,8 +12,8 @@ package com.TheRPGAdventurer.ROTD.proxy;
 import com.TheRPGAdventurer.ROTD.DragonMountsConfig;
 import com.TheRPGAdventurer.ROTD.client.gui.GuiDragonDebug;
 import com.TheRPGAdventurer.ROTD.client.other.TargetHighlighter;
+import com.TheRPGAdventurer.ROTD.client.render.DragonCoreBlockEntityRenderer;
 import com.TheRPGAdventurer.ROTD.client.render.RenderDM2Cape;
-import com.TheRPGAdventurer.ROTD.client.render.TileEntityDragonShulkerRenderer;
 import com.TheRPGAdventurer.ROTD.client.render.dragon.DragonRenderer;
 import com.TheRPGAdventurer.ROTD.client.render.dragon.breathweaponFX.ClientBreathNodeRenderer;
 import com.TheRPGAdventurer.ROTD.client.userinput.DragonOrbControl;
@@ -52,9 +52,6 @@ import java.util.Arrays;
 public class ClientProxy extends ServerProxy {
 
     private int thirdPersonViewDragon = 0;
-    private int lockY = 0;
-    private boolean followYaw = false;
-    private boolean hover = false;
 
     @Override
     public void PreInitialization(FMLPreInitializationEvent event) {
@@ -65,8 +62,8 @@ public class ClientProxy extends ServerProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityTameableDragon.class, DragonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ClientBreathNodeEntity.class, ClientBreathNodeRenderer::new);
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDragonShulker.class, new TileEntityDragonShulkerRenderer());
-        ModBlocks.DRAGONSHULKER.item.setTileEntityItemStackRenderer(new TileEntityDragonShulkerRenderer.ItemStackRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDragonShulker.class, new DragonCoreBlockEntityRenderer());
+        ModBlocks.DRAGONSHULKER.item.setTileEntityItemStackRenderer(new DragonCoreBlockEntityRenderer.ItemStackRenderer());
 
         //Override mcmod.info - This looks cooler :)
         TextFormatting t = null, r = TextFormatting.RESET;
@@ -145,28 +142,6 @@ public class ClientProxy extends ServerProxy {
 
     public void setDragon3rdPersonView(int view) {
         thirdPersonViewDragon = view;
-    }
-
-    public boolean getDragonFollowYaw() {
-        return followYaw;
-    }
-
-    public void setDragonFollowYaw(boolean followYaw) {
-        this.followYaw = followYaw;
-    }
-
-    public void setDragonLockY(int lockY) {
-        this.lockY = lockY;
-    }
-
-    @Override
-    public boolean getDragonHover() {
-        return hover;
-    }
-
-    @Override
-    public void setDragonHover(boolean hover) {
-        this.hover = hover;
     }
 
     public void registerItemRenderer(Item item, int meta, String id) {

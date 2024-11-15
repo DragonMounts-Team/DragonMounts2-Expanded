@@ -113,7 +113,6 @@ public class ItemDragonWhistle extends Item implements IHasModel {
                 nbt.setString("Breed", dragon.getBreedType().identifier);
 
                 stack.setTagCompound(nbt);
-                dragon.setControllingWhistle(stack);
                 player.sendStatusMessage(new TextComponentTranslation("whistle.msg.hasDragon"), true);
                 return true;
             }

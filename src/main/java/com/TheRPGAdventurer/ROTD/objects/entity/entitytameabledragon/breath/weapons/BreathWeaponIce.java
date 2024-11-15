@@ -104,8 +104,6 @@ public class BreathWeaponIce extends BreathWeapon {
             EntityUtil.addOrMergeEffect((EntityLivingBase) entity, MobEffects.SLOWNESS, 100, 0, false, true);
         }
 
-        this.xp(entity);
-
         return currentHitDensity;
     }
 }

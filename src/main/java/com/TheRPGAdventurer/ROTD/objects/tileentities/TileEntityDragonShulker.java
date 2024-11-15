@@ -4,6 +4,7 @@ import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.inventory.ContainerDragonShulker;
 import com.TheRPGAdventurer.ROTD.objects.blocks.BlockDragonShulker;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -141,10 +142,6 @@ public class TileEntityDragonShulker extends TileEntityLockableLoot implements I
         return this.getBoundingBox(p_190588_1_).contract((double) enumfacing.getXOffset(), (double) enumfacing.getYOffset(), (double) enumfacing.getZOffset());
     }
 
-    public AxisAlignedBB getBoundingBox(IBlockState p_190584_1_) {
-        return this.getBoundingBox((EnumFacing) p_190584_1_.getValue(BlockDragonShulker.FACING));
-    }
-
     public AxisAlignedBB getBoundingBox(EnumFacing p_190587_1_) {
         return Block.FULL_BLOCK_AABB.expand((double) (0.5F * this.getProgress(1.0F) * (float) p_190587_1_.getXOffset()), (double) (0.5F * this.getProgress(1.0F) * (float) p_190587_1_.getYOffset()), (double) (0.5F * this.getProgress(1.0F) * (float) p_190587_1_.getZOffset()));
     }
@@ -153,9 +150,9 @@ public class TileEntityDragonShulker extends TileEntityLockableLoot implements I
         IBlockState iblockstate = this.world.getBlockState(this.getPos());
 
         if (iblockstate.getBlock() instanceof BlockDragonShulker) {
-            EnumFacing enumfacing = (EnumFacing) iblockstate.getValue(BlockDragonShulker.FACING);
+            EnumFacing enumfacing = iblockstate.getValue(BlockDirectional.FACING);
             AxisAlignedBB axisalignedbb = this.getTopBoundingBox(enumfacing).offset(this.pos);
-            List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity((Entity) null, axisalignedbb);
+            List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(null, axisalignedbb);
 
             if (!list.isEmpty()) {
                 for (int i = 0; i < list.size(); ++i) {

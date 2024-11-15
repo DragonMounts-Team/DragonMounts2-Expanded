@@ -42,8 +42,6 @@ import org.apache.logging.log4j.Logger;
  * the dragon during breath weapon (eg jaw opening)
  */
 public class DragonBreathHelper extends DragonHelper {
-    private final DataParameter<String> dataParamBreathWeaponTarget;
-    private final DataParameter<Integer> dataParamBreathWeaponMode;
 
     private final int BREATH_START_DURATION=5; // ticks
     private final int BREATH_STOP_DURATION=5; // ticks
@@ -60,8 +58,6 @@ public class DragonBreathHelper extends DragonHelper {
         if (dragon.isClient()) {
             breathWeaponEmitter=new BreathWeaponEmitter();
         }
-        dataParamBreathWeaponTarget=i_dataParamBreathWeaponTarget;
-        dataParamBreathWeaponMode=i_dataParamBreathWeaponMode;
         //dataWatcher.register(dataParamBreathWeaponTarget, "");  //already registered by caller
         breathAffectedArea = new BreathAffectedArea();
     }
@@ -74,15 +70,12 @@ public class DragonBreathHelper extends DragonHelper {
 
     public float getBreathStateFractionComplete() {
         switch (currentBreathState) {
-            case IDLE: {
+            case IDLE:
+            case SUSTAIN:
                 return 0.0F;
-            }
             case STARTING: {
                 int ticksSpentStarting=tickCounter - transitionStartTick;
                 return MathHelper.clamp(ticksSpentStarting / (float) BREATH_START_DURATION, 0.0F, 1.0F);
-            }
-            case SUSTAIN: {
-                return 0.0F;
             }
             case STOPPING: {
                 int ticksSpentStopping=tickCounter - transitionStartTick;
@@ -99,7 +92,7 @@ public class DragonBreathHelper extends DragonHelper {
     public void onLivingUpdate() {
         ++tickCounter;
         if (dragon!=null) {
-            if (dragon.isClient()) {
+            if (dragon.world.isRemote) {
                 onLivingUpdateClient();
             } else {
                 onLivingUpdateServer();

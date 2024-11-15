@@ -19,9 +19,7 @@ public class LayerRendererDragonSaddle extends LayerRendererDragon {
     public void doRenderLayer(EntityTameableDragon dragon, float moveTime,
                               float moveSpeed, float partialTicks, float ticksExisted, float lookYaw,
                               float lookPitch, float scale) {
-        if (!dragon.isSaddled()) {
-            return;
-        }
+        if (!dragon.isSaddled()) return;
         renderer.bindTexture(breedRenderer.getSaddleTexture());
         model.render(dragon, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
     }

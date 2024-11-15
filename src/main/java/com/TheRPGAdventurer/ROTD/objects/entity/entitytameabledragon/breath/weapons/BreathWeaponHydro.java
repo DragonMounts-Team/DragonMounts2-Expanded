@@ -142,8 +142,6 @@ public class BreathWeaponHydro extends BreathWeapon {
 //        ((EntityLivingBase) entity).addPotionEffect(iceEffect); // Apply a copy of the PotionEffect to the entity
         entity.playSound(SoundEvents.ENTITY_GENERIC_SPLASH, 0.4f, 1.0f);
 
-        this.xp(entity);
-
         return currentHitDensity;
     }
 }

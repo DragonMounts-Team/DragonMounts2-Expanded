@@ -213,3 +213,21 @@ tooltip.dragonmounts.age=年龄：%s
 tooltip.dragonmounts.health=生命值：%s
 tooltip.dragonmounts.owner=主人：%s
 tooltip.dragonmounts.gender=性别：%s
+
+argument.player.toomany=Only one player is allowed, but the provided selector allows more than one
+
+commands.dragon.usage=/dragon <subcommand>
+commands.dragon.breed.usage=/dragon breed <breed> [dragon]
+commands.dragon.breed.invalid=“%s”不是有效的种类
+commands.dragon.breed.success=%s的种类已被设为%s
+commands.dragon.gender.usage=/dragon gender [dragon]
+commands.dragon.gender.success=%s的性别已被设为%s
+commands.dragon.tame.usage=/dragon tame [dragon]
+commands.dragon.tame.success=已使%s被%s驯服
+commands.dragon.unlock.usage=/dragon unlock [dragon]
+commands.dragon.unlock.success=%s现在信任陌生人
+commands.dragon.stage.usage=/dragon stage <stage> [dragon]
+commands.dragon.stage.invalid=“%s”不是有效的年龄段
+commands.dragon.stage.success=%s的年龄段已被设为%s
+commands.dragon.notFound=无法根据“%s”找到龙
+commands.dragon.unspecified=你必须指定被执行龙

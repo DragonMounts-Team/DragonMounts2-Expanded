@@ -37,7 +37,7 @@ public enum DragonLifeStage {
 //  juvenile = 50 minutes
 //          adult = 1 hour
 
-  //
+  public final String identifier;
   public final int durationTicks; // -1 means infinite
   public final float startScale;
   public final float finalScale;
@@ -53,6 +53,7 @@ public enum DragonLifeStage {
     this.startScale = scaleAtStartOfStage;
     this.finalScale = scaleAtEndOfStage;
     this.boundaryTick = prior == null ? this.durationTicks : prior.boundaryTick + this.durationTicks;
+    this.identifier = this.name().toLowerCase();
   }
 
   /** true if we're in the egg, false otherwise

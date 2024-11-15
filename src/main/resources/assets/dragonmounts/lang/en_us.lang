@@ -236,3 +236,21 @@ tooltip.dragonmounts.name=Name: %s
 tooltip.dragonmounts.health=Health: %s
 tooltip.dragonmounts.owner=Owner: %s
 tooltip.dragonmounts.gender=Gender: %s
+
+argument.player.toomany=Only one player is allowed, but the provided selector allows more than one
+
+commands.dragon.usage=/dragon <subcommand>
+commands.dragon.breed.usage=/dragon breed <breed> [dragon]
+commands.dragon.breed.invalid='%s' is not a valid breed
+commands.dragon.breed.success=The breed of %s has been set to %s
+commands.dragon.gender.usage=/dragon gender [dragon]
+commands.dragon.gender.success=The gender of %s has been set to %s
+commands.dragon.tame.usage=/dragon tame [dragon]
+commands.dragon.tame.success=Dragon %s is tamed by %s now
+commands.dragon.unlock.usage=/dragon unlock [dragon]
+commands.dragon.unlock.success=Dragon %s is unlocked now
+commands.dragon.stage.usage=/dragon stage <stage> [dragon]
+commands.dragon.stage.invalid='%s' is not a valid stage
+commands.dragon.stage.success=The stage of %s has been set to %s
+commands.dragon.notFound=Could not find dragon based on '%s'
+commands.dragon.unspecified=You must specify which dragon you wish to perform this action on.

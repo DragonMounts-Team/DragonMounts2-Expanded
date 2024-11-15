@@ -80,7 +80,7 @@ public class GuiDragon extends GuiContainer {
 
         this.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize);
 
-        if (dragon.isChested()) this.drawTexturedModalRect(x, y + 73, 0, 130, 170, 55);
+        if (this.dragon.isChested()) this.drawTexturedModalRect(x, y + 73, 0, 130, 170, 55);
 
         hunger(x, y);
 

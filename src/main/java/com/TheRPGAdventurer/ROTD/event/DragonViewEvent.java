@@ -144,7 +144,7 @@ public class DragonViewEvent {
 //                rideGui.renderDragonBoostHotbar();
 //        }
 //    }
-
+//TODO: Deprecated
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         if (event.getEntityLiving() instanceof EntityPlayer) {

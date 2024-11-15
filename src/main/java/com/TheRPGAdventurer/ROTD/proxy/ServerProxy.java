@@ -13,7 +13,7 @@ import com.TheRPGAdventurer.ROTD.DragonMounts;
 import com.TheRPGAdventurer.ROTD.DragonMountsConfig;
 import com.TheRPGAdventurer.ROTD.DragonMountsTags;
 import com.TheRPGAdventurer.ROTD.capability.ArmorEffectManager;
-import com.TheRPGAdventurer.ROTD.cmd.CommandDragon;
+import com.TheRPGAdventurer.ROTD.cmd.DragonCommandTree;
 import com.TheRPGAdventurer.ROTD.event.VanillaEggHandler;
 import com.TheRPGAdventurer.ROTD.inits.DMArmorEffects;
 import com.TheRPGAdventurer.ROTD.inits.DMCapabilities;
@@ -23,9 +23,7 @@ import com.TheRPGAdventurer.ROTD.objects.entity.entitytameabledragon.EntityTamea
 import com.TheRPGAdventurer.ROTD.objects.items.entity.EntityDragonAmulet;
 import com.TheRPGAdventurer.ROTD.registry.CooldownCategory;
 import com.TheRPGAdventurer.ROTD.util.debugging.StartupDebugCommon;
-import net.minecraft.command.ServerCommandManager;
 import net.minecraft.item.Item;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.*;
@@ -70,7 +68,7 @@ public class ServerProxy {
         DragonMounts.NETWORK_WRAPPER.registerMessage(MessageDragonBreath.MessageDragonBreathHandler.class, MessageDragonBreath.class, 0, Side.SERVER);
         DragonMounts.NETWORK_WRAPPER.registerMessage(MessageDragonExtras.MessageDragonExtrasHandler.class, MessageDragonExtras.class, 1, Side.SERVER);
         DragonMounts.NETWORK_WRAPPER.registerMessage(MessageDragonGui.MessageDragonGuiHandler.class, MessageDragonGui.class, 3, Side.SERVER);
-        DragonMounts.NETWORK_WRAPPER.registerMessage(MessageDragonInventory.MessageDragonInventoryHandler.class, MessageDragonInventory.class, 4, Side.SERVER);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(SSyncBannerPacket.Handler.class, SSyncBannerPacket.class, 4, Side.CLIENT);
         DragonMounts.NETWORK_WRAPPER.registerMessage(MessageDragonSit.MessageDragonSitHandler.class, MessageDragonSit.class, 5, Side.SERVER);
         DragonMounts.NETWORK_WRAPPER.registerMessage(MessageDragonTeleport.MessageDragonTeleportHandler.class, MessageDragonTeleport.class, 6, Side.SERVER);
 
@@ -92,10 +90,8 @@ public class ServerProxy {
         MinecraftForge.EVENT_BUS.register(ArmorEffectManager.Events.class);
     }
 
-    public void ServerStarting(FMLServerStartingEvent evt) {
-        MinecraftServer server = evt.getServer();
-        ServerCommandManager cmdman = (ServerCommandManager) server.getCommandManager();
-        cmdman.registerCommand(new CommandDragon());
+    public void ServerStarting(FMLServerStartingEvent event) {
+        event.registerServerCommand(new DragonCommandTree());
     }
 
     public void ServerStopped(FMLServerStoppedEvent evt) {
@@ -120,30 +116,6 @@ public class ServerProxy {
     }
 
     public void setDragon3rdPersonView(int view) {
-    }
-
-    public boolean getDragonFollowYaw() {
-        return false;
-    }
-
-    public void setDragonFollowYaw(boolean yaw) {
-    }
-
-    public boolean getDragonHover() {
-        return false;
-    }
-
-    public void setDragonHover(boolean hover) {
-    }
-
-    public int getDragonLockY() {
-        return 0;
-    }
-
-    public void setDragonLockY(int yaw) {
-    }
-
-    public void registerModel(Item item, int metadata) {
     }
 
     public void registerItemRenderer(Item item, int meta, String id) {

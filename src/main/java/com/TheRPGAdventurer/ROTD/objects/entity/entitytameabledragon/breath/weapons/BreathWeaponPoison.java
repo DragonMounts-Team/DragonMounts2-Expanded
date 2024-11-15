@@ -85,8 +85,6 @@ public class BreathWeaponPoison extends BreathWeapon {
         triggerDamageExceptions(entity, DAMAGE_PER_HIT_DENSITY, entityID, currentHitDensity);
         entity.attackEntityFrom(DamageSource.causeMobDamage(dragon), DAMAGE_PER_HIT_DENSITY);
 
-        this.xp(entity);
-
         return currentHitDensity;
     }
 

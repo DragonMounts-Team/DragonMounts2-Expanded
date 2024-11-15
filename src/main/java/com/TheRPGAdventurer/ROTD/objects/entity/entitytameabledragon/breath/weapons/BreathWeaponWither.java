@@ -82,14 +82,10 @@ public class BreathWeaponWither extends BreathWeapon {
         Entity entity = world.getEntityByID(entityID);
         if (!(entity instanceof EntityLivingBase) || entity.isDead) return null;
 
-
-        float hitDensity = currentHitDensity.getHitDensity();
-        final float DAMAGE_PER_HIT_DENSITY = WITHER_DAMAGE * hitDensity;
+        final float DAMAGE_PER_HIT_DENSITY = WITHER_DAMAGE * currentHitDensity.getHitDensity();
 
         triggerDamageExceptions(entity, DAMAGE_PER_HIT_DENSITY, entityID, currentHitDensity);
         entity.attackEntityFrom(DamageSource.causeMobDamage(dragon), DAMAGE_PER_HIT_DENSITY);
-
-        this.xp(entity);
 
         return currentHitDensity;
     }
