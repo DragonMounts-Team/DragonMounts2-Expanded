@@ -3,7 +3,7 @@ itemGroup.armorytab=龙骑2：延续—装备
 
 entity.DragonMount.name=龙
 
-entity.DragonMount.ice.name=寒晶龙
+entity.DragonMount.ice.name=冰晶龙
 entity.DragonMount.end.name=末影龙
 entity.DragonMount.ender.name=末影龙
 entity.DragonMount.aether.name=天境龙
@@ -20,7 +20,7 @@ entity.DragonMount.zombie.name=僵尸龙
 entity.DragonMount.terra.name=土纹龙
 entity.DragonMount.moonlight.name=月魄龙
 
-entity.DragonMount.albino.ice.name=白化的寒晶龙
+entity.DragonMount.albino.ice.name=白化的冰晶龙
 entity.DragonMount.albino.ender.name=白化的末影龙
 entity.DragonMount.albino.aether.name=白化的天境龙
 entity.DragonMount.albino.forest.name=白化的森林龙
@@ -36,7 +36,7 @@ entity.DragonMount.albino.zombie.name=白化的僵尸龙
 entity.DragonMount.albino.terra.name=白化的土纹龙
 entity.DragonMount.albino.moonlight.name=白化的月魄龙
 
-entity.DragonMounts.dragon.ice.name=寒晶龙
+entity.DragonMounts.dragon.ice.name=冰晶龙
 entity.DragonMounts.dragon.ender.name=末影龙
 entity.DragonMounts.dragon.aether.name=天境龙
 entity.DragonMounts.dragon.forest.name=森林龙
@@ -56,10 +56,9 @@ entity.DragonMounts.dragon.moonlight.name=月魄龙
 #属性品种
 dragon.forest=森林
 dragon.aether=天境
-dragon.ice=寒晶
+dragon.ice=冰晶
 dragon.water=涟渊
 dragon.fire=赤焰
-dragon.fire2=火属
 dragon.skeleton=骷髅
 dragon.wither=凋灵
 dragon.nether=下界
@@ -119,18 +118,18 @@ tile.block_dragon_shulker.name=龙核心
 tile.storm_egg.name=风暴龙 蛋
 tile.end_egg.name=末影龙 蛋
 tile.zombie_egg.name=僵尸龙 蛋
-tile.sylphid_egg.name=水龙 蛋
+tile.sylphid_egg.name=涟渊龙 蛋
 tile.nether_egg.name=下界龙 蛋
 tile.forest_egg.name=森林龙 蛋
 tile.aether_egg.name=天境龙 蛋
-tile.ice_egg.name=冰龙 蛋
-tile.fire_egg.name=火龙 蛋
+tile.ice_egg.name=冰晶龙 蛋
+tile.fire_egg.name=赤焰龙 蛋
 tile.skeleton_egg.name=骷髅龙 蛋
 tile.wither_egg.name=凋灵龙 蛋
 tile.enchant_egg.name=魔法龙 蛋
-tile.sunlight_egg.name=日光龙 蛋
-tile.moonlight_egg.name=月光龙 蛋
-tile.terra_egg.name=土龙 蛋
+tile.sunlight_egg.name=日耀龙 蛋
+tile.moonlight_egg.name=月魄龙 蛋
+tile.terra_egg.name=土纹龙 蛋
 
 item.removeNBT=<潜行+右键以解除绑定>
 item.armoryitems.info=用龙鳞锻造

@@ -36,6 +36,6 @@ public class DragonBreedStorm extends DragonBreedWater {
 
 	@Override
 	public EnumItemBreedTypes getItemBreed(EntityTameableDragon dragon) {
-		return dragon.isMale() ? EnumItemBreedTypes.STORM : EnumItemBreedTypes.STORM2;
+		return EnumItemBreedTypes.STORM;
 	}
 }

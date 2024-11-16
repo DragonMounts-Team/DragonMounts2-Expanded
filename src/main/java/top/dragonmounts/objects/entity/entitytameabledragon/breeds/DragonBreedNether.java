@@ -96,6 +96,6 @@ public class DragonBreedNether extends DragonBreed {
 
     @Override
     public EnumItemBreedTypes getItemBreed(EntityTameableDragon dragon) {
-        return dragon.isMale() ? EnumItemBreedTypes.NETHER : EnumItemBreedTypes.NETHER2;
+        return  EnumItemBreedTypes.NETHER;
     }
 }

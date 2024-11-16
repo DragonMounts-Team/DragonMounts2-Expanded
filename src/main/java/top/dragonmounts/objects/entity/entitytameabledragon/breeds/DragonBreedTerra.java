@@ -67,6 +67,6 @@ public class DragonBreedTerra extends DragonBreed {
 
     @Override
     public EnumItemBreedTypes getItemBreed(EntityTameableDragon dragon) {
-        return dragon.isMale() ? EnumItemBreedTypes.TERRA : EnumItemBreedTypes.TERRA2;
+        return EnumItemBreedTypes.TERRA;
     }
 }

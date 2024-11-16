@@ -73,13 +73,6 @@ public class ModTools {
 	public static final ItemDragonShovel fireDragonShovel = new ItemDragonShovel(FireDragonScaleMaterial, "fire_dragon_shovel", EnumItemBreedTypes.FIRE);
 	public static final ItemDragonHoe fireDragonHoe = new ItemDragonHoe(FireDragonScaleMaterial, "fire_dragon_hoe", EnumItemBreedTypes.FIRE);
 
-	//Fire2 Start
-	public static final ItemDragonSword fireDragonSword2 = new ItemDragonSword(FireDragonScaleMaterial2, "fire2_dragon_sword", EnumItemBreedTypes.FIRE);   
-	public static final ItemDragonPickAxe fireDragonPickaxe2 = new ItemDragonPickAxe(FireDragonScaleMaterial2, "fire2_dragon_pickaxe", EnumItemBreedTypes.FIRE);
-	public static final ItemDragonAxe fireDragonAxe2 = new ItemDragonAxe(FireDragonScaleMaterial2, "fire2_dragon_axe", damage, speed, EnumItemBreedTypes.FIRE);
-	public static final ItemDragonShovel fireDragonShovel2 = new ItemDragonShovel(FireDragonScaleMaterial2, "fire2_dragon_shovel", EnumItemBreedTypes.FIRE);
-	public static final ItemDragonHoe fireDragonHoe2 = new ItemDragonHoe(FireDragonScaleMaterial2, "fire2_dragon_hoe", EnumItemBreedTypes.FIRE);
-
 	//Ice Start
     public static final ItemDragonSword iceDragonSword = new ItemDragonSword(IceDragonScaleMaterial, "ice_dragon_sword", EnumItemBreedTypes.ICE);
 	public static final ItemDragonPickAxe iceDragonPickaxe = new ItemDragonPickAxe(IceDragonScaleMaterial, "ice_dragon_pickaxe", EnumItemBreedTypes.ICE);
@@ -93,13 +86,6 @@ public class ModTools {
 	public static final ItemDragonAxe netherDragonAxe = new ItemDragonAxe(NetherDragonScaleMaterial, "nether_dragon_axe", netherDamage, netherSpeed, EnumItemBreedTypes.NETHER);
 	public static final ItemDragonShovel netherDragonShovel = new ItemDragonShovel(NetherDragonScaleMaterial, "nether_dragon_shovel", EnumItemBreedTypes.NETHER);
 	public static final ItemDragonHoe netherDragonHoe = new ItemDragonHoe(NetherDragonScaleMaterial, "nether_dragon_hoe", EnumItemBreedTypes.NETHER);
-	
-	//Nether2 Start
-	public static final ItemDragonSword netherDragonSword2 = new ItemDragonSword(NetherDragonScaleMaterial2, "nether2_dragon_sword", EnumItemBreedTypes.NETHER);
-	public static final ItemDragonPickAxe netherDragonPickaxe2 = new ItemDragonPickAxe(NetherDragonScaleMaterial2, "nether2_dragon_pickaxe", EnumItemBreedTypes.NETHER);
-	public static final ItemDragonAxe netherDragonAxe2 = new ItemDragonAxe(NetherDragonScaleMaterial2, "nether2_dragon_axe", netherDamage, netherSpeed, EnumItemBreedTypes.NETHER);
-	public static final ItemDragonShovel netherDragonShovel2 = new ItemDragonShovel(NetherDragonScaleMaterial2, "nether2_dragon_shovel", EnumItemBreedTypes.NETHER);
-	public static final ItemDragonHoe netherDragonHoe2 = new ItemDragonHoe(NetherDragonScaleMaterial2, "nether2_dragon_hoe", EnumItemBreedTypes.NETHER);
 
 	//Ender Start
     public static final ItemDragonSword enderDragonSword = new ItemDragonSword(EnderDragonScaleMaterial, "ender_dragon_sword", EnumItemBreedTypes.END);
@@ -129,20 +115,6 @@ public class ModTools {
 	public static final ItemDragonShovel sunlightDragonShovel = new ItemDragonShovel(SunlightDragonScaleMaterial, "sunlight_dragon_shovel", EnumItemBreedTypes.SUNLIGHT);
 	public static final ItemDragonHoe sunlightDragonHoe = new ItemDragonHoe(SunlightDragonScaleMaterial, "sunlight_dragon_hoe", EnumItemBreedTypes.SUNLIGHT);
 
-	//Storm2 Start
-	public static final ItemDragonSword stormDragonSword2 = new ItemDragonSword(StormDragonScaleMaterial2, "storm2_dragon_sword", EnumItemBreedTypes.STORM);
-	public static final ItemDragonPickAxe stormDragonPickaxe2 = new ItemDragonPickAxe(StormDragonScaleMaterial2, "storm2_dragon_pickaxe", EnumItemBreedTypes.STORM);
-	public static final ItemDragonAxe stormDragonAxe2 = new ItemDragonAxe(StormDragonScaleMaterial2, "storm2_dragon_axe", damage, speed, EnumItemBreedTypes.STORM);
-	public static final ItemDragonShovel stormDragonShovel2 = new ItemDragonShovel(StormDragonScaleMaterial2, "storm2_dragon_shovel", EnumItemBreedTypes.STORM);
-	public static final ItemDragonHoe stormDragonHoe2 = new ItemDragonHoe(StormDragonScaleMaterial2, "storm2_dragon_hoe", EnumItemBreedTypes.STORM);
-	
-	//Sunlight2 Start
-	public static final ItemDragonSword sunlightDragonSword2 = new ItemDragonSword(SunlightDragonScaleMaterial2, "sunlight2_dragon_sword", EnumItemBreedTypes.SUNLIGHT2);
-	public static final ItemDragonPickAxe sunlightDragonPickaxe2 = new ItemDragonPickAxe(SunlightDragonScaleMaterial2, "sunlight2_dragon_pickaxe", EnumItemBreedTypes.SUNLIGHT2);
-	public static final ItemDragonAxe sunlightDragonAxe2 = new ItemDragonAxe(SunlightDragonScaleMaterial2, "sunlight2_dragon_axe", damage, speed, EnumItemBreedTypes.SUNLIGHT2);
-	public static final ItemDragonShovel sunlightDragonShovel2 = new ItemDragonShovel(SunlightDragonScaleMaterial2, "sunlight2_dragon_shovel", EnumItemBreedTypes.SUNLIGHT2);
-	public static final ItemDragonHoe sunlightDragonHoe2 = new ItemDragonHoe(SunlightDragonScaleMaterial2, "sunlight2_dragon_hoe", EnumItemBreedTypes.SUNLIGHT2);
-	
 	//Zombie Start
 	public static final ItemDragonSword zombieDragonSword = new ItemDragonSword(ZombieDragonScaleMaterial, "zombie_dragon_sword", EnumItemBreedTypes.ZOMBIE);
 	public static final ItemDragonPickAxe zombieDragonPickaxe = new ItemDragonPickAxe(ZombieDragonScaleMaterial, "zombie_dragon_pickaxe", EnumItemBreedTypes.ZOMBIE);
@@ -156,13 +128,6 @@ public class ModTools {
 	public static final ItemDragonAxe terraDragonAxe = new ItemDragonAxe(TerraDragonScaleMaterial, "terra_dragon_axe", damage, speed, EnumItemBreedTypes.TERRA);
 	public static final ItemDragonShovel terraDragonShovel = new ItemDragonShovel(TerraDragonScaleMaterial, "terra_dragon_shovel", EnumItemBreedTypes.TERRA);
 	public static final ItemDragonHoe terraDragonHoe = new ItemDragonHoe(TerraDragonScaleMaterial, "terra_dragon_hoe", EnumItemBreedTypes.TERRA);
-	
-	//Terra2 Start
-	public static final ItemDragonSword terraDragonSword2 = new ItemDragonSword(TerraDragonScaleMaterial2, "terra2_dragon_sword", EnumItemBreedTypes.TERRA2);
-	public static final ItemDragonPickAxe terraDragonPickaxe2 = new ItemDragonPickAxe(TerraDragonScaleMaterial2, "terra2_dragon_pickaxe", EnumItemBreedTypes.TERRA2);
-	public static final ItemDragonAxe terraDragonAxe2 = new ItemDragonAxe(TerraDragonScaleMaterial2, "terra2_dragon_axe", damage, speed, EnumItemBreedTypes.TERRA2);
-	public static final ItemDragonShovel terraDragonShovel2 = new ItemDragonShovel(TerraDragonScaleMaterial2, "terra2_dragon_shovel", EnumItemBreedTypes.TERRA2);
-	public static final ItemDragonHoe terraDragonHoe2 = new ItemDragonHoe(TerraDragonScaleMaterial2, "terra2_dragon_hoe", EnumItemBreedTypes.TERRA2);
 
 	//Moonlight Start
 	public static final ItemDragonSword moonlightDragonSword = new ItemDragonSword(MoonlightDragonScaleMaterial, "moonlight_dragon_sword", EnumItemBreedTypes.MOONLIGHT);
@@ -170,12 +135,6 @@ public class ModTools {
 	public static final ItemDragonAxe moonlightDragonAxe = new ItemDragonAxe(MoonlightDragonScaleMaterial, "moonlight_dragon_axe", damage, speed, EnumItemBreedTypes.MOONLIGHT);
 	public static final ItemDragonShovel moonlightDragonShovel = new ItemDragonShovel(MoonlightDragonScaleMaterial, "moonlight_dragon_shovel", EnumItemBreedTypes.MOONLIGHT);
 	public static final ItemDragonHoe moonlightDragonHoe = new ItemDragonHoe(MoonlightDragonScaleMaterial, "moonlight_dragon_hoe", EnumItemBreedTypes.MOONLIGHT);
-	//Moonlight Male Start
-	public static final ItemDragonSword MOONLIGHT_FEMALE_DRAGON_SCALE_SWORD = new ItemDragonSword(MOONLIGHT_FEMALE_DRAGON_SCALE_MATERIAL, "moonlight2_dragon_sword", EnumItemBreedTypes.MOONLIGHT_FEMALE);
-	public static final ItemDragonPickAxe MOONLIGHT_FEMALE_DRAGON_SCALE_PICKAXE = new ItemDragonPickAxe(MOONLIGHT_FEMALE_DRAGON_SCALE_MATERIAL, "moonlight2_dragon_pickaxe", EnumItemBreedTypes.MOONLIGHT_FEMALE);
-	public static final ItemDragonAxe MOONLIGHT_FEMALE_DRAGON_SCALE_AXE = new ItemDragonAxe(MOONLIGHT_FEMALE_DRAGON_SCALE_MATERIAL, "moonlight2_dragon_axe", damage, speed, EnumItemBreedTypes.MOONLIGHT_FEMALE);
-	public static final ItemDragonShovel MOONLIGHT_FEMALE_DRAGON_SCALE_SHOVEL = new ItemDragonShovel(MOONLIGHT_FEMALE_DRAGON_SCALE_MATERIAL, "moonlight2_dragon_shovel", EnumItemBreedTypes.MOONLIGHT_FEMALE);
-	public static final ItemDragonHoe MOONLIGHT_FEMALE_DRAGON_SCALE_HOE = new ItemDragonHoe(MOONLIGHT_FEMALE_DRAGON_SCALE_MATERIAL, "moonlight2_dragon_hoe", EnumItemBreedTypes.MOONLIGHT_FEMALE);
 
 	//Light Start
 	//public static final ItemDragonSword lightDragonSword = new ItemDragonSword(LightDragonScaleMaterial, "light_dragon_sword", EnumItemBreedTypes.LIGHT);

@@ -30,15 +30,12 @@ def makeMaterial(breed: ItemBreedType, factor, enchantment, toughness):
 def makeMaterials():
   low = [
     ItemBreedType.TERRA,
-    ItemBreedType.TERRA2,
     ItemBreedType.MOONLIGHT,
-    ItemBreedType.MOONLIGHT_FEMALE,
     ItemBreedType.ZOMBIE
   ]
   special = [
     ItemBreedType.ENCHANT,
     ItemBreedType.NETHER,
-    ItemBreedType.NETHER2,
     ItemBreedType.ENDER,
     ItemBreedType.SKELETON,
     ItemBreedType.WITHER
@@ -56,6 +53,5 @@ def makeMaterials():
   makeMaterial(ItemBreedType.ENCHANT, 50, 30, 7.0)
   print('defence = new int[]{4, 7, 9, 4};')
   makeMaterial(ItemBreedType.NETHER, 55, 11, 8.0)
-  makeMaterial(ItemBreedType.NETHER2, 55, 11, 8.0)
   makeMaterial(ItemBreedType.ENDER, 70, 11, 9.0)
   print('}')
