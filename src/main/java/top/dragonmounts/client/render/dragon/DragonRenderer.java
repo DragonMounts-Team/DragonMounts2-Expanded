@@ -177,7 +177,7 @@ public class DragonRenderer extends RenderLiving<EntityTameableDragon> {
         if (dragon.getBreedType() == EnumDragonBreed.FOREST) {
             return dragon.isMale() ? texture.getMaleForestBodyTexture(dragon.isBaby(), dragon.getForestType().identifier) : texture.getFemaleForestBodyTexture(dragon.isBaby(), dragon.getForestType().identifier);
         }
-        return dragon.isMale() ? texture.getMaleBodyTexture(dragon.isBaby(), dragon.altTextures()) : texture.getFemaleBodyTexture(dragon.isBaby(), dragon.altTextures());
+        return texture.getMaleBodyTexture(dragon.isBaby(), dragon.altTextures());
     }
 }
 
