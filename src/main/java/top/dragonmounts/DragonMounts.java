@@ -9,15 +9,6 @@
  */
 package top.dragonmounts;
 
-import top.dragonmounts.client.gui.GuiHandler;
-import top.dragonmounts.compat.BaublesCompat;
-import top.dragonmounts.event.EventLiving;
-import top.dragonmounts.event.RegistryEventHandler;
-import top.dragonmounts.inits.DMArmors;
-import top.dragonmounts.inits.DMItemGroups;
-import top.dragonmounts.inits.ModTools;
-import top.dragonmounts.proxy.ServerProxy;
-import top.dragonmounts.util.debugging.testclasses.LoggerLimit;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -30,9 +21,18 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import top.dragonmounts.client.gui.GuiHandler;
+import top.dragonmounts.compat.BaublesCompat;
+import top.dragonmounts.event.EventLiving;
+import top.dragonmounts.event.RegistryEventHandler;
+import top.dragonmounts.inits.DMArmors;
+import top.dragonmounts.inits.DMItemGroups;
+import top.dragonmounts.inits.ModTools;
+import top.dragonmounts.proxy.ServerProxy;
+import top.dragonmounts.util.debugging.testclasses.LoggerLimit;
+import top.dragonmounts.world.DMWorldGenerator;
 
 import java.util.Locale;
 
@@ -93,7 +93,7 @@ public class DragonMounts {
         proxy.render();
         ModTools.InitializaRepairs();
         DMArmors.InitializaRepairs();
-        GameRegistry.registerWorldGenerator(new DragonMountsWorldGenerator(), 0);
+        DMWorldGenerator.init();
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
         RegistryEventHandler.initRegistries();
         // Mod Compat Initialization

@@ -14,6 +14,9 @@ import net.minecraft.command.ICommandSender;
 import net.minecraftforge.server.command.CommandTreeBase;
 import net.minecraftforge.server.command.CommandTreeHelp;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
@@ -25,12 +28,18 @@ public class DragonCommandTree extends CommandTreeBase {
         super.addSubcommand(new CommandDragonTame());
         super.addSubcommand(new CommandDragonGender());
         super.addSubcommand(new CommandDragonUnlock());
+        super.addSubcommand(new LocateCommand());
         super.addSubcommand(new CommandTreeHelp(this));
     }
 
     @Override
     public String getName() {
-        return "dragon";
+        return "dragonmounts";
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Collections.singletonList("dragon");// Compat
     }
 
     @Override

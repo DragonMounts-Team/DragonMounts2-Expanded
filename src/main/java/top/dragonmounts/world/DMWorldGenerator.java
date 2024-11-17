@@ -1,4 +1,4 @@
-package top.dragonmounts;
+package top.dragonmounts.world;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -22,18 +23,30 @@ import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.common.IWorldGenerator;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import top.dragonmounts.DragonMountsConfig;
+import top.dragonmounts.DragonMountsTags;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import static net.minecraft.world.gen.structure.MapGenStructureIO.registerStructure;
+import static net.minecraft.world.gen.structure.MapGenStructureIO.registerStructureComponent;
 import static top.dragonmounts.util.DMUtils.getSurface;
+import static top.dragonmounts.world.DMStructures.ENCHANT_DRAGON_NEST;
 
 /**
  * Handles world generation for dragon nests, make a separate package if we are gonna use Mappers to optimize instead of the IWorldGenerator
  */
-public class DragonMountsWorldGenerator implements IWorldGenerator {
+public class DMWorldGenerator implements IWorldGenerator {
+    public static void init() {
+        registerStructure(DragonNestStructure.Start.class, "DM2CDragonNest");
+        registerStructureComponent(DragonNestTemplate.class, "DM2CDN");
+        GameRegistry.registerWorldGenerator(new DMWorldGenerator(), 0);
+    }
+
     @Override
     public void generate(Random random, int x, int z, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
         if (world.provider.getDimensionType() == DimensionType.NETHER) {
@@ -41,9 +54,14 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
             this.generateZombieAtNether(world, random, x, z);
         } else if (!isDimensionBlacklisted(world.provider.getDimension())) {
             this.generateNestAtSurface(world, random, x, z);
-        } else if (world.provider.getDimensionType() == DimensionType.THE_END && (x > 2000 || z > 2000 || x < -2000 || z < 2000)) {
-            this.generateNestAtEnd(world, random, x, z);
         }
+        //noinspection DataFlowIssue
+        ENCHANT_DRAGON_NEST.generate(world, x, z, null);
+        random.setSeed(world.getSeed());
+        long k = random.nextLong() / 2L * 2L + 1L;
+        long l = random.nextLong() / 2L * 2L + 1L;
+        random.setSeed((long) x * k + (long) z * l ^ world.getSeed());
+        ENCHANT_DRAGON_NEST.generateStructure(world, random, new ChunkPos(x, z));
     }
 
     private BlockPos getEndHeight(World world, BlockPos pos) {
@@ -259,21 +277,6 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
         }
     }
 
-    public void generateNestAtEnd(World world, Random random, int chunkX, int chunkZ) {
-        WorldServer worldserver = (WorldServer) world;
-        MinecraftServer minecraftserver = world.getMinecraftServer();
-
-        if (DragonMountsConfig.canSpawnEndNest && random.nextInt(DragonMountsConfig.EnchantNestRarity) == 1) {
-            int x = (chunkX * 16) + random.nextInt(16);
-            int z = (chunkZ * 16) + random.nextInt(16);
-            BlockPos height = getSurface(world, x, z);
-
-            if (canSpawnHere(world, height, 5)) {
-                loadStructure(new BlockPos(height.getX(), height.getY() - 1, height.getZ()), worldserver, "enchant", LootTableList.CHESTS_END_CITY_TREASURE, true, random);
-            }
-        }
-    }
-
     public void loadStructure(BlockPos pos, World world, String name, ResourceLocation lootTable, boolean hasChest, Random rand) {
         WorldServer worldserver = (WorldServer) world;
         MinecraftServer minecraftserver = world.getMinecraftServer();
@@ -284,9 +287,7 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
         if (template != null) {
             IBlockState iblockstate = world.getBlockState(pos);
             world.notifyBlockUpdate(pos, iblockstate, iblockstate, 2);
-            PlacementSettings placementsettings = (new PlacementSettings()).setIgnoreEntities(false).setChunk(null).setReplacedBlock(null).setIgnoreStructureBlock(true);
-
-            template.addBlocksToWorldChunk(world, pos.add(-1 * template.getSize().getX() / 2, 1, -1 * template.getSize().getZ() / 2), placementsettings);
+            template.addBlocksToWorldChunk(world, pos.add(-1 * template.getSize().getX() / 2, 1, -1 * template.getSize().getZ() / 2), new PlacementSettings());
             putResources(worldserver, lootTable, pos.add(-1 * template.getSize().getX() / 2, 1, -1 * template.getSize().getZ() / 2), template, hasChest, rand);
         } else if (template == null) {
             System.out.println("NO Nest");
