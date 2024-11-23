@@ -42,7 +42,7 @@ public class ModTools {
 	public static final ToolMaterial MOONLIGHT_FEMALE_DRAGON_SCALE_MATERIAL = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":moonlightdragonscales2", 4, 2700, 8.0F, 5.0F, 11);
 	public static final ToolMaterial ZombieDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":zombiedragonscales", 4, 2700, 8.0F, 5.0F, 11);
 	//public static final ToolMaterial LightDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":lightdragonscales", 4, 2700, 8.0F, 5.0F, 11);
-	//public static final ToolMaterial DarkDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":darkdragonscales", 4, 2700, 8.0F, 5.0F, 11);
+	public static final ToolMaterial DarkDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":darkdragonscales", 4, 2700, 8.0F, 5.0F, 11);
 	//public static final ToolMaterial SpecterDragonScaleMaterial = EnumHelper.addToolMaterial(DragonMountsTags.MOD_ID + ":specterdragonscales", 4, 2700, 8.0F, 5.0F, 11);
 	
 	//Forest Start
@@ -144,11 +144,11 @@ public class ModTools {
 	//public static final ItemDragonHoe lightDragonHoe = new ItemDragonHoe(lightDragonScaleMaterial, "light_dragon_hoe", EnumItemBreedTypes.LIGHT);
 	
 	//Dark Start
-	//public static final ItemDragonSword darkDragonSword = new ItemDragonSword(DarkDragonScaleMaterial, "dark_dragon_sword", EnumItemBreedTypes.DARK);
-	//public static final ItemDragonPickAxe darkDragonPickaxe = new ItemDragonPickAxe(DarkDragonScaleMaterial, "dark_dragon_pickaxe", EnumItemBreedTypes.DARK);
-	//public static final ItemDragonAxe darkDragonAxe = new ItemDragonAxe(DarkDragonScaleMaterial, "dark_dragon_axe", damage, speed, EnumItemBreedTypes.DARK);
-	//public static final ItemDragonShovel darkDragonShovel = new ItemDragonShovel(DarkDragonScaleMaterial, "dark_dragon_shovel", EnumItemBreedTypes.DARK);
-	//public static final ItemDragonHoe darkDragonHoe = new ItemDragonHoe(DarkDragonScaleMaterial, "dark_dragon_hoe", EnumItemBreedTypes.DARK);
+	public static final ItemDragonSword darkDragonSword = new ItemDragonSword(DarkDragonScaleMaterial, "dark_dragon_sword", EnumItemBreedTypes.DARK);
+	public static final ItemDragonPickAxe darkDragonPickaxe = new ItemDragonPickAxe(DarkDragonScaleMaterial, "dark_dragon_pickaxe", EnumItemBreedTypes.DARK);
+	public static final ItemDragonAxe darkDragonAxe = new ItemDragonAxe(DarkDragonScaleMaterial, "dark_dragon_axe", damage, speed, EnumItemBreedTypes.DARK);
+	public static final ItemDragonShovel darkDragonShovel = new ItemDragonShovel(DarkDragonScaleMaterial, "dark_dragon_shovel", EnumItemBreedTypes.DARK);
+	public static final ItemDragonHoe darkDragonHoe = new ItemDragonHoe(DarkDragonScaleMaterial, "dark_dragon_hoe", EnumItemBreedTypes.DARK);
 	
 	//Specter Start
 	//public static final ItemDragonSword specterDragonSword = new ItemDragonSword(specterDragonScaleMaterial, "specter_dragon_sword", EnumItemBreedTypes.SPECTER);
@@ -195,7 +195,7 @@ public class ModTools {
 		TerraDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.TerraDragonScales));
 		MoonlightDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.MoonlightDragonScales));
 //		LightDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.LightDragonScales));
-//		DarkDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.DarkDragonScales));
+		DarkDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.DarkDragonScales));
 //		SpecterDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.SpecterDragonScales));
 	}
 }

@@ -36,7 +36,7 @@ public class ModItems {
     public static final Item ZombieDragonScales = new ItemDragonScales("zombie_dragonscales", EnumItemBreedTypes.ZOMBIE);
     public static final Item MoonlightDragonScales = new ItemDragonScales("moonlight_dragonscales", EnumItemBreedTypes.MOONLIGHT);
     //public static final Item LightDragonScales = new ItemDragonScales("light_dragonscales", EnumItemBreedTypes.LIGHT);
-    //public static final Item DarkDragonScales = new ItemDragonScales("dark_dragonscales", EnumItemBreedTypes.DARK);
+    public static final Item DarkDragonScales = new ItemDragonScales("dark_dragonscales", EnumItemBreedTypes.DARK);
     //public static final Item SpecterDragonScales = new ItemDragonScales("specter_dragonscales", EnumItemBreedTypes.SPECTER);
     //Scales end
 

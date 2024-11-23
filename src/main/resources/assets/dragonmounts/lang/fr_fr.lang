@@ -61,29 +61,21 @@ entity.DragonMounts.dragon.moonlight.name=Dragon Lunaire
 
 #Breeds
 dragon.forest=Forêts
-dragon.forest2=Forged
 dragon.aether=Ethéré
 dragon.ice=Givre
-dragon.sylphid=Océanique
 dragon.water=Océanique
 dragon.fire=Flammes
-dragon.fire2=Flammes
 dragon.skeleton=Squelettique
 dragon.wither=Wither
 dragon.nether=Nether
-dragon.nether2=Nether
 dragon.end=Ender
-dragon.ender=Ender
 dragon.enchant=Enchanté
 dragon.sunlight=Solaire
-dragon.sunlight2=Solaire
 dragon.moonlight=Lunaire
-dragon.moonlight2=Lunaire
 dragon.storm=Tempêtes
-dragon.storm2=Tempêtes
 dragon.zombie=Zombifié
 dragon.terra=Terrestre
-dragon.terra2=Terrestre
+dragon.dark=Dark
 
 #Stage
 dragon.egg=Oeuf
