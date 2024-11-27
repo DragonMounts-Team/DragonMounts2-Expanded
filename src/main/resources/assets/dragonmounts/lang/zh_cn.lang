@@ -149,7 +149,7 @@ commands.dragon.nodragons=附近没有龙
 commands.dragon.canttame=你不能驯服龙
 msg.dragon.toggleHover=龙悬停切换
 msg.dragon.toggleFollowYaw=龙跟随偏航
-msg.dragon.toggleYLock=旧操纵（空格和左ALT）
+msg.dragon.toggleYLock=锁定飞行高度
 
 whistle.msg.cleared=龙已解除绑定
 whistle.msg.hasDragon=龙已成功绑定该龙哨

@@ -1,3 +1,0 @@
-@javax.annotation.ParametersAreNonnullByDefault
-@mcp.MethodsReturnNonnullByDefault
-package top.dragonmounts.cmd;
