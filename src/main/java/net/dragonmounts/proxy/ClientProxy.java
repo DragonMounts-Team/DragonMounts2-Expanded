@@ -88,21 +88,14 @@ public class ClientProxy extends ServerProxy {
         addCredit(credits, "WolfShotz (Kay9Unit)", "Coder and codebase improvements");
         addCredit(credits, "FlaemWing", "New nest textures, tool textures and dragon armor item textures.");
         addCredit(credits, "AlexThe666", "Open sourcing the code for I&F, Ice and Fire Owner.");
-        addCredit(credits, "Majty/Guinea Owl", "For Amulet textures.");
-        addCredit(credits, "NightScale", "For new ideas and once funding a server for DM2.");
-        addCredit(credits, "Unakitononeko", "For the new and improved forest textures.");
-        addCredit(credits, "Crafty", "For the new and improved ice textures.");
-        addCredit(credits, "Charles Xavier", "Moderator.");
-        addCredit(credits, "qnebra", "Moderator.");
-        addCredit(credits, "Jester", "Ex Marine over 23 years old when this version is released, gave me life advices on how to improve myself.");
-        addCredit(credits, "WheezieFreeBreezie and Eden", "For being friends with me while playing on a modded server along with our faction Atlas.");
-        addCredit(credits, "WalterTheMighty", "For giving me a modded server experience.");
-        addCredit(credits, "GandalfTheDank", "For making me realize on what happens to me if I'm being a terrible person.");
+        addCredit(credits, "cesar_zorak", "Dragon armor model textures, breed textures and more");
+        addCredit(credits, "NightScale", "For contributing new ideas");
+        addCredit(credits, "Unakitononeko", "For the new and improved forest textures");
         addCredit(credits, "TheGreyGhost", "Old DM1 Developer. Prototype Dragon Breath.");
         addCredit(credits, "Tomanex", "Dragon Mounts Team Founder and Texture Artist. Revamped various textures");
         addCredit(credits, "JDSK0ala", "Dragon Mounts Team Founder and Beta Tester");
-        addCredit(credits, "Moaswies", "Updating the code and continuing Dragon Mounts 2 on Java 1.12.2 after the Dragon Mounts team was founded");
-        addCredit(credits, "2190303755 (Number-Man)", "Updating the code and continuing Dragon Mounts 2 on Java 1.12.2 after the Dragon Mounts team was founded");
+        addCredit(credits, "2190303755 (Number-Man)", "Lead Developer and Coder for Dragon Mounts 2: Continued");
+        addCredit(credits, "Moaswies", "Coder for Dragon Mounts 2: Continued");
         addCredit(credits, "EnderEXE", "Beta Tester");
         addCredit(credits, "Tomohiko", "For contributing Japanese localization");
         addCredit(credits, "Signis Kerman", "For contributing French localization");
@@ -172,4 +165,4 @@ public class ClientProxy extends ServerProxy {
     public File getDataDirectory() {
         return Minecraft.getMinecraft().gameDir;
     }
-            }
+}

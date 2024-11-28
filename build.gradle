@@ -47,7 +47,7 @@ version = propertyString('mod_version')
 group = propertyString('root_package')
 
 base {
-    archivesName.set((propertyString('mod_name') as String).replaceAll(' ', ''))
+    archivesName.set((propertyString('mod_name') as String).replaceAll(/[:\s]/, ''))
 }
 
 sourceSets.main.resources.srcDir('src/generated/')
