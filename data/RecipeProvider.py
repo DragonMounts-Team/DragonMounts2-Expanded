@@ -115,27 +115,15 @@ def generateRecipes(output: Output):
       .groupBy('dragon_scale_bow')\
       .unlockedBy('has_scales', unlock)\
       .save(output, 'combat')
-    if (breed is ItemBreedType.NETHER2 or breed is ItemBreedType.STORM2):
-      name = 'dragon_shield_' + breed.value.path[:-1]
-      shaped(makeId(name))\
-        .define('W', dragonScales)\
-        .define('o', ingot['iron'])\
-        .pattern('WoW')\
-        .pattern('WWW')\
-        .pattern(' W ')\
-        .groupBy('dragon_scale_shield')\
-        .unlockedBy('has_scales', unlock)\
-        .save(output, 'combat', name + '2')
-    else:
-      shaped(base.withPrefix('dragon_shield_'))\
-        .define('W', dragonScales)\
-        .define('o', ingot['iron'])\
-        .pattern('WoW')\
-        .pattern('WWW')\
-        .pattern(' W ')\
-        .groupBy('dragon_scale_shield')\
-        .unlockedBy('has_scales', unlock)\
-        .save(output, 'combat')
+    shaped(base.withPrefix('dragon_shield_'))\
+      .define('W', dragonScales)\
+      .define('o', ingot['iron'])\
+      .pattern('WoW')\
+      .pattern('WWW')\
+      .pattern(' W ')\
+      .groupBy('dragon_scale_shield')\
+      .unlockedBy('has_scales', unlock)\
+      .save(output, 'combat')
   for carriageType in CarriageType:
     shaped(makeId('carriage_' + carriageType.name))\
       .define('X', leather)\

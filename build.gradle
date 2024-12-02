@@ -47,7 +47,7 @@ version = propertyString('mod_version')
 group = propertyString('root_package')
 
 base {
-    archivesName.set((propertyString('mod_name') as String).replaceAll(' ', ''))
+    archivesName.set((propertyString('mod_name') as String).replaceAll(/[:\s]/, ''))
 }
 
 sourceSets.main.resources.srcDir('src/generated/')
@@ -172,13 +172,13 @@ processResources {
     filterList.addAll(propertyStringList('mixin_configs').collect(config -> "mixins.${config}.json" as String))
 
     filesMatching(filterList) { fcd ->
-        def authors = propertyStringList('mod_authors', ',').join(', ')
+        def authors = propertyStringList('mod_authors', ',')
         fcd.expand(
                 'mod_id': propertyString('mod_id'),
                 'mod_name': propertyString('mod_name'),
                 'mod_version': project.version,
                 'mod_description': propertyString('mod_description'),
-                'mod_authors': authors.isEmpty() ? "" : authors.substring(1, authors.length() - 1),
+                'mod_authors': authors.isEmpty() ? "" : authors.join('", "'),
                 'mod_credits': propertyString('mod_credits'),
                 'mod_url': propertyString('mod_url'),
                 'mod_update_json': propertyString('mod_update_json'),
