@@ -14,14 +14,15 @@ Feel free to use the mod in any modpacks. You are allowed to use it, you do not 
 Any modpack which uses Dragon Mounts 2 takes full responsibility for user support queries.
 For anyone else, we only support official builds from Curse/Curseforge, Modrinth, and GitHub, not custom built jars. We also do not take bug reports for outdated builds of Minecraft.
 ## Credits
-Dragon Mounts 2 Credits:
+Dragon Mounts 2 Continued Credits:
 - BarracudaATA - Open sourcing the mod to let others create projects under the Dragon Mounts name
 - Kingdomall & Shannieann - Giving us permission to continue maintenance of DM2, officially endorsing our continuation
 - Tomanex - Dragon Mounts Team Founder and Texture Artist. Revamped various textures
 - JDSK0ala - Dragon Mounts Team Founder and Beta Tester
-- 2190303755 (Number-Man) - Updating the code and continuing Dragon Mounts 2 on Java 1.12.2 after the Dragon Mounts team was founded
+- 2190303755 (Number-Man) - Lead Developer and Coder for Dragon Mounts 2: Continued
+- Moaswies - Coder for Dragon Mounts 2: Continued
 - EnderEXE - Beta Tester
-- Tomohiko, Signis Kerman - For making the Japanese and French translations respectively
+- Tomohiko, Signis Kerman - For contributing the Japanese and French translations respectively
 
 Former Dragon Mounts 2 Developers:
 - TheRPGAdventurer - Former author of Dragon Mounts 2
