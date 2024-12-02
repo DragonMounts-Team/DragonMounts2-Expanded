@@ -23,7 +23,6 @@ import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon
 import net.dragonmounts.objects.items.entity.EntityDragonAmulet;
 import net.dragonmounts.registry.CooldownCategory;
 import net.dragonmounts.util.debugging.StartupDebugCommon;
-import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.*;
@@ -108,17 +107,11 @@ public class ServerProxy {
                 3, DragonMounts.instance, 64, 20, true);
     }
 
-    public void render() {
-    }
-
     public int getDragon3rdPersonView() {
         return 0;
     }
 
     public void setDragon3rdPersonView(int view) {
-    }
-
-    public void registerItemRenderer(Item item, int meta, String id) {
     }
 
     // get the directory on disk used for storing the game files

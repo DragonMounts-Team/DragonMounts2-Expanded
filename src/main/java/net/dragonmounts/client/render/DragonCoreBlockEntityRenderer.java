@@ -1,8 +1,8 @@
 package net.dragonmounts.client.render;
 
+import net.dragonmounts.block.DragonCoreBlock;
+import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.client.model.DragonCoreModel;
-import net.dragonmounts.objects.blocks.BlockDragonShulker;
-import net.dragonmounts.objects.tileentities.TileEntityDragonShulker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -18,12 +18,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import static net.dragonmounts.DragonMounts.makeId;
 
 @SideOnly(Side.CLIENT)
-public class DragonCoreBlockEntityRenderer extends TileEntitySpecialRenderer<TileEntityDragonShulker> implements IDragonCoreRenderer {
+public class DragonCoreBlockEntityRenderer extends TileEntitySpecialRenderer<DragonCoreBlockEntity> implements IDragonCoreRenderer {
     private static final ResourceLocation TEXTURE = makeId("textures/blocks/dragon_core.png");
     private static final DragonCoreModel MODEL = new DragonCoreModel();
 
     @Override
-    public void render(TileEntityDragonShulker core, double x, double y, double z, float partialTicks, int destroy, float alpha) {
+    public void render(DragonCoreBlockEntity core, double x, double y, double z, float partialTicks, int destroy, float alpha) {
         TextureManager manager = this.rendererDispatcher.renderEngine;
         if (manager == null) return;
         MODEL.render(manager, this, (float) x, (float) y, (float) z, destroy, core.getProgress(partialTicks), 0.0625F, alpha);
@@ -56,7 +56,7 @@ public class DragonCoreBlockEntityRenderer extends TileEntitySpecialRenderer<Til
 
         public void renderByItem(ItemStack stack, float partialTicks) {
             Item item = stack.getItem();
-            if (item instanceof ItemBlock && ((ItemBlock) item).getBlock() instanceof BlockDragonShulker) {
+            if (item instanceof ItemBlock && ((ItemBlock) item).getBlock() instanceof DragonCoreBlock) {
                 TextureManager manager = Minecraft.getMinecraft().renderEngine;
                 if (manager == null) return;
                 MODEL.render(manager, this, 0.0F, 0.0F, 0.0F, -1, 0.0F, 0.0625F, 1.0F);

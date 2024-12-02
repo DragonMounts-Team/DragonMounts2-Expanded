@@ -4,7 +4,6 @@ import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.inits.ModItems;
 import net.dragonmounts.util.DMUtils;
-import net.dragonmounts.util.IHasModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -21,7 +20,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemDragonShield extends ItemShield implements IHasModel {
+public class ItemDragonShield extends ItemShield {
 
     public EnumItemBreedTypes type;
     public ToolMaterial material;
@@ -77,10 +76,5 @@ public class ItemDragonShield extends ItemShield implements IHasModel {
         for (CreativeTabs tab : this.getCreativeTabs())
             if (tab == targetTab) return true;
         return targetTab == CreativeTabs.SEARCH;
-    }
-
-    @Override
-    public void RegisterModels() {
-        DragonMounts.proxy.registerItemRenderer(this, 0, "inventory");
     }
 }

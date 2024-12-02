@@ -2,22 +2,22 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "dragonmounts:dark_dragon_shovel"
+      "dragonmounts:dragon_nest"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "dragonmounts:dark_dragon_shovel"
+        "recipe": "dragonmounts:dragon_nest"
       }
     },
-    "has_scales": {
+    "has_stick": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "dragonmounts:dark_dragonscales"
+            "item": "minecraft:stick"
           }
         ]
       }
@@ -26,7 +26,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_scales"
+      "has_stick"
     ]
   ]
 }

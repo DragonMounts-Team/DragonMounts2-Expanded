@@ -9,15 +9,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.EnumHelper;
-import net.dragonmounts.objects.items.gemset.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ModTools {
-	//Tool Array
-	public static final List<Item> TOOLS = new ArrayList<Item>();
-	
 	static float damage = 10.0F; static float speed = -2.8F;
 	static float netherDamage = 12.0F; static float netherSpeed = -2.9F;
 	static float enderDamage = 9.0F; static float enderSpeed = -2.9F;
@@ -195,7 +188,7 @@ public class ModTools {
 		TerraDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.TerraDragonScales));
 		MoonlightDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.MoonlightDragonScales));
 //		LightDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.LightDragonScales));
-		DarkDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.DarkDragonScales));
+		DarkDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.DARK_DRAGON_SCALES));
 //		SpecterDragonScaleMaterial.setRepairItem(new ItemStack(ModItems.SpecterDragonScales));
 	}
 }

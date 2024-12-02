@@ -2,7 +2,7 @@ package net.dragonmounts.objects.items.gemset;
 
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
-import net.dragonmounts.inits.ModTools;
+import net.dragonmounts.inits.ModItems;
 import net.dragonmounts.objects.items.EnumItemBreedTypes;
 import net.dragonmounts.util.DMUtils;
 import net.minecraft.client.util.ITooltipFlag;
@@ -28,7 +28,7 @@ public class ItemDragonHoe extends ItemHoe {
         this.setTranslationKey("dragon_hoe");
         this.type=type;
 
-        ModTools.TOOLS.add(this);
+        ModItems.ITEMS.add(this);
     }
 
     @Override

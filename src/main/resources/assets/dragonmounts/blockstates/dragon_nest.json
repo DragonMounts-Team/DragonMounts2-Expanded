@@ -1,8 +1,7 @@
 {
     "variants": {
 	    "normal":{
-		    "model": "dragonmounts:pileofsticks"
- 
+		    "model": "dragonmounts:dragon_nest"
 		} 
 	}  
 }

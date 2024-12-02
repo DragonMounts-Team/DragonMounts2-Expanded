@@ -53,7 +53,7 @@ egg.cantHatchEnd.DragonMounts=Дракон не может вылупится и
 item.diamond_shears.name=Алмазные ножницы
 item.structure_spawner.name=Structure Spawner (Debug)
 
-tile.pileofsticks.name=Блок гнезда
+tile.dragon_nest.name=Блок гнезда
 item.dragonEgg.name=%s Яйцо
 
 item.carriage_oak.name=Дубовая каретка

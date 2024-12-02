@@ -2,7 +2,7 @@ package net.dragonmounts.objects.items.gemset;
 
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
-import net.dragonmounts.inits.ModTools;
+import net.dragonmounts.inits.ModItems;
 import net.dragonmounts.objects.items.EnumItemBreedTypes;
 import net.dragonmounts.util.DMUtils;
 import net.minecraft.client.util.ITooltipFlag;
@@ -27,8 +27,8 @@ public class ItemDragonShovel extends ItemSpade {
         this.setTranslationKey("dragon_shovel");
         this.setRegistryName(new ResourceLocation(DragonMountsTags.MOD_ID, unlocalizedName));
         this.type=type;
-        
-        ModTools.TOOLS.add(this);
+
+        ModItems.ITEMS.add(this);
     }
 
     @Override

@@ -1,13 +1,11 @@
 package net.dragonmounts.objects.items;
 
-import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.inits.ModItems;
-import net.dragonmounts.util.IHasModel;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 
-public class ItemDragonWand extends Item implements IHasModel
+public class ItemDragonWand extends Item
 {
 	
 	public ItemDragonWand(String name) {
@@ -17,11 +15,5 @@ public class ItemDragonWand extends Item implements IHasModel
 	//	this.setCreativeTab(DragonMounts.TAB);
 		
 		ModItems.ITEMS.add(this);
-	}
-
-	@Override
-	public void RegisterModels()
-	{
-		DragonMounts.proxy.registerItemRenderer(this, 0, "inventory");
 	}
 }

@@ -9,17 +9,19 @@ c ** 2012 August 13
  */
 package net.dragonmounts.objects.entity.entitytameabledragon;
 
+import com.google.common.base.Optional;
+import io.netty.buffer.ByteBuf;
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.DragonMountsLootTables;
+import net.dragonmounts.block.BlockDragonBreedEgg;
+import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.client.gui.GuiHandler;
 import net.dragonmounts.client.model.dragon.anim.DragonAnimator;
-import net.dragonmounts.inits.*;
 import net.dragonmounts.inits.*;
 import net.dragonmounts.inventory.DragonInventory;
 import net.dragonmounts.network.MessageDragonBreath;
 import net.dragonmounts.network.MessageDragonExtras;
-import net.dragonmounts.objects.blocks.BlockDragonBreedEgg;
 import net.dragonmounts.objects.entity.entitycarriage.EntityCarriage;
 import net.dragonmounts.objects.entity.entitytameabledragon.ai.ground.EntityAIDragonSit;
 import net.dragonmounts.objects.entity.entitytameabledragon.ai.path.PathNavigateFlying;
@@ -29,15 +31,11 @@ import net.dragonmounts.objects.entity.entitytameabledragon.breeds.DragonBreed;
 import net.dragonmounts.objects.entity.entitytameabledragon.breeds.DragonBreedForest;
 import net.dragonmounts.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import net.dragonmounts.objects.entity.entitytameabledragon.helper.*;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.*;
 import net.dragonmounts.objects.entity.entitytameabledragon.helper.util.Pair;
 import net.dragonmounts.objects.items.ItemDragonEssence;
 import net.dragonmounts.objects.items.ItemDragonScales;
-import net.dragonmounts.objects.tileentities.TileEntityDragonShulker;
 import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.math.MathX;
-import com.google.common.base.Optional;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -873,10 +871,10 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
             this.writeToNBT(nbt);
             stack.setTagCompound(nbt);
             BlockPos pos = this.getPosition();
-            this.world.setBlockState(pos, ModBlocks.DRAGONSHULKER.getDefaultState(), 1);
+            this.world.setBlockState(pos, DMBlocks.DRAGON_CORE.getDefaultState(), 1);
             TileEntity tile = this.world.getTileEntity(pos);
-            if (tile instanceof TileEntityDragonShulker) {
-                ((TileEntityDragonShulker) tile).setInventorySlotContents(0, stack);
+            if (tile instanceof DragonCoreBlockEntity) {
+                ((DragonCoreBlockEntity) tile).setInventorySlotContents(0, stack);
             }
         } else if (!isEgg()) {
             this.inventory.dropAllItems();
@@ -1874,7 +1872,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
     }
 
     @Override
-    public List<ItemStack> onSheared(ItemStack stack, net.minecraft.world.IBlockAccess world, BlockPos pos, int fortune) {
+    public List<ItemStack> onSheared(ItemStack stack, IBlockAccess world, BlockPos pos, int fortune) {
         Item item = ItemDragonScales.byBreed(this.getBreed().getItemBreed(this));
         if (item == null) return Collections.emptyList();
         this.setSheared(true);
@@ -2013,7 +2011,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
                         if (this.getPassengers().size() < 3) {
                             this.setRidingPlayer(player);
                         }
-                    } else if (stack.getItem() == Items.SADDLE) {
+                    } else if (!stack.isEmpty() && stack.getItem() == Items.SADDLE) {
                         if (player.capabilities.isCreativeMode) {
                             ItemStack saddle = stack.copy();
                             saddle.setCount(1);

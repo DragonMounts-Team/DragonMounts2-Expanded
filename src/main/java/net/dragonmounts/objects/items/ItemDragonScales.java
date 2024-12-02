@@ -1,9 +1,7 @@
 package net.dragonmounts.objects.items;
 
-import net.dragonmounts.DragonMounts;
 import net.dragonmounts.inits.DMItemGroups;
 import net.dragonmounts.util.DMUtils;
-import net.dragonmounts.util.IHasModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,7 +14,7 @@ import java.util.Collection;
 import java.util.EnumMap;
 import java.util.List;
 
-public class ItemDragonScales extends Item implements IHasModel {
+public class ItemDragonScales extends Item {
     private static final EnumMap<EnumItemBreedTypes, ItemDragonScales> INSTANCES = new EnumMap<>(EnumItemBreedTypes.class);
     public EnumItemBreedTypes type;
 
@@ -44,10 +42,5 @@ public class ItemDragonScales extends Item implements IHasModel {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         tooltip.add(type.color + DMUtils.translateToLocal(type.translationKey));
-    }
-
-    @Override
-    public void RegisterModels() {
-        DragonMounts.proxy.registerItemRenderer(this, 0, "inventory");
     }
 }

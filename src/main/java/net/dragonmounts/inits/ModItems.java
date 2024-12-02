@@ -1,18 +1,19 @@
 package net.dragonmounts.inits;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
+import net.dragonmounts.item.CraftableBlockItem;
 import net.dragonmounts.items.ItemDragonOrb;
 import net.dragonmounts.items.ItemTestRunner;
 import net.dragonmounts.objects.entity.entitycarriage.EntityCarriage;
 import net.dragonmounts.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import net.dragonmounts.objects.items.*;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
-import net.dragonmounts.objects.items.*;
 
 import java.util.List;
 
@@ -20,6 +21,10 @@ public class ModItems {
     public static final ReferenceOpenHashSet<Item> DRAGON_INTERACTABLE = new ReferenceOpenHashSet<>();
     public static final ReferenceOpenHashSet<Item> HARDCODED_AQUATIC_FOOD = new ReferenceOpenHashSet<>();
     public static final List<Item> ITEMS = new ObjectArrayList<>();
+
+    public static final Item DRAGON_NEST = new CraftableBlockItem(DMBlocks.DRAGON_NEST, DMItemGroups.MAIN);
+    public static final Item DRAGON_CORE = new ItemBlock(DMBlocks.DRAGON_CORE).setRegistryName(DMBlocks.DRAGON_CORE.getRegistryName());
+    public static final Item DRAGON_EGG = new ItemDragonBreedEgg().setRegistryName("dragon_egg");
 
     //Scales Start
     public static final Item ForestDragonScales = new ItemDragonScales("forest_dragonscales", EnumItemBreedTypes.FOREST);
@@ -36,7 +41,7 @@ public class ModItems {
     public static final Item ZombieDragonScales = new ItemDragonScales("zombie_dragonscales", EnumItemBreedTypes.ZOMBIE);
     public static final Item MoonlightDragonScales = new ItemDragonScales("moonlight_dragonscales", EnumItemBreedTypes.MOONLIGHT);
     //public static final Item LightDragonScales = new ItemDragonScales("light_dragonscales", EnumItemBreedTypes.LIGHT);
-    public static final Item DarkDragonScales = new ItemDragonScales("dark_dragonscales", EnumItemBreedTypes.DARK);
+    public static final Item DARK_DRAGON_SCALES = new ItemDragonScales("dark_dragon_scales", EnumItemBreedTypes.DARK);
     //public static final Item SpecterDragonScales = new ItemDragonScales("specter_dragonscales", EnumItemBreedTypes.SPECTER);
     //Scales end
 
@@ -144,9 +149,16 @@ public class ModItems {
         DRAGON_INTERACTABLE.add(ModItems.Amulet);
         DRAGON_INTERACTABLE.add(Items.BONE);
         DRAGON_INTERACTABLE.add(Items.STICK);
+        DRAGON_INTERACTABLE.add(DMArmors.IRON_DRAGON_ARMOR);
+        DRAGON_INTERACTABLE.add(DMArmors.GOLD_DRAGON_ARMOR);
+        DRAGON_INTERACTABLE.add(DMArmors.EMERALD_DRAGON_ARMOR);
+        DRAGON_INTERACTABLE.add(DMArmors.DIAMOND_DRAGON_ARMOR);
         HARDCODED_AQUATIC_FOOD.add(Items.FISH);
         HARDCODED_AQUATIC_FOOD.add(Items.COOKED_FISH);
         ITEMS.addAll(ItemDragonScales.getInstances());
+        ITEMS.add(DRAGON_CORE);
+        ITEMS.add(DRAGON_NEST);
+        ITEMS.add(DRAGON_EGG);
     }
 
     public static boolean isAquaticFood(ItemStack stack) {

@@ -5,7 +5,6 @@ import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.inits.ModItems;
 import net.dragonmounts.objects.entity.entitycarriage.EntityCarriage;
 import net.dragonmounts.util.DMUtils;
-import net.dragonmounts.util.IHasModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -30,7 +29,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemCarriage extends Item implements IHasModel {
+public class ItemCarriage extends Item {
 
     EntityCarriage.Type type;
 
@@ -125,10 +124,5 @@ public class ItemCarriage extends Item implements IHasModel {
         for (CreativeTabs tab : this.getCreativeTabs())
             if (tab == targetTab) return true;
         return targetTab == CreativeTabs.SEARCH;
-    }
-
-    @Override
-    public void RegisterModels() {
-        DragonMounts.proxy.registerItemRenderer(this, 0, "inventory");
     }
 }

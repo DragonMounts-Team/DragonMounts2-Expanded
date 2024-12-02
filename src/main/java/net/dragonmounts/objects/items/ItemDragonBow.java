@@ -2,9 +2,8 @@ package net.dragonmounts.objects.items;
 
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
-import net.dragonmounts.inits.ModTools;
+import net.dragonmounts.inits.ModItems;
 import net.dragonmounts.util.DMUtils;
-import net.dragonmounts.util.IHasModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -31,7 +30,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemDragonBow extends ItemBow implements IHasModel {
+public class ItemDragonBow extends ItemBow {
 
     private final EnumItemBreedTypes type;
     private final Item repairItem;
@@ -44,7 +43,7 @@ public class ItemDragonBow extends ItemBow implements IHasModel {
         setMaxDamage(725);
         setTranslationKey("dragon_bow");
         setRegistryName(new ResourceLocation(DragonMountsTags.MOD_ID, "dragon_bow_" + type.identifier));
-        ModTools.TOOLS.add(this);
+        ModItems.ITEMS.add(this);
     }
 
     /**
@@ -189,7 +188,4 @@ public class ItemDragonBow extends ItemBow implements IHasModel {
             if (tab == targetTab) return true;
         return targetTab == CreativeTabs.SEARCH;
     }
-
-    @Override
-    public void RegisterModels() { DragonMounts.proxy.registerItemRenderer(this, 0, "inventory"); }
 }

@@ -1,6 +1,6 @@
 package net.dragonmounts.inventory;
 
-import net.dragonmounts.objects.tileentities.TileEntityDragonShulker;
+import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -13,17 +13,17 @@ import net.minecraft.item.ItemStack;
  *
  * @author WolfShotz
  */
-public class ContainerDragonShulker extends Container {
+public class DragonCoreContainer extends Container {
+    public final DragonCoreBlockEntity core;
     private final int numRows;
-    private final TileEntityDragonShulker shulkerInventory;
 
-    public ContainerDragonShulker(InventoryPlayer playerInv, TileEntityDragonShulker tileEntityDragonShulker, EntityPlayer player) {
-        this.shulkerInventory=tileEntityDragonShulker;
-        this.numRows = tileEntityDragonShulker.getSizeInventory();
-        tileEntityDragonShulker.openInventory(player);
+    public DragonCoreContainer(InventoryPlayer playerInv, DragonCoreBlockEntity core, EntityPlayer player) {
+        this.core = core;
+        this.numRows = core.getSizeInventory();
+        core.openInventory(player);
 
         //Build Dragon Core Inventory Slots
-        this.addSlotToContainer(new Slot(tileEntityDragonShulker, 0, 80, 36));
+        this.addSlotToContainer(new Slot(core, 0, 80, 36));
 
         //Build Player Inventory Slots
         for (int i1=0; i1 < 3; ++i1) {
@@ -40,13 +40,13 @@ public class ContainerDragonShulker extends Container {
 
     @Override
     public boolean canInteractWith(EntityPlayer playerIn) {
-        return this.shulkerInventory.isUsableByPlayer(playerIn);
+        return this.core.isUsableByPlayer(playerIn);
     }
 
     @Override
     public void onContainerClosed(EntityPlayer playerIn) {
         super.onContainerClosed(playerIn);
-        shulkerInventory.closeInventory(playerIn);
+        this.core.closeInventory(playerIn);
     }
 
     @Override
@@ -74,9 +74,5 @@ public class ContainerDragonShulker extends Container {
         }
 
         return itemstack;
-    }
-
-    public TileEntityDragonShulker getShulkerInventory() {
-        return this.shulkerInventory;
     }
 }

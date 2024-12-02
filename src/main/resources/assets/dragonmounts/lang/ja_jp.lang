@@ -126,8 +126,8 @@ item.dragonarmor_gold.name=ゴールドドラゴンアーマー
 item.dragonarmor_emerald.name=エメラルドドラゴンアーマー
 
 # Tiles
-tile.pileofsticks.name=ネストブロック
-tile.block_dragon_shulker.name=ドラゴンコア
+tile.dragon_nest.name=ネストブロック
+tile.dragon_core.name=ドラゴンコア
 
 tile.storm_egg.name=ストームドラゴンエッグ
 tile.end_egg.name=エンダードラゴンエッグ
@@ -192,7 +192,7 @@ gui.unlocked.dragon=アンロック
 gui.dragon.sit=座る
 gui.firesupport=火力支援
 gui.dragon.hunger=飢え
-container.dragon_shulker=ドラゴンコンテナー
+container.dragon_core=ドラゴンコンテナー
 
 #Controls
 key.categories.dragon=ドラゴンマウント

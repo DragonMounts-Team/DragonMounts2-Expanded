@@ -2,10 +2,9 @@ package net.dragonmounts.objects.items;
 
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
-import net.dragonmounts.inits.ModTools;
+import net.dragonmounts.inits.ModItems;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.util.DMUtils;
-import net.dragonmounts.util.IHasModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -27,7 +26,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemDiamondShears extends ItemShears implements IHasModel {
+public class ItemDiamondShears extends ItemShears {
 
     private ToolMaterial material;
     private EntityTameableDragon dragon;
@@ -39,7 +38,7 @@ public class ItemDiamondShears extends ItemShears implements IHasModel {
         this.setMaxStackSize(1);
         this.setCreativeTab(CreativeTabs.TOOLS);
 
-        ModTools.TOOLS.add(this);
+        ModItems.ITEMS.add(this);
     }
 
     @Override
@@ -87,10 +86,4 @@ public class ItemDiamondShears extends ItemShears implements IHasModel {
             if (tab == targetTab) return true;
         return targetTab == CreativeTabs.SEARCH;
     }
-
-    @Override
-    public void RegisterModels() {
-        DragonMounts.proxy.registerItemRenderer(this, 0, "inventory");
-    }
-
 }

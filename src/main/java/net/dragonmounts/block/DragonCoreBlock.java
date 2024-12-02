@@ -1,21 +1,16 @@
-package net.dragonmounts.objects.blocks;
+package net.dragonmounts.block;
 
 import net.dragonmounts.DragonMounts;
+import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.client.gui.GuiHandler;
-import net.dragonmounts.inits.ModBlocks;
-import net.dragonmounts.inits.ModItems;
-import net.dragonmounts.objects.tileentities.TileEntityDragonShulker;
-import net.dragonmounts.util.IHasModel;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -24,7 +19,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -38,24 +32,20 @@ import static net.minecraft.block.BlockDirectional.FACING;
  * @author WolfShotz
  */
 
-public class BlockDragonShulker extends BlockContainer implements IHasModel {
-    public final ItemBlock item = new ItemBlock(this);
-
-    public BlockDragonShulker(String name) {
+public class DragonCoreBlock extends BlockContainer {
+    public DragonCoreBlock(String name) {
         super(Material.ROCK);
         setTranslationKey(name);
         setRegistryName(name);
         setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP));
-        ModBlocks.BLOCKS.add(this);
         setHardness(2000);
-        ModItems.ITEMS.add(this.item.setRegistryName(name));
     }
 
     @Override
     public void breakBlock(World level, BlockPos pos, IBlockState state) {
         TileEntity tileentity = level.getTileEntity(pos);
-        if (tileentity instanceof TileEntityDragonShulker) {
-            InventoryHelper.dropInventoryItems(level, pos, (TileEntityDragonShulker) tileentity);
+        if (tileentity instanceof DragonCoreBlockEntity) {
+            InventoryHelper.dropInventoryItems(level, pos, (DragonCoreBlockEntity) tileentity);
         }
         super.breakBlock(level, pos, state);
     }
@@ -65,15 +55,15 @@ public class BlockDragonShulker extends BlockContainer implements IHasModel {
         if (stack.hasDisplayName()) {
             TileEntity tileentity = worldIn.getTileEntity(pos);
 
-            if (tileentity instanceof TileEntityDragonShulker) {
-                ((TileEntityDragonShulker) tileentity).setCustomName(stack.getDisplayName());
+            if (tileentity instanceof DragonCoreBlockEntity) {
+                ((DragonCoreBlockEntity) tileentity).setCustomName(stack.getDisplayName());
             }
         }
     }
 
     @Override
     public TileEntity createTileEntity(World worldIn, IBlockState state) {
-        return new TileEntityDragonShulker();
+        return new DragonCoreBlockEntity();
     }
 
     /**
@@ -82,8 +72,8 @@ public class BlockDragonShulker extends BlockContainer implements IHasModel {
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (worldIn.isRemote) return true;
         else if (playerIn.isSpectator()) return true;
-        else if (worldIn.getTileEntity(pos) instanceof TileEntityDragonShulker) {
-            playerIn.openGui(DragonMounts.instance, GuiHandler.GUI_DRAGON_SHULKER, worldIn, pos.getX(), pos.getY(), pos.getZ());
+        else if (worldIn.getTileEntity(pos) instanceof DragonCoreBlockEntity) {
+            playerIn.openGui(DragonMounts.instance, GuiHandler.GUI_DRAGON_CORE, worldIn, pos.getX(), pos.getY(), pos.getZ());
             return true;
         }
         return false;
@@ -158,12 +148,7 @@ public class BlockDragonShulker extends BlockContainer implements IHasModel {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileEntityDragonShulker();
-    }
-
-    @Override
-    public void RegisterModels() {
-        ModelLoader.setCustomModelResourceLocation(this.item, 0, new ModelResourceLocation(this.item.getRegistryName(), "inventory"));
+        return new DragonCoreBlockEntity();
     }
 
     @Override

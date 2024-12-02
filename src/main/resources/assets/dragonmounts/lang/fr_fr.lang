@@ -125,8 +125,8 @@ item.dragonarmor_gold.name=Armure en Or pour Dragon
 item.dragonarmor_emerald.name=Armure en Emeraude pour Dragon
 
 # Tiles
-tile.pileofsticks.name=Pile de bois
-tile.block_dragon_shulker.name=Coeur Draconique
+tile.dragon_nest.name=Pile de bois
+tile.dragon_core.name=Coeur Draconique
 
 tile.storm_egg.name=Oeuf de Dragon des Tempêtes
 tile.end_egg.name=Oeuf d'Ender Dragon
@@ -191,7 +191,7 @@ gui.unlocked.dragon=Déverouiller
 gui.dragon.sit=Asseoir
 gui.firesupport=Appui-feu Draconique
 gui.dragon.hunger=Barre de faim
-container.dragon_shulker=Coeur Draconique
+container.dragon_core=Coeur Draconique
 
 #Controls
 key.categories.dragon=Dragon Mounts

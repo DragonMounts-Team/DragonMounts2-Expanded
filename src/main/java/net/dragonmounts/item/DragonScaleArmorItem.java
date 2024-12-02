@@ -1,15 +1,14 @@
-package net.dragonmounts.items;
+package net.dragonmounts.item;
 
-import net.dragonmounts.DragonMounts;
 import net.dragonmounts.api.IArmorEffectSource;
 import net.dragonmounts.api.IDescribableArmorEffect;
 import net.dragonmounts.capability.IArmorEffectManager;
 import net.dragonmounts.compat.CooldownOverlayCompat;
-import net.dragonmounts.inits.DMArmors;
+import net.dragonmounts.inits.DMItemGroups;
+import net.dragonmounts.inits.ModItems;
 import net.dragonmounts.objects.items.EnumItemBreedTypes;
 import net.dragonmounts.registry.CooldownCategory;
 import net.dragonmounts.util.DMUtils;
-import net.dragonmounts.util.IHasModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,7 +26,7 @@ import java.util.List;
 
 import static net.dragonmounts.DragonMounts.makeId;
 
-public class DragonScaleArmorItem extends ItemArmor implements IHasModel, IArmorEffectSource {
+public class DragonScaleArmorItem extends ItemArmor implements IArmorEffectSource {
 	private final EnumItemBreedTypes type;
 	public final IDescribableArmorEffect effect;
 
@@ -37,7 +36,7 @@ public class DragonScaleArmorItem extends ItemArmor implements IHasModel, IArmor
 		setTranslationKey("dragonscale_" + slot.getName());
 		setRegistryName(makeId(unlocalizedName));
 		this.type = type;
-		DMArmors.ARMOR.add(this);
+		ModItems.ITEMS.add(this);
 		if (effect instanceof CooldownCategory) {
 			CooldownOverlayCompat.register((CooldownCategory) effect, this);
 		}
@@ -63,18 +62,13 @@ public class DragonScaleArmorItem extends ItemArmor implements IHasModel, IArmor
 			this.effect.appendHoverText(stack, tooltip, flag);
 		}
 	}
-	
-	@Override
-	public void RegisterModels() {
-		DragonMounts.proxy.registerItemRenderer(this, 0, "inventory");
-	}
 
 	/**
 	 * This method determines where the item is displayed
 	 */
 	@Override
 	public @Nonnull CreativeTabs[] getCreativeTabs() {
-		return new CreativeTabs[]{DragonMounts.armoryTab};
+		return new CreativeTabs[]{DMItemGroups.COMBAT};
 	}
 
 	@Override

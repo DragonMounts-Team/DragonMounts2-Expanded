@@ -126,8 +126,8 @@ item.dragonarmor_gold.name=Gold Dragon Armor
 item.dragonarmor_emerald.name=Emerald Dragon Armor
 
 # Tiles
-tile.pileofsticks.name=Nest Block
-tile.block_dragon_shulker.name=Dragon Core
+tile.dragon_nest.name=Nest Block
+tile.dragon_core.name=Dragon Core
 
 tile.storm_egg.name=Storm Dragon Egg
 tile.end_egg.name=Ender Dragon Egg
@@ -192,7 +192,7 @@ gui.unlocked.dragon=UNLOCK
 gui.dragon.sit=Sit
 gui.firesupport=Fire Support
 gui.dragon.hunger=Hunger
-container.dragon_shulker=Dragon Core
+container.dragon_core=Dragon Core
 
 #Controls
 key.categories.dragon=Dragon Mounts

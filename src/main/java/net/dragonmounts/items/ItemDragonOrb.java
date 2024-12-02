@@ -4,7 +4,6 @@ import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.inits.ModItems;
-import net.dragonmounts.util.IHasModel;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
@@ -19,7 +18,7 @@ import net.minecraft.world.World;
  * Created by TGG on 3/07/2015.
  * The Dragon Orb.
  */
-public class ItemDragonOrb extends Item implements IHasModel {
+public class ItemDragonOrb extends Item {
 
   public ItemDragonOrb()
   {
@@ -62,9 +61,4 @@ public class ItemDragonOrb extends Item implements IHasModel {
   {
     return 72000;
   }
-
-  @Override
-  public void RegisterModels()
-  { DragonMounts.proxy.registerItemRenderer(this, 0, "inventory"); }
-
 }

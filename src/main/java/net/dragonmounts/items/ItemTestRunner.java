@@ -3,7 +3,6 @@ package net.dragonmounts.items;
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.inits.ModItems;
-import net.dragonmounts.util.IHasModel;
 import net.dragonmounts.util.debugging.TestRunner;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,7 +26,7 @@ import java.util.List;
  *
  * ItemTestRunner is used to trigger a test case
  */
-public class ItemTestRunner extends Item implements IHasModel
+public class ItemTestRunner extends Item
 {
   public ItemTestRunner()
   {
@@ -86,9 +85,4 @@ public class ItemTestRunner extends Item implements IHasModel
     }
     return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
   }
-
-  @Override
-  public void RegisterModels()
-  { DragonMounts.proxy.registerItemRenderer(this, 0, "inventory"); }
-
 }

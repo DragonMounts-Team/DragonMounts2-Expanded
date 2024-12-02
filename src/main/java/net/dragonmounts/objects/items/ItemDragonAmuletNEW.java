@@ -1,12 +1,14 @@
 package net.dragonmounts.objects.items;
 
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.dragonmounts.DragonMountsTags;
+import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.inits.DMItemGroups;
 import net.dragonmounts.inits.ModItems;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.objects.items.entity.EntityDragonAmulet;
 import net.dragonmounts.util.DMUtils;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
+import net.dragonmounts.util.IHasModel;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -38,7 +40,7 @@ import java.util.List;
  *
  * @author WolfShotz
  */
-public class ItemDragonAmuletNEW extends Item implements ICapabilityProvider {
+public class ItemDragonAmuletNEW extends Item implements ICapabilityProvider, IHasModel {
     private static final Reference2ObjectOpenHashMap<Capability<?>, Object> CAPABILITIES = new Reference2ObjectOpenHashMap<>();
 
     public static <T> void registerCapability(Capability<T> capability, T instance) {
@@ -161,6 +163,11 @@ public class ItemDragonAmuletNEW extends Item implements ICapabilityProvider {
     @Override
     public boolean hasCustomEntity(ItemStack stack) {
         return true;
+    }
+
+    @Override
+    public void registerModel() {
+        ClientUtil.registerAmuletModel(this);
     }
 
     @Nullable

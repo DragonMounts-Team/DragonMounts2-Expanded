@@ -9,10 +9,10 @@
  */
 package net.dragonmounts.client.render.dragon;
 
+import net.dragonmounts.block.BlockDragonBreedEgg;
 import net.dragonmounts.client.model.dragon.DragonModel;
 import net.dragonmounts.client.model.dragon.DragonModelMode;
 import net.dragonmounts.client.render.dragon.breeds.DefaultDragonBreedRenderer;
-import net.dragonmounts.objects.blocks.BlockDragonBreedEgg;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStageHelper;

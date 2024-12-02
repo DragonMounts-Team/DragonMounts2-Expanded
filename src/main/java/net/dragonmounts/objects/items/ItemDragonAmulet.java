@@ -1,12 +1,10 @@
 package net.dragonmounts.objects.items;
 
-import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.inits.ModItems;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import net.dragonmounts.objects.items.entity.EntityDragonAmulet;
-import net.dragonmounts.util.IHasModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -28,7 +26,7 @@ import javax.annotation.Nonnull;
  * @author WolfShotz
  * @deprecated
  */
-public class ItemDragonAmulet extends Item implements IHasModel {
+public class ItemDragonAmulet extends Item {
 	EnumItemBreedTypes type;
 
 	public ItemDragonAmulet(EnumItemBreedTypes type, EnumDragonBreed breed) {
@@ -73,9 +71,4 @@ public class ItemDragonAmulet extends Item implements IHasModel {
 
 	@Override
 	public boolean hasCustomEntity(ItemStack stack) { return true; }
-
-	@Override
-	public void RegisterModels() {
-		DragonMounts.proxy.registerItemRenderer(this, 0, "inventory");
-	}
 }

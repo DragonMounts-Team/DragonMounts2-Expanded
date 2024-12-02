@@ -1,6 +1,5 @@
 package net.dragonmounts.util;
 
-public interface IHasModel
-{
-	public void RegisterModels();
+public interface IHasModel {
+	void registerModel();
 }

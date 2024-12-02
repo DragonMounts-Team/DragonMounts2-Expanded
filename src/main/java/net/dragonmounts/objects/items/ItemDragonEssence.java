@@ -1,11 +1,9 @@
 package net.dragonmounts.objects.items;
 
-import net.dragonmounts.DragonMounts;
 import net.dragonmounts.inits.ModItems;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import net.dragonmounts.util.DMUtils;
-import net.dragonmounts.util.IHasModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -25,7 +23,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-public class ItemDragonEssence extends Item implements IHasModel {
+public class ItemDragonEssence extends Item {
 
     public EnumItemBreedTypes type;
     public EnumDragonBreed breed;
@@ -78,7 +76,4 @@ public class ItemDragonEssence extends Item implements IHasModel {
             tooltip.add(TextFormatting.RED + "ERROR: Broken or Missing NBT Data");
         }
     }
-
-    @Override
-    public void RegisterModels() { DragonMounts.proxy.registerItemRenderer(this, 0, "inventory"); }
 }

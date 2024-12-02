@@ -1,8 +1,8 @@
-package net.dragonmounts.objects.tileentities;
+package net.dragonmounts.block.entity;
 
 import net.dragonmounts.DragonMountsTags;
-import net.dragonmounts.inventory.ContainerDragonShulker;
-import net.dragonmounts.objects.blocks.BlockDragonShulker;
+import net.dragonmounts.block.DragonCoreBlock;
+import net.dragonmounts.inventory.DragonCoreContainer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.material.EnumPushReaction;
@@ -31,14 +31,14 @@ import java.util.List;
  * @author WolfShotz
  */
 
-public class TileEntityDragonShulker extends TileEntityLockableLoot implements ITickable {
+public class DragonCoreBlockEntity extends TileEntityLockableLoot implements ITickable {
     private final NonNullList<ItemStack> chestContents = NonNullList.withSize(1, ItemStack.EMPTY);
     public int numPlayersUsing, ticksSinceSync;
     private float progress, progressOld;
-    private TileEntityDragonShulker.AnimationStatus animationStatus;
+    private DragonCoreBlockEntity.AnimationStatus animationStatus;
 
-    public TileEntityDragonShulker() {
-        this.animationStatus = TileEntityDragonShulker.AnimationStatus.CLOSED;
+    public DragonCoreBlockEntity() {
+        this.animationStatus = DragonCoreBlockEntity.AnimationStatus.CLOSED;
     }
 
     @Override
@@ -57,11 +57,11 @@ public class TileEntityDragonShulker extends TileEntityLockableLoot implements I
             this.numPlayersUsing = type;
 
             if (type == 0) {
-                this.animationStatus = TileEntityDragonShulker.AnimationStatus.CLOSING;
+                this.animationStatus = DragonCoreBlockEntity.AnimationStatus.CLOSING;
             }
 
             if (type == 1) {
-                this.animationStatus = TileEntityDragonShulker.AnimationStatus.OPENING;
+                this.animationStatus = DragonCoreBlockEntity.AnimationStatus.OPENING;
             }
 
             return true;
@@ -77,7 +77,7 @@ public class TileEntityDragonShulker extends TileEntityLockableLoot implements I
 
     @Override
     public String getName() {
-        return this.hasCustomName() ? this.customName : "container.dragon_shulker";
+        return this.hasCustomName() ? this.customName : "container.dragon_core";
     }
 
     @Override
@@ -113,12 +113,12 @@ public class TileEntityDragonShulker extends TileEntityLockableLoot implements I
     }
 
     public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
-        return new ContainerDragonShulker(playerInventory, this, playerIn);
+        return new DragonCoreContainer(playerInventory, this, playerIn);
     }
 
     @Override
     public String getGuiID() {
-        return DragonMountsTags.MOD_ID + ":dragon_shulker";
+        return DragonMountsTags.MOD_ID + ":dragon_core";
     }
 
     @Override
@@ -132,7 +132,7 @@ public class TileEntityDragonShulker extends TileEntityLockableLoot implements I
     public void update() {
         this.updateAnimation();
 
-        if (this.animationStatus == TileEntityDragonShulker.AnimationStatus.OPENING || this.animationStatus == TileEntityDragonShulker.AnimationStatus.CLOSING) {
+        if (this.animationStatus == DragonCoreBlockEntity.AnimationStatus.OPENING || this.animationStatus == DragonCoreBlockEntity.AnimationStatus.CLOSING) {
             this.moveCollidedEntities();
         }
     }
@@ -149,7 +149,7 @@ public class TileEntityDragonShulker extends TileEntityLockableLoot implements I
     private void moveCollidedEntities() {
         IBlockState iblockstate = this.world.getBlockState(this.getPos());
 
-        if (iblockstate.getBlock() instanceof BlockDragonShulker) {
+        if (iblockstate.getBlock() instanceof DragonCoreBlock) {
             EnumFacing enumfacing = iblockstate.getValue(BlockDirectional.FACING);
             AxisAlignedBB axisalignedbb = this.getTopBoundingBox(enumfacing).offset(this.pos);
             List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(null, axisalignedbb);
@@ -213,14 +213,14 @@ public class TileEntityDragonShulker extends TileEntityLockableLoot implements I
             case OPENING:
                 this.progress += 0.1F;
                 if (this.progress >= 1.0F) {
-                    this.animationStatus = TileEntityDragonShulker.AnimationStatus.OPENED;
+                    this.animationStatus = DragonCoreBlockEntity.AnimationStatus.OPENED;
                     this.progress = 1.0F;
                 }
                 break;
             case CLOSING:
                 this.progress -= 0.1F;
                 if (this.progress <= 0.0F) {
-                    this.animationStatus = TileEntityDragonShulker.AnimationStatus.CLOSED;
+                    this.animationStatus = DragonCoreBlockEntity.AnimationStatus.CLOSED;
                     this.progress = 0.0F;
                     if (!this.world.isRemote && this.isEmpty()) {
                         this.world.destroyBlock(this.getPos(), false);
@@ -231,8 +231,8 @@ public class TileEntityDragonShulker extends TileEntityLockableLoot implements I
                 this.progress = 1.0F;
         }
     }
-    
-    public TileEntityDragonShulker.AnimationStatus getAnimationStatus() {
+
+    public DragonCoreBlockEntity.AnimationStatus getAnimationStatus() {
         return this.animationStatus;
     }
 

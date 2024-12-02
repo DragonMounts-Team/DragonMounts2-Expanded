@@ -1,11 +1,10 @@
 package net.dragonmounts.inits;
 
+import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import net.dragonmounts.DragonMountsTags;
-import net.dragonmounts.items.DragonScaleArmorItem;
+import net.dragonmounts.item.DragonScaleArmorItem;
 import net.dragonmounts.objects.items.EnumItemBreedTypes;
 import net.dragonmounts.objects.items.ItemDragonArmor;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -16,7 +15,6 @@ import net.minecraftforge.common.util.EnumHelper;
 
 public class DMArmors {
     public static final Reference2IntOpenHashMap<Item> DRAGON_ARMORS = new Reference2IntOpenHashMap<>();
-    public static final ObjectArrayList<Item> ARMOR = new ObjectArrayList<>();
     public static final ArmorMaterial AETHER_DRAGON_SCALE_MATERIAL;
     public static final ArmorMaterial WATER_DRAGON_SCALE_MATERIAL;
     public static final ArmorMaterial ICE_DRAGON_SCALE_MATERIAL;
@@ -64,10 +62,10 @@ public class DMArmors {
         ENDER_DRAGON_SCALE_MATERIAL = EnumHelper.addArmorMaterial("ENDER_DRAGON_SCALE", prefix + ":ender", 70, defence, 11, sound, 9.0F);
     }
 
-    public static final Item IRON_DRAGON_ARMOR = new ItemDragonArmor("dragonarmor_iron");
-    public static final Item GOLD_DRAGON_ARMOR = new ItemDragonArmor("dragonarmor_gold");
-    public static final Item DIAMOND_DRAGON_ARMOR = new ItemDragonArmor("dragonarmor_diamond");
-    public static final Item EMERALD_DRAGON_ARMOR = new ItemDragonArmor("dragonarmor_emerald");
+    public static final ItemDragonArmor IRON_DRAGON_ARMOR = new ItemDragonArmor("dragonarmor_iron");
+    public static final ItemDragonArmor GOLD_DRAGON_ARMOR = new ItemDragonArmor("dragonarmor_gold");
+    public static final ItemDragonArmor DIAMOND_DRAGON_ARMOR = new ItemDragonArmor("dragonarmor_diamond");
+    public static final ItemDragonArmor EMERALD_DRAGON_ARMOR = new ItemDragonArmor("dragonarmor_emerald");
 
     public static final DragonScaleArmorItem AETHER_DRAGON_SCALE_HELMET = new DragonScaleArmorItem(AETHER_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.HEAD, "aether_dragonscale_cap", EnumItemBreedTypes.AETHER, DMArmorEffects.AETHER_EFFECT);
     public static final DragonScaleArmorItem AETHER_DRAGON_SCALE_CHESTPLATE = new DragonScaleArmorItem(AETHER_DRAGON_SCALE_MATERIAL, 1, EntityEquipmentSlot.CHEST, "aether_dragonscale_tunic", EnumItemBreedTypes.AETHER, DMArmorEffects.AETHER_EFFECT);

@@ -1,17 +1,20 @@
 package net.dragonmounts.objects.items;
 
-import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.inits.DMArmors;
-import net.dragonmounts.util.IHasModel;
+import net.dragonmounts.inits.DMItemGroups;
+import net.dragonmounts.inits.ModItems;
+import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 
 import javax.annotation.Nonnull;
 
-
-public class ItemDragonArmor extends Item implements IHasModel {
-
+public class ItemDragonArmor extends Item {
     public String name;
 
     public ItemDragonArmor(String name) {
@@ -21,7 +24,25 @@ public class ItemDragonArmor extends Item implements IHasModel {
         this.setRegistryName(DragonMountsTags.MOD_ID, name);
         this.setCreativeTab(CreativeTabs.COMBAT);
 
-        DMArmors.ARMOR.add(this);
+        ModItems.ITEMS.add(this);
+    }
+
+    @Override
+    public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase entity, EnumHand hand) {
+        if (stack.isEmpty() || !(entity instanceof EntityTameableDragon)) return false;
+        EntityTameableDragon dragon = (EntityTameableDragon) entity;
+        if (!dragon.isOwner(player) || DMArmors.DRAGON_ARMORS.getInt(stack.getItem()) <= dragon.getArmorType())
+            return false;
+        if (dragon.world.isRemote) return true;
+        if (player.capabilities.isCreativeMode) {
+            ItemStack armor = stack.copy();
+            armor.setCount(1);
+            dragon.setArmor(armor);
+        } else {
+            dragon.setArmor(stack.splitStack(1));
+        }
+        player.swingArm(hand);
+        return true;
     }
 
     /**
@@ -29,7 +50,7 @@ public class ItemDragonArmor extends Item implements IHasModel {
      */
     @Override
     public @Nonnull CreativeTabs[] getCreativeTabs() {
-        return new CreativeTabs[]{DragonMounts.armoryTab};
+        return new CreativeTabs[]{DMItemGroups.COMBAT};
     }
 
     @Override
@@ -37,10 +58,5 @@ public class ItemDragonArmor extends Item implements IHasModel {
         for (CreativeTabs tab : this.getCreativeTabs())
             if (tab == targetTab) return true;
         return targetTab == CreativeTabs.SEARCH;
-    }
-
-    @Override
-    public void RegisterModels() {
-        DragonMounts.proxy.registerItemRenderer(this, 0, "inventory");
     }
 }

@@ -1,11 +1,11 @@
 package net.dragonmounts.objects.items.gemset;
 
+import com.google.common.collect.Multimap;
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
-import net.dragonmounts.inits.ModTools;
+import net.dragonmounts.inits.ModItems;
 import net.dragonmounts.objects.items.EnumItemBreedTypes;
 import net.dragonmounts.util.DMUtils;
-import com.google.common.collect.Multimap;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -31,7 +31,7 @@ public class ItemDragonSword extends ItemSword {
         this.setRegistryName(DragonMountsTags.MOD_ID, name);
         this.type = type;
 
-        ModTools.TOOLS.add(this);
+        ModItems.ITEMS.add(this);
     }
 
     @Override

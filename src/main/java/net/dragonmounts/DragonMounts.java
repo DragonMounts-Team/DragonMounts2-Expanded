@@ -11,6 +11,7 @@ package net.dragonmounts;
 
 import net.dragonmounts.client.gui.GuiHandler;
 import net.dragonmounts.compat.BaublesCompat;
+import net.dragonmounts.compat.DragonMountsCompat;
 import net.dragonmounts.event.EventLiving;
 import net.dragonmounts.event.RegistryEventHandler;
 import net.dragonmounts.inits.DMArmors;
@@ -21,12 +22,9 @@ import net.dragonmounts.util.debugging.testclasses.LoggerLimit;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.*;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.ModMetadata;
-import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -85,12 +83,12 @@ public class DragonMounts {
         proxy.PreInitialization(event);
         metadata=event.getModMetadata();
         DMItemGroups.init();
+        DragonMountsCompat.load(FMLCommonHandler.instance().getDataFixer().init(DragonMountsTags.MOD_ID, DragonMountsCompat.VERSION));
     }
 
     @EventHandler
     public void Initialization(FMLInitializationEvent event) {
         proxy.Initialization(event);
-        proxy.render();
         ModTools.InitializaRepairs();
         DMArmors.InitializaRepairs();
         GameRegistry.registerWorldGenerator(new DragonMountsWorldGenerator(), 0);

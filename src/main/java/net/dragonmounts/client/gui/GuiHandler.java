@@ -1,9 +1,9 @@
 package net.dragonmounts.client.gui;
 
+import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.inventory.ContainerDragon;
-import net.dragonmounts.inventory.ContainerDragonShulker;
+import net.dragonmounts.inventory.DragonCoreContainer;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.tileentities.TileEntityDragonShulker;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -13,7 +13,7 @@ public class GuiHandler implements IGuiHandler {
 
     public static final int GUI_DRAGON = 0;
     public static final int GUI_DRAGON_WAND = 1;
-    public static final int GUI_DRAGON_SHULKER = 3;
+    public static final int GUI_DRAGON_CORE = 3;
 
     @Override
     public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -25,10 +25,10 @@ public class GuiHandler implements IGuiHandler {
                     return new ContainerDragon((EntityTameableDragon) entity, player);
                 }
                 break;
-            case GUI_DRAGON_SHULKER:
+            case GUI_DRAGON_CORE:
                 entity = world.getTileEntity(new BlockPos(x, y, z));
-                if (entity instanceof TileEntityDragonShulker) {
-                    return new ContainerDragonShulker(player.inventory, (TileEntityDragonShulker) entity, player);
+                if (entity instanceof DragonCoreBlockEntity) {
+                    return new DragonCoreContainer(player.inventory, (DragonCoreBlockEntity) entity, player);
                 }
         }
         return null;
@@ -44,10 +44,10 @@ public class GuiHandler implements IGuiHandler {
                     return new GuiDragon(player, (EntityTameableDragon) entity);
                 }
                 break;
-            case GUI_DRAGON_SHULKER:
+            case GUI_DRAGON_CORE:
                 entity = world.getTileEntity(new BlockPos(x, y, z));
-                if (entity instanceof TileEntityDragonShulker) {
-                    return new GuiDragonShulker(player.inventory, (TileEntityDragonShulker) entity, player);
+                if (entity instanceof DragonCoreBlockEntity) {
+                    return new GuiDragonCore(player.inventory, (DragonCoreBlockEntity) entity, player);
                 }
         }
         return null;

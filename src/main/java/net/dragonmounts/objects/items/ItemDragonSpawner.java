@@ -6,7 +6,6 @@ import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon
 import net.dragonmounts.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStage;
 import net.dragonmounts.util.DMUtils;
-import net.dragonmounts.util.IHasModel;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -25,7 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemDragonSpawner extends Item implements IHasModel {
+public class ItemDragonSpawner extends Item {
 
     private EnumDragonBreed breed;
     private EnumItemBreedTypes type;
@@ -106,10 +105,5 @@ public class ItemDragonSpawner extends Item implements IHasModel {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         tooltip.add(type.color + DMUtils.translateToLocal(type.translationKey));
-    }
-
-    @Override
-    public void RegisterModels() {
-        DragonMounts.proxy.registerItemRenderer(this, 0, "inventory");
     }
 }

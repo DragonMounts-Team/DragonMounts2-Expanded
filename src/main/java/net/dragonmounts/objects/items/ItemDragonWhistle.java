@@ -1,14 +1,12 @@
 package net.dragonmounts.objects.items;
 
-import net.dragonmounts.DragonMounts;
+import com.mojang.authlib.GameProfile;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.client.gui.GuiDragonWhistle;
 import net.dragonmounts.inits.DMItemGroups;
 import net.dragonmounts.inits.ModItems;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.util.DMUtils;
-import net.dragonmounts.util.IHasModel;
-import com.mojang.authlib.GameProfile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -39,7 +37,7 @@ import static net.minecraft.tileentity.TileEntitySkull.updateGameProfile;
  * @author TheRPGAdventurer
  * @modifier WolfShotz
  */
-public class ItemDragonWhistle extends Item implements IHasModel {
+public class ItemDragonWhistle extends Item {
     public final String DRAGON_UUID_KEY = DragonMountsTags.MOD_ID + "dragon";
 
     public static String getDragonName(NBTTagCompound tag) {
@@ -172,10 +170,5 @@ public class ItemDragonWhistle extends Item implements IHasModel {
         tooltip.add(I18n.format("tooltip.dragonmounts.age", TextFormatting.AQUA + DMUtils.translateToLocal(nbt.getString("Age")) + TextFormatting.RESET));
         tooltip.add(I18n.format("tooltip.dragonmounts.owner", TextFormatting.GOLD + nbt.getString("OwnerName") + TextFormatting.RESET));
         tooltip.add(TextFormatting.ITALIC + DMUtils.translateToLocal("item.removeNBT"));
-    }
-
-    @Override
-    public void RegisterModels() {
-        DragonMounts.proxy.registerItemRenderer(this, 0, "inventory");
     }
 }

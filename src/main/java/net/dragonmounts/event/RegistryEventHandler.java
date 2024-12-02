@@ -2,24 +2,20 @@ package net.dragonmounts.event;
 
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
+import net.dragonmounts.block.BlockDragonBreedEgg;
+import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.client.gui.GuiHandler;
-import net.dragonmounts.inits.*;
-import net.dragonmounts.inits.*;
-import net.dragonmounts.objects.blocks.BlockDragonBreedEgg;
+import net.dragonmounts.inits.DMArmorEffects;
+import net.dragonmounts.inits.DMBlocks;
+import net.dragonmounts.inits.ModItems;
 import net.dragonmounts.objects.entity.entitytameabledragon.breeds.DragonBreedForest;
 import net.dragonmounts.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
-import net.dragonmounts.objects.items.EnumItemBreedTypes;
-import net.dragonmounts.objects.items.ItemDragonBreedEgg;
-import net.dragonmounts.objects.tileentities.TileEntityDragonShulker;
 import net.dragonmounts.registry.CooldownCategory;
 import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.IHasModel;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
@@ -30,8 +26,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.DataSerializerEntry;
 import net.minecraftforge.registries.IForgeRegistry;
 
-import java.util.Arrays;
-import java.util.function.Consumer;
+import java.util.Objects;
 
 import static net.dragonmounts.DragonMounts.makeId;
 
@@ -40,19 +35,20 @@ public class RegistryEventHandler {
 	
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
-        ModBlocks.BLOCKS.forEach(event.getRegistry()::register);
-        event.getRegistry().register(BlockDragonBreedEgg.DRAGON_BREED_EGG.setRegistryName("dragon_egg"));
-        GameRegistry.registerTileEntity(TileEntityDragonShulker.class, makeId("dragon_shulker"));
+        IForgeRegistry<Block> registry = event.getRegistry();
+        registry.register(DMBlocks.DRAGON_CORE);
+        registry.register(DMBlocks.DRAGON_NEST);
+        registry.register(BlockDragonBreedEgg.DRAGON_BREED_EGG.setRegistryName("dragon_egg"));
+        GameRegistry.registerTileEntity(DragonCoreBlockEntity.class, makeId("dragon_core"));
         DMUtils.getLogger().info("Block Registries Successfully Registered");
     }
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
-        Consumer<Item> register = event.getRegistry()::register;
-        ModItems.ITEMS.forEach(register);
-        ModTools.TOOLS.forEach(register);
-        DMArmors.ARMOR.forEach(register);
-        register.accept(ItemDragonBreedEgg.DRAGON_BREED_EGG.setRegistryName("dragon_egg"));
+        IForgeRegistry<Item> registry = event.getRegistry();
+        for (Item item : ModItems.ITEMS) {
+            registry.register(item);
+        }
         DMUtils.getLogger().info("Item Registries Successfully Registered!");
     }
 
@@ -78,53 +74,12 @@ public class RegistryEventHandler {
 
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
-        //DragonMounts.proxy.registerModel(Item.getItemFromBlock(ModBlocks.DRAGONSHULKER), 0);
-        for (Block block : ModBlocks.BLOCKS) {
-        	if (block instanceof IHasModel) {
-        		((IHasModel) block).RegisterModels();
-        	}
-        }
-
         for (Item item : ModItems.ITEMS) {
             if (item instanceof IHasModel) {
-                ((IHasModel) item).RegisterModels();
+                ((IHasModel) item).registerModel();
+            } else {
+                ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(Objects.requireNonNull(item.getRegistryName()), "inventory"));
             }
-        }
-
-        for (Item item : ModTools.TOOLS) {
-            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName().toString(), "inventory"));
-        }
-
-        for (Item item : DMArmors.ARMOR) {
-            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName().toString(), "inventory"));
-        }
-
-        // register item renderer for dragon egg block variants
-        String modelLocation = DragonMountsTags.MOD_ID + ":dragon_egg";
-        Arrays.stream(EnumDragonBreed.values()).forEach(breed -> ModelLoader.setCustomModelResourceLocation(
-                ItemDragonBreedEgg.DRAGON_BREED_EGG,
-                breed.meta,
-                new ModelResourceLocation(modelLocation, "breed=" + breed.identifier)
-        ));
-
-        {// Amulets
-            EnumItemBreedTypes[] types = EnumItemBreedTypes.values();
-            int size = types.length;
-            Object2ObjectOpenHashMap<String, ModelResourceLocation> mapping = new Object2ObjectOpenHashMap<>();
-            ModelResourceLocation empty = new ModelResourceLocation("dragonmounts:dragon_amulet");
-            ModelResourceLocation[] models = new ModelResourceLocation[size + 1];
-            models[0] = empty;
-            for (int i = 0; i < size; ) {
-                EnumItemBreedTypes breed = types[i];
-                ModelResourceLocation model = new ModelResourceLocation("dragonmounts:" + breed.identifier + "_dragon_amulet");
-                mapping.put(breed.identifier, model);
-                models[++i] = model;
-            }
-            ModelLoader.setCustomMeshDefinition(ModItems.Amulet, stack -> {
-                NBTTagCompound root = stack.getTagCompound();
-                return root == null ? empty : mapping.get(root.getString("breed"));
-            });
-            ModelBakery.registerItemVariants(ModItems.Amulet, models);
         }
         DMUtils.getLogger().info("Models Sucessfully Registered");
     }

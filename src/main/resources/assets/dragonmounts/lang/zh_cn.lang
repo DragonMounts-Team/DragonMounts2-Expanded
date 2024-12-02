@@ -112,8 +112,8 @@ item.dragonarmor_iron.name=铁龙铠
 item.dragonarmor_gold.name=金龙铠
 item.dragonarmor_emerald.name=绿宝石龙铠
 
-tile.pileofsticks.name=龙巢方块
-tile.block_dragon_shulker.name=龙核心
+tile.dragon_nest.name=龙巢方块
+tile.dragon_core.name=龙核心
 
 tile.storm_egg.name=风暴龙 蛋
 tile.end_egg.name=末影龙 蛋
@@ -168,7 +168,7 @@ gui.unlocked.dragon=解锁
 gui.dragon.sit=坐下
 gui.firesupport=火力支援
 gui.dragon.hunger=饥饿
-container.dragon_shulker=龙核心
+container.dragon_core=龙核心
 
 key.categories.dragon=龙骑士
 key.dragon.projectile=未经使用的

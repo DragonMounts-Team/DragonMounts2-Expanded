@@ -192,7 +192,7 @@ def generateRecipes(output: Output):
     .pattern('XXX')\
     .pattern('X#X')\
     .save(output, 'redstone', 'easter_egg')
-  shaped(makeId('pileofsticks'))\
+  shaped(makeId('dragon_nest'))\
     .define('#', stick)\
     .pattern('###')\
     .pattern('###')\

@@ -5,7 +5,6 @@ import net.dragonmounts.inits.ModItems;
 import net.dragonmounts.inits.ModSounds;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.util.DMUtils;
-import net.dragonmounts.util.IHasModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,7 +18,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemDragonGender extends Item implements IHasModel
+public class ItemDragonGender extends Item
 {
 
     public ItemDragonGender(String name)
@@ -53,10 +52,4 @@ public class ItemDragonGender extends Item implements IHasModel
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         tooltip.add(DMUtils.translateToLocal("item.gui.dragon_gender"));
     }
-    
-	@Override
-	public void RegisterModels()
-	{
-		DragonMounts.proxy.registerItemRenderer(this, 0, "inventory");
-	}
 }

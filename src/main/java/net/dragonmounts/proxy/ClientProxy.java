@@ -10,6 +10,7 @@
 package net.dragonmounts.proxy;
 
 import net.dragonmounts.DragonMountsConfig;
+import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.client.gui.GuiDragonDebug;
 import net.dragonmounts.client.other.TargetHighlighter;
 import net.dragonmounts.client.render.DragonCoreBlockEntityRenderer;
@@ -19,17 +20,13 @@ import net.dragonmounts.client.render.dragon.breathweaponFX.ClientBreathNodeRend
 import net.dragonmounts.client.userinput.DragonOrbControl;
 import net.dragonmounts.event.DragonViewEvent;
 import net.dragonmounts.event.IItemColorRegistration;
-import net.dragonmounts.inits.ModBlocks;
+import net.dragonmounts.inits.ModItems;
 import net.dragonmounts.inits.ModKeys;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.effects.ClientBreathNodeEntity;
-import net.dragonmounts.objects.tileentities.TileEntityDragonShulker;
 import net.dragonmounts.util.debugging.StartupDebugClientOnly;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -37,8 +34,6 @@ import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.File;
 import java.util.stream.Collectors;
@@ -72,11 +67,10 @@ public class ClientProxy extends ServerProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityTameableDragon.class, DragonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ClientBreathNodeEntity.class, ClientBreathNodeRenderer::new);
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDragonShulker.class, new DragonCoreBlockEntityRenderer());
-        ModBlocks.DRAGONSHULKER.item.setTileEntityItemStackRenderer(new DragonCoreBlockEntityRenderer.ItemStackRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(DragonCoreBlockEntity.class, new DragonCoreBlockEntityRenderer());
+        ModItems.DRAGON_CORE.setTileEntityItemStackRenderer(new DragonCoreBlockEntityRenderer.ItemStackRenderer());
 
         //Override mcmod.info - This looks cooler :)
-        //TODO: LOCALIZATION
         ModMetadata metadata = event.getModMetadata();
         metadata.name = TextFormatting.DARK_AQUA.toString() + TextFormatting.BOLD + metadata.name;
         StringBuilder credits = new StringBuilder(2048).append('\n');
@@ -119,6 +113,7 @@ public class ClientProxy extends ServerProxy {
         if (DragonMountsConfig.isDebug()) {
             MinecraftForge.EVENT_BUS.register(new GuiDragonDebug());
         }
+        ModKeys.init();
         StartupDebugClientOnly.initClientOnly();
     }
 
@@ -138,15 +133,9 @@ public class ClientProxy extends ServerProxy {
             MinecraftForge.EVENT_BUS.register(new TargetHighlighter());
         }
 
-        MinecraftForge.EVENT_BUS.register(new ModKeys());
+        //MinecraftForge.EVENT_BUS.register(new ModKeys());
         MinecraftForge.EVENT_BUS.register(new DragonViewEvent());
         MinecraftForge.EVENT_BUS.register(new RenderDM2Cape());
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void render() {
-        ModKeys.init();
     }
 
     public int getDragon3rdPersonView() {
@@ -155,10 +144,6 @@ public class ClientProxy extends ServerProxy {
 
     public void setDragon3rdPersonView(int view) {
         thirdPersonViewDragon = view;
-    }
-
-    public void registerItemRenderer(Item item, int meta, String id) {
-        ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), id));
     }
 
     @Override

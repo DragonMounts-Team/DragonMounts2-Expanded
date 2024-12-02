@@ -9,15 +9,15 @@
  */
 package net.dragonmounts.objects.entity.entitytameabledragon.helper;
 
+import com.google.common.collect.ImmutableMap;
 import net.dragonmounts.DragonMounts;
+import net.dragonmounts.block.BlockDragonBreedEgg;
 import net.dragonmounts.inits.ModSounds;
-import net.dragonmounts.objects.blocks.BlockDragonBreedEgg;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.BreathNode;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.nodes.BreathNodeP;
 import net.dragonmounts.util.ClientServerSynchronisedTickCount;
 import net.dragonmounts.util.math.MathX;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
