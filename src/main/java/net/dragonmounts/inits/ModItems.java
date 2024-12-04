@@ -50,7 +50,6 @@ public class ModItems {
     //Essence End
 
     //Amulets Start
-    //TODO Remove These Registries in the future
     public static final ItemDragonAmulet AmuletForest = new ItemDragonAmulet(EnumItemBreedTypes.FOREST, EnumDragonBreed.FOREST);
     public static final ItemDragonAmulet AmuletAether = new ItemDragonAmulet(EnumItemBreedTypes.AETHER, EnumDragonBreed.AETHER);
     public static final ItemDragonAmulet AmuletFire = new ItemDragonAmulet(EnumItemBreedTypes.FIRE, EnumDragonBreed.FIRE);
@@ -72,7 +71,6 @@ public class ModItems {
     //Other Start
     public static final Item dragon_wand = new ItemDragonWand("dragon_wand");
     public static final Item dragon_whistle = new ItemDragonWhistle();
-    public static final Item gender = new ItemDragonGender("dragon_gender");
     public static final ItemDragonOrb dragon_orb = new ItemDragonOrb();
     public static final ItemTestRunner test_runner = new ItemTestRunner();
     //Other End

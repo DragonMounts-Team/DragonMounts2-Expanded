@@ -9,13 +9,14 @@
  */
 package net.dragonmounts.client.gui;
 
+import it.unimi.dsi.fastutil.objects.Reference2IntMap;
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonBreedHelper;
 import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStageHelper;
 import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonReproductionHelper;
+import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonVariantHelper;
+import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.DMUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -211,12 +212,12 @@ public class GuiDragonDebug extends Gui {
         String healthRel = dfShort.format(dragon.getHealthRelative() * 100);
         String hunger = dfShort.format(dragon.getHunger());
         text.printf("Health: %s/%s (%s%%)\n", health, healthMax, healthRel, hunger);
-        
-        // breed
-        text.print("Breed: ");
-        EnumDragonBreed breedType = dragon.getBreedType();
-        text.setColor(breedType.getBreed().getColor());
-        text.println(breedType.getName());
+
+        // type
+        text.print("Type: ");
+        DragonType type = dragon.getVariant().type;
+        text.setColor(type.color);
+        text.println(DMUtils.translateToLocal(type.translationKey));
         text.setColor(WHITE);
         
         // life stage
@@ -301,10 +302,10 @@ public class GuiDragonDebug extends Gui {
         text.setColor(WHITE);
         int top = text.getY();
         int[] data = {0, 0};// lines, end
-        DragonBreedHelper breedHelper = dragonServer.getBreedHelper();
-        breedHelper.getBreedPoints().forEach((breedType, points) -> {
-            text.setColor(breedType.getBreed().getColor());
-            text.printf("%s: %d", breedType, points.get());
+        DragonVariantHelper helper = this.dragonServer.variantHelper;
+        for (Reference2IntMap.Entry<DragonType> entry : helper.getBreedPoints().reference2IntEntrySet()) {
+            text.setColor(entry.getKey().color);
+            text.printf("%s: %d", DMUtils.translateToLocal(entry.getKey().translationKey), entry.getIntValue());
             if (text.getX() > data[1]) {
                 data[1] = text.getX();
             }
@@ -313,7 +314,7 @@ public class GuiDragonDebug extends Gui {
                 data[0] = 0;
                 text.setOrigin(data[1] + 5, top);
             }
-        });
+        }
     }
 
     private void renderNavigation() {

@@ -11,6 +11,7 @@ package net.dragonmounts.client.model.dragon.anim;
 
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.client.model.dragon.DragonModel;
+import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.DragonBreathHelper;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.DragonHeadPositionHelper;
@@ -157,9 +158,10 @@ public class DragonAnimator {
 */
     public DragonAnimator(EntityTameableDragon dragon) {
         this.dragon = dragon;
-        WING_FINGERS = dragon.getBreedType().getNumberOfWingFingers();
-        NECK_SEGMENTS = dragon.getBreedType().getNumberOfNeckSegments();
-        TAIL_SEGMENTS = dragon.getBreedType().getNumberOfTailSegments();
+        VariantAppearance appearance = dragon.getVariant().appearance;
+        WING_FINGERS = 4;
+        NECK_SEGMENTS = 7;
+        TAIL_SEGMENTS = 12;
 
         wingFingerRotateX = new float[WING_FINGERS];
         wingFingerRotateY = new float[WING_FINGERS];

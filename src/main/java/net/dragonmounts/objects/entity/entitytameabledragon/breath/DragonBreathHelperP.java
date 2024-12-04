@@ -4,14 +4,11 @@ import net.dragonmounts.DragonMounts;
 import net.dragonmounts.client.render.dragon.breathweaponFX.BreathWeaponFXEmitter;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.nodes.BreathNodeFactory;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.nodes.BreathNodeP;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.nodes.BreathProjectileFactory;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.sound.SoundController;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.sound.SoundEffectBreathWeaponP;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.weapons.BreathWeaponP;
 import net.dragonmounts.objects.entity.entitytameabledragon.breeds.DragonBreed;
 import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonHelper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.datasync.DataParameter;
@@ -62,7 +59,7 @@ public class DragonBreathHelperP extends DragonHelper
   // changes the breath weapon after the breed is changed
   public void refreshBreed(EntityTameableDragon dragon)
   {
-    DragonBreed newBreed = dragon.getBreed();
+    /*DragonBreed newBreed = dragon.getBreed();
     if (currentBreed == newBreed) return;
     currentBreed = newBreed;
 
@@ -88,13 +85,13 @@ public class DragonBreathHelperP extends DragonHelper
     }
     if (dragon.isClient()) {
       refreshBreedClientOnly(dragon);
-    }
+    }*/
 
   }
 
   public void refreshBreedClientOnly(EntityTameableDragon dragon)
   {
-    soundEffectBreathWeapon = dragon.getBreed().getSoundEffectBreathWeapon(getSoundController(dragon.getEntityWorld()), weaponInfoLink);
+    //soundEffectBreathWeapon = dragon.getBreed().getSoundEffectBreathWeapon(getSoundController(dragon.getEntityWorld()), weaponInfoLink);
   }
 
 
@@ -293,10 +290,10 @@ public class DragonBreathHelperP extends DragonHelper
     refreshBreed(dragon);
     BreathWeaponTarget target = getTarget();
     updateBreathState(target);
-    dragon.getBreed().getBreathWeapon(dragon).updateBreathWeaponMode();
+    //dragon.getBreed().getBreathWeapon(dragon).updateBreathWeaponMode();
     DragonBreathMode dragonBreathMode = dragon.getBreathHelperP().getBreathMode();
 
-    switch (dragon.getBreed().getBreathWeaponSpawnType(dragon)) {
+    /*switch (dragon.getBreed().getBreathWeaponSpawnType(dragon)) {
       case NODES: {
         if (target != null) {
           Vec3d origin = dragon.getAnimator().getThroatPosition();
@@ -330,7 +327,7 @@ public class DragonBreathHelperP extends DragonHelper
                 "Unknown BreathWeaponSpawnType:" + dragon.getBreed().getBreathWeaponSpawnType(dragon));
         return;
       }
-    }
+    }*/
   }
 
   private void onLivingUpdateClient()
@@ -339,7 +336,7 @@ public class DragonBreathHelperP extends DragonHelper
     BreathWeaponTarget target = getTarget();
     updateBreathState(target);
 
-    switch (dragon.getBreed().getBreathWeaponSpawnType(dragon)) {
+    /*switch (dragon.getBreed().getBreathWeaponSpawnType(dragon)) {
       case NODES: {
         DragonBreathMode dragonBreathMode = getBreathMode();
         breathWeaponFXEmitter.changeBreathMode(dragonBreathMode);
@@ -372,7 +369,7 @@ public class DragonBreathHelperP extends DragonHelper
       }
     }
 
-    soundEffectBreathWeapon.performTick(Minecraft.getMinecraft().player);
+    soundEffectBreathWeapon.performTick(Minecraft.getMinecraft().player);*/
   }
 
   public SoundController getSoundController(World world)

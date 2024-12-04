@@ -11,7 +11,6 @@ package net.dragonmounts.objects.entity.entitytameabledragon.helper;
 
 import com.google.common.collect.ImmutableMap;
 import net.dragonmounts.DragonMounts;
-import net.dragonmounts.block.BlockDragonBreedEgg;
 import net.dragonmounts.inits.ModSounds;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.BreathNode;
@@ -23,7 +22,6 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -230,8 +228,8 @@ public class DragonLifeStageHelper extends DragonHelper {
             dragon.dropItem(Items.SADDLE, 1);
         }
 
-        dragon.entityDropItem(new ItemStack(BlockDragonBreedEgg.DRAGON_BREED_EGG),
-                dragon.getBreedType().getMeta());
+        /*dragon.entityDropItem(new ItemStack(BlockDragonBreedEgg.DRAGON_BREED_EGG),
+                dragon.getBreedType().getMeta());TODO: use DragonType*/
 
         dragon.setDead();
     }
@@ -257,7 +255,7 @@ public class DragonLifeStageHelper extends DragonHelper {
             // heal dragon to updated full health
             dragon.setHealth(dragon.getMaxHealth());
             if (lifeStage.isEgg()) {
-                dragon.getBreedHelper().resetPoints(null);
+                dragon.variantHelper.resetPoints(null);
             }
         }
         dragon.onLifeStageChange(lifeStage);
@@ -338,15 +336,7 @@ public class DragonLifeStageHelper extends DragonHelper {
     }
 
     protected EnumParticleTypes getEggParticle() {
-        switch (dragon.getBreedType()) {
-            case END:
-                return EnumParticleTypes.PORTAL;
-            case NETHER:
-                return EnumParticleTypes.DRIP_LAVA;
-            //All Eggs without special particles:
-            default:
-                return EnumParticleTypes.TOWN_AURA;
-        }
+        return this.dragon.getVariant().type.eggParticle;
     }
 
     private void updateScale() {

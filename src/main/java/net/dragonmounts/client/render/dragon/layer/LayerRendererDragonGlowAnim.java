@@ -9,12 +9,8 @@
  */
 package net.dragonmounts.client.render.dragon.layer;
 
-import net.dragonmounts.client.model.dragon.DragonModel;
 import net.dragonmounts.client.model.dragon.DragonModelMode;
-import net.dragonmounts.client.render.dragon.DragonRenderer;
-import net.dragonmounts.client.render.dragon.breeds.DefaultDragonBreedRenderer;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-
 import net.minecraft.client.renderer.GlStateManager;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -23,20 +19,15 @@ import static org.lwjgl.opengl.GL11.*;
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class LayerRendererDragonGlowAnim extends LayerRendererDragon {
-
-    public LayerRendererDragonGlowAnim(DragonRenderer renderer, DefaultDragonBreedRenderer breedRenderer, DragonModel model) {
-        super(renderer, breedRenderer, model);
-    }
-
+public class LayerRendererDragonGlowAnim extends DragonLayerRenderer {
     @Override
     public void doRenderLayer(EntityTameableDragon dragon, float moveTime,
             float moveSpeed, float partialTicks, float ticksExisted, float lookYaw,
             float lookPitch, float scale) {
         boolean invisible = dragon.isInvisible();
         GlStateManager.depthMask(!invisible);
-        
-        renderer.bindTexture(breedRenderer.getGlowAnimTexture());
+
+        //renderer.bindTexture(breedRenderer.getGlowAnimTexture());
         
         double ticks = dragon.ticksExisted + partialTicks;
         

@@ -77,7 +77,7 @@ public class ItemDragonAmuletNEW extends Item implements ICapabilityProvider, IH
                     tag = new NBTTagCompound();
                     stack.setTagCompound(tag);
                 }
-                tag.setString("breed", dragon.getBreed().getItemBreed(dragon).identifier);
+                //tag.setString("breed", dragon.getVariant().type.identifier.toString());
                 if (dragon.hasCustomName()) {
                     stack.setStackDisplayName(dragon.getCustomNameTag());
                 } else {

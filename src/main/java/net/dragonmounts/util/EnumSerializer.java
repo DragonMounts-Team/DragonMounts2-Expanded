@@ -8,6 +8,7 @@ import net.minecraft.network.datasync.DataSerializer;
 import javax.annotation.Nonnull;
 
 @MethodsReturnNonnullByDefault
+@Deprecated
 public class EnumSerializer<E extends Enum<E>> implements DataSerializer<E> {
     private final E[] values;
     public final E defaultValue;

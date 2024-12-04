@@ -4,7 +4,6 @@ import net.dragonmounts.client.model.dragon.DragonModel;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.objects.entity.entitytameabledragon.helper.SegmentSizePositionRotation;
 import net.dragonmounts.util.math.MathX;
-
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
@@ -142,7 +141,7 @@ public class DragonHeadPositionHelper {
     Vec3d bodyOrigin = dragon.getPositionVector();
     bodyOrigin = bodyOrigin.add(0, dragon.getEyeHeight(), 0);
     float scale = dragon.getScale();
-    final float ADULT_SCALE_FACTOR = dragon.getBreed().getAdultModelScaleFactor();
+    final float ADULT_SCALE_FACTOR = 0.1F;//TODO: use DragonType or something else
     final float BODY_X_SCALE = -ADULT_SCALE_FACTOR * scale;
     final float BODY_Y_SCALE = -ADULT_SCALE_FACTOR * scale;
     final float BODY_Z_SCALE = ADULT_SCALE_FACTOR * scale;

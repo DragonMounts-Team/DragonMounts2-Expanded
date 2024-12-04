@@ -25,6 +25,8 @@ import net.dragonmounts.objects.entity.entitycarriage.EntityCarriage;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.objects.items.entity.EntityDragonAmulet;
 import net.dragonmounts.registry.CooldownCategory;
+import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.debugging.StartupDebugCommon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -59,6 +61,8 @@ public class ServerProxy {
         DragonMountsConfig.PreInit();
         StartupDebugCommon.preInitCommon();
         CooldownCategory.REGISTRY.register();
+        DragonType.REGISTRY.register();
+        DragonVariant.REGISTRY.register();
     }
 
     @SuppressWarnings("deprecation")

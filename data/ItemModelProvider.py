@@ -14,12 +14,12 @@ amuletModel = makeId('item/dragon_amulet')
 
 def basicItem(output: Output, identifier: ResourceLocation, texture: ResourceLocation = None):
   model(generatedModel)\
-    .texture('layer0', identifier.withPrefix('item/') if texture is None else texture)\
+    .texture('layer0', identifier.withPrefix('items/') if texture is None else texture)\
     .save(output, identifier.path)
 
 def handheldItem(output: Output, identifier: ResourceLocation, texture: ResourceLocation = None):
   model(handheldModel)\
-    .texture('layer0', identifier.withPrefix('item/') if texture is None else texture)\
+    .texture('layer0', identifier.withPrefix('items/') if texture is None else texture)\
     .save(output, identifier.path)
 
 def dragonScalesItem(output: Output, type: DragonType):
@@ -74,6 +74,7 @@ def generateItemModels(output: Output):
   shieldModel = makeId('item/shield/shield')
   blockingShieldModel = makeId('item/shield/shield_blocking')
   spawnEggModel = ResourceLocation('item/spawn_egg')
+  basicItem(output, makeId("variant_switcher"))
   for material in DragonArmorMaterial:
     name = material.name.lower()
     basicItem(

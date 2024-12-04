@@ -9,8 +9,8 @@
  */
 package net.dragonmounts.objects.entity.entitytameabledragon.ai;
 
+import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
@@ -47,7 +47,7 @@ public class EntityAIDragonPlayerControl extends EntityAIDragonBase {
         double y = dragon.posY;
         double z = dragon.posZ;
 
-        if (dragon.getBreedType() == EnumDragonBreed.SYLPHID) {
+        if (dragon.getVariant().type == DragonTypes.WATER) {
             PotionEffect watereffect = new PotionEffect(MobEffects.WATER_BREATHING, 200);
             if (!rider.isPotionActive(watereffect.getPotion()) && rider.isInWater()) { // If the Potion isn't currently active,
                 rider.addPotionEffect(watereffect); // Apply a copy of the PotionEffect to the player
@@ -55,7 +55,7 @@ public class EntityAIDragonPlayerControl extends EntityAIDragonBase {
         }
 
         // if we're breathing at a target, look at it
-        if ((dragon.isUsingBreathWeapon() && dragon.getBreed().canUseBreathWeapon())) {
+        if (dragon.isUsingBreathWeapon() && dragon.getBreathHelper().hasWeapon()) {
             Vec3d dragonEyePos = dragon.getPositionVector().add(0, dragon.getEyeHeight(), 0);
             Vec3d lookDirection = rider.getLook(1.0F);
             Vec3d endOfLook = dragonEyePos.add(lookDirection.x, lookDirection.y, lookDirection.z);

@@ -10,8 +10,8 @@ public class DefaultAppearance extends VariantAppearance {
     public final boolean hasTailHorns;
     public final boolean hasSideTailScale;
 
-    public DefaultAppearance(ResourceLocation body, ResourceLocation glow, boolean hasTailHorns, boolean hasSideTailScale) {
-        super(1.6F);
+    public DefaultAppearance(ResourceLocation body, ResourceLocation glow, boolean hasTailHorns, boolean hasSideTailScale, boolean isSkeleton) {
+        super(1.6F, isSkeleton);
         this.body = body;
         this.glow = glow;
         this.hasTailHorns = hasTailHorns;

@@ -53,6 +53,8 @@ public abstract class DragonMountsCompat {
         //Blocks
         ITEM_MAPPINGS.put("pileofsticks", ModItems.DRAGON_NEST);
         ITEM_MAPPINGS.put("block_dragon_shulker", ModItems.DRAGON_CORE);
+        //Misc
+        ITEM_MAPPINGS.put("dragon_gender", DMItems.VARIANT_SWITCHER);
         //Spawn Eggs
         ITEM_MAPPINGS.put("summon_aether", DMItems.AETHER_DRAGON_SPAWN_EGG);
         ITEM_MAPPINGS.put("summon_enchant", DMItems.ENCHANT_DRAGON_SPAWN_EGG);

@@ -20,7 +20,7 @@ import net.minecraftforge.server.command.CommandTreeHelp;
  */
 public class DragonCommandTree extends CommandTreeBase {
     public DragonCommandTree() {
-        super.addSubcommand(new BreedCommand());
+        super.addSubcommand(new TypeCommand());
         super.addSubcommand(new StageCommand());
         super.addSubcommand(new CommandDragonTame());
         super.addSubcommand(new CommandDragonGender());

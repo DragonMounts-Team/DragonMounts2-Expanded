@@ -17,24 +17,23 @@ public class VariantAppearances {
                 new ResourceLocation(namespace, builder.replace(length + 6, length + 10, "glow").toString()),
                 new ResourceLocation(namespace, builder.delete(length, length + 5).toString()),
                 hasTailHorns,
-                hasSideTailScale
-        );
+                hasSideTailScale,
+                false);
     }
 
-    public static VariantAppearance createDefaultAppearance(String namespace, String path, boolean hasTailHorns, boolean hasSideTailScale) {
+    public static VariantAppearance createDefaultAppearance(String namespace, String path, boolean hasTailHorns, boolean hasSideTailScale, boolean isSkeleton) {
         StringBuilder builder = new StringBuilder(TEXTURES_ROOT + path);
         int length = builder.length();
         return new DefaultAppearance(
                 new ResourceLocation(namespace, builder.append("/body.png").toString()),
                 new ResourceLocation(namespace, builder.replace(length + 1, length + 5, "glow").toString()),
                 hasTailHorns,
-                hasSideTailScale
-        );
+                hasSideTailScale,
+                isSkeleton);
     }
 
     public static final VariantAppearance AETHER_FEMALE;
     public static final VariantAppearance AETHER_MALE;
-    public static final VariantAppearance AETHER_NEW;
     public static final VariantAppearance ENCHANT_FEMALE = createAgeableAppearance(MOD_ID, "enchant/female", false, false);
     public static final VariantAppearance ENCHANT_MALE = createAgeableAppearance(MOD_ID, "enchant/male", false, false);
     public static final VariantAppearance ENDER_FEMALE;
@@ -49,8 +48,8 @@ public class VariantAppearances {
     public static final VariantAppearance FOREST_TAIGA_MALE;
     public static final VariantAppearance ICE_FEMALE;
     public static final VariantAppearance ICE_MALE;
-    public static final VariantAppearance MOONLIGHT_FEMALE = createDefaultAppearance(MOD_ID, "moonlight/female", false, false);
-    public static final VariantAppearance MOONLIGHT_MALE = createDefaultAppearance(MOD_ID, "moonlight/male", false, false);
+    public static final VariantAppearance MOONLIGHT_FEMALE = createDefaultAppearance(MOD_ID, "moonlight/female", false, false, false);
+    public static final VariantAppearance MOONLIGHT_MALE = createDefaultAppearance(MOD_ID, "moonlight/male", false, false, false);
     public static final VariantAppearance NETHER_FEMALE = createAgeableAppearance(MOD_ID, "nether/female", false, false);
     public static final VariantAppearance NETHER_MALE = createAgeableAppearance(MOD_ID, "nether/male", false, false);
     public static final VariantAppearance SKELETON_FEMALE;
@@ -63,35 +62,34 @@ public class VariantAppearances {
     public static final VariantAppearance TERRA_MALE = createAgeableAppearance(MOD_ID, "terra/male", false, false);
     public static final VariantAppearance WATER_FEMALE = createAgeableAppearance(MOD_ID, "water/female", true, false);
     public static final VariantAppearance WATER_MALE = createAgeableAppearance(MOD_ID, "water/male", true, false);
-    public static final VariantAppearance WITHER_FEMALE = createDefaultAppearance(MOD_ID, "wither/female", true, false);
-    public static final VariantAppearance WITHER_MALE = createDefaultAppearance(MOD_ID, "wither/male", true, false);
+    public static final VariantAppearance WITHER_FEMALE = createDefaultAppearance(MOD_ID, "wither/female", true, false, true);
+    public static final VariantAppearance WITHER_MALE = createDefaultAppearance(MOD_ID, "wither/male", true, false, true);
     public static final VariantAppearance ZOMBIE_FEMALE;
     public static final VariantAppearance ZOMBIE_MALE;
 
     static {
         ResourceLocation glow = makeId(TEXTURES_ROOT + "aether/glow.png");
         ResourceLocation babyGlow = makeId(TEXTURES_ROOT + "aether/baby_glow.png");
-        AETHER_FEMALE = new AgeableAppearance(makeId(TEXTURES_ROOT + "aether/female/body.png"), makeId(TEXTURES_ROOT + "aether/female/baby_body.png"), babyGlow, glow, false, false);
-        AETHER_MALE = new AgeableAppearance(makeId(TEXTURES_ROOT + "aether/male/body.png"), makeId(TEXTURES_ROOT + "aether/male/baby_body.png"), babyGlow, glow, false, false);
-        AETHER_NEW = new DefaultAppearance(makeId(TEXTURES_ROOT + "aether/new/body.png"), makeId(TEXTURES_ROOT + "aether/new/glow.png"), false, false);
+        AETHER_FEMALE = new AgeableAppearance(makeId(TEXTURES_ROOT + "aether/female/body.png"), makeId(TEXTURES_ROOT + "aether/female/baby_body.png"), babyGlow, glow, false, false, false);
+        AETHER_MALE = new AgeableAppearance(makeId(TEXTURES_ROOT + "aether/male/body.png"), makeId(TEXTURES_ROOT + "aether/male/baby_body.png"), babyGlow, glow, false, false, false);
     }
 
     static {
         ResourceLocation glow = makeId(TEXTURES_ROOT + "ender/glow.png");
-        ENDER_FEMALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "ender/female/body.png"), glow, false, false);
-        ENDER_MALE = new AgeableAppearance(makeId(TEXTURES_ROOT + "ender/male/body.png"), makeId(TEXTURES_ROOT + "ender/male/baby_body.png"), glow, glow, false, false);
+        ENDER_FEMALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "ender/female/body.png"), glow, false, false, false);
+        ENDER_MALE = new AgeableAppearance(makeId(TEXTURES_ROOT + "ender/male/body.png"), makeId(TEXTURES_ROOT + "ender/male/baby_body.png"), glow, glow, false, false, false);
     }
 
     static {
         ResourceLocation glow = makeId(TEXTURES_ROOT + "forest/glow.png");
         ResourceLocation babyBody = makeId(TEXTURES_ROOT + "forest/forest/baby_body.png");
-        FOREST_FEMALE = new AgeableAppearance(makeId(TEXTURES_ROOT + "forest/forest/female_body.png"), babyBody, glow, glow, false, false);
-        FOREST_MALE = new AgeableAppearance(makeId(TEXTURES_ROOT + "forest/forest/male_body.png"), babyBody, glow, glow, false, false);
+        FOREST_FEMALE = new AgeableAppearance(makeId(TEXTURES_ROOT + "forest/forest/female_body.png"), babyBody, glow, glow, false, false, false);
+        FOREST_MALE = new AgeableAppearance(makeId(TEXTURES_ROOT + "forest/forest/male_body.png"), babyBody, glow, glow, false, false, false);
         babyBody = makeId(TEXTURES_ROOT + "forest/dry/baby_body.png");
-        FOREST_DRY_FEMALE = new AgeableAppearance(makeId(TEXTURES_ROOT + "forest/dry/female_body.png"), babyBody, glow, glow, false, false);
-        FOREST_DRY_MALE = new AgeableAppearance(makeId(TEXTURES_ROOT + "forest/dry/male_body.png"), babyBody, glow, glow, false, false);
-        FOREST_TAIGA_FEMALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "forest/taiga/female_body.png"), glow, false, false);
-        FOREST_TAIGA_MALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "forest/taiga/male_body.png"), glow, false, false);
+        FOREST_DRY_FEMALE = new AgeableAppearance(makeId(TEXTURES_ROOT + "forest/dry/female_body.png"), babyBody, glow, glow, false, false, false);
+        FOREST_DRY_MALE = new AgeableAppearance(makeId(TEXTURES_ROOT + "forest/dry/male_body.png"), babyBody, glow, glow, false, false, false);
+        FOREST_TAIGA_FEMALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "forest/taiga/female_body.png"), glow, false, false, false);
+        FOREST_TAIGA_MALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "forest/taiga/male_body.png"), glow, false, false, false);
     }
 
     static {
@@ -103,33 +101,32 @@ public class VariantAppearances {
                 babyGlow,
                 makeId(TEXTURES_ROOT + "ice/female/glow.png"),
                 false,
-                true
-        );
-        ICE_MALE = new AgeableAppearance(maleBody, maleBody, babyGlow, makeId(TEXTURES_ROOT + "ice/male/glow.png"), false, true);
+                true,
+                false);
+        ICE_MALE = new AgeableAppearance(maleBody, maleBody, babyGlow, makeId(TEXTURES_ROOT + "ice/male/glow.png"), false, true, false);
     }
 
     static {
         ResourceLocation glow = makeId(TEXTURES_ROOT + "skeleton/glow.png");
-        SKELETON_FEMALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "skeleton/female_body.png"), glow, false, false);
-        SKELETON_MALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "skeleton/male_body.png"), glow, false, false);
+        SKELETON_FEMALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "skeleton/female_body.png"), glow, false, false, true);
+        SKELETON_MALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "skeleton/male_body.png"), glow, false, false, true);
     }
 
     static {
         ResourceLocation body = makeId(TEXTURES_ROOT + "storm/female/body.png");
-        STORM_FEMALE = new AgeableAppearance(body, body, makeId(TEXTURES_ROOT + "storm/female/baby_glow.png"), makeId(TEXTURES_ROOT + "storm/female/glow.png"), true, false);
+        STORM_FEMALE = new AgeableAppearance(body, body, makeId(TEXTURES_ROOT + "storm/female/baby_glow.png"), makeId(TEXTURES_ROOT + "storm/female/glow.png"), true, false, false);
     }
 
     static {
         ResourceLocation body = makeId(TEXTURES_ROOT + "zombie/body.png");
-        ZOMBIE_FEMALE = new DefaultAppearance(body, makeId(TEXTURES_ROOT + "zombie/female_glow.png"), false, false);
-        ZOMBIE_MALE = new DefaultAppearance(body, makeId(TEXTURES_ROOT + "zombie/male_glow.png"), false, false);
+        ZOMBIE_FEMALE = new DefaultAppearance(body, makeId(TEXTURES_ROOT + "zombie/female_glow.png"), false, false, false);
+        ZOMBIE_MALE = new DefaultAppearance(body, makeId(TEXTURES_ROOT + "zombie/male_glow.png"), false, false, false);
     }
 
     public static Object2ObjectOpenHashMap<String, VariantAppearance> getMap() {
         Object2ObjectOpenHashMap<String, VariantAppearance> map = new Object2ObjectOpenHashMap<>();
         map.put("aether_female", AETHER_FEMALE);
         map.put("aether_male", AETHER_MALE);
-        map.put("aether_new", AETHER_NEW);
         map.put("enchant_female", ENCHANT_FEMALE);
         map.put("enchant_male", ENCHANT_MALE);
         map.put("ender_female", ENDER_FEMALE);

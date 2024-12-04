@@ -285,9 +285,9 @@ public class DMItems {
     public static final DragonSpawnEggItem WATER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("water_dragon_spawn_egg", DragonTypes.WATER, 0x4F6AA6, 0x223464);
     public static final DragonSpawnEggItem WITHER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("wither_dragon_spawn_egg", DragonTypes.WITHER, 0x839292, 0x383F40);
     public static final DragonSpawnEggItem ZOMBIE_DRAGON_SPAWN_EGG = createDragonSpawnEgg("zombie_dragon_spawn_egg", DragonTypes.ZOMBIE, 0x56562E, 0xA7BF2F);
-    /*?
+    //?
     public static final VariantSwitcherItem VARIANT_SWITCHER = createItem("variant_switcher", new VariantSwitcherItem());
-    //Shears
+    /*Shears
     public static final TieredShearsItem DIAMOND_SHEARS = createTieredShearsItem("diamond_shears", ItemTier.DIAMOND);
     public static final TieredShearsItem NETHERITE_SHEARS = createTieredShearsItem("netherite_shears", ItemTier.NETHERITE.fireResistant());
     //Carriages
@@ -338,7 +338,7 @@ public class DMItems {
     public static final Item DRAGON_CORE = new ItemBlock(DMBlocks.DRAGON_CORE).setRegistryName(DMBlocks.DRAGON_CORE.getRegistryName());*/
 
     static <T extends Item> T createItem(String name, T item) {
-        ITEMS.add(item.setRegistryName(name));
+        ITEMS.add(item.setTranslationKey(name).setRegistryName(name));
         return item;
     }
 

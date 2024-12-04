@@ -40,6 +40,7 @@ import static net.dragonmounts.util.math.MathX.parseColor;
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
+@Deprecated
 public class DragonBreedHelper extends DragonHelper {
     private static final Logger L = LogManager.getLogger();
     private static final int BLOCK_RANGE = 2;
@@ -118,7 +119,7 @@ public class DragonBreedHelper extends DragonHelper {
 
         DragonBreed oldBreed = oldType.getBreed();
         DragonBreed newBreed = newType.getBreed();
-        dragon.getBreathHelper().onBreedChange(newBreed);
+
 
         // switch breed stats
         oldBreed.onDisable(dragon);
@@ -203,11 +204,6 @@ public class DragonBreedHelper extends DragonHelper {
     @Override
     public void onDeath() {
         getBreedType().getBreed().onDeath(dragon);
-    }
-
-    public void inheritBreed(EntityTameableDragon parent1, EntityTameableDragon parent2) {
-        breedPoints.get(parent1.getBreedType()).addAndGet(POINTS_INHERIT + rand.nextInt(POINTS_INHERIT));
-        breedPoints.get(parent2.getBreedType()).addAndGet(POINTS_INHERIT + rand.nextInt(POINTS_INHERIT));
     }
 
     /**

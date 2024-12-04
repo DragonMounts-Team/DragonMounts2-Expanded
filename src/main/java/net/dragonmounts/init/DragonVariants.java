@@ -12,7 +12,6 @@ public class DragonVariants {
     public static final ObjectArrayList<DragonVariant> BUILTIN_VALUES = new ObjectArrayList<>();
     public static final DragonVariant AETHER_FEMALE;
     public static final DragonVariant AETHER_MALE;
-    public static final DragonVariant AETHER_NEW;
     public static final DragonVariant ENCHANT_FEMALE;
     public static final DragonVariant ENCHANT_MALE;
     public static final DragonVariant ENDER_FEMALE;
@@ -50,7 +49,6 @@ public class DragonVariants {
         Function<String, VariantAppearance> function = DragonMounts.PROXY.getVariantAppearances();
         BUILTIN_VALUES.add(AETHER_FEMALE = new DragonVariant(DragonTypes.AETHER, makeId("aether_female"), function));
         BUILTIN_VALUES.add(AETHER_MALE = new DragonVariant(DragonTypes.AETHER, makeId("aether_male"), function));
-        BUILTIN_VALUES.add(AETHER_NEW = new DragonVariant(DragonTypes.AETHER, makeId("aether_new"), function));
         BUILTIN_VALUES.add(ENCHANT_FEMALE = new DragonVariant(DragonTypes.ENCHANT, makeId("enchant_female"), function));
         BUILTIN_VALUES.add(ENCHANT_MALE = new DragonVariant(DragonTypes.ENCHANT, makeId("enchant_male"), function));
         BUILTIN_VALUES.add(ENDER_FEMALE = new DragonVariant(DragonTypes.ENDER, DragonVariant.DEFAULT_KEY, function));

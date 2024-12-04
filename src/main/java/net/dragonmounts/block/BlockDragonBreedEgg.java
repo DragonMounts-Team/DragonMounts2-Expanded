@@ -109,7 +109,7 @@ public class BlockDragonBreedEgg extends BlockDragonEgg {
         }
 
     	EntityTameableDragon dragon = new EntityTameableDragon(worldIn);
-        dragon.setBreedType(state.getValue(BlockDragonBreedEgg.BREED));
+        //dragon.setBreedType(state.getValue(BlockDragonBreedEgg.BREED));TODO: use setVariant
     	worldIn.setBlockToAir(pos); // Set to air AFTER setting breed type
     	dragon.getLifeStageHelper().setLifeStage(DragonLifeStage.EGG);
     	dragon.getReproductionHelper().setBreeder(player);

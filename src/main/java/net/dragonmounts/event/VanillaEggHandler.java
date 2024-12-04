@@ -2,7 +2,6 @@ package net.dragonmounts.event;
 
 import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStage;
 import net.dragonmounts.util.DMUtils;
 import net.minecraft.init.Blocks;
@@ -36,7 +35,7 @@ public class VanillaEggHandler {
 	    	
 		EntityTameableDragon entityDragon = new EntityTameableDragon(world);
 		entityDragon.setPosition(pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5);
-		entityDragon.setBreedType(EnumDragonBreed.END);
+		//entityDragon.setBreedType(EnumDragonBreed.END);TODO: use setVariant
 		entityDragon.getLifeStageHelper().setLifeStage(DragonLifeStage.EGG);
 		entityDragon.getReproductionHelper().setBreeder(evt.getEntityPlayer());
 	    	

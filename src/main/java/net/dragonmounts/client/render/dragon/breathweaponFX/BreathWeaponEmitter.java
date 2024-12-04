@@ -1,7 +1,7 @@
 package net.dragonmounts.client.render.dragon.breathweaponFX;
 
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.BreathNode;
-import net.dragonmounts.objects.entity.entitytameabledragon.breeds.DragonBreed;
+import net.dragonmounts.registry.DragonType;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -26,7 +26,7 @@ public class BreathWeaponEmitter {
      *
      * @param power the strength of the beam
      */
-    public void spawnBreathParticles(World world, Vec3d origin, Vec3d direction, BreathNode.Power power, int tickCount, DragonBreed breed) {
+    public void spawnBreathParticles(World world, Vec3d origin, Vec3d direction, BreathNode.Power power, int tickCount, DragonType.Behavior behavior) {
         if (tickCount != previousTickCount + 1) {
             previousDirection = direction;
             previousOrigin = origin;
@@ -37,7 +37,7 @@ public class BreathWeaponEmitter {
         final int PARTICLES_PER_TICK = 4;
         for (int i = 0; i < PARTICLES_PER_TICK; ++i) {
             float partialTickHeadStart = i / (float) PARTICLES_PER_TICK;
-            breed.spawnClientNodeEntity(
+            behavior.spawnClientBreath(
                     world,
                     interpolateVec(previousOrigin, origin, partialTickHeadStart),
                     interpolateVec(previousDirection, direction, partialTickHeadStart),

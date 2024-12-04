@@ -6,6 +6,7 @@ import net.dragonmounts.client.gui.GuiDragonWhistle;
 import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.inits.ModItems;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
+import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.DMUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
@@ -107,8 +108,9 @@ public class ItemDragonWhistle extends Item {
                 nbt.setString("Age", "dragon." + dragon.getLifeStageHelper().getLifeStage().name().toLowerCase());
                 nbt.setString("OwnerName", owner.getName());
                 nbt.setUniqueId("Owner", owner.getUniqueID());
-                nbt.setInteger("Color", dragon.getBreed().getColor());
-                nbt.setString("Breed", dragon.getBreedType().identifier);
+                DragonType type = dragon.getVariant().type;
+                nbt.setInteger("Color", type.color);
+                nbt.setString("Type", type.identifier.toString());
 
                 stack.setTagCompound(nbt);
                 player.sendStatusMessage(new TextComponentTranslation("whistle.msg.hasDragon"), true);

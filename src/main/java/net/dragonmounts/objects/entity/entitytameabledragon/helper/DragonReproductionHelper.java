@@ -9,8 +9,8 @@
  */
 package net.dragonmounts.objects.entity.entitytameabledragon.helper;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import com.google.common.base.Optional;
+import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
@@ -194,7 +194,7 @@ public class DragonReproductionHelper extends DragonHelper {
         }
 
         // inherit the baby's breed from its parents
-        baby.getBreedHelper().inheritBreed(parent1, parent2);
+        baby.variantHelper.inheritBreed(parent1, parent2);
 
         // increase reproduction counter
         parent1.getReproductionHelper().addReproduced();

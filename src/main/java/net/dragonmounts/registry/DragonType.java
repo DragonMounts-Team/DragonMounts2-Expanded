@@ -3,6 +3,8 @@ package net.dragonmounts.registry;
 import com.google.common.collect.ImmutableMultimap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ReferenceSet;
+import it.unimi.dsi.fastutil.objects.ReferenceSets;
 import net.dragonmounts.inits.ModSounds;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.BreathNode;
@@ -55,9 +57,9 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
     public final DragonVariant.Manager variants = new DragonVariant.Manager(this);
     public final Behavior behavior;
     private final Reference2ObjectOpenHashMap<Class<?>, Object> map = new Reference2ObjectOpenHashMap<>();
-    private final Set<DamageSource> immunities;
-    private final Set<Block> blocks;
-    private final Set<Biome> biomes;
+    private final ReferenceOpenHashSet<DamageSource> immunities;
+    private final ReferenceOpenHashSet<Block> blocks;
+    private final ReferenceOpenHashSet<Biome> biomes;
     public final EnumParticleTypes sneezeParticle;
     public final EnumParticleTypes eggParticle;
     @Nullable
@@ -86,6 +88,10 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
 
     public boolean isInvulnerableTo(DamageSource source) {
         return !this.immunities.isEmpty() && this.immunities.contains(source);
+    }
+
+    public ReferenceSet<DamageSource> getImmunities() {
+        return ReferenceSets.unmodifiable(this.immunities);
     }
 
     public boolean isHabitat(Block block) {
@@ -129,7 +135,7 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
         public final Set<Block> blocks = new ReferenceOpenHashSet<>();
         public final Set<Biome> biomes = new ReferenceOpenHashSet<>();
         public EnumParticleTypes sneezeParticle = EnumParticleTypes.SMOKE_LARGE;
-        public EnumParticleTypes eggParticle;
+        public EnumParticleTypes eggParticle = EnumParticleTypes.TOWN_AURA;
         public boolean convertible = true;
         public boolean isSkeleton = false;
         public boolean avoidWater = false;
@@ -231,9 +237,7 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
         }
 
         default SoundEvent getLivingSound(EntityTameableDragon dragon) {
-            return dragon.isBaby()
-                    ? ModSounds.ENTITY_DRAGON_HATCHLING_GROWL
-                    :
+            return dragon.isBaby() ? ModSounds.ENTITY_DRAGON_HATCHLING_GROWL :
                     (dragon.getRNG().nextInt(3) == 0
                             ? ModSounds.ENTITY_DRAGON_GROWL
                             : ModSounds.ENTITY_DRAGON_BREATHE

@@ -84,6 +84,7 @@ public class RegistryEventHandler {
         IForgeRegistry<DataSerializerEntry> registry = event.getRegistry();
         registry.register(new DataSerializerEntry(EnumDragonBreed.SERIALIZER).setRegistryName(DragonMountsTags.MOD_ID + ":dragon_breed"));
         registry.register(new DataSerializerEntry(DragonBreedForest.SubType.SERIALIZER).setRegistryName(DragonMountsTags.MOD_ID + ":forest_type"));
+        registry.register(new DataSerializerEntry(DragonVariant.SERIALIZER).setRegistryName(DragonMountsTags.MOD_ID + ":dragon_variant"));
     }
 
     @SubscribeEvent

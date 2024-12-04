@@ -18,9 +18,10 @@ public class AgeableAppearance extends VariantAppearance {
             ResourceLocation babyGlow,
             ResourceLocation glow,
             boolean hasTailHorns,
-            boolean hasSideTailScale
+            boolean hasSideTailScale,
+            boolean isSkeleton
     ) {
-        super(1.6F);
+        super(1.6F, isSkeleton);
         this.body = body;
         this.babyBody = babyBody;
         this.glow = glow;

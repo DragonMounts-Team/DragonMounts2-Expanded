@@ -107,7 +107,7 @@ public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityCont
         Entity entity;
         if (DRAGON_ID.equals(identifier)) {
             EntityTameableDragon dragon = new EntityTameableDragon(level);
-            //TODO: set dragon type
+            dragon.setVariant(this.type.variants.draw(level.rand, null));
             dragon.getLifeStageHelper().setLifeStage(player != null && player.isSneaking()
                     ? DragonLifeStage.HATCHLING
                     : DragonLifeStage.ADULT

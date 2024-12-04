@@ -6,8 +6,8 @@ import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.sound.SoundController;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.sound.SoundEffectBreathWeapon;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.weapons.BreathWeapon;
-import net.dragonmounts.objects.entity.entitytameabledragon.breeds.DragonBreed;
 import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonHelper;
+import net.dragonmounts.registry.DragonType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.math.MathHelper;
@@ -121,8 +121,7 @@ public class DragonBreathHelper extends DragonHelper {
 
     private void onLivingUpdateClient() {
         EntityTameableDragon dragon = this.dragon;
-        DragonBreed breed = dragon.getBreed();
-        if (!breed.canUseBreathWeapon()) {
+        if (this.weapon == null) {
             this.currentBreathState = BreathState.IDLE;
             return;
         }
@@ -134,7 +133,7 @@ public class DragonBreathHelper extends DragonHelper {
                     dragon.getLook(1.0f),
                     dragon.getLifeStageHelper().getBreathPower(),
                     this.tickCounter,
-                    breed
+                    dragon.getVariant().type.behavior
             );
         }
 
@@ -206,17 +205,9 @@ public class DragonBreathHelper extends DragonHelper {
             infoToUpdate.dragonHeadLocation=origin;
             infoToUpdate.relativeVolume=dragon.getScale();
             infoToUpdate.lifeStage=dragon.getLifeStageHelper().getLifeStage();
-
-            boolean isUsingBreathweapon=false;
-            if (dragon.isUsingBreathWeapon()) {
-                Vec3d lookDirection=dragon.getLook(1.0f);
-                Vec3d endOfLook=origin.add(lookDirection.x, lookDirection.y, lookDirection.z);
-                if (endOfLook!=null && currentBreathState==BreathState.SUSTAIN && dragon.getBreed().canUseBreathWeapon()) {
-                    isUsingBreathweapon=true;
-                }
-            }
-
-            infoToUpdate.breathingState=isUsingBreathweapon ? SoundEffectBreathWeapon.WeaponSoundInfo.State.BREATHING : SoundEffectBreathWeapon.WeaponSoundInfo.State.IDLE;
+            infoToUpdate.breathingState = DragonBreathHelper.this.weapon != null && dragon.isUsingBreathWeapon() && currentBreathState == BreathState.SUSTAIN
+                    ? SoundEffectBreathWeapon.WeaponSoundInfo.State.BREATHING
+                    : SoundEffectBreathWeapon.WeaponSoundInfo.State.IDLE;
             return true;
         }
     }
@@ -225,7 +216,11 @@ public class DragonBreathHelper extends DragonHelper {
         return breathWeaponEmitter;
     }
 
-    public void onBreedChange(DragonBreed breed) {
-        this.weapon = breed.createBreathWeapon(this.dragon);
+    public void onBreedChange(DragonType type) {
+        this.weapon = type.behavior.createBreathWeapon(this.dragon);
+    }
+
+    public boolean hasWeapon() {
+        return this.weapon != null;
     }
 }

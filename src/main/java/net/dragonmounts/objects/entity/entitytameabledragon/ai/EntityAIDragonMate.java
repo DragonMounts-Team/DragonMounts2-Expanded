@@ -10,12 +10,9 @@
 package net.dragonmounts.objects.entity.entitytameabledragon.ai;
 
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStage;
 
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Derivative EntityAIMate class to deal with some special values that can't be
@@ -113,13 +110,10 @@ public class EntityAIDragonMate extends EntityAIDragonBase {
             dragonMate.resetInLove();
             dragonBaby.setLocationAndAngles(dragon.posX, dragon.posY, dragon.posZ, 0, 0);
             dragonBaby.getLifeStageHelper().setLifeStage(DragonLifeStage.EGG);
-
-            Map<EnumDragonBreed, AtomicInteger> points = dragonBaby.getBreedHelper().getBreedPoints();
-
             // i cant figure out on how to get the highest number on the breed point map on the baby and set the breed with it
             // (turn on debug to see breed points per dragon)
             // inherit breed sets the both breed point from parents
-            dragonBaby.setBreedType(dragonMate.getBreedType());
+            //dragonBaby.setBreedType(dragonMate.getBreedType());TODO: use DragonType
             world.spawnEntity(dragonBaby);
         }
     }
