@@ -11,6 +11,8 @@ package net.dragonmounts.objects.entity.entitytameabledragon.helper;
 
 import com.google.common.collect.ImmutableMap;
 import net.dragonmounts.DragonMounts;
+import net.dragonmounts.block.HatchableDragonEggBlock;
+import net.dragonmounts.init.DMBlocks;
 import net.dragonmounts.inits.ModSounds;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.BreathNode;
@@ -22,6 +24,7 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -228,8 +231,7 @@ public class DragonLifeStageHelper extends DragonHelper {
             dragon.dropItem(Items.SADDLE, 1);
         }
 
-        /*dragon.entityDropItem(new ItemStack(BlockDragonBreedEgg.DRAGON_BREED_EGG),
-                dragon.getBreedType().getMeta());TODO: use DragonType*/
+        dragon.entityDropItem(new ItemStack(dragon.getVariant().type.getInstance(HatchableDragonEggBlock.class, DMBlocks.ENDER_DRAGON_EGG)), 0);
 
         dragon.setDead();
     }

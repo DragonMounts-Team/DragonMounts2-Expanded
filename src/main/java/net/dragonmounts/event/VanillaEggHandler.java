@@ -1,8 +1,8 @@
 package net.dragonmounts.event;
 
 import net.dragonmounts.DragonMountsConfig;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStage;
+import net.dragonmounts.block.HatchableDragonEggBlock;
+import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.util.DMUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -20,25 +20,16 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class VanillaEggHandler {
 		
 	@SubscribeEvent
-	public void onPlayerInteract(PlayerInteractEvent.RightClickBlock evt) {
-		World world = evt.getWorld();
-		BlockPos pos = evt.getPos();
-		if (world.getBlockState(pos).getBlock() != Blocks.DRAGON_EGG) return; //ignore all other blocks
-		if (world.isRemote) return; //do nothing on client world
+	public void onPlayerInteract(PlayerInteractEvent.RightClickBlock event) {
+		World level = event.getWorld();
+		if (level.isRemote) return; //do nothing on client world
+		BlockPos pos = event.getPos();
+		if (level.getBlockState(pos).getBlock() != Blocks.DRAGON_EGG) return; //ignore all other blocks
 		if (DragonMountsConfig.isDisableBlockOverride()) return; //do nothing if config is set
-		if (world.provider.getDimensionType() == DimensionType.THE_END) {
-			evt.getEntityPlayer().sendStatusMessage(new TextComponentTranslation(DMUtils.translateToLocal("egg.cantHatchEnd.DragonMounts")), true);
+		if (level.provider.getDimensionType() == DimensionType.THE_END) {
+			event.getEntityPlayer().sendStatusMessage(new TextComponentTranslation(DMUtils.translateToLocal("egg.cantHatchEnd.DragonMounts")), true);
 			return;  //cant hatch in the end
 		}
-	    	
-		world.setBlockToAir(evt.getPos());
-	    	
-		EntityTameableDragon entityDragon = new EntityTameableDragon(world);
-		entityDragon.setPosition(pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5);
-		//entityDragon.setBreedType(EnumDragonBreed.END);TODO: use setVariant
-		entityDragon.getLifeStageHelper().setLifeStage(DragonLifeStage.EGG);
-		entityDragon.getReproductionHelper().setBreeder(evt.getEntityPlayer());
-	    	
-		world.spawnEntity(entityDragon);
+		HatchableDragonEggBlock.spawn(level, pos, DragonTypes.ENDER).getReproductionHelper().setBreeder(event.getEntityPlayer());
 	}
 }

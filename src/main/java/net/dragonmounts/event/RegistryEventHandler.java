@@ -2,7 +2,6 @@ package net.dragonmounts.event;
 
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
-import net.dragonmounts.block.BlockDragonBreedEgg;
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.client.gui.GuiHandler;
 import net.dragonmounts.init.DMArmorEffects;
@@ -40,9 +39,9 @@ public class RegistryEventHandler {
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
         IForgeRegistry<Block> registry = event.getRegistry();
-        registry.register(DMBlocks.DRAGON_CORE);
-        registry.register(DMBlocks.DRAGON_NEST);
-        registry.register(BlockDragonBreedEgg.DRAGON_BREED_EGG.setRegistryName("dragon_egg"));
+        for (Block block : DMBlocks.BLOCKS) {
+            registry.register(block);
+        }
         GameRegistry.registerTileEntity(DragonCoreBlockEntity.class, makeId("dragon_core"));
         DMUtils.getLogger().info("Block Registries Successfully Registered");
     }

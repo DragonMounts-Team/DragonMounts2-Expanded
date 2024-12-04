@@ -9,10 +9,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 public class DragonNestBlock extends Block {
-	public DragonNestBlock(String name) {
+	public DragonNestBlock() {
 		super(Material.WOOD);
-		this.setTranslationKey(name);
-		this.setRegistryName(name);
 		this.setResistance(1);
 		this.setHardness(1);
 		this.setSoundType(SoundType.WOOD);

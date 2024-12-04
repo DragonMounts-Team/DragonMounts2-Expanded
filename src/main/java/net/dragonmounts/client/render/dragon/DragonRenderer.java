@@ -9,11 +9,12 @@
  */
 package net.dragonmounts.client.render.dragon;
 
-import net.dragonmounts.block.BlockDragonBreedEgg;
+import net.dragonmounts.block.HatchableDragonEggBlock;
 import net.dragonmounts.client.model.dragon.DragonModel;
 import net.dragonmounts.client.model.dragon.DragonModelMode;
 import net.dragonmounts.client.render.dragon.layer.DragonLayerRenderer;
 import net.dragonmounts.client.variant.VariantAppearance;
+import net.dragonmounts.init.DMBlocks;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStageHelper;
 import net.minecraft.block.state.IBlockState;
@@ -131,7 +132,7 @@ public class DragonRenderer extends RenderLiving<EntityTameableDragon> {
         BufferBuilder vb = tessellator.getBuffer();
         vb.begin(GL_QUADS, DefaultVertexFormats.BLOCK);
 
-        IBlockState state = BlockDragonBreedEgg.DRAGON_BREED_EGG.getDefaultState();//.withProperty(BlockDragonBreedEgg.BREED, dragon.getBreedType());TODO: use DragonType
+        IBlockState state = dragon.getVariant().type.getInstance(HatchableDragonEggBlock.class, DMBlocks.ENDER_DRAGON_EGG).getDefaultState();
         BlockPos pos = dragon.getPosition();
         vb.setTranslation(-pos.getX() - 0.5, -pos.getY(), -pos.getZ() - 0.5);
 

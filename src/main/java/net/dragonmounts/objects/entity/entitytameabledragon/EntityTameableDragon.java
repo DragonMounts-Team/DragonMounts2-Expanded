@@ -13,8 +13,10 @@ import com.google.common.base.Optional;
 import io.netty.buffer.ByteBuf;
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsConfig;
+import net.dragonmounts.block.HatchableDragonEggBlock;
 import net.dragonmounts.client.gui.GuiHandler;
 import net.dragonmounts.client.model.dragon.anim.DragonAnimator;
+import net.dragonmounts.init.DMBlocks;
 import net.dragonmounts.init.DMItems;
 import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.init.DragonVariants;
@@ -1756,8 +1758,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
 
     @Override
     public List<ItemStack> onSheared(ItemStack stack, IBlockAccess world, BlockPos pos, int fortune) {
-        //TODO: getDragonType
-        Item item = DragonTypes.ENDER.getInstance(DragonScalesItem.class, null);
+        Item item = this.getVariant().type.getInstance(DragonScalesItem.class, null);
         if (item == null) return Collections.emptyList();
         this.setSheared(true);
         ticksShear = 3000;
@@ -1843,7 +1844,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
              */
             if (player.isSneaking()) {
                 world.playSound(player, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.PLAYERS, 0.5F, 1);
-                //world.setBlockState(getPosition(), BlockDragonBreedEgg.DRAGON_BREED_EGG.getStateFromMeta(getBreedType().getMeta()));TODO: use DragonType
+                world.setBlockState(this.getPosition(), this.getVariant().type.getInstance(HatchableDragonEggBlock.class, DMBlocks.ENDER_DRAGON_EGG).getDefaultState());
                 setDead();
                 return true;
             }

@@ -86,6 +86,7 @@ def generateItemModels(output: Output):
     name = type.value.path
     dragonAmuletItem(output, name, name)
     model(spawnEggModel).save(output, name + '_dragon_spawn_egg')
+    model(ResourceLocation(type.value.namespace, 'block/' + name + '_dragon_egg')).save(output, name + '_dragon_egg')
     if (type is DragonType.SKELETON or type is DragonType.WITHER): continue
     dragonScalesItem(output, type)
     dragonScaleBowItem(output, type)
@@ -111,4 +112,4 @@ def generateItemModels(output: Output):
         .model(makeId('item/' + blocking))\
       .end()\
       .save(output, root)
-  output.log('model(s)')
+  output.log('item model(s)')

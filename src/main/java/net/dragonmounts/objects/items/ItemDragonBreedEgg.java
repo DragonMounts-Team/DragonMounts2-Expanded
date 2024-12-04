@@ -1,8 +1,8 @@
 package net.dragonmounts.objects.items;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.dragonmounts.block.BlockDragonBreedEgg;
 import net.dragonmounts.client.ClientUtil;
+import net.dragonmounts.init.DMBlocks;
 import net.dragonmounts.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import net.dragonmounts.util.IHasModel;
 import net.minecraft.item.ItemBlock;
@@ -13,7 +13,7 @@ public class ItemDragonBreedEgg extends ItemBlock implements IHasModel {
     private static final Int2ObjectOpenHashMap<String> BREED_CACHE = new Int2ObjectOpenHashMap<>();
     
     public ItemDragonBreedEgg() {
-        super(BlockDragonBreedEgg.DRAGON_BREED_EGG);
+        super(DMBlocks.DRAGON_EGG_COMPAT);
         this.setMaxDamage(0);
         this.setHasSubtypes(true);
     }

@@ -289,7 +289,6 @@ public class DMItems {
     public static final VariantSwitcherItem VARIANT_SWITCHER = createItem("variant_switcher", new VariantSwitcherItem());
     /*Shears
     public static final TieredShearsItem DIAMOND_SHEARS = createTieredShearsItem("diamond_shears", ItemTier.DIAMOND);
-    public static final TieredShearsItem NETHERITE_SHEARS = createTieredShearsItem("netherite_shears", ItemTier.NETHERITE.fireResistant());
     //Carriages
     public static final CarriageItem ACACIA_CARRIAGE = createItem("acacia_carriage", new CarriageItem(CarriageTypes.ACACIA));
     public static final CarriageItem BIRCH_CARRIAGE = createItem("birch_carriage", new CarriageItem(CarriageTypes.BIRCH));

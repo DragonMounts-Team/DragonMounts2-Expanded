@@ -30,7 +30,7 @@
       },
       "sylphid": {
         "textures": {
-          "all": "dragonmounts:entities/dragon/sylphid/egg"
+          "all": "dragonmounts:entities/dragon/water/egg"
         }
       },
       "ice": {

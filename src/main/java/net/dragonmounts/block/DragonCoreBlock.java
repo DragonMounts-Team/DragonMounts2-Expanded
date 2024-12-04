@@ -32,12 +32,10 @@ import static net.minecraft.block.BlockDirectional.FACING;
  */
 
 public class DragonCoreBlock extends BlockContainer {
-    public DragonCoreBlock(String name) {
+    public DragonCoreBlock() {
         super(Material.ROCK);
-        setTranslationKey(name);
-        setRegistryName(name);
-        setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP));
-        setHardness(2000);
+        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP));
+        this.setHardness(2000);
     }
 
     @Override
