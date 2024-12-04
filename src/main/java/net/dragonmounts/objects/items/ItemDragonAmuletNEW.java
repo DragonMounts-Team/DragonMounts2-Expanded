@@ -3,7 +3,7 @@ package net.dragonmounts.objects.items;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.client.ClientUtil;
-import net.dragonmounts.inits.DMItemGroups;
+import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.inits.ModItems;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.objects.items.entity.EntityDragonAmulet;

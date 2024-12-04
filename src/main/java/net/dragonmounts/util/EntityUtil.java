@@ -1,14 +1,20 @@
 package net.dragonmounts.util;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.dragonmounts.objects.entity.entitytameabledragon.helper.util.Pair;
 import net.dragonmounts.util.math.MathX;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.List;
 
@@ -31,6 +37,19 @@ public class EntityUtil {
             return false;
         entity.addPotionEffect(new PotionEffect(effect, duration, amplifier, ambient, visible));
         return true;
+    }
+
+    public static void finalizeSpawn(World level, Entity entity, double x, double y, double z, IEntityLivingData data) {
+        entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(level.rand.nextFloat() * 360.0F), 0.0F);
+        if (entity instanceof EntityLiving) {
+            EntityLiving $entity = (EntityLiving) entity;
+            $entity.rotationYawHead = $entity.rotationYaw;
+            $entity.renderYawOffset = $entity.rotationYaw;
+            if (ForgeEventFactory.doSpecialSpawn($entity, level, (float) x, (float) y, (float) z, null)) return;
+            $entity.onInitialSpawn(level.getDifficultyForLocation(new BlockPos($entity)), data);
+            level.spawnEntity(entity);
+            $entity.playLivingSound();
+        }
     }
 
     /**

@@ -1,5 +1,6 @@
 package net.dragonmounts.registry;
 
+import net.dragonmounts.util.DMUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.*;
 
@@ -27,6 +28,7 @@ public class NumericIdentifiedEntry<T extends NumericIdentifiedEntry<T>> extends
 
         @Override
         public void onClear(IForgeRegistryInternal<T> owner, RegistryManager stage) {
+            DMUtils.getLogger().info("Clearing Registry!", new Throwable());
             for (T entry : owner) {
                 entry.id = -1;
             }

@@ -18,8 +18,15 @@ import net.dragonmounts.block.BlockDragonBreedEgg;
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.client.gui.GuiHandler;
 import net.dragonmounts.client.model.dragon.anim.DragonAnimator;
-import net.dragonmounts.inits.*;
+import net.dragonmounts.init.DMBlocks;
+import net.dragonmounts.init.DMItems;
+import net.dragonmounts.init.DragonTypes;
+import net.dragonmounts.inits.ModItems;
+import net.dragonmounts.inits.ModKeys;
+import net.dragonmounts.inits.ModSounds;
 import net.dragonmounts.inventory.DragonInventory;
+import net.dragonmounts.item.DragonArmorItem;
+import net.dragonmounts.item.DragonScalesItem;
 import net.dragonmounts.network.MessageDragonBreath;
 import net.dragonmounts.network.MessageDragonExtras;
 import net.dragonmounts.objects.entity.entitycarriage.EntityCarriage;
@@ -33,7 +40,6 @@ import net.dragonmounts.objects.entity.entitytameabledragon.breeds.EnumDragonBre
 import net.dragonmounts.objects.entity.entitytameabledragon.helper.*;
 import net.dragonmounts.objects.entity.entitytameabledragon.helper.util.Pair;
 import net.dragonmounts.objects.items.ItemDragonEssence;
-import net.dragonmounts.objects.items.ItemDragonScales;
 import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.block.Block;
@@ -151,7 +157,6 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
     public int inAirTicks;
     public int roarTicks;
     protected int ticksSinceLastAttack;
-    float damageReduction = (float) getArmorResistance() + 3.0F;
     private boolean isUsingBreathWeapon;
     private boolean altBreathing;
     private boolean isGoingDown;
@@ -160,7 +165,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
     private boolean followYaw;
     private DragonAnimator animator;
     private double airSpeedVertical = 0;
-    private int armor;
+    private boolean armored;
     private boolean chested;
     private boolean saddled;
 
@@ -348,20 +353,6 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
      */
     public void setOppositeGender() {
         this.setMale(!this.isMale());
-    }
-
-    public double getArmorResistance() {
-        switch (this.getArmorType()) {
-            case 1:
-            case 4:
-                return 1.5;
-            case 2:
-                return 1.4;
-            case 3:
-                return 1.7;
-            default:
-                return 0;
-        }
     }
 
     public boolean isGrowthPaused() {
@@ -1086,7 +1077,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
      */
     @Override
     public EnumCreatureAttribute getCreatureAttribute() {
-        return getBreed().getCreatureAttribute();
+        return EnumCreatureAttribute.UNDEFINED;
     }
 
     @Override
@@ -1331,7 +1322,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
             this.getAISit().setSitting(false);
         }
 
-        if (this.isBeingRidden() && source.getTrueSource() != null && source.getTrueSource().isPassenger(source.getTrueSource()) && damage < 1) {
+        if (this.isBeingRidden() && sourceEntity != null && this.isPassenger(sourceEntity) && damage < 1) {
             return false;
         }
 
@@ -1339,7 +1330,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
             return false;
         }
 
-        if (!world.isRemote && source.getTrueSource() != null && this.getRNG().nextInt(4) == 0 && !isEgg()) {
+        if (!world.isRemote && sourceEntity != null && this.getRNG().nextInt(4) == 0 && !isEgg()) {
             this.roar();
         }
 
@@ -1349,10 +1340,6 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
 
         if (sourceEntity != null && sourceEntity.isPassenger(this)) {
             return false;
-        }
-
-        if (getArmorResistance() != 0) {
-            damage -= damageReduction;
         }
 
         return super.attackEntityFrom(source, damage);
@@ -1868,12 +1855,13 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
 
     @Override
     public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
-        return item != null && item.getItem() == ModTools.diamond_shears && (isJuvenile() || isAdult()) && ticksShear <= 0;
+        return item != null && item.getItem() == DMItems.diamond_shears && (isJuvenile() || isAdult()) && ticksShear <= 0;
     }
 
     @Override
     public List<ItemStack> onSheared(ItemStack stack, IBlockAccess world, BlockPos pos, int fortune) {
-        Item item = ItemDragonScales.byBreed(this.getBreed().getItemBreed(this));
+        //TODO: getDragonType
+        Item item = DragonTypes.ENDER.getInstance(DragonScalesItem.class, null);
         if (item == null) return Collections.emptyList();
         this.setSheared(true);
         ticksShear = 3000;
@@ -2156,11 +2144,11 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
             this.chested = chested;
         } else if (ARMOR.equals(key)) {
             ItemStack stack = this.getArmor();
-            int type = stack.isEmpty() ? 0 : DMArmors.DRAGON_ARMORS.getInt(stack.getItem());
-            if (!this.firstUpdate && type != 0 && type != this.armor) {
+            boolean armored = !stack.isEmpty() && stack.getItem() instanceof DragonArmorItem;
+            if (!this.firstUpdate && armored && !this.armored) {
                 this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_HORSE_ARMOR, SoundCategory.PLAYERS, 1F, 1F, false);
             }
-            this.armor = type;
+            this.armored = armored;
         } else if (SADDLE.equals(key)) {
             ItemStack stack = this.getSaddle();
             boolean saddled = !stack.isEmpty() && stack.getItem() == Items.SADDLE;
@@ -2187,8 +2175,8 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
         return this.getDataManager().get(ARMOR);
     }
 
-    public int getArmorType() {
-        return this.armor;
+    public boolean isArmored() {
+        return this.armored;
     }
 
     public ItemStack getChest() {

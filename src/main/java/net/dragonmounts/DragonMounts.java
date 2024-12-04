@@ -14,9 +14,8 @@ import net.dragonmounts.compat.BaublesCompat;
 import net.dragonmounts.compat.DragonMountsCompat;
 import net.dragonmounts.event.EventLiving;
 import net.dragonmounts.event.RegistryEventHandler;
-import net.dragonmounts.inits.DMArmors;
-import net.dragonmounts.inits.DMItemGroups;
-import net.dragonmounts.inits.ModTools;
+import net.dragonmounts.init.DMItemGroups;
+import net.dragonmounts.init.DMItems;
 import net.dragonmounts.proxy.ServerProxy;
 import net.dragonmounts.util.debugging.testclasses.LoggerLimit;
 import net.minecraft.creativetab.CreativeTabs;
@@ -47,7 +46,7 @@ public class DragonMounts {
     public static final String GUI_FACTORY = "net.dragonmounts.DragonMountsConfigGuiFactory";
 
     @SidedProxy(serverSide="net.dragonmounts.proxy.ServerProxy", clientSide="net.dragonmounts.proxy.ClientProxy")
-    public static ServerProxy proxy;
+    public static ServerProxy PROXY;
 
     @Instance(value = DragonMountsTags.MOD_ID)
     public static DragonMounts instance;
@@ -80,7 +79,7 @@ public class DragonMounts {
     public void PreInitialization(FMLPreInitializationEvent event) {
         DragonMountsLootTables.registerLootTables();
         MinecraftForge.EVENT_BUS.register(new EventLiving());
-        proxy.PreInitialization(event);
+        PROXY.PreInitialization(event);
         metadata=event.getModMetadata();
         DMItemGroups.init();
         DragonMountsCompat.load(FMLCommonHandler.instance().getDataFixer().init(DragonMountsTags.MOD_ID, DragonMountsCompat.VERSION));
@@ -88,9 +87,8 @@ public class DragonMounts {
 
     @EventHandler
     public void Initialization(FMLInitializationEvent event) {
-        proxy.Initialization(event);
-        ModTools.InitializaRepairs();
-        DMArmors.InitializaRepairs();
+        PROXY.Initialization(event);
+        DMItems.bindRepairMaterials();
         GameRegistry.registerWorldGenerator(new DragonMountsWorldGenerator(), 0);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
         RegistryEventHandler.initRegistries();
@@ -100,16 +98,16 @@ public class DragonMounts {
 
     @EventHandler
     public void PostInitialization(FMLPostInitializationEvent event) {
-        proxy.PostInitialization(event);
+        PROXY.PostInitialization(event);
     }
 
     @EventHandler
     public void ServerStarting(FMLServerStartingEvent event) {
-        proxy.ServerStarting(event);
+        PROXY.ServerStarting(event);
     }
 
     @EventHandler
     public void ServerStopped(FMLServerStoppedEvent event) {
-        proxy.ServerStopped(event);
+        PROXY.ServerStopped(event);
     }
 }

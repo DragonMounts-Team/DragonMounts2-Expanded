@@ -3,7 +3,7 @@ package net.dragonmounts.objects.items;
 import com.mojang.authlib.GameProfile;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.client.gui.GuiDragonWhistle;
-import net.dragonmounts.inits.DMItemGroups;
+import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.inits.ModItems;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.util.DMUtils;

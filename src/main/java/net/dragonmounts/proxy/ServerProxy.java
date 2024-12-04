@@ -9,14 +9,17 @@
  */
 package net.dragonmounts.proxy;
 
+import it.unimi.dsi.fastutil.Function;
+import it.unimi.dsi.fastutil.objects.Object2ObjectFunctions;
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.capability.ArmorEffectManager;
+import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.cmd.DragonCommandTree;
 import net.dragonmounts.event.VanillaEggHandler;
-import net.dragonmounts.inits.DMArmorEffects;
-import net.dragonmounts.inits.DMCapabilities;
+import net.dragonmounts.init.DMArmorEffects;
+import net.dragonmounts.init.DMCapabilities;
 import net.dragonmounts.network.*;
 import net.dragonmounts.objects.entity.entitycarriage.EntityCarriage;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
@@ -46,7 +49,7 @@ public class ServerProxy {
     private final int ENTITY_UPDATE_FREQ = 3;
     private final int ENTITY_ID = 1;
     private final boolean ENTITY_SEND_VELO_UPDATES = true;
-    private static SimpleNetworkWrapper network = NetworkRegistry.INSTANCE.newSimpleChannel("DragonControls");
+    private static final SimpleNetworkWrapper network = NetworkRegistry.INSTANCE.newSimpleChannel("DragonControls");
 
     public SimpleNetworkWrapper getNetwork() {
         return this.network;
@@ -120,5 +123,8 @@ public class ServerProxy {
         return FMLServerHandler.instance().getSavesDirectory();
     }
 
-
+    @SuppressWarnings("unchecked")
+    public Function<String, VariantAppearance> getVariantAppearances() {
+        return Object2ObjectFunctions.EMPTY_FUNCTION;
+    }
 }

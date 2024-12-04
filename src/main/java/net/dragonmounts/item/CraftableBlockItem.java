@@ -16,9 +16,6 @@ public class CraftableBlockItem extends ItemBlock {
         this.setRegistryName(Objects.requireNonNull(block.getRegistryName()));
     }
 
-    /**
-     * This method determines where the item is displayed
-     */
     @Override
     public @Nonnull CreativeTabs[] getCreativeTabs() {
         return new CreativeTabs[]{this.tab};

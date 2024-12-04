@@ -1,8 +1,9 @@
 package net.dragonmounts.event;
 
+import net.dragonmounts.init.DMItems;
 import net.dragonmounts.inits.ModItems;
+import net.dragonmounts.item.DragonSpawnEggItem;
 import net.dragonmounts.items.IItemDragonOrbColour;
-import net.dragonmounts.objects.items.ItemDragonSpawner;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ColorHandlerEvent;
@@ -24,10 +25,10 @@ public class IItemColorRegistration {
 
         colors.registerItemColorHandler((stack, tintIndex) -> {
             Item item = stack.getItem();
-            return item instanceof ItemDragonSpawner ? (
-                    tintIndex == 0 ? ((ItemDragonSpawner) item).backgroundColor : ((ItemDragonSpawner) item).highlightColor
+            return item instanceof DragonSpawnEggItem ? (
+                    tintIndex == 0 ? ((DragonSpawnEggItem) item).backgroundColor : ((DragonSpawnEggItem) item).highlightColor
             ) : -1;
-        }, ModItems.SpawnAether, ModItems.SpawnEnchant, ModItems.SpawnEnd, ModItems.SpawnFire, ModItems.SpawnForest, ModItems.SpawnIce, ModItems.SpawnMoonlight, ModItems.SpawnNether, ModItems.SpawnSkeleton, ModItems.SpawnStorm, ModItems.SpawnSunlight, ModItems.SpawnTerra, ModItems.SpawnWater, ModItems.SpawnWither, ModItems.SpawnZombie);
+        }, DMItems.AETHER_DRAGON_SPAWN_EGG, DMItems.ENCHANT_DRAGON_SPAWN_EGG, DMItems.ENDER_DRAGON_SPAWN_EGG, DMItems.FIRE_DRAGON_SPAWN_EGG, DMItems.FOREST_DRAGON_SPAWN_EGG, DMItems.ICE_DRAGON_SPAWN_EGG, DMItems.MOONLIGHT_DRAGON_SPAWN_EGG, DMItems.NETHER_DRAGON_SPAWN_EGG, DMItems.SKELETON_DRAGON_SPAWN_EGG, DMItems.STORM_DRAGON_SPAWN_EGG, DMItems.SUNLIGHT_DRAGON_SPAWN_EGG, DMItems.TERRA_DRAGON_SPAWN_EGG, DMItems.WATER_DRAGON_SPAWN_EGG, DMItems.WITHER_DRAGON_SPAWN_EGG, DMItems.ZOMBIE_DRAGON_SPAWN_EGG);
 
         colors.registerItemColorHandler(new IItemDragonOrbColour(), ModItems.dragon_orb);
     }

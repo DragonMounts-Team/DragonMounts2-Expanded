@@ -33,7 +33,7 @@ public class DataLogger
   static private PrintStream getOrCreate(String datalogName) throws FileNotFoundException
   {
     if (!dataLogs.containsKey(datalogName)) {
-      File newDataLog = new File(DragonMounts.proxy.getDataDirectory(), datalogName + ".txt");
+      File newDataLog = new File(DragonMounts.PROXY.getDataDirectory(), datalogName + ".txt");
       final boolean AUTOFLUSH = true;
       PrintStream stream = new PrintStream(new FileOutputStream(newDataLog), AUTOFLUSH);
       dataLogs.put(datalogName, stream);

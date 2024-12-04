@@ -5,12 +5,16 @@ import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.block.BlockDragonBreedEgg;
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.client.gui.GuiHandler;
-import net.dragonmounts.inits.DMArmorEffects;
-import net.dragonmounts.inits.DMBlocks;
+import net.dragonmounts.init.DMArmorEffects;
+import net.dragonmounts.init.DMBlocks;
+import net.dragonmounts.init.DragonTypes;
+import net.dragonmounts.init.DragonVariants;
 import net.dragonmounts.inits.ModItems;
 import net.dragonmounts.objects.entity.entitytameabledragon.breeds.DragonBreedForest;
 import net.dragonmounts.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import net.dragonmounts.registry.CooldownCategory;
+import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.IHasModel;
 import net.minecraft.block.Block;
@@ -63,6 +67,16 @@ public class RegistryEventHandler {
         registry.register(DMArmorEffects.NETHER_EFFECT);
         registry.register(DMArmorEffects.SUNLIGHT_EFFECT);
         registry.register(DMArmorEffects.ZOMBIE_EFFECT);
+    }
+
+    @SubscribeEvent
+    public static void registerDragonType(RegistryEvent.Register<DragonType> event) {
+        DragonTypes.BUILTIN_VALUES.forEach(event.getRegistry()::register);
+    }
+
+    @SubscribeEvent
+    public static void registerDragonVariant(RegistryEvent.Register<DragonVariant> event) {
+        DragonVariants.BUILTIN_VALUES.forEach(event.getRegistry()::register);
     }
 
     @SubscribeEvent

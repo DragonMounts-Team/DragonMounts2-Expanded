@@ -2,7 +2,7 @@ package net.dragonmounts.objects.items;
 
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
-import net.dragonmounts.inits.ModItems;
+import net.dragonmounts.init.DMItems;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.util.DMUtils;
 import net.minecraft.client.util.ITooltipFlag;
@@ -38,7 +38,7 @@ public class ItemDiamondShears extends ItemShears {
         this.setMaxStackSize(1);
         this.setCreativeTab(CreativeTabs.TOOLS);
 
-        ModItems.ITEMS.add(this);
+        DMItems.ITEMS.add(this);
     }
 
     @Override

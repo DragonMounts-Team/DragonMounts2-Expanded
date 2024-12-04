@@ -1,5 +1,5 @@
-itemGroup.dragonmounts=DM2: Continued
-itemGroup.armorytab=DM2: Continued—Equipement
+itemGroup.dragonmounts.main=DM2: Continued
+itemGroup.dragonmounts.combat=DM2: Continued—Equipement
 
 entity.DragonMount.ice.name=Морозный дракон
 entity.DragonMount.ender.name=Дракон края
@@ -263,9 +263,9 @@ item.terra2_dragonscale_boots.name=Драконьи Сапоги
 
 key.categories.dragon=Управление драконом
 
-item.dragonarmor_diamond.name=Алмазная драконья броня
-item.dragonarmor_iron.name=Железная драконья броня
-item.dragonarmor_gold.name=Золотая драконья броня
+item.diamond_dragon_armor.name=Алмазная драконья броня
+item.iron_dragon_armor.name=Железная драконья броня
+item.golden_dragon_armor.name=Золотая драконья броня
 
 entity.dragon.tooYounng=Дракон еще слишком молод, для того чтобы его оседлать.
 
@@ -317,25 +317,22 @@ item.zombie_dragon_essence.name=Драконья эссенция
 item.terra_dragon_essence.name=Драконья эссенция
 item.moonlight_dragon_essence.name=Драконья эссенция
 
-dragon.forest=Лесной
-dragon.aether=Небесный
-dragon.ice=Морозный
-dragon.water=Водный
-dragon.fire=Огненный
-dragon.fire2=Огненный
-dragon.skeleton=Скелет
-dragon.wither=Иссушающий
-dragon.nether=Нижнего мира
-dragon.end=Края
-dragon.ender=Края
-dragon.enchant=Чарующий
-dragon.sunlight=Солнечный
-dragon.sunlight2=Солнечный
-dragon.moonlight=Лунный
-dragon.storm=Штормовой
-dragon.zombie=Зомби
-dragon.terra=Земляной
-dragon.terra2=Земляной
+
+dragon_type.dragonmounts.forest=Лесной
+dragon_type.dragonmounts.aether=Небесный
+dragon_type.dragonmounts.ice=Морозный
+dragon_type.dragonmounts.water=Водный
+dragon_type.dragonmounts.fire=Огненный
+dragon_type.dragonmounts.skeleton=Скелет
+dragon_type.dragonmounts.wither=Иссушающий
+dragon_type.dragonmounts.nether=Нижнего мира
+dragon_type.dragonmounts.ender=Края
+dragon_type.dragonmounts.enchant=Чарующий
+dragon_type.dragonmounts.sunlight=Солнечный
+dragon_type.dragonmounts.moonlight=Лунный
+dragon_type.dragonmounts.storm=Штормовой
+dragon_type.dragonmounts.zombie=Зомби
+dragon_type.dragonmounts.terra=Земляной
 
 gui.nothing=Ничего не делать
 gui.circle=Кружить рядом с игроком

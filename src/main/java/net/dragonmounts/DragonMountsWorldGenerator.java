@@ -1,5 +1,6 @@
 package net.dragonmounts;
 
+import net.dragonmounts.util.DMUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -251,7 +252,6 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
                             loadStructure(new BlockPos(x, y - 10, z), worldserver, "zombie", LootTableList.CHESTS_NETHER_BRIDGE, true, random);
                         } else {
                             loadStructure(new BlockPos(x, y - 10, z), worldserver, "skeleton", LootTableList.CHESTS_NETHER_BRIDGE, true, random);
-
                         }
                     }
                 }
@@ -261,8 +261,6 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
 
     public void generateNestAtEnd(World world, Random random, int chunkX, int chunkZ) {
         WorldServer worldserver = (WorldServer) world;
-        MinecraftServer minecraftserver = world.getMinecraftServer();
-
         if (DragonMountsConfig.canSpawnEndNest && random.nextInt(DragonMountsConfig.EnchantNestRarity) == 1) {
             int x = (chunkX * 16) + random.nextInt(16);
             int z = (chunkZ * 16) + random.nextInt(16);
@@ -282,6 +280,7 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
         Template template = templatemanager.getTemplate(minecraftserver, loc);
 
         if (template != null) {
+            DMUtils.getLogger().info(name);
             IBlockState iblockstate = world.getBlockState(pos);
             world.notifyBlockUpdate(pos, iblockstate, iblockstate, 2);
             PlacementSettings placementsettings = (new PlacementSettings()).setIgnoreEntities(false).setChunk(null).setReplacedBlock(null).setIgnoreStructureBlock(true);
@@ -289,7 +288,7 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
             template.addBlocksToWorldChunk(world, pos.add(-1 * template.getSize().getX() / 2, 1, -1 * template.getSize().getZ() / 2), placementsettings);
             putResources(worldserver, lootTable, pos.add(-1 * template.getSize().getX() / 2, 1, -1 * template.getSize().getZ() / 2), template, hasChest, rand);
         } else if (template == null) {
-            System.out.println("NO Nest");
+            DMUtils.getLogger().warn(name);
         }
 
     }

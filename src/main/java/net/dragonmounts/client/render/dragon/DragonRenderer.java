@@ -45,7 +45,6 @@ import static org.lwjgl.opengl.GL11.*;
 public class DragonRenderer extends RenderLiving<EntityTameableDragon> {
 
     public static final String TEX_BASE = "textures/entities/dragon/";
-    public static final ResourceLocation ENDERCRYSTAL_BEAM_TEXTURES = new ResourceLocation("textures/entity/endercrystal/endercrystal_beam.png");
 
     private final Map<EnumDragonBreed, DefaultDragonBreedRenderer> breedRenderers = new EnumMap<>(EnumDragonBreed.class);
 
@@ -71,7 +70,7 @@ public class DragonRenderer extends RenderLiving<EntityTameableDragon> {
         if (dragon.getAnimator().isInGui) return;
         EntityEnderCrystal crystal = dragon.healingEnderCrystal;
         if (crystal != null) {
-            this.bindTexture(ENDERCRYSTAL_BEAM_TEXTURES);
+            this.bindTexture(RenderDragon.ENDERCRYSTAL_BEAM_TEXTURES);
             float f = MathHelper.sin((crystal.ticksExisted + partialTicks) * 0.2F) / 2.0F + 0.5F;
             float l = 1.0F - partialTicks;
             RenderDragon.renderCrystalBeams(x, y, z, partialTicks, dragon.posX + (dragon.prevPosX - dragon.posX) * l, dragon.posY + (dragon.prevPosY - dragon.posY) * l, dragon.posZ + (dragon.prevPosZ - dragon.posZ) * l, dragon.ticksExisted, crystal.posX, (f * f + f) * 0.2F + crystal.posY, crystal.posZ);

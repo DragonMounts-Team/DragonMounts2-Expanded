@@ -1,13 +1,14 @@
 package net.dragonmounts.objects.entity.entitytameabledragon.breeds;
 
-import net.dragonmounts.util.EnumSerializer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.dragonmounts.util.EnumSerializer;
 import net.minecraft.util.IStringSerializable;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+@Deprecated
 public enum EnumDragonBreed implements IStringSerializable {
     AETHER(0, DragonBreedAir::new),
     FIRE(1, DragonBreedFire::new),

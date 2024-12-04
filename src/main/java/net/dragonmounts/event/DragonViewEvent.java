@@ -67,7 +67,7 @@ public class DragonViewEvent {
     public void extendZoom(EntityViewRenderEvent.CameraSetup event) {
         if (event.getEntity() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntity();
-            int currentView = DragonMounts.proxy.getDragon3rdPersonView();
+            int currentView = DragonMounts.PROXY.getDragon3rdPersonView();
 
             if (player.getRidingEntity() instanceof EntityTameableDragon) {
                 EntityTameableDragon dragon = (EntityTameableDragon) player.getRidingEntity();
@@ -151,14 +151,14 @@ public class DragonViewEvent {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
             if (player.getRidingEntity() instanceof EntityTameableDragon) {
                 if (ModKeys.dragon_change_view.isPressed()) {
-                    int currentView = DragonMounts.proxy.getDragon3rdPersonView();
+                    int currentView = DragonMounts.PROXY.getDragon3rdPersonView();
                     if (currentView + 1 > 2) {
                         currentView = 0;
                     } else {
                         currentView++;
                     }
 
-                    DragonMounts.proxy.setDragon3rdPersonView(currentView);
+                    DragonMounts.PROXY.setDragon3rdPersonView(currentView);
                 }
             }
         }

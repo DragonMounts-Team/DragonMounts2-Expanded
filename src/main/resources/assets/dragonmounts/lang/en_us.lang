@@ -1,8 +1,8 @@
 # US English Translations
 
 # Creative Menu's
-itemGroup.maintab=DM2: Continued
-itemGroup.armorytab=DM2: Continued-Equipement
+itemGroup.dragonmounts.main=DM2: Continued
+itemGroup.dragonmounts.combat=DM2: Continued-Equipement
 
 ##
 # Dragon Names
@@ -58,25 +58,24 @@ entity.DragonMounts.dragon.zombie.name=Zombie Dragon
 entity.DragonMounts.dragon.terra.name=Terra Dragon
 entity.DragonMounts.dragon.moonlight.name=Moonlight Dragon
 
-
-#Breeds
-dragon.forest=Forest
-dragon.aether=Aether
-dragon.ice=Ice
-dragon.water=Water
-dragon.fire=Fire
-dragon.skeleton=Skeleton
-dragon.wither=Wither
-dragon.nether=Nether
-dragon.end=Ender
-dragon.enchant=Enchant
-dragon.sunlight=Sunlight
-dragon.moonlight=Moonlight
-dragon.storm=Storm
-dragon.zombie=Zombie
-dragon.terra=Terra
-dragon.dark=Dark
-dragon.light=Light
+#Dragon Types
+dragon_type.dragonmounts.forest=Forest
+dragon_type.dragonmounts.aether=Aether
+dragon_type.dragonmounts.ice=Ice
+dragon_type.dragonmounts.water=Water
+dragon_type.dragonmounts.fire=Fire
+dragon_type.dragonmounts.skeleton=Skeleton
+dragon_type.dragonmounts.wither=Wither
+dragon_type.dragonmounts.nether=Nether
+dragon_type.dragonmounts.ender=Ender
+dragon_type.dragonmounts.enchant=Enchant
+dragon_type.dragonmounts.sunlight=Sunlight
+dragon_type.dragonmounts.moonlight=Moonlight
+dragon_type.dragonmounts.storm=Storm
+dragon_type.dragonmounts.zombie=Zombie
+dragon_type.dragonmounts.terra=Terra
+dragon_type.dragonmounts.dark=Dark
+dragon_type.dragonmounts.light=Light
 
 #Stage
 dragon.egg=Egg
@@ -94,7 +93,7 @@ item.diamond_shears.name=Diamond Shears
 item.dragonEgg.name=%s Egg
 item.dragon_gender.name=Dragon Gender Gem
 item.gui.dragon_gender=Right Click an owned dragon with the gem will switch its gender
-item.summon_egg.name=Spawn Dragon
+item.dragon_spawn_egg.name=Dragon Spawn Egg
 item.dragon_essence.name=Dragon Essence
 item.dragon_whistle.name=Dragon Whistle
 item.dragon_amulet.name=Dragon Amulet
@@ -108,22 +107,22 @@ item.carriage_dark_oak.name=Dark Oak CargoBob
 item.carriage_jungle.name=Jungle CargoBob
 
 # Armory Items
-item.dragonscales.name=Dragon Scales
-item.dragon_sword.name=Dragon Sword
-item.dragon_pickaxe.name=Dragon Pickaxe
-item.dragon_axe.name=Dragon Axe
-item.dragon_shovel.name=Dragon Shovel
-item.dragon_hoe.name=Dragon Hoe
-item.dragon_shield.name=Dragon Shield
-item.dragon_bow.name=Dragon Bow
-item.dragonscale_head.name=Dragon Scale Cap
-item.dragonscale_chest.name=Dragon Scale Tunic
-item.dragonscale_legs.name=Dragon Scale Leggings
-item.dragonscale_feet.name=Dragon Scale Boots
-item.dragonarmor_diamond.name=Diamond Dragon Armor
-item.dragonarmor_iron.name=Iron Dragon Armor
-item.dragonarmor_gold.name=Gold Dragon Armor
-item.dragonarmor_emerald.name=Emerald Dragon Armor
+item.dragon_scales.name=Dragon Scales
+item.dragon_scale_sword.name=Dragon Sword
+item.dragon_scale_pickaxe.name=Dragon Pickaxe
+item.dragon_scale_axe.name=Dragon Axe
+item.dragon_scale_shovel.name=Dragon Shovel
+item.dragon_scale_hoe.name=Dragon Hoe
+item.dragon_scale_shield.name=Dragon Shield
+item.dragon_scale_bow.name=Dragon Bow
+item.dragon_scale_helmet.name=Dragon Scale Cap
+item.dragon_scale_chestplate.name=Dragon Scale Tunic
+item.dragon_scale_leggings.name=Dragon Scale Leggings
+item.dragon_scale_boots.name=Dragon Scale Boots
+item.diamond_dragon_armor.name=Diamond Dragon Armor
+item.iron_dragon_armor.name=Iron Dragon Armor
+item.golden_dragon_armor.name=Golden Dragon Armor
+item.emerald_dragon_armor.name=Emerald Dragon Armor
 
 # Tiles
 tile.dragon_nest.name=Nest Block

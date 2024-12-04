@@ -456,4 +456,8 @@ public class MathX {
                 start.z * (1 - fraction) + end.z * fraction
         );
     }
+
+    public static float parseColor(int color, int area) {
+        return (color >> (area << 3) & 0xFF) / 255F;
+    }
 }

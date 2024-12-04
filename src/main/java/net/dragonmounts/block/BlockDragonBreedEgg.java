@@ -10,7 +10,7 @@
 package net.dragonmounts.block;
 
 import net.dragonmounts.DragonMountsConfig;
-import net.dragonmounts.inits.DMItemGroups;
+import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStage;

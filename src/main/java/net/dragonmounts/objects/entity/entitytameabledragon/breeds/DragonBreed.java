@@ -9,14 +9,12 @@ import net.dragonmounts.objects.entity.entitytameabledragon.breath.effects.Flame
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.nodes.BreathNodeFactory;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.nodes.BreathProjectileFactory;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.sound.*;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.sound.*;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.weapons.BreathWeapon;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.weapons.BreathWeaponP;
 import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStage;
 import net.dragonmounts.objects.entity.entitytameabledragon.helper.util.Pair;
 import net.dragonmounts.objects.items.EnumItemBreedTypes;
 import net.minecraft.block.Block;
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -61,24 +59,8 @@ public abstract class DragonBreed {
         return skin;
     }
 
-    public EnumCreatureAttribute getCreatureAttribute() {
-        return EnumCreatureAttribute.UNDEFINED;
-    }
-
     public int getColor() {
         return color;
-    }
-
-    public float getColorR() {
-        return ((color >> 16) & 0xFF) / 255f;
-    }
-
-    public float getColorG() {
-        return ((color >> 8) & 0xFF) / 255f;
-    }
-
-    public float getColorB() {
-        return (color & 0xFF) / 255f;
     }
 
     protected final void setImmunity(DamageSource dmg) {

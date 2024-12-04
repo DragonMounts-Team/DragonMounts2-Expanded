@@ -1,8 +1,8 @@
 # 日本語訳
 
 # Creative Menu's
-itemGroup.maintab=ドラゴンマウント
-itemGroup.armorytab=ドラゴンマウント装備
+itemGroup.dragonmounts.main=ドラゴンマウント
+itemGroup.dragonmounts.combat=ドラゴンマウント装備
 
 ##
 # Dragon Names
@@ -59,23 +59,24 @@ entity.DragonMounts.dragon.terra.name=テラドラゴン
 entity.DragonMounts.dragon.moonlight.name=ムーンライトドラゴン
 
 
-#Breeds
-dragon.forest=フォレスト
-dragon.aether=エーテル
-dragon.ice=アイス
-dragon.water=ウォーター
-dragon.fire=ファイア
-dragon.skeleton=スケルトン
-dragon.wither=ウィザー
-dragon.nether=ネザー
-dragon.end=エンダー
-dragon.enchant=エンチャント
-dragon.sunlight=サンライト
-dragon.moonlight=ムーンライト
-dragon.storm=ストーム
-dragon.zombie=ゾンビ
-dragon.terra=テラ
-dragon.dark=暗い
+#Dragon Types
+dragon_type.dragonmounts.forest=フォレスト
+dragon_type.dragonmounts.aether=エーテル
+dragon_type.dragonmounts.ice=アイス
+dragon_type.dragonmounts.water=ウォーター
+dragon_type.dragonmounts.fire=ファイア
+dragon_type.dragonmounts.skeleton=スケルトン
+dragon_type.dragonmounts.wither=ウィザー
+dragon_type.dragonmounts.nether=ネザー
+dragon_type.dragonmounts.ender=エンダー
+dragon_type.dragonmounts.enchant=エンチャント
+dragon_type.dragonmounts.sunlight=サンライト
+dragon_type.dragonmounts.moonlight=ムーンライト
+dragon_type.dragonmounts.storm=ストーム
+dragon_type.dragonmounts.zombie=ゾンビ
+dragon_type.dragonmounts.terra=テラ
+dragon_type.dragonmounts.dark=暗い
+
 #Stage
 dragon.egg=ドラゴンの卵
 #Untranslated
@@ -94,7 +95,7 @@ item.diamond_shears.name=ダイヤのハサミ
 item.dragonEgg.name=%s ドラゴンの卵
 item.dragon_gender.name=ドラゴンジェンダージェム
 item.gui.dragon_gender=所有しているドラゴンを宝石で右クリックすると性別が切り替わります
-item.summon_egg.name=ドラゴンのスポーンエッグ
+item.dragon_spawn_egg.name=ドラゴンのスポーンエッグ
 item.dragon_essence.name=ドラゴンエッセンス
 item.dragon_whistle.name=ドラゴンホイッスル
 item.dragon_amulet.name=ドラゴンアミュレット
@@ -108,22 +109,22 @@ item.carriage_dark_oak.name=ダークオークのカーゴボブ
 item.carriage_jungle.name=ジャングルのカーゴボブ
 
 # Armory Items
-item.dragonscales.name=ドラゴンスケール
-item.dragon_sword.name=ドラゴンソード
-item.dragon_pickaxe.name=ドラゴンピッケル
-item.dragon_axe.name=ドラゴンアックス
-item.dragon_shovel.name=ドラゴンシャベル
-item.dragon_hoe.name=ドラゴンのクワ
-item.dragon_shield.name=ドラゴンシールド
-item.dragon_bow.name=ドラゴンボウ
-item.dragonscale_head.name=ドラゴンスケールキャップ
-item.dragonscale_chest.name=ドラゴンスケールチェスト
-item.dragonscale_legs.name=ドラゴンスケールレギンス
-item.dragonscale_feet.name=ドラゴンスケールブーツ
-item.dragonarmor_diamond.name=ダイヤモンドドラゴンアーマー
-item.dragonarmor_iron.name=アイアンドラゴンアーマー
-item.dragonarmor_gold.name=ゴールドドラゴンアーマー
-item.dragonarmor_emerald.name=エメラルドドラゴンアーマー
+item.dragon_scales.name=ドラゴンスケール
+item.dragon_scale_sword.name=ドラゴンソード
+item.dragon_scale_pickaxe.name=ドラゴンピッケル
+item.dragon_scale_axe.name=ドラゴンアックス
+item.dragon_scale_shovel.name=ドラゴンシャベル
+item.dragon_scale_hoe.name=ドラゴンのクワ
+item.dragon_scale_shield.name=ドラゴンシールド
+item.dragon_scale_bow.name=ドラゴンボウ
+item.dragon_scale_helmet.name=ドラゴンスケールキャップ
+item.dragon_scale_chestplate.name=ドラゴンスケールチェスト
+item.dragon_scale_leggings.name=ドラゴンスケールレギンス
+item.dragon_scale_boots.name=ドラゴンスケールブーツ
+item.diamond_dragon_armor.name=ダイヤモンドドラゴンアーマー
+item.iron_dragon_armor.name=アイアンドラゴンアーマー
+item.golden_dragon_armor.name=ゴールドドラゴンアーマー
+item.emerald_dragon_armor.name=エメラルドドラゴンアーマー
 
 # Tiles
 tile.dragon_nest.name=ネストブロック

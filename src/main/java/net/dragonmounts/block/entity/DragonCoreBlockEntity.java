@@ -15,7 +15,6 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntityLockableLoot;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -85,15 +84,7 @@ public class DragonCoreBlockEntity extends TileEntityLockableLoot implements ITi
         super.readFromNBT(compound);
         if (!this.checkLootAndRead(compound)) {
             NBTTagCompound stack = compound.getCompoundTag("Item");
-            if (stack.isEmpty()) {
-                NBTTagList list = compound.getTagList("Items", 10);
-                for (int i = 0; i < list.tagCount(); ++i) {
-                    stack = list.getCompoundTagAt(i);
-                    if ((stack.getByte("Slot") & 255) == 0) {
-                        this.chestContents.set(0, new ItemStack(stack));
-                    }
-                }
-            } else {
+            if (!stack.isEmpty()) {
                 this.chestContents.set(0, new ItemStack(stack));
             }
         }

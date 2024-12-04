@@ -1,0 +1,6 @@
+{
+  "parent": "dragonmounts:item/forest_dragon_scale_bow",
+  "textures": {
+    "layer0": "dragonmounts:items/bow/dragon_bow_forest_1"
+  }
+}

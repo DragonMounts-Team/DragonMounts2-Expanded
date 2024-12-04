@@ -9,6 +9,7 @@
  */
 package net.dragonmounts.proxy;
 
+import it.unimi.dsi.fastutil.Function;
 import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.client.gui.GuiDragonDebug;
@@ -18,6 +19,8 @@ import net.dragonmounts.client.render.RenderDM2Cape;
 import net.dragonmounts.client.render.dragon.DragonRenderer;
 import net.dragonmounts.client.render.dragon.breathweaponFX.ClientBreathNodeRenderer;
 import net.dragonmounts.client.userinput.DragonOrbControl;
+import net.dragonmounts.client.variant.VariantAppearance;
+import net.dragonmounts.client.variant.VariantAppearances;
 import net.dragonmounts.event.DragonViewEvent;
 import net.dragonmounts.event.IItemColorRegistration;
 import net.dragonmounts.inits.ModItems;
@@ -44,9 +47,8 @@ import java.util.stream.Collectors;
  * 2nd @author TheRPGAdventurer
  */
 public class ClientProxy extends ServerProxy {
-    private static StringBuilder addCredit(StringBuilder builder, String credit, String description) {
-        return builder
-                .append(TextFormatting.GREEN)
+    private static void addCredit(StringBuilder builder, String credit, String description) {
+        builder.append(TextFormatting.GREEN)
                 .append(credit)
                 .append(TextFormatting.RESET)
                 .append('-')
@@ -149,5 +151,10 @@ public class ClientProxy extends ServerProxy {
     @Override
     public File getDataDirectory() {
         return Minecraft.getMinecraft().gameDir;
+    }
+
+    @Override
+    public Function<String, VariantAppearance> getVariantAppearances() {
+        return VariantAppearances.getMap();
     }
 }

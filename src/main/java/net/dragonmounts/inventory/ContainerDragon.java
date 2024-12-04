@@ -1,6 +1,6 @@
 package net.dragonmounts.inventory;
 
-import net.dragonmounts.inits.DMArmors;
+import net.dragonmounts.item.DragonArmorItem;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -57,7 +57,7 @@ public class ContainerDragon extends Container {
 		this.addSlotToContainer(new Slot(inventory, 32, 8, 54) {
 
 			public boolean isItemValid(ItemStack stack) {
-				return !stack.isEmpty() && DMArmors.DRAGON_ARMORS.getInt(stack.getItem()) != 0 && dragon.isOldEnoughToBreathe();
+				return !stack.isEmpty() && stack.getItem() instanceof DragonArmorItem && dragon.isOldEnoughToBreathe();
 			}
 
 		});

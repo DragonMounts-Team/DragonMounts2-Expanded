@@ -33,6 +33,8 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static net.dragonmounts.util.math.MathX.parseColor;
+
 /**
  * Helper class for breed properties.
  *
@@ -147,9 +149,9 @@ public class DragonBreedHelper extends DragonHelper {
                     double px = dragon.posX + (rand.nextDouble() - 0.5);
                     double py = dragon.posY + (rand.nextDouble() - 0.5);
                     double pz = dragon.posZ + (rand.nextDouble() - 0.5);
-                    DragonBreed current = currentType.getBreed();
+                    int color = currentType.getBreed().getColor();
                     level.spawnParticle(EnumParticleTypes.REDSTONE, px, py + 1, pz,
-                            current.getColorR(), current.getColorG(), current.getColorB());
+                            parseColor(color, 2), parseColor(color, 1), parseColor(color, 0));
                 }
                 return;
             }

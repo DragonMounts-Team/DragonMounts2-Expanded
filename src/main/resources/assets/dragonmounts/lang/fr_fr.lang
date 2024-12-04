@@ -1,8 +1,8 @@
 # French Translations
 
 # Creative Menu's
-itemGroup.maintab=DM2: Continued
-itemGroup.armorytab=DM2: Continued—Equipement
+itemGroup.dragonmounts.main=DM2: Continued
+itemGroup.dragonmounts.combat=DM2: Continued—Equipement
 
 ##
 # Dragon Names
@@ -59,23 +59,23 @@ entity.DragonMounts.dragon.terra.name=Dragon Terrestre
 entity.DragonMounts.dragon.moonlight.name=Dragon Lunaire
 
 
-#Breeds
-dragon.forest=Forêts
-dragon.aether=Ethéré
-dragon.ice=Givre
-dragon.water=Océanique
-dragon.fire=Flammes
-dragon.skeleton=Squelettique
-dragon.wither=Wither
-dragon.nether=Nether
-dragon.end=Ender
-dragon.enchant=Enchanté
-dragon.sunlight=Solaire
-dragon.moonlight=Lunaire
-dragon.storm=Tempêtes
-dragon.zombie=Zombifié
-dragon.terra=Terrestre
-dragon.dark=Dark
+#Dragon Types
+dragon_type.dragonmounts.forest=Forêts
+dragon_type.dragonmounts.aether=Ethéré
+dragon_type.dragonmounts.ice=Givre
+dragon_type.dragonmounts.water=Océanique
+dragon_type.dragonmounts.fire=Flammes
+dragon_type.dragonmounts.skeleton=Squelettique
+dragon_type.dragonmounts.wither=Wither
+dragon_type.dragonmounts.nether=Nether
+dragon_type.dragonmounts.ender=Ender
+dragon_type.dragonmounts.enchant=Enchanté
+dragon_type.dragonmounts.sunlight=Solaire
+dragon_type.dragonmounts.moonlight=Lunaire
+dragon_type.dragonmounts.storm=Tempêtes
+dragon_type.dragonmounts.zombie=Zombifié
+dragon_type.dragonmounts.terra=Terrestre
+dragon_type.dragonmounts.dark=Dark
 
 #Stage
 dragon.egg=Oeuf
@@ -93,7 +93,7 @@ item.diamond_shears.name=Cisailles en Diamants
 item.dragonEgg.name=Oeuf de Dragon
 item.dragon_gender.name=Gemme de changement de genre
 item.gui.dragon_gender=Right Cliquez sur un de vos dragons pour changer son genre
-item.summon_egg.name=Faire Apparaitre un Dragon
+item.dragon_spawn_egg.name=Faire Apparaitre un Dragon
 item.dragon_essence.name=Essence Draconique 
 item.dragon_whistle.name=Flute Draconique
 item.dragon_amulet.name=Amulette Draconique
@@ -107,22 +107,22 @@ item.carriage_dark_oak.name=Nacelle en Chêne Noir
 item.carriage_jungle.name=Nacelle en Acajou
 
 # Armory Items
-item.dragonscales.name=Ecailles de Dragon
-item.dragon_sword.name=Epée Draconique
-item.dragon_pickaxe.name=Pioche Draconique
-item.dragon_axe.name=Hache Draconique 
-item.dragon_shovel.name=Pelle Draconique
-item.dragon_hoe.name=Houe Draconique
-item.dragon_shield.name=Bouclier Draconique
-item.dragon_bow.name=Arc Draconique
-item.dragonscale_head.name=Casque en Ecailles de Dragon
-item.dragonscale_chest.name=Plastron en Ecailles de Dragon
-item.dragonscale_legs.name=Jambières en Ecailles de Dragon
-item.dragonscale_feet.name=Bottes en Ecailles de Dragon
-item.dragonarmor_diamond.name=Armure en Diamant pour Dragon
-item.dragonarmor_iron.name=Armure en Fer pour Dragon
-item.dragonarmor_gold.name=Armure en Or pour Dragon
-item.dragonarmor_emerald.name=Armure en Emeraude pour Dragon
+item.dragon_scales.name=Ecailles de Dragon
+item.dragon_scale_sword.name=Epée Draconique
+item.dragon_scale_pickaxe.name=Pioche Draconique
+item.dragon_scale_axe.name=Hache Draconique
+item.dragon_scale_shovel.name=Pelle Draconique
+item.dragon_scale_hoe.name=Houe Draconique
+item.dragon_scale_shield.name=Bouclier Draconique
+item.dragon_scale_bow.name=Arc Draconique
+item.dragon_scale_helmet.name=Casque en Ecailles de Dragon
+item.dragon_scale_chestplate.name=Plastron en Ecailles de Dragon
+item.dragon_scale_leggings.name=Jambières en Ecailles de Dragon
+item.dragon_scale_boots.name=Bottes en Ecailles de Dragon
+item.diamond_dragon_armor.name=Armure en Diamant pour Dragon
+item.iron_dragon_armor.name=Armure en Fer pour Dragon
+item.golden_dragon_armor.name=Armure en Or pour Dragon
+item.emerald_dragon_armor.name=Armure en Emeraude pour Dragon
 
 # Tiles
 tile.dragon_nest.name=Pile de bois

@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Deprecated
 public enum EnumItemBreedTypes {
 	AETHER(TextFormatting.DARK_AQUA), 
 	WATER(TextFormatting.BLUE),

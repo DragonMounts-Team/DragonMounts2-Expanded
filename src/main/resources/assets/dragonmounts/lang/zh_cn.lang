@@ -1,5 +1,5 @@
-itemGroup.maintab=龙骑2：延续
-itemGroup.armorytab=龙骑2：延续—装备
+itemGroup.dragonmounts.main=龙骑2：延续
+itemGroup.dragonmounts.combat=龙骑2：延续—装备
 
 entity.DragonMount.name=龙
 
@@ -52,23 +52,22 @@ entity.DragonMounts.dragon.zombie.name=僵尸龙
 entity.DragonMounts.dragon.terra.name=土纹龙
 entity.DragonMounts.dragon.moonlight.name=月魄龙
 
-
-#属性品种
-dragon.forest=森林
-dragon.aether=天境
-dragon.ice=冰晶
-dragon.water=涟渊
-dragon.fire=赤焰
-dragon.skeleton=骷髅
-dragon.wither=凋灵
-dragon.nether=下界
-dragon.end=末影
-dragon.enchant=魔法
-dragon.sunlight=日耀
-dragon.moonlight=月魄
-dragon.storm=风暴
-dragon.zombie=僵尸
-dragon.terra=土纹
+#类型
+dragon_type.dragonmounts.forest=森林
+dragon_type.dragonmounts.aether=天境
+dragon_type.dragonmounts.ice=冰晶
+dragon_type.dragonmounts.water=涟渊
+dragon_type.dragonmounts.fire=赤焰
+dragon_type.dragonmounts.skeleton=骷髅
+dragon_type.dragonmounts.wither=凋灵
+dragon_type.dragonmounts.nether=下界
+dragon_type.dragonmounts.ender=末影
+dragon_type.dragonmounts.enchant=魔法
+dragon_type.dragonmounts.sunlight=日耀
+dragon_type.dragonmounts.moonlight=月魄
+dragon_type.dragonmounts.storm=风暴
+dragon_type.dragonmounts.zombie=僵尸
+dragon_type.dragonmounts.terra=土纹
 
 #阶段
 dragon.egg=蛋
@@ -82,7 +81,7 @@ item.diamond_shears.name=钻石剪刀
 item.dragonEgg.name=%s蛋
 item.dragon_gender.name=龙性别宝石
 item.gui.dragon_gender=用宝石右键单击已驯服的龙将转换其性别
-item.summon_egg.name=生成龙
+item.dragon_spawn_egg.name=龙刷怪蛋
 item.dragon_essence.name=龙精华
 item.dragon_whistle.name=龙哨
 item.dragon_amulet.name=龙护符
@@ -95,22 +94,22 @@ item.carriage_acacia.name=金合欢木货物装载箱
 item.carriage_dark_oak.name=深色橡木货物装载箱
 item.carriage_jungle.name=丛林木货物装载箱
 
-item.dragonscales.name=龙鳞
-item.dragon_sword.name=龙鳞剑
-item.dragon_pickaxe.name=龙鳞镐
-item.dragon_axe.name=龙鳞斧
-item.dragon_shovel.name=龙鳞锹
-item.dragon_hoe.name=龙鳞锄
-item.dragon_shield.name=龙鳞盾
-item.dragon_bow.name=龙鳞弓
-item.dragonscale_head.name=龙鳞头盔
-item.dragonscale_chest.name=龙鳞胸甲
-item.dragonscale_legs.name=龙鳞护腿
-item.dragonscale_feet.name=龙鳞靴子
-item.dragonarmor_diamond.name=钻石龙铠
-item.dragonarmor_iron.name=铁龙铠
-item.dragonarmor_gold.name=金龙铠
-item.dragonarmor_emerald.name=绿宝石龙铠
+item.dragon_scales.name=龙鳞
+item.dragon_scale_sword.name=龙鳞剑
+item.dragon_scale_pickaxe.name=龙鳞镐
+item.dragon_scale_axe.name=龙鳞斧
+item.dragon_scale_shovel.name=龙鳞锹
+item.dragon_scale_hoe.name=龙鳞锄
+item.dragon_scale_shield.name=龙鳞盾
+item.dragon_scale_bow.name=龙鳞弓
+item.dragon_scale_helmet.name=龙鳞头盔
+item.dragon_scale_chestplate.name=龙鳞胸甲
+item.dragon_scale_leggings.name=龙鳞护腿
+item.dragon_scale_boots.name=龙鳞靴子
+item.diamond_dragon_armor.name=钻石龙铠
+item.iron_dragon_armor.name=铁龙铠
+item.golden_dragon_armor.name=金龙铠
+item.emerald_dragon_armor.name=绿宝石龙铠
 
 tile.dragon_nest.name=龙巢方块
 tile.dragon_core.name=龙核心

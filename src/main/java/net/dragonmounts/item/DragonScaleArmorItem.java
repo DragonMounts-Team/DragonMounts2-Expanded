@@ -4,11 +4,9 @@ import net.dragonmounts.api.IArmorEffectSource;
 import net.dragonmounts.api.IDescribableArmorEffect;
 import net.dragonmounts.capability.IArmorEffectManager;
 import net.dragonmounts.compat.CooldownOverlayCompat;
-import net.dragonmounts.inits.DMItemGroups;
-import net.dragonmounts.inits.ModItems;
-import net.dragonmounts.objects.items.EnumItemBreedTypes;
+import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.registry.CooldownCategory;
-import net.dragonmounts.util.DMUtils;
+import net.dragonmounts.registry.DragonType;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,19 +22,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static net.dragonmounts.DragonMounts.makeId;
-
 public class DragonScaleArmorItem extends ItemArmor implements IArmorEffectSource {
-	private final EnumItemBreedTypes type;
+	private final DragonType type;
 	public final IDescribableArmorEffect effect;
 
-	public DragonScaleArmorItem(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot slot, String unlocalizedName, EnumItemBreedTypes type, IDescribableArmorEffect effect) {
-		super(materialIn, renderIndexIn, slot);
+	public DragonScaleArmorItem(ArmorMaterial material, int index, EntityEquipmentSlot slot, DragonType type, IDescribableArmorEffect effect) {
+		super(material, index, slot);
 		this.effect = effect;
-		setTranslationKey("dragonscale_" + slot.getName());
-		setRegistryName(makeId(unlocalizedName));
 		this.type = type;
-		ModItems.ITEMS.add(this);
 		if (effect instanceof CooldownCategory) {
 			CooldownOverlayCompat.register((CooldownCategory) effect, this);
 		}
@@ -57,15 +50,12 @@ public class DragonScaleArmorItem extends ItemArmor implements IArmorEffectSourc
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flag) {
-		tooltip.add(type.color + DMUtils.translateToLocal(type.translationKey));
+		tooltip.add(this.type.getName());
 		if (this.effect != null) {
 			this.effect.appendHoverText(stack, tooltip, flag);
 		}
 	}
 
-	/**
-	 * This method determines where the item is displayed
-	 */
 	@Override
 	public @Nonnull CreativeTabs[] getCreativeTabs() {
 		return new CreativeTabs[]{DMItemGroups.COMBAT};

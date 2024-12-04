@@ -2,7 +2,7 @@ from Core.Util import ResourceLocation, ItemStack, makeId, cast2Ingredient
 from Core.Criterion import InventoryChangedCriterion as has
 from Core.RecipeBuilder import ShapedRecipeBuilder as shaped, ShaplessRecipeBuilder as shapeless
 from Core.Output import Output
-from ItemBreedType import ItemBreedType
+from DragonType import DragonType
 from CarriageType import CarriageType
 
 def generateRecipes(output: Output):
@@ -22,8 +22,8 @@ def generateRecipes(output: Output):
   hasDiamond = has('diamond')
   hasEnderPearl = has('ender_pearl')
   dragonScaleBows = []
-  for breed in ItemBreedType:
-    if (breed is ItemBreedType.SKELETON or breed is ItemBreedType.WITHER): continue
+  for breed in DragonType:
+    if (breed is DragonType.SKELETON or breed is DragonType.WITHER): continue
     base = breed.value
     dragonScales = base.withSuffix('_dragonscales')
     unlock = has(dragonScales)
@@ -102,7 +102,7 @@ def generateRecipes(output: Output):
       .groupBy('dragon_scale_chestplate')\
       .unlockedBy('has_scales', unlock)\
       .save(output, 'combat')
-    if (breed is ItemBreedType.ENDER):
+    if (breed is DragonType.ENDER):
       base = makeId('end')
     bow = base.withPrefix('dragon_bow_')
     dragonScaleBows.append(bow)
