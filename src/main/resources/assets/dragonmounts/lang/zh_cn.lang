@@ -1,56 +1,8 @@
 itemGroup.dragonmounts.main=龙骑2：延续
 itemGroup.dragonmounts.combat=龙骑2：延续—装备
 
-entity.DragonMount.name=龙
-
-entity.DragonMount.ice.name=冰晶龙
-entity.DragonMount.end.name=末影龙
-entity.DragonMount.ender.name=末影龙
-entity.DragonMount.aether.name=天境龙
-entity.DragonMount.forest.name=森林龙
-entity.DragonMount.sylphid.name=涟渊龙
-entity.DragonMount.nether.name=下界龙
-entity.DragonMount.fire.name=赤焰龙
-entity.DragonMount.skeleton.name=骷髅龙
-entity.DragonMount.wither.name=凋灵龙
-entity.DragonMount.enchant.name=魔法龙
-entity.DragonMount.sunlight.name=日耀龙
-entity.DragonMount.storm.name=风暴龙
-entity.DragonMount.zombie.name=僵尸龙
-entity.DragonMount.terra.name=土纹龙
-entity.DragonMount.moonlight.name=月魄龙
-
-entity.DragonMount.albino.ice.name=白化的冰晶龙
-entity.DragonMount.albino.ender.name=白化的末影龙
-entity.DragonMount.albino.aether.name=白化的天境龙
-entity.DragonMount.albino.forest.name=白化的森林龙
-entity.DragonMount.albino.sylphid.name=白化的涟渊龙
-entity.DragonMount.albino.nether.name=白化的下界龙
-entity.DragonMount.albino.fire.name=白化的赤焰龙
-entity.DragonMount.albino.skeleton.name=白化的骷髅龙
-entity.DragonMount.albino.wither.name=白化的凋灵龙
-entity.DragonMount.albino.enchant.name=白化的魔法龙
-entity.DragonMount.albino.sunlight.name=白化的日耀龙
-entity.DragonMount.albino.storm.name=白化的风暴龙
-entity.DragonMount.albino.zombie.name=白化的僵尸龙
-entity.DragonMount.albino.terra.name=白化的土纹龙
-entity.DragonMount.albino.moonlight.name=白化的月魄龙
-
-entity.DragonMounts.dragon.ice.name=冰晶龙
-entity.DragonMounts.dragon.ender.name=末影龙
-entity.DragonMounts.dragon.aether.name=天境龙
-entity.DragonMounts.dragon.forest.name=森林龙
-entity.DragonMounts.dragon.sylphid.name=涟渊龙
-entity.DragonMounts.dragon.nether.name=下界龙
-entity.DragonMounts.dragon.fire.name=赤焰龙
-entity.DragonMounts.dragon.skeleton.name=骷髅龙
-entity.DragonMounts.dragon.wither.name=凋灵龙
-entity.DragonMounts.dragon.enchant.name=魔法龙
-entity.DragonMounts.dragon.sunlight.name=日耀龙
-entity.DragonMounts.dragon.storm.name=风暴龙
-entity.DragonMounts.dragon.zombie.name=僵尸龙
-entity.DragonMounts.dragon.terra.name=土纹龙
-entity.DragonMounts.dragon.moonlight.name=月魄龙
+entity.dragonmounts.dragon=%s龙
+entity.dragonmounts.dragon.name=龙
 
 #类型
 dragon_type.dragonmounts.forest=森林
@@ -209,15 +161,15 @@ argument.player.toomany=Only one player is allowed, but the provided selector al
 commands.dragon.usage=/dragon <subcommand>
 commands.dragon.breed.usage=/dragon breed <breed> [dragon]
 commands.dragon.breed.invalid=“%s”不是有效的种类
-commands.dragon.breed.success=%s的种类已被设为%s
+commands.dragon.breed.success=%s的种类已被设为：%s
 commands.dragon.gender.usage=/dragon gender [dragon]
-commands.dragon.gender.success=%s的性别已被设为%s
+commands.dragon.gender.success=%s的性别已被设为：%s
 commands.dragon.tame.usage=/dragon tame [dragon]
 commands.dragon.tame.success=已使%s被%s驯服
 commands.dragon.unlock.usage=/dragon unlock [dragon]
 commands.dragon.unlock.success=%s现在信任陌生人
 commands.dragon.stage.usage=/dragon stage <stage> [dragon]
 commands.dragon.stage.invalid=“%s”不是有效的年龄段
-commands.dragon.stage.success=%s的年龄段已被设为%s
+commands.dragon.stage.success=%s的年龄段已被设为：%s
 commands.dragon.notFound=无法根据“%s”找到龙
 commands.dragon.unspecified=你必须指定被执行龙

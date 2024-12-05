@@ -1,5 +1,6 @@
 package net.dragonmounts.registry;
 
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMultimap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
@@ -53,7 +54,7 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
     public final ResourceLocation identifier;
     public final String translationKey;
     public final TextFormatting formatting;
-    public final ImmutableMultimap<IAttribute, AttributeModifier> attributes;
+    public final ImmutableMultimap<String, AttributeModifier> attributes;
     public final DragonVariant.Manager variants = new DragonVariant.Manager(this);
     public final Behavior behavior;
     private final Reference2ObjectOpenHashMap<Class<?>, Object> map = new Reference2ObjectOpenHashMap<>();
@@ -62,8 +63,6 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
     private final ReferenceOpenHashSet<Biome> biomes;
     public final EnumParticleTypes sneezeParticle;
     public final EnumParticleTypes eggParticle;
-    @Nullable
-    private ResourceLocation lootTable;
 
     public DragonType(ResourceLocation identifier, Properties props, Behavior behavior) {
         this.color = props.color;
@@ -71,7 +70,7 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
         this.isSkeleton = props.isSkeleton;
         this.avoidWater = props.avoidWater;
         this.formatting = props.formatting;
-        this.attributes = props.attributes.build();
+        this.attributes = ImmutableMultimap.copyOf(props.attributes);
         this.immunities = new ReferenceOpenHashSet<>(props.immunities);
         this.blocks = new ReferenceOpenHashSet<>(props.blocks);
         this.biomes = new ReferenceOpenHashSet<>(props.biomes);
@@ -128,7 +127,7 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
 
     public static class Properties {
         protected static final UUID MODIFIER_UUID = UUID.fromString("12e4cc82-db6d-5676-afc5-86498f0f6464");
-        public final ImmutableMultimap.Builder<IAttribute, AttributeModifier> attributes = ImmutableMultimap.builder();
+        public final HashMultimap<String, AttributeModifier> attributes = HashMultimap.create();
         public final int color;
         public final TextFormatting formatting;
         public final Set<DamageSource> immunities = new ReferenceOpenHashSet<>();
@@ -165,7 +164,7 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
         }
 
         public Properties putAttributeModifier(IAttribute attribute, String name, double value, int operation) {
-            this.attributes.put(attribute, new AttributeModifier(MODIFIER_UUID, name, value, operation));
+            this.attributes.put(attribute.getName(), new AttributeModifier(MODIFIER_UUID, name, value, operation));
             return this;
         }
 

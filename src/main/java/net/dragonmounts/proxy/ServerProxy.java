@@ -17,13 +17,13 @@ import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.capability.ArmorEffectManager;
 import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.cmd.DragonCommandTree;
+import net.dragonmounts.entity.EntityContainerItemEntity;
 import net.dragonmounts.event.VanillaEggHandler;
 import net.dragonmounts.init.DMArmorEffects;
 import net.dragonmounts.init.DMCapabilities;
 import net.dragonmounts.network.*;
 import net.dragonmounts.objects.entity.entitycarriage.EntityCarriage;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.items.entity.EntityDragonAmulet;
 import net.dragonmounts.registry.CooldownCategory;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
@@ -104,13 +104,13 @@ public class ServerProxy {
     }
 
     private void registerEntities() {
-        EntityRegistry.registerModEntity(new ResourceLocation(DragonMountsTags.MOD_ID, "dragon"), EntityTameableDragon.class, "DragonMount",
+        EntityRegistry.registerModEntity(new ResourceLocation(DragonMountsTags.MOD_ID, "dragon"), EntityTameableDragon.class, "dragonmounts.dragon",
                 ENTITY_ID, DragonMounts.instance, ENTITY_TRACKING_RANGE, ENTITY_UPDATE_FREQ,
                 ENTITY_SEND_VELO_UPDATES);
         EntityRegistry.registerModEntity(new ResourceLocation(DragonMountsTags.MOD_ID, "carriage"), EntityCarriage.class, "DragonCarriage",
                 2, DragonMounts.instance, 32, ENTITY_UPDATE_FREQ,
                 ENTITY_SEND_VELO_UPDATES);
-        EntityRegistry.registerModEntity(new ResourceLocation(DragonMountsTags.MOD_ID, "indestructible"), EntityDragonAmulet.class, "Indestructible Item",
+        EntityRegistry.registerModEntity(new ResourceLocation(DragonMountsTags.MOD_ID, "indestructible"), EntityContainerItemEntity.class, "Indestructible Item",
                 3, DragonMounts.instance, 64, 20, true);
     }
 

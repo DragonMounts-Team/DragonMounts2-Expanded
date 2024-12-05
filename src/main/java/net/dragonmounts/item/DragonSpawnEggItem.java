@@ -48,24 +48,25 @@ public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityCont
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World level, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World level, BlockPos clicked, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (level.isRemote) return EnumActionResult.SUCCESS;
         ItemStack stack = player.getHeldItem(hand);
-        if (!player.canPlayerEdit(pos.offset(facing), facing, stack)) return EnumActionResult.FAIL;
-        IBlockState state = level.getBlockState(pos);
+        BlockPos pos = clicked.offset(facing);
+        if (!player.canPlayerEdit(pos, facing, stack)) return EnumActionResult.FAIL;
+        IBlockState state = level.getBlockState(clicked);
         if (state.getBlock() == Blocks.MOB_SPAWNER) {
-            TileEntity block = level.getTileEntity(pos);
+            TileEntity block = level.getTileEntity(clicked);
             if (block instanceof TileEntityMobSpawner) {
                 ((TileEntityMobSpawner) block).getSpawnerBaseLogic().setEntityId(getEntityTypeFrom(stack));
                 block.markDirty();
-                level.notifyBlockUpdate(pos, state, state, 3);
+                level.notifyBlockUpdate(clicked, state, state, 3);
                 if (!player.capabilities.isCreativeMode) {
                     stack.shrink(1);
                 }
                 return EnumActionResult.SUCCESS;
             }
         }
-        if (this.loadEntity(level, stack, player, pos.offset(facing), true) != null) {
+        if (this.loadEntity(level, stack, player, pos, true, null) != null) {
             if (!player.capabilities.isCreativeMode) {
                 stack.shrink(1);
             }
@@ -86,7 +87,7 @@ public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityCont
             return new ActionResult<>(EnumActionResult.PASS, stack);
         if (!level.isBlockModifiable(player, pos) || !player.canPlayerEdit(pos, hit.sideHit, stack))
             return new ActionResult<>(EnumActionResult.FAIL, stack);
-        if (loadEntity(level, stack, player, pos, false) == null)
+        if (loadEntity(level, stack, player, pos, false, null) == null)
             return new ActionResult<>(EnumActionResult.PASS, stack);
         if (!player.capabilities.isCreativeMode) {
             stack.shrink(1);
@@ -102,7 +103,7 @@ public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityCont
 
     @Nullable
     @Override
-    public Entity loadEntity(World level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos, boolean yOffset) {
+    public Entity loadEntity(World level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos, boolean yOffset, @Nullable String feedback) {
         ResourceLocation identifier = getEntityTypeFrom(stack);
         Entity entity;
         if (DRAGON_ID.equals(identifier)) {
@@ -117,7 +118,7 @@ public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityCont
             entity = EntityList.createEntityByIDFromName(identifier, level);
             if (entity == null) return null;
         } else return null;
-        EntityUtil.finalizeSpawn(level, entity, pos.getX() + 0.5D, yOffset ? pos.getY() + this.getYOffset(level, pos) : pos.getY(), pos.getZ() + 0.5D, null);
+        EntityUtil.finalizeSpawn(level, entity, pos, true, null);
         if (entity instanceof EntityLivingBase && stack.hasDisplayName()) {
             entity.setCustomNameTag(stack.getDisplayName());
         }

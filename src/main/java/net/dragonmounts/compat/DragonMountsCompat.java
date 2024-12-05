@@ -19,9 +19,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public abstract class DragonMountsCompat {
     public static final int VERSION = 0;
     public static final Object2ObjectOpenHashMap<String, Item> ITEM_MAPPINGS = new Object2ObjectOpenHashMap<>();
+    public static final DragonEntityCompat DRAGON_ENTITY_FIX = new DragonEntityCompat();
 
     public static void load(ModFixs fixer) {
-        fixer.registerFix(FixTypes.ENTITY, new DragonEntityCompat());
+        fixer.registerFix(FixTypes.ENTITY, DRAGON_ENTITY_FIX);
         fixer.registerFix(FixTypes.BLOCK_ENTITY, new DMBlockEntityCompat());
     }
 
@@ -54,7 +55,15 @@ public abstract class DragonMountsCompat {
         ITEM_MAPPINGS.put("pileofsticks", ModItems.DRAGON_NEST);
         ITEM_MAPPINGS.put("block_dragon_shulker", ModItems.DRAGON_CORE);
         //Misc
+        ITEM_MAPPINGS.put("dragon_amulet", DMItems.AMULET);
         ITEM_MAPPINGS.put("dragon_gender", DMItems.VARIANT_SWITCHER);
+        ITEM_MAPPINGS.put("end_dragon_amulet", DMItems.ENDER_DRAGON_AMULET);
+        ITEM_MAPPINGS.put("end_dragon_essence", DMItems.ENDER_DRAGON_ESSENCE);
+        //Dragon Armor
+        ITEM_MAPPINGS.put("dragonarmor_iron", DMItems.IRON_DRAGON_ARMOR);
+        ITEM_MAPPINGS.put("dragonarmor_gold", DMItems.GOLDEN_DRAGON_ARMOR);
+        ITEM_MAPPINGS.put("dragonarmor_emerald", DMItems.EMERALD_DRAGON_ARMOR);
+        ITEM_MAPPINGS.put("dragonarmor_diamond", DMItems.DIAMOND_DRAGON_ARMOR);
         //Spawn Eggs
         ITEM_MAPPINGS.put("summon_aether", DMItems.AETHER_DRAGON_SPAWN_EGG);
         ITEM_MAPPINGS.put("summon_enchant", DMItems.ENCHANT_DRAGON_SPAWN_EGG);
@@ -175,8 +184,8 @@ public abstract class DragonMountsCompat {
         ITEM_MAPPINGS.put("nether2_dragonscale_leggings", suit.leggings);
         ITEM_MAPPINGS.put("nether2_dragonscale_boots", suit.boots);
         ITEM_MAPPINGS.put("ender_dragonscales", DMItems.ENDER_DRAGON_SCALES);
-        ITEM_MAPPINGS.put("dragon_bow_ender", DMItems.ENDER_DRAGON_SCALE_BOW);
-        ITEM_MAPPINGS.put("dragon_shield_ender", DMItems.ENDER_DRAGON_SCALE_SHIELD);
+        ITEM_MAPPINGS.put("dragon_bow_end", DMItems.ENDER_DRAGON_SCALE_BOW);
+        ITEM_MAPPINGS.put("dragon_shield_end", DMItems.ENDER_DRAGON_SCALE_SHIELD);
         ITEM_MAPPINGS.put("ender_dragon_sword", DMItems.ENDER_DRAGON_SCALE_SWORD);
         ITEM_MAPPINGS.put("ender_dragon_axe", DMItems.ENDER_DRAGON_SCALE_AXE);
         ITEM_MAPPINGS.put("ender_dragon_pickaxe", DMItems.ENDER_DRAGON_SCALE_PICKAXE);
@@ -258,11 +267,23 @@ public abstract class DragonMountsCompat {
         ITEM_MAPPINGS.put("storm_dragon_pickaxe", DMItems.STORM_DRAGON_SCALE_PICKAXE);
         ITEM_MAPPINGS.put("storm_dragon_hoe", DMItems.STORM_DRAGON_SCALE_HOE);
         ITEM_MAPPINGS.put("storm_dragon_shovel", DMItems.STORM_DRAGON_SCALE_SHOVEL);
+        ITEM_MAPPINGS.put("storm2_dragonscales", DMItems.STORM_DRAGON_SCALES);
+        ITEM_MAPPINGS.put("dragon_bow_storm2", DMItems.STORM_DRAGON_SCALE_BOW);
+        ITEM_MAPPINGS.put("dragon_shield_storm2", DMItems.STORM_DRAGON_SCALE_SHIELD);
+        ITEM_MAPPINGS.put("storm2_dragon_sword", DMItems.STORM_DRAGON_SCALE_SWORD);
+        ITEM_MAPPINGS.put("storm2_dragon_axe", DMItems.STORM_DRAGON_SCALE_AXE);
+        ITEM_MAPPINGS.put("storm2_dragon_pickaxe", DMItems.STORM_DRAGON_SCALE_PICKAXE);
+        ITEM_MAPPINGS.put("storm2_dragon_hoe", DMItems.STORM_DRAGON_SCALE_HOE);
+        ITEM_MAPPINGS.put("storm2_dragon_shovel", DMItems.STORM_DRAGON_SCALE_SHOVEL);
         suit = DMItems.STORM_DRAGON_SCALE_ARMORS;
         ITEM_MAPPINGS.put("storm_dragonscale_cap", suit.helmet);
         ITEM_MAPPINGS.put("storm_dragonscale_tunic", suit.chestplate);
         ITEM_MAPPINGS.put("storm_dragonscale_leggings", suit.leggings);
         ITEM_MAPPINGS.put("storm_dragonscale_boots", suit.boots);
+        ITEM_MAPPINGS.put("storm2_dragonscale_cap", suit.helmet);
+        ITEM_MAPPINGS.put("storm2_dragonscale_tunic", suit.chestplate);
+        ITEM_MAPPINGS.put("storm2_dragonscale_leggings", suit.leggings);
+        ITEM_MAPPINGS.put("storm2_dragonscale_boots", suit.boots);
         ITEM_MAPPINGS.put("terra_dragonscales", DMItems.TERRA_DRAGON_SCALES);
         ITEM_MAPPINGS.put("dragon_bow_terra", DMItems.TERRA_DRAGON_SCALE_BOW);
         ITEM_MAPPINGS.put("dragon_shield_terra", DMItems.TERRA_DRAGON_SCALE_SHIELD);

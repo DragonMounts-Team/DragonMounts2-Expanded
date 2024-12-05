@@ -1,6 +1,7 @@
 package net.dragonmounts.registry;
 
 import it.unimi.dsi.fastutil.Function;
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.util.DMUtils;
 import net.minecraft.network.PacketBuffer;
@@ -187,9 +188,12 @@ public class DragonVariant extends IForgeRegistryEntry.Impl<DragonVariant> {
 
         @Override
         public void onClear(IForgeRegistryInternal<DragonVariant> owner, RegistryManager stage) {
-            DMUtils.getLogger().info("Clearing Registry!", new Throwable());
-            for (DragonType type : DragonType.REGISTRY) {
-                type.variants.clear();
+            DMUtils.getLogger().info("Clearing Registry!", new Throwable("Clearing Registry!"));
+            ReferenceOpenHashSet<DragonType> cleared = new ReferenceOpenHashSet<>();
+            for (DragonVariant variant : owner) {
+                if (cleared.contains(variant.type)) continue;
+                variant.type.variants.clear();
+                cleared.add(variant.type);
             }
         }
     }

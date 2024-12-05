@@ -1,7 +1,7 @@
 package net.dragonmounts.objects.entity.entitytameabledragon.breath;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.util.Pair;
 import net.dragonmounts.util.math.MathX;
+import net.dragonmounts.util.math.Pair;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.*;
 

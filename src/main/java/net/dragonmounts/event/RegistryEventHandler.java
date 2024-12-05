@@ -9,8 +9,6 @@ import net.dragonmounts.init.DMBlocks;
 import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.init.DragonVariants;
 import net.dragonmounts.inits.ModItems;
-import net.dragonmounts.objects.entity.entitytameabledragon.breeds.DragonBreedForest;
-import net.dragonmounts.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import net.dragonmounts.registry.CooldownCategory;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
@@ -81,8 +79,6 @@ public class RegistryEventHandler {
     @SubscribeEvent
     public static void registerDataSerializer(RegistryEvent.Register<DataSerializerEntry> event) {
         IForgeRegistry<DataSerializerEntry> registry = event.getRegistry();
-        registry.register(new DataSerializerEntry(EnumDragonBreed.SERIALIZER).setRegistryName(DragonMountsTags.MOD_ID + ":dragon_breed"));
-        registry.register(new DataSerializerEntry(DragonBreedForest.SubType.SERIALIZER).setRegistryName(DragonMountsTags.MOD_ID + ":forest_type"));
         registry.register(new DataSerializerEntry(DragonVariant.SERIALIZER).setRegistryName(DragonMountsTags.MOD_ID + ":dragon_variant"));
     }
 

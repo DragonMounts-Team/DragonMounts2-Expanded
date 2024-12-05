@@ -3,7 +3,7 @@ package net.dragonmounts.client.render.dragon.breathweaponFX;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.DragonBreathMode;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.IEntityParticle;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.nodes.BreathNodeP;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.util.Pair;
+import net.dragonmounts.util.math.Pair;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.util.EnumFacing;

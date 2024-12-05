@@ -1,8 +1,8 @@
 package net.dragonmounts.objects.entity.entitytameabledragon.breath;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.util.Pair;
-import net.dragonmounts.util.EntityUtil;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.dragonmounts.util.EntityUtil;
+import net.dragonmounts.util.math.Pair;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;

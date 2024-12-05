@@ -37,13 +37,18 @@ public interface IEntityContainer<T extends Entity> {
 
     ItemStack saveEntity(T entity);
 
+    /**
+     * null: denied
+     * empty: failed
+     */
     @Nullable
     Entity loadEntity(
             World level,
             ItemStack stack,
             @Nullable EntityPlayer player,
             BlockPos pos,
-            boolean yOffset
+            boolean yOffset,
+            @Nullable String feedback
     );
 
     Class<T> getContentType();

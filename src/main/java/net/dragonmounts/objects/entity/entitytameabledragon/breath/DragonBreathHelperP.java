@@ -7,7 +7,6 @@ import net.dragonmounts.objects.entity.entitytameabledragon.breath.nodes.BreathN
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.nodes.BreathProjectileFactory;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.sound.SoundController;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.sound.SoundEffectBreathWeaponP;
-import net.dragonmounts.objects.entity.entitytameabledragon.breeds.DragonBreed;
 import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -446,7 +445,6 @@ public class DragonBreathHelperP extends DragonHelper
   private boolean playerHasReleasedTargetSinceLastBreath = false;
 
   private BreathAffectedArea breathAffectedArea;
-  private DragonBreed currentBreed = null;
   private BreathProjectileFactory breathProjectileFactory = null;
   private BreathNodeFactory breathNodeFactory = null;
   private DragonBreathMode breathWeaponMode = DragonBreathMode.DEFAULT;

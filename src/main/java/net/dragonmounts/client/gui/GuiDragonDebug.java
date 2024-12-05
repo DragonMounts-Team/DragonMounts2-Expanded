@@ -23,6 +23,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.Path;
@@ -210,8 +211,17 @@ public class GuiDragonDebug extends Gui {
         String health = dfShort.format(dragon.getHealth());
         String healthMax = dfShort.format(dragon.getMaxHealth());
         String healthRel = dfShort.format(dragon.getHealthRelative() * 100);
+        text.printf("Health: %s/%s (%s%%)\n", health, healthMax, healthRel);
+        // armor
+        IAttributeInstance attribute = dragon.getEntityAttribute(SharedMonsterAttributes.ARMOR);
+        //noinspection ConstantValue
+        if (attribute != null) {
+            text.printf("Armor: %s\n", dfShort.format(attribute.getAttributeValue()));
+        }
+
+        // hunger
         String hunger = dfShort.format(dragon.getHunger());
-        text.printf("Health: %s/%s (%s%%)\n", health, healthMax, healthRel, hunger);
+        text.printf("Hunger: %s\n", hunger);
 
         // type
         text.print("Type: ");

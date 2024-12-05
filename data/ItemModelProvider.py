@@ -10,7 +10,7 @@ bowModel = ResourceLocation('item/bow')
 blockingPredicate = ResourceLocation('blocking')
 pullingPredicate = ResourceLocation('pulling')
 pullPredicate = ResourceLocation('pull')
-amuletModel = makeId('item/dragon_amulet')
+amuletModel = makeId('item/amulet')
 
 def basicItem(output: Output, identifier: ResourceLocation, texture: ResourceLocation = None):
   model(generatedModel)\
@@ -65,16 +65,16 @@ def dragonScaleBowItem(output: Output, type: DragonType):
     .end()\
     .save(output, pathBase.path)
 
-def dragonAmuletItem(output, type: str, name: str):
+def dragonAmuletItem(output, type: str):
   model(amuletModel)\
-    .texture('layer0', makeId('items/amulet/' + name + '_dragon_amulet'))\
+    .texture('layer0', makeId('items/amulet/' + type + '_dragon_amulet'))\
     .save(output, type + '_dragon_amulet')
 
 def generateItemModels(output: Output):
   shieldModel = makeId('item/shield/shield')
   blockingShieldModel = makeId('item/shield/shield_blocking')
   spawnEggModel = ResourceLocation('item/spawn_egg')
-  basicItem(output, makeId("variant_switcher"))
+  basicItem(output, makeId('variant_switcher'))
   for material in DragonArmorMaterial:
     name = material.name.lower()
     basicItem(
@@ -84,7 +84,9 @@ def generateItemModels(output: Output):
     )
   for type in DragonType:
     name = type.value.path
-    dragonAmuletItem(output, name, name)
+    dragonAmuletItem(output, name)
+    essence = type.value.withSuffix('_dragon_essence')
+    basicItem(output, essence, essence.withPrefix('items/essence/'))
     model(spawnEggModel).save(output, name + '_dragon_spawn_egg')
     model(ResourceLocation(type.value.namespace, 'block/' + name + '_dragon_egg')).save(output, name + '_dragon_egg')
     if (type is DragonType.SKELETON or type is DragonType.WITHER): continue

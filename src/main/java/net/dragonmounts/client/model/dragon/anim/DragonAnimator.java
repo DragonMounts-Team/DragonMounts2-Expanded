@@ -16,9 +16,9 @@ import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.DragonBreathHelper;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.DragonHeadPositionHelper;
 import net.dragonmounts.objects.entity.entitytameabledragon.helper.SegmentSizePositionRotation;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.util.Spline;
 import net.dragonmounts.util.math.Interpolation;
 import net.dragonmounts.util.math.MathX;
+import net.dragonmounts.util.math.Spline;
 import net.minecraft.util.math.Vec3d;
 
 /**

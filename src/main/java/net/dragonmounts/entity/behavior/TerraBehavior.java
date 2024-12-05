@@ -27,7 +27,7 @@ public class TerraBehavior implements DragonType.Behavior {
                         0,
                         0,
                         0,
-                        (dragon.isMale() ? 3 : 5)
+                        4
                 );
             }
         }

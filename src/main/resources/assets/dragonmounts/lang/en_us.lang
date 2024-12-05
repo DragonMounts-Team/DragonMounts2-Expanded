@@ -7,56 +7,8 @@ itemGroup.dragonmounts.combat=DM2: Continued-Equipement
 ##
 # Dragon Names
 ##
-entity.DragonMount.name=Dragon
-
-entity.DragonMount.ice.name=Ice Dragon
-entity.DragonMount.end.name=Ender Dragon
-entity.DragonMount.ender.name=Ender Dragon
-entity.DragonMount.aether.name=Aether Dragon
-entity.DragonMount.forest.name=Forest Dragon
-entity.DragonMount.sylphid.name=Water Dragon
-entity.DragonMount.nether.name=Nether Dragon
-entity.DragonMount.fire.name=Fire Dragon
-entity.DragonMount.skeleton.name=Skeleton Dragon
-entity.DragonMount.wither.name=Wither Dragon
-entity.DragonMount.enchant.name=Enchantment Dragon
-entity.DragonMount.sunlight.name=Sunlight Dragon
-entity.DragonMount.storm.name=Storm Dragon
-entity.DragonMount.zombie.name=Zombie Dragon
-entity.DragonMount.terra.name=Terra Dragon
-entity.DragonMount.moonlight.name=Moonlight Dragon
-
-entity.DragonMount.albino.ice.name=Albino Ice Dragon
-entity.DragonMount.albino.ender.name=Albino Ender Dragon
-entity.DragonMount.albino.aether.name=Albino Aether Dragon
-entity.DragonMount.albino.forest.name=Albino Forest Dragon
-entity.DragonMount.albino.sylphid.name=Albino Water Dragon
-entity.DragonMount.albino.nether.name=Albino Nether Dragon
-entity.DragonMount.albino.fire.name=Albino Fire Dragon
-entity.DragonMount.albino.skeleton.name=Albino Skeleton Dragon
-entity.DragonMount.albino.wither.name=Albino Wither Dragon
-entity.DragonMount.albino.enchant.name=Albino Enchantment Dragon
-entity.DragonMount.albino.sunlight.name=Albino Sunlight Dragon
-entity.DragonMount.albino.storm.name=Albino Storm Dragon
-entity.DragonMount.albino.zombie.name=Albino Zombie Dragon
-entity.DragonMount.albino.terra.name=Albino Terra Dragon
-entity.DragonMount.albino.moonlight.name=Albino Moonlight Dragon
-
-entity.DragonMounts.dragon.ice.name=Ice Dragon
-entity.DragonMounts.dragon.ender.name=Ender Dragon
-entity.DragonMounts.dragon.aether.name=Aether Dragon
-entity.DragonMounts.dragon.forest.name=Forest Dragon
-entity.DragonMounts.dragon.sylphid.name=Water Dragon
-entity.DragonMounts.dragon.nether.name=Nether Dragon
-entity.DragonMounts.dragon.fire.name=Fire Dragon
-entity.DragonMounts.dragon.skeleton.name=Skeleton Dragon
-entity.DragonMounts.dragon.wither.name=Wither Dragon
-entity.DragonMounts.dragon.enchant.name=Enchantment Dragon
-entity.DragonMounts.dragon.sunlight.name=Sunlight Dragon
-entity.DragonMounts.dragon.storm.name=Storm Dragon
-entity.DragonMounts.dragon.zombie.name=Zombie Dragon
-entity.DragonMounts.dragon.terra.name=Terra Dragon
-entity.DragonMounts.dragon.moonlight.name=Moonlight Dragon
+entity.dragonmounts.dragon=%s Dragon
+entity.dragonmounts.dragon.name=Dragon
 
 #Dragon Types
 dragon_type.dragonmounts.forest=Forest
@@ -234,15 +186,15 @@ argument.player.toomany=Only one player is allowed, but the provided selector al
 commands.dragon.usage=/dragon <subcommand>
 commands.dragon.breed.usage=/dragon breed <breed> [dragon]
 commands.dragon.breed.invalid='%s' is not a valid breed
-commands.dragon.breed.success=The breed of %s has been set to %s
+commands.dragon.breed.success=The breed of %s has been set to: %s
 commands.dragon.gender.usage=/dragon gender [dragon]
-commands.dragon.gender.success=The gender of %s has been set to %s
+commands.dragon.gender.success=The gender of %s has been set to: %s
 commands.dragon.tame.usage=/dragon tame [dragon]
 commands.dragon.tame.success=Dragon %s is tamed by %s now
 commands.dragon.unlock.usage=/dragon unlock [dragon]
 commands.dragon.unlock.success=Dragon %s is unlocked now
 commands.dragon.stage.usage=/dragon stage <stage> [dragon]
 commands.dragon.stage.invalid='%s' is not a valid stage
-commands.dragon.stage.success=The stage of %s has been set to %s
+commands.dragon.stage.success=The stage of %s has been set to: %s
 commands.dragon.notFound=Could not find dragon based on '%s'
 commands.dragon.unspecified=You must specify which dragon you wish to perform this action on.

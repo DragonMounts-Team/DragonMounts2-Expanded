@@ -14,6 +14,7 @@ import io.netty.buffer.ByteBuf;
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.block.HatchableDragonEggBlock;
+import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.client.gui.GuiHandler;
 import net.dragonmounts.client.model.dragon.anim.DragonAnimator;
 import net.dragonmounts.init.DMBlocks;
@@ -25,6 +26,7 @@ import net.dragonmounts.inits.ModKeys;
 import net.dragonmounts.inits.ModSounds;
 import net.dragonmounts.inventory.DragonInventory;
 import net.dragonmounts.item.DragonArmorItem;
+import net.dragonmounts.item.DragonEssenceItem;
 import net.dragonmounts.item.DragonScalesItem;
 import net.dragonmounts.network.MessageDragonBreath;
 import net.dragonmounts.network.MessageDragonExtras;
@@ -33,8 +35,6 @@ import net.dragonmounts.objects.entity.entitytameabledragon.ai.ground.EntityAIDr
 import net.dragonmounts.objects.entity.entitytameabledragon.ai.path.PathNavigateFlying;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.DragonBreathHelper;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.DragonBreathHelperP;
-import net.dragonmounts.objects.entity.entitytameabledragon.breeds.DragonBreedForest;
-import net.dragonmounts.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
 import net.dragonmounts.objects.entity.entitytameabledragon.helper.*;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
@@ -69,16 +69,18 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SPacketAnimation;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.PotionEvent;
@@ -94,6 +96,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
+import static net.dragonmounts.util.EntityUtil.replaceAttributeModifier;
 import static net.minecraft.entity.SharedMonsterAttributes.ATTACK_DAMAGE;
 import static net.minecraft.entity.SharedMonsterAttributes.FOLLOW_RANGE;
 
@@ -123,15 +126,12 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
     private static final DataParameter<Boolean> GOING_DOWN = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> ALLOW_OTHERPLAYERS = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> BOOSTING = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> IS_MALE = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> HOVER_CANCELLED = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> Y_LOCKED = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> ALT_TEXTURE = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> FOLLOW_YAW = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Optional<UUID>> DATA_BREEDER = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-    private static final DataParameter<EnumDragonBreed> DATA_BREED = EntityDataManager.createKey(EntityTameableDragon.class, EnumDragonBreed.SERIALIZER);
     private static final DataParameter<DragonVariant> DATA_VARIANT = EntityDataManager.createKey(EntityTameableDragon.class, DragonVariant.SERIALIZER);
-    private static final DataParameter<DragonBreedForest.SubType> FOREST_TEXTURES = EntityDataManager.createKey(EntityTameableDragon.class, DragonBreedForest.SubType.SERIALIZER);
     private static final DataParameter<Integer> DATA_REPRO_COUNT = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> HUNGER = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> DATA_TICKS_SINCE_CREATION = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.VARINT);
@@ -214,11 +214,9 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
         manager.register(ALLOW_OTHERPLAYERS, false);
         manager.register(BOOSTING, false);
         manager.register(DRAGON_SCALES, (byte) 0);
-        manager.register(IS_MALE, getRNG().nextBoolean());
         //        manager.register(SLEEP, false); //unused as of now
         manager.register(FOLLOW_YAW, true);
         manager.register(DATA_BREATH_WEAPON_TARGET, "");
-        manager.register(FOREST_TEXTURES, DragonBreedForest.SubType.NONE);
         manager.register(DATA_BREATH_WEAPON_MODE, 0);
         manager.register(HUNGER, 100);
         manager.register(DATA_ARMOR, ItemStack.EMPTY);
@@ -252,7 +250,6 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
         nbt.setBoolean("Sheared", this.isSheared());
         nbt.setBoolean("Breathing", this.isUsingBreathWeapon());
         nbt.setBoolean("projectile", this.isUsingAltBreathWeapon());
-        nbt.setBoolean("IsMale", this.isMale());
         nbt.setBoolean("unhovered", this.isUnHovered());
         nbt.setBoolean("followyaw", this.followYaw());
         nbt.setInteger("AgeTicks", this.getLifeStageHelper().getTicksSinceCreation());
@@ -282,7 +279,6 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
         this.setUsingBreathWeapon(nbt.getBoolean("Breathing"));
         this.setUsingProjectile(nbt.getBoolean("projectile"));
         this.getLifeStageHelper().setTicksSinceCreation(nbt.getInteger("AgeTicks"));
-        this.setMale(nbt.getBoolean("IsMale"));
         this.setUnHovered(nbt.getBoolean("unhovered"));
         this.setYLocked(nbt.getBoolean("ylocked"));
         this.setFollowYaw(nbt.getBoolean("followyaw"));
@@ -292,7 +288,17 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
         this.setCanBeAdjucator(nbt.getBoolean("Adjucator"));
         this.setToAllowedOtherPlayers(nbt.getBoolean("AllowOtherPlayers"));
         this.inventory.readAdditionalData(nbt);
-        if (nbt.hasKey("Variant")) {
+        if (nbt.getBoolean("DataFix$IsForest")) {
+            boolean male = this.rand.nextBoolean();
+            Set<BiomeDictionary.Type> types = BiomeDictionary.getTypes(this.world.getBiome(this.getPosition()));
+            if (types.contains(BiomeDictionary.Type.SAVANNA) || types.contains(BiomeDictionary.Type.DRY) || types.contains(BiomeDictionary.Type.MESA) || types.contains(BiomeDictionary.Type.SANDY)) {
+                this.setVariant(male ? DragonVariants.FOREST_DRY_MALE : DragonVariants.FOREST_DRY_FEMALE);
+            } else if (types.contains(BiomeDictionary.Type.COLD) || types.contains(BiomeDictionary.Type.MOUNTAIN)) {
+                this.setVariant(male ? DragonVariants.FOREST_TAIGA_MALE : DragonVariants.FOREST_TAIGA_FEMALE);
+            } else {
+                this.setVariant(male ? DragonVariants.FOREST_MALE : DragonVariants.FOREST_FEMALE);
+            }
+        } else if (nbt.hasKey("Variant")) {
             this.setVariant(DragonVariant.byName(nbt.getString("Variant")));
         }
         this.variantHelper.readFromNBT(nbt);
@@ -339,25 +345,6 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
     // public void setSleeping(boolean sleeping) {
     //   dataManager.set(SLEEP, sleeping);
     // }
-
-    /**
-     * Gets the gender since booleans return only 2 values (true or false) true == MALE, false == FEMALE
-     * 2 genders only dont call me sexist and dont talk to me about political correctness
-     */
-    public boolean isMale() {
-        return dataManager.get(IS_MALE);
-    }
-
-    public void setMale(boolean male) {
-        dataManager.set(IS_MALE, male);
-    }
-
-    /**
-     * set in commands
-     */
-    public void setOppositeGender() {
-        this.setMale(!this.isMale());
-    }
 
     public boolean isGrowthPaused() {
         return dataManager.get(GROWTH_PAUSED);
@@ -476,14 +463,6 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
 
     public void setAltTextures(boolean alt) {
         dataManager.set(ALT_TEXTURE, alt);
-    }
-
-    public DragonBreedForest.SubType getForestType() {
-        return dataManager.get(FOREST_TEXTURES);
-    }
-
-    public void setForestType(DragonBreedForest.SubType forest) {
-        dataManager.set(FOREST_TEXTURES, forest);
     }
 
 
@@ -863,16 +842,14 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
         super.onDeath(src);
         if (this.world.isRemote) return;
         if (isTamed()) {
-            /*ItemStack stack = new ItemStack(dragonEssence());
-            NBTTagCompound nbt = new NBTTagCompound();
-            this.writeToNBT(nbt);
-            stack.setTagCompound(nbt);
+            DragonEssenceItem item = this.getVariant().type.getInstance(DragonEssenceItem.class, null);
+            if (item == null) return;
             BlockPos pos = this.getPosition();
-            this.world.setBlockState(pos, DMBlocks.DRAGON_CORE.getDefaultState(), 1);
+            this.world.setBlockState(pos, DMBlocks.DRAGON_CORE.getDefaultState(), 3);
             TileEntity tile = this.world.getTileEntity(pos);
             if (tile instanceof DragonCoreBlockEntity) {
-                ((DragonCoreBlockEntity) tile).setInventorySlotContents(0, stack);
-            }TODO: DragonType.getInstance*/
+                ((DragonCoreBlockEntity) tile).setInventorySlotContents(0, item.saveEntity(this));
+            }
         } else if (!isEgg()) {
             this.inventory.dropAllItems();
         }
@@ -906,15 +883,11 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
     }
 
     @Override
-    public ITextComponent getDisplayName() {
-        // return custom name if set
-        if (this.hasCustomName()) return new TextComponentString(this.getCustomNameTag());
-        // return default breed name otherwise
-        return new TextComponentTranslation(this.makeTranslationKey());
-    }
-
-    public String makeTranslationKey() {
-        return DMUtils.makeDescriptionId("entity.dragon", this.getVariant().type.identifier);
+    public String getName() {
+        if (this.hasCustomName()) return this.getCustomNameTag();
+        String name = EntityList.getEntityString(this);
+        name = name == null ? "entity.dragonmounts.dragon" : "entity." + name;
+        return I18n.translateToLocalFormatted(name, I18n.translateToLocal(this.getVariant().type.translationKey));
     }
 
     public void roar() {
@@ -1345,14 +1318,7 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
      */
     @Override
     public EntityAgeable createChild(EntityAgeable mate) {
-        EntityTameableDragon parent1 = this;
-        EntityTameableDragon parent2 = (EntityTameableDragon) mate;
-
-        if (parent1.isMale() && !parent2.isMale() || !parent1.isMale() && parent2.isMale()) {
-            return getReproductionHelper().createChild(parent1.isMale() ? mate : parent1);
-        } else {
-            return null;
-        }
+        return mate instanceof EntityTameableDragon ? this.getReproductionHelper().createChild((EntityTameableDragon) mate) : null;
     }
 
     private void addHelper(DragonHelper helper) {
@@ -2037,6 +2003,16 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
             if (!this.firstUpdate && armored && !this.armored) {
                 this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_HORSE_ARMOR, SoundCategory.PLAYERS, 1F, 1F, false);
             }
+            if (armored) {
+                replaceAttributeModifier(
+                        this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ARMOR),
+                        DragonArmorItem.MODIFIER_UUID,
+                        "Dragon Armor Bonus",
+                        ((DragonArmorItem) stack.getItem()).protection,
+                        0,
+                        false
+                );
+            }
             this.armored = armored;
         } else if (DATA_SADDLE.equals(key)) {
             ItemStack stack = this.getSaddle();
@@ -2090,6 +2066,15 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
 
     public void setVariant(DragonVariant variant) {
         this.dataManager.set(DATA_VARIANT, variant);
+    }
+
+    @Nullable
+    @Override
+    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData data) {
+        super.onInitialSpawn(difficulty, data);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(DragonMountsConfig.BASE_HEALTH);
+        this.variantHelper.onVariantChanged(this.getVariant());
+        return data;
     }
 }
 

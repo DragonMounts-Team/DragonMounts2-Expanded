@@ -23,7 +23,6 @@ public class DragonCommandTree extends CommandTreeBase {
         super.addSubcommand(new TypeCommand());
         super.addSubcommand(new StageCommand());
         super.addSubcommand(new CommandDragonTame());
-        super.addSubcommand(new CommandDragonGender());
         super.addSubcommand(new CommandDragonUnlock());
         super.addSubcommand(new CommandTreeHelp(this));
     }

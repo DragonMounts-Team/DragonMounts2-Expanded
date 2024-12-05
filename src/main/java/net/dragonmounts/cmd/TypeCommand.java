@@ -11,6 +11,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 
 import javax.annotation.Nullable;
@@ -59,7 +60,7 @@ public class TypeCommand extends DragonHandlerCommand {
         for (EntityTameableDragon dragon : dragons) {
             ITextComponent name = dragon.getDisplayName();
             dragon.setVariant(type.variants.draw(dragon.getRNG(), dragon.getVariant()));
-            sender.sendMessage(new TextComponentTranslation("commands.dragon.breed.success", name, type.identifier));
+            sender.sendMessage(new TextComponentTranslation("commands.dragon.breed.success", name, new TextComponentTranslation(type.translationKey).setStyle(new Style().setColor(type.formatting))));
         }
     }
 

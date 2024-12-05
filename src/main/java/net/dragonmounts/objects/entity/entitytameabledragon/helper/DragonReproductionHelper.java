@@ -134,28 +134,25 @@ public class DragonReproductionHelper extends DragonHelper {
 
         EntityTameableDragon dragonMate = (EntityTameableDragon) mate;
 
-        if ((dragonMate.isMale() && !dragon.isMale()) || (!dragonMate.isMale() && dragon.isMale())) {
-            return true;
-        } else if (!dragonMate.isTamed()) {
+        if (!dragonMate.isTamed()) {
             return false;
         } else  {
             return dragon.isInLove() && dragonMate.isInLove();
         }
     }
 
-    public EntityAgeable createChild(EntityAgeable mate) {
+    public EntityAgeable createChild(EntityTameableDragon mate) {
         if (!(mate instanceof EntityTameableDragon)) {
             throw new IllegalArgumentException("The mate isn't a dragon");
         }
 
-        EntityTameableDragon parent1 = dragon;
-        EntityTameableDragon parent2 = (EntityTameableDragon) mate;
+        EntityTameableDragon self = dragon;
         EntityTameableDragon baby = new EntityTameableDragon(dragon.world);
 
         // mix the custom names in case both parents have one
-        if (parent1.hasCustomName() && parent2.hasCustomName()) {
-            String p1Name = parent1.getCustomNameTag();
-            String p2Name = parent2.getCustomNameTag();
+        if (self.hasCustomName() && mate.hasCustomName()) {
+            String p1Name = self.getCustomNameTag();
+            String p2Name = mate.getCustomNameTag();
             String babyName;
 
             if (p1Name.contains(" ") || p2Name.contains(" ")) {
@@ -194,11 +191,11 @@ public class DragonReproductionHelper extends DragonHelper {
         }
 
         // inherit the baby's breed from its parents
-        baby.variantHelper.inheritBreed(parent1, parent2);
+        baby.variantHelper.inheritBreed(self, mate);
 
         // increase reproduction counter
-        parent1.getReproductionHelper().addReproduced();
-        parent2.getReproductionHelper().addReproduced();
+        self.getReproductionHelper().addReproduced();
+        mate.getReproductionHelper().addReproduced();
 
         return baby;
     }

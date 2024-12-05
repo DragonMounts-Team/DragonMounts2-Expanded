@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "dragon_scale_boots",
+  "pattern": [
+    "# #",
+    "# #"
+  ],
+  "key": {
+    "#": {
+      "item": "dragonmounts:moonlight_dragon_scales"
+    }
+  },
+  "result": {
+    "item": "dragonmounts:moonlight_dragon_scale_boots"
+  }
+}

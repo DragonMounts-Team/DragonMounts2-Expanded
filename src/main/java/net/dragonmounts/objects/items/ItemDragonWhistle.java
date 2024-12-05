@@ -3,7 +3,9 @@ package net.dragonmounts.objects.items;
 import com.mojang.authlib.GameProfile;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.client.gui.GuiDragonWhistle;
+import net.dragonmounts.compat.DragonTypeCompat;
 import net.dragonmounts.init.DMItemGroups;
+import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.inits.ModItems;
 import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.registry.DragonType;
@@ -20,6 +22,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -31,6 +34,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static net.minecraft.tileentity.TileEntitySkull.updateGameProfile;
+import static net.minecraft.util.text.translation.I18n.translateToLocal;
 
 /**
  * Dragon Whistle Item for controlling certain dragon behaviour remotely.
@@ -42,12 +46,12 @@ public class ItemDragonWhistle extends Item {
     public final String DRAGON_UUID_KEY = DragonMountsTags.MOD_ID + "dragon";
 
     public static String getDragonName(NBTTagCompound tag) {
-        if (tag.hasKey("Name")) {
-            return tag.getString("Name");
+        if (tag.hasKey("Name")) return tag.getString("Name");
+        if (tag.hasKey("Type")) {
+            DragonType type = DragonType.REGISTRY.getValue(new ResourceLocation(tag.getString("Type")));
+            return type == null ? null : type.formatting + translateToLocal(type.translationKey) + TextFormatting.RESET;
         }
-        String name = DMUtils.translateToLocal(tag.getString("LocName"));
-        String type = tag.getString("Breed");
-        return type.isEmpty() ? name : EnumItemBreedTypes.byName(type).color + name + TextFormatting.RESET;
+        return null;
     }
 
     public ItemDragonWhistle() {
@@ -59,12 +63,16 @@ public class ItemDragonWhistle extends Item {
     }
 
     /**
-     * Owner name compat
+     * compat
      */
     @Override
     public boolean updateItemStackNBT(NBTTagCompound nbt)
     {
         super.updateItemStackNBT(nbt);
+        if (nbt.hasKey("Breed")) {
+            nbt.setString("Type", DragonTypeCompat.MAPPING.getOrDefault(nbt.getString("Breed"), DragonTypes.ENDER).identifier.toString());
+            nbt.removeTag("Breed");
+        }
         if (nbt.hasUniqueId("Owner")) return false;
         if (nbt.hasKey("OwnerName", 8)) {
             String name = nbt.getString("OwnerName");
@@ -102,8 +110,6 @@ public class ItemDragonWhistle extends Item {
                 nbt.setUniqueId(DRAGON_UUID_KEY, dragon.getUniqueID());
                 if (dragon.hasCustomName()) {
                     nbt.setString("Name", dragon.getCustomNameTag());
-                } else {
-                    nbt.setString("LocName", dragon.makeTranslationKey());
                 }
                 nbt.setString("Age", "dragon." + dragon.getLifeStageHelper().getLifeStage().name().toLowerCase());
                 nbt.setString("OwnerName", owner.getName());
@@ -154,8 +160,10 @@ public class ItemDragonWhistle extends Item {
     @Override
     @SideOnly(Side.CLIENT)
     public String getItemStackDisplayName(ItemStack stack) {
-        if (stack.hasTagCompound() && stack.getTagCompound().hasUniqueId(DRAGON_UUID_KEY)) {
-            return I18n.format("tooltip.dragonmounts.whistle.name", getDragonName(stack.getTagCompound()));
+        NBTTagCompound nbt = stack.getTagCompound();
+        if (nbt != null && nbt.hasUniqueId(DRAGON_UUID_KEY)) {
+            String name = getDragonName(nbt);
+            if (name != null) return I18n.format("tooltip.dragonmounts.whistle.name", name);
         }
         return super.getItemStackDisplayName(stack);
     }
@@ -168,7 +176,10 @@ public class ItemDragonWhistle extends Item {
             tooltip.add(DMUtils.translateToLocal("item.whistle.info"));
             return;
         }
-        tooltip.add(I18n.format("tooltip.dragonmounts.name", getDragonName(nbt)));
+        String name = getDragonName(nbt);
+        if (name != null) {
+            tooltip.add(I18n.format("tooltip.dragonmounts.name", getDragonName(nbt)));
+        }
         tooltip.add(I18n.format("tooltip.dragonmounts.age", TextFormatting.AQUA + DMUtils.translateToLocal(nbt.getString("Age")) + TextFormatting.RESET));
         tooltip.add(I18n.format("tooltip.dragonmounts.owner", TextFormatting.GOLD + nbt.getString("OwnerName") + TextFormatting.RESET));
         tooltip.add(TextFormatting.ITALIC + DMUtils.translateToLocal("item.removeNBT"));

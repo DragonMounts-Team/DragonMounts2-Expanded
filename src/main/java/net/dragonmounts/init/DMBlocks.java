@@ -2,7 +2,7 @@ package net.dragonmounts.init;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.dragonmounts.block.DragonCoreBlock;
-import net.dragonmounts.block.DragonEggBlockCompat;
+import net.dragonmounts.block.DragonEggCompatBlock;
 import net.dragonmounts.block.DragonNestBlock;
 import net.dragonmounts.block.HatchableDragonEggBlock;
 import net.dragonmounts.registry.DragonType;
@@ -14,7 +14,7 @@ public class DMBlocks {
     public static final ObjectArrayList<Block> BLOCKS = new ObjectArrayList<>();
     public static final DragonNestBlock DRAGON_NEST = register("dragon_nest", new DragonNestBlock());
     public static final DragonCoreBlock DRAGON_CORE = register("dragon_core", new DragonCoreBlock());
-    public static final DragonEggBlockCompat DRAGON_EGG_COMPAT = register("dragon_egg", new DragonEggBlockCompat());
+    public static final DragonEggCompatBlock DRAGON_EGG_COMPAT = register("dragon_egg", new DragonEggCompatBlock());
     public static final HatchableDragonEggBlock AETHER_DRAGON_EGG = registerDragonEgg("aether_dragon_egg", DragonTypes.AETHER);
     public static final HatchableDragonEggBlock ENCHANT_DRAGON_EGG = registerDragonEgg("enchant_dragon_egg", DragonTypes.ENCHANT);
     public static final HatchableDragonEggBlock ENDER_DRAGON_EGG = registerDragonEgg("ender_dragon_egg", DragonTypes.ENDER);

@@ -1,16 +1,16 @@
 package net.dragonmounts.objects.entity.entitytameabledragon.breath;
 
+import it.unimi.dsi.fastutil.ints.*;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.nodes.BreathNodeFactory;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.nodes.BreathNodeP;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.nodes.EntityBreathNodeP;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.weapons.BreathWeapon;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.weapons.BreathWeaponP;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.util.Pair;
-import it.unimi.dsi.fastutil.ints.*;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectIterator;
+import net.dragonmounts.util.math.Pair;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumFacing;

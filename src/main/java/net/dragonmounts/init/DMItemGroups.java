@@ -1,7 +1,6 @@
 package net.dragonmounts.init;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -23,7 +22,7 @@ public class DMItemGroups {
             @Override
             @SideOnly(Side.CLIENT)
             public ItemStack createIcon() {
-                return new ItemStack(Blocks.DRAGON_EGG);
+                return new ItemStack(DMBlocks.ENDER_DRAGON_EGG);
             }
         };
     }

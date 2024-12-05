@@ -1,5 +1,5 @@
 {
-  "parent": "dragonmounts:item/dragon_amulet",
+  "parent": "dragonmounts:item/amulet",
   "textures": {
     "layer0": "dragonmounts:items/amulet/ice_dragon_amulet"
   }

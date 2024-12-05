@@ -28,7 +28,7 @@ public class NumericIdentifiedEntry<T extends NumericIdentifiedEntry<T>> extends
 
         @Override
         public void onClear(IForgeRegistryInternal<T> owner, RegistryManager stage) {
-            DMUtils.getLogger().info("Clearing Registry!", new Throwable());
+            DMUtils.getLogger().info("Clearing Registry!", new Throwable("Clearing Registry!"));
             for (T entry : owner) {
                 entry.id = -1;
             }

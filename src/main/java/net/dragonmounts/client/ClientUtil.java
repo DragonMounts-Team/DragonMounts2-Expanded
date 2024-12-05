@@ -2,8 +2,7 @@ package net.dragonmounts.client;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.dragonmounts.DragonMountsTags;
-import net.dragonmounts.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
-import net.dragonmounts.objects.items.EnumItemBreedTypes;
+import net.dragonmounts.compat.DragonTypeCompat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -23,22 +22,22 @@ public abstract class ClientUtil {
     public static void registerDragonEggModel(Item item) {
         // register item renderer for dragon egg block variants
         String model = DragonMountsTags.MOD_ID + ":dragon_egg";
-        for (EnumDragonBreed breed : EnumDragonBreed.values()) {
-            ModelLoader.setCustomModelResourceLocation(item, breed.meta, new ModelResourceLocation(model, "breed=" + breed.identifier));
+        for (DragonTypeCompat type : DragonTypeCompat.values()) {
+            ModelLoader.setCustomModelResourceLocation(item, type.ordinal(), new ModelResourceLocation(model, "breed=" + type.identifier));
         }
     }
 
     public static void registerAmuletModel(Item item) {
-        EnumItemBreedTypes[] types = EnumItemBreedTypes.values();
+        DragonTypeCompat[] types = DragonTypeCompat.values();
         int size = types.length;
         Object2ObjectOpenHashMap<String, ModelResourceLocation> mapping = new Object2ObjectOpenHashMap<>();
         ModelResourceLocation empty = new ModelResourceLocation("dragonmounts:dragon_amulet");
         ModelResourceLocation[] models = new ModelResourceLocation[size + 1];
         models[0] = empty;
         for (int i = 0; i < size; ) {
-            EnumItemBreedTypes breed = types[i];
-            ModelResourceLocation model = new ModelResourceLocation("dragonmounts:" + breed.identifier + "_dragon_amulet");
-            mapping.put(breed.identifier, model);
+            DragonTypeCompat type = types[i];
+            ModelResourceLocation model = new ModelResourceLocation("dragonmounts:" + type.identifier + "_dragon_amulet");
+            mapping.put(type.identifier, model);
             models[++i] = model;
         }
         ModelLoader.setCustomMeshDefinition(item, stack -> {

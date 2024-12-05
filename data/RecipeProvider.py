@@ -4,6 +4,7 @@ from Core.RecipeBuilder import ShapedRecipeBuilder as shaped, ShaplessRecipeBuil
 from Core.Output import Output
 from DragonType import DragonType
 from CarriageType import CarriageType
+from DragonArmorMaterial import DragonArmorMaterial
 
 def generateRecipes(output: Output):
   ingot = {
@@ -22,12 +23,12 @@ def generateRecipes(output: Output):
   hasDiamond = has('diamond')
   hasEnderPearl = has('ender_pearl')
   dragonScaleBows = []
-  for breed in DragonType:
-    if (breed is DragonType.SKELETON or breed is DragonType.WITHER): continue
-    base = breed.value
-    dragonScales = base.withSuffix('_dragonscales')
+  for type in DragonType:
+    if (type is DragonType.SKELETON or type is DragonType.WITHER): continue
+    base = type.value
+    dragonScales = base.withSuffix('_dragon_scales')
     unlock = has(dragonScales)
-    shaped(base.withSuffix('_dragon_axe'))\
+    shaped(base.withSuffix('_dragon_scale_axe'))\
       .define('X', dragonScales)\
       .define('#', stick)\
       .pattern('XX')\
@@ -36,7 +37,7 @@ def generateRecipes(output: Output):
       .groupBy('dragon_scale_axe')\
       .unlockedBy('has_scales', unlock)\
       .save(output, 'combat')
-    shaped(base.withSuffix('_dragon_hoe'))\
+    shaped(base.withSuffix('_dragon_scale_hoe'))\
       .define('X', dragonScales)\
       .define('#', stick)\
       .pattern('XX')\
@@ -45,7 +46,7 @@ def generateRecipes(output: Output):
       .groupBy('dragon_scale_hoe')\
       .unlockedBy('has_scales', unlock)\
       .save(output, 'tools')
-    shaped(base.withSuffix('_dragon_pickaxe'))\
+    shaped(base.withSuffix('_dragon_scale_pickaxe'))\
       .define('X', dragonScales)\
       .define('#', stick)\
       .pattern('XXX')\
@@ -54,7 +55,7 @@ def generateRecipes(output: Output):
       .groupBy('dragon_scale_pickaxe')\
       .unlockedBy('has_scales', unlock)\
       .save(output, 'tools')
-    shaped(base.withSuffix('_dragon_shovel'))\
+    shaped(base.withSuffix('_dragon_scale_shovel'))\
       .define('X', dragonScales)\
       .define('#', stick)\
       .pattern('X')\
@@ -63,7 +64,7 @@ def generateRecipes(output: Output):
       .groupBy('dragon_scale_shovel')\
       .unlockedBy('has_scales', unlock)\
       .save(output, 'tools')
-    shaped(base.withSuffix('_dragon_sword'))\
+    shaped(base.withSuffix('_dragon_scale_sword'))\
       .define('X', dragonScales)\
       .define('#', stick)\
       .pattern('X')\
@@ -72,21 +73,21 @@ def generateRecipes(output: Output):
       .groupBy('dragon_scale_sword')\
       .unlockedBy('has_scales', unlock)\
       .save(output, 'combat')
-    shaped(base.withSuffix('_dragonscale_boots'))\
+    shaped(base.withSuffix('_dragon_scale_boots'))\
       .define('#', dragonScales)\
       .pattern('# #')\
       .pattern('# #')\
       .groupBy('dragon_scale_boots')\
       .unlockedBy('has_scales', unlock)\
       .save(output, 'combat')
-    shaped(base.withSuffix('_dragonscale_cap'))\
+    shaped(base.withSuffix('_dragon_scale_helmet'))\
       .define('#', dragonScales)\
       .pattern('###')\
       .pattern('# #')\
       .groupBy('dragon_scale_helmet')\
       .unlockedBy('has_scales', unlock)\
       .save(output, 'combat')
-    shaped(base.withSuffix('_dragonscale_leggings'))\
+    shaped(base.withSuffix('_dragon_scale_leggings'))\
       .define('#', dragonScales)\
       .pattern('###')\
       .pattern('# #')\
@@ -94,7 +95,7 @@ def generateRecipes(output: Output):
       .groupBy('dragon_scale_leggings')\
       .unlockedBy('has_scales', unlock)\
       .save(output, 'combat')
-    shaped(base.withSuffix('_dragonscale_tunic'))\
+    shaped(base.withSuffix('_dragon_scale_chestplate'))\
       .define('#', dragonScales)\
       .pattern('# #')\
       .pattern('###')\
@@ -102,9 +103,7 @@ def generateRecipes(output: Output):
       .groupBy('dragon_scale_chestplate')\
       .unlockedBy('has_scales', unlock)\
       .save(output, 'combat')
-    if (breed is DragonType.ENDER):
-      base = makeId('end')
-    bow = base.withPrefix('dragon_bow_')
+    bow = base.withSuffix('_dragon_scale_bow')
     dragonScaleBows.append(bow)
     shaped(bow)\
       .define('#', dragonScales)\
@@ -115,7 +114,7 @@ def generateRecipes(output: Output):
       .groupBy('dragon_scale_bow')\
       .unlockedBy('has_scales', unlock)\
       .save(output, 'combat')
-    shaped(base.withPrefix('dragon_shield_'))\
+    shaped(base.withSuffix('_dragon_scale_shield'))\
       .define('W', dragonScales)\
       .define('o', ingot['iron'])\
       .pattern('WoW')\
@@ -133,7 +132,7 @@ def generateRecipes(output: Output):
       .groupBy('carriage')\
       .unlockedBy('has_leather', hasLeather)\
       .save(output, 'transportation')
-  shaped(makeId('dragon_amulet'))\
+  shaped(makeId('amulet'))\
     .define('Y', cobblestone)\
     .define('#', stringItem)\
     .define('X', enderPearl)\
@@ -156,7 +155,7 @@ def generateRecipes(output: Output):
     .pattern('X ')\
     .unlockedBy('has_diamond', hasDiamond)\
     .save(output, 'combat')
-  shaped(makeId('dragon_gender'))\
+  shaped(makeId('variant_switcher'))\
     .define('W', 'emerald')\
     .define('o', 'gold_ingot')\
     .define('z', ingot['diamond'])\
@@ -175,11 +174,11 @@ def generateRecipes(output: Output):
     .pattern('#R#')\
     .unlockedBy('has_bow', has(dragonScaleBows))\
     .save(output, 'redstone')
-  for material in ['diamond', 'emerald', 'gold', 'iron']:
-    block = ResourceLocation(material + '_block')
-    shaped(makeId('dragonarmor_' + material))\
+  for material in DragonArmorMaterial:
+    block = material.value[1]
+    shaped(makeId(material.name.lower() + '_dragon_armor'))\
       .groupBy('dragon_armor')\
-      .define('#', ingot[material])\
+      .define('#', material.value[0])\
       .define('X', block)\
       .pattern('X #')\
       .pattern(' XX')\

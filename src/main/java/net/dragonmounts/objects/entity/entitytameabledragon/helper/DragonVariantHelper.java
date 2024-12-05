@@ -10,6 +10,7 @@ import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
 import net.minecraft.block.Block;
+import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -22,6 +23,7 @@ import javax.annotation.Nullable;
 import static net.dragonmounts.util.math.MathX.parseColor;
 
 public class DragonVariantHelper extends DragonHelper {
+    public static final String NBT_VARIANT_POINTS = "VariantPoints";
     private static final int BLOCK_RANGE = 2;
     private static final int POINTS_BLOCK = 1;
     private static final int POINTS_BIOME = 1;
@@ -30,8 +32,6 @@ public class DragonVariantHelper extends DragonHelper {
     private static final int POINTS_ENV = 3;
     private static final int TICK_RATE_PARTICLES = 2;
     private static final int TICK_RATE_BLOCK = 20;
-    private static final String NBT_BREED = "Breed";
-    private static final String NBT_BREED_POINTS = "breedPoints";
     private final Reference2IntOpenHashMap<DragonType> points = new Reference2IntOpenHashMap<>();
     private DragonType lastType;
 
@@ -49,12 +49,12 @@ public class DragonVariantHelper extends DragonHelper {
         for (Reference2IntMap.Entry<DragonType> entry : this.points.reference2IntEntrySet()) {
             points.setInteger(entry.getKey().identifier.toString(), entry.getIntValue());
         }
-        nbt.setTag(NBT_BREED_POINTS, points);
+        nbt.setTag(NBT_VARIANT_POINTS, points);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
-        NBTTagCompound points = nbt.getCompoundTag(NBT_BREED_POINTS);
+        NBTTagCompound points = nbt.getCompoundTag(NBT_VARIANT_POINTS);
         for (Reference2IntMap.Entry<DragonType> entry : this.points.reference2IntEntrySet()) {
             entry.setValue(points.getInteger(entry.getKey().identifier.toString()));
         }
@@ -147,7 +147,11 @@ public class DragonVariantHelper extends DragonHelper {
             this.resetPoints(type);
         }
 
-        //TODO: modify base health
+        AbstractAttributeMap attributes = this.dragon.getAttributeMap();
+        if (this.lastType != null) {
+            attributes.removeAttributeModifiers(this.lastType.attributes);
+        }
+        attributes.applyAttributeModifiers(type.attributes);
         this.lastType = type;
     }
 

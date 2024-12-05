@@ -19,9 +19,7 @@ import net.dragonmounts.objects.entity.entitytameabledragon.breath.BreathNode;
 import net.dragonmounts.objects.entity.entitytameabledragon.breath.nodes.BreathNodeP;
 import net.dragonmounts.util.ClientServerSynchronisedTickCount;
 import net.dragonmounts.util.math.MathX;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -35,14 +33,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
+import java.util.UUID;
 
 import static net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStage.getLifeStageFromTickCount;
+import static net.dragonmounts.util.EntityUtil.replaceAttributeModifier;
 import static net.minecraft.entity.SharedMonsterAttributes.*;
 
 /**
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public class DragonLifeStageHelper extends DragonHelper {
+    public static final UUID DRAGON_AEG_MODIFIER_ID = UUID.fromString("856d4ba4-9ffe-4a52-8606-890bb9be538b");
 
     public static final Map<DragonLifeStage, BreathNode.Power> BREATHNODE_POWER_BY_STAGE =
             ImmutableMap.<DragonLifeStage, BreathNode.Power>builder()
@@ -95,27 +96,12 @@ public class DragonLifeStageHelper extends DragonHelper {
 
     @Override
     public void applyEntityAttributes() {
-        applyScaleModifier(MAX_HEALTH);
-        applyScaleModifier(ATTACK_DAMAGE);
-        applyScaleModifierArmor(ARMOR);
-    }
-
-    private void applyScaleModifier(IAttribute attribute) {
-        IAttributeInstance instance = dragon.getEntityAttribute(attribute);
-        AttributeModifier oldModifier = instance.getModifier(DragonScaleModifier.ID);
-        if (oldModifier != null) {
-            instance.removeModifier(oldModifier);
-        }
-        instance.applyModifier(new DragonScaleModifier(MathX.clamp(getScale(), 0.1, 1)));
-    }
-
-    private void applyScaleModifierArmor(IAttribute attribute) {
-        IAttributeInstance instance = dragon.getEntityAttribute(attribute);
-        AttributeModifier oldModifier = instance.getModifier(DragonScaleModifier.ID);
-        if (oldModifier != null) {
-            instance.removeModifier(oldModifier);
-        }
-        instance.applyModifier(new DragonScaleModifier(MathX.clamp(getScale(), 0.1, 1.2)));
+        AbstractAttributeMap attributes = this.dragon.getAttributeMap();
+        double scale = this.getScale();
+        double factor = MathX.clamp(scale, 0.1, 1);
+        replaceAttributeModifier(attributes.getAttributeInstance(MAX_HEALTH), DRAGON_AEG_MODIFIER_ID, "Dragon size modifier", factor, 1, false);
+        replaceAttributeModifier(attributes.getAttributeInstance(ATTACK_DAMAGE), DRAGON_AEG_MODIFIER_ID, "Dragon size modifier", factor, 1, false);
+        replaceAttributeModifier(attributes.getAttributeInstance(ARMOR), DRAGON_AEG_MODIFIER_ID, "Dragon size modifier", MathX.clamp(scale, 0.1, 1.2), 1, false);
     }
 
     /**

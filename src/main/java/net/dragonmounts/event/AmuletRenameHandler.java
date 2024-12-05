@@ -1,7 +1,7 @@
 package net.dragonmounts.event;
 
 import net.dragonmounts.DragonMountsConfig;
-import net.dragonmounts.objects.items.ItemDragonAmuletNEW;
+import net.dragonmounts.item.DragonAmuletItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
@@ -18,21 +18,19 @@ public class AmuletRenameHandler {
     public static void onTake(AnvilRepairEvent event) {
         if (!DragonMountsConfig.forcedRename) return;
         ItemStack output = event.getItemResult();
-        if (!output.isEmpty() && output.getItem() instanceof ItemDragonAmuletNEW) {
+        if (!output.isEmpty() && output.getItem() instanceof DragonAmuletItem) {
             NBTTagCompound root = output.getTagCompound();
             if (root == null) return;
-            String breed = root.getString("breed");
-            if (breed.isEmpty()) return;
             String result = getDisplayName(root);
             if (result.equals(getDisplayName(event.getItemInput().getTagCompound()))) return;
+            NBTTagCompound data = root.getCompoundTag("EntityTag");
             if (result.isEmpty()) {
-                if (!root.getString("CustomName").isEmpty()) {
-                    root.removeTag("CustomName");
-                    root.removeTag("Name");
-                    root.setString("LocName", "entity.DragonMount." + breed + ".name");
+                if (!data.getString("CustomName").isEmpty()) {
+                    data.removeTag("CustomName");
+                    root.setString("LocName", "entity.dragon." + ((DragonAmuletItem) output.getItem()).type.identifier);
                 }
             } else {
-                root.setString("CustomName", result);
+                data.setString("CustomName", result);
             }
         }
     }

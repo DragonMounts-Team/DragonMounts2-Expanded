@@ -1,9 +1,9 @@
 package net.dragonmounts.objects.entity.entitytameabledragon.breath;
 
-import net.dragonmounts.DragonMounts;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.util.Base64;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.dragonmounts.DragonMounts;
+import net.dragonmounts.util.math.Base64;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.entity.player.EntityPlayer;

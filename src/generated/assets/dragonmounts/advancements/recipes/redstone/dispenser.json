@@ -17,43 +17,43 @@
       "conditions": {
         "items": [
           {
-            "item": "dragonmounts:dragon_bow_aether"
+            "item": "dragonmounts:aether_dragon_scale_bow"
           },
           {
-            "item": "dragonmounts:dragon_bow_water"
+            "item": "dragonmounts:water_dragon_scale_bow"
           },
           {
-            "item": "dragonmounts:dragon_bow_ice"
+            "item": "dragonmounts:ice_dragon_scale_bow"
           },
           {
-            "item": "dragonmounts:dragon_bow_fire"
+            "item": "dragonmounts:fire_dragon_scale_bow"
           },
           {
-            "item": "dragonmounts:dragon_bow_forest"
+            "item": "dragonmounts:forest_dragon_scale_bow"
           },
           {
-            "item": "dragonmounts:dragon_bow_nether"
+            "item": "dragonmounts:nether_dragon_scale_bow"
           },
           {
-            "item": "dragonmounts:dragon_bow_end"
+            "item": "dragonmounts:ender_dragon_scale_bow"
           },
           {
-            "item": "dragonmounts:dragon_bow_enchant"
+            "item": "dragonmounts:enchant_dragon_scale_bow"
           },
           {
-            "item": "dragonmounts:dragon_bow_sunlight"
+            "item": "dragonmounts:sunlight_dragon_scale_bow"
           },
           {
-            "item": "dragonmounts:dragon_bow_moonlight"
+            "item": "dragonmounts:moonlight_dragon_scale_bow"
           },
           {
-            "item": "dragonmounts:dragon_bow_storm"
+            "item": "dragonmounts:storm_dragon_scale_bow"
           },
           {
-            "item": "dragonmounts:dragon_bow_terra"
+            "item": "dragonmounts:terra_dragon_scale_bow"
           },
           {
-            "item": "dragonmounts:dragon_bow_zombie"
+            "item": "dragonmounts:zombie_dragon_scale_bow"
           }
         ]
       }

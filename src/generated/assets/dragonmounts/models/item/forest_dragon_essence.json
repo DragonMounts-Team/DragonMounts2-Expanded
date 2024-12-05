@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "dragonmounts:items/essence/forest_dragon_essence"
+  }
+}

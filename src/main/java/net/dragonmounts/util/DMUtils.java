@@ -46,6 +46,11 @@ public class DMUtils {
         return I18n.hasKey(key) ? I18n.format(key, NO_ARGS) : fallbackSrc.getString(fallbackKey);
     }
 
+    @SideOnly(Side.CLIENT)
+    public static String translateBothToLocal(String major, String minor) {
+        return I18n.format(major, I18n.format(minor, NO_ARGS));
+    }
+
     public static boolean isAir(World world, BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
         return state.getBlock().isAir(state, world, pos);
