@@ -1,22 +1,24 @@
 package net.dragonmounts.event;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.client.gui.GuiHandler;
-import net.dragonmounts.init.DMArmorEffects;
-import net.dragonmounts.init.DMBlocks;
-import net.dragonmounts.init.DragonTypes;
-import net.dragonmounts.init.DragonVariants;
+import net.dragonmounts.compat.DragonMountsCompat;
+import net.dragonmounts.compat.DragonTypeCompat;
+import net.dragonmounts.init.*;
 import net.dragonmounts.inits.ModItems;
 import net.dragonmounts.registry.CooldownCategory;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.DMUtils;
-import net.dragonmounts.util.IHasModel;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
@@ -28,6 +30,7 @@ import net.minecraftforge.registries.DataSerializerEntry;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.Objects;
+import java.util.function.Function;
 
 import static net.dragonmounts.DragonMounts.makeId;
 
@@ -40,6 +43,7 @@ public class RegistryEventHandler {
         for (Block block : DMBlocks.BLOCKS) {
             registry.register(block);
         }
+        registry.register(DragonMountsCompat.DRAGON_EGG_BLOCK);
         GameRegistry.registerTileEntity(DragonCoreBlockEntity.class, makeId("dragon_core"));
         DMUtils.getLogger().info("Block Registries Successfully Registered");
     }
@@ -50,6 +54,7 @@ public class RegistryEventHandler {
         for (Item item : ModItems.ITEMS) {
             registry.register(item);
         }
+        registry.register(DragonMountsCompat.DRAGON_EGG_ITEM);
         DMUtils.getLogger().info("Item Registries Successfully Registered!");
     }
 
@@ -84,17 +89,42 @@ public class RegistryEventHandler {
 
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
+        Item amulet = DMItems.AMULET;
         for (Item item : ModItems.ITEMS) {
-            if (item instanceof IHasModel) {
-                ((IHasModel) item).registerModel();
-            } else {
-                ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(Objects.requireNonNull(item.getRegistryName()), "inventory"));
+            if (amulet == item) continue;
+            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(Objects.requireNonNull(item.getRegistryName()), "inventory"));
+        }
+        {// Compat: register item model for dragon egg variants
+            Item egg = DragonMountsCompat.DRAGON_EGG_ITEM;
+            String model = DragonMountsTags.MOD_ID + ":dragon_egg";
+            for (DragonTypeCompat type : DragonTypeCompat.values()) {
+                ModelLoader.setCustomModelResourceLocation(egg, type.ordinal(), new ModelResourceLocation(model, "breed=" + type.identifier));
             }
         }
+        {// Compat: register item model for amulet variants
+            DragonTypeCompat[] types = DragonTypeCompat.values();
+            int size = types.length;
+            Object2ObjectOpenHashMap<String, ModelResourceLocation> mapping = new Object2ObjectOpenHashMap<>();
+            Reference2IntOpenHashMap<DragonType> meta = new Reference2IntOpenHashMap<>();
+            ModelResourceLocation empty = new ModelResourceLocation("dragonmounts:amulet");
+            ModelResourceLocation[] models = new ModelResourceLocation[size + 1];
+            models[0] = empty;
+            for (int i = 0; i < size; ) {
+                DragonType type = types[i].type;
+                models[++i] = new ModelResourceLocation("dragonmounts:" + type.identifier.getPath() + "_dragon_amulet");
+                meta.put(type, i);
+            }
+            Function<String, ModelResourceLocation> computer = variant -> models[meta.getOrDefault(DragonVariant.byName(variant).type, 0)];
+            ModelLoader.setCustomMeshDefinition(amulet, stack -> {
+                NBTTagCompound root = stack.getTagCompound();
+                if (root == null) return empty;
+                NBTTagCompound data = root.getCompoundTag("EntityTag");
+                if (data.isEmpty()) return empty;
+                return mapping.computeIfAbsent(data.getString("Variant"), computer);
+            });
+            ModelBakery.registerItemVariants(amulet, models);
+        }
         DMUtils.getLogger().info("Models Sucessfully Registered");
-    }
-
-    public static void preInitRegistries() {
     }
 
     public static void initRegistries() {

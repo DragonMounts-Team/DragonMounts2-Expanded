@@ -1,11 +1,13 @@
 package net.dragonmounts.compat;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.dragonmounts.block.DragonEggCompatBlock;
 import net.dragonmounts.compat.fixer.DMBlockEntityCompat;
 import net.dragonmounts.compat.fixer.DragonEntityCompat;
 import net.dragonmounts.init.DMBlocks;
 import net.dragonmounts.init.DMItems;
 import net.dragonmounts.inits.ModItems;
+import net.dragonmounts.item.DragonEggCompatItem;
 import net.dragonmounts.util.DragonScaleArmorSuit;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -20,6 +22,8 @@ public abstract class DragonMountsCompat {
     public static final int VERSION = 0;
     public static final Object2ObjectOpenHashMap<String, Item> ITEM_MAPPINGS = new Object2ObjectOpenHashMap<>();
     public static final DragonEntityCompat DRAGON_ENTITY_FIX = new DragonEntityCompat();
+    public static final Block DRAGON_EGG_BLOCK = new DragonEggCompatBlock().setTranslationKey("dragon_egg").setRegistryName("dragon_egg");
+    public static final Item DRAGON_EGG_ITEM = new DragonEggCompatItem().setRegistryName("dragon_egg");
 
     public static void load(ModFixs fixer) {
         fixer.registerFix(FixTypes.ENTITY, DRAGON_ENTITY_FIX);
@@ -80,7 +84,7 @@ public abstract class DragonMountsCompat {
         ITEM_MAPPINGS.put("summon_water", DMItems.WATER_DRAGON_SPAWN_EGG);
         ITEM_MAPPINGS.put("summon_wither", DMItems.WITHER_DRAGON_SPAWN_EGG);
         ITEM_MAPPINGS.put("summon_zombie", DMItems.ZOMBIE_DRAGON_SPAWN_EGG);
-
+        //Items
         ITEM_MAPPINGS.put("aether_dragonscales", DMItems.AETHER_DRAGON_SCALES);
         ITEM_MAPPINGS.put("dragon_bow_aether", DMItems.AETHER_DRAGON_SCALE_BOW);
         ITEM_MAPPINGS.put("dragon_shield_aether", DMItems.AETHER_DRAGON_SCALE_SHIELD);

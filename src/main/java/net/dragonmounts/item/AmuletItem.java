@@ -176,6 +176,21 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+        NBTTagCompound root = stack.getTagCompound();
+        if (root != null && !root.hasKey("EntityTag") && root.hasKey("Breed", 8)) {
+            NBTTagCompound display = root.getCompoundTag("display");
+            IEntityContainer.simplifyData(root);
+            root.removeTag("display");
+            root.removeTag("LocName");
+            NBTTagCompound entity = root.copy();
+            entity.setString("id", "dragonmounts:dragon");
+            DragonMountsCompat.DRAGON_ENTITY_FIX.fixTagCompound(entity);
+            root.tagMap.clear();
+            root.setTag("EntityTag", entity);
+            if (!display.isEmpty()) {
+                root.setTag("display", display);
+            }
+        }
         return this;
     }
 
@@ -189,25 +204,6 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
     @SuppressWarnings("unchecked")
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
         return (T) CAPABILITIES.get(capability);
-    }
-
-    @Override
-    public boolean updateItemStackNBT(NBTTagCompound nbt) {
-        super.updateItemStackNBT(nbt);
-        if (nbt.hasKey("EntityTag")) return false;
-        if (nbt.hasKey("breed", 8)) {
-            NBTTagCompound display = nbt.getCompoundTag("display");
-            IEntityContainer.simplifyData(nbt);
-            nbt.removeTag("display");
-            nbt.removeTag("LocName");
-            NBTTagCompound entity = nbt.copy();
-            entity.setString("id", "dragonmounts:dragon");
-            DragonMountsCompat.DRAGON_ENTITY_FIX.fixTagCompound(entity);
-            nbt.tagMap.clear();
-            nbt.setTag("display", display);
-            return true;
-        }
-        return false;
     }
 
     protected DragonType getDragonType(NBTTagCompound data) {

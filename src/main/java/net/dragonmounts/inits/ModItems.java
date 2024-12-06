@@ -5,7 +5,6 @@ import net.dragonmounts.init.DMBlocks;
 import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.init.DMItems;
 import net.dragonmounts.item.CraftableBlockItem;
-import net.dragonmounts.item.DragonEggCompatItem;
 import net.dragonmounts.items.ItemDragonOrb;
 import net.dragonmounts.items.ItemTestRunner;
 import net.dragonmounts.objects.entity.entitycarriage.EntityCarriage;
@@ -28,7 +27,6 @@ public class ModItems {
 
     public static final Item DRAGON_NEST = new CraftableBlockItem(DMBlocks.DRAGON_NEST, DMItemGroups.MAIN);
     public static final Item DRAGON_CORE = new ItemBlock(DMBlocks.DRAGON_CORE).setRegistryName(DMBlocks.DRAGON_CORE.getRegistryName());
-    public static final Item DRAGON_EGG = new DragonEggCompatItem().setRegistryName("dragon_egg");
 
     //Other Start
     public static final Item dragon_wand = new ItemDragonWand("dragon_wand");
@@ -61,7 +59,6 @@ public class ModItems {
         HARDCODED_AQUATIC_FOOD.add(Items.COOKED_FISH);
         ITEMS.add(DRAGON_CORE);
         ITEMS.add(DRAGON_NEST);
-        ITEMS.add(DRAGON_EGG);
     }
 
     public static boolean isAquaticFood(ItemStack stack) {

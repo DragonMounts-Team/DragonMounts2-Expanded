@@ -26,10 +26,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
@@ -65,22 +67,22 @@ public class ItemDragonWhistle extends Item {
     /**
      * compat
      */
+    @Nullable
     @Override
-    public boolean updateItemStackNBT(NBTTagCompound nbt)
-    {
-        super.updateItemStackNBT(nbt);
-        if (nbt.hasKey("Breed")) {
-            nbt.setString("Type", DragonTypeCompat.MAPPING.getOrDefault(nbt.getString("Breed"), DragonTypes.ENDER).identifier.toString());
-            nbt.removeTag("Breed");
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+        NBTTagCompound root = stack.getTagCompound();
+        if (root == null) return null;
+        if (root.hasKey("Breed")) {
+            root.setString("Type", DragonTypeCompat.MAPPING.getOrDefault(root.getString("Breed"), DragonTypes.ENDER).identifier.toString());
+            root.removeTag("Breed");
         }
-        if (nbt.hasUniqueId("Owner")) return false;
-        if (nbt.hasKey("OwnerName", 8)) {
-            String name = nbt.getString("OwnerName");
-            if (StringUtils.isBlank(name)) return false;
-            nbt.setUniqueId("Owner", updateGameProfile(new GameProfile(null, name)).getId());
-            return true;
+        if (root.hasUniqueId("Owner")) return null;
+        if (root.hasKey("OwnerName", 8)) {
+            String name = root.getString("OwnerName");
+            if (StringUtils.isBlank(name)) return null;
+            root.setUniqueId("Owner", updateGameProfile(new GameProfile(null, name)).getId());
         }
-        return false;
+        return null;
     }
 
     /**

@@ -71,7 +71,7 @@ public class DragonEntityCompat implements IFixableData {
                     variant = isMale ? DragonVariants.ENDER_MALE : DragonVariants.ENDER_FEMALE;
                     break;
             }
-            tag.setString("Variant", variant.toString());
+            tag.setString("Variant", variant.getSerializedName());
             tag.removeTag("Breed");
         }
         return tag;

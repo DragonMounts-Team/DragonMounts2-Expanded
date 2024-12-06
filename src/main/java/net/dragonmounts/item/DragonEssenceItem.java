@@ -21,6 +21,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -122,26 +123,28 @@ public class DragonEssenceItem extends Item implements IEntityContainer<EntityTa
         return new EntityContainerItemEntity(world, location, stack);
     }
 
+    @Nullable
     @Override
-    public boolean updateItemStackNBT(NBTTagCompound nbt) {
-        super.updateItemStackNBT(nbt);
-        if (nbt.hasKey("EntityTag")) return false;
-        if (nbt.hasKey("breed", 8)) {
-            NBTTagCompound display = nbt.getCompoundTag("display");
-            IEntityContainer.simplifyData(nbt);
-            nbt.removeTag("display");
-            nbt.removeTag("LocName");
-            NBTTagCompound entity = IEntityContainer.simplifyData(nbt.copy());
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+        NBTTagCompound root = stack.getTagCompound();
+        if (root != null && !root.hasKey("EntityTag") && root.hasKey("Breed", 8)) {
+            NBTTagCompound display = root.getCompoundTag("display");
+            IEntityContainer.simplifyData(root);
+            root.removeTag("display");
+            root.removeTag("LocName");
+            NBTTagCompound entity = root.copy();
             entity.setString("id", "dragonmounts:dragon");
             entity.removeTag("UUIDMost");
             entity.removeTag("UUIDLeast");
             entity.removeTag("Health");
             entity.removeTag("TicksSinceCreation");
             DragonMountsCompat.DRAGON_ENTITY_FIX.fixTagCompound(entity);
-            nbt.tagMap.clear();
-            nbt.setTag("display", display);
-            return true;
+            root.tagMap.clear();
+            root.setTag("EntityTag", entity);
+            if (!display.isEmpty()) {
+                root.setTag("display", display);
+            }
         }
-        return false;
+        return null;
     }
 }
