@@ -11,6 +11,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 public class EntityContainerItemEntity extends EntityItem {
+    private int animationAge;
     public EntityContainerItemEntity(World level) {
         super(level);
         this.age = -32768;
@@ -54,5 +55,16 @@ public class EntityContainerItemEntity extends EntityItem {
             }
         }
         return false;
+    }
+
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        ++this.animationAge;
+    }
+
+    @Override
+    public int getAge() {
+        return this.animationAge;
     }
 }

@@ -15,10 +15,11 @@ import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.block.HatchableDragonEggBlock;
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
+import net.dragonmounts.capability.IHardShears;
 import net.dragonmounts.client.gui.GuiHandler;
 import net.dragonmounts.client.model.dragon.anim.DragonAnimator;
 import net.dragonmounts.init.DMBlocks;
-import net.dragonmounts.init.DMItems;
+import net.dragonmounts.init.DMCapabilities;
 import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.init.DragonVariants;
 import net.dragonmounts.inits.ModItems;
@@ -27,7 +28,6 @@ import net.dragonmounts.inits.ModSounds;
 import net.dragonmounts.inventory.DragonInventory;
 import net.dragonmounts.item.DragonArmorItem;
 import net.dragonmounts.item.DragonEssenceItem;
-import net.dragonmounts.item.DragonScalesItem;
 import net.dragonmounts.network.MessageDragonBreath;
 import net.dragonmounts.network.MessageDragonExtras;
 import net.dragonmounts.objects.entity.entitycarriage.EntityCarriage;
@@ -48,6 +48,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityEnderCrystal;
@@ -77,11 +78,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -103,7 +102,7 @@ import static net.minecraft.entity.SharedMonsterAttributes.FOLLOW_RANGE;
 /**
  * Here be dragons
  */
-public class EntityTameableDragon extends EntityTameable implements IShearable, IEntityAdditionalSpawnData {
+public class EntityTameableDragon extends EntityTameable implements IEntityAdditionalSpawnData {
     // base attributes
     public static final double BASE_GROUND_SPEED = 0.4;
     public static final double BASE_AIR_SPEED = 0.9;
@@ -1717,22 +1716,8 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
         }
     }
 
-    @Override
-    public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
-        return item != null && item.getItem() == DMItems.diamond_shears && (isJuvenile() || isAdult()) && ticksShear <= 0;
-    }
-
-    @Override
-    public List<ItemStack> onSheared(ItemStack stack, IBlockAccess world, BlockPos pos, int fortune) {
-        Item item = this.getVariant().type.getInstance(DragonScalesItem.class, null);
-        if (item == null) return Collections.emptyList();
-        this.setSheared(true);
-        ticksShear = 3000;
-
-        playSound(SoundEvents.ENTITY_ITEM_BREAK, 1.0F, 1.0F);
-        playSound(ModSounds.ENTITY_DRAGON_GROWL, 1.0F, 1.0F);
-
-        return Collections.singletonList(new ItemStack(item, 2 + this.rand.nextInt(3)));
+    public void setSheared(int duration) {
+        //TODO: impl
     }
 
     /**
@@ -1780,14 +1765,21 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
     }
 
     private void eatEvent(ItemStack stack) {
-        playSound(this.getEatSound(), 1f, 0.75f);
-        double motionX = this.getRNG().nextGaussian() * 0.07D;
-        double motionY = this.getRNG().nextGaussian() * 0.07D;
-        double motionZ = this.getRNG().nextGaussian() * 0.07D;
-        Vec3d pos = this.getAnimator().getThroatPosition();
-
-        if (world.isRemote) {
-            world.spawnParticle(EnumParticleTypes.ITEM_CRACK, pos.x, pos.y, pos.z, motionX, motionY, motionZ, Item.getIdFromItem(stack.getItem()), stack.getMetadata());
+        this.playSound(this.getEatSound(), 1f, 0.75f);
+        if (this.world.isRemote) {
+            Vec3d pos = this.getAnimator().getThroatPosition();
+            Random random = this.rand;
+            this.world.spawnParticle(
+                    EnumParticleTypes.ITEM_CRACK,
+                    pos.x,
+                    pos.y,
+                    pos.z,
+                    random.nextGaussian() * 0.07D,
+                    random.nextGaussian() * 0.07D,
+                    random.nextGaussian() * 0.07D,
+                    Item.getIdFromItem(stack.getItem()),
+                    stack.getMetadata()
+            );
         }
     }
 
@@ -1816,6 +1808,9 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
             }
             return false;
         }
+        // prevent doing any interactions when a hatchling rides you, the hitbox could block the player's raytraceresult for rightclick
+        if (player.isPassenger(this)) return false;
+
         ItemStack stack = player.getHeldItem(hand);
 
         final String warn = checkAccess(player);
@@ -1832,35 +1827,56 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
             return true;
         }
 
-        // prevent doing any interactions when a hatchling rides you, the hitbox could block the player's raytraceresult for rightclick
-        if (player.isPassenger(this)) return false;
-
-        if (this.isServer()) {
-            if (allow && isInertItem(stack)) {
-                /*
-                 * Sit
-                 */
-                if (this.onGround && !stack.isEmpty() && DMUtils.anyMatches(stack, OreDictionary.getOreID("stickWood"), OreDictionary.getOreID("bone"))) {
-                    L.debug("sit");
+        boolean isServer = !this.world.isRemote;
+        if (!this.isSheared() && this.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE)) {
+            IHardShears shears = stack.getCapability(DMCapabilities.HARD_SHEARS, null);
+            if (shears != null) {
+                if (isServer) {
+                    int cooldown = shears.onShear(stack, player, this);
+                    if (cooldown != 0) {
+                        this.setSheared(cooldown);
+                        this.playSound(SoundEvents.ENTITY_ITEM_BREAK, 1.0F, 1.0F);
+                        this.playSound(ModSounds.ENTITY_DRAGON_GROWL, 1.0F, 1.0F);
+                        if (!allow) {
+                            this.setAttackTarget(player);
+                        }
+                        return true;
+                    }
+                } else return true;
+            }
+        }
+        if (allow && isInertItem(stack)) {
+            /*
+             * Sit
+             */
+            if (this.onGround && !stack.isEmpty() && DMUtils.anyMatches(stack, OreDictionary.getOreID("stickWood"), OreDictionary.getOreID("bone"))) {
+                if (isServer) {
                     this.getAISit().setSitting(!this.isSitting());
                     this.getNavigator().clearPath();
                 }
-
+                return true;
+            }
+            /*
+             * GUI
+             */
+            if (player.isSneaking()) {
+                // Dragon Inventory
+                this.openGUI(player, GuiHandler.GUI_DRAGON);
+                return true;
+            }
+            if (!this.isBaby()) {
                 /*
-                 * GUI
+                 * Player Riding the Dragon
                  */
-                if (player.isSneaking()) {
-                    // Dragon Inventory
-                    this.openGUI(player, GuiHandler.GUI_DRAGON);
-                } else if (!this.isBaby()) {
-                    /*
-                     * Player Riding the Dragon
-                     */
-                    if (this.isSaddled()) {
-                        if (this.getPassengers().size() < 3) {
+                if (this.isSaddled()) {
+                    if (this.getPassengers().size() < 3) {
+                        if (isServer) {
                             this.setRidingPlayer(player);
                         }
-                    } else if (!stack.isEmpty() && stack.getItem() == Items.SADDLE) {
+                        return true;
+                    }
+                } else if (!stack.isEmpty() && stack.getItem() == Items.SADDLE) {
+                    if (isServer) {
                         if (player.capabilities.isCreativeMode) {
                             ItemStack saddle = stack.copy();
                             saddle.setCount(1);
@@ -1868,8 +1884,8 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
                         } else {
                             this.setSaddle(stack.splitStack(1));
                         }
-                        player.swingArm(hand);
                     }
+                    return true;
                 }
             }
         }
@@ -2003,15 +2019,18 @@ public class EntityTameableDragon extends EntityTameable implements IShearable, 
             if (!this.firstUpdate && armored && !this.armored) {
                 this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_HORSE_ARMOR, SoundCategory.PLAYERS, 1F, 1F, false);
             }
+            IAttributeInstance attribute = this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ARMOR);
             if (armored) {
                 replaceAttributeModifier(
-                        this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ARMOR),
+                        attribute,
                         DragonArmorItem.MODIFIER_UUID,
                         "Dragon Armor Bonus",
                         ((DragonArmorItem) stack.getItem()).protection,
                         0,
                         false
                 );
+            } else if (attribute != null) {
+                attribute.removeModifier(DragonArmorItem.MODIFIER_UUID);
             }
             this.armored = armored;
         } else if (DATA_SADDLE.equals(key)) {

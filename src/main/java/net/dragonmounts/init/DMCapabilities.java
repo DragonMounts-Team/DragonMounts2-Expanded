@@ -2,6 +2,8 @@ package net.dragonmounts.init;
 
 import net.dragonmounts.capability.ArmorEffectManager;
 import net.dragonmounts.capability.IArmorEffectManager;
+import net.dragonmounts.capability.IHardShears;
+import net.dragonmounts.util.DummyStorage;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -19,8 +21,12 @@ public class DMCapabilities {
     @CapabilityInject(IArmorEffectManager.class)
     public static final Capability<IArmorEffectManager> ARMOR_EFFECT_MANAGER = null;
 
+    @CapabilityInject(IHardShears.class)
+    public static final Capability<IHardShears> HARD_SHEARS = null;
+
     public static void register() {
         CapabilityManager.INSTANCE.register(IArmorEffectManager.class, new ArmorEffectManager.Storage(), () -> null);
+        CapabilityManager.INSTANCE.register(IHardShears.class, new DummyStorage<>(), () -> null);
     }
 
     @SubscribeEvent

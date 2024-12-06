@@ -149,7 +149,7 @@ tile.terra_egg.name=テラドラゴンエッグ
 # Item Info
 item.removeNBT=<スニーク+右クリックでドラゴンの拘束を解除>
 item.armoryitems.info=の鱗で鍛えられた
-item.diamondshears.info=飼いならされたドラゴンを殺さずに鱗を手に入れるために使用します。飼いならされていないドラゴンは攻撃してきます
+tooltip.dragonmounts.hard_shears=飼いならされたドラゴンを殺さずに鱗を手に入れるために使用します。飼いならされていないドラゴンは攻撃してきます
 item.dragonamulet.info=右クリックしてドラゴンを保管して運び、地面を右クリックすると召喚できます
 item.carriage.info=ドラゴンがボートのように複数の乗客を運ぶために使用される
 item.whistle.info=所有している飼いならしたドラゴンを右クリックして操作します

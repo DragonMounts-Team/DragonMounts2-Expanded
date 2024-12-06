@@ -5,7 +5,6 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.api.IDescribableArmorEffect;
 import net.dragonmounts.item.*;
-import net.dragonmounts.objects.items.ItemDiamondShears;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.DragonScaleArmorSuit;
 import net.minecraft.entity.Entity;
@@ -33,10 +32,10 @@ public class DMItems {
     public static final DragonScalesItem MOONLIGHT_DRAGON_SCALES = createDragonScalesItem("moonlight_dragon_scales", DragonTypes.MOONLIGHT);
 
     //Dragon Armor
-    public static final DragonArmorItem IRON_DRAGON_ARMOR = createDragonArmorItem("iron_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "iron.png", 5);
-    public static final DragonArmorItem GOLDEN_DRAGON_ARMOR = createDragonArmorItem("golden_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "gold.png", 7);
-    public static final DragonArmorItem DIAMOND_DRAGON_ARMOR = createDragonArmorItem("diamond_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "diamond.png", 11);
-    public static final DragonArmorItem EMERALD_DRAGON_ARMOR = createDragonArmorItem("emerald_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "emerald.png", 5);
+    public static final DragonArmorItem IRON_DRAGON_ARMOR = createDragonArmorItem("iron_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "iron.png", 3);
+    public static final DragonArmorItem GOLDEN_DRAGON_ARMOR = createDragonArmorItem("golden_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "gold.png", 5);
+    public static final DragonArmorItem DIAMOND_DRAGON_ARMOR = createDragonArmorItem("diamond_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "diamond.png", 9);
+    public static final DragonArmorItem EMERALD_DRAGON_ARMOR = createDragonArmorItem("emerald_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "emerald.png", 3);
 
     //Dragon Scale Swords
     public static final DragonScaleSwordItem AETHER_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("aether_dragon_scale_sword", DragonTypes.AETHER, DMTiers.AETHER_DRAGON_SCALE);
@@ -288,8 +287,8 @@ public class DMItems {
     public static final DragonSpawnEggItem ZOMBIE_DRAGON_SPAWN_EGG = createDragonSpawnEgg("zombie_dragon_spawn_egg", DragonTypes.ZOMBIE, 0x56562E, 0xA7BF2F);
     //?
     public static final VariantSwitcherItem VARIANT_SWITCHER = createItem("variant_switcher", "variant_switcher", new VariantSwitcherItem());
-    /*Shears
-    public static final TieredShearsItem DIAMOND_SHEARS = createTieredShearsItem("diamond_shears", ItemTier.DIAMOND);
+    //Shears
+    public static final HardShearsItem DIAMOND_SHEARS = createHardShearsItem("diamond_shears", Item.ToolMaterial.DIAMOND, 345);/*
     //Carriages
     public static final CarriageItem ACACIA_CARRIAGE = createItem("acacia_carriage", new CarriageItem(CarriageTypes.ACACIA));
     public static final CarriageItem BIRCH_CARRIAGE = createItem("birch_carriage", new CarriageItem(CarriageTypes.BIRCH));
@@ -445,11 +444,11 @@ public class DMItems {
         return item;
     }
 
-    /*static TieredShearsItem createTieredShearsItem(String name, IItemTier tier) {
-        TieredShearsItem item = new TieredShearsItem(tier);
-        ITEMS.add(item);
+    static HardShearsItem createHardShearsItem(String name, Item.ToolMaterial tier, int durability) {
+        HardShearsItem item = new HardShearsItem(tier);
+        ITEMS.add(item.setMaxDamage(durability).setTranslationKey(name).setRegistryName(name));
         return item;
-    }*/
+    }
 
     @SuppressWarnings("DataFlowIssue")
     public static void bindRepairMaterials() {
@@ -493,7 +492,4 @@ public class DMItems {
         DMMaterials.MOONLIGHT_DRAGON_SCALE.setRepairItem(stack);
         DMTiers.MOONLIGHT_DRAGON_SCALE.setRepairItem(stack);
     }
-
-    //Shears Start
-    public static final ItemDiamondShears diamond_shears = new ItemDiamondShears(Item.ToolMaterial.DIAMOND, "diamond_shears");
 }

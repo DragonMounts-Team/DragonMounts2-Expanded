@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraft.enchantment.EnchantmentHelper int getEnchantmentLevel(net.minecraft.enchantment.Enchantment, net.minecraft.item.ItemStack) 0'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+</root>

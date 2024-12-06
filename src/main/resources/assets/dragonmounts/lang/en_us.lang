@@ -99,7 +99,6 @@ tile.terra_egg.name=Terra Dragon Egg
 # Item Info
 item.removeNBT=<Sneak + Right Click to unbind a Dragon>
 item.armoryitems.info=Forged with the Scales of
-item.diamondshears.info=Used to get scales from tamed dragons without killing it. Untamed ones will attack
 item.dragonamulet.info=Right Click to store a dragon and carry it, right click on ground to summon
 item.carriage.info=Used to make dragons carry multiple passengers like a boat
 item.whistle.info=Right Click an owned and tamed dragon to control it
@@ -180,6 +179,9 @@ tooltip.dragonmounts.name=Name: %s
 tooltip.dragonmounts.health=Health: %s
 tooltip.dragonmounts.owner=Owner: %s
 tooltip.dragonmounts.gender=Gender: %s
+tooltip.dragonmounts.hard_shears=Used to get scales from dragons
+
+item.modifiers.equipped=When equipped:
 
 argument.player.toomany=Only one player is allowed, but the provided selector allows more than one
 

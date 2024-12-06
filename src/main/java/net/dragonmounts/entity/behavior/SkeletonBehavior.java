@@ -6,7 +6,6 @@ import net.dragonmounts.objects.entity.entitytameabledragon.breath.weapons.Breat
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
 
@@ -16,8 +15,7 @@ public class SkeletonBehavior implements DragonType.Behavior {
 
     @Override
     public boolean isHabitatEnvironment(Entity egg) {
-        if (egg.posY * 4 > egg.world.getHeight()) return false;// woah dude, too high!
-        return egg.world.getLightBrightness(new BlockPos(egg)) < 4;// too bright!
+        return egg.posY * 5 < egg.world.getHeight() && egg.getBrightness() < 0.25;
     }
 
     @Nullable

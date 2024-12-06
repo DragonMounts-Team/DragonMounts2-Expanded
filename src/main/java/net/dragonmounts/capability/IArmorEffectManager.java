@@ -28,10 +28,4 @@ public interface IArmorEffectManager {
     void readNBT(NBTTagCompound tag);
 
     void sendInitPacket();
-
-    interface Provider {
-        default ArmorEffectManager dragonmounts$getManager() {
-            throw new NullPointerException();
-        }
-    }
 }

@@ -147,7 +147,7 @@ tile.terra_egg.name=Oeuf de Dragon Terrestre
 # Item Info
 item.removeNBT=<Sneak + Clic Droit pour délier un Dragon>
 item.armoryitems.info=Forgé avec les écailles d'un
-item.diamondshears.info=Utilisées pour récolter les écailles d'un Dragon apprivoisé. Ceux sauvages vous attaquerons
+tooltip.dragonmounts.hard_shears=Utilisées pour récolter les écailles d'un Dragon apprivoisé. Ceux sauvages vous attaquerons
 item.dragonamulet.info=Clic Droit pour stocker un Dragon et le transporter, Clic Droit sur le sol pour le faire apparaitre
 item.carriage.info=Utilisé pour faire en sorte que les Dragons puissent transporter plusieurs passagers
 item.whistle.info=Clic Droit sur un Dragon possédé et apprivoisé pour le contrôler

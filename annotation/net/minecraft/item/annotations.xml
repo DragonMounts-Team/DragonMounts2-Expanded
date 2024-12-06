@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraft.item.ItemStack T getCapability(net.minecraftforge.common.capabilities.Capability&lt;T&gt;, net.minecraft.util.EnumFacing) 0'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+</root>

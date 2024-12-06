@@ -84,7 +84,6 @@ tile.terra_egg.name=土纹龙 蛋
 
 item.removeNBT=<潜行+右键以解除绑定>
 item.armoryitems.info=用龙鳞锻造
-item.diamondshears.info=用于从驯服的龙身上获取龙鳞而不杀死它，野生的会攻击
 item.dragonamulet.info=右键储存一条被驯化过的龙并携带它，并可以通过右键点击地面重新召唤
 item.carriage.info=让龙像一艘船一样携带多个生物
 item.whistle.info=左键单击绑定驯服的龙并通过右键使用此物品来控制它，不必担心左键绑定时会伤害到你的龙
@@ -155,6 +154,9 @@ tooltip.dragonmounts.age=年龄：%s
 tooltip.dragonmounts.health=生命值：%s
 tooltip.dragonmounts.owner=主人：%s
 tooltip.dragonmounts.gender=性别：%s
+tooltip.dragonmounts.hard_shears=从龙身上剪下龙鳞
+
+item.modifiers.equipped=在装备后：
 
 argument.player.toomany=Only one player is allowed, but the provided selector allows more than one
 

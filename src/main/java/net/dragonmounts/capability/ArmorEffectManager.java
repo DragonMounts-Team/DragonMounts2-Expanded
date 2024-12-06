@@ -25,12 +25,13 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static java.lang.System.arraycopy;
+import static java.util.Arrays.fill;
 import static net.dragonmounts.DragonMounts.NETWORK_WRAPPER;
 import static net.dragonmounts.client.ClientUtil.getLocalPlayer;
 import static net.dragonmounts.init.DMCapabilities.ARMOR_EFFECT_MANAGER;
-import static java.lang.System.arraycopy;
-import static java.util.Arrays.fill;
 
+@SuppressWarnings("DataFlowIssue")
 public final class ArmorEffectManager implements IArmorEffectManager {
     private static ArmorEffectManager LOCAL_MANAGER = null;
     private static SInitCooldownPacket LOCAL_CACHE = null;
@@ -430,7 +431,7 @@ public final class ArmorEffectManager implements IArmorEffectManager {
         }
     }
 
-    public static class LazyProvider implements ICapabilitySerializable<NBTTagCompound>, IArmorEffectManager.Provider {
+    public static class LazyProvider implements ICapabilitySerializable<NBTTagCompound> {
         public final ArmorEffectManager manager;
 
         public LazyProvider(EntityPlayer player) {
@@ -454,12 +455,8 @@ public final class ArmorEffectManager implements IArmorEffectManager {
 
         @Nullable
         @Override
-        public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing side) {
+        public <T> T getCapability(@Nullable Capability<T> capability, @Nullable EnumFacing side) {
             return ARMOR_EFFECT_MANAGER == capability ? ARMOR_EFFECT_MANAGER.cast(this.manager) : null;
-        }
-
-        public ArmorEffectManager dragonmounts$getManager() {
-            return this.manager;
         }
     }
 

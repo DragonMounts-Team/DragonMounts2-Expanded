@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraft.inventory.Container net.minecraft.inventory.Slot getSlot(int)'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+</root>

@@ -45,7 +45,6 @@ public class ModItems {
     //Carriages end
 
     static {
-        DRAGON_INTERACTABLE.add(DMItems.diamond_shears);
         DRAGON_INTERACTABLE.add(ModItems.dragon_wand);
         DRAGON_INTERACTABLE.add(ModItems.dragon_whistle);
         DRAGON_INTERACTABLE.add(DMItems.AMULET);
