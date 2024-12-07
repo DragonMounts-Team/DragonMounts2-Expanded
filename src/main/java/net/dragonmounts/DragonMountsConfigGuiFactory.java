@@ -40,7 +40,8 @@ public class DragonMountsConfigGuiFactory implements IModGuiFactory {
         return new GuiConfig(parent, Arrays.asList(
                 new ConfigElement(config.getCategory(DragonMountsConfig.CATEGORY_MAIN)),
                 new ConfigElement(config.getCategory(DragonMountsConfig.CATEGORY_WORLDGEN)),
-                new ConfigElement(config.getCategory(DragonMountsConfig.CATEGORY_CLIENTDM2))
+                new ConfigElement(config.getCategory(DragonMountsConfig.CATEGORY_CLIENTDM2)),
+                new ConfigElement(config.getCategory(DragonMountsConfig.CATEGORY_EFFECTS_ID))
         ), DragonMountsTags.MOD_ID, false, false, DragonMountsTags.MOD_NAME);
 	}
 }

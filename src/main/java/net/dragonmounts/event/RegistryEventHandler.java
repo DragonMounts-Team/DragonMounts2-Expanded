@@ -10,6 +10,7 @@ import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.client.gui.GuiHandler;
 import net.dragonmounts.compat.DragonMountsCompat;
 import net.dragonmounts.compat.DragonTypeCompat;
+import net.dragonmounts.effects.DarkDragonBlessEffect;
 import net.dragonmounts.entity.breath.sound.SoundEffectName;
 import net.dragonmounts.init.*;
 import net.dragonmounts.registry.CarriageType;
@@ -22,6 +23,8 @@ import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -66,6 +69,12 @@ public class RegistryEventHandler {
             registry.register(DMItems.TEST_RUNNER);
         }
         DMUtils.getLogger().info("Item Registries Successfully Registered!");
+    }
+    @SubscribeEvent
+    public static void registerEffects(RegistryEvent.Register<Potion> event) {
+        event.getRegistry().registerAll(
+                DMEffect.DARK_DRAGON_BLESS.setRegistryName(new ResourceLocation(DragonMountsTags.MOD_ID, "dark_dragon_bless"))
+        );
     }
 
     @SubscribeEvent
