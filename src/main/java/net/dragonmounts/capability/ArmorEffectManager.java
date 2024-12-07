@@ -22,7 +22,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static java.lang.System.arraycopy;
@@ -449,8 +448,8 @@ public final class ArmorEffectManager implements IArmorEffectManager {
         }
 
         @Override
-        public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-            return true;
+        public boolean hasCapability(@Nullable Capability<?> capability, @Nullable EnumFacing facing) {
+            return ARMOR_EFFECT_MANAGER == capability;
         }
 
         @Nullable
