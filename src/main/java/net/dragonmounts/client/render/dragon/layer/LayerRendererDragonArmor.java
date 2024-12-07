@@ -1,7 +1,7 @@
 package net.dragonmounts.client.render.dragon.layer;
 
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.item.DragonArmorItem;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
  */
 public class LayerRendererDragonArmor extends DragonLayerRenderer {
     @Override
-    public void doRenderLayer(EntityTameableDragon dragon, float moveTime, float moveSpeed, float partialTicks, float ticksExisted, float lookYaw, float lookPitch, float scale) {
+    public void doRenderLayer(TameableDragonEntity dragon, float moveTime, float moveSpeed, float partialTicks, float ticksExisted, float lookYaw, float lookPitch, float scale) {
         ItemStack stack = dragon.getArmor();
         if (stack.isEmpty()) return;
         Item item = stack.getItem();

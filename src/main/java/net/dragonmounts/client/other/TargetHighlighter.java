@@ -3,7 +3,7 @@ package net.dragonmounts.client.other;
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.client.userinput.DragonOrbControl;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.BreathWeaponTarget;
+import net.dragonmounts.entity.breath.BreathWeaponTarget;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderGlobal;

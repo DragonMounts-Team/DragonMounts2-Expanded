@@ -1,7 +1,7 @@
 package net.dragonmounts.inventory;
 
 import net.dragonmounts.item.DragonArmorItem;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -14,10 +14,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerDragon extends Container {
 	public final DragonInventory inventory;
-	private final EntityTameableDragon dragon;
+	private final TameableDragonEntity dragon;
 	public static final int chestStartIndex = 3;
 
-	public ContainerDragon(final EntityTameableDragon dragon, EntityPlayer player) {
+	public ContainerDragon(final TameableDragonEntity dragon, EntityPlayer player) {
 		DragonInventory inventory = this.inventory = dragon.inventory;
 		this.dragon = dragon;
 		final int inventoryColumn = 9;

@@ -2,9 +2,9 @@ package net.dragonmounts.event;
 
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsConfig;
-import net.dragonmounts.inits.ModKeys;
-import net.dragonmounts.objects.entity.entitycarriage.EntityCarriage;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
+import net.dragonmounts.entity.CarriageEntity;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.init.DMKeyBindings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,7 +21,7 @@ public class DragonViewEvent {
     /**
      * Copied from EntitytRenderer.orientCamera, uses raytraceresult to reduce thirdPersonView and unable xRay
      */
-    private double thirdPersonDistance(EntityTameableDragon dragon, double thirdPersonDist, float yaw, float pitch, EntityPlayer rider, double partialTicks) { // partial ticks are unused
+    private double thirdPersonDistance(TameableDragonEntity dragon, double thirdPersonDist, float yaw, float pitch, EntityPlayer rider, double partialTicks) { // partial ticks are unused
         if (this.mc.gameSettings.thirdPersonView == 2) pitch += 180.0F;
         float eyeHeight = dragon.getEyeHeight();
         double x = rider.prevPosX + (rider.posX - rider.prevPosX);
@@ -69,8 +69,8 @@ public class DragonViewEvent {
             EntityPlayer player = (EntityPlayer) event.getEntity();
             int currentView = DragonMounts.PROXY.getDragon3rdPersonView();
 
-            if (player.getRidingEntity() instanceof EntityTameableDragon) {
-                EntityTameableDragon dragon = (EntityTameableDragon) player.getRidingEntity();
+            if (player.getRidingEntity() instanceof TameableDragonEntity) {
+                TameableDragonEntity dragon = (TameableDragonEntity) player.getRidingEntity();
                 // third person zoom is 20
                 double thirdPersonDistance = thirdPersonDistance(dragon, DragonMountsConfig.ThirdPersonZoom, event.getYaw(), event.getPitch(), player, event.getRenderPartialTicks());
 //            double thirdPersonDistance = DragonMountsConfig.ThirdPersonZoom * dragon.getScale();
@@ -97,10 +97,10 @@ public class DragonViewEvent {
                         GlStateManager.translate(4.7F, -0.08F * dragon.getScale(), thirdPersonDistance);
                     }
                 }
-            } else if (player.getRidingEntity() instanceof EntityCarriage) {
-                EntityCarriage carriage = (EntityCarriage) player.getRidingEntity();
-                if (carriage.getRidingEntity() instanceof EntityTameableDragon) {
-                    EntityTameableDragon dragon = (EntityTameableDragon) carriage.getRidingEntity();
+            } else if (player.getRidingEntity() instanceof CarriageEntity) {
+                CarriageEntity carriage = (CarriageEntity) player.getRidingEntity();
+                if (carriage.getRidingEntity() instanceof TameableDragonEntity) {
+                    TameableDragonEntity dragon = (TameableDragonEntity) carriage.getRidingEntity();
                     double thirdPersonDistance = thirdPersonDistance(dragon, DragonMountsConfig.ThirdPersonZoom * dragon.getScale(), event.getYaw(), event.getPitch(),
                             player, event.getRenderPartialTicks());
 //                double thirdPersonDistance = DragonMountsConfig.ThirdPersonZoom * dragon.getScale();
@@ -149,8 +149,8 @@ public class DragonViewEvent {
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         if (event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-            if (player.getRidingEntity() instanceof EntityTameableDragon) {
-                if (ModKeys.dragon_change_view.isPressed()) {
+            if (player.getRidingEntity() instanceof TameableDragonEntity) {
+                if (DMKeyBindings.dragon_change_view.isPressed()) {
                     int currentView = DragonMounts.PROXY.getDragon3rdPersonView();
                     if (currentView + 1 > 2) {
                         currentView = 0;

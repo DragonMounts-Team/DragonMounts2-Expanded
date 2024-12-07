@@ -101,12 +101,12 @@ item.dragon_whistle.name=ドラゴンホイッスル
 item.dragon_amulet.name=ドラゴンアミュレット
 item.dragon_orb.name=ドラゴンオーブ
 
-item.carriage_oak.name=オークのカーゴボブ
-item.carriage_birch.name=白樺のカーゴボブ
-item.carriage_spruce.name=トウヒのカーゴボブ
-item.carriage_acacia.name=アカシアのカーゴボブ
-item.carriage_dark_oak.name=ダークオークのカーゴボブ
-item.carriage_jungle.name=ジャングルのカーゴボブ
+item.oak_carriage.name=オークのカーゴボブ
+item.birch_carriage.name=白樺のカーゴボブ
+item.spruce_carriage.name=トウヒのカーゴボブ
+item.acacia_carriage.name=アカシアのカーゴボブ
+item.dark_oak_carriage.name=ダークオークのカーゴボブ
+item.jungle_carriage.name=ジャングルのカーゴボブ
 
 # Armory Items
 item.dragon_scales.name=ドラゴンスケール
@@ -151,7 +151,7 @@ item.removeNBT=<スニーク+右クリックでドラゴンの拘束を解除>
 item.armoryitems.info=の鱗で鍛えられた
 tooltip.dragonmounts.hard_shears=飼いならされたドラゴンを殺さずに鱗を手に入れるために使用します。飼いならされていないドラゴンは攻撃してきます
 item.dragonamulet.info=右クリックしてドラゴンを保管して運び、地面を右クリックすると召喚できます
-item.carriage.info=ドラゴンがボートのように複数の乗客を運ぶために使用される
+tooltip.dragonmounts.carriage=ドラゴンがボートのように複数の乗客を運ぶために使用される
 item.whistle.info=所有している飼いならしたドラゴンを右クリックして操作します
 item.whistle.nullBlockPos=テレポートできません
 

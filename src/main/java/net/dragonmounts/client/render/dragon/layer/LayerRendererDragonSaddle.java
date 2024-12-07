@@ -1,13 +1,13 @@
 package net.dragonmounts.client.render.dragon.layer;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
+import net.dragonmounts.entity.TameableDragonEntity;
 
 /**
  * Created by EveryoneElse on 14/06/2015.
  */
 public class LayerRendererDragonSaddle extends DragonLayerRenderer {
     @Override
-    public void doRenderLayer(EntityTameableDragon dragon, float moveTime,
+    public void doRenderLayer(TameableDragonEntity dragon, float moveTime,
                               float moveSpeed, float partialTicks, float ticksExisted, float lookYaw,
                               float lookPitch, float scale) {
         if (!dragon.isSaddled()) return;

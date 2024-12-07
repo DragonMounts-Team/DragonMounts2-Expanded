@@ -1,6 +1,6 @@
 package net.dragonmounts.client.render.dragon.breathweaponFX;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.effects.ClientBreathNodeEntity;
+import net.dragonmounts.entity.breath.effects.ClientBreathNodeEntity;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;

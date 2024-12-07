@@ -14,9 +14,9 @@ import net.dragonmounts.client.model.dragon.DragonModel;
 import net.dragonmounts.client.model.dragon.DragonModelMode;
 import net.dragonmounts.client.render.dragon.layer.DragonLayerRenderer;
 import net.dragonmounts.client.variant.VariantAppearance;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMBlocks;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStageHelper;
+import net.dragonmounts.entity.helper.DragonLifeStageHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
@@ -40,7 +40,7 @@ import static org.lwjgl.opengl.GL11.*;
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class DragonRenderer extends RenderLiving<EntityTameableDragon> {
+public class DragonRenderer extends RenderLiving<TameableDragonEntity> {
 
     public static final String TEX_BASE = "textures/entities/dragon/";
 
@@ -49,7 +49,7 @@ public class DragonRenderer extends RenderLiving<EntityTameableDragon> {
     }
 
     @Override
-    public void doRender(EntityTameableDragon dragon, double x, double y, double z, float yaw, float partialTicks) {
+    public void doRender(TameableDragonEntity dragon, double x, double y, double z, float yaw, float partialTicks) {
         renderName(dragon, x, y, z);
         if (dragon.isEgg()) {
             renderEgg(dragon, x, y, z, yaw, partialTicks);
@@ -70,7 +70,7 @@ public class DragonRenderer extends RenderLiving<EntityTameableDragon> {
     }
 
     @Override
-    protected void renderLayers(EntityTameableDragon dragon, float moveTime, float moveSpeed, float partialTicks, float ticksExisted, float lookYaw, float lookPitch, float scale) {
+    protected void renderLayers(TameableDragonEntity dragon, float moveTime, float moveSpeed, float partialTicks, float ticksExisted, float lookYaw, float lookPitch, float scale) {
         VariantAppearance appearance = dragon.getVariant().appearance;
         DragonModel model = appearance.model;
         for (DragonLayerRenderer layer : appearance.layers) {
@@ -87,7 +87,7 @@ public class DragonRenderer extends RenderLiving<EntityTameableDragon> {
      * Renders the model in RenderLiving
      */
     @Override
-    protected void renderModel(EntityTameableDragon dragon, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
+    protected void renderModel(TameableDragonEntity dragon, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
 
         float death = dragon.getDeathTime() / (float) dragon.getMaxDeathTime();
 
@@ -112,7 +112,7 @@ public class DragonRenderer extends RenderLiving<EntityTameableDragon> {
         }
     }
 
-    protected void renderEgg(EntityTameableDragon dragon, double x, double y, double z, float pitch, float partialTicks) {
+    protected void renderEgg(TameableDragonEntity dragon, double x, double y, double z, float pitch, float partialTicks) {
         // apply egg wiggle
         DragonLifeStageHelper lifeStage = dragon.getLifeStageHelper();
         float tickX = lifeStage.getEggWiggleX();
@@ -150,7 +150,7 @@ public class DragonRenderer extends RenderLiving<EntityTameableDragon> {
     }
 
     @Override
-    protected void applyRotations(EntityTameableDragon dragon, float par2, float par3, float par4) {
+    protected void applyRotations(TameableDragonEntity dragon, float par2, float par3, float par4) {
         GlStateManager.rotate(180 - par3, 0, 1, 0);
     }
 
@@ -159,14 +159,14 @@ public class DragonRenderer extends RenderLiving<EntityTameableDragon> {
      * the model is rendered. Args: entityLiving, partialTickTime
      */
     @Override
-    protected void preRenderCallback(EntityTameableDragon dragon, float partialTicks) {
+    protected void preRenderCallback(TameableDragonEntity dragon, float partialTicks) {
         // a fully grown dragon is larger than the model by this amount
         float scale = dragon.getScale() * 1.6F;//TODO: update VariantAppearance
         GlStateManager.scale(scale, scale, scale);
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(EntityTameableDragon dragon) {
+    protected ResourceLocation getEntityTexture(TameableDragonEntity dragon) {
         return dragon.getVariant().appearance.getBody(dragon);
     }
 }

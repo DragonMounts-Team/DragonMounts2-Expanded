@@ -1,14 +1,14 @@
 package net.dragonmounts.entity.behavior;
 
-import net.dragonmounts.inits.ModSounds;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.BreathNode;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.effects.PoisonBreathFX;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.sound.SoundEffectName;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.sound.SoundState;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.weapons.BreathWeapon;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.weapons.BreathWeaponPoison;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStage;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.breath.BreathNode;
+import net.dragonmounts.entity.breath.effects.PoisonBreathFX;
+import net.dragonmounts.entity.breath.sound.SoundEffectName;
+import net.dragonmounts.entity.breath.sound.SoundState;
+import net.dragonmounts.entity.breath.weapons.BreathWeapon;
+import net.dragonmounts.entity.breath.weapons.BreathWeaponPoison;
+import net.dragonmounts.entity.helper.DragonLifeStage;
+import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
@@ -18,11 +18,11 @@ import javax.annotation.Nullable;
 
 public class ZombieBehavior implements DragonType.Behavior {
     @Override
-    public void tick(EntityTameableDragon dragon) {}
+    public void tick(TameableDragonEntity dragon) {}
 
     @Nullable
     @Override
-    public BreathWeapon createBreathWeapon(EntityTameableDragon dragon) {
+    public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
         return new BreathWeaponPoison(dragon);
     }
 
@@ -32,8 +32,8 @@ public class ZombieBehavior implements DragonType.Behavior {
     }
 
     @Override
-    public SoundEvent getLivingSound(EntityTameableDragon dragon) {
-        return dragon.isBaby() ? ModSounds.ENTITY_DRAGON_HATCHLING_GROWL : ModSounds.ZOMBIE_DRAGON_GROWL;
+    public SoundEvent getLivingSound(TameableDragonEntity dragon) {
+        return dragon.isBaby() ? DMSounds.ENTITY_DRAGON_HATCHLING_GROWL : DMSounds.ZOMBIE_DRAGON_GROWL;
     }
 
     @Override

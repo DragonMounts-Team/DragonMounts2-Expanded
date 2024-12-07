@@ -1,11 +1,11 @@
 package net.dragonmounts.entity.behavior;
 
-import net.dragonmounts.inits.ModSounds;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.BreathNode;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.effects.EnderBreathFX;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.weapons.BreathWeapon;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.weapons.BreathWeaponEnder;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.breath.BreathNode;
+import net.dragonmounts.entity.breath.effects.EnderBreathFX;
+import net.dragonmounts.entity.breath.weapons.BreathWeapon;
+import net.dragonmounts.entity.breath.weapons.BreathWeaponEnder;
+import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundEvent;
@@ -14,20 +14,20 @@ import net.minecraft.world.World;
 
 public class EnderBehavior implements DragonType.Behavior {
     @Override
-    public void tick(EntityTameableDragon dragon) {}
+    public void tick(TameableDragonEntity dragon) {}
 
     @Override
-    public BreathWeapon createBreathWeapon(EntityTameableDragon dragon) {
+    public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
         return new BreathWeaponEnder(dragon);
     }
 
     @Override
-    public SoundEvent getLivingSound(EntityTameableDragon dragon) {
-        return ModSounds.ENTITY_DRAGON_BREATHE;
+    public SoundEvent getLivingSound(TameableDragonEntity dragon) {
+        return DMSounds.ENTITY_DRAGON_BREATHE;
     }
 
     @Override
-    public SoundEvent getRoarSound(EntityTameableDragon dragon) {
+    public SoundEvent getRoarSound(TameableDragonEntity dragon) {
         return SoundEvents.ENTITY_ENDERDRAGON_GROWL;
     }
 

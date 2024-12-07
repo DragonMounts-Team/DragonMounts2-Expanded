@@ -2,9 +2,9 @@
 package net.dragonmounts.client.userinput;
 
 import net.dragonmounts.DragonMounts;
-import net.dragonmounts.inits.ModItems;
+import net.dragonmounts.entity.breath.BreathWeaponTarget;
+import net.dragonmounts.init.DMItems;
 import net.dragonmounts.network.MessageDragonTarget;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.BreathWeaponTarget;
 import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.RayTraceServer;
 import net.minecraft.client.Minecraft;
@@ -76,7 +76,7 @@ public class DragonOrbControl {
 
     boolean oldTriggerHeld = triggerHeld;
 
-    if (!DMUtils.hasEquipped(entityPlayerSP, ModItems.dragon_orb)) {
+    if (!DMUtils.hasEquipped(entityPlayerSP, DMItems.DRAGON_ORB)) {
       enableClickInterception(false);
       triggerHeld = false;
       targetBeingLookedAt = null;

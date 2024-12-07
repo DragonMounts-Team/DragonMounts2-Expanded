@@ -1,7 +1,7 @@
 package net.dragonmounts.client.render.dragon.layer;
 
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.inventory.DragonInventory;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.util.math.Interpolation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBanner;
@@ -20,7 +20,7 @@ public class LayerRendererDragonBanner extends DragonLayerRenderer {
     private final TileEntityBanner banner4=new TileEntityBanner();
 
     @Override
-    public void doRenderLayer(EntityTameableDragon dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void doRenderLayer(TameableDragonEntity dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         DragonInventory inventory = dragon.inventory;
         ItemStack itemstack1 = inventory.getBanner(0);
         ItemStack itemstack2 = inventory.getBanner(1);

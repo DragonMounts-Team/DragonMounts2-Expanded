@@ -3,7 +3,7 @@ package net.dragonmounts.item;
 import net.dragonmounts.capability.IHardShears;
 import net.dragonmounts.init.DMCapabilities;
 import net.dragonmounts.init.DMItemGroups;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.util.DMUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -21,23 +21,24 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class HardShearsItem extends ItemShears implements IHardShears, ICapabilityProvider {
-    public final ToolMaterial iter;
+    public final ToolMaterial tier;
     public final float speedFactor;
 
-    public HardShearsItem(ToolMaterial iter) {
-        this.iter = iter;
-        this.speedFactor = iter.getEfficiency() / ToolMaterial.IRON.getEfficiency();
+    public HardShearsItem(ToolMaterial tier) {
+        this.tier = tier;
+        this.speedFactor = tier.getEfficiency() / ToolMaterial.IRON.getEfficiency();
         this.setCreativeTab(CreativeTabs.TOOLS);
     }
 
     @Override
-    public int onShear(ItemStack stack, EntityPlayer player, EntityTameableDragon dragon) {
+    public int onShear(ItemStack stack, EntityPlayer player, TameableDragonEntity dragon) {
         DragonScalesItem item = dragon.getVariant().type.getInstance(DragonScalesItem.class, null);
         if (item == null) return 0;
         ItemStack scales = new ItemStack(item, 2 + dragon.getRNG().nextInt(3));
@@ -54,6 +55,12 @@ public class HardShearsItem extends ItemShears implements IHardShears, ICapabili
     public float getDestroySpeed(ItemStack stack, IBlockState state) {
         float speed = super.getDestroySpeed(stack, state);
         return speed > 1.0F ? speed * this.speedFactor : speed;
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack ingredient) {
+        ItemStack matcher = this.tier.getRepairItemStack();
+        return !matcher.isEmpty() && OreDictionary.itemMatches(matcher, ingredient, false);
     }
 
     @Override

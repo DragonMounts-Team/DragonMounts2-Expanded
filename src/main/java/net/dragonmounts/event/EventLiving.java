@@ -1,6 +1,6 @@
 package net.dragonmounts.event;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
+import net.dragonmounts.entity.TameableDragonEntity;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.EntityMountEvent;
@@ -10,8 +10,8 @@ public class EventLiving {
 
     @SubscribeEvent
     public void onEntityMount(EntityMountEvent event) {
-        if (event.getEntityBeingMounted() instanceof EntityTameableDragon) {
-            EntityTameableDragon dragon = (EntityTameableDragon) event.getEntityBeingMounted();
+        if (event.getEntityBeingMounted() instanceof TameableDragonEntity) {
+            TameableDragonEntity dragon = (TameableDragonEntity) event.getEntityBeingMounted();
             if (event.isDismounting() && event.getEntityMounting() instanceof EntityPlayer && !event.getEntityMounting().world.isRemote) {
                 EntityPlayer player = (EntityPlayer) event.getEntityMounting();
 

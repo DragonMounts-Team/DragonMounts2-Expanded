@@ -47,7 +47,7 @@ item.whistle.info=Щелкните левой кнопкой мыши по пр�
 item.command.new_home=Новая домашняя точка
 dragon.locked=Хозяин заблокировал дракона
 tooltip.dragonmounts.hard_shears=Используется для получения чешуи драконов, не убивая их. Неприрученный дракон нападет
-item.carriage.info=Используется чтобы драконы могли перевозить несколько пассажиров, как лодка
+tooltip.dragonmounts.carriage=Используется чтобы драконы могли перевозить несколько пассажиров, как лодка
 egg.cantHatchEnd.DragonMounts=Дракон не может вылупится из яйца в Крае
 
 item.diamond_shears.name=Алмазные ножницы
@@ -56,12 +56,12 @@ item.structure_spawner.name=Structure Spawner (Debug)
 tile.dragon_nest.name=Блок гнезда
 item.dragonEgg.name=%s Яйцо
 
-item.carriage_oak.name=Дубовая каретка
-item.carriage_birch.name=Березовая каретка
-item.carriage_spruce.name=Еловая каретка
-item.carriage_acacia.name=Акациевая каретка
-item.carriage_dark_oak.name=Каретка из темного дуба
-item.carriage_jungle.name=Джунглиевая каретка
+item.oak_carriage.name=Дубовая каретка
+item.birch_carriage.name=Березовая каретка
+item.spruce_carriage.name=Еловая каретка
+item.acacia_carriage.name=Акациевая каретка
+item.dark_oak_carriage.name=Каретка из темного дуба
+item.jungle_carriage.name=Джунглиевая каретка
 
 item.ender_dragonscales.name=Драконья чешуя
 item.ender_dragon_pickaxe.name=Драконья кирка

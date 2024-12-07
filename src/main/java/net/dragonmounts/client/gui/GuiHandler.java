@@ -1,9 +1,9 @@
 package net.dragonmounts.client.gui;
 
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.inventory.ContainerDragon;
 import net.dragonmounts.inventory.DragonCoreContainer;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -21,8 +21,8 @@ public class GuiHandler implements IGuiHandler {
         switch (id) {
             case GUI_DRAGON:
                 entity = world.getEntityByID(x);
-                if (entity instanceof EntityTameableDragon) {
-                    return new ContainerDragon((EntityTameableDragon) entity, player);
+                if (entity instanceof TameableDragonEntity) {
+                    return new ContainerDragon((TameableDragonEntity) entity, player);
                 }
                 break;
             case GUI_DRAGON_CORE:
@@ -40,8 +40,8 @@ public class GuiHandler implements IGuiHandler {
         switch (id) {
             case GUI_DRAGON:
                 entity = world.getEntityByID(x);
-                if (entity instanceof EntityTameableDragon) {
-                    return new GuiDragon(player, (EntityTameableDragon) entity);
+                if (entity instanceof TameableDragonEntity) {
+                    return new GuiDragon(player, (TameableDragonEntity) entity);
                 }
                 break;
             case GUI_DRAGON_CORE:

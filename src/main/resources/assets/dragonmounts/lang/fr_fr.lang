@@ -99,12 +99,12 @@ item.dragon_whistle.name=Flute Draconique
 item.dragon_amulet.name=Amulette Draconique
 item.dragon_orb.name=Orbe Draconique
 
-item.carriage_oak.name=Nacelle en Chêne
-item.carriage_birch.name=Nacelle en Bouleau
-item.carriage_spruce.name=Nacelle en Sapin
-item.carriage_acacia.name=Nacelle en Acacia
-item.carriage_dark_oak.name=Nacelle en Chêne Noir
-item.carriage_jungle.name=Nacelle en Acajou
+item.oak_carriage.name=Nacelle en Chêne
+item.birch_carriage.name=Nacelle en Bouleau
+item.spruce_carriage.name=Nacelle en Sapin
+item.acacia_carriage.name=Nacelle en Acacia
+item.dark_oak_carriage.name=Nacelle en Chêne Noir
+item.jungle_carriage.name=Nacelle en Acajou
 
 # Armory Items
 item.dragon_scales.name=Ecailles de Dragon
@@ -149,7 +149,7 @@ item.removeNBT=<Sneak + Clic Droit pour délier un Dragon>
 item.armoryitems.info=Forgé avec les écailles d'un
 tooltip.dragonmounts.hard_shears=Utilisées pour récolter les écailles d'un Dragon apprivoisé. Ceux sauvages vous attaquerons
 item.dragonamulet.info=Clic Droit pour stocker un Dragon et le transporter, Clic Droit sur le sol pour le faire apparaitre
-item.carriage.info=Utilisé pour faire en sorte que les Dragons puissent transporter plusieurs passagers
+tooltip.dragonmounts.carriage=Utilisé pour faire en sorte que les Dragons puissent transporter plusieurs passagers
 item.whistle.info=Clic Droit sur un Dragon possédé et apprivoisé pour le contrôler
 item.whistle.nullBlockPos=Téléportation impossible
 

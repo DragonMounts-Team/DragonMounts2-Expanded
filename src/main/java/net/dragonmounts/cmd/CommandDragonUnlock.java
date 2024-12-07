@@ -9,7 +9,7 @@
  */
 package net.dragonmounts.cmd;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.EntityNotFoundException;
 import net.minecraft.command.ICommandSender;
@@ -41,7 +41,7 @@ public class CommandDragonUnlock extends DragonHandlerCommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        List<EntityTameableDragon> dragons;
+        List<TameableDragonEntity> dragons;
         switch (args.length) {
             case 0:
                 dragons = Collections.singletonList(getClosestDragon(sender));
@@ -53,7 +53,7 @@ public class CommandDragonUnlock extends DragonHandlerCommand {
             default:
                 throw new WrongUsageException("commands.dragon.unlock.usage");
         }
-        for (EntityTameableDragon dragon : dragons) {
+        for (TameableDragonEntity dragon : dragons) {
             dragon.setToAllowedOtherPlayers(true);
             sender.sendMessage(new TextComponentTranslation("commands.dragon.unlock.success", dragon.getDisplayName()));
         }

@@ -3,8 +3,8 @@ package net.dragonmounts.item;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.dragonmounts.compat.DragonMountsCompat;
 import net.dragonmounts.entity.EntityContainerItemEntity;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMItems;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.DMUtils;
@@ -54,8 +54,8 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
     @Override
     public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
         if (!this.isEmpty(stack.getTagCompound()) || !target.isEntityAlive()) return false;
-        if (target instanceof EntityTameableDragon) {
-            EntityTameableDragon dragon = (EntityTameableDragon) target;
+        if (target instanceof TameableDragonEntity) {
+            TameableDragonEntity dragon = (TameableDragonEntity) target;
             if (dragon.isOwner(player)) {
                 DragonAmuletItem amulet = dragon.getVariant().type.getInstance(DragonAmuletItem.class, null);
                 if (amulet == null) return false;
@@ -149,7 +149,7 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
         ResourceLocation identifier = DragonSpawnEggItem.getEntityTypeFrom(stack);
         Entity entity;
         if (DRAGON_ID.equals(identifier)) {
-            entity = new EntityTameableDragon(level);
+            entity = new TameableDragonEntity(level);
         } else if (EntityList.ENTITY_EGGS.containsKey(identifier)) {
             entity = EntityList.createEntityByIDFromName(identifier, level);
             if (entity == null) return null;
@@ -207,6 +207,6 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
     }
 
     protected DragonType getDragonType(NBTTagCompound data) {
-        return DragonVariant.byName(data.getString("Variant")).type;
+        return DragonVariant.byName(data.getString(DragonVariant.DATA_PARAMETER_KEY)).type;
     }
 }

@@ -3,6 +3,7 @@ from Core.Output import Output
 from Core.ModelBuilder import ModelBuilder as model
 from DragonType import DragonType
 from DragonArmorMaterial import DragonArmorMaterial
+from CarriageType import CarriageType
 
 generatedModel = ResourceLocation('item/generated')
 handheldModel = ResourceLocation('item/handheld')
@@ -75,6 +76,12 @@ def generateItemModels(output: Output):
   blockingShieldModel = makeId('item/shield/shield_blocking')
   spawnEggModel = ResourceLocation('item/spawn_egg')
   basicItem(output, makeId('variant_switcher'))
+  for type in CarriageType:
+    basicItem(
+      output,
+      makeId(type.name + '_carriage'),
+      makeId('items/carriage/carriage_' + type.name)
+    )
   for material in DragonArmorMaterial:
     name = material.name.lower()
     basicItem(

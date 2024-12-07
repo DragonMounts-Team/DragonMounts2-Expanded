@@ -9,7 +9,7 @@
  */
 package net.dragonmounts.network;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.DragonOrbTargets;
+import net.dragonmounts.entity.breath.DragonOrbTargets;
 import io.netty.channel.ChannelHandler.Sharable;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;

@@ -39,12 +39,12 @@ item.dragon_whistle.name=龙哨
 item.dragon_amulet.name=龙护符
 item.dragon_orb.name=龙宝珠
 
-item.carriage_oak.name=橡木货物装载箱
-item.carriage_birch.name=桦木货物装载箱
-item.carriage_spruce.name=云杉木货物装载箱
-item.carriage_acacia.name=金合欢木货物装载箱
-item.carriage_dark_oak.name=深色橡木货物装载箱
-item.carriage_jungle.name=丛林木货物装载箱
+item.oak_carriage.name=橡木货物装载箱
+item.birch_carriage.name=桦木货物装载箱
+item.spruce_carriage.name=云杉木货物装载箱
+item.acacia_carriage.name=金合欢木货物装载箱
+item.dark_oak_carriage.name=深色橡木货物装载箱
+item.jungle_carriage.name=丛林木货物装载箱
 
 item.dragon_scales.name=龙鳞
 item.dragon_scale_sword.name=龙鳞剑
@@ -85,7 +85,7 @@ tile.terra_egg.name=土纹龙 蛋
 item.removeNBT=<潜行+右键以解除绑定>
 item.armoryitems.info=用龙鳞锻造
 item.dragonamulet.info=右键储存一条被驯化过的龙并携带它，并可以通过右键点击地面重新召唤
-item.carriage.info=让龙像一艘船一样携带多个生物
+tooltip.dragonmounts.carriage=让龙像一艘船一样携带多个生物
 item.whistle.info=左键单击绑定驯服的龙并通过右键使用此物品来控制它，不必担心左键绑定时会伤害到你的龙
 item.whistle.nullBlockPos=无法传送到那里
 

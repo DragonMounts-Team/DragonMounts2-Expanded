@@ -4,9 +4,7 @@ import it.unimi.dsi.fastutil.Function;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.util.DMUtils;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializer;
+import net.dragonmounts.util.RegisteredObjectSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.*;
 
@@ -23,27 +21,7 @@ public class DragonVariant extends IForgeRegistryEntry.Impl<DragonVariant> {
     public static final String DATA_PARAMETER_KEY = "Variant";
     public static final ResourceLocation DEFAULT_KEY = makeId("ender_female");
     public static final Registry REGISTRY = new Registry(makeId("dragon_variant"), new RegistryBuilder<DragonVariant>().setDefaultKey(DEFAULT_KEY));
-    public static final DataSerializer<DragonVariant> SERIALIZER = new DataSerializer<DragonVariant>() {
-        @Override
-        public void write(PacketBuffer buffer, DragonVariant value) {
-            buffer.writeVarInt(REGISTRY.getID(value));
-        }
-
-        @Override
-        public DragonVariant read(PacketBuffer buffer) {
-            return REGISTRY.getValue(buffer.readVarInt());
-        }
-
-        @Override
-        public DataParameter<DragonVariant> createKey(int id) {
-            return new DataParameter<>(id, this);
-        }
-
-        @Override
-        public DragonVariant copyValue(@Nonnull DragonVariant value) {
-            return value;
-        }
-    };
+    public static final RegisteredObjectSerializer<DragonVariant> SERIALIZER = new RegisteredObjectSerializer<>(REGISTRY);
 
     public static DragonVariant byName(String name) {
         return REGISTRY.getValue(new ResourceLocation(name));

@@ -1,7 +1,7 @@
 package net.dragonmounts.network;
 
-import net.dragonmounts.inits.ModSounds;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.init.DMSounds;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.NetHandlerPlayServer;
@@ -32,8 +32,8 @@ public class MessageDragonTeleport extends CUUIDPacket {
             Entity entity = handler.server.getEntityFromUuid(message.uuid);
             EntityPlayer player = handler.player;
             World world = player.world;
-            if (entity instanceof EntityTameableDragon && world.isBlockLoaded(player.getPosition())) {
-                EntityTameableDragon dragon = (EntityTameableDragon) entity;
+            if (entity instanceof TameableDragonEntity && world.isBlockLoaded(player.getPosition())) {
+                TameableDragonEntity dragon = (TameableDragonEntity) entity;
                 //Get block pos by raytracing from player for dragon teleport
                 Vec3d start = new Vec3d(
                         player.prevPosX + (player.posX - player.prevPosX),
@@ -56,7 +56,7 @@ public class MessageDragonTeleport extends CUUIDPacket {
                 if (hit.typeOfHit == RayTraceResult.Type.BLOCK) {
                     BlockPos pos = hit.getBlockPos();
                     dragon.setPosition(pos.getX(), pos.getY() + 0.5, pos.getZ());
-                    world.playSound(null, player.posX, player.posY, player.posZ, ModSounds.DRAGON_WHISTLE, SoundCategory.NEUTRAL, 1, 1);
+                    world.playSound(null, player.posX, player.posY, player.posZ, DMSounds.DRAGON_WHISTLE, SoundCategory.NEUTRAL, 1, 1);
                 }
             }
             return null;

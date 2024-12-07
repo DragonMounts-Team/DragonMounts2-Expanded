@@ -5,6 +5,8 @@ import net.dragonmounts.registry.DragonType;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
@@ -19,8 +21,8 @@ import java.util.List;
 public class DragonScaleShieldItem extends ItemShield {
     public final DragonType type;
 
-    public DragonScaleShieldItem(DragonType type) {
-        this.setMaxDamage(2500);
+    public DragonScaleShieldItem(DragonType type, ItemArmor.ArmorMaterial material) {
+        this.setMaxDamage(material.getDurability(EntityEquipmentSlot.CHEST) * 10 / 3);
         this.setMaxStackSize(1);
         this.type = type;
     }
@@ -33,7 +35,9 @@ public class DragonScaleShieldItem extends ItemShield {
 
     //Necessary because were extending from ItemShield, which creates its own displayname method
     @Override
-    public String getItemStackDisplayName(ItemStack stack) {return I18n.translateToLocal("item.dragon_scale_shield.name");}
+    public String getItemStackDisplayName(ItemStack stack) {
+        return I18n.translateToLocal("item.dragon_scale_shield.name");
+    }
 
     @Override
     public boolean isShield(ItemStack stack, EntityLivingBase entity) {

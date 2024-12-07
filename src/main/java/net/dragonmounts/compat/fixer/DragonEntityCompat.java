@@ -1,7 +1,7 @@
 package net.dragonmounts.compat.fixer;
 
 import net.dragonmounts.init.DragonVariants;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonVariantHelper;
+import net.dragonmounts.entity.helper.DragonVariantHelper;
 import net.dragonmounts.registry.DragonVariant;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.datafix.IFixableData;
@@ -71,7 +71,7 @@ public class DragonEntityCompat implements IFixableData {
                     variant = isMale ? DragonVariants.ENDER_MALE : DragonVariants.ENDER_FEMALE;
                     break;
             }
-            tag.setString("Variant", variant.getSerializedName());
+            tag.setString(DragonVariant.DATA_PARAMETER_KEY, variant.getSerializedName());
             tag.removeTag("Breed");
         }
         return tag;

@@ -3,7 +3,7 @@ package net.dragonmounts.client.variant;
 import com.google.common.collect.ImmutableList;
 import net.dragonmounts.client.model.dragon.DragonModel;
 import net.dragonmounts.client.render.dragon.layer.*;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.util.ResourceLocation;
 
 import static net.dragonmounts.DragonMounts.makeId;
@@ -38,27 +38,27 @@ public abstract class VariantAppearance {
         );
     }
 
-    public abstract boolean hasTailHorns(EntityTameableDragon dragon);
+    public abstract boolean hasTailHorns(TameableDragonEntity dragon);
 
-    public abstract boolean hasSideTailScale(EntityTameableDragon dragon);
+    public abstract boolean hasSideTailScale(TameableDragonEntity dragon);
 
     public abstract boolean hasTailHornsOnShoulder();
 
     public abstract boolean hasSideTailScaleOnShoulder();
 
-    public abstract ResourceLocation getBody(EntityTameableDragon dragon);
+    public abstract ResourceLocation getBody(TameableDragonEntity dragon);
 
-    public abstract ResourceLocation getGlow(EntityTameableDragon dragon);
+    public abstract ResourceLocation getGlow(TameableDragonEntity dragon);
 
-    public ResourceLocation getChest(EntityTameableDragon dragon) {
+    public ResourceLocation getChest(TameableDragonEntity dragon) {
         return DEFAULT_CHEST;
     }
 
-    public ResourceLocation getSaddle(EntityTameableDragon dragon) {
+    public ResourceLocation getSaddle(TameableDragonEntity dragon) {
         return DEFAULT_SADDLE;
     }
 
-    public ResourceLocation getDissolve(EntityTameableDragon dragon) {
+    public ResourceLocation getDissolve(TameableDragonEntity dragon) {
         return DEFAULT_DISSOLVE;
     }
 }

@@ -9,7 +9,7 @@
  */
 package net.dragonmounts.cmd;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.command.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -42,7 +42,7 @@ public class CommandDragonTame extends DragonHandlerCommand {
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         Entity entity;
         EntityPlayer player;
-        List<EntityTameableDragon> dragons;
+        List<TameableDragonEntity> dragons;
         switch (args.length) {
             case 0:
                 entity = sender.getCommandSenderEntity();
@@ -68,7 +68,7 @@ public class CommandDragonTame extends DragonHandlerCommand {
             default:
                 throw new WrongUsageException("commands.dragon.tame.usage");
         }
-        for (EntityTameableDragon dragon : dragons) {
+        for (TameableDragonEntity dragon : dragons) {
             dragon.tamedFor(player, true);
             sender.sendMessage(new TextComponentTranslation("commands.dragon.tame.success", dragon.getDisplayName(), player.getDisplayName()));
         }

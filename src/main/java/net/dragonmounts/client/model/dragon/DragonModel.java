@@ -12,9 +12,9 @@ package net.dragonmounts.client.model.dragon;
 
 import net.dragonmounts.client.model.dragon.anim.DragonAnimator;
 import net.dragonmounts.client.variant.VariantAppearance;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.DragonHeadPositionHelper;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.SegmentSizePositionRotation;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.breath.DragonHeadPositionHelper;
+import net.dragonmounts.entity.helper.SegmentSizePositionRotation;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
@@ -449,7 +449,7 @@ public class DragonModel extends ModelBase {
      * Applies the animations on the model. Called every frame before the model
      * is rendered.
      */
-    private void updateFromAnimator(EntityTameableDragon dragon) {
+    private void updateFromAnimator(TameableDragonEntity dragon) {
         DragonAnimator dragonAnimator=dragon.getAnimator();
         dragonAnimator.animate();
 
@@ -471,7 +471,7 @@ public class DragonModel extends ModelBase {
         animLegs(dragon);
     }
 
-    protected void animHeadAndNeck(EntityTameableDragon dragon) {
+    protected void animHeadAndNeck(TameableDragonEntity dragon) {
         DragonHeadPositionHelper headPositionHelper=dragon.getAnimator().getDragonHeadPositionHelper();
 
         SegmentSizePositionRotation[] segmentData=headPositionHelper.getNeckSegmentPositionSizeLocations();
@@ -495,7 +495,7 @@ public class DragonModel extends ModelBase {
         jaw.rotateAngleX=dragon.getAnimator().getJawRotateAngleX();
     }
 
-    protected void animWings(EntityTameableDragon dragon) {
+    protected void animWings(TameableDragonEntity dragon) {
         DragonAnimator dragonAnimatorCommon=dragon.getAnimator();
         // apply angles
         wingArm.rotateAngleX=dragonAnimatorCommon.getWingArmRotateAngleX();
@@ -514,7 +514,7 @@ public class DragonModel extends ModelBase {
 
     }
 
-    protected void animTail(EntityTameableDragon dragon) {
+    protected void animTail(TameableDragonEntity dragon) {
         DragonAnimator DragonAnimator=dragon.getAnimator();
         SegmentSizePositionRotation[] tailSegmentData=DragonAnimator.getTailSegments();
         final int TAIL_SEGMENTS=tailSegmentData.length;
@@ -538,7 +538,7 @@ public class DragonModel extends ModelBase {
     }
 
     // left this in DragonModel because it isn't really needed by the server and is difficult to move.
-    protected void animLegs(EntityTameableDragon dragon) {
+    protected void animLegs(TameableDragonEntity dragon) {
         DragonAnimator DragonAnimator=dragon.getAnimator();
 
         // dangling legs for flying
@@ -643,10 +643,10 @@ public class DragonModel extends ModelBase {
      */
     @Override
     public void setLivingAnimations(EntityLivingBase entity, float moveTime, float moveSpeed, float partialTicks) {
-        setLivingAnimations((EntityTameableDragon) entity, moveTime, moveSpeed, partialTicks);
+        setLivingAnimations((TameableDragonEntity) entity, moveTime, moveSpeed, partialTicks);
     }
 
-    public void setLivingAnimations(EntityTameableDragon dragon, float moveTime, float moveSpeed, float partialTicks) {
+    public void setLivingAnimations(TameableDragonEntity dragon, float moveTime, float moveSpeed, float partialTicks) {
         DragonAnimator animator=dragon.getAnimator();
         animator.setPartialTicks(partialTicks);
     }
@@ -656,10 +656,10 @@ public class DragonModel extends ModelBase {
      */
     @Override
     public void render(Entity entity, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
-        render((EntityTameableDragon) entity, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
+        render((TameableDragonEntity) entity, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
     }
 
-    public void render(EntityTameableDragon dragon, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
+    public void render(TameableDragonEntity dragon, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
         DragonAnimator animator=dragon.getAnimator();
         animator.setMovement(moveTime, moveSpeed);
         animator.setLook(lookYaw, lookPitch);
@@ -674,7 +674,7 @@ public class DragonModel extends ModelBase {
     /**
      * Renders the model after all animations are applied.
      */
-    public void renderModel(EntityTameableDragon dragon, float scale) {
+    public void renderModel(TameableDragonEntity dragon, float scale) {
         if (mode==null) {
             return;
         }

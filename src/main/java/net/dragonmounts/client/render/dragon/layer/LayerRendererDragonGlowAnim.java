@@ -10,7 +10,7 @@
 package net.dragonmounts.client.render.dragon.layer;
 
 import net.dragonmounts.client.model.dragon.DragonModelMode;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.client.renderer.GlStateManager;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -21,9 +21,9 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class LayerRendererDragonGlowAnim extends DragonLayerRenderer {
     @Override
-    public void doRenderLayer(EntityTameableDragon dragon, float moveTime,
-            float moveSpeed, float partialTicks, float ticksExisted, float lookYaw,
-            float lookPitch, float scale) {
+    public void doRenderLayer(TameableDragonEntity dragon, float moveTime,
+                              float moveSpeed, float partialTicks, float ticksExisted, float lookYaw,
+                              float lookPitch, float scale) {
         boolean invisible = dragon.isInvisible();
         GlStateManager.depthMask(!invisible);
 

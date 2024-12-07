@@ -1,7 +1,7 @@
 package net.dragonmounts.cmd;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStage;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.helper.DragonLifeStage;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.EntityNotFoundException;
@@ -39,7 +39,7 @@ public class StageCommand extends DragonHandlerCommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        List<EntityTameableDragon> dragons;
+        List<TameableDragonEntity> dragons;
         switch (args.length) {
             case 1:
                 dragons = Collections.singletonList(getClosestDragon(sender));
@@ -53,7 +53,7 @@ public class StageCommand extends DragonHandlerCommand {
         }
         DragonLifeStage stage = this.stages.get(args[0]);
         if (stage == null) throw new CommandException("commands.dragon.stage.invalid");
-        for (EntityTameableDragon dragon : dragons) {
+        for (TameableDragonEntity dragon : dragons) {
             dragon.getLifeStageHelper().setLifeStage(stage);
             sender.sendMessage(new TextComponentTranslation("commands.dragon.breed.success", dragon.getDisplayName(), stage.identifier));
         }

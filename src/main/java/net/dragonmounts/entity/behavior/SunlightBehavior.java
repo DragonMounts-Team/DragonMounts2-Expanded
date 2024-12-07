@@ -1,7 +1,7 @@
 package net.dragonmounts.entity.behavior;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStage;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class SunlightBehavior implements DragonType.Behavior {
     @Override
-    public void tick(EntityTameableDragon dragon) {
+    public void tick(TameableDragonEntity dragon) {
         World level = dragon.world;
         if (dragon.posY > level.getHeight() + 8 && dragon.world.isDaytime() && dragon.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE)) {
             Random random = level.rand;

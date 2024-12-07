@@ -1,7 +1,7 @@
 package net.dragonmounts.cmd;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.EntityNotFoundException;
@@ -43,7 +43,7 @@ public class TypeCommand extends DragonHandlerCommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        List<EntityTameableDragon> dragons;
+        List<TameableDragonEntity> dragons;
         switch (args.length) {
             case 1:
                 dragons = Collections.singletonList(getClosestDragon(sender));
@@ -57,7 +57,7 @@ public class TypeCommand extends DragonHandlerCommand {
         }
         DragonType type = this.types.get(args[0]);
         if (type == null) throw new CommandException("commands.dragon.breed.invalid");
-        for (EntityTameableDragon dragon : dragons) {
+        for (TameableDragonEntity dragon : dragons) {
             ITextComponent name = dragon.getDisplayName();
             dragon.setVariant(type.variants.draw(dragon.getRNG(), dragon.getVariant()));
             sender.sendMessage(new TextComponentTranslation("commands.dragon.breed.success", name, new TextComponentTranslation(type.translationKey).setStyle(new Style().setColor(type.formatting))));

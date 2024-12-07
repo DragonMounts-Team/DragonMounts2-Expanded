@@ -11,7 +11,7 @@ package net.dragonmounts.client.render.dragon.layer;
 
 import net.dragonmounts.client.model.dragon.DragonModel;
 import net.dragonmounts.client.render.dragon.DragonRenderer;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
@@ -21,7 +21,7 @@ import net.minecraft.util.ResourceLocation;
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public abstract class DragonLayerRenderer implements LayerRenderer<EntityTameableDragon> {
+public abstract class DragonLayerRenderer implements LayerRenderer<TameableDragonEntity> {
     protected static final ResourceLocation ENCHANTED_ITEM_GLINT_RES = new ResourceLocation("textures/misc/enchanted_item_glint.png");
     protected DragonRenderer renderer;
     protected DragonModel model;

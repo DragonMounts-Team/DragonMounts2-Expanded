@@ -5,7 +5,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 
 import javax.annotation.Nonnull;
-import java.util.Objects;
 
 public class CraftableBlockItem extends ItemBlock {
     public final CreativeTabs tab;
@@ -13,7 +12,6 @@ public class CraftableBlockItem extends ItemBlock {
     public CraftableBlockItem(Block block, CreativeTabs modTab) {
         super(block);
         this.tab = modTab;
-        this.setRegistryName(Objects.requireNonNull(block.getRegistryName()));
     }
 
     @Override

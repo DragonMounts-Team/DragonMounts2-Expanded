@@ -1,13 +1,13 @@
 package net.dragonmounts.entity.behavior;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.BreathNode;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.effects.IceBreathFX;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.sound.SoundEffectName;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.sound.SoundState;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.weapons.BreathWeapon;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.weapons.BreathWeaponIce;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStage;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.breath.BreathNode;
+import net.dragonmounts.entity.breath.effects.IceBreathFX;
+import net.dragonmounts.entity.breath.sound.SoundEffectName;
+import net.dragonmounts.entity.breath.sound.SoundState;
+import net.dragonmounts.entity.breath.weapons.BreathWeapon;
+import net.dragonmounts.entity.breath.weapons.BreathWeaponIce;
+import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.enchantment.EnchantmentFrostWalker;
 import net.minecraft.init.Blocks;
@@ -23,7 +23,7 @@ public class IceBehavior implements DragonType.Behavior {
     public static final float FOOTPRINT_CHANCE = 0.01F;
 
     @Override
-    public void tick(EntityTameableDragon dragon) {
+    public void tick(TameableDragonEntity dragon) {
         World level = dragon.world;
         if (level.isRemote) return;
         if (dragon.isOverWater()) {
@@ -66,7 +66,7 @@ public class IceBehavior implements DragonType.Behavior {
     }
 
     @Override
-    public BreathWeapon createBreathWeapon(EntityTameableDragon dragon) {
+    public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
         return new BreathWeaponIce(dragon);
     }
 

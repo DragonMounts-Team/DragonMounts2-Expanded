@@ -1,6 +1,6 @@
 package net.dragonmounts.client.render.dragon.breathweaponFX;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.BreathNode;
+import net.dragonmounts.entity.breath.BreathNode;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;

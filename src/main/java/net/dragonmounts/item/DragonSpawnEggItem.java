@@ -1,8 +1,8 @@
 package net.dragonmounts.item;
 
 import net.dragonmounts.init.DMItemGroups;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStage;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.EntityUtil;
 import net.minecraft.block.BlockLiquid;
@@ -107,7 +107,7 @@ public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityCont
         ResourceLocation identifier = getEntityTypeFrom(stack);
         Entity entity;
         if (DRAGON_ID.equals(identifier)) {
-            EntityTameableDragon dragon = new EntityTameableDragon(level);
+            TameableDragonEntity dragon = new TameableDragonEntity(level);
             dragon.setVariant(this.type.variants.draw(level.rand, null));
             dragon.getLifeStageHelper().setLifeStage(player != null && player.isSneaking()
                     ? DragonLifeStage.HATCHLING

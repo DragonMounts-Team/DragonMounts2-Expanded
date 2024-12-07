@@ -1,7 +1,7 @@
 package net.dragonmounts.item;
 
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMItemGroups;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.util.DMUtils;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -37,8 +37,8 @@ public class DragonArmorItem extends Item {
 
     @Override
     public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase entity, EnumHand hand) {
-        if (stack.isEmpty() || !(entity instanceof EntityTameableDragon)) return false;
-        EntityTameableDragon dragon = (EntityTameableDragon) entity;
+        if (stack.isEmpty() || !(entity instanceof TameableDragonEntity)) return false;
+        TameableDragonEntity dragon = (TameableDragonEntity) entity;
         if (dragon.isArmored() || !dragon.isOwner(player)) return false;
         if (dragon.world.isRemote) return true;
         if (player.capabilities.isCreativeMode) {

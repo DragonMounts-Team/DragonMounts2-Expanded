@@ -1,7 +1,8 @@
 package net.dragonmounts.item;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.EntityUtil;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,11 +20,11 @@ import javax.annotation.Nullable;
 
 import static net.dragonmounts.util.EntityUtil.notOwner;
 
-public class DragonAmuletItem extends AmuletItem<EntityTameableDragon> {
+public class DragonAmuletItem extends AmuletItem<TameableDragonEntity> {
     public final DragonType type;
 
     public DragonAmuletItem(DragonType type) {
-        super(EntityTameableDragon.class);
+        super(TameableDragonEntity.class);
         this.type = type;
     }
 
@@ -33,7 +34,7 @@ public class DragonAmuletItem extends AmuletItem<EntityTameableDragon> {
     }
 
     @Override
-    public ItemStack saveEntity(EntityTameableDragon dragon) {
+    public ItemStack saveEntity(TameableDragonEntity dragon) {
         NBTTagCompound root = new NBTTagCompound();
         NBTTagCompound data = IEntityContainer.simplifyData(dragon.writeToNBT(new NBTTagCompound()));
         EntityLivingBase owner = dragon.getOwner();
@@ -50,15 +51,15 @@ public class DragonAmuletItem extends AmuletItem<EntityTameableDragon> {
 
     @Nullable
     @Override
-    public EntityTameableDragon loadEntity(World level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos, boolean yOffset, String feedback) {
-        EntityTameableDragon dragon = new EntityTameableDragon(level);
+    public TameableDragonEntity loadEntity(World level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos, boolean yOffset, String feedback) {
+        TameableDragonEntity dragon = new TameableDragonEntity(level);
         NBTTagCompound root = stack.getTagCompound();
         boolean flag = root == null;
         if (!flag) {
             NBTTagCompound data = root.getCompoundTag("EntityTag");
             if (!data.isEmpty()) {
                 if (notOwner(data, player, "dragon.notOwned")) return null;
-                flag = !data.hasKey("Variant");
+                flag = !data.hasKey(DragonVariant.DATA_PARAMETER_KEY);
                 dragon.readFromNBT(data);
             }
         }

@@ -1,6 +1,6 @@
 package net.dragonmounts.network;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.util.DMUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
@@ -63,8 +63,8 @@ public class MessageDragonExtras implements IMessage {
         public IMessage onMessage(MessageDragonExtras message, MessageContext ctx) {
             EntityPlayer player = ctx.getServerHandler().player;
             Entity entity = player.world.getEntityByID(message.dragonId);
-            if (entity instanceof EntityTameableDragon) {
-                EntityTameableDragon dragon = (EntityTameableDragon) entity;
+            if (entity instanceof TameableDragonEntity) {
+                TameableDragonEntity dragon = (TameableDragonEntity) entity;
 
                 if (message.isHoverCancel) {
                     dragon.setUnHovered(!dragon.isUnHovered());

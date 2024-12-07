@@ -1,6 +1,6 @@
 package net.dragonmounts.network;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
+import net.dragonmounts.entity.TameableDragonEntity;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -41,8 +41,8 @@ public class MessageDragonGui implements IMessage {
         @Override
         public IMessage onMessage(MessageDragonGui message, MessageContext ctx) {
             Entity entity = ctx.getServerHandler().player.world.getEntityByID(message.dragonId);
-            if (entity instanceof EntityTameableDragon) {
-                EntityTameableDragon dragon = (EntityTameableDragon) entity;
+            if (entity instanceof TameableDragonEntity) {
+                TameableDragonEntity dragon = (TameableDragonEntity) entity;
                 switch (message.state) {
                     case 1:
                         dragon.getAISit().setSitting(!dragon.isSitting());

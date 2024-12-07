@@ -3,9 +3,9 @@ package net.dragonmounts.client.gui;
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.client.model.dragon.anim.DragonAnimator;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.inventory.ContainerDragon;
 import net.dragonmounts.network.MessageDragonGui;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.util.DMUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -33,14 +33,14 @@ public class GuiDragon extends GuiContainer {
     private static final ResourceLocation offhand = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/offhand.png");
     private static final ResourceLocation hunger_full = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/hunger_full.png");
     private static final ResourceLocation dismountTex = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/items/carriage/carriage_oak.png");
-    private EntityTameableDragon dragon;
+    private TameableDragonEntity dragon;
     private float mousePosX;
     private float mousePosY;
     private LockButton lockButton;
     //    private GuiButton dismount;
     private EntityPlayer player;
 
-    public GuiDragon(EntityPlayer player, EntityTameableDragon dragon) {
+    public GuiDragon(EntityPlayer player, TameableDragonEntity dragon) {
         super(new ContainerDragon(dragon, player));
         this.player = player;
         this.dragon = dragon;
@@ -143,9 +143,9 @@ public class GuiDragon extends GuiContainer {
 
     static class LockButton extends GuiButton {
 
-        private EntityTameableDragon dragon;
+        private TameableDragonEntity dragon;
 
-        public LockButton(int buttonId, int x, int y, int width, int height, EntityTameableDragon dragon) {
+        public LockButton(int buttonId, int x, int y, int width, int height, TameableDragonEntity dragon) {
             super(buttonId, x, y, width, height, "");
             this.dragon = dragon;
         }

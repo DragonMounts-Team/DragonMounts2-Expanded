@@ -1,6 +1,6 @@
 package net.dragonmounts.network;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
+import net.dragonmounts.entity.TameableDragonEntity;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -42,8 +42,8 @@ public class MessageDragonBreath implements IMessage {
         @Override
         public IMessage onMessage(MessageDragonBreath message, MessageContext ctx) {
             Entity entity = ctx.getServerHandler().player.world.getEntityByID(message.dragonId);
-            if (entity instanceof EntityTameableDragon) {
-                ((EntityTameableDragon) entity).setUsingBreathWeapon(message.isBreathing);
+            if (entity instanceof TameableDragonEntity) {
+                ((TameableDragonEntity) entity).setUsingBreathWeapon(message.isBreathing);
 
 //			if(message.isProjectile) {
 //				dragon.setUsingProjectile(true);

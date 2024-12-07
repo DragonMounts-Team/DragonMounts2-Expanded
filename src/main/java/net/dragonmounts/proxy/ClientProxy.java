@@ -14,19 +14,21 @@ import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.client.gui.GuiDragonDebug;
 import net.dragonmounts.client.other.TargetHighlighter;
+import net.dragonmounts.client.render.CarriageRenderer;
+import net.dragonmounts.client.render.DMCapeRenderer;
 import net.dragonmounts.client.render.DragonCoreBlockEntityRenderer;
-import net.dragonmounts.client.render.RenderDM2Cape;
 import net.dragonmounts.client.render.dragon.DragonRenderer;
 import net.dragonmounts.client.render.dragon.breathweaponFX.ClientBreathNodeRenderer;
 import net.dragonmounts.client.userinput.DragonOrbControl;
 import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.client.variant.VariantAppearances;
+import net.dragonmounts.entity.CarriageEntity;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.breath.effects.ClientBreathNodeEntity;
 import net.dragonmounts.event.DragonViewEvent;
 import net.dragonmounts.event.IItemColorRegistration;
-import net.dragonmounts.inits.ModItems;
-import net.dragonmounts.inits.ModKeys;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.effects.ClientBreathNodeEntity;
+import net.dragonmounts.init.DMItems;
+import net.dragonmounts.init.DMKeyBindings;
 import net.dragonmounts.util.debugging.StartupDebugClientOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextFormatting;
@@ -66,11 +68,12 @@ public class ClientProxy extends ServerProxy {
         MinecraftForge.EVENT_BUS.register(IItemColorRegistration.class);
         // register dragon entity renderer
         DragonMountsConfig.clientPreInit();
-        RenderingRegistry.registerEntityRenderingHandler(EntityTameableDragon.class, DragonRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(TameableDragonEntity.class, DragonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ClientBreathNodeEntity.class, ClientBreathNodeRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(CarriageEntity.class, CarriageRenderer::new);
 
         ClientRegistry.bindTileEntitySpecialRenderer(DragonCoreBlockEntity.class, new DragonCoreBlockEntityRenderer());
-        ModItems.DRAGON_CORE.setTileEntityItemStackRenderer(new DragonCoreBlockEntityRenderer.ItemStackRenderer());
+        DMItems.DRAGON_CORE.setTileEntityItemStackRenderer(new DragonCoreBlockEntityRenderer.ItemStackRenderer());
 
         //Override mcmod.info - This looks cooler :)
         ModMetadata metadata = event.getModMetadata();
@@ -115,7 +118,7 @@ public class ClientProxy extends ServerProxy {
         if (DragonMountsConfig.isDebug()) {
             MinecraftForge.EVENT_BUS.register(new GuiDragonDebug());
         }
-        ModKeys.init();
+        DMKeyBindings.init();
         StartupDebugClientOnly.initClientOnly();
     }
 
@@ -137,7 +140,7 @@ public class ClientProxy extends ServerProxy {
 
         //MinecraftForge.EVENT_BUS.register(new ModKeys());
         MinecraftForge.EVENT_BUS.register(new DragonViewEvent());
-        MinecraftForge.EVENT_BUS.register(new RenderDM2Cape());
+        MinecraftForge.EVENT_BUS.register(new DMCapeRenderer());
     }
 
     public int getDragon3rdPersonView() {

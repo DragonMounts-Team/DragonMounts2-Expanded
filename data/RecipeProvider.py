@@ -124,7 +124,7 @@ def generateRecipes(output: Output):
       .unlockedBy('has_scales', unlock)\
       .save(output, 'combat')
   for carriageType in CarriageType:
-    shaped(makeId('carriage_' + carriageType.name))\
+    shaped(makeId(carriageType.name + '_carriage'))\
       .define('X', leather)\
       .define('#', ItemStack('planks', 1, carriageType.value))\
       .pattern('X X')\

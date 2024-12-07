@@ -1,6 +1,7 @@
 package net.dragonmounts.init;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import mcp.MethodsReturnNonnullByDefault;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.api.IDescribableArmorEffect;
@@ -8,14 +9,24 @@ import net.dragonmounts.item.*;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.DragonScaleArmorSuit;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.oredict.OreDictionary;
+import org.apache.commons.lang3.ArrayUtils;
 
 @MethodsReturnNonnullByDefault
 public class DMItems {
     public static final ObjectArrayList<Item> ITEMS = new ObjectArrayList<>();
+    public static final ReferenceOpenHashSet<Item> DRAGON_INTERACTABLE = new ReferenceOpenHashSet<>();
+    public static final ReferenceOpenHashSet<Item> HARDCODED_AQUATIC_FOOD = new ReferenceOpenHashSet<>();
+
+    public static boolean isAquaticFood(ItemStack stack) {
+        return HARDCODED_AQUATIC_FOOD.contains(stack.getItem()) || ArrayUtils.contains(OreDictionary.getOreIDs(stack), OreDictionary.getOreID("listAllfishraw"));
+    }
     //Scales Start
     public static final DragonScalesItem FOREST_DRAGON_SCALES = createDragonScalesItem("forest_dragon_scales", DragonTypes.FOREST);
     public static final DragonScalesItem FIRE_DRAGON_SCALES = createDragonScalesItem("fire_dragon_scales", DragonTypes.FIRE);
@@ -286,16 +297,18 @@ public class DMItems {
     public static final DragonSpawnEggItem WITHER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("wither_dragon_spawn_egg", DragonTypes.WITHER, 0x839292, 0x383F40);
     public static final DragonSpawnEggItem ZOMBIE_DRAGON_SPAWN_EGG = createDragonSpawnEgg("zombie_dragon_spawn_egg", DragonTypes.ZOMBIE, 0x56562E, 0xA7BF2F);
     //?
-    public static final VariantSwitcherItem VARIANT_SWITCHER = createItem("variant_switcher", "variant_switcher", new VariantSwitcherItem());
+    public static final VariantSwitcherItem VARIANT_SWITCHER = createItem("variant_switcher", new VariantSwitcherItem());
+    public static final DragonWandItem DRAGON_WAND = createItem("dragon_wand", new DragonWandItem());
+    public static final DragonWhistleItem DRAGON_WHISTLE = createItem("dragon_whistle", new DragonWhistleItem());
     //Shears
-    public static final HardShearsItem DIAMOND_SHEARS = createHardShearsItem("diamond_shears", Item.ToolMaterial.DIAMOND, 345);/*
+    public static final HardShearsItem DIAMOND_SHEARS = createHardShearsItem("diamond_shears", Item.ToolMaterial.DIAMOND, 345);
     //Carriages
     public static final CarriageItem ACACIA_CARRIAGE = createItem("acacia_carriage", new CarriageItem(CarriageTypes.ACACIA));
     public static final CarriageItem BIRCH_CARRIAGE = createItem("birch_carriage", new CarriageItem(CarriageTypes.BIRCH));
     public static final CarriageItem DARK_OAK_CARRIAGE = createItem("dark_oak_carriage", new CarriageItem(CarriageTypes.DARK_OAK));
     public static final CarriageItem JUNGLE_CARRIAGE = createItem("jungle_carriage", new CarriageItem(CarriageTypes.JUNGLE));
     public static final CarriageItem OAK_CARRIAGE = createItem("oak_carriage", new CarriageItem(CarriageTypes.OAK));
-    public static final CarriageItem SPRUCE_CARRIAGE = createItem("spruce_carriage", new CarriageItem(CarriageTypes.SPRUCE));*/
+    public static final CarriageItem SPRUCE_CARRIAGE = createItem("spruce_carriage", new CarriageItem(CarriageTypes.SPRUCE));
     //Dragon Amulets
     public static final AmuletItem<Entity> AMULET = createItem("amulet", "dragon_amulet", new AmuletItem<>(Entity.class));
     public static final DragonAmuletItem FOREST_DRAGON_AMULET = createDragonAmuletItem("forest_dragon_amulet", DragonTypes.FOREST);
@@ -328,14 +341,24 @@ public class DMItems {
     public static final DragonEssenceItem ZOMBIE_DRAGON_ESSENCE = createDragonEssenceItem("zombie_dragon_essence", DragonTypes.ZOMBIE);
     public static final DragonEssenceItem MOONLIGHT_DRAGON_ESSENCE = createDragonEssenceItem("moonlight_dragon_essence", DragonTypes.MOONLIGHT);
     public static final DragonEssenceItem SKELETON_DRAGON_ESSENCE = createDragonEssenceItem("skeleton_dragon_essence", DragonTypes.SKELETON);
-    public static final DragonEssenceItem WITHER_DRAGON_ESSENCE = createDragonEssenceItem("wither_dragon_essence", DragonTypes.WITHER);/*
-    public static final DragonWhistleItem DRAGON_WHISTLE = createItem("dragon_whistle", new DragonWhistleItem(item()));
+    public static final DragonEssenceItem WITHER_DRAGON_ESSENCE = createDragonEssenceItem("wither_dragon_essence", DragonTypes.WITHER);
     //Blocks
-    public static final Item DRAGON_NEST = new CraftableBlockItem(DMBlocks.DRAGON_NEST, DMItemGroups.MAIN);
-    public static final Item DRAGON_CORE = new ItemBlock(DMBlocks.DRAGON_CORE).setRegistryName(DMBlocks.DRAGON_CORE.getRegistryName());*/
+    public static final CraftableBlockItem DRAGON_NEST = createItem("dragon_nest", new CraftableBlockItem(DMBlocks.DRAGON_NEST, DMItemGroups.MAIN));
+    public static final ItemBlock DRAGON_CORE = createItem("dragon_core", new ItemBlock(DMBlocks.DRAGON_CORE));
+    public static final DragonOrbItem DRAGON_ORB = initItem("dragon_orb", new DragonOrbItem());
+    public static final TestRunnerItem TEST_RUNNER = initItem("test_runner", new TestRunnerItem());
 
     static <T extends Item> T createItem(String name, String translationKey, T item) {
         ITEMS.add(item.setTranslationKey(translationKey).setRegistryName(name));
+        return item;
+    }
+
+    static <T extends Item> T createItem(String name, T item) {
+        return createItem(name, name, item);
+    }
+
+    static <T extends Item> T initItem(String name, T item) {
+        item.setTranslationKey(name).setRegistryName(name);
         return item;
     }
 
@@ -364,9 +387,9 @@ public class DMItems {
     }
 
     static DragonScaleBowItem createDragonScaleBowItem(String name, DragonType type, Item.ToolMaterial tier) {
-        DragonScaleBowItem item = new DragonScaleBowItem(type);
+        DragonScaleBowItem item = new DragonScaleBowItem(type, tier);
         type.bindInstance(DragonScaleBowItem.class, item);
-        ITEMS.add(item.setRegistryName(name));
+        ITEMS.add(item.setTranslationKey("dragon_scale_bow").setRegistryName(name));
         return item;
     }
 
@@ -417,7 +440,7 @@ public class DMItems {
     }
 
     static DragonScaleShieldItem createDragonScaleShieldItem(String name, DragonType type, ItemArmor.ArmorMaterial material) {
-        DragonScaleShieldItem item = new DragonScaleShieldItem(type);
+        DragonScaleShieldItem item = new DragonScaleShieldItem(type, material);
         type.bindInstance(DragonScaleShieldItem.class, item);
         ITEMS.add(item.setRegistryName(name));
         return item;
@@ -448,6 +471,22 @@ public class DMItems {
         HardShearsItem item = new HardShearsItem(tier);
         ITEMS.add(item.setMaxDamage(durability).setTranslationKey(name).setRegistryName(name));
         return item;
+    }
+
+    static {
+        DRAGON_INTERACTABLE.add(DRAGON_WAND);
+        DRAGON_INTERACTABLE.add(DRAGON_WHISTLE);
+        DRAGON_INTERACTABLE.add(AMULET);
+        DRAGON_INTERACTABLE.add(IRON_DRAGON_ARMOR);
+        DRAGON_INTERACTABLE.add(GOLDEN_DRAGON_ARMOR);
+        DRAGON_INTERACTABLE.add(EMERALD_DRAGON_ARMOR);
+        DRAGON_INTERACTABLE.add(DIAMOND_DRAGON_ARMOR);
+        DRAGON_INTERACTABLE.add(Items.BONE);
+        DRAGON_INTERACTABLE.add(Items.STICK);
+        HARDCODED_AQUATIC_FOOD.add(Items.FISH);
+        HARDCODED_AQUATIC_FOOD.add(Items.COOKED_FISH);
+        ITEMS.add(DRAGON_CORE);
+        ITEMS.add(DRAGON_NEST);
     }
 
     @SuppressWarnings("DataFlowIssue")

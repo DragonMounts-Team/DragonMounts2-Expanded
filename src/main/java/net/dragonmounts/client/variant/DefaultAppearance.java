@@ -1,6 +1,6 @@
 package net.dragonmounts.client.variant;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.util.ResourceLocation;
 
 
@@ -19,12 +19,12 @@ public class DefaultAppearance extends VariantAppearance {
     }
 
     @Override
-    public boolean hasTailHorns(EntityTameableDragon dragon) {
+    public boolean hasTailHorns(TameableDragonEntity dragon) {
         return this.hasTailHorns;
     }
 
     @Override
-    public boolean hasSideTailScale(EntityTameableDragon dragon) {
+    public boolean hasSideTailScale(TameableDragonEntity dragon) {
         return this.hasSideTailScale;
     }
 
@@ -39,12 +39,12 @@ public class DefaultAppearance extends VariantAppearance {
     }
 
     @Override
-    public ResourceLocation getBody(EntityTameableDragon dragon) {
+    public ResourceLocation getBody(TameableDragonEntity dragon) {
         return this.body;
     }
 
     @Override
-    public ResourceLocation getGlow(EntityTameableDragon dragon) {
+    public ResourceLocation getGlow(TameableDragonEntity dragon) {
         return this.glow;
     }
 }

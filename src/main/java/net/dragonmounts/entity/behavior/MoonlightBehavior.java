@@ -1,13 +1,13 @@
 package net.dragonmounts.entity.behavior;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.BreathNode;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.effects.AetherBreathFX;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.sound.SoundEffectName;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.sound.SoundState;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.weapons.BreathWeapon;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.weapons.BreathWeaponAether;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStage;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.breath.BreathNode;
+import net.dragonmounts.entity.breath.effects.AetherBreathFX;
+import net.dragonmounts.entity.breath.sound.SoundEffectName;
+import net.dragonmounts.entity.breath.sound.SoundState;
+import net.dragonmounts.entity.breath.weapons.BreathWeapon;
+import net.dragonmounts.entity.breath.weapons.BreathWeaponAether;
+import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
@@ -17,7 +17,7 @@ import java.util.Random;
 
 public class MoonlightBehavior implements DragonType.Behavior {
     @Override
-    public void tick(EntityTameableDragon dragon) {
+    public void tick(TameableDragonEntity dragon) {
         World level = dragon.world;
         if (dragon.posY > level.getHeight() && !level.isDaytime() && dragon.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE)) {
             Random random = level.rand;
@@ -36,7 +36,7 @@ public class MoonlightBehavior implements DragonType.Behavior {
     }
 
     @Override
-    public BreathWeapon createBreathWeapon(EntityTameableDragon dragon) {
+    public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
         return new BreathWeaponAether(dragon);
     }
 

@@ -1,6 +1,6 @@
 package net.dragonmounts.cmd;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.util.DMUtils;
 import net.minecraft.command.*;
 import net.minecraft.entity.Entity;
@@ -19,17 +19,17 @@ public abstract class DragonHandlerCommand extends CommandBase {
     public static final double SEARCH_WIDTH = 16;
     public static final double SEARCH_HEIGHT = 12;
 
-    public static EntityTameableDragon getClosestDragon(ICommandSender sender) throws CommandException {
+    public static TameableDragonEntity getClosestDragon(ICommandSender sender) throws CommandException {
         Entity entity = sender.getCommandSenderEntity();
-        if (entity instanceof EntityTameableDragon) return (EntityTameableDragon) entity;
+        if (entity instanceof TameableDragonEntity) return (TameableDragonEntity) entity;
         if (entity instanceof EntityPlayer) {
-            List<EntityTameableDragon> dragons = entity.world.getEntitiesWithinAABB(
-                    EntityTameableDragon.class,
+            List<TameableDragonEntity> dragons = entity.world.getEntitiesWithinAABB(
+                    TameableDragonEntity.class,
                     entity.getEntityBoundingBox().grow(SEARCH_WIDTH, SEARCH_HEIGHT, SEARCH_WIDTH)
             );
             double distance = Double.MAX_VALUE, temp;
-            EntityTameableDragon closest = null;
-            for (EntityTameableDragon dragon : dragons) {
+            TameableDragonEntity closest = null;
+            for (TameableDragonEntity dragon : dragons) {
                 temp = entity.getDistanceSq(dragon);
                 if (temp < distance) {
                     distance = temp;
@@ -42,14 +42,14 @@ public abstract class DragonHandlerCommand extends CommandBase {
         throw new EntityNotFoundException("commands.dragon.unspecified", DMUtils.NO_ARGS);
     }
 
-    public static List<EntityTameableDragon> getSelectedDragons(MinecraftServer server, ICommandSender sender, String selector) throws CommandException {
+    public static List<TameableDragonEntity> getSelectedDragons(MinecraftServer server, ICommandSender sender, String selector) throws CommandException {
         if (selector.isEmpty()) throw new EntityNotFoundException("commands.dragon.unspecified", DMUtils.NO_ARGS);
-        List<EntityTameableDragon> dragons = EntitySelector.matchEntities(sender, selector, EntityTameableDragon.class);
+        List<TameableDragonEntity> dragons = EntitySelector.matchEntities(sender, selector, TameableDragonEntity.class);
         if (dragons.isEmpty()) {
             try {
                 Entity entity = server.getEntityFromUuid(UUID.fromString(selector));
-                if (entity instanceof EntityTameableDragon) {
-                    return Collections.singletonList((EntityTameableDragon) entity);
+                if (entity instanceof TameableDragonEntity) {
+                    return Collections.singletonList((TameableDragonEntity) entity);
                 }
             } catch (IllegalArgumentException e) {
                 if (selector.split("-").length == 5) {
@@ -79,7 +79,7 @@ public abstract class DragonHandlerCommand extends CommandBase {
                         entity.world,
                         entity,
                         ((EntityPlayer) entity).getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue(),
-                        target -> target instanceof EntityTameableDragon && target.canBeCollidedWith() && target.getLowestRidingEntity() != vehicle
+                        target -> target instanceof TameableDragonEntity && target.canBeCollidedWith() && target.getLowestRidingEntity() != vehicle
                 );
                 if (hit != null) {
                     return getListOfStringsMatchingLastWord(args, hit.getCachedUniqueIdString());

@@ -1,13 +1,13 @@
 package net.dragonmounts.entity.behavior;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.BreathNode;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.effects.HydroBreathFX;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.sound.SoundEffectName;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.sound.SoundState;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.weapons.BreathWeapon;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.weapons.BreathWeaponHydro;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStage;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.breath.BreathNode;
+import net.dragonmounts.entity.breath.effects.HydroBreathFX;
+import net.dragonmounts.entity.breath.sound.SoundEffectName;
+import net.dragonmounts.entity.breath.sound.SoundState;
+import net.dragonmounts.entity.breath.weapons.BreathWeapon;
+import net.dragonmounts.entity.breath.weapons.BreathWeaponHydro;
+import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.EntityUtil;
 import net.minecraft.init.MobEffects;
@@ -20,7 +20,7 @@ import java.util.Random;
 
 public class WaterBehavior implements DragonType.Behavior {
     @Override
-    public void tick(EntityTameableDragon dragon) {
+    public void tick(TameableDragonEntity dragon) {
         if (dragon.isInWater()) {
             EntityUtil.addOrResetEffect(dragon, MobEffects.WATER_BREATHING, 200, 0, false, false, 21);
         }
@@ -46,7 +46,7 @@ public class WaterBehavior implements DragonType.Behavior {
 
     @Nullable
     @Override
-    public BreathWeapon createBreathWeapon(EntityTameableDragon dragon) {
+    public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
         return new BreathWeaponHydro(dragon);
     }
 

@@ -1,7 +1,7 @@
 package net.dragonmounts.inventory;
 
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.network.SSyncBannerPacket;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.util.DMUtils;
 import io.netty.buffer.ByteBuf;
 import mcp.MethodsReturnNonnullByDefault;
@@ -20,7 +20,7 @@ import static net.dragonmounts.DragonMounts.NETWORK_WRAPPER;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public final class DragonInventory implements IInventory {
-    public final EntityTameableDragon dragon;
+    public final TameableDragonEntity dragon;
     /**
      * item stacks in chest
      */
@@ -30,7 +30,7 @@ public final class DragonInventory implements IInventory {
      */
     private final ItemStack[] banners = new ItemStack[4];
 
-    public DragonInventory(EntityTameableDragon dragon) {
+    public DragonInventory(TameableDragonEntity dragon) {
         this.dragon = dragon;
         this.clear();
     }
@@ -84,7 +84,7 @@ public final class DragonInventory implements IInventory {
             this.stacks[slot] = ItemStack.EMPTY;
             return stack;
         }
-        EntityTameableDragon dragon = this.dragon;
+        TameableDragonEntity dragon = this.dragon;
         switch (slot -= this.stacks.length) {
             case 4:
                 stack = dragon.getChest();
@@ -214,7 +214,7 @@ public final class DragonInventory implements IInventory {
     }
 
     public void saveAdditionalData(NBTTagCompound tag) {
-        EntityTameableDragon dragon = this.dragon;
+        TameableDragonEntity dragon = this.dragon;
         ItemStack stack;
         if (!(stack = dragon.getSaddle()).isEmpty()) {
             tag.setTag("Saddle", stack.writeToNBT(new NBTTagCompound()));
@@ -285,7 +285,7 @@ public final class DragonInventory implements IInventory {
     }
 
     public void dropItemsInChest() {
-        EntityTameableDragon dragon = this.dragon;
+        TameableDragonEntity dragon = this.dragon;
         if (dragon.world.isRemote) {
             Arrays.fill(this.stacks, ItemStack.EMPTY);
         } else {
@@ -297,7 +297,7 @@ public final class DragonInventory implements IInventory {
      * Server only
      */
     public void dropAllItems() {
-        EntityTameableDragon dragon = this.dragon;
+        TameableDragonEntity dragon = this.dragon;
         DMUtils.dropItems(dragon, this.stacks);
         DMUtils.dropItems(dragon, this.banners);
         dragon.entityDropItem(dragon.getChest(), 0.5F);

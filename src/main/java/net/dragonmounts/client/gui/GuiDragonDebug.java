@@ -12,10 +12,10 @@ package net.dragonmounts.client.gui;
 import it.unimi.dsi.fastutil.objects.Reference2IntMap;
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStageHelper;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonReproductionHelper;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonVariantHelper;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.helper.DragonLifeStageHelper;
+import net.dragonmounts.entity.helper.DragonReproductionHelper;
+import net.dragonmounts.entity.helper.DragonVariantHelper;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.DMUtils;
 import net.minecraft.client.Minecraft;
@@ -23,7 +23,6 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.Path;
@@ -63,8 +62,8 @@ public class GuiDragonDebug extends Gui {
     private final DecimalFormat dfShort = new DecimalFormat("0.00");
     private final DecimalFormat dfLong = new DecimalFormat("0.0000");
     private ScaledResolution res;
-    private EntityTameableDragon dragonClient;
-    private EntityTameableDragon dragonServer;
+    private TameableDragonEntity dragonClient;
+    private TameableDragonEntity dragonServer;
     
     public GuiDragonDebug() {
         fr = mc.fontRenderer;
@@ -112,8 +111,8 @@ public class GuiDragonDebug extends Gui {
     
     private void getClientDragon() {
         // always return currently ridden dragon first
-        if (mc.player.getRidingEntity() instanceof EntityTameableDragon) {
-            dragonClient = (EntityTameableDragon) mc.player.getRidingEntity();
+        if (mc.player.getRidingEntity() instanceof TameableDragonEntity) {
+            dragonClient = (TameableDragonEntity) mc.player.getRidingEntity();
             return;
         }
         
@@ -124,12 +123,12 @@ public class GuiDragonDebug extends Gui {
         if (mc.objectMouseOver.entityHit == null) {
             return;
         }
-        
-        if (!(mc.objectMouseOver.entityHit instanceof EntityTameableDragon)) {
+
+        if (!(mc.objectMouseOver.entityHit instanceof TameableDragonEntity)) {
             return;
         }
-        
-        dragonClient = (EntityTameableDragon) mc.objectMouseOver.entityHit;
+
+        dragonClient = (TameableDragonEntity) mc.objectMouseOver.entityHit;
     }
 
     private void getServerDragon() {
@@ -153,14 +152,14 @@ public class GuiDragonDebug extends Gui {
         
         for (WorldServer ws : mcs.worlds) {
             Entity ent = ws.getEntityByID(dragonClient.getEntityId());
-            if (ent instanceof EntityTameableDragon) {
-                dragonServer = (EntityTameableDragon) ent;
+            if (ent instanceof TameableDragonEntity) {
+                dragonServer = (TameableDragonEntity) ent;
                 return;
             }
         }
     }
-    
-    private EntityTameableDragon getSelectedDragon() {
+
+    private TameableDragonEntity getSelectedDragon() {
         return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) ? dragonClient : dragonServer;
     }
 
@@ -175,7 +174,7 @@ public class GuiDragonDebug extends Gui {
     }
     
     private void renderEntityInfo() {
-        EntityTameableDragon dragon = getSelectedDragon();
+        TameableDragonEntity dragon = getSelectedDragon();
         if (dragon == null) {
             return;
         }
@@ -212,13 +211,6 @@ public class GuiDragonDebug extends Gui {
         String healthMax = dfShort.format(dragon.getMaxHealth());
         String healthRel = dfShort.format(dragon.getHealthRelative() * 100);
         text.printf("Health: %s/%s (%s%%)\n", health, healthMax, healthRel);
-        // armor
-        IAttributeInstance attribute = dragon.getEntityAttribute(SharedMonsterAttributes.ARMOR);
-        //noinspection ConstantValue
-        if (attribute != null) {
-            text.printf("Armor: %s\n", dfShort.format(attribute.getAttributeValue()));
-        }
-
         // hunger
         String hunger = dfShort.format(dragon.getHunger());
         text.printf("Hunger: %s\n", hunger);
@@ -282,7 +274,7 @@ public class GuiDragonDebug extends Gui {
     }
     
     private void renderAttributes() {
-        EntityTameableDragon dragon = getSelectedDragon();
+        TameableDragonEntity dragon = getSelectedDragon();
         if (dragon == null) {
             return;
         }

@@ -6,14 +6,14 @@ import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ReferenceSet;
 import it.unimi.dsi.fastutil.objects.ReferenceSets;
-import net.dragonmounts.inits.ModSounds;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.BreathNode;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.effects.FlameBreathFX;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.sound.SoundEffectName;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.sound.SoundState;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.weapons.BreathWeapon;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStage;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.breath.BreathNode;
+import net.dragonmounts.entity.breath.effects.FlameBreathFX;
+import net.dragonmounts.entity.breath.sound.SoundEffectName;
+import net.dragonmounts.entity.breath.sound.SoundState;
+import net.dragonmounts.entity.breath.weapons.BreathWeapon;
+import net.dragonmounts.entity.helper.DragonLifeStage;
+import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.util.DMUtils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -200,7 +200,7 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
     }
 
     public interface Behavior {
-        void tick(EntityTameableDragon dragon);
+        void tick(TameableDragonEntity dragon);
 
         default boolean isHabitatEnvironment(Entity egg) {
             return false;
@@ -227,7 +227,7 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
         }
 
         @Nullable
-        default BreathWeapon createBreathWeapon(EntityTameableDragon dragon) {
+        default BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
             return new BreathWeapon(dragon);
         }
 
@@ -235,16 +235,16 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
             return state.getSoundByAge(stage);
         }
 
-        default SoundEvent getLivingSound(EntityTameableDragon dragon) {
-            return dragon.isBaby() ? ModSounds.ENTITY_DRAGON_HATCHLING_GROWL :
+        default SoundEvent getLivingSound(TameableDragonEntity dragon) {
+            return dragon.isBaby() ? DMSounds.ENTITY_DRAGON_HATCHLING_GROWL :
                     (dragon.getRNG().nextInt(3) == 0
-                            ? ModSounds.ENTITY_DRAGON_GROWL
-                            : ModSounds.ENTITY_DRAGON_BREATHE
+                            ? DMSounds.ENTITY_DRAGON_GROWL
+                            : DMSounds.ENTITY_DRAGON_BREATHE
                     );
         }
 
-        default SoundEvent getRoarSound(EntityTameableDragon dragon) {
-            return dragon.isBaby() ? ModSounds.HATCHLING_DRAGON_ROAR : ModSounds.DRAGON_ROAR;
+        default SoundEvent getRoarSound(TameableDragonEntity dragon) {
+            return dragon.isBaby() ? DMSounds.HATCHLING_DRAGON_ROAR : DMSounds.DRAGON_ROAR;
         }
 
         default void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathNode.Power power, float partialTicks) {

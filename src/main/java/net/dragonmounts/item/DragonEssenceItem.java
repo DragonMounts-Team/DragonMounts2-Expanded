@@ -2,9 +2,10 @@ package net.dragonmounts.item;
 
 import net.dragonmounts.compat.DragonMountsCompat;
 import net.dragonmounts.entity.EntityContainerItemEntity;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStage;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.EntityUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -30,7 +31,7 @@ import java.util.List;
 
 import static net.dragonmounts.util.EntityUtil.notOwner;
 
-public class DragonEssenceItem extends Item implements IEntityContainer<EntityTameableDragon> {
+public class DragonEssenceItem extends Item implements IEntityContainer<TameableDragonEntity> {
     public final DragonType type;
 
     public DragonEssenceItem(DragonType type) {
@@ -51,7 +52,7 @@ public class DragonEssenceItem extends Item implements IEntityContainer<EntityTa
     }
 
     @Override
-    public ItemStack saveEntity(EntityTameableDragon dragon) {
+    public ItemStack saveEntity(TameableDragonEntity dragon) {
         NBTTagCompound root = new NBTTagCompound();
         NBTTagCompound data = IEntityContainer.simplifyData(dragon.writeToNBT(new NBTTagCompound()));
         data.removeTag("UUIDMost");
@@ -67,14 +68,14 @@ public class DragonEssenceItem extends Item implements IEntityContainer<EntityTa
     @Nullable
     @Override
     public Entity loadEntity(World level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos, boolean yOffset, String feedback) {
-        EntityTameableDragon dragon = new EntityTameableDragon(level);
+        TameableDragonEntity dragon = new TameableDragonEntity(level);
         NBTTagCompound root = stack.getTagCompound();
         boolean flag = root == null;
         if (!flag) {
             NBTTagCompound data = root.getCompoundTag("EntityTag");
             if (!data.isEmpty()) {
                 if (notOwner(data, player, feedback)) return null;
-                flag = !data.hasKey("Variant");
+                flag = !data.hasKey(DragonVariant.DATA_PARAMETER_KEY);
                 dragon.readFromNBT(data);
             }
         }
@@ -103,8 +104,8 @@ public class DragonEssenceItem extends Item implements IEntityContainer<EntityTa
     }
 
     @Override
-    public Class<EntityTameableDragon> getContentType() {
-        return EntityTameableDragon.class;
+    public Class<TameableDragonEntity> getContentType() {
+        return TameableDragonEntity.class;
     }
 
     @Override

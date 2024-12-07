@@ -1,8 +1,8 @@
 package net.dragonmounts.block;
 
 import net.dragonmounts.init.DMItemGroups;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStage;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.block.BlockDragonEgg;
 import net.minecraft.block.SoundType;
@@ -25,9 +25,9 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class HatchableDragonEggBlock extends BlockDragonEgg {
-    public static EntityTameableDragon spawn(World level, BlockPos pos, DragonType type) {
+    public static TameableDragonEntity spawn(World level, BlockPos pos, DragonType type) {
         level.setBlockToAir(pos);
-        EntityTameableDragon egg = new EntityTameableDragon(level);//TODO: use HatchableDragonEggEntity
+        TameableDragonEntity egg = new TameableDragonEntity(level);//TODO: use HatchableDragonEggEntity
         egg.setVariant(type.variants.draw(level.rand, null));
         egg.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
         egg.getLifeStageHelper().setLifeStage(DragonLifeStage.EGG);
