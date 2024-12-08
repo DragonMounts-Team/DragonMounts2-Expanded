@@ -13,6 +13,7 @@ import it.unimi.dsi.fastutil.objects.Reference2IntMap;
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.entity.helper.DragonLifeStageHelper;
 import net.dragonmounts.entity.helper.DragonReproductionHelper;
 import net.dragonmounts.entity.helper.DragonVariantHelper;
@@ -223,13 +224,12 @@ public class GuiDragonDebug extends Gui {
         text.setColor(WHITE);
         
         // life stage
-        DragonLifeStageHelper lifeStage = dragon.getLifeStageHelper();
-        String lifeStageName = lifeStage.getLifeStage().name().toLowerCase();
-        int ticksSinceCreation = dragon.getLifeStageHelper().getTicksSinceCreation();
-        text.printf("Life stage: %s (%d)\n", lifeStageName, ticksSinceCreation);
-        
+        DragonLifeStageHelper helper = dragon.getLifeStageHelper();
+        int ticksSinceCreation = helper.getTicksSinceCreation();
+        text.printf("Life Stage: %s %s (%d)\n", helper.getLifeStage().name(), dfShort.format(DragonLifeStage.getStageProgressFromTickCount(ticksSinceCreation)), ticksSinceCreation);
+
         // size
-        String scale = dfShort.format(lifeStage.getScale());
+        String scale = dfShort.format(helper.getScale());
         String width = dfShort.format(dragon.width);
         String height = dfShort.format(dragon.height);
         text.printf("Size: %s (w:%s h:%s)\n", scale, width, height);

@@ -273,6 +273,7 @@ public class DMArmorEffects {
     public static void onExpDrop(LivingExperienceDropEvent event) {
         EntityPlayer source = event.getAttackingPlayer();
         if (source == null) return;
+        //noinspection DataFlowIssue
         IArmorEffectManager manager = source.getCapability(ARMOR_EFFECT_MANAGER, null);
         if (manager == null || !manager.isActive(ENCHANT_EFFECT)) return;
         int base = event.getDroppedExperience();
@@ -286,6 +287,7 @@ public class DMArmorEffects {
         if (self.world.isRemote) return;
         Entity source = event.getSource().getTrueSource();
         if (source != null) {
+            //noinspection DataFlowIssue
             IArmorEffectManager manager = source.getCapability(ARMOR_EFFECT_MANAGER, null);
             if (manager != null && manager.isActive(STORM_EFFECT) && self.getRNG().nextFloat() < 0.05F) {
                 self.world.addWeatherEffect(new EntityLightningBolt(self.world, self.posX, self.posY, self.posZ, false));

@@ -2,6 +2,7 @@ package net.dragonmounts.event;
 
 import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.block.HatchableDragonEggBlock;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.util.DMUtils;
 import net.minecraft.init.Blocks;
@@ -30,6 +31,9 @@ public class VanillaEggHandler {
 			event.getEntityPlayer().sendStatusMessage(new TextComponentTranslation(DMUtils.translateToLocal("egg.cantHatchEnd.DragonMounts")), true);
 			return;  //cant hatch in the end
 		}
-		HatchableDragonEggBlock.spawn(level, pos, DragonTypes.ENDER).getReproductionHelper().setBreeder(event.getEntityPlayer());
+		TameableDragonEntity egg = HatchableDragonEggBlock.spawn(level, pos, DragonTypes.ENDER);
+		if (egg != null) {
+			egg.getReproductionHelper().setBreeder(event.getEntityPlayer());
+		}
 	}
 }

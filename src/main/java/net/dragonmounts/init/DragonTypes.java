@@ -199,5 +199,6 @@ public class DragonTypes {
                     .addImmunity(DamageSource.WITHER)
                     .addHabitat(Blocks.LAPIS_BLOCK)
                     .addHabitat(Blocks.LAPIS_ORE)
+                    .removeLoot()//TODO: add loot table later
     );
 }

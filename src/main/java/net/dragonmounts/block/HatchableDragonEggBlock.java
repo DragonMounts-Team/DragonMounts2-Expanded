@@ -1,9 +1,10 @@
 package net.dragonmounts.block;
 
-import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.helper.DragonLifeStage;
+import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.registry.DragonVariant;
 import net.minecraft.block.BlockDragonEgg;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -25,10 +26,13 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class HatchableDragonEggBlock extends BlockDragonEgg {
+    @Nullable
     public static TameableDragonEntity spawn(World level, BlockPos pos, DragonType type) {
         level.setBlockToAir(pos);
         TameableDragonEntity egg = new TameableDragonEntity(level);//TODO: use HatchableDragonEggEntity
-        egg.setVariant(type.variants.draw(level.rand, null));
+        DragonVariant variant = type.variants.draw(level.rand, null);
+        if (variant == null) return null;
+        egg.setVariant(variant);
         egg.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
         egg.getLifeStageHelper().setLifeStage(DragonLifeStage.EGG);
         level.spawnEntity(egg);
@@ -66,7 +70,10 @@ public class HatchableDragonEggBlock extends BlockDragonEgg {
             level.playSound(player, pos, SoundEvents.BLOCK_WOOD_HIT, SoundCategory.PLAYERS, 1, 1);
             return true;
         }
-        spawn(level, pos, this.getDragonType(this.getMetaFromState(state))).getReproductionHelper().setBreeder(player);
+        TameableDragonEntity egg = spawn(level, pos, this.getDragonType(this.getMetaFromState(state)));
+        if (egg != null) {
+            egg.getReproductionHelper().setBreeder(player);
+        }
         return true;
     }
 

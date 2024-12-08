@@ -111,6 +111,7 @@ public class RegistryEventHandler {
         registry.register(DragonTypes.WATER);
         registry.register(DragonTypes.WITHER);
         registry.register(DragonTypes.ZOMBIE);
+        registry.register(DragonTypes.DARK);
     }
 
     @SubscribeEvent
@@ -128,7 +129,7 @@ public class RegistryEventHandler {
     @SubscribeEvent
     public static void registerMobEffects(RegistryEvent.Register<Potion> event) {
         IForgeRegistry<Potion> registry = event.getRegistry();
-        registry.register(DMEffect.DARK_DRAGON_BLESS);
+        registry.register(DMMobEffects.DARK_DRAGON_BLESS);
     }
 
     @SubscribeEvent

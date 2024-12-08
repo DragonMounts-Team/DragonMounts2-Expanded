@@ -1,7 +1,7 @@
 package net.dragonmounts.effect;
 
 import net.dragonmounts.client.gui.MobEffectIcon;
-import net.dragonmounts.init.DMEffect;
+import net.dragonmounts.init.DMMobEffects;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
@@ -16,10 +16,8 @@ public class DarkDragonBlessEffect extends Potion {
 
     @Override
     public void performEffect(EntityLivingBase entity, int amplifier) {
-        if (this == DMEffect.DARK_DRAGON_BLESS) {
-            if ((entity.getHealth() < entity.getMaxHealth())&&entity.world.getLightFromNeighbors(entity.getPosition())<7.0) {
-                entity.heal(0.5F);
-            }
+        if (this == DMMobEffects.DARK_DRAGON_BLESS && entity.getHealth() < entity.getMaxHealth() && entity.world.getLightFromNeighbors(entity.getPosition()) < 7.0) {
+            entity.heal(0.5F);
         }
     }
 

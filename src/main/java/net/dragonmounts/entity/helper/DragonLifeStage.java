@@ -38,7 +38,7 @@ public enum DragonLifeStage {
 //          adult = 1 hour
 
   public final String identifier;
-  public final int durationTicks; // -1 means infinite
+  public final int durationTicks;
   public final float startScale;
   public final float finalScale;
   public final int boundaryTick;
@@ -102,7 +102,7 @@ public enum DragonLifeStage {
   public static float getStageProgressFromTickCount(int ticksSinceCreation) {
     DragonLifeStage stage = getLifeStageFromTickCount(ticksSinceCreation);
     if (stage.durationTicks == 0) return 1.0F;
-    return 1.0F + MathHelper.clamp(ticksSinceCreation - stage.boundaryTick, -1, 0) / (float) stage.durationTicks;
+    return 1.0F + MathHelper.clamp((ticksSinceCreation - stage.boundaryTick) / (float) stage.durationTicks, -1.0F, 0.0F);
   }
 
   public static float getScaleFromTickCount(int ticksSinceCreation) {
@@ -111,7 +111,7 @@ public enum DragonLifeStage {
     return MathX.lerp(
             stage.startScale,
             stage.finalScale,
-            1.0F + MathHelper.clamp(ticksSinceCreation - stage.boundaryTick, -1, 0) / (float) stage.durationTicks
+            1.0F + MathHelper.clamp((ticksSinceCreation - stage.boundaryTick) / (float) stage.durationTicks, -1.0F, 0.0F)
     );
   }
 

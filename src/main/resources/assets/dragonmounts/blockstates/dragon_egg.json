@@ -82,11 +82,6 @@
         "textures": {
           "all": "dragonmounts:entities/dragon/moonlight/egg"
         }
-      },
-      "dark": {
-        "textures": {
-          "all": "dragonmounts:entities/dragon/dark/egg"
-        }
       }
     }
   }

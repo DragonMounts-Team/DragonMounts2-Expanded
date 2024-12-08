@@ -28,6 +28,7 @@ public class DMBlocks {
     public static final HatchableDragonEggBlock WATER_DRAGON_EGG = registerDragonEgg("water_dragon_egg", DragonTypes.WATER);
     public static final HatchableDragonEggBlock WITHER_DRAGON_EGG = registerDragonEgg("wither_dragon_egg", DragonTypes.WITHER);
     public static final HatchableDragonEggBlock ZOMBIE_DRAGON_EGG = registerDragonEgg("zombie_dragon_egg", DragonTypes.ZOMBIE);
+    public static final HatchableDragonEggBlock DARK_DRAGON_EGG = registerDragonEgg("dark_dragon_egg", DragonTypes.DARK);
 
     static <T extends Block> T register(String name, T block) {
         BLOCKS.add(block.setTranslationKey(name).setRegistryName(name));

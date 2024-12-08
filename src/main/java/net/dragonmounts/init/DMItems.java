@@ -27,6 +27,10 @@ public class DMItems {
     public static boolean isAquaticFood(ItemStack stack) {
         return HARDCODED_AQUATIC_FOOD.contains(stack.getItem()) || ArrayUtils.contains(OreDictionary.getOreIDs(stack), OreDictionary.getOreID("listAllfishraw"));
     }
+
+    //Blocks
+    public static final CraftableBlockItem DRAGON_NEST = createItem("dragon_nest", new CraftableBlockItem(DMBlocks.DRAGON_NEST, DMItemGroups.MAIN));
+    public static final ItemBlock DRAGON_CORE = createItem("dragon_core", new ItemBlock(DMBlocks.DRAGON_CORE));
     //Scales Start
     public static final DragonScalesItem FOREST_DRAGON_SCALES = createDragonScalesItem("forest_dragon_scales", DragonTypes.FOREST);
     public static final DragonScalesItem FIRE_DRAGON_SCALES = createDragonScalesItem("fire_dragon_scales", DragonTypes.FIRE);
@@ -41,7 +45,6 @@ public class DMItems {
     public static final DragonScalesItem TERRA_DRAGON_SCALES = createDragonScalesItem("terra_dragon_scales", DragonTypes.TERRA);
     public static final DragonScalesItem ZOMBIE_DRAGON_SCALES = createDragonScalesItem("zombie_dragon_scales", DragonTypes.ZOMBIE);
     public static final DragonScalesItem MOONLIGHT_DRAGON_SCALES = createDragonScalesItem("moonlight_dragon_scales", DragonTypes.MOONLIGHT);
-
     public static final DragonScalesItem DARK_DRAGON_SCALES = createDragonScalesItem("dark_dragon_scales", DragonTypes.DARK);
 
     //Dragon Armor
@@ -318,7 +321,7 @@ public class DMItems {
     public static final CarriageItem OAK_CARRIAGE = createItem("oak_carriage", new CarriageItem(CarriageTypes.OAK));
     public static final CarriageItem SPRUCE_CARRIAGE = createItem("spruce_carriage", new CarriageItem(CarriageTypes.SPRUCE));
     //Dragon Amulets
-    public static final AmuletItem<Entity> AMULET = createItem("amulet", "dragon_amulet", new AmuletItem<>(Entity.class));
+    public static final AmuletItem<Entity> AMULET = new AmuletItem<>(Entity.class);
     public static final DragonAmuletItem FOREST_DRAGON_AMULET = createDragonAmuletItem("forest_dragon_amulet", DragonTypes.FOREST);
     public static final DragonAmuletItem FIRE_DRAGON_AMULET = createDragonAmuletItem("fire_dragon_amulet", DragonTypes.FIRE);
     public static final DragonAmuletItem ICE_DRAGON_AMULET = createDragonAmuletItem("ice_dragon_amulet", DragonTypes.ICE);
@@ -350,23 +353,11 @@ public class DMItems {
     public static final DragonEssenceItem MOONLIGHT_DRAGON_ESSENCE = createDragonEssenceItem("moonlight_dragon_essence", DragonTypes.MOONLIGHT);
     public static final DragonEssenceItem SKELETON_DRAGON_ESSENCE = createDragonEssenceItem("skeleton_dragon_essence", DragonTypes.SKELETON);
     public static final DragonEssenceItem WITHER_DRAGON_ESSENCE = createDragonEssenceItem("wither_dragon_essence", DragonTypes.WITHER);
-    //Blocks
-    public static final CraftableBlockItem DRAGON_NEST = createItem("dragon_nest", new CraftableBlockItem(DMBlocks.DRAGON_NEST, DMItemGroups.MAIN));
-    public static final ItemBlock DRAGON_CORE = createItem("dragon_core", new ItemBlock(DMBlocks.DRAGON_CORE));
-    public static final DragonOrbItem DRAGON_ORB = initItem("dragon_orb", new DragonOrbItem());
-    public static final TestRunnerItem TEST_RUNNER = initItem("test_runner", new TestRunnerItem());
-
-    static <T extends Item> T createItem(String name, String translationKey, T item) {
-        ITEMS.add(item.setTranslationKey(translationKey).setRegistryName(name));
-        return item;
-    }
+    public static final DragonOrbItem DRAGON_ORB = new DragonOrbItem();
+    public static final TestRunnerItem TEST_RUNNER = new TestRunnerItem();
 
     static <T extends Item> T createItem(String name, T item) {
-        return createItem(name, name, item);
-    }
-
-    static <T extends Item> T initItem(String name, T item) {
-        item.setTranslationKey(name).setRegistryName(name);
+        ITEMS.add(item.setTranslationKey(name).setRegistryName(name));
         return item;
     }
 
@@ -482,9 +473,10 @@ public class DMItems {
     }
 
     static {
+        ITEMS.add(AMULET.setTranslationKey("dragon_amulet").setRegistryName("amulet").setCreativeTab(DMItemGroups.MAIN));
+        DRAGON_INTERACTABLE.add(AMULET);
         DRAGON_INTERACTABLE.add(DRAGON_WAND);
         DRAGON_INTERACTABLE.add(DRAGON_WHISTLE);
-        DRAGON_INTERACTABLE.add(AMULET);
         DRAGON_INTERACTABLE.add(IRON_DRAGON_ARMOR);
         DRAGON_INTERACTABLE.add(GOLDEN_DRAGON_ARMOR);
         DRAGON_INTERACTABLE.add(EMERALD_DRAGON_ARMOR);
@@ -493,8 +485,8 @@ public class DMItems {
         DRAGON_INTERACTABLE.add(Items.STICK);
         HARDCODED_AQUATIC_FOOD.add(Items.FISH);
         HARDCODED_AQUATIC_FOOD.add(Items.COOKED_FISH);
-        ITEMS.add(DRAGON_CORE);
-        ITEMS.add(DRAGON_NEST);
+        DRAGON_ORB.setTranslationKey("dragon_orb").setRegistryName("dragon_orb");
+        TEST_RUNNER.setTranslationKey("test_runner").setRegistryName("test_runner");
     }
 
     @SuppressWarnings("DataFlowIssue")

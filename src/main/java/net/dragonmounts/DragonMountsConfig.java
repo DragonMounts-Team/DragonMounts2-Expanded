@@ -29,7 +29,6 @@ public class DragonMountsConfig {
     public static final String CATEGORY_MAIN = "main";
     public static final String CATEGORY_WORLDGEN = "worldGen";
     public static final String CATEGORY_CLIENTDM2 = "clientDM2";
-    public static final String CATEGORY_EFFECTS_ID = "DMEffectId";
 
     // config properties
     private static boolean disableBlockOverride = false;
@@ -91,8 +90,6 @@ public class DragonMountsConfig {
 
     public static boolean useDimensionBlackList = true;
     public static boolean forcedRename = false;
-
-    public static int DARK_DRAGON_BLESS_ID = 68;
 
     private static boolean configHasLoaded = false; // used to detect code which tries to access a property before the config has been loaded
     // can be caused by static instantiation of classes especially Items Blocks and similar
@@ -171,72 +168,71 @@ public class DragonMountsConfig {
         /*
          *  MAIN
          */
-        prop = config.get(CATEGORY_MAIN, "debug", debug);
-        prop.setComment("Debug mode. You need to restart Minecraft for the change to take effect.  Unless you're a developer or are told to activate it, you don't want to set this to true.");
+        prop = config.get(CATEGORY_MAIN, "debug", false, "Debug mode for developers.").setRequiresMcRestart(true).setLanguageKey("config.dragonmounts.debug");
         debug = prop.getBoolean();
         propOrder.add(prop.getName());
 
-        prop = config.get(CATEGORY_MAIN, "can eggs change breeds", shouldChangeBreedViaHabitatOrBlock);
+        prop = config.get(CATEGORY_MAIN, "can eggs change breeds", true);
         prop.setComment("Enables changing of egg breeds via block or environment");
         shouldChangeBreedViaHabitatOrBlock = prop.getBoolean();
         propOrder.add(prop.getName());
 
-        prop = config.get(CATEGORY_MAIN, "disable block override", disableBlockOverride);
+        prop = config.get(CATEGORY_MAIN, "disable block override", false);
         prop.setComment("Disables right-click override on the vanilla dragon egg block. May help to fix issues with other mods.");
         disableBlockOverride = prop.getBoolean();
         propOrder.add(prop.getName());
 
-        prop = config.get(CATEGORY_MAIN, "Armor", ARMOR);
+        prop = config.get(CATEGORY_MAIN, "Armor", 8.0);
         prop.setComment("Makes Dragons Tougher or Not");
         ARMOR = prop.getDouble();
         propOrder.add(prop.getName());
 
-        prop = config.get(CATEGORY_MAIN, "Damage", BASE_DAMAGE);
+        prop = config.get(CATEGORY_MAIN, "Damage", 12.0);
         prop.setComment("Damage for dragon attack");
         BASE_DAMAGE = prop.getDouble();
         propOrder.add(prop.getName());
 
-        prop = config.get(CATEGORY_MAIN, "Dragon Base Health", BASE_HEALTH);
+        prop = config.get(CATEGORY_MAIN, "Dragon Base Health", 90.0);
         prop.setComment("Dragon Base Health" + TextFormatting.ITALIC + " Note: Some Dragons have unique health values and are still affected by this");
         BASE_HEALTH = prop.getDouble();
         propOrder.add(prop.getName());
 
-        prop = config.get(CATEGORY_MAIN, "Health Regen Speed", REG_FACTOR);
+        prop = config.get(CATEGORY_MAIN, "Health Regen Speed", 75);
         prop.setComment("Higher numbers slower regen for dragons");
         REG_FACTOR = prop.getInt();
         propOrder.add(prop.getName());
 
-        prop = config.get(CATEGORY_MAIN, "Hunger Speed", hungerDecrement);
+        prop = config.get(CATEGORY_MAIN, "Hunger Speed", 6000);
         prop.setComment("More numbers slower, i.e. gets a number from the factor of (3000) to 1 per tick (millisecond) if it equals to 1 reduce hunger, dont make it too low or might crash the game");
         hungerDecrement = prop.getInt();
         propOrder.add(prop.getName());
 
-        prop = config.get(CATEGORY_MAIN, "can dragons despawn", canDragonDespawn);
+        prop = config.get(CATEGORY_MAIN, "can dragons despawn", true);
         prop.setComment("Enables or Disables dragons ability to despawn, works only for adult non tamed dragons");
         canDragonDespawn = prop.getBoolean();
         propOrder.add(prop.getName());
 
-        prop = config.get(CATEGORY_MAIN, "can ice breath be permanent", canIceBreathBePermanent);
+        prop = config.get(CATEGORY_MAIN, "can ice breath be permanent", false);
         prop.setComment("refers to the ice breath for the dragon in water, set true if you want the ice block to be permanent. false otherwise.");
         canIceBreathBePermanent = prop.getBoolean();
         propOrder.add(prop.getName());
 
-        prop = config.get(CATEGORY_MAIN, "fire breath affect blocks", canFireBreathAffectBlocks);
+        prop = config.get(CATEGORY_MAIN, "fire breath affect blocks", true);
         prop.setComment("refers to the fire breath to affect blocks");
         canFireBreathAffectBlocks = prop.getBoolean();
         propOrder.add(prop.getName());
 
-        prop = config.get(CATEGORY_MAIN, "use CommandingPlayer", useCommandingPlayer);
+        prop = config.get(CATEGORY_MAIN, "use CommandingPlayer", false);
         prop.setComment("Use a commanding player method(Experimental) to make dragons land on multiple players");
         useCommandingPlayer = prop.getBoolean();
         propOrder.add(prop.getName());
 
-        prop = config.get(CATEGORY_MAIN, "Allow Other Player's Control", allowOtherPlayerControl);
+        prop = config.get(CATEGORY_MAIN, "Allow Other Player's Control", true);
         prop.setComment("Disable or enable the dragon's ability to obey other players");
         allowOtherPlayerControl = prop.getBoolean();
         propOrder.add(prop.getName());
 
-        prop = config.get(CATEGORY_MAIN, "Allow Other Breeding", allowBreeding);
+        prop = config.get(CATEGORY_MAIN, "Allow Other Breeding", true);
         prop.setComment("Allow or disallow breeding");
         allowBreeding = prop.getBoolean();
         propOrder.add(prop.getName());
@@ -245,17 +241,17 @@ public class DragonMountsConfig {
         forcedRename = prop.getBoolean(false);
         propOrder.add(prop.getName());
 
-        prop = config.get(CATEGORY_CLIENTDM2, "Max Flight Height", maxFLightHeight);
+        prop = config.get(CATEGORY_CLIENTDM2, "Max Flight Height", 20.0);
         prop.setComment("Max flight for dragons circling players on a whistle");
         maxFLightHeight = prop.getDouble();
         propOrder.add(prop.getName());
 
-        prop = config.get(CATEGORY_CLIENTDM2, "Third Person Zoom BACK", ThirdPersonZoom);
+        prop = config.get(CATEGORY_CLIENTDM2, "Third Person Zoom BACK", 20.0);
         prop.setComment("Zoom out for third person 2 while riding the the dragon and dragon carriages DO NOT EXXAGERATE IF YOU DONT WANT CORRUPTED WORLDS");
         ThirdPersonZoom = prop.getDouble();
         propOrder.add(prop.getName());
 
-        prop = config.get(CATEGORY_CLIENTDM2, "Wander From HomeDist", dragonanderFromHomeDist);
+        prop = config.get(CATEGORY_CLIENTDM2, "Wander From HomeDist", 50);
         prop.setComment("Wander From HomeDist");
         dragonanderFromHomeDist = prop.getInt();
         propOrder.add(prop.getName());
@@ -359,13 +355,6 @@ public class DragonMountsConfig {
                 + "(Note: Expermiment on a new world when editing these numbers because it may cause damages to your own worlds)");
         netherNestRarerityInZ = prop.getInt();
         propOrder.add(prop.getName());
-
-        prop = config.get(CATEGORY_EFFECTS_ID, "Dark Dragon Effect Id", DARK_DRAGON_BLESS_ID);
-        prop.setComment("Dark dragon effect`s number id");
-        DARK_DRAGON_BLESS_ID = prop.getInt();
-        propOrder.add(prop.getName());
-
-
         configHasLoaded = true;
 
         config.setCategoryPropertyOrder(CATEGORY_WORLDGEN, propOrder);
