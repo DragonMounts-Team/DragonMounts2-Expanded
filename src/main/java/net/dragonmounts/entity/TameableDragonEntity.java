@@ -32,7 +32,6 @@ import net.dragonmounts.network.MessageDragonExtras;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.DMUtils;
-import net.dragonmounts.util.LootTableLocation;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -229,6 +228,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         attributes.getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(RESISTANCE);
         attributes.getAttributeInstance(SharedMonsterAttributes.ARMOR).setBaseValue(BASE_ARMOR);
         attributes.getAttributeInstance(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(BASE_TOUGHNESS);
+        attributes.getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(DragonMountsConfig.BASE_HEALTH);
         attributes.getAttributeInstance(SWIM_SPEED).setBaseValue(5.0);
     }
 
@@ -626,7 +626,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     public void onLivingUpdate() {
         this.variantHelper.onLivingUpdate();
         helpers.values().forEach(DragonHelper::onLivingUpdate);
-        this.getVariant().type.behavior.tick(this);
+        this.getVariant().type.tick(this);
 
         if (isServer()) {
             final float DUMMY_MOVETIME = 0;
@@ -878,7 +878,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
     public void roar() {
         if (!isDead && !isUsingBreathWeapon()) {
-            SoundEvent sound = this.getVariant().type.behavior.getRoarSound(this);
+            SoundEvent sound = this.getVariant().type.getRoarSound(this);
             if (sound == null) return;
             this.roarTicks = 0;
             world.playSound(posX, posY, posZ, sound, SoundCategory.NEUTRAL, MathX.clamp(getScale(), 0.3F, 0.6F), getSoundPitch(), true);
@@ -898,7 +898,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
      * Returns the sound this mob makes while it's alive.
      */
     public SoundEvent getLivingSound() {
-        return isEgg() || isUsingBreathWeapon() ? null : this.getVariant().type.behavior.getLivingSound(this);
+        return isEgg() || isUsingBreathWeapon() ? null : this.getVariant().type.getLivingSound(this);
     }
 
     /**
@@ -1104,7 +1104,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     @Override
     public double getMountedYOffset() {
         //final int DEFAULT_PASSENGER_NUMBER = 0;
-        return this.getVariant().type.behavior.locatePassenger(0, this.isSitting()).y * getScale();
+        return this.getVariant().type.locatePassenger(0, this.isSitting()).y * getScale();
     }
 
     /**
@@ -1525,7 +1525,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
                 return;
             }
 
-            Vec3d mountedPositionOffset = this.getVariant().type.behavior.locatePassenger(passengerNumber, this.isSitting());
+            Vec3d mountedPositionOffset = this.getVariant().type.locatePassenger(passengerNumber, this.isSitting());
 
             double dragonScaling = getScale(); //getBreed().getAdultModelRenderScaleFactor() * getScale();
 
@@ -1679,11 +1679,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
     @Override
     protected ResourceLocation getLootTable() {
-        if (!isTamed() && !isEgg() || !isBaby()) {
-            return this.getVariant().type.getInstance(LootTableLocation.class, null);
-        } else {
-            return null;
-        }
+        return !isTamed() && !isEgg() || !isBaby() ? this.getVariant().type.lootTable : null;
     }
 
     public boolean isSheared() {
@@ -2066,7 +2062,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     @Override
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData data) {
         super.onInitialSpawn(difficulty, data);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(DragonMountsConfig.BASE_HEALTH);
         this.variantHelper.onVariantChanged(this.getVariant());
         return data;
     }

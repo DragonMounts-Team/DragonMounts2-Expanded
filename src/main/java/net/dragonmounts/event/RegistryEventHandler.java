@@ -10,7 +10,6 @@ import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.client.gui.GuiHandler;
 import net.dragonmounts.compat.DragonMountsCompat;
 import net.dragonmounts.compat.DragonTypeCompat;
-import net.dragonmounts.effects.DarkDragonBlessEffect;
 import net.dragonmounts.entity.breath.sound.SoundEffectName;
 import net.dragonmounts.init.*;
 import net.dragonmounts.registry.CarriageType;
@@ -24,7 +23,6 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -70,12 +68,6 @@ public class RegistryEventHandler {
         }
         DMUtils.getLogger().info("Item Registries Successfully Registered!");
     }
-    @SubscribeEvent
-    public static void registerEffects(RegistryEvent.Register<Potion> event) {
-        event.getRegistry().registerAll(
-                DMEffect.DARK_DRAGON_BLESS.setRegistryName(new ResourceLocation(DragonMountsTags.MOD_ID, "dark_dragon_bless"))
-        );
-    }
 
     @SubscribeEvent
     public static void registerCarriageType(RegistryEvent.Register<CarriageType> event) {
@@ -103,7 +95,22 @@ public class RegistryEventHandler {
 
     @SubscribeEvent
     public static void registerDragonType(RegistryEvent.Register<DragonType> event) {
-        DragonTypes.BUILTIN_VALUES.forEach(event.getRegistry()::register);
+        IForgeRegistry<DragonType> registry = event.getRegistry();
+        registry.register(DragonTypes.AETHER);
+        registry.register(DragonTypes.ENCHANT);
+        registry.register(DragonTypes.ENDER);
+        registry.register(DragonTypes.FIRE);
+        registry.register(DragonTypes.FOREST);
+        registry.register(DragonTypes.ICE);
+        registry.register(DragonTypes.MOONLIGHT);
+        registry.register(DragonTypes.NETHER);
+        registry.register(DragonTypes.SKELETON);
+        registry.register(DragonTypes.STORM);
+        registry.register(DragonTypes.SUNLIGHT);
+        registry.register(DragonTypes.TERRA);
+        registry.register(DragonTypes.WATER);
+        registry.register(DragonTypes.WITHER);
+        registry.register(DragonTypes.ZOMBIE);
     }
 
     @SubscribeEvent
@@ -116,6 +123,12 @@ public class RegistryEventHandler {
         IForgeRegistry<DataSerializerEntry> registry = event.getRegistry();
         registry.register(new DataSerializerEntry(CarriageType.SERIALIZER).setRegistryName(DragonMountsTags.MOD_ID + ":carriage_type"));
         registry.register(new DataSerializerEntry(DragonVariant.SERIALIZER).setRegistryName(DragonMountsTags.MOD_ID + ":dragon_variant"));
+    }
+
+    @SubscribeEvent
+    public static void registerMobEffects(RegistryEvent.Register<Potion> event) {
+        IForgeRegistry<Potion> registry = event.getRegistry();
+        registry.register(DMEffect.DARK_DRAGON_BLESS);
     }
 
     @SubscribeEvent

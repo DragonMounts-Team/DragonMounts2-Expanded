@@ -309,6 +309,6 @@ public class SoundEffectBreathWeapon {
    * @return the resourcelocation corresponding to the desired sound
    */
   protected ResourceLocation weaponSound(SoundState soundPart, DragonLifeStage stage, TameableDragonEntity dragon) {
-    return dragon.getVariant().type.behavior.getBreathSound(stage, soundPart).location;
+    return dragon.getVariant().type.getBreathSound(stage, soundPart).location;
   }
 }

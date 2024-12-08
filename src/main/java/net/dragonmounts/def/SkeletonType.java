@@ -1,17 +1,19 @@
-package net.dragonmounts.entity.behavior;
+package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.weapons.BreathWeapon;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 
 import javax.annotation.Nullable;
 
-public class SkeletonBehavior implements DragonType.Behavior {
-    @Override
-    public void tick(TameableDragonEntity dragon) {}
+public class SkeletonType extends DragonType {
+    public SkeletonType(ResourceLocation identifier, Properties props) {
+        super(identifier, props);
+    }
 
     @Override
     public boolean isHabitatEnvironment(Entity egg) {

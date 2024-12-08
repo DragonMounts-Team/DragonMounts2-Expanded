@@ -26,7 +26,7 @@ public class BreathWeaponEmitter {
      *
      * @param power the strength of the beam
      */
-    public void spawnBreathParticles(World world, Vec3d origin, Vec3d direction, BreathNode.Power power, int tickCount, DragonType.Behavior behavior) {
+    public void spawnBreathParticles(World world, Vec3d origin, Vec3d direction, BreathNode.Power power, int tickCount, DragonType type) {
         if (tickCount != previousTickCount + 1) {
             previousDirection = direction;
             previousOrigin = origin;
@@ -37,7 +37,7 @@ public class BreathWeaponEmitter {
         final int PARTICLES_PER_TICK = 4;
         for (int i = 0; i < PARTICLES_PER_TICK; ++i) {
             float partialTickHeadStart = i / (float) PARTICLES_PER_TICK;
-            behavior.spawnClientBreath(
+            type.spawnClientBreath(
                     world,
                     interpolateVec(previousOrigin, origin, partialTickHeadStart),
                     interpolateVec(previousDirection, direction, partialTickHeadStart),

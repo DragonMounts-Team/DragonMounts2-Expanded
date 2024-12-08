@@ -101,7 +101,7 @@ public class DragonVariantHelper extends DragonHelper {
                 if (type.isHabitat(biome)) {
                     this.points.addTo(type, POINTS_BIOME);
                 }
-                if (type.behavior.isHabitatEnvironment(dragon)) {
+                if (type.isHabitatEnvironment(dragon)) {
                     this.points.addTo(type, POINTS_ENV);
                 }
             }

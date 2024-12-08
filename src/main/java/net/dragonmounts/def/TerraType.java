@@ -1,15 +1,20 @@
-package net.dragonmounts.entity.behavior;
+package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
 
 import java.util.Random;
 
-public class TerraBehavior implements DragonType.Behavior {
+public class TerraType extends DragonType {
+    public TerraType(ResourceLocation identifier, Properties props) {
+        super(identifier, props);
+    }
+
     @Override
     public void tick(TameableDragonEntity dragon) {
         World level = dragon.world;

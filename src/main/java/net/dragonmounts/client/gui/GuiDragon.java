@@ -74,13 +74,11 @@ public class GuiDragon extends GuiContainer {
         int y = (this.height - this.ySize) / 2;
 
         this.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize);
+        this.drawTexturedModalRect(x - 22, y + 184, 0, this.ySize, 25, 30);
 
         if (this.dragon.isChested()) this.drawTexturedModalRect(x, y + 73, 0, 130, 170, 55);
 
         hunger(x, y);
-
-        this.mc.getTextureManager().bindTexture(offhand);
-        drawModalRectWithCustomSizedTexture(x - 22, y + 184, 0.0F, 0.0F, 25, 30, 25, 30);
 
         int size = 0;
         switch (dragon.getLifeStageHelper().getLifeStage()) {

@@ -1,4 +1,4 @@
-package net.dragonmounts.entity.behavior;
+package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathNode;
@@ -10,15 +10,17 @@ import net.dragonmounts.entity.breath.weapons.BreathWeaponPoison;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.registry.DragonType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class ZombieBehavior implements DragonType.Behavior {
-    @Override
-    public void tick(TameableDragonEntity dragon) {}
+public class ZombieType extends DragonType {
+    public ZombieType(ResourceLocation identifier, Properties props) {
+        super(identifier, props);
+    }
 
     @Nullable
     @Override

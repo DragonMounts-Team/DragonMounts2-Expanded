@@ -1,4 +1,4 @@
-package net.dragonmounts.entity.behavior;
+package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathNode;
@@ -8,13 +8,15 @@ import net.dragonmounts.entity.breath.weapons.BreathWeaponEnder;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EnderBehavior implements DragonType.Behavior {
-    @Override
-    public void tick(TameableDragonEntity dragon) {}
+public class EnderType extends DragonType {
+    public EnderType(ResourceLocation identifier, Properties props) {
+        super(identifier, props);
+    }
 
     @Override
     public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {

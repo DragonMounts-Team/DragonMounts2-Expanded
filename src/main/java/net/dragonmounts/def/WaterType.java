@@ -1,4 +1,4 @@
-package net.dragonmounts.entity.behavior;
+package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathNode;
@@ -12,13 +12,18 @@ import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.EntityUtil;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class WaterBehavior implements DragonType.Behavior {
+public class WaterType extends DragonType {
+    public WaterType(ResourceLocation identifier, Properties props) {
+        super(identifier, props);
+    }
+
     @Override
     public void tick(TameableDragonEntity dragon) {
         if (dragon.isInWater()) {

@@ -1,14 +1,19 @@
-package net.dragonmounts.entity.behavior;
+package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class EnchantBehavior implements DragonType.Behavior {
+public class EnchantType extends DragonType {
+    public EnchantType(ResourceLocation identifier, Properties props) {
+        super(identifier, props);
+    }
+
     @Override
     public void tick(TameableDragonEntity dragon) {
         if (dragon.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE)) {

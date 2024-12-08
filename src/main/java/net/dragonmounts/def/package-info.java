@@ -1,2 +1,2 @@
 @javax.annotation.ParametersAreNonnullByDefault
-package net.dragonmounts.entity.behavior;
+package net.dragonmounts.def;

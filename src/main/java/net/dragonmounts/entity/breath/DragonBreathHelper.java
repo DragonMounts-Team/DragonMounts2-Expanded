@@ -133,7 +133,7 @@ public class DragonBreathHelper extends DragonHelper {
                     dragon.getLook(1.0f),
                     dragon.getLifeStageHelper().getBreathPower(),
                     this.tickCounter,
-                    dragon.getVariant().type.behavior
+                    dragon.getVariant().type
             );
         }
 
@@ -217,7 +217,7 @@ public class DragonBreathHelper extends DragonHelper {
     }
 
     public void onBreedChange(DragonType type) {
-        this.weapon = type.behavior.createBreathWeapon(this.dragon);
+        this.weapon = type.createBreathWeapon(this.dragon);
     }
 
     public boolean hasWeapon() {

@@ -27,8 +27,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.registries.IForgeRegistryEntry;
-import net.minecraftforge.registries.RegistryBuilder;
+import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraftforge.registries.*;
 
 import javax.annotation.Nullable;
 import java.util.Set;
@@ -41,11 +41,7 @@ import static net.dragonmounts.DragonMounts.makeId;
 public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
     public static final String DATA_PARAMETER_KEY = "DragonType";
     public static final ResourceLocation DEFAULT_KEY = makeId("ender");
-    public static final DeferredRegistry<DragonType> REGISTRY = new DeferredRegistry<>(
-            makeId("dragon_type"),
-            DragonType.class,
-            new RegistryBuilder<DragonType>().setDefaultKey(DEFAULT_KEY)
-    );
+    public static final DeferredRegistry<DragonType> REGISTRY = new Registry(makeId("dragon_type"), new RegistryBuilder<DragonType>().setDefaultKey(DEFAULT_KEY));
 
     public final int color;
     public final boolean convertible;
@@ -56,15 +52,16 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
     public final TextFormatting formatting;
     public final ImmutableMultimap<String, AttributeModifier> attributes;
     public final DragonVariant.Manager variants = new DragonVariant.Manager(this);
-    public final Behavior behavior;
     private final Reference2ObjectOpenHashMap<Class<?>, Object> map = new Reference2ObjectOpenHashMap<>();
     private final ReferenceOpenHashSet<DamageSource> immunities;
     private final ReferenceOpenHashSet<Block> blocks;
     private final ReferenceOpenHashSet<Biome> biomes;
     public final EnumParticleTypes sneezeParticle;
     public final EnumParticleTypes eggParticle;
+    @Nullable
+    public final ResourceLocation lootTable;
 
-    public DragonType(ResourceLocation identifier, Properties props, Behavior behavior) {
+    public DragonType(ResourceLocation identifier, Properties props) {
         this.color = props.color;
         this.convertible = props.convertible;
         this.isSkeleton = props.isSkeleton;
@@ -76,9 +73,60 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
         this.biomes = new ReferenceOpenHashSet<>(props.biomes);
         this.sneezeParticle = props.sneezeParticle;
         this.eggParticle = props.eggParticle;
-        this.behavior = behavior;
+        this.lootTable = props.hasLootTable ? (props.lootTable == null ? identifier : props.lootTable) : null;
         this.setRegistryName(this.identifier = identifier);
         this.translationKey = DMUtils.makeDescriptionId("dragon_type", identifier);
+    }
+
+    public void tick(TameableDragonEntity dragon) {}
+
+    public boolean isHabitatEnvironment(Entity egg) {
+        return false;
+    }
+
+    public Vec3d locatePassenger(int index, boolean sitting) {
+        double yOffset = sitting ? 3.4 : 4.4;
+        double yOffset2 = sitting ? 2.1 : 2.5; // maybe not needed
+        // dragon position is the middle of the model, and the saddle is on
+        // the shoulders, so move player forwards on Z axis relative to the
+        // dragon's rotation to fix that
+        switch (index) {
+            case 1:
+                return new Vec3d(0.6, yOffset, 0.1);
+            case 2:
+                return new Vec3d(-0.6, yOffset, 0.1);
+            case 3:
+                return new Vec3d(1.6, yOffset2, 0.2);
+            case 4:
+                return new Vec3d(-1.6, yOffset2, 0.2);
+            default:
+                return new Vec3d(0, yOffset, 2.2);
+        }
+    }
+
+    @Nullable
+    public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
+        return new BreathWeapon(dragon);
+    }
+
+    public SoundEffectName getBreathSound(DragonLifeStage stage, SoundState state) {
+        return state.getSoundByAge(stage);
+    }
+
+    public SoundEvent getLivingSound(TameableDragonEntity dragon) {
+        return dragon.isBaby() ? DMSounds.ENTITY_DRAGON_HATCHLING_GROWL :
+                (dragon.getRNG().nextInt(3) == 0
+                        ? DMSounds.ENTITY_DRAGON_GROWL
+                        : DMSounds.ENTITY_DRAGON_BREATHE
+                );
+    }
+
+    public SoundEvent getRoarSound(TameableDragonEntity dragon) {
+        return dragon.isBaby() ? DMSounds.HATCHLING_DRAGON_ROAR : DMSounds.DRAGON_ROAR;
+    }
+
+    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathNode.Power power, float partialTicks) {
+        world.spawnEntity(new FlameBreathFX(world, position, direction, power, partialTicks));
     }
 
     public String getName() {
@@ -135,6 +183,8 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
         public final Set<Biome> biomes = new ReferenceOpenHashSet<>();
         public EnumParticleTypes sneezeParticle = EnumParticleTypes.SMOKE_LARGE;
         public EnumParticleTypes eggParticle = EnumParticleTypes.TOWN_AURA;
+        public ResourceLocation lootTable;
+        boolean hasLootTable = true;
         public boolean convertible = true;
         public boolean isSkeleton = false;
         public boolean avoidWater = false;
@@ -197,58 +247,30 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
             this.avoidWater = true;
             return this;
         }
+
+        public Properties removeLoot() {
+            this.hasLootTable = false;
+            return this;
+        }
+
+        public Properties loot(ResourceLocation table) {
+            this.lootTable = table;
+            this.hasLootTable = true;
+            return this;
+        }
     }
 
-    public interface Behavior {
-        void tick(TameableDragonEntity dragon);
-
-        default boolean isHabitatEnvironment(Entity egg) {
-            return false;
+    public static class Registry extends DeferredRegistry<DragonType> implements IForgeRegistry.AddCallback<DragonType> {
+        public Registry(ResourceLocation identifier, RegistryBuilder<DragonType> builder) {
+            super(identifier, DragonType.class, builder);
         }
 
-        default Vec3d locatePassenger(int index, boolean sitting) {
-            double yOffset = sitting ? 3.4 : 4.4;
-            double yOffset2 = sitting ? 2.1 : 2.5; // maybe not needed
-            // dragon position is the middle of the model, and the saddle is on
-            // the shoulders, so move player forwards on Z axis relative to the
-            // dragon's rotation to fix that
-            switch (index) {
-                case 1:
-                    return new Vec3d(0.6, yOffset, 0.1);
-                case 2:
-                    return new Vec3d(-0.6, yOffset, 0.1);
-                case 3:
-                    return new Vec3d(1.6, yOffset2, 0.2);
-                case 4:
-                    return new Vec3d(-1.6, yOffset2, 0.2);
-                default:
-                    return new Vec3d(0, yOffset, 2.2);
+        @Override
+        public void onAdd(IForgeRegistryInternal<DragonType> owner, RegistryManager stage, int id, DragonType obj, @Nullable DragonType oldObj) {
+            ResourceLocation loot = obj.lootTable;
+            if (loot != null && !LootTableList.getAll().contains(loot)) {
+                LootTableList.register(loot);
             }
-        }
-
-        @Nullable
-        default BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
-            return new BreathWeapon(dragon);
-        }
-
-        default SoundEffectName getBreathSound(DragonLifeStage stage, SoundState state) {
-            return state.getSoundByAge(stage);
-        }
-
-        default SoundEvent getLivingSound(TameableDragonEntity dragon) {
-            return dragon.isBaby() ? DMSounds.ENTITY_DRAGON_HATCHLING_GROWL :
-                    (dragon.getRNG().nextInt(3) == 0
-                            ? DMSounds.ENTITY_DRAGON_GROWL
-                            : DMSounds.ENTITY_DRAGON_BREATHE
-                    );
-        }
-
-        default SoundEvent getRoarSound(TameableDragonEntity dragon) {
-            return dragon.isBaby() ? DMSounds.HATCHLING_DRAGON_ROAR : DMSounds.DRAGON_ROAR;
-        }
-
-        default void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathNode.Power power, float partialTicks) {
-            world.spawnEntity(new FlameBreathFX(world, position, direction, power, partialTicks));
         }
     }
 }

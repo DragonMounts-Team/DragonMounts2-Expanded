@@ -1,4 +1,4 @@
-package net.dragonmounts.entity.behavior;
+package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathNode;
@@ -12,6 +12,7 @@ import net.dragonmounts.registry.DragonType;
 import net.minecraft.enchantment.EnchantmentFrostWalker;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -19,8 +20,12 @@ import net.minecraftforge.common.BiomeDictionary;
 
 import java.util.Random;
 
-public class IceBehavior implements DragonType.Behavior {
+public class IceType extends DragonType {
     public static final float FOOTPRINT_CHANCE = 0.01F;
+
+    public IceType(ResourceLocation identifier, Properties props) {
+        super(identifier, props);
+    }
 
     @Override
     public void tick(TameableDragonEntity dragon) {

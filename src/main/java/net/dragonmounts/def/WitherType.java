@@ -1,4 +1,4 @@
-package net.dragonmounts.entity.behavior;
+package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathNode;
@@ -8,6 +8,7 @@ import net.dragonmounts.entity.breath.weapons.BreathWeaponWither;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -15,7 +16,11 @@ import net.minecraft.world.WorldServer;
 
 import javax.annotation.Nullable;
 
-public class WitherBehavior implements DragonType.Behavior {
+public class WitherType extends DragonType {
+    public WitherType(ResourceLocation identifier, Properties props) {
+        super(identifier, props);
+    }
+
     @Override
     public void tick(TameableDragonEntity dragon) {
         World level = dragon.world;

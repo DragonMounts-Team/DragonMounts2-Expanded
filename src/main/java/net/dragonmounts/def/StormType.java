@@ -1,4 +1,4 @@
-package net.dragonmounts.entity.behavior;
+package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.sound.SoundEffectName;
@@ -7,8 +7,13 @@ import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 
-public class StormBehavior extends WaterBehavior {
+public class StormType extends WaterType {
+    public StormType(ResourceLocation identifier, Properties props) {
+        super(identifier, props);
+    }
+
     @Override
     public void tick(TameableDragonEntity dragon) {
         super.tick(dragon);

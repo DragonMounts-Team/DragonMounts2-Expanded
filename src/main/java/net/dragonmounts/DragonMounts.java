@@ -14,7 +14,6 @@ import net.dragonmounts.compat.BaublesCompat;
 import net.dragonmounts.compat.DragonMountsCompat;
 import net.dragonmounts.event.EventLiving;
 import net.dragonmounts.event.RegistryEventHandler;
-import net.dragonmounts.init.DMEffect;
 import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.init.DMItems;
 import net.dragonmounts.proxy.ServerProxy;
@@ -78,12 +77,10 @@ public class DragonMounts {
 
     @EventHandler
     public void PreInitialization(FMLPreInitializationEvent event) {
-        DragonMountsLootTables.registerLootTables();
         MinecraftForge.EVENT_BUS.register(new EventLiving());
         PROXY.PreInitialization(event);
         metadata=event.getModMetadata();
         DMItemGroups.init();
-
         DragonMountsCompat.load(FMLCommonHandler.instance().getDataFixer().init(DragonMountsTags.MOD_ID, DragonMountsCompat.VERSION));
     }
 
