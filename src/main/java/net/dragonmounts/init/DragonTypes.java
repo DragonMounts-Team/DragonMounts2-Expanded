@@ -190,4 +190,14 @@ public class DragonTypes {
                     .addHabitat(Blocks.NETHER_WART_BLOCK)
                     .setSneezeParticle(null)
     );
+    public static final DarkType DARK = new DarkType(
+            makeId("dark"),
+            new DragonType.Properties(0x808080, TextFormatting.GRAY)
+                    .addImmunity(DamageSource.MAGIC)
+                    .addImmunity(DamageSource.HOT_FLOOR)
+                    .addImmunity(DamageSource.LIGHTNING_BOLT)
+                    .addImmunity(DamageSource.WITHER)
+                    .addHabitat(Blocks.LAPIS_BLOCK)
+                    .addHabitat(Blocks.LAPIS_ORE)
+    );
 }

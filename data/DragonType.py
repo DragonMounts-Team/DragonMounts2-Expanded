@@ -16,3 +16,4 @@ class DragonType(Enum):
   STORM = makeId('storm')
   TERRA = makeId('terra')
   ZOMBIE = makeId('zombie')
+  DARK = makeId('dark')

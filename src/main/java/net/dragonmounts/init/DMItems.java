@@ -42,6 +42,8 @@ public class DMItems {
     public static final DragonScalesItem ZOMBIE_DRAGON_SCALES = createDragonScalesItem("zombie_dragon_scales", DragonTypes.ZOMBIE);
     public static final DragonScalesItem MOONLIGHT_DRAGON_SCALES = createDragonScalesItem("moonlight_dragon_scales", DragonTypes.MOONLIGHT);
 
+    public static final DragonScalesItem DARK_DRAGON_SCALES = createDragonScalesItem("dark_dragon_scales", DragonTypes.DARK);
+
     //Dragon Armor
     public static final DragonArmorItem IRON_DRAGON_ARMOR = createDragonArmorItem("iron_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "iron.png", 3);
     public static final DragonArmorItem GOLDEN_DRAGON_ARMOR = createDragonArmorItem("golden_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "gold.png", 5);
@@ -62,6 +64,7 @@ public class DMItems {
     public static final DragonScaleSwordItem STORM_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("storm_dragon_scale_sword", DragonTypes.STORM, DMTiers.STORM_DRAGON_SCALE);
     public static final DragonScaleSwordItem TERRA_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("terra_dragon_scale_sword", DragonTypes.TERRA, DMTiers.TERRA_DRAGON_SCALE);
     public static final DragonScaleSwordItem ZOMBIE_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("zombie_dragon_scale_sword", DragonTypes.ZOMBIE, DMTiers.ZOMBIE_DRAGON_SCALE);
+    public static final DragonScaleSwordItem DARK_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("dark_dragon_scale_sword", DragonTypes.DARK, DMTiers.DARK_DRAGON_SCALE);
 
     //Dragon Scale Axes
     public static final DragonScaleAxeItem AETHER_DRAGON_SCALE_AXE = createDragonScaleAxeItem("aether_dragon_scale_axe", DragonTypes.AETHER, DMTiers.AETHER_DRAGON_SCALE);
@@ -77,6 +80,7 @@ public class DMItems {
     public static final DragonScaleAxeItem STORM_DRAGON_SCALE_AXE = createDragonScaleAxeItem("storm_dragon_scale_axe", DragonTypes.STORM, DMTiers.STORM_DRAGON_SCALE);
     public static final DragonScaleAxeItem TERRA_DRAGON_SCALE_AXE = createDragonScaleAxeItem("terra_dragon_scale_axe", DragonTypes.TERRA, DMTiers.TERRA_DRAGON_SCALE);
     public static final DragonScaleAxeItem ZOMBIE_DRAGON_SCALE_AXE = createDragonScaleAxeItem("zombie_dragon_scale_axe", DragonTypes.ZOMBIE, DMTiers.ZOMBIE_DRAGON_SCALE);
+    public static final DragonScaleAxeItem DARK_DRAGON_SCALE_AXE = createDragonScaleAxeItem("dark_dragon_scale_axe", DragonTypes.DARK, DMTiers.DARK_DRAGON_SCALE);
 
     //Dragon Scale Bows
     public static final DragonScaleBowItem AETHER_DRAGON_SCALE_BOW = createDragonScaleBowItem("aether_dragon_scale_bow", DragonTypes.AETHER, DMTiers.AETHER_DRAGON_SCALE);
@@ -160,6 +164,10 @@ public class DMItems {
     public static final DragonScaleShovelItem ZOMBIE_DRAGON_SCALE_SHOVEL = createDragonScaleShovelItem("zombie_dragon_scale_shovel", DragonTypes.ZOMBIE, DMTiers.ZOMBIE_DRAGON_SCALE);
     public static final DragonScalePickaxeItem ZOMBIE_DRAGON_SCALE_PICKAXE = createDragonScalePickaxeItem("zombie_dragon_scale_pickaxe", DragonTypes.ZOMBIE, DMTiers.ZOMBIE_DRAGON_SCALE);
     public static final DragonScaleHoeItem ZOMBIE_DRAGON_SCALE_HOE = createDragonScaleHoeItem("zombie_dragon_scale_hoe", DragonTypes.ZOMBIE, DMTiers.ZOMBIE_DRAGON_SCALE);
+    //Dragon Scale Tools - Dark
+    public static final DragonScaleShovelItem DARK_DRAGON_SCALE_SHOVEL = createDragonScaleShovelItem("dark_dragon_scale_shovel", DragonTypes.DARK, DMTiers.DARK_DRAGON_SCALE);
+    public static final DragonScalePickaxeItem DARK_DRAGON_SCALE_PICKAXE = createDragonScalePickaxeItem("dark_dragon_scale_pickaxe", DragonTypes.DARK, DMTiers.DARK_DRAGON_SCALE);
+    public static final DragonScaleHoeItem DARK_DRAGON_SCALE_HOE = createDragonScaleHoeItem("dark_dragon_scale_hoe", DragonTypes.DARK, DMTiers.DARK_DRAGON_SCALE);
 
     //Dragon Scale Armors
     public static final DragonScaleArmorSuit AETHER_DRAGON_SCALE_ARMORS = createDragonScaleArmors(
