@@ -17,7 +17,7 @@ public class DarkDragonBlessEffect extends Potion {
     @Override
     public void performEffect(EntityLivingBase entity, int amplifier) {
         if (this == DMEffect.DARK_DRAGON_BLESS) {
-            if (entity.getHealth() < entity.getMaxHealth()) {
+            if ((entity.getHealth() < entity.getMaxHealth())&&entity.world.getLightFromNeighbors(entity.getPosition())<7.0) {
                 entity.heal(0.5F);
             }
         }

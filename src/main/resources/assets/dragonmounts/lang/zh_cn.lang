@@ -4,6 +4,8 @@ itemGroup.dragonmounts.combat=龙骑2：延续—装备
 entity.dragonmounts.dragon=%s龙
 entity.dragonmounts.dragon.name=龙
 
+
+effect.dark_dragon_bless=暗龙祝福
 #类型
 dragon_type.dragonmounts.forest=森林
 dragon_type.dragonmounts.aether=天境
