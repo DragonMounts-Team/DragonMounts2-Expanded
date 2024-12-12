@@ -21,6 +21,7 @@ public class DMMaterials {
     public static final ArmorMaterial STORM_DRAGON_SCALE;
     public static final ArmorMaterial TERRA_DRAGON_SCALE;
     public static final ArmorMaterial ZOMBIE_DRAGON_SCALE;
+    public static final ArmorMaterial DARK_DRAGON_SCALE;
 
     static {
         int[] defence = new int[]{3, 7, 8, 3};
@@ -41,5 +42,7 @@ public class DMMaterials {
         defence = new int[]{4, 7, 9, 4};
         NETHER_DRAGON_SCALE = addArmorMaterial("DM2C_NETHER_DRAGON_SCALE", prefix + ":nether", 55, defence, 11, sound, 8.0F);
         ENDER_DRAGON_SCALE = addArmorMaterial("DM2C_ENDER_DRAGON_SCALE", prefix + ":ender", 70, defence, 11, sound, 9.0F);
+        defence = new int[]{3, 7, 8, 5};
+        DARK_DRAGON_SCALE= addArmorMaterial("DM2C_DARK_DRAGON_SCALE", prefix + ":dark", 70, defence, 13, sound, 8.0F);
     }
 }

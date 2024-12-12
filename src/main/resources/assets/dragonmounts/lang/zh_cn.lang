@@ -147,6 +147,7 @@ tooltip.armor_effect.dragonmounts.sunlight=当装备者的饥饿值小于10时�
 tooltip.armor_effect.dragonmounts.terra=给予装备者持续30秒的急迫 I效果
 tooltip.armor_effect.dragonmounts.water=当装备者在水下时，给予其持续30秒的水下呼吸 I效果
 tooltip.armor_effect.dragonmounts.zombie=在夜间给予装备者持续15秒的力量 I效果
+tooltip.armor_effect.dragonmounts.dark=给予装备者持续30秒的 暗龙祝福 效果
 tooltip.dragonmounts.armor_effect_cooldown=冷却时间：%s秒
 tooltip.dragonmounts.armor_effect_fishing_luck=当装备者钓鱼时，给予其持续10秒的幸运 I效果，该效果不受冷却时间影响
 tooltip.dragonmounts.armor_effect_piece_4=4件套：

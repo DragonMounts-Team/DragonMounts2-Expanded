@@ -268,7 +268,22 @@ public class DMArmorEffects {
             return flag;
         }
     };
-
+    public static final IDescribableArmorEffect DARK_EFFECT = new IDescribableArmorEffect() {
+        @Override
+        public boolean activate(IArmorEffectManager manager, EntityPlayer player, int level) {
+            boolean flag = level > 3;
+            if (flag){
+                addOrResetEffect(player, DMMobEffects.DARK_DRAGON_BLESS, 600, 0, true, true, 201);
+            }
+            return flag;
+        }
+        @Override
+        public void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {
+            tooltips.add("");
+            this.appendTriggerInfo(stack, tooltips);
+            tooltips.add(TextFormatting.RESET + DMUtils.translateToLocal("tooltip.armor_effect.dragonmounts.dark"));
+        }
+    };
     @SubscribeEvent
     public static void onExpDrop(LivingExperienceDropEvent event) {
         EntityPlayer source = event.getAttackingPlayer();

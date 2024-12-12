@@ -170,6 +170,8 @@ tooltip.armor_effect.dragonmounts.sunlight=When the hunger value of wearer is le
 tooltip.armor_effect.dragonmounts.terra=Apply Haste I effect for 30s
 tooltip.armor_effect.dragonmounts.water=When the wearer is underwater, apply Water Breathing I effect for 30s
 tooltip.armor_effect.dragonmounts.zombie=Apply Strength I effect for 15s at night
+
+tooltip.armor_effect.dragonmounts.dark=Apply Dark Dragon Bless  effect for 30s
 tooltip.dragonmounts.armor_effect_cooldown=CD: %ss
 tooltip.dragonmounts.armor_effect_fishing_luck=When the wearer is fishing, apply Luck I effect for 10s without cooldown
 tooltip.dragonmounts.armor_effect_piece_4=4-Piece Set:

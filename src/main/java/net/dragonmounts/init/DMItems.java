@@ -290,6 +290,15 @@ public class DMItems {
             DragonTypes.ZOMBIE,
             DMArmorEffects.ZOMBIE_EFFECT
     );
+    public static final DragonScaleArmorSuit DARK_DRAGON_SCALE_ARMORS = createDragonScaleArmors(
+            "dark_dragon_scale_helmet",
+            "dark_dragon_scale_chestplate",
+            "dark_dragon_scale_leggings",
+            "dark_dragon_scale_boots",
+            DMMaterials.DARK_DRAGON_SCALE,
+            DragonTypes.DARK,
+            DMArmorEffects.DARK_EFFECT
+    );
 
     //Dragon Spawn Eggs
     public static final DragonSpawnEggItem AETHER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("aether_dragon_spawn_egg", DragonTypes.AETHER, 0x06E9FA, 0x281EE7);
