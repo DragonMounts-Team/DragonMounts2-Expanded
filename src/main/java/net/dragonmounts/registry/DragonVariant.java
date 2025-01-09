@@ -1,7 +1,7 @@
 package net.dragonmounts.registry;
 
-import it.unimi.dsi.fastutil.Function;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
+import net.dragonmounts.block.DragonHeadBlock;
 import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.RegisteredObjectSerializer;
@@ -13,6 +13,7 @@ import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static it.unimi.dsi.fastutil.Arrays.MAX_ARRAY_SIZE;
 import static net.dragonmounts.DragonMounts.makeId;
@@ -30,11 +31,18 @@ public class DragonVariant extends IForgeRegistryEntry.Impl<DragonVariant> {
     public final DragonType type;
     int index = -1;// non-private to simplify nested class access
     public final VariantAppearance appearance;
+    public final DragonHeadBlock.Holder head;
 
-    public DragonVariant(DragonType type, ResourceLocation identifier, Function<String, VariantAppearance> function) {
+    public DragonVariant(
+            DragonType type,
+            ResourceLocation identifier,
+            Function<String, VariantAppearance> appearanceFactory,
+            Function<DragonVariant, DragonHeadBlock.Holder> headFactory
+    ) {
         this.type = type;
-        this.appearance = function.get(identifier.getPath());
+        this.appearance = appearanceFactory.apply(identifier.getPath());
         this.setRegistryName(identifier);
+        this.head = headFactory.apply(this);
     }
 
     public final String getSerializedName() {

@@ -68,6 +68,7 @@ item.emerald_dragon_armor.name=绿宝石龙铠
 
 tile.dragon_nest.name=龙巢方块
 tile.dragon_core.name=龙核心
+tile.dragon_head.name=龙首
 
 tile.storm_egg.name=风暴龙 蛋
 tile.end_egg.name=末影龙 蛋
@@ -147,7 +148,7 @@ tooltip.armor_effect.dragonmounts.sunlight=当装备者的饥饿值小于10时�
 tooltip.armor_effect.dragonmounts.terra=给予装备者持续30秒的急迫 I效果
 tooltip.armor_effect.dragonmounts.water=当装备者在水下时，给予其持续30秒的水下呼吸 I效果
 tooltip.armor_effect.dragonmounts.zombie=在夜间给予装备者持续15秒的力量 I效果
-tooltip.armor_effect.dragonmounts.dark=给予装备者持续30秒的 暗龙祝福 效果
+tooltip.armor_effect.dragonmounts.dark=给予装备者持续30秒的暗龙祝福 I效果
 tooltip.dragonmounts.armor_effect_cooldown=冷却时间：%s秒
 tooltip.dragonmounts.armor_effect_fishing_luck=当装备者钓鱼时，给予其持续10秒的幸运 I效果，该效果不受冷却时间影响
 tooltip.dragonmounts.armor_effect_piece_4=4件套：
@@ -162,7 +163,7 @@ tooltip.dragonmounts.hard_shears=从龙身上剪下龙鳞
 
 item.modifiers.equipped=在装备后：
 
-argument.player.toomany=Only one player is allowed, but the provided selector allows more than one
+argument.player.toomany=只允许一名玩家，但提供的选择器允许多名玩家
 
 commands.dragon.usage=/dragon <subcommand>
 commands.dragon.breed.usage=/dragon breed <breed> [dragon]

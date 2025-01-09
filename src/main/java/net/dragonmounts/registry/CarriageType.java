@@ -4,6 +4,7 @@ import net.dragonmounts.entity.CarriageEntity;
 import net.dragonmounts.init.CarriageTypes;
 import net.dragonmounts.util.RegisteredObjectSerializer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.RegistryBuilder;
@@ -22,7 +23,7 @@ public abstract class CarriageType extends IForgeRegistryEntry.Impl<CarriageType
         return type == null ? CarriageTypes.OAK : type;
     }
 
-    public abstract Item getItem(CarriageEntity entity);
+    public abstract ItemStack getItemStack(CarriageEntity entity);
 
     public abstract ResourceLocation getTexture(CarriageEntity entity);
 
@@ -41,8 +42,8 @@ public abstract class CarriageType extends IForgeRegistryEntry.Impl<CarriageType
         }
 
         @Override
-        public Item getItem(CarriageEntity entity) {
-            return this.item.get();
+        public ItemStack getItemStack(CarriageEntity entity) {
+            return new ItemStack(this.item.get());
         }
 
         @Override

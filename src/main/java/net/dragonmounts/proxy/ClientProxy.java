@@ -9,14 +9,15 @@
  */
 package net.dragonmounts.proxy;
 
-import it.unimi.dsi.fastutil.Function;
 import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
+import net.dragonmounts.block.entity.DragonHeadBlockEntity;
 import net.dragonmounts.client.gui.GuiDragonDebug;
 import net.dragonmounts.client.other.TargetHighlighter;
 import net.dragonmounts.client.render.CarriageRenderer;
 import net.dragonmounts.client.render.DMCapeRenderer;
 import net.dragonmounts.client.render.DragonCoreBlockEntityRenderer;
+import net.dragonmounts.client.render.DragonHeadBlockEntityRenderer;
 import net.dragonmounts.client.render.dragon.DragonRenderer;
 import net.dragonmounts.client.render.dragon.breathweaponFX.ClientBreathNodeRenderer;
 import net.dragonmounts.client.userinput.DragonOrbControl;
@@ -29,6 +30,8 @@ import net.dragonmounts.event.DragonViewEvent;
 import net.dragonmounts.event.IItemColorRegistration;
 import net.dragonmounts.init.DMItems;
 import net.dragonmounts.init.DMKeyBindings;
+import net.dragonmounts.init.DragonVariants;
+import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.debugging.StartupDebugClientOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextFormatting;
@@ -41,6 +44,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.File;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -73,7 +77,12 @@ public class ClientProxy extends ServerProxy {
         RenderingRegistry.registerEntityRenderingHandler(CarriageEntity.class, CarriageRenderer::new);
 
         ClientRegistry.bindTileEntitySpecialRenderer(DragonCoreBlockEntity.class, new DragonCoreBlockEntityRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(DragonHeadBlockEntity.class, new DragonHeadBlockEntityRenderer());
         DMItems.DRAGON_CORE.setTileEntityItemStackRenderer(new DragonCoreBlockEntityRenderer.ItemStackRenderer());
+        DragonHeadBlockEntityRenderer.ItemStackRenderer renderer = new DragonHeadBlockEntityRenderer.ItemStackRenderer();
+        for (DragonVariant variant : DragonVariants.BUILTIN_VALUES) {
+            variant.head.item.setTileEntityItemStackRenderer(renderer);
+        }
 
         //Override mcmod.info - This looks cooler :)
         ModMetadata metadata = event.getModMetadata();
@@ -158,6 +167,6 @@ public class ClientProxy extends ServerProxy {
 
     @Override
     public Function<String, VariantAppearance> getVariantAppearances() {
-        return VariantAppearances.getMap();
+        return VariantAppearances.getFactory();
     }
 }

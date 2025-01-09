@@ -6,6 +6,8 @@ import net.dragonmounts.client.render.dragon.layer.*;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.util.ResourceLocation;
 
+import javax.annotation.Nullable;
+
 import static net.dragonmounts.DragonMounts.makeId;
 
 public abstract class VariantAppearance {
@@ -46,9 +48,9 @@ public abstract class VariantAppearance {
 
     public abstract boolean hasSideTailScaleOnShoulder();
 
-    public abstract ResourceLocation getBody(TameableDragonEntity dragon);
+    public abstract ResourceLocation getBody(@Nullable TameableDragonEntity dragon);
 
-    public abstract ResourceLocation getGlow(TameableDragonEntity dragon);
+    public abstract ResourceLocation getGlow(@Nullable TameableDragonEntity dragon);
 
     public ResourceLocation getChest(TameableDragonEntity dragon) {
         return DEFAULT_CHEST;

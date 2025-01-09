@@ -9,8 +9,6 @@
  */
 package net.dragonmounts.proxy;
 
-import it.unimi.dsi.fastutil.Function;
-import it.unimi.dsi.fastutil.objects.Object2ObjectFunctions;
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.DragonMountsTags;
@@ -19,11 +17,11 @@ import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.cmd.DragonCommandTree;
 import net.dragonmounts.entity.CarriageEntity;
 import net.dragonmounts.entity.EntityContainerItemEntity;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.event.VanillaEggHandler;
 import net.dragonmounts.init.DMArmorEffects;
 import net.dragonmounts.init.DMCapabilities;
 import net.dragonmounts.network.*;
-import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.registry.CarriageType;
 import net.dragonmounts.registry.CooldownCategory;
 import net.dragonmounts.registry.DragonType;
@@ -39,6 +37,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.server.FMLServerHandler;
 
 import java.io.File;
+import java.util.function.Function;
 
 /**
  * @author Nico Bergemann <barracuda415 at yahoo.de>
@@ -129,8 +128,7 @@ public class ServerProxy {
         return FMLServerHandler.instance().getSavesDirectory();
     }
 
-    @SuppressWarnings("unchecked")
     public Function<String, VariantAppearance> getVariantAppearances() {
-        return Object2ObjectFunctions.EMPTY_FUNCTION;
+        return ignored -> null;
     }
 }

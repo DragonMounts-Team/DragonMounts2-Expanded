@@ -3,6 +3,8 @@ package net.dragonmounts.client.variant;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.function.Function;
+
 import static net.dragonmounts.DragonMounts.makeId;
 import static net.dragonmounts.DragonMountsTags.MOD_ID;
 import static net.dragonmounts.client.variant.VariantAppearance.TEXTURES_ROOT;
@@ -123,7 +125,7 @@ public class VariantAppearances {
         ZOMBIE_MALE = new DefaultAppearance(body, makeId(TEXTURES_ROOT + "zombie/male_glow.png"), false, false, false);
     }
 
-    public static Object2ObjectOpenHashMap<String, VariantAppearance> getMap() {
+    public static Function<String, VariantAppearance> getFactory() {
         Object2ObjectOpenHashMap<String, VariantAppearance> map = new Object2ObjectOpenHashMap<>();
         map.put("aether_female", AETHER_FEMALE);
         map.put("aether_male", AETHER_MALE);
@@ -159,6 +161,6 @@ public class VariantAppearances {
         map.put("wither_male", WITHER_MALE);
         map.put("zombie_female", ZOMBIE_FEMALE);
         map.put("zombie_male", ZOMBIE_MALE);
-        return map;
+        return map::get;
     }
 }

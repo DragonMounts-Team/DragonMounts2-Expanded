@@ -2,6 +2,7 @@ from Core.Util import ResourceLocation, makeId
 from Core.Output import Output
 from Core.ModelBuilder import ModelBuilder as model
 from DragonType import DragonType
+from DragonVariant import DragonVariant
 from DragonArmorMaterial import DragonArmorMaterial
 from CarriageType import CarriageType
 
@@ -75,6 +76,7 @@ def generateItemModels(output: Output):
   shieldModel = makeId('item/shield/shield')
   blockingShieldModel = makeId('item/shield/shield_blocking')
   spawnEggModel = ResourceLocation('item/spawn_egg')
+  dragonHeadModel = ResourceLocation('item/skull_dragon')
   basicItem(output, makeId('variant_switcher'))
   for type in CarriageType:
     basicItem(
@@ -89,6 +91,8 @@ def generateItemModels(output: Output):
       makeId(name + '_dragon_armor'),
       makeId('items/armor/dragon/dragonarmor_' + ('gold' if name == 'golden' else name))
     )
+  for variant in DragonVariant:
+    model(dragonHeadModel).save(output, variant.value.path + '_dragon_head')
   for type in DragonType:
     name = type.value.path
     dragonAmuletItem(output, name)

@@ -7,6 +7,7 @@ import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.api.IDescribableArmorEffect;
 import net.dragonmounts.item.*;
 import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.DragonScaleArmorSuit;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
@@ -362,6 +363,7 @@ public class DMItems {
     public static final DragonEssenceItem MOONLIGHT_DRAGON_ESSENCE = createDragonEssenceItem("moonlight_dragon_essence", DragonTypes.MOONLIGHT);
     public static final DragonEssenceItem SKELETON_DRAGON_ESSENCE = createDragonEssenceItem("skeleton_dragon_essence", DragonTypes.SKELETON);
     public static final DragonEssenceItem WITHER_DRAGON_ESSENCE = createDragonEssenceItem("wither_dragon_essence", DragonTypes.WITHER);
+    //Misc
     public static final DragonOrbItem DRAGON_ORB = new DragonOrbItem();
     public static final TestRunnerItem TEST_RUNNER = new TestRunnerItem();
 
@@ -496,6 +498,9 @@ public class DMItems {
         HARDCODED_AQUATIC_FOOD.add(Items.COOKED_FISH);
         DRAGON_ORB.setTranslationKey("dragon_orb").setRegistryName("dragon_orb");
         TEST_RUNNER.setTranslationKey("test_runner").setRegistryName("test_runner");
+        for (DragonVariant variant : DragonVariants.BUILTIN_VALUES) {
+            ITEMS.add(variant.head.item);
+        }
     }
 
     @SuppressWarnings("DataFlowIssue")

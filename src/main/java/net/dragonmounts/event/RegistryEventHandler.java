@@ -7,6 +7,7 @@ import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
+import net.dragonmounts.block.entity.DragonHeadBlockEntity;
 import net.dragonmounts.client.gui.GuiHandler;
 import net.dragonmounts.compat.DragonMountsCompat;
 import net.dragonmounts.compat.DragonTypeCompat;
@@ -47,8 +48,13 @@ public class RegistryEventHandler {
         for (Block block : DMBlocks.BLOCKS) {
             registry.register(block);
         }
+        for (DragonVariant variant : DragonVariants.BUILTIN_VALUES) {
+            registry.register(variant.head.wall);
+            registry.register(variant.head.standing);
+        }
         registry.register(DragonMountsCompat.DRAGON_EGG_BLOCK);
         GameRegistry.registerTileEntity(DragonCoreBlockEntity.class, makeId("dragon_core"));
+        GameRegistry.registerTileEntity(DragonHeadBlockEntity.class, makeId("dragon_head"));
         DMUtils.getLogger().info("Block Registries Successfully Registered");
     }
 

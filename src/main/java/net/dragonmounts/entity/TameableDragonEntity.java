@@ -27,6 +27,7 @@ import net.dragonmounts.init.*;
 import net.dragonmounts.inventory.DragonInventory;
 import net.dragonmounts.item.DragonArmorItem;
 import net.dragonmounts.item.DragonEssenceItem;
+import net.dragonmounts.item.DragonSpawnEggItem;
 import net.dragonmounts.network.MessageDragonBreath;
 import net.dragonmounts.network.MessageDragonExtras;
 import net.dragonmounts.registry.DragonType;
@@ -66,6 +67,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.translation.I18n;
@@ -2056,6 +2058,14 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
     public void setVariant(DragonVariant variant) {
         this.dataManager.set(DATA_VARIANT, variant);
+    }
+
+    @Override
+    public ItemStack getPickedResult(RayTraceResult target) {
+        return new ItemStack(this.isEgg()
+                ? Item.getItemFromBlock(this.getVariant().type.getInstance(HatchableDragonEggBlock.class, DMBlocks.ENDER_DRAGON_EGG))
+                : this.getVariant().type.getInstance(DragonSpawnEggItem.class, DMItems.ENDER_DRAGON_SPAWN_EGG)
+        );
     }
 
     @Nullable
