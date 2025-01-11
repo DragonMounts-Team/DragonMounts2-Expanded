@@ -1,6 +1,6 @@
 ![LOGO](src/main/resources/logo.png)
 
-# [Dragon Mounts 2: Continued](https://www.curseforge.com/minecraft/mc-mods/dragon-mounts-2)
+# [Dragon Mounts 2: Expanded](https://www.curseforge.com/minecraft/mc-mods/dragon-mounts-2-expanded)
 Dragon Mounts 2 is a sequel to Dragon Mounts, created by TheRPGAdventurer. A mod which adds over 15 new dragons to your game. In addition to new dragons, the mod adds in new armors and tools for players, Armors for Dragons, Nests that generates in every worlds, New Dragon breeds, and much more.
 
 The continued support for this mod is now maintained by The Dragon Mounts Team and is endorsed by the original DM2 developers. Our goal is to bring back the original essence of Dragon Mounts, fixing many bugs it once had since it's last update (v1.6.3).
@@ -15,21 +15,22 @@ Any modpack which uses Dragon Mounts 2 takes full responsibility for user suppor
 For anyone else, we only support official builds from Curse/Curseforge, Modrinth, and GitHub, not custom built jars. We also do not take bug reports for outdated builds of Minecraft.
 ## Credits
 Dragon Mounts 2 Continued Credits:
-- BarracudaATA - Open sourcing the mod to let others create projects under the Dragon Mounts name
-- Kingdomall & Shannieann - Giving us permission to continue maintenance of DM2, officially endorsing our continuation
+- BarracudaATA - BarracudaATA - Owner of Dragon Mounts and open sourcing the mod to let others create projects under the Dragon Mounts name
+- Dragon Mounts 2 Developers- Giving us permission to continue maintenance of DM2, officially endorsing our continuation
 - Tomanex - Dragon Mounts Team Founder and Texture Artist. Revamped various textures
 - JDSK0ala - Dragon Mounts Team Founder and Beta Tester
-- 2190303755 (Number-Man) - Lead Developer and Coder for Dragon Mounts 2: Continued
+- 2190303755 - Lead Developer and Coder for Dragon Mounts 2: Continued
 - Moaswies - Coder for Dragon Mounts 2: Continued
 - EnderEXE - Beta Tester
 - Tomohiko, Signis Kerman - For contributing the Japanese and French translations respectively
 
 Former Dragon Mounts 2 Developers:
-- TheRPGAdventurer - Former author of Dragon Mounts 2
-- Kingdomall - First Developer for DM2. Overhauling many textures
-- Shannieann - 2nd Developer and artist for Zombie and Terra textures. Texture artist
-- UkanGundun - Fire and Sunlight textures. Texture artist
-- WolfShotz (Kay9Unit) - Coder and codebase improvements
+- BarracudaATA - Owner of Dragon Mounts and open sourcing the mod to let others create projects under the Dragon Mounts name
+- TheRPGAdventurer - Owner of Dragon Mounts 2
+- Kingdomall - Overhauling the majority of textures
+- Shannieann - Texture artist for Zombie and Terra textures
+- UkanGundun - Texture artist for Fire and Sunlight textures
+- Kay9Unit (WolfShotz) - Coder and doing codebase improvements
 - FlaemWing - New nest textures, tool textures and dragon armor item textures
 - cesar_zorak - Dragon armor model textures, breed textures and more
 - Alexthe666 (AlexModGuy) - Open sourcing the code for I&F, Ice and Fire Owner
