@@ -134,8 +134,7 @@ public class RegistryEventHandler {
 
     @SubscribeEvent
     public static void registerMobEffects(RegistryEvent.Register<Potion> event) {
-        IForgeRegistry<Potion> registry = event.getRegistry();
-        registry.register(DMMobEffects.DARK_DRAGON_BLESS);
+        event.getRegistry().register(DMMobEffects.DARK_DRAGONS_GRACE);
     }
 
     @SubscribeEvent

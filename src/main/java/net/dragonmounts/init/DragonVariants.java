@@ -19,6 +19,7 @@ public class DragonVariants {
     public static final ObjectArrayList<DragonVariant> BUILTIN_VALUES = new ObjectArrayList<>();
     public static final DragonVariant AETHER_FEMALE;
     public static final DragonVariant AETHER_MALE;
+    public static final DragonVariant DARK;
     public static final DragonVariant ENCHANT_FEMALE;
     public static final DragonVariant ENCHANT_MALE;
     public static final DragonVariant ENDER_FEMALE;
@@ -74,6 +75,7 @@ public class DragonVariants {
         Function<String, VariantAppearance> appearance = DragonMounts.PROXY.getVariantAppearances();
         BUILTIN_VALUES.add(AETHER_FEMALE = makeVariant(DragonTypes.AETHER, "aether_female", appearance));
         BUILTIN_VALUES.add(AETHER_MALE = makeVariant(DragonTypes.AETHER, "aether_male", appearance));
+        BUILTIN_VALUES.add(DARK = makeVariant(DragonTypes.DARK, "dark", appearance));
         BUILTIN_VALUES.add(ENCHANT_FEMALE = makeVariant(DragonTypes.ENCHANT, "enchant_female", appearance));
         BUILTIN_VALUES.add(ENCHANT_MALE = makeVariant(DragonTypes.ENCHANT, "enchant_male", appearance));
         BUILTIN_VALUES.add(ENDER_FEMALE = makeVariant(DragonTypes.ENDER, "ender_female", appearance));

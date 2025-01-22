@@ -9,13 +9,12 @@ import java.util.Map;
 
 import static net.dragonmounts.DragonMountsTags.MOD_ID;
 
-public class DragonMountsCore implements IFMLLoadingPlugin {
-    public static final Logger ASM_LOGGER = LogManager.getLogger(MOD_ID);
-
+public class DragonMountsPlugin implements IFMLLoadingPlugin {
+    static final Logger PLUGIN_LOGGER = LogManager.getLogger(MOD_ID);
     @Override
     public String[] getASMTransformerClass() {
         return new String[]{
-                "net.dragonmounts.asm.LayerCustomHeadTransformer"
+                "net.dragonmounts.asm.DMClassTransformer"
         };
     }
 

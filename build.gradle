@@ -371,7 +371,9 @@ tasks.register('appendSnapshot') {
         snapshot = prefix + 'a'
     }
     project.version += '-' + snapshot
-    lastBuild.text = snapshot
+    if (gradle.startParameter.taskNames[0] == "buildSnapshot") { // ignore prepareKotlinBuildScriptModel
+        lastBuild.text = snapshot
+    }
 }
 
 tasks.register('buildSnapshot') {

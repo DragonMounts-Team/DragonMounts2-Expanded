@@ -3,6 +3,7 @@ from Core.Util import makeId
 class DragonVariant(Enum):
   AETHER_FEMALE = makeId('aether_female')
   AETHER_MALE = makeId('aether_male')
+  DARK = makeId('dark')
   ENCHANT_FEMALE = makeId('enchant_female')
   ENCHANT_MALE = makeId('enchant_male')
   ENDER_FEMALE = makeId('ender_female')

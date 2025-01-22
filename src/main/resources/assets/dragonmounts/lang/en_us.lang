@@ -4,7 +4,7 @@
 itemGroup.dragonmounts.main=DM2: Continued
 itemGroup.dragonmounts.combat=DM2: Continued-Equipement
 
-effect.dark_dragon_bless=Dark Dragon Bless
+effect.dragonmounts.dark_dragons_grace=Dark Dragon's Grace
 ##
 # Dragon Names
 ##
@@ -171,7 +171,7 @@ tooltip.armor_effect.dragonmounts.sunlight=When the hunger value of wearer is le
 tooltip.armor_effect.dragonmounts.terra=Apply Haste I effect for 30s
 tooltip.armor_effect.dragonmounts.water=When the wearer is underwater, apply Water Breathing I effect for 30s
 tooltip.armor_effect.dragonmounts.zombie=Apply Strength I effect for 15s at night
-tooltip.armor_effect.dragonmounts.dark=Apply Dark Dragon Bless I effect for 30s
+tooltip.armor_effect.dragonmounts.dark=Apply Dark Dragon's Grace I effect for 30s
 tooltip.dragonmounts.armor_effect_cooldown=CD: %ss
 tooltip.dragonmounts.armor_effect_fishing_luck=When the wearer is fishing, apply Luck I effect for 10s without cooldown
 tooltip.dragonmounts.armor_effect_piece_4=4-Piece Set:

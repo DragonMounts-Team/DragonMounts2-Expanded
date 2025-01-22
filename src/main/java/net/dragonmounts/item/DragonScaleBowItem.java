@@ -28,10 +28,12 @@ import java.util.List;
 
 public class DragonScaleBowItem extends ItemBow {
     public final DragonType type;
+    public final int enchantability;
 
     public DragonScaleBowItem(DragonType type, ToolMaterial tier) {
         this.type = type;
         this.setMaxDamage(tier.getMaxUses() / 4);
+        this.enchantability = tier.getEnchantability() / 5;
     }
 
     @Override
@@ -117,10 +119,16 @@ public class DragonScaleBowItem extends ItemBow {
     }
 
     @Override
+    public int getItemEnchantability() {
+        return this.enchantability;
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         tooltip.add(this.type.getName());
     }
+
 
     @Override
     public @Nonnull CreativeTabs[] getCreativeTabs() {

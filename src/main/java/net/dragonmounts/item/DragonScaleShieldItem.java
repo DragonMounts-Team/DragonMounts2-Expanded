@@ -1,5 +1,6 @@
 package net.dragonmounts.item;
 
+import net.dragonmounts.def.EnchantType;
 import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.client.util.ITooltipFlag;
@@ -47,6 +48,11 @@ public class DragonScaleShieldItem extends ItemShield {
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack ingredient) {
         return ingredient.getItem() == this.type.getInstance(DragonScalesItem.class, null);
+    }
+
+    @Override
+    public int getItemEnchantability() {
+        return this.type instanceof EnchantType ? 1 : 0;
     }
 
     @Override

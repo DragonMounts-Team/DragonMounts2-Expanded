@@ -1,22 +1,20 @@
 package net.dragonmounts.effect;
 
 import net.dragonmounts.client.gui.MobEffectIcon;
-import net.dragonmounts.init.DMMobEffects;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 
-public class DarkDragonBlessEffect extends Potion {
-
-    public DarkDragonBlessEffect(boolean isBadEffect, int color) {
-        super(isBadEffect, color);
+public class DarkDragonsGraceEffect extends Potion {
+    public DarkDragonsGraceEffect(boolean bad, int color) {
+        super(bad, color);
         this.setEffectiveness(0.25D);
     }
 
     @Override
     public void performEffect(EntityLivingBase entity, int amplifier) {
-        if (this == DMMobEffects.DARK_DRAGON_BLESS && entity.getHealth() < entity.getMaxHealth() && entity.world.getLightFromNeighbors(entity.getPosition()) < 7.0) {
+        if (entity.getHealth() < entity.getMaxHealth() && entity.world.getLightFromNeighbors(entity.getPosition()) < 7.0) {
             entity.heal(0.5F);
         }
     }

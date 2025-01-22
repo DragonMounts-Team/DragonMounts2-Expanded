@@ -12,7 +12,7 @@ public class DMTiers {
     public static final ToolMaterial WATER_DRAGON_SCALE = addToolMaterial("DM2C_WATER_DRAGON_SCALE", 4, 2700, 8.0F, 5.0F, 11);
     public static final ToolMaterial NETHER_DRAGON_SCALE = addToolMaterial("DM2C_NETHER_DRAGON_SCALE", 5, 2700, 8.0F, 6.0F, 11);
     public static final ToolMaterial ENDER_DRAGON_SCALE = addToolMaterial("DM2C_ENDER_DRAGON_SCALE", 5, 3000, 8.0F, 6.0F, 11);
-    public static final ToolMaterial ENCHANT_DRAGON_SCALE = addToolMaterial("DM2C_ENCHANT_DRAGON_SCALE", 4, 2700, 8.0F, 5.0F, 11);
+    public static final ToolMaterial ENCHANT_DRAGON_SCALE = addToolMaterial("DM2C_ENCHANT_DRAGON_SCALE", 4, 2700, 8.0F, 5.0F, 30);
     public static final ToolMaterial STORM_DRAGON_SCALE = addToolMaterial("DM2C_STORM_DRAGON_SCALE", 4, 2700, 8.0F, 5.0F, 11);
     public static final ToolMaterial SUNLIGHT_DRAGON_SCALE = addToolMaterial("DM2C_SUNLIGHT_DRAGON_SCALE", 4, 2700, 8.0F, 5.0F, 11);
     public static final ToolMaterial TERRA_DRAGON_SCALE = addToolMaterial("DM2C_TERRA_DRAGON_SCALE", 4, 2700, 8.0F, 5.0F, 11);

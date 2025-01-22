@@ -4,8 +4,7 @@ itemGroup.dragonmounts.combat=龙骑2：延续—装备
 entity.dragonmounts.dragon=%s龙
 entity.dragonmounts.dragon.name=龙
 
-
-effect.dark_dragon_bless=暗龙祝福
+effect.dragonmounts.dark_dragons_grace=暝龙赐福
 #类型
 dragon_type.dragonmounts.forest=森林
 dragon_type.dragonmounts.aether=天境
@@ -147,8 +146,8 @@ tooltip.armor_effect.dragonmounts.storm=装备者的攻击造成伤害后有5%%�
 tooltip.armor_effect.dragonmounts.sunlight=当装备者的饥饿值小于10时，给予其持续10秒的饱和 I效果
 tooltip.armor_effect.dragonmounts.terra=给予装备者持续30秒的急迫 I效果
 tooltip.armor_effect.dragonmounts.water=当装备者在水下时，给予其持续30秒的水下呼吸 I效果
-tooltip.armor_effect.dragonmounts.zombie=在夜间给予装备者持续15秒的力量 I效果
-tooltip.armor_effect.dragonmounts.dark=给予装备者持续30秒的暗龙祝福 I效果
+tooltip.armor_effect.dragonmounts.zombie=在夜间，给予装备者持续15秒的力量 I效果
+tooltip.armor_effect.dragonmounts.dark=给予装备者持续30秒的暝龙赐福 I效果
 tooltip.dragonmounts.armor_effect_cooldown=冷却时间：%s秒
 tooltip.dragonmounts.armor_effect_fishing_luck=当装备者钓鱼时，给予其持续10秒的幸运 I效果，该效果不受冷却时间影响
 tooltip.dragonmounts.armor_effect_piece_4=4件套：
