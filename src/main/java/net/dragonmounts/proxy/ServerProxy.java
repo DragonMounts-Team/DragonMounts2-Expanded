@@ -128,7 +128,7 @@ public class ServerProxy {
         return FMLServerHandler.instance().getSavesDirectory();
     }
 
-    public Function<String, VariantAppearance> getVariantAppearances() {
+    public Function<String, VariantAppearance> getBuiltinAppearances() {
         return ignored -> null;
     }
 }

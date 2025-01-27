@@ -30,10 +30,11 @@ public class MessageDragonTeleport extends CUUIDPacket {
         public IMessage onMessage(MessageDragonTeleport message, MessageContext ctx) {
             NetHandlerPlayServer handler = ctx.getServerHandler();
             Entity entity = handler.server.getEntityFromUuid(message.uuid);
-            EntityPlayer player = handler.player;
-            World world = player.world;
-            if (entity instanceof TameableDragonEntity && world.isBlockLoaded(player.getPosition())) {
+            if (entity instanceof TameableDragonEntity) {
                 TameableDragonEntity dragon = (TameableDragonEntity) entity;
+                EntityPlayer player = handler.player;
+                World world = player.world;
+                if (!dragon.isTamedFor(player) || !world.isBlockLoaded(player.getPosition())) return null;
                 //Get block pos by raytracing from player for dragon teleport
                 Vec3d start = new Vec3d(
                         player.prevPosX + (player.posX - player.prevPosX),

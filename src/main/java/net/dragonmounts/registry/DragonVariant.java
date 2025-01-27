@@ -28,21 +28,21 @@ public class DragonVariant extends IForgeRegistryEntry.Impl<DragonVariant> {
         return REGISTRY.getValue(new ResourceLocation(name));
     }
 
-    public final DragonType type;
     int index = -1;// non-private to simplify nested class access
+    public final DragonType type;
     public final VariantAppearance appearance;
     public final DragonHeadBlock.Holder head;
 
     public DragonVariant(
             DragonType type,
             ResourceLocation identifier,
-            Function<String, VariantAppearance> appearanceFactory,
-            Function<DragonVariant, DragonHeadBlock.Holder> headFactory
+            VariantAppearance appearance,
+            Function<DragonVariant, DragonHeadBlock.Holder> factory
     ) {
         this.type = type;
-        this.appearance = appearanceFactory.apply(identifier.getPath());
+        this.appearance = appearance;
         this.setRegistryName(identifier);
-        this.head = headFactory.apply(this);
+        this.head = factory.apply(this);
     }
 
     public final String getSerializedName() {

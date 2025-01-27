@@ -22,7 +22,9 @@ public class MessageDragonSit extends CUUIDPacket {
             Entity entity = ctx.getServerHandler().server.getEntityFromUuid(message.uuid);
             if (entity instanceof TameableDragonEntity) {
                 TameableDragonEntity dragon = (TameableDragonEntity) entity;
-                dragon.getAISit().setSitting(!dragon.isSitting());
+                if (dragon.isTamedFor(ctx.getServerHandler().player)) {
+                    dragon.getAISit().setSitting(!dragon.isSitting());
+                }
             }
             return null;
         }

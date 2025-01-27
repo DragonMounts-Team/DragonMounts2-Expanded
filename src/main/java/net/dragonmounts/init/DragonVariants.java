@@ -53,12 +53,8 @@ public class DragonVariants {
     public static final DragonVariant ZOMBIE_FEMALE;
     public static final DragonVariant ZOMBIE_MALE;
 
-    static DragonVariant makeVariant(
-            DragonType type,
-            String name,
-            Function<String, VariantAppearance> factory
-    ) {
-        return new DragonVariant(type, makeId(name), factory, variant -> {
+    static DragonVariant make(Function<String, VariantAppearance> supplier, DragonType type, String name) {
+        return new DragonVariant(type, makeId(name), supplier.apply(name), variant -> {
             DragonHeadItem item = new DragonHeadItem(variant);
             DragonHeadStandingBlock standing = new DragonHeadStandingBlock(Material.CIRCUITS, variant);
             DragonHeadWallBlock wall = new DragonHeadWallBlock(Material.CIRCUITS, variant);
@@ -72,41 +68,41 @@ public class DragonVariants {
     }
 
     static {
-        Function<String, VariantAppearance> appearance = DragonMounts.PROXY.getVariantAppearances();
-        BUILTIN_VALUES.add(AETHER_FEMALE = makeVariant(DragonTypes.AETHER, "aether_female", appearance));
-        BUILTIN_VALUES.add(AETHER_MALE = makeVariant(DragonTypes.AETHER, "aether_male", appearance));
-        BUILTIN_VALUES.add(DARK = makeVariant(DragonTypes.DARK, "dark", appearance));
-        BUILTIN_VALUES.add(ENCHANT_FEMALE = makeVariant(DragonTypes.ENCHANT, "enchant_female", appearance));
-        BUILTIN_VALUES.add(ENCHANT_MALE = makeVariant(DragonTypes.ENCHANT, "enchant_male", appearance));
-        BUILTIN_VALUES.add(ENDER_FEMALE = makeVariant(DragonTypes.ENDER, "ender_female", appearance));
-        BUILTIN_VALUES.add(ENDER_MALE = makeVariant(DragonTypes.ENDER, "ender_male", appearance));
-        BUILTIN_VALUES.add(FIRE_FEMALE = makeVariant(DragonTypes.FIRE, "fire_female", appearance));
-        BUILTIN_VALUES.add(FIRE_MALE = makeVariant(DragonTypes.FIRE, "fire_male", appearance));
-        BUILTIN_VALUES.add(FOREST_FEMALE = makeVariant(DragonTypes.FOREST, "forest_female", appearance));
-        BUILTIN_VALUES.add(FOREST_MALE = makeVariant(DragonTypes.FOREST, "forest_male", appearance));
-        BUILTIN_VALUES.add(FOREST_DRY_FEMALE = makeVariant(DragonTypes.FOREST, "forest_dry_female", appearance));
-        BUILTIN_VALUES.add(FOREST_DRY_MALE = makeVariant(DragonTypes.FOREST, "forest_dry_male", appearance));
-        BUILTIN_VALUES.add(FOREST_TAIGA_FEMALE = makeVariant(DragonTypes.FOREST, "forest_taiga_female", appearance));
-        BUILTIN_VALUES.add(FOREST_TAIGA_MALE = makeVariant(DragonTypes.FOREST, "forest_taiga_male", appearance));
-        BUILTIN_VALUES.add(ICE_FEMALE = makeVariant(DragonTypes.ICE, "ice_female", appearance));
-        BUILTIN_VALUES.add(ICE_MALE = makeVariant(DragonTypes.ICE, "ice_male", appearance));
-        BUILTIN_VALUES.add(MOONLIGHT_FEMALE = makeVariant(DragonTypes.MOONLIGHT, "moonlight_female", appearance));
-        BUILTIN_VALUES.add(MOONLIGHT_MALE = makeVariant(DragonTypes.MOONLIGHT, "moonlight_male", appearance));
-        BUILTIN_VALUES.add(NETHER_FEMALE = makeVariant(DragonTypes.NETHER, "nether_female", appearance));
-        BUILTIN_VALUES.add(NETHER_MALE = makeVariant(DragonTypes.NETHER, "nether_male", appearance));
-        BUILTIN_VALUES.add(SKELETON_FEMALE = makeVariant(DragonTypes.SKELETON, "skeleton_female", appearance));
-        BUILTIN_VALUES.add(SKELETON_MALE = makeVariant(DragonTypes.SKELETON, "skeleton_male", appearance));
-        BUILTIN_VALUES.add(STORM_FEMALE = makeVariant(DragonTypes.STORM, "storm_female", appearance));
-        BUILTIN_VALUES.add(STORM_MALE = makeVariant(DragonTypes.STORM, "storm_male", appearance));
-        BUILTIN_VALUES.add(SUNLIGHT_FEMALE = makeVariant(DragonTypes.SUNLIGHT, "sunlight_female", appearance));
-        BUILTIN_VALUES.add(SUNLIGHT_MALE = makeVariant(DragonTypes.SUNLIGHT, "sunlight_male", appearance));
-        BUILTIN_VALUES.add(TERRA_FEMALE = makeVariant(DragonTypes.TERRA, "terra_female", appearance));
-        BUILTIN_VALUES.add(TERRA_MALE = makeVariant(DragonTypes.TERRA, "terra_male", appearance));
-        BUILTIN_VALUES.add(WATER_FEMALE = makeVariant(DragonTypes.WATER, "water_female", appearance));
-        BUILTIN_VALUES.add(WATER_MALE = makeVariant(DragonTypes.WATER, "water_male", appearance));
-        BUILTIN_VALUES.add(WITHER_FEMALE = makeVariant(DragonTypes.WITHER, "wither_female", appearance));
-        BUILTIN_VALUES.add(WITHER_MALE = makeVariant(DragonTypes.WITHER, "wither_male", appearance));
-        BUILTIN_VALUES.add(ZOMBIE_FEMALE = makeVariant(DragonTypes.ZOMBIE, "zombie_female", appearance));
-        BUILTIN_VALUES.add(ZOMBIE_MALE = makeVariant(DragonTypes.ZOMBIE, "zombie_male", appearance));
+        Function<String, VariantAppearance> appearance = DragonMounts.PROXY.getBuiltinAppearances();
+        BUILTIN_VALUES.add(AETHER_FEMALE = make(appearance, DragonTypes.AETHER, "aether_female"));
+        BUILTIN_VALUES.add(AETHER_MALE = make(appearance, DragonTypes.AETHER, "aether_male"));
+        BUILTIN_VALUES.add(DARK = make(appearance, DragonTypes.DARK, "dark"));
+        BUILTIN_VALUES.add(ENCHANT_FEMALE = make(appearance, DragonTypes.ENCHANT, "enchant_female"));
+        BUILTIN_VALUES.add(ENCHANT_MALE = make(appearance, DragonTypes.ENCHANT, "enchant_male"));
+        BUILTIN_VALUES.add(ENDER_FEMALE = make(appearance, DragonTypes.ENDER, "ender_female"));
+        BUILTIN_VALUES.add(ENDER_MALE = make(appearance, DragonTypes.ENDER, "ender_male"));
+        BUILTIN_VALUES.add(FIRE_FEMALE = make(appearance, DragonTypes.FIRE, "fire_female"));
+        BUILTIN_VALUES.add(FIRE_MALE = make(appearance, DragonTypes.FIRE, "fire_male"));
+        BUILTIN_VALUES.add(FOREST_FEMALE = make(appearance, DragonTypes.FOREST, "forest_female"));
+        BUILTIN_VALUES.add(FOREST_MALE = make(appearance, DragonTypes.FOREST, "forest_male"));
+        BUILTIN_VALUES.add(FOREST_DRY_FEMALE = make(appearance, DragonTypes.FOREST, "forest_dry_female"));
+        BUILTIN_VALUES.add(FOREST_DRY_MALE = make(appearance, DragonTypes.FOREST, "forest_dry_male"));
+        BUILTIN_VALUES.add(FOREST_TAIGA_FEMALE = make(appearance, DragonTypes.FOREST, "forest_taiga_female"));
+        BUILTIN_VALUES.add(FOREST_TAIGA_MALE = make(appearance, DragonTypes.FOREST, "forest_taiga_male"));
+        BUILTIN_VALUES.add(ICE_FEMALE = make(appearance, DragonTypes.ICE, "ice_female"));
+        BUILTIN_VALUES.add(ICE_MALE = make(appearance, DragonTypes.ICE, "ice_male"));
+        BUILTIN_VALUES.add(MOONLIGHT_FEMALE = make(appearance, DragonTypes.MOONLIGHT, "moonlight_female"));
+        BUILTIN_VALUES.add(MOONLIGHT_MALE = make(appearance, DragonTypes.MOONLIGHT, "moonlight_male"));
+        BUILTIN_VALUES.add(NETHER_FEMALE = make(appearance, DragonTypes.NETHER, "nether_female"));
+        BUILTIN_VALUES.add(NETHER_MALE = make(appearance, DragonTypes.NETHER, "nether_male"));
+        BUILTIN_VALUES.add(SKELETON_FEMALE = make(appearance, DragonTypes.SKELETON, "skeleton_female"));
+        BUILTIN_VALUES.add(SKELETON_MALE = make(appearance, DragonTypes.SKELETON, "skeleton_male"));
+        BUILTIN_VALUES.add(STORM_FEMALE = make(appearance, DragonTypes.STORM, "storm_female"));
+        BUILTIN_VALUES.add(STORM_MALE = make(appearance, DragonTypes.STORM, "storm_male"));
+        BUILTIN_VALUES.add(SUNLIGHT_FEMALE = make(appearance, DragonTypes.SUNLIGHT, "sunlight_female"));
+        BUILTIN_VALUES.add(SUNLIGHT_MALE = make(appearance, DragonTypes.SUNLIGHT, "sunlight_male"));
+        BUILTIN_VALUES.add(TERRA_FEMALE = make(appearance, DragonTypes.TERRA, "terra_female"));
+        BUILTIN_VALUES.add(TERRA_MALE = make(appearance, DragonTypes.TERRA, "terra_male"));
+        BUILTIN_VALUES.add(WATER_FEMALE = make(appearance, DragonTypes.WATER, "water_female"));
+        BUILTIN_VALUES.add(WATER_MALE = make(appearance, DragonTypes.WATER, "water_male"));
+        BUILTIN_VALUES.add(WITHER_FEMALE = make(appearance, DragonTypes.WITHER, "wither_female"));
+        BUILTIN_VALUES.add(WITHER_MALE = make(appearance, DragonTypes.WITHER, "wither_male"));
+        BUILTIN_VALUES.add(ZOMBIE_FEMALE = make(appearance, DragonTypes.ZOMBIE, "zombie_female"));
+        BUILTIN_VALUES.add(ZOMBIE_MALE = make(appearance, DragonTypes.ZOMBIE, "zombie_male"));
     }
 }

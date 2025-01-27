@@ -124,9 +124,6 @@ public class ClientProxy extends ServerProxy {
     @Override
     public void Initialization(FMLInitializationEvent evt) {
         super.Initialization(evt);
-        if (DragonMountsConfig.isDebug()) {
-            MinecraftForge.EVENT_BUS.register(new GuiDragonDebug());
-        }
         DMKeyBindings.init();
         StartupDebugClientOnly.initClientOnly();
     }
@@ -166,7 +163,7 @@ public class ClientProxy extends ServerProxy {
     }
 
     @Override
-    public Function<String, VariantAppearance> getVariantAppearances() {
-        return VariantAppearances.getFactory();
+    public Function<String, VariantAppearance> getBuiltinAppearances() {
+        return VariantAppearances.getSupplier();
     }
 }

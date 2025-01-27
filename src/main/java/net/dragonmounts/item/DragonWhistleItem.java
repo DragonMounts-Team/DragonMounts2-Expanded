@@ -44,8 +44,10 @@ import static net.minecraft.util.text.translation.I18n.translateToLocal;
  * @modifier WolfShotz
  */
 public class DragonWhistleItem extends Item {
-    public final String DRAGON_UUID_KEY = DragonMountsTags.MOD_ID + "dragon";
+    public final String DRAGON_UUID_KEY = "DragonUUID";
+    public final String DEPRECATED_UUID_KEY = DragonMountsTags.MOD_ID + "dragon";
 
+    @Nullable
     public static String getDragonName(NBTTagCompound tag) {
         if (tag.hasKey("Name")) return tag.getString("Name");
         if (tag.hasKey("Type")) {
@@ -71,7 +73,14 @@ public class DragonWhistleItem extends Item {
             root.setString("Type", DragonTypeCompat.MAPPING.getOrDefault(root.getString("Breed"), DragonTypes.ENDER).identifier.toString());
             root.removeTag("Breed");
         }
-        if (root.hasUniqueId("Owner")) return null;
+        if (root.hasUniqueId(DEPRECATED_UUID_KEY)) {
+            String most = DEPRECATED_UUID_KEY + "Most";
+            root.setLong("DragonUUIDMost", root.getLong(most));
+            root.removeTag(most);
+            String least = DEPRECATED_UUID_KEY + "Least";
+            root.setLong("DragonUUIDLeast", root.getLong(least));
+            root.removeTag(least);
+        }
         if (root.hasKey("OwnerName", 8)) {
             String name = root.getString("OwnerName");
             if (StringUtils.isBlank(name)) return null;
@@ -87,7 +96,8 @@ public class DragonWhistleItem extends Item {
      * @param world
      */
     @SideOnly(Side.CLIENT)
-    private void openDragonWhistleGui(UUID uuid, World world) {
+    private void openDragonWhistleGui(@Nullable UUID uuid, World world) {
+        if (uuid == null || !world.isRemote) return;
         Minecraft.getMinecraft().displayGuiScreen(new GuiDragonWhistle(world, uuid));
     }
 
@@ -131,25 +141,31 @@ public class DragonWhistleItem extends Item {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
-        if (!stack.hasTagCompound() || !stack.getTagCompound().hasUniqueId(DRAGON_UUID_KEY)) {
-            player.sendStatusMessage(new TextComponentTranslation("whistle.msg.unBound"), true);
-            return new ActionResult<>(EnumActionResult.FAIL, stack);
-        }
-        NBTTagCompound nbt = stack.getTagCompound();
-        if (nbt.hasUniqueId("Owner")) {
-            if (!player.getUniqueID().equals(nbt.getUniqueId("Owner"))) {
+        NBTTagCompound nbt;
+        if (world.isRemote) {
+            if (!stack.hasTagCompound() || !(nbt = stack.getTagCompound()).hasUniqueId(DRAGON_UUID_KEY)) {
+                player.sendStatusMessage(new TextComponentTranslation("whistle.msg.unBound"), true);
+                return new ActionResult<>(EnumActionResult.FAIL, stack);
+            }
+            if (nbt.hasUniqueId("Owner") && !player.getUniqueID().equals(nbt.getUniqueId("Owner"))) {
                 player.sendStatusMessage(new TextComponentTranslation("dragon.notOwned"), true);
                 return new ActionResult<>(EnumActionResult.FAIL, stack);
             }
+            if (!player.isSneaking()) {
+                this.openDragonWhistleGui(nbt.getUniqueId(DRAGON_UUID_KEY), world);
+            }
+            return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+        }
+        if (!stack.hasTagCompound() || !(nbt = stack.getTagCompound()).hasUniqueId(DRAGON_UUID_KEY) || (
+                nbt.hasUniqueId("Owner") && !player.getUniqueID().equals(nbt.getUniqueId("Owner"))
+        )) {
+            return new ActionResult<>(EnumActionResult.FAIL, stack);
         }
         if (player.isSneaking()) {
             stack.setTagCompound(null);
             player.swingArm(hand);
             player.sendStatusMessage(new TextComponentTranslation("whistle.msg.cleared"), true);
-            return new ActionResult<>(EnumActionResult.SUCCESS, stack);
         }
-
-        this.openDragonWhistleGui(stack.getTagCompound().getUniqueId(DRAGON_UUID_KEY), world);
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
 
