@@ -115,13 +115,11 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     private static final DataParameter<Boolean> DATA_FLYING = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> GROWTH_PAUSED = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> DATA_BREATHING = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> DATA_ALT_BREATHING = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> GOING_DOWN = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> ALLOW_OTHERPLAYERS = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> BOOSTING = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> HOVER_CANCELLED = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> Y_LOCKED = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> ALT_TEXTURE = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> FOLLOW_YAW = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Optional<UUID>> DATA_BREEDER = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.OPTIONAL_UNIQUE_ID);
     private static final DataParameter<DragonVariant> DATA_VARIANT = EntityDataManager.createKey(TameableDragonEntity.class, DragonVariant.SERIALIZER);
@@ -129,8 +127,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     private static final DataParameter<Integer> HUNGER = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> DATA_TICKS_SINCE_CREATION = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> DATA_SHEARED = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> HAS_ADJUCATOR_STONE = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> HAS_ELDER_STONE = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     //private static final DataParameter<Boolean> SLEEP = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.BOOLEAN);
     private static final DataParameter<String> DATA_BREATH_WEAPON_TARGET = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.STRING);
     private static final DataParameter<Integer> DATA_BREATH_WEAPON_MODE = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.VARINT);
@@ -148,13 +144,11 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     public int roarTicks;
     protected int ticksSinceLastAttack;
     private boolean isUsingBreathWeapon;
-    private boolean altBreathing;
     private boolean isGoingDown;
     private boolean isUnhovered;
     private boolean yLocked;
     private boolean followYaw;
-    private DragonAnimator animator;
-    private double airSpeedVertical = 0;
+    public final DragonAnimator animator;
     private boolean armored;
     private boolean chested;
     private boolean saddled;
@@ -196,13 +190,9 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         manager.register(DATA_FLYING, false);
         manager.register(GROWTH_PAUSED, false);
         manager.register(DATA_BREATHING, false);
-        manager.register(DATA_ALT_BREATHING, false);
         manager.register(GOING_DOWN, false);
         manager.register(Y_LOCKED, false);
         manager.register(HOVER_CANCELLED, false);
-        manager.register(ALT_TEXTURE, false);
-        manager.register(HAS_ELDER_STONE, false);
-        manager.register(HAS_ADJUCATOR_STONE, false);
         manager.register(ALLOW_OTHERPLAYERS, false);
         manager.register(BOOSTING, false);
         manager.register(DATA_SHEARED, false);
@@ -242,15 +232,13 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         super.writeEntityToNBT(nbt);
         nbt.setInteger("Sheared", this.shearCooldown);
         nbt.setBoolean("Breathing", this.isUsingBreathWeapon());
-        nbt.setBoolean("projectile", this.isUsingAltBreathWeapon());
+        //nbt.setBoolean("projectile", this.isUsingAltBreathWeapon());
         nbt.setBoolean("unhovered", this.isUnHovered());
         nbt.setBoolean("followyaw", this.followYaw());
         nbt.setInteger("AgeTicks", this.getLifeStageHelper().getTicksSinceCreation());
         nbt.setInteger("hunger", this.getHunger());
         nbt.setBoolean("boosting", this.boosting());
         nbt.setBoolean("ylocked", this.isYLocked());
-        nbt.setBoolean("Elder", this.canBeElder());
-        nbt.setBoolean("Adjucator", this.canBeAdjucator());
         nbt.setBoolean("growthpause", this.isGrowthPaused());
         nbt.setBoolean("AllowOtherPlayers", this.allowedOtherPlayers());
         nbt.setString(DragonVariant.DATA_PARAMETER_KEY, this.getVariant().getSerializedName());
@@ -270,15 +258,13 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         this.setHunger(nbt.getInteger("hunger"));
         this.setGrowthPaused(nbt.getBoolean("growthpause"));
         this.setUsingBreathWeapon(nbt.getBoolean("Breathing"));
-        this.setUsingProjectile(nbt.getBoolean("projectile"));
+        //this.setUsingProjectile(nbt.getBoolean("projectile"));
         this.getLifeStageHelper().setTicksSinceCreation(nbt.getInteger("AgeTicks"));
         this.setUnHovered(nbt.getBoolean("unhovered"));
         this.setYLocked(nbt.getBoolean("ylocked"));
         this.setFollowYaw(nbt.getBoolean("followyaw"));
         this.setBoosting(nbt.getBoolean("boosting"));
         //        this.setSleeping(nbt.getBoolean("sleeping")); //unused as of now
-        this.setCanBeElder(nbt.getBoolean("Elder"));
-        this.setCanBeAdjucator(nbt.getBoolean("Adjucator"));
         this.setToAllowedOtherPlayers(nbt.getBoolean("AllowOtherPlayers"));
         this.inventory.readAdditionalData(nbt);
         if (nbt.getBoolean("DataFix$IsForest")) {
@@ -298,37 +284,12 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         helpers.values().forEach(helper -> helper.readFromNBT(nbt));
     }
 
-    /**
-     * Returns relative speed multiplier for the vertical flying speed.
-     *
-     * @return relative vertical speed multiplier
-     */
-    public double getMoveSpeedAirVert() {
-        return this.airSpeedVertical;
-    }
-
     public boolean boosting() {
         return dataManager.get(BOOSTING);
     }
 
     public void setBoosting(boolean allow) {
         dataManager.set(BOOSTING, allow);
-    }
-
-    public boolean canBeAdjucator() {
-        return dataManager.get(HAS_ADJUCATOR_STONE);
-    }
-
-    public void setCanBeAdjucator(boolean male) {
-        dataManager.set(HAS_ADJUCATOR_STONE, male);
-    }
-
-    public boolean canBeElder() {
-        return dataManager.get(HAS_ELDER_STONE);
-    }
-
-    public void setCanBeElder(boolean male) {
-        dataManager.set(HAS_ELDER_STONE, male);
     }
 
     // public boolean isSleeping() {
@@ -396,41 +357,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     /**
      * Returns true if the entity is breathing.
      */
-    public boolean isUsingAltBreathWeapon() {
-        if (world.isRemote) {
-            boolean usingBreathWeapon = this.dataManager.get(DATA_ALT_BREATHING);
-            this.altBreathing = usingBreathWeapon;
-            return usingBreathWeapon;
-        }
-        return altBreathing;
-    }
-
-    /**
-     * Set the breathing flag of the entity.
-     */
-    public void setUsingAltBreathWeapon(boolean altBreathing) {
-        if (!this.isOldEnoughToBreathe()) {
-            altBreathing = false;
-        }
-        this.dataManager.set(DATA_ALT_BREATHING, altBreathing);
-        if (!world.isRemote) {
-            this.altBreathing = altBreathing;
-        }
-    }
-
-    /**
-     * Set the breathing flag of the entity.
-     */
-    public void setUsingProjectile(boolean altBreathing) {
-        this.dataManager.set(DATA_ALT_BREATHING, altBreathing);
-        if (!world.isRemote) {
-            this.altBreathing = altBreathing;
-        }
-    }
-
-    /**
-     * Returns true if the entity is breathing.
-     */
     public boolean isGoingDown() {
         if (world.isRemote) {
             boolean isGoingDown = this.dataManager.get(GOING_DOWN);
@@ -449,15 +375,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
             this.isGoingDown = goingdown;
         }
     }
-
-    public boolean altTextures() {
-        return this.dataManager.get(ALT_TEXTURE);
-    }
-
-    public void setAltTextures(boolean alt) {
-        dataManager.set(ALT_TEXTURE, alt);
-    }
-
 
     public boolean allowedOtherPlayers() {
         return this.dataManager.get(ALLOW_OTHERPLAYERS);

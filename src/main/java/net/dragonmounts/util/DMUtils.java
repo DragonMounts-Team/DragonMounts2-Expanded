@@ -91,8 +91,8 @@ public class DMUtils {
         return false;
     }
 
-    public static BlockPos getSurface(World level, int x, int z) {
-        return new BlockPos(x, level.getHeight(x, z), z);
+    public static MutableBlockPosEx getSurface(World level, int x, int z) {
+        return new MutableBlockPosEx(x, level.getHeight(x, z), z);
     }
 
     public static NBTTagList writeToNBT(ItemStack[] stacks) {

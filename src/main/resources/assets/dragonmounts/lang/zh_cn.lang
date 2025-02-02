@@ -184,3 +184,7 @@ config.dragonmounts.category.world_gen=世界生成
 config.dragonmounts.category.client=客户端
 config.dragonmounts.debug=调试
 config.dragonmounts.debug.tooltip=启用调试功能
+config.dragonmounts.toggleDimensionLimitation=仅生成于限定维度
+config.dragonmounts.toggleDimensionLimitation.tooltip=若开启此选项，龙巢仅在声明的维度生成；若关闭此选项，则龙巢不会在声明的维度生成
+config.dragonmounts.limitedDimensions=限定维度
+config.dragonmounts.limitedDimensions.tooltip=维度数字标识符的列表

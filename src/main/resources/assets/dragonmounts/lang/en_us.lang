@@ -208,3 +208,7 @@ config.dragonmounts.category.world_gen=World Generation
 config.dragonmounts.category.client=Client
 config.dragonmounts.debug=Debug
 config.dragonmounts.debug.tooltip=Enable Debug Mode
+config.dragonmounts.toggleDimensionLimitation=Allow Declared Dimensions Only
+config.dragonmounts.toggleDimensionLimitation.tooltip=If enabled, Dragon Nests will only be generated in declared dimensions; otherwise they will not be generated in the declared dimensions
+config.dragonmounts.limitedDimensions=Limited Dimensions
+config.dragonmounts.limitedDimensions.tooltip=A list of limited dimensions' numeric id

@@ -10,6 +10,7 @@
 package net.dragonmounts;
 
 import com.google.common.collect.Lists;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -39,16 +40,8 @@ public class DragonMountsConfig {
     public static boolean canIceBreathBePermanent = false;
     public static boolean canFireBreathAffectBlocks = true;
 
-    public static boolean useCommandingPlayer = false;
     public static boolean allowOtherPlayerControl = true;
     public static boolean allowBreeding = true;
-
-
-    public static boolean canSpawnSurfaceDragonNest = true;
-    public static boolean canSpawnUnderGroundNest = true;
-    public static boolean canSpawnNetherNest = true;
-    public static boolean canSpawnEndNest = true;
-
 
     public static double ARMOR = 8F;
     public static double BASE_DAMAGE = 12.0F;
@@ -83,12 +76,11 @@ public class DragonMountsConfig {
 
     public static double maxFLightHeight = 20;
 
-    public static int[] dragonBlacklistedDimensions = new int[]{1, -1};
-    public static int[] dragonWhitelistedDimensions = new int[]{0};
+    public static boolean allowDeclaredDimensionsOnly = false;
+    public static IntOpenHashSet limitedDimensions = new IntOpenHashSet();
 
     public static int minimumDistance = 16;
 
-    public static boolean useDimensionBlackList = true;
     public static boolean forcedRename = false;
 
     private static boolean configHasLoaded = false; // used to detect code which tries to access a property before the config has been loaded
@@ -222,11 +214,6 @@ public class DragonMountsConfig {
         canFireBreathAffectBlocks = prop.getBoolean();
         propOrder.add(prop.getName());
 
-        prop = config.get(CATEGORY_MAIN, "use CommandingPlayer", false);
-        prop.setComment("Use a commanding player method(Experimental) to make dragons land on multiple players");
-        useCommandingPlayer = prop.getBoolean();
-        propOrder.add(prop.getName());
-
         prop = config.get(CATEGORY_MAIN, "Allow Other Player's Control", true);
         prop.setComment("Disable or enable the dragon's ability to obey other players");
         allowOtherPlayerControl = prop.getBoolean();
@@ -260,25 +247,16 @@ public class DragonMountsConfig {
          *  WORLDGEN
          */
 
-        // thanks i/f
-        dragonBlacklistedDimensions = config.get("all", "Blacklisted Dragon Dimensions", new int[]{-1, 1}, "Dragons cannot spawn in these dimensions' IDs").getIntList();
-        dragonWhitelistedDimensions = config.get("all", "Whitelisted Dragon Dimensions", new int[]{0}, "Dragons can only spawn in these dimensions' IDs").getIntList();
-        useDimensionBlackList = config.getBoolean("use Dimension Blacklist", "all", true, "true to use dimensional blacklist, false to use the whitelist.");
+        allowDeclaredDimensionsOnly = config.getBoolean("Allow Declared Dimensions Only", CATEGORY_WORLDGEN, false, "Whether the limited dimension list is an allow list or a block list", "config.dragonmounts.toggleDimensionLimitation");
+        limitedDimensions = new IntOpenHashSet(config.get(
+                CATEGORY_WORLDGEN,
+                "Limited Dimensions",
+                new int[]{},
+                "limited dimension list on dragon nest generation"
+        ).setLanguageKey("config.dragonmounts.limitedDimensions").getIntList());
 
-        prop = config.get(CATEGORY_WORLDGEN, "canSpawnSurfaceDragonNest", canSpawnSurfaceDragonNest);
-        prop.setComment("Enables spawning of nests in extreme hills");
-        canSpawnSurfaceDragonNest = prop.getBoolean();
-        propOrder.add(prop.getName());
-
-        prop = config.get(CATEGORY_WORLDGEN, "canSpawnNetherNest", canSpawnNetherNest);
-        prop.setComment("Enables spawning of nether, zombie, and skeleton dragon nests in the nether");
-        canSpawnNetherNest = prop.getBoolean();
-        propOrder.add(prop.getName());
-
-        prop = config.get(CATEGORY_WORLDGEN, "canSpawnEnchantNest", canSpawnEndNest);
-        prop.setComment("Enables spawning of end dragon nests in end cities");
-        canSpawnEndNest = prop.getBoolean();
-        propOrder.add(prop.getName());
+        propOrder.add("Allow Declared Dimensions Only");
+        propOrder.add("Limited Dimensions");
 
         prop = config.get(CATEGORY_WORLDGEN, "Forest Nest Rarity", ForestNestRarity);
         prop.setComment("Determines how rare Forest Plains dragon nests will mainly spawn. I did this because the forest biome is too common thus making the forest breed to common. Higher numbers = higher rarity (in other words  how many blocks for another nest to spawn), "

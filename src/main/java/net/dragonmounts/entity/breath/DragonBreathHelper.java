@@ -97,9 +97,6 @@ public class DragonBreathHelper extends DragonHelper {
             } else {
                 onLivingUpdateServer();
             }
-
-            if(dragon.isUsingAltBreathWeapon()) {
-            }
         }
     }
 

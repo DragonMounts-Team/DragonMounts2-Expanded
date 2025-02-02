@@ -305,6 +305,7 @@ public class DMItems {
 
     //Dragon Spawn Eggs
     public static final DragonSpawnEggItem AETHER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("aether_dragon_spawn_egg", DragonTypes.AETHER, 0x06E9FA, 0x281EE7);
+    public static final DragonSpawnEggItem DARK_DRAGON_SPAWN_EGG = createDragonSpawnEgg("dark_dragon_spawn_egg", DragonTypes.DARK, 0x1D1D24, 0x900996);
     public static final DragonSpawnEggItem ENCHANT_DRAGON_SPAWN_EGG = createDragonSpawnEgg("enchant_dragon_spawn_egg", DragonTypes.ENCHANT, 0xF30FFF, 0xD7D7D7);
     public static final DragonSpawnEggItem ENDER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("ender_dragon_spawn_egg", DragonTypes.ENDER, 0x1D1D24, 0x900996);
     public static final DragonSpawnEggItem FIRE_DRAGON_SPAWN_EGG = createDragonSpawnEgg("fire_dragon_spawn_egg", DragonTypes.FIRE, 0x9F2909, 0xF7A502);
@@ -349,6 +350,7 @@ public class DMItems {
     public static final DragonAmuletItem MOONLIGHT_DRAGON_AMULET = createDragonAmuletItem("moonlight_dragon_amulet", DragonTypes.MOONLIGHT);
     public static final DragonAmuletItem SKELETON_DRAGON_AMULET = createDragonAmuletItem("skeleton_dragon_amulet", DragonTypes.SKELETON);
     public static final DragonAmuletItem WITHER_DRAGON_AMULET = createDragonAmuletItem("wither_dragon_amulet", DragonTypes.WITHER);
+    public static final DragonAmuletItem DARK_DRAGON_AMULET = createDragonAmuletItem("dark_dragon_amulet", DragonTypes.DARK);
     //Dragon Essences
     public static final DragonEssenceItem FOREST_DRAGON_ESSENCE = createDragonEssenceItem("forest_dragon_essence", DragonTypes.FOREST);
     public static final DragonEssenceItem FIRE_DRAGON_ESSENCE = createDragonEssenceItem("fire_dragon_essence", DragonTypes.FIRE);
@@ -365,6 +367,7 @@ public class DMItems {
     public static final DragonEssenceItem MOONLIGHT_DRAGON_ESSENCE = createDragonEssenceItem("moonlight_dragon_essence", DragonTypes.MOONLIGHT);
     public static final DragonEssenceItem SKELETON_DRAGON_ESSENCE = createDragonEssenceItem("skeleton_dragon_essence", DragonTypes.SKELETON);
     public static final DragonEssenceItem WITHER_DRAGON_ESSENCE = createDragonEssenceItem("wither_dragon_essence", DragonTypes.WITHER);
+    public static final DragonEssenceItem DARK_DRAGON_ESSENCE = createDragonEssenceItem("dark_dragon_essence", DragonTypes.DARK);
     //Misc
     public static final DragonOrbItem DRAGON_ORB = new DragonOrbItem();
     public static final TestRunnerItem TEST_RUNNER = new TestRunnerItem();
