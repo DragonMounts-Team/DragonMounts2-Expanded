@@ -3,10 +3,12 @@ package net.dragonmounts.def;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathNode;
 import net.dragonmounts.entity.breath.effects.AetherBreathFX;
+import net.dragonmounts.entity.breath.effects.DarkBreathFX;
 import net.dragonmounts.entity.breath.sound.SoundEffectName;
 import net.dragonmounts.entity.breath.sound.SoundState;
 import net.dragonmounts.entity.breath.weapons.BreathWeapon;
 import net.dragonmounts.entity.breath.weapons.BreathWeaponAether;
+import net.dragonmounts.entity.breath.weapons.BreathWeaponDark;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.entity.Entity;
@@ -45,7 +47,7 @@ public class DarkType extends DragonType {
 
     @Override
     public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
-        return new BreathWeaponAether(dragon);
+        return new BreathWeaponDark(dragon);
     }
 
     @Override
@@ -55,7 +57,7 @@ public class DarkType extends DragonType {
 
     @Override
     public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathNode.Power power, float partialTicks) {
-        world.spawnEntity(new AetherBreathFX(world, position, direction, power, partialTicks));
+        world.spawnEntity(new DarkBreathFX(world, position, direction, power, partialTicks));
     }
 
     @Override

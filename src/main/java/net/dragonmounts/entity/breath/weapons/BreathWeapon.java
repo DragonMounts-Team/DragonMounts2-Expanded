@@ -53,6 +53,7 @@ public class BreathWeapon {
     protected float NETHER_DAMAGE = 0.9F;
     protected float POISON_DAMAGE = 0.6F;
     protected float WITHER_DAMAGE = 0.6F;
+    protected float DARK_DAMAGE = 0.6F;
 
     public BreathWeapon(TameableDragonEntity dragon) {
         this.dragon = dragon;
