@@ -1,11 +1,8 @@
 ![LOGO](src/main/resources/logo.png)
 
 # [Dragon Mounts 2: Expanded](https://www.curseforge.com/minecraft/mc-mods/dragon-mounts-2-expanded)
-Dragon Mounts 2 is a sequel to Dragon Mounts, created by TheRPGAdventurer. A mod which adds over 15 new dragons to your game. In addition to new dragons, the mod adds in new armors and tools for players, Armors for Dragons, Nests that generates in every worlds, New Dragon breeds, and much more.
+Dragon Mounts 2: Expanded is a remaster of the infamous Dragon Mounts 2. It polishes the mod with several bug fixes and overhauling it's outdated code and textures.
 
-The continued support for this mod is now maintained by The Dragon Mounts Team and is endorsed by the original DM2 developers. Our goal is to bring back the original essence of Dragon Mounts, fixing many bugs it once had since it's last update (v1.6.3).
-
-It is now completely dependency-free, and a lot of the codebase is cleaned up and most apparent bugs are fixed. This means you will no longer need LLibrary as a required dependency to run the mod, greatly enhancing compatibility with other mods.
 ## License
 The mods binaries, as well as its textures and code are licensed under the **GPLv3 license**.
 
@@ -14,28 +11,31 @@ Feel free to use the mod in any modpacks. You are allowed to use it, you do not 
 Any modpack which uses Dragon Mounts 2 takes full responsibility for user support queries.
 For anyone else, we only support official builds from Curse/Curseforge, Modrinth, and GitHub, not custom built jars. We also do not take bug reports for outdated builds of Minecraft.
 ## Credits
-Dragon Mounts 2 Continued Credits:
-- BarracudaATA - BarracudaATA - Owner of Dragon Mounts and open sourcing the mod to let others create projects under the Dragon Mounts name
-- Dragon Mounts 2 Developers- Giving us permission to continue maintenance of DM2, officially endorsing our continuation
-- Tomanex - Dragon Mounts Team Founder and Texture Artist. Revamped various textures
-- JDSK0ala - Dragon Mounts Team Founder and Beta Tester
-- 2190303755 - Lead Developer and Coder for Dragon Mounts 2: Continued
-- Moaswies - Coder for Dragon Mounts 2: Continued
-- EnderEXE - Beta Tester
-- Tomohiko, Signis Kerman - For contributing the Japanese and French translations respectively
+Creators:
+- Tomanex - Owner & Artist; Updated Item Textures
+- JDSK0ala - Owner & Beta Tester. Several Contributions
+- 2190303755 - Coder
+- Moaswies - Coder
 
-Former Dragon Mounts 2 Developers:
-- BarracudaATA - Owner of Dragon Mounts and open sourcing the mod to let others create projects under the Dragon Mounts name
-- TheRPGAdventurer - Owner of Dragon Mounts 2
-- Kingdomall - Overhauling the majority of textures
-- Shannieann - Texture artist for Zombie and Terra textures
-- UkanGundun - Texture artist for Fire and Sunlight textures
-- Kay9Unit (WolfShotz) - Coder and doing codebase improvements
-- FlaemWing - New nest textures, tool textures and dragon armor item textures
-- cesar_zorak - Dragon armor model textures, breed textures and more
-- Alexthe666 (AlexModGuy) - Open sourcing the code for I&F, Ice and Fire Owner
-- Majty/GuineaOwl - Amulet textures
-- NightScale - For new ideas and feedback
-- Unakitononeko - New and improved Forest textures
-- Crafty - New and improved Ice textures
-- TheGreyGhost - Old DM1 Developer. Prototype Dragon Breath
+Contributors:
+- HaxTheCharizard (Moderator) - Artist; Armor and Tool Textures. Attachable Models
+- Signis Kerman - French Translations
+- Tomohiko - Japanese translations
+- Legitdragonb0y - Several Contributions
+
+Dragon Mounts 2 Creators:
+- BarracudaATA - Original Project; code, textures, ideas.
+- TheRPGAdventurer - Owner & Lead Developer
+- Kingdomall - Artist; Updated Dragon Textures
+- Shannieann - Artist; Nether, Terra and Zombie Textures
+- Ukan - Artist; Sunlight and Moonlight Textures
+- Kay9 - (Ex)-Coder
+
+Original Contributers:
+- AlexModGuy (I&F Owner) - Ice and Fire code
+- FlaemWing - Artist; Nest Block, Tools and Dragon Armor item
+- cesar_zorak - Artist; Dragon Armor model, Breed textures. Several Contributions
+- Majty/GuineaOwl - Artist; Amulet Item Texture
+- Unakitononeko - Artist; Updated Forest Textures
+- Crafty - Artist; Updated Ice Textures
+- TheGreyGhost - DM1 Developer; Prototype Dragon Breath
