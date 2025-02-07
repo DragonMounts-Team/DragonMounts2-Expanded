@@ -1,10 +1,11 @@
 package net.dragonmounts.inventory;
 
-import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.network.SSyncBannerPacket;
-import net.dragonmounts.util.DMUtils;
 import io.netty.buffer.ByteBuf;
 import mcp.MethodsReturnNonnullByDefault;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.network.SSyncBannerPacket;
+import net.dragonmounts.util.EntityUtil;
+import net.dragonmounts.util.ItemUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -225,11 +226,11 @@ public final class DragonInventory implements IInventory {
         if (!(stack = dragon.getArmor()).isEmpty()) {
             tag.setTag("Armor", stack.writeToNBT(new NBTTagCompound()));
         }
-        NBTTagList banners = DMUtils.writeToNBT(this.banners);
+        NBTTagList banners = ItemUtil.writeToNBT(this.banners);
         if (!banners.isEmpty()) {
             tag.setTag("Banners", banners);
         }
-        NBTTagList stacks = DMUtils.writeToNBT(this.stacks);
+        NBTTagList stacks = ItemUtil.writeToNBT(this.stacks);
         if (!stacks.isEmpty()) {
             tag.setTag("Inventory", stacks);
         }
@@ -246,10 +247,10 @@ public final class DragonInventory implements IInventory {
             this.dragon.setArmor(new ItemStack(tag.getCompoundTag("Armor")));
         }
         if (tag.hasKey("Banners")) {
-            DMUtils.readFromNBT(this.banners, tag.getTagList("Banners", 10));
+            ItemUtil.readFromNBT(this.banners, tag.getTagList("Banners", 10));
         }
         if (tag.hasKey("Inventory")) {
-            DMUtils.readFromNBT(this.stacks, tag.getTagList("Inventory", 10));
+            ItemUtil.readFromNBT(this.stacks, tag.getTagList("Inventory", 10));
         }
         // Compat
         NBTTagList items = tag.getTagList("Items", 10);
@@ -289,7 +290,7 @@ public final class DragonInventory implements IInventory {
         if (dragon.world.isRemote) {
             Arrays.fill(this.stacks, ItemStack.EMPTY);
         } else {
-            DMUtils.dropItems(this.dragon, this.stacks);
+            EntityUtil.dropItems(this.dragon, this.stacks);
         }
     }
 
@@ -298,8 +299,8 @@ public final class DragonInventory implements IInventory {
      */
     public void dropAllItems() {
         TameableDragonEntity dragon = this.dragon;
-        DMUtils.dropItems(dragon, this.stacks);
-        DMUtils.dropItems(dragon, this.banners);
+        EntityUtil.dropItems(dragon, this.stacks);
+        EntityUtil.dropItems(dragon, this.banners);
         dragon.entityDropItem(dragon.getChest(), 0.5F);
         dragon.entityDropItem(dragon.getArmor(), 0.5F);
         dragon.entityDropItem(dragon.getSaddle(), 0.5F);

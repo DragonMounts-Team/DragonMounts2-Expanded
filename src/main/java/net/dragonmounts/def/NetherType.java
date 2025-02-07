@@ -1,7 +1,7 @@
 package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.breath.BreathNode;
+import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.effects.NetherBreathFX;
 import net.dragonmounts.entity.breath.weapons.BreathWeapon;
 import net.dragonmounts.entity.breath.weapons.BreathWeaponNether;
@@ -57,7 +57,7 @@ public class NetherType extends DragonType {
 
     @Override
     public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
-        return new BreathWeaponNether(dragon);
+        return new BreathWeaponNether(dragon, 0.9F);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class NetherType extends DragonType {
     }
 
     @Override
-    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathNode.Power power, float partialTicks) {
+    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
         world.spawnEntity(new NetherBreathFX(world, position, direction, power, partialTicks));
     }
 }

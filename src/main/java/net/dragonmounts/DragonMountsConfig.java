@@ -11,6 +11,7 @@ package net.dragonmounts;
 
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import net.dragonmounts.util.LogUtil;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -19,6 +20,7 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.apache.logging.log4j.Level;
 
 import java.io.File;
 import java.util.List;
@@ -97,15 +99,15 @@ public class DragonMountsConfig {
     }
 
     public static void syncFromFiles() {
-        syncconfigs(true, true);
+        syncConfigs(true, true);
     }
 
     public static void syncFromGui() {
-        syncconfigs(false, true);
+        syncConfigs(false, true);
     }
 
     public static void syncFromFields() {
-        syncconfigs(false, false);
+        syncConfigs(false, false);
     }
 
     public static Configuration getConfig() {
@@ -145,12 +147,10 @@ public class DragonMountsConfig {
 
     private static void verifyLoaded() {
         if (configHasLoaded) return;
-
-        DragonMounts.loggerLimit.error_once(
-                "One or more DragonMountsConfig properties were accessed before loading the configuration");
+        LogUtil.once(Level.ERROR, "One or more DragonMountsConfig properties were accessed before loading the configuration");
     }
 
-    private static void syncconfigs(boolean loadFromConfigFile, boolean readFromConfig) {
+    private static void syncConfigs(boolean loadFromConfigFile, boolean readFromConfig) {
         if (loadFromConfigFile)
             config.load();
 

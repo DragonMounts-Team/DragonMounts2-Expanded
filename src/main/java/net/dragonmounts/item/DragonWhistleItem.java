@@ -2,13 +2,14 @@ package net.dragonmounts.item;
 
 import com.mojang.authlib.GameProfile;
 import net.dragonmounts.DragonMountsTags;
+import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.client.gui.GuiDragonWhistle;
 import net.dragonmounts.compat.DragonTypeCompat;
+import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.registry.DragonType;
-import net.dragonmounts.util.DMUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -73,6 +74,12 @@ public class DragonWhistleItem extends Item {
             root.setString("Type", DragonTypeCompat.MAPPING.getOrDefault(root.getString("Breed"), DragonTypes.ENDER).identifier.toString());
             root.removeTag("Breed");
         }
+        if (root.hasKey("Age", 8)) {
+            String name = root.getString("Age");
+            if (name.startsWith("dragon.")) {
+                root.setString("Age", "life_stage." + name);
+            }
+        }
         if (root.hasUniqueId(DEPRECATED_UUID_KEY)) {
             String most = DEPRECATED_UUID_KEY + "Most";
             root.setLong("DragonUUIDMost", root.getLong(most));
@@ -96,9 +103,9 @@ public class DragonWhistleItem extends Item {
      * @param world
      */
     @SideOnly(Side.CLIENT)
-    private void openDragonWhistleGui(@Nullable UUID uuid, World world) {
+    private void openDragonWhistleGui(@Nullable UUID uuid, World world, EnumHand hand) {
         if (uuid == null || !world.isRemote) return;
-        Minecraft.getMinecraft().displayGuiScreen(new GuiDragonWhistle(world, uuid));
+        Minecraft.getMinecraft().displayGuiScreen(new GuiDragonWhistle(world, uuid, hand));
     }
 
 
@@ -112,25 +119,31 @@ public class DragonWhistleItem extends Item {
         if (target instanceof TameableDragonEntity) {
             TameableDragonEntity dragon = (TameableDragonEntity) target;
             EntityLivingBase owner = dragon.getOwner();
-            if (owner != null && dragon.isAllowed(player)) {
+            if (owner != null) {
+                if (Relation.checkRelation(dragon, player) == Relation.STRANGER) {
+                    Relation.STRANGER.onDeny(player);
+                    return false;
+                }
+                if (stack.hasTagCompound() && stack.getTagCompound().hasUniqueId(DRAGON_UUID_KEY)) {
+                    player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.whistle.existing"), true);
+                    return true;
+                }
                 NBTTagCompound nbt = new NBTTagCompound();
                 nbt.setUniqueId(DRAGON_UUID_KEY, dragon.getUniqueID());
                 if (dragon.hasCustomName()) {
                     nbt.setString("Name", dragon.getCustomNameTag());
                 }
-                nbt.setString("Age", "dragon." + dragon.getLifeStageHelper().getLifeStage().name().toLowerCase());
+                nbt.setString("Age", dragon.getLifeStageHelper().getLifeStage().translationKey);
                 nbt.setString("OwnerName", owner.getName());
                 nbt.setUniqueId("Owner", owner.getUniqueID());
                 DragonType type = dragon.getVariant().type;
                 nbt.setInteger("Color", type.color);
                 nbt.setString("Type", type.identifier.toString());
-
                 stack.setTagCompound(nbt);
-                player.sendStatusMessage(new TextComponentTranslation("whistle.msg.hasDragon"), true);
+                player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.whistle.success"), true);
                 return true;
             }
         }
-
         return false;
     }
 
@@ -144,16 +157,14 @@ public class DragonWhistleItem extends Item {
         NBTTagCompound nbt;
         if (world.isRemote) {
             if (!stack.hasTagCompound() || !(nbt = stack.getTagCompound()).hasUniqueId(DRAGON_UUID_KEY)) {
-                player.sendStatusMessage(new TextComponentTranslation("whistle.msg.unBound"), true);
+                player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.whistle.empty"), true);
                 return new ActionResult<>(EnumActionResult.FAIL, stack);
             }
             if (nbt.hasUniqueId("Owner") && !player.getUniqueID().equals(nbt.getUniqueId("Owner"))) {
-                player.sendStatusMessage(new TextComponentTranslation("dragon.notOwned"), true);
+                player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.dragon.notOwner"), true);
                 return new ActionResult<>(EnumActionResult.FAIL, stack);
             }
-            if (!player.isSneaking()) {
-                this.openDragonWhistleGui(nbt.getUniqueId(DRAGON_UUID_KEY), world);
-            }
+            this.openDragonWhistleGui(nbt.getUniqueId(DRAGON_UUID_KEY), world, hand);
             return new ActionResult<>(EnumActionResult.SUCCESS, stack);
         }
         if (!stack.hasTagCompound() || !(nbt = stack.getTagCompound()).hasUniqueId(DRAGON_UUID_KEY) || (
@@ -161,15 +172,9 @@ public class DragonWhistleItem extends Item {
         )) {
             return new ActionResult<>(EnumActionResult.FAIL, stack);
         }
-        if (player.isSneaking()) {
-            stack.setTagCompound(null);
-            player.swingArm(hand);
-            player.sendStatusMessage(new TextComponentTranslation("whistle.msg.cleared"), true);
-        }
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
 
-    /*=== Item Extras ===*/
     @Override
     @SideOnly(Side.CLIENT)
     public String getItemStackDisplayName(ItemStack stack) {
@@ -185,16 +190,15 @@ public class DragonWhistleItem extends Item {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         NBTTagCompound nbt = stack.getTagCompound();
-        if (nbt == null || !nbt.hasUniqueId(DRAGON_UUID_KEY)) {
-            tooltip.add(DMUtils.translateToLocal("item.whistle.info"));
-            return;
+        if (nbt != null && nbt.hasUniqueId(DRAGON_UUID_KEY)) {
+            String name = getDragonName(nbt);
+            if (name != null) {
+                tooltip.add(I18n.format("tooltip.dragonmounts.name", name));
+            }
+            tooltip.add(I18n.format("tooltip.dragonmounts.age", TextFormatting.AQUA + ClientUtil.translateToLocal(nbt.getString("Age")) + TextFormatting.RESET));
+            tooltip.add(I18n.format("tooltip.dragonmounts.owner", TextFormatting.GOLD + nbt.getString("OwnerName") + TextFormatting.RESET));
+
         }
-        String name = getDragonName(nbt);
-        if (name != null) {
-            tooltip.add(I18n.format("tooltip.dragonmounts.name", getDragonName(nbt)));
-        }
-        tooltip.add(I18n.format("tooltip.dragonmounts.age", TextFormatting.AQUA + DMUtils.translateToLocal(nbt.getString("Age")) + TextFormatting.RESET));
-        tooltip.add(I18n.format("tooltip.dragonmounts.owner", TextFormatting.GOLD + nbt.getString("OwnerName") + TextFormatting.RESET));
-        tooltip.add(TextFormatting.ITALIC + DMUtils.translateToLocal("item.removeNBT"));
+        tooltip.add(ClientUtil.translateToLocal("tooltip.dragonmounts.whistle"));
     }
 }

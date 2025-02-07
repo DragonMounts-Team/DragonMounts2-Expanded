@@ -36,7 +36,7 @@ public class CommandDragonUnlock extends DragonHandlerCommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "commands.dragon.unlock.usage";
+        return "commands.dragonmounts.unlock.usage";
     }
 
     @Override
@@ -48,14 +48,14 @@ public class CommandDragonUnlock extends DragonHandlerCommand {
                 break;
             case 1:
                 dragons = getSelectedDragons(server, sender, args[0]);
-                if (dragons.isEmpty()) throw new EntityNotFoundException("commands.dragon.notFound", args[0]);
+                if (dragons.isEmpty()) throw new EntityNotFoundException("commands.dragonmounts.notFound", args[0]);
                 break;
             default:
-                throw new WrongUsageException("commands.dragon.unlock.usage");
+                throw new WrongUsageException("commands.dragonmounts.unlock.usage");
         }
         for (TameableDragonEntity dragon : dragons) {
             dragon.setToAllowedOtherPlayers(true);
-            sender.sendMessage(new TextComponentTranslation("commands.dragon.unlock.success", dragon.getDisplayName()));
+            sender.sendMessage(new TextComponentTranslation("commands.dragonmounts.unlock.success", dragon.getDisplayName()));
         }
     }
 }

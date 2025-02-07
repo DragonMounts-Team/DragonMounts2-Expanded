@@ -15,20 +15,20 @@ public class EntityAIDragonSit extends EntityAISit {
     public EntityAIDragonSit(TameableDragonEntity dragon) {
         super(dragon);
         this.dragon = dragon;
-        this.setMutexBits(5);
     }
 
     /**
      * Returns whether the EntityAIBase should begin execution.
      */
     public boolean shouldExecute() {
-        if (!this.dragon.isTamed() || this.dragon.isInWater() || !this.dragon.onGround || this.dragon.getControllingPlayer() != null) {
-            return false;
-        } else {
-            EntityLivingBase owner = this.dragon.getOwner();
-            if (owner == null) return true;
-            return (!(this.dragon.getDistanceSq(owner) < 144.0D) || owner.getRevengeTarget() == null) && this.isSitting;
-        }
+        if (!this.isSitting ||
+                !this.dragon.isTamed() ||
+                this.dragon.isInWater() ||
+                !this.dragon.onGround ||
+                this.dragon.getControllingPlayer() != null
+        ) return false;
+        EntityLivingBase owner = this.dragon.getOwner();
+        return owner == null || (this.dragon.getDistanceSq(owner) >= 144.0D || owner.getRevengeTarget() == null);
     }
 
     /**

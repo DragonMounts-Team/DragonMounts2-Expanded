@@ -39,11 +39,11 @@ public abstract class DragonHandlerCommand extends CommandBase {
             if (closest != null) return closest;
 
         }
-        throw new EntityNotFoundException("commands.dragon.unspecified", DMUtils.NO_ARGS);
+        throw new EntityNotFoundException("commands.dragonmounts.unspecified", DMUtils.NO_ARGS);
     }
 
     public static List<TameableDragonEntity> getSelectedDragons(MinecraftServer server, ICommandSender sender, String selector) throws CommandException {
-        if (selector.isEmpty()) throw new EntityNotFoundException("commands.dragon.unspecified", DMUtils.NO_ARGS);
+        if (selector.isEmpty()) throw new EntityNotFoundException("commands.dragonmounts.unspecified", DMUtils.NO_ARGS);
         List<TameableDragonEntity> dragons = EntitySelector.matchEntities(sender, selector, TameableDragonEntity.class);
         if (dragons.isEmpty()) {
             try {

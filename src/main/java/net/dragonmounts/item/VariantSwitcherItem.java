@@ -36,7 +36,7 @@ public class VariantSwitcherItem extends Item {
                 }
                 return true;
             }
-            player.sendStatusMessage(new TextComponentTranslation("dragon.notOwned"), true);
+            player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.dragon.notOwner"), true);
         }
         return false;
     }

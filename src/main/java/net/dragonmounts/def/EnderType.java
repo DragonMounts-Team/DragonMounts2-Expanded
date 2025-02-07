@@ -1,7 +1,7 @@
 package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.breath.BreathNode;
+import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.effects.EnderBreathFX;
 import net.dragonmounts.entity.breath.weapons.BreathWeapon;
 import net.dragonmounts.entity.breath.weapons.BreathWeaponEnder;
@@ -20,7 +20,7 @@ public class EnderType extends DragonType {
 
     @Override
     public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
-        return new BreathWeaponEnder(dragon);
+        return new BreathWeaponEnder(dragon, 0.9F);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class EnderType extends DragonType {
     }
 
     @Override
-    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathNode.Power power, float partialTicks) {
+    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
         world.spawnEntity(new EnderBreathFX(world, position, direction, power, partialTicks));
     }
 }

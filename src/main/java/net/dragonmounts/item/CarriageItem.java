@@ -1,9 +1,9 @@
 package net.dragonmounts.item;
 
+import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.entity.CarriageEntity;
 import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.registry.CarriageType;
-import net.dragonmounts.util.DMUtils;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -75,7 +75,7 @@ public class CarriageItem extends Item {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World level, List<String> tooltips, ITooltipFlag flag) {
-        tooltips.add(TextFormatting.GRAY + DMUtils.translateToLocal("tooltip.dragonmounts.carriage"));
+        tooltips.add(TextFormatting.GRAY + ClientUtil.translateToLocal("tooltip.dragonmounts.carriage"));
     }
 
     @Override

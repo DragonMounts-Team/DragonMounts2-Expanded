@@ -25,7 +25,7 @@ public class DragonHeadPositionHelper {
   public SegmentSizePositionRotation head;
   public SegmentSizePositionRotation neck;  //not required?  not sure.
 
-  private TameableDragonEntity dragon;
+  private final TameableDragonEntity dragon;
   private final int NUMBER_OF_NECK_SEGMENTS;
 
   public DragonHeadPositionHelper(TameableDragonEntity parent, int i_numberOfNeckSegments) {

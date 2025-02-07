@@ -1,7 +1,7 @@
 package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.breath.BreathNode;
+import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.effects.AetherBreathFX;
 import net.dragonmounts.entity.breath.sound.SoundEffectName;
 import net.dragonmounts.entity.breath.sound.SoundState;
@@ -42,11 +42,11 @@ public class MoonlightType extends DragonType {
 
     @Override
     public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
-        return new BreathWeaponAether(dragon);
+        return new BreathWeaponAether(dragon, 0.7F);
     }
 
     @Override
-    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathNode.Power power, float partialTicks) {
+    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
         world.spawnEntity(new AetherBreathFX(world, position, direction, power, partialTicks));
     }
 

@@ -34,7 +34,7 @@ public class DragonCommandTree extends CommandTreeBase {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "commands.dragon.usage";
+        return "commands.dragonmounts.usage";
     }
 
     @Override

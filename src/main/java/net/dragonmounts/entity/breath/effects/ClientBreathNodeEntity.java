@@ -1,6 +1,7 @@
 package net.dragonmounts.entity.breath.effects;
 
 import net.dragonmounts.entity.breath.BreathNode;
+import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.util.EntityUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
@@ -26,7 +27,7 @@ public abstract class ClientBreathNodeEntity extends Entity {
             World world,
             Vec3d position,
             Vec3d direction,
-            BreathNode.Power power,
+            BreathPower power,
             float partialTicksHeadStart,
             boolean extraRotation
     ) {

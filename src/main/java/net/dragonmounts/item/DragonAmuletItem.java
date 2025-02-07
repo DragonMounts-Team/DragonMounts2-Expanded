@@ -58,7 +58,7 @@ public class DragonAmuletItem extends AmuletItem<TameableDragonEntity> {
         if (!flag) {
             NBTTagCompound data = root.getCompoundTag("EntityTag");
             if (!data.isEmpty()) {
-                if (notOwner(data, player, "dragon.notOwned")) return null;
+                if (notOwner(data, player, "message.dragonmounts.dragon.notOwner")) return null;
                 flag = !data.hasKey(DragonVariant.DATA_PARAMETER_KEY);
                 dragon.readFromNBT(data);
             }

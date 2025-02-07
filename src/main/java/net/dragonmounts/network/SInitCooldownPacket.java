@@ -1,13 +1,13 @@
 package net.dragonmounts.network;
 
-import net.dragonmounts.capability.ArmorEffectManager;
 import io.netty.buffer.ByteBuf;
+import net.dragonmounts.capability.ArmorEffectManager;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-import static net.dragonmounts.util.VarInt.readVarInt;
-import static net.dragonmounts.util.VarInt.writeVarInt;
+import static net.dragonmounts.util.ByteBufferUtil.readVarInt;
+import static net.dragonmounts.util.ByteBufferUtil.writeVarInt;
 
 public class SInitCooldownPacket implements IMessage {
     public int size;

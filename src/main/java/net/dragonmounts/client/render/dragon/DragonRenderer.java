@@ -15,8 +15,8 @@ import net.dragonmounts.client.model.dragon.DragonModelMode;
 import net.dragonmounts.client.render.dragon.layer.DragonLayerRenderer;
 import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.init.DMBlocks;
 import net.dragonmounts.entity.helper.DragonLifeStageHelper;
+import net.dragonmounts.init.DMBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
@@ -161,7 +161,7 @@ public class DragonRenderer extends RenderLiving<TameableDragonEntity> {
     @Override
     protected void preRenderCallback(TameableDragonEntity dragon, float partialTicks) {
         // a fully grown dragon is larger than the model by this amount
-        float scale = dragon.getScale() * 1.6F;//TODO: update VariantAppearance
+        float scale = dragon.getScale() * dragon.getVariant().appearance.renderScale;
         GlStateManager.scale(scale, scale, scale);
     }
 

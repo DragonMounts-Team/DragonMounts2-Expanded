@@ -48,7 +48,7 @@ public class EntityAIDragonFlight extends EntityAIDragonBase {
         landingPos = dragon.getPosition();
 
         // add some variance
-        int followRange = MathHelper.floor(getFollowRange());
+        int followRange = MathHelper.floor(dragon.getNavigator().getPathSearchRange());
         int ox = followRange - random.nextInt(followRange) * 2;
         int oz = followRange - random.nextInt(followRange) * 2;
         landingPos = landingPos.add(ox, 0, oz);
@@ -80,5 +80,9 @@ public class EntityAIDragonFlight extends EntityAIDragonBase {
             // probably too high, so simply descend vertically
             tryMoveToBlockPos(dragon.getPosition().down(4), speed);
         }
+    }
+
+    protected boolean tryMoveToBlockPos(BlockPos pos, double speed) {
+        return dragon.getNavigator().tryMoveToXYZ(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, speed);
     }
 }

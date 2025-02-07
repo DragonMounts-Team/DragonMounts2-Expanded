@@ -20,6 +20,7 @@ public class DragonMoveHelper extends EntityMoveHelper {
 
     @Override
     public void onUpdateMoveHelper() {
+        TameableDragonEntity dragon = this.dragon;
         // original movement behavior if the entity isn't flying
         if (dragon.isFlying()) {
             Vec3d dragonPos = dragon.getPositionVector();
@@ -29,7 +30,7 @@ public class DragonMoveHelper extends EntityMoveHelper {
             // target position and normalizing the result
             Vec3d dir = movePos.subtract(dragonPos).normalize();
 
-            // get euclidean distance to target
+            // get Euclidean distance to target
             double dist = dragonPos.distanceTo(movePos);
 
             // move towards target if it's far away enough   dragon.width
@@ -48,7 +49,7 @@ public class DragonMoveHelper extends EntityMoveHelper {
                 dragon.motionY *= 0.8;
                 dragon.motionZ *= 0.8;
 
-                dragon.motionY += Math.sin(dragon.ticksExisted / 5) * 0.03;
+                dragon.motionY += Math.sin(dragon.ticksExisted / 5.0) * 0.03;
             }
 
             // face entity towards target

@@ -35,7 +35,7 @@ public class CommandDragonTame extends DragonHandlerCommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "commands.dragon.tame.usage";
+        return "commands.dragonmounts.tame.usage";
     }
 
     @Override
@@ -57,20 +57,20 @@ public class CommandDragonTame extends DragonHandlerCommand {
                     player = (EntityPlayer) entity;
                 } else throw new PlayerNotFoundException("commands.generic.player.unspecified");
                 dragons = getSelectedDragons(server, sender, args[0]);
-                if (dragons.isEmpty()) throw new EntityNotFoundException("commands.dragon.notFound", args[0]);
+                if (dragons.isEmpty()) throw new EntityNotFoundException("commands.dragonmounts.notFound", args[0]);
                 break;
             case 2:
                 dragons = getSelectedDragons(server, sender, args[0]);
-                if (dragons.isEmpty()) throw new EntityNotFoundException("commands.dragon.notFound", args[0]);
+                if (dragons.isEmpty()) throw new EntityNotFoundException("commands.dragonmounts.notFound", args[0]);
                 player = EntitySelector.matchOnePlayer(sender, args[1]);
                 if (player == null) throw new PlayerNotFoundException("argument.player.toomany");
                 break;
             default:
-                throw new WrongUsageException("commands.dragon.tame.usage");
+                throw new WrongUsageException("commands.dragonmounts.tame.usage");
         }
         for (TameableDragonEntity dragon : dragons) {
-            dragon.tamedFor(player, true);
-            sender.sendMessage(new TextComponentTranslation("commands.dragon.tame.success", dragon.getDisplayName(), player.getDisplayName()));
+            dragon.tame(player);
+            sender.sendMessage(new TextComponentTranslation("commands.dragonmounts.tame.success", dragon.getDisplayName(), player.getDisplayName()));
         }
     }
 }

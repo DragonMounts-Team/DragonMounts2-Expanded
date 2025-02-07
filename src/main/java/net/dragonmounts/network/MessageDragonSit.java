@@ -2,6 +2,7 @@ package net.dragonmounts.network;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -22,10 +23,12 @@ public class MessageDragonSit extends CUUIDPacket {
             Entity entity = ctx.getServerHandler().server.getEntityFromUuid(message.uuid);
             if (entity instanceof TameableDragonEntity) {
                 TameableDragonEntity dragon = (TameableDragonEntity) entity;
-                if (dragon.isTamedFor(ctx.getServerHandler().player)) {
+                if (dragon.isOwner(ctx.getServerHandler().player)) {
                     dragon.getAISit().setSitting(!dragon.isSitting());
+                    return null;
                 }
             }
+            ctx.getServerHandler().player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.whistle.failed"), true);
             return null;
         }
     }

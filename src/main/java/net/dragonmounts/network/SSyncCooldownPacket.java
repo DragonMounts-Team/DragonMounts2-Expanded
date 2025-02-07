@@ -1,17 +1,17 @@
 package net.dragonmounts.network;
 
+import io.netty.buffer.ByteBuf;
 import net.dragonmounts.capability.ArmorEffectManager;
 import net.dragonmounts.compat.CooldownOverlayCompat;
 import net.dragonmounts.registry.CooldownCategory;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.item.Item;
 import net.minecraft.util.CooldownTracker;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-import static net.dragonmounts.util.VarInt.readVarInt;
-import static net.dragonmounts.util.VarInt.writeVarInt;
+import static net.dragonmounts.util.ByteBufferUtil.readVarInt;
+import static net.dragonmounts.util.ByteBufferUtil.writeVarInt;
 
 public class SSyncCooldownPacket implements IMessage {
     public int id;

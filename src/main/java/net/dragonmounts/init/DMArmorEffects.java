@@ -3,8 +3,8 @@ package net.dragonmounts.init;
 import net.dragonmounts.api.IDescribableArmorEffect;
 import net.dragonmounts.api.IDescribableArmorEffect.Advanced;
 import net.dragonmounts.capability.IArmorEffectManager;
+import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.network.SRiposteEffectPacket;
-import net.dragonmounts.util.DMUtils;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -85,7 +85,7 @@ public class DMArmorEffects {
         public void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {
             tooltips.add("");
             this.appendTriggerInfo(stack, tooltips);
-            tooltips.add(TextFormatting.RESET + DMUtils.translateToLocal("tooltip.armor_effect.dragonmounts.enchant"));
+            tooltips.add(TextFormatting.RESET + ClientUtil.translateToLocal("tooltip.armor_effect.dragonmounts.enchant"));
         }
     };
 
@@ -147,8 +147,8 @@ public class DMArmorEffects {
         public void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {
             tooltips.add("");
             this.appendTriggerInfo(stack, tooltips);
-            tooltips.add(TextFormatting.RESET + DMUtils.translateToLocal(FISHING_LUCK));
-            tooltips.add(TextFormatting.RESET + DMUtils.translateToLocal(this.description));
+            tooltips.add(TextFormatting.RESET + ClientUtil.translateToLocal(FISHING_LUCK));
+            tooltips.add(TextFormatting.RESET + ClientUtil.translateToLocal(this.description));
             this.appendCooldownInfo(tooltips);
         }
     };
@@ -169,7 +169,7 @@ public class DMArmorEffects {
         public void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {
             tooltips.add("");
             this.appendTriggerInfo(stack, tooltips);
-            tooltips.add(TextFormatting.RESET + DMUtils.translateToLocal("tooltip.armor_effect.dragonmounts.moonlight"));
+            tooltips.add(TextFormatting.RESET + ClientUtil.translateToLocal("tooltip.armor_effect.dragonmounts.moonlight"));
         }
     };
 
@@ -185,7 +185,7 @@ public class DMArmorEffects {
         public void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {
             tooltips.add("");
             this.appendTriggerInfo(stack, tooltips);
-            tooltips.add(TextFormatting.RESET + DMUtils.translateToLocal("tooltip.armor_effect.dragonmounts.storm"));
+            tooltips.add(TextFormatting.RESET + ClientUtil.translateToLocal("tooltip.armor_effect.dragonmounts.storm"));
         }
     };
 
@@ -216,8 +216,8 @@ public class DMArmorEffects {
         public void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {
             tooltips.add("");
             this.appendTriggerInfo(stack, tooltips);
-            tooltips.add(TextFormatting.RESET + DMUtils.translateToLocal(FISHING_LUCK));
-            tooltips.add(TextFormatting.RESET + DMUtils.translateToLocal(this.description));
+            tooltips.add(TextFormatting.RESET + ClientUtil.translateToLocal(FISHING_LUCK));
+            tooltips.add(TextFormatting.RESET + ClientUtil.translateToLocal(this.description));
             this.appendCooldownInfo(tooltips);
         }
     };
@@ -236,7 +236,7 @@ public class DMArmorEffects {
         public void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {
             tooltips.add("");
             this.appendTriggerInfo(stack, tooltips);
-            tooltips.add(TextFormatting.RESET + DMUtils.translateToLocal("tooltip.armor_effect.dragonmounts.terra"));
+            tooltips.add(TextFormatting.RESET + ClientUtil.translateToLocal("tooltip.armor_effect.dragonmounts.terra"));
         }
     };
 
@@ -254,7 +254,7 @@ public class DMArmorEffects {
         public void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {
             tooltips.add("");
             this.appendTriggerInfo(stack, tooltips);
-            tooltips.add(TextFormatting.RESET + DMUtils.translateToLocal("tooltip.armor_effect.dragonmounts.water"));
+            tooltips.add(TextFormatting.RESET + ClientUtil.translateToLocal("tooltip.armor_effect.dragonmounts.water"));
         }
     };
 
@@ -283,7 +283,7 @@ public class DMArmorEffects {
         public void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {
             tooltips.add("");
             this.appendTriggerInfo(stack, tooltips);
-            tooltips.add(TextFormatting.RESET + DMUtils.translateToLocal("tooltip.armor_effect.dragonmounts.dark"));
+            tooltips.add(TextFormatting.RESET + ClientUtil.translateToLocal("tooltip.armor_effect.dragonmounts.dark"));
         }
     };
 

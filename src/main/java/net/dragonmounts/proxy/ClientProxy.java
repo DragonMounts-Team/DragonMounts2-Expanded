@@ -26,14 +26,13 @@ import net.dragonmounts.client.variant.VariantAppearances;
 import net.dragonmounts.entity.CarriageEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.effects.ClientBreathNodeEntity;
-import net.dragonmounts.event.DragonViewEvent;
+import net.dragonmounts.event.CameraHandler;
 import net.dragonmounts.event.IItemColorRegistration;
+import net.dragonmounts.event.KeyBindingHandler;
 import net.dragonmounts.init.DMItems;
 import net.dragonmounts.init.DMKeyBindings;
 import net.dragonmounts.init.DragonVariants;
 import net.dragonmounts.registry.DragonVariant;
-import net.dragonmounts.util.debugging.StartupDebugClientOnly;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -43,7 +42,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-import java.io.File;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -63,8 +61,6 @@ public class ClientProxy extends ServerProxy {
                 .append(TextFormatting.RESET)
                 .append('\n');
     }
-
-    private int thirdPersonViewDragon = 0;
 
     @Override
     public void PreInitialization(FMLPreInitializationEvent event) {
@@ -125,41 +121,23 @@ public class ClientProxy extends ServerProxy {
     public void Initialization(FMLInitializationEvent evt) {
         super.Initialization(evt);
         DMKeyBindings.init();
-        StartupDebugClientOnly.initClientOnly();
     }
 
     @Override
     public void PostInitialization(FMLPostInitializationEvent event) {
         super.PostInitialization(event);
-
         if (DragonMountsConfig.isDebug()) {
             MinecraftForge.EVENT_BUS.register(new GuiDragonDebug());
         }
-        StartupDebugClientOnly.postInitClientOnly();
-
         if (DragonMountsConfig.isPrototypeBreathweapons()) {
-            DragonOrbControl.createSingleton(getNetwork());
+            DragonOrbControl.createSingleton();
             DragonOrbControl.initialiseInterceptors();
             MinecraftForge.EVENT_BUS.register(DragonOrbControl.getInstance());
             MinecraftForge.EVENT_BUS.register(new TargetHighlighter());
         }
-
-        //MinecraftForge.EVENT_BUS.register(new ModKeys());
-        MinecraftForge.EVENT_BUS.register(new DragonViewEvent());
-        MinecraftForge.EVENT_BUS.register(new DMCapeRenderer());
-    }
-
-    public int getDragon3rdPersonView() {
-        return thirdPersonViewDragon;
-    }
-
-    public void setDragon3rdPersonView(int view) {
-        thirdPersonViewDragon = view;
-    }
-
-    @Override
-    public File getDataDirectory() {
-        return Minecraft.getMinecraft().gameDir;
+        MinecraftForge.EVENT_BUS.register(CameraHandler.class);
+        MinecraftForge.EVENT_BUS.register(KeyBindingHandler.class);
+        MinecraftForge.EVENT_BUS.register(DMCapeRenderer.class);
     }
 
     @Override

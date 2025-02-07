@@ -33,12 +33,12 @@ public class TypeCommand extends DragonHandlerCommand {
 
     @Override
     public String getName() {
-        return "breed";
+        return "type";
     }
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "commands.dragon.breed.usage";
+        return "commands.dragonmounts.type.usage";
     }
 
     @Override
@@ -50,17 +50,17 @@ public class TypeCommand extends DragonHandlerCommand {
                 break;
             case 2:
                 dragons = getSelectedDragons(server, sender, args[1]);
-                if (dragons.isEmpty()) throw new EntityNotFoundException("commands.dragon.notFound", args[1]);
+                if (dragons.isEmpty()) throw new EntityNotFoundException("commands.dragonmounts.notFound", args[1]);
                 break;
             default:
-                throw new WrongUsageException("commands.dragon.breed.usage");
+                throw new WrongUsageException("commands.dragonmounts.type.usage");
         }
         DragonType type = this.types.get(args[0]);
-        if (type == null) throw new CommandException("commands.dragon.breed.invalid");
+        if (type == null) throw new CommandException("commands.dragonmounts.type.invalid");
         for (TameableDragonEntity dragon : dragons) {
             ITextComponent name = dragon.getDisplayName();
             dragon.setVariant(type.variants.draw(dragon.getRNG(), dragon.getVariant()));
-            sender.sendMessage(new TextComponentTranslation("commands.dragon.breed.success", name, new TextComponentTranslation(type.translationKey).setStyle(new Style().setColor(type.formatting))));
+            sender.sendMessage(new TextComponentTranslation("commands.dragonmounts.type.success", name, new TextComponentTranslation(type.translationKey).setStyle(new Style().setColor(type.formatting))));
         }
     }
 

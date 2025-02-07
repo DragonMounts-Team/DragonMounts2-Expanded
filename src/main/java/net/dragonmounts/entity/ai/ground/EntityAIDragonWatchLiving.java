@@ -11,20 +11,16 @@ package net.dragonmounts.entity.ai.ground;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.ai.EntityAIDragonBase;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.entity.EntityLivingBase;
 
 /**
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public class EntityAIDragonWatchLiving extends EntityAIDragonBase {
-
     private final float maxDist;
     private final float watchChance;
-    private Entity watchedEntity;
+    private EntityLivingBase target;
     private int watchTicks;
 
     public EntityAIDragonWatchLiving(TameableDragonEntity dragon, float maxDist, float watchChance) {
@@ -39,31 +35,21 @@ public class EntityAIDragonWatchLiving extends EntityAIDragonBase {
      */
     @Override
     public boolean shouldExecute() {
-        if (random.nextFloat() >= watchChance) {
-            return false;
+        if (this.random.nextFloat() >= this.watchChance) return false;
+        TameableDragonEntity dragon = this.dragon;
+        EntityLivingBase target = this.world.findNearestEntityWithinAABB(
+                EntityLivingBase.class,
+                dragon.getEntityBoundingBox().grow(this.maxDist, dragon.height, this.maxDist),
+                dragon
+        );
+        // don't try to look at the rider when being ridden
+        if (target == null || target == dragon.getControllingPlayer()) return false;
+        this.target = target;
+        // watch the owner a little longer
+        if (dragon.isOwner(target)) {
+            this.watchTicks *= 3;
         }
-        
-        watchedEntity = null;
-        
-        if (watchedEntity == null) {
-            AxisAlignedBB aabb = dragon.getEntityBoundingBox().grow(maxDist, dragon.height, maxDist);
-            Class clazz = EntityLiving.class;
-            watchedEntity = world.findNearestEntityWithinAABB(clazz, aabb, dragon);
-        }
-
-        if (watchedEntity != null) {
-            // don't try to look at the rider when being ridden
-            if (watchedEntity == dragon.getControllingPlayer()) {
-                watchedEntity = null;
-            }
-            
-            // watch the owner a little longer
-            if (watchedEntity == dragon.getOwner()) {
-                watchTicks *= 3;
-            }
-        }
-
-        return watchedEntity != null;
+        return true;
     }
 
     /**
@@ -71,10 +57,7 @@ public class EntityAIDragonWatchLiving extends EntityAIDragonBase {
      */
     @Override
     public boolean shouldContinueExecuting() {
-
-        if (!watchedEntity.isEntityAlive()) return false;
-        if (dragon.getDistanceSq(watchedEntity) > maxDist * maxDist) return false;
-        else return watchTicks > 2;
+        return target.isEntityAlive() && !(dragon.getDistanceSq(target) > maxDist * maxDist) && watchTicks > 2;
     }
 
     /**
@@ -91,7 +74,7 @@ public class EntityAIDragonWatchLiving extends EntityAIDragonBase {
     @Override
     public void resetTask() {
         dragon.renderYawOffset = 0;
-        watchedEntity = null;
+        target = null;
     }
 
     /**
@@ -99,10 +82,13 @@ public class EntityAIDragonWatchLiving extends EntityAIDragonBase {
      */
     @Override
     public void updateTask() {
-        double lx = watchedEntity.posX;
-        double ly = watchedEntity.posY + watchedEntity.getEyeHeight();
-        double lz = watchedEntity.posZ;
-        dragon.getLookHelper().setLookPosition(lx, ly, lz, 10, dragon.getVerticalFaceSpeed());
+        dragon.getLookHelper().setLookPosition(
+                target.posX,
+                target.posY + target.getEyeHeight(),
+                target.posZ,
+                10,
+                dragon.getVerticalFaceSpeed()
+        );
         watchTicks--;
     }
 }

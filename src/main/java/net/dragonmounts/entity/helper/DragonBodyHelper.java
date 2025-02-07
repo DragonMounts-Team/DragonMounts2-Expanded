@@ -19,7 +19,7 @@ import net.minecraft.entity.EntityBodyHelper;
  */
 public class DragonBodyHelper extends EntityBodyHelper {
 
-    private TameableDragonEntity dragon;
+    private final TameableDragonEntity dragon;
     private int turnTicks;
     private int turnTicksLimit = 20;
     private float prevRotationYawHead;
@@ -31,6 +31,7 @@ public class DragonBodyHelper extends EntityBodyHelper {
 
     @Override
     public void updateRenderAngles() {
+        TameableDragonEntity dragon = this.dragon;
         double deltaX = dragon.posX - dragon.prevPosX;
         double deltaY = dragon.posZ - dragon.prevPosZ;
         double dist = deltaX * deltaX + deltaY * deltaY;

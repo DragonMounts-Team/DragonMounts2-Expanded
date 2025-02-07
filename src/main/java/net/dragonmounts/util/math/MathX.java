@@ -21,7 +21,7 @@ import java.util.Random;
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public class MathX {
-
+    public static final AxisAlignedBB ZERO_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
     public static final double PI_D = Math.PI;
     public static final float PI_F = (float) Math.PI;
     public static boolean useLUT = true;
@@ -302,8 +302,8 @@ public class MathX {
         return Math.abs(x1 - x2) <= MINIMUM_SIGNIFICANT_DIFFERENCE;
     }
 
-    public static boolean isSignificantlyDifferent(double x1, double x2) {
-        return Math.abs(x1 - x2) > MINIMUM_SIGNIFICANT_DIFFERENCE;
+    public static boolean isSignificantlyDifferent(double left, double right) {
+        return Math.abs(left - right) > MINIMUM_SIGNIFICANT_DIFFERENCE;
     }
 
     /**

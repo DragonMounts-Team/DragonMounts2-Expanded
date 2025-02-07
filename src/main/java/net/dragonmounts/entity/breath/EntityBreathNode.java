@@ -21,20 +21,26 @@ import net.minecraft.world.World;
  * 3) various getters for intensity, radius, and recent collisions.
  */
 class EntityBreathNode extends Entity {
-    public static EntityBreathNode createEntityBreathNodeServer(World world, double x, double y, double z, double directionX, double directionY, double directionZ, BreathNode.Power power) {
-        Vec3d direction=new Vec3d(directionX, directionY, directionZ).normalize();
-
+    public static EntityBreathNode createEntityBreathNodeServer(World world, Vec3d pos, Vec3d direction, BreathPower power) {
         BreathNode breathNode = new BreathNode(power);
-        Vec3d actualMotion = breathNode.getRandomisedStartingMotion(direction, world.rand);
+        Vec3d actualMotion = breathNode.getRandomisedStartingMotion(direction.normalize(), world.rand);
         // don't randomise the other properties (size, age) on the server.
-
-        return new EntityBreathNode(world, x, y, z, actualMotion, breathNode);
+        return new EntityBreathNode(world, pos.x, pos.y, pos.z, actualMotion, breathNode);
     }
 
-    private EntityBreathNode(World world, double x, double y, double z, Vec3d motion,
-                             BreathNode i_breathNode) {
+    private final BreathNode breathNode;
+    private float intensityAtCollision;
+
+    private EntityBreathNode(
+            World world,
+            double x,
+            double y,
+            double z,
+            Vec3d motion,
+            BreathNode node
+    ) {
         super(world);
-        breathNode = i_breathNode;
+        breathNode = node;
 
         final float ARBITRARY_START_SIZE=0.2F;
         this.setSize(ARBITRARY_START_SIZE, ARBITRARY_START_SIZE);
@@ -49,7 +55,6 @@ class EntityBreathNode extends Entity {
     }
 
     @Override
-    @Deprecated
     public void onUpdate() {
         this.onServerTick();
     }
@@ -65,11 +70,11 @@ class EntityBreathNode extends Entity {
         float radius = this.getCurrentRadius();
         Vec3d prevPos = this.getPositionVector();
         handleWaterMovement();
-        float newAABBDiameter = breathNode.getCurrentAABBcollisionSize();
+        float size = breathNode.getCurrentAABBcollisionSize();
         this.prevPosX = posX;
         this.prevPosY = posY;
         this.prevPosZ = posZ;
-        ObjectArrayList<Pair<EnumFacing, AxisAlignedBB>> collisions = EntityUtil.moveAndResize(this, motionX, motionY, motionZ, newAABBDiameter, newAABBDiameter);
+        ObjectArrayList<Pair<EnumFacing, AxisAlignedBB>> collisions = EntityUtil.moveAndResize(this, motionX, motionY, motionZ, size, size);
         this.intensityAtCollision = getCurrentIntensity();
         if (collided && onGround) {
             motionY -= 0.01F;         // ensure that we hit the ground next time too
@@ -103,8 +108,6 @@ class EntityBreathNode extends Entity {
         return intensityAtCollision;
     }
 
-    private BreathNode breathNode;
-
     @Override
     protected void entityInit() {}
 
@@ -113,6 +116,4 @@ class EntityBreathNode extends Entity {
 
     @Override
     protected void writeEntityToNBT(NBTTagCompound tagCompound) {}
-
-    private float intensityAtCollision;
 }

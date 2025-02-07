@@ -10,6 +10,7 @@
 package net.dragonmounts.entity.ai;
 
 import net.dragonmounts.entity.TameableDragonEntity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -21,7 +22,7 @@ import net.minecraft.item.ItemStack;
  */
 public class EntityAIDragonCatchOwner extends EntityAIDragonBase {
 
-    protected EntityPlayer owner = (EntityPlayer) dragon.getOwner();
+    protected EntityPlayer owner;
 
     public EntityAIDragonCatchOwner(TameableDragonEntity dragon) {
         super(dragon);
@@ -29,41 +30,20 @@ public class EntityAIDragonCatchOwner extends EntityAIDragonBase {
 
     @Override
     public boolean shouldExecute() {
-        if (owner == null) {
+        TameableDragonEntity dragon = this.dragon;
+        // don't catch if leashed, sitting or already being ridden
+        if (dragon.getLeashed() || dragon.isSitting() || !dragon.isSaddled() || dragon.getControllingPlayer() != null)
             return false;
-        }
-
-        // don't catch if leashed
-        if (dragon.getLeashed()) {
-            return false;
-        }
-//         no point in catching players in creative mode
-        if (owner.capabilities.isCreativeMode) {
-            return false;
-        }
-
-        // don't catch if already being ridden
-        if (dragon.getControllingPlayer() != null) {
-            return false;
-        }
-
-        // don't follow if sitting
-        if (dragon.isSitting()) {
-            return false;
-        }
-
-
-        if (!dragon.isSaddled()) {
-            return false;
-        }
-
+        EntityLivingBase owner = dragon.getOwner();
+        if (!(owner instanceof EntityPlayer)) return false;
+        this.owner = (EntityPlayer) owner;
+        // no point in catching players in creative mode
+        if (this.owner.capabilities.isCreativeMode) return false;
         // don't catch if owner has a working Elytra equipped
-        // note: isBroken() is misleading, it actually checks if the items is usable
-        ItemStack itemStack = owner.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-        if (itemStack != null && itemStack.getItem() == Items.ELYTRA && ItemElytra.isUsable(itemStack)) {
+        ItemStack stack = owner.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+        if (!stack.isEmpty() && stack.getItem() == Items.ELYTRA && ItemElytra.isUsable(stack)) {
             return false;
         }
-
         return owner.fallDistance > 4;
     }
 
@@ -74,13 +54,14 @@ public class EntityAIDragonCatchOwner extends EntityAIDragonBase {
 
     @Override
     public void updateTask() {
+        TameableDragonEntity dragon = this.dragon;
+        EntityPlayer owner = this.owner;
         // catch owner in flight if possible
         if (!dragon.isFlying()) {
             dragon.liftOff();
         }
-
         // don't catch if owner is too far away
-        double followRange = getFollowRange();
+        double followRange = dragon.getNavigator().getPathSearchRange();
         dragon.setBoosting(dragon.getDistance(owner) < 1);
         if (dragon.getDistance(owner) < followRange) {
             // mount owner if close enough, otherwise move to owner

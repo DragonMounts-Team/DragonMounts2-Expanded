@@ -1,7 +1,7 @@
 package net.dragonmounts.entity.breath.effects;
 
 import net.dragonmounts.DragonMountsTags;
-import net.dragonmounts.entity.breath.BreathNode;
+import net.dragonmounts.entity.breath.BreathPower;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
@@ -31,7 +31,7 @@ public class AetherBreathFX extends ClientBreathNodeEntity {
      * @param partialTicksHeadStart if spawning multiple EntityFX per tick, use this parameter to spread the starting
      *                              location in the direction
      */
-    public AetherBreathFX(World world, Vec3d position, Vec3d direction, BreathNode.Power power, float partialTicksHeadStart) {
+    public AetherBreathFX(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicksHeadStart) {
         super(world, position, direction, power, partialTicksHeadStart, true);
     }
 

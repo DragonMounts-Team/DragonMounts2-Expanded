@@ -3,8 +3,8 @@ package net.dragonmounts.item;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.dragonmounts.init.DMItemGroups;
-import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.ITestCase;
+import net.dragonmounts.util.LogUtil;
 import net.dragonmounts.util.debugging.TestRunner;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
@@ -73,12 +73,12 @@ public class TestRunnerItem extends Item implements ITestCase {
     public static void execute(ITestCase test, World level, EntityPlayer player, ItemStack stack, int index) {
         try {
             if (test.run(level, player, stack)) {
-                DMUtils.getLogger().info("[Success] Test(#" + index + ") called on " + (level.isRemote ? "client side" : "server side"));
+                LogUtil.LOGGER.info("[Success] Test(#{}) called on {}", index, level.isRemote ? "client side" : "server side");
             } else {
-                DMUtils.getLogger().info("[Failure] Test(#" + index + ") called on " + (level.isRemote ? "client side" : "server side"));
+                LogUtil.LOGGER.info("[Failure] Test(#{}) called on {}", index, level.isRemote ? "client side" : "server side");
             }
         } catch (Exception e) {
-            DMUtils.getLogger().warn("[Error] Test(#" + index + ") called on " + (level.isRemote ? "client side" : "server side"), e);
+            LogUtil.LOGGER.warn("[Error] Test(#{}) called on {}", index, level.isRemote ? "client side" : "server side", e);
         }
     }
 

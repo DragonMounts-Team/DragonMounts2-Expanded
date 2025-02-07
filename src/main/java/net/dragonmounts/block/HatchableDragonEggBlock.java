@@ -44,7 +44,7 @@ public class HatchableDragonEggBlock extends BlockDragonEgg {
     public HatchableDragonEggBlock(DragonType type) {
         this.type = type;
         this.setSoundType(SoundType.STONE)
-                .setTranslationKey("dragonEgg")
+                .setTranslationKey("dragon_egg")
                 .setHardness(0)
                 .setResistance(30)
                 .setLightLevel(0.125F)
@@ -62,7 +62,7 @@ public class HatchableDragonEggBlock extends BlockDragonEgg {
     public boolean onBlockActivated(World level, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (DimensionType.THE_END.equals(level.provider.getDimensionType())) {
             if (!level.isRemote) {
-                player.sendStatusMessage(new TextComponentTranslation("egg.cantHatchEnd.DragonMounts"), true);
+                player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.egg.wrongDimension"), true);
             }
             return false;
         }

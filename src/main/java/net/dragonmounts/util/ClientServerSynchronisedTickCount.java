@@ -76,4 +76,8 @@ public class ClientServerSynchronisedTickCount {
         }
         return (int) localTickCount;
     }
+
+    public void onAgeUp(int ticks) {
+        this.updateFromServer(this.getCurrentTickCount() + ticks + this.ticksToInsert);
+    }
 }

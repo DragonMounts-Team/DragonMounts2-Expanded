@@ -10,6 +10,7 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -85,6 +86,15 @@ public class EntityUtil {
         if (attribute == null) return;
         attribute.removeModifier(uuid);
         attribute.applyModifier(new AttributeModifier(uuid, name, amount, operator).setSaved(serializable));
+    }
+
+    public static void clampYaw(Entity entity, float yaw, float limit) {
+        entity.setRenderYawOffset(yaw);
+        float delta = MathHelper.wrapDegrees(entity.rotationYaw - yaw);
+        float limited = MathHelper.clamp(delta, -limit, limit);
+        entity.prevRotationYaw += limited - delta;
+        entity.rotationYaw += limited - delta;
+        entity.setRotationYawHead(entity.rotationYaw);
     }
 
     /**
@@ -207,5 +217,13 @@ public class EntityUtil {
         }
         entity.world.profiler.endSection();
         return collisions;
+    }
+
+    public static void dropItems(Entity entity, ItemStack[] stacks) {
+        for (int i = 0, j = stacks.length; i < j; ++i) {
+            if (entity.entityDropItem(stacks[i], 0.5F) != null) {
+                stacks[i] = ItemStack.EMPTY;
+            }
+        }
     }
 }

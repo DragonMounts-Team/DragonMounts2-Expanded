@@ -1,7 +1,7 @@
 package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.breath.BreathNode;
+import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.effects.IceBreathFX;
 import net.dragonmounts.entity.breath.sound.SoundEffectName;
 import net.dragonmounts.entity.breath.sound.SoundState;
@@ -72,7 +72,7 @@ public class IceType extends DragonType {
 
     @Override
     public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
-        return new BreathWeaponIce(dragon);
+        return new BreathWeaponIce(dragon, 0.7F);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class IceType extends DragonType {
     }
 
     @Override
-    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathNode.Power power, float partialTicks) {
+    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
         world.spawnEntity(new IceBreathFX(world, position, direction, power, partialTicks));
     }
 }

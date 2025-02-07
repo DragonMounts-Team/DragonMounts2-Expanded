@@ -6,12 +6,14 @@ import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ReferenceSet;
 import it.unimi.dsi.fastutil.objects.ReferenceSets;
+import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.breath.BreathNode;
+import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.effects.FlameBreathFX;
 import net.dragonmounts.entity.breath.sound.SoundEffectName;
 import net.dragonmounts.entity.breath.sound.SoundState;
 import net.dragonmounts.entity.breath.weapons.BreathWeapon;
+import net.dragonmounts.entity.breath.weapons.FireBreath;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.util.DMUtils;
@@ -84,29 +86,47 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
         return false;
     }
 
-    public Vec3d locatePassenger(int index, boolean sitting) {
-        double yOffset = sitting ? 3.4 : 4.4;
-        double yOffset2 = sitting ? 2.1 : 2.5; // maybe not needed
+    public Vec3d locatePassenger(int index, boolean sitting, float scale) {
         // dragon position is the middle of the model, and the saddle is on
         // the shoulders, so move player forwards on Z axis relative to the
         // dragon's rotation to fix that
         switch (index) {
             case 1:
-                return new Vec3d(0.6, yOffset, 0.1);
+                return new Vec3d(
+                        0.6 * scale,
+                        sitting ? 3.4 * scale : 4.4 * scale,
+                        0.1 * scale
+                );
             case 2:
-                return new Vec3d(-0.6, yOffset, 0.1);
+                return new Vec3d(
+                        -0.6 * scale,
+                        sitting ? 3.4 * scale : 4.4 * scale,
+                        0.1 * scale
+                );
             case 3:
-                return new Vec3d(1.6, yOffset2, 0.2);
+                return new Vec3d(
+                        1.6 * scale,
+                        sitting ? 2.1 * scale : 2.5 * scale,
+                        0.2 * scale
+                );
             case 4:
-                return new Vec3d(-1.6, yOffset2, 0.2);
+                return new Vec3d(
+                        -1.6 * scale,
+                        sitting ? 2.1 * scale : 2.5 * scale,
+                        0.2 * scale
+                );
             default:
-                return new Vec3d(0, yOffset, 2.2);
+                return new Vec3d(
+                        0,
+                        sitting ? 3.4 * scale : 4.4 * scale,
+                        2.2 * scale
+                );
         }
     }
 
     @Nullable
     public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
-        return new BreathWeapon(dragon);
+        return new FireBreath(dragon, 0.7F);
     }
 
     public SoundEffectName getBreathSound(DragonLifeStage stage, SoundState state) {
@@ -125,12 +145,12 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
         return dragon.isBaby() ? DMSounds.HATCHLING_DRAGON_ROAR : DMSounds.DRAGON_ROAR;
     }
 
-    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathNode.Power power, float partialTicks) {
+    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
         world.spawnEntity(new FlameBreathFX(world, position, direction, power, partialTicks));
     }
 
     public String getName() {
-        return this.formatting + DMUtils.translateToLocal(this.translationKey);
+        return this.formatting + ClientUtil.translateToLocal(this.translationKey);
     }
 
     public boolean isInvulnerableTo(DamageSource source) {

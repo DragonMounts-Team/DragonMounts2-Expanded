@@ -173,11 +173,11 @@ public class EntityAIDragonAttack extends EntityAIDragonBase {
     }
 
     public boolean isWithinBreathRange(double targetDistSq) {
-        return targetDistSq > 4 && targetDistSq < 95 ? true : false;
+        return targetDistSq > 4 && targetDistSq < 95;
     }
 
     public boolean isWithinMeleeRange(double targetDistSq) {
-        return targetDistSq < 3 ? true : false;
+        return targetDistSq < 3;
     }
 
     public boolean shouldUseBreathWeapon() {
@@ -189,12 +189,13 @@ public class EntityAIDragonAttack extends EntityAIDragonBase {
     }
 
     public boolean lookingAtTarget(EntityLivingBase target) {
-        Vec3d vec3d = dragon.getLook(1.0F).normalize();
-        Vec3d vec3d1 = new Vec3d(target.posX - dragon.posX, target.getEntityBoundingBox().minY + (double) target.getEyeHeight() - (dragon.posY + (double) dragon.getEyeHeight()), target.posZ - dragon.posZ);
-        double d0 = vec3d1.length();
-        vec3d1 = vec3d1.normalize();
-        double d1 = vec3d.dotProduct(vec3d1);
-        return d1 > 1.0D - 0.025D / d0 ? dragon.canEntityBeSeen(target) : false;
+        Vec3d view = dragon.getLook(1.0F).normalize();
+        Vec3d vec3d1 = new Vec3d(
+                target.posX - dragon.posX,
+                target.getEntityBoundingBox().minY + target.getEyeHeight() - (dragon.posY + dragon.getEyeHeight()),
+                target.posZ - dragon.posZ
+        );
+        return view.dotProduct(vec3d1.normalize()) > 1.0D - 0.025D / vec3d1.length() && dragon.canEntityBeSeen(target);
     }
 
     protected void checkAndPerformAttack(EntityLivingBase target, double targetDistSq) {

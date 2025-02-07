@@ -1,8 +1,8 @@
 # US English Translations
 
 # Creative Menu's
-itemGroup.dragonmounts.main=DM2: Continued
-itemGroup.dragonmounts.combat=DM2: Continued-Equipement
+itemGroup.dragonmounts.main=DM2: Expanded
+itemGroup.dragonmounts.combat=DM2: Expanded-Equipment
 
 effect.dragonmounts.dark_dragons_grace=Dark Dragon's Grace
 ##
@@ -31,26 +31,23 @@ dragon_type.dragonmounts.dark=Dark
 dragon_type.dragonmounts.light=Light
 
 #Stage
-dragon.egg=Egg
-dragon.hatchling=Hatchling
-dragon.infant=Infant
-dragon.prejuvenile=Pre-Juvenile
-dragon.juvenile=Juvenile
-dragon.adult=Adult
-
+life_stage.dragon.egg=Egg
+life_stage.dragon.hatchling=Hatchling
+life_stage.dragon.infant=Infant
+life_stage.dragon.prejuvenile=Pre-Juvenile
+life_stage.dragon.juvenile=Juvenile
+life_stage.dragon.adult=Adult
 
 ##
 # Item Names
 ##
 item.diamond_shears.name=Diamond Shears
-item.dragonEgg.name=%s Egg
-item.dragon_gender.name=Dragon Gender Gem
-item.gui.dragon_gender=Right Click an owned dragon with the gem will switch its gender
 item.dragon_spawn_egg.name=Dragon Spawn Egg
 item.dragon_essence.name=Dragon Essence
 item.dragon_whistle.name=Dragon Whistle
 item.dragon_amulet.name=Dragon Amulet
 item.dragon_orb.name=Dragon Orb
+item.dragonmounts.variation_orb.name=Orb of Variation
 
 item.oak_carriage.name=Oak CargoBob
 item.birch_carriage.name=Birch CargoBob
@@ -81,82 +78,46 @@ item.emerald_dragon_armor.name=Emerald Dragon Armor
 tile.dragon_nest.name=Nest Block
 tile.dragon_core.name=Dragon Core
 tile.dragon_head.name=Dragon Head
-
-tile.storm_egg.name=Storm Dragon Egg
-tile.end_egg.name=Ender Dragon Egg
-tile.zombie_egg.name=Zombie Dragon Egg
-tile.sylphid_egg.name=Water Dragon Egg
-tile.nether_egg.name=Nether Dragon Egg
-tile.forest_egg.name=Forest Dragon Egg
-tile.aether_egg.name=Aether Dragon Egg
-tile.ice_egg.name=Ice Dragon Egg
-tile.fire_egg.name=Fire Dragon Egg
-tile.skeleton_egg.name=Skeleton Dragon Egg
-tile.wither_egg.name=Wither Dragon Egg
-tile.enchant_egg.name=Enchant Dragon Egg
-tile.sunlight_egg.name=Sunlight Dragon Egg
-tile.moonlight_egg.name=Moonlight Dragon Egg
-tile.terra_egg.name=Terra Dragon Egg
-
-# Item Info
-item.removeNBT=<Sneak + Right Click to unbind a Dragon>
-item.armoryitems.info=Forged with the Scales of
-item.dragonamulet.info=Right Click to store a dragon and carry it, right click on ground to summon
-tooltip.dragonmounts.carriage=Used to make dragons carry multiple passengers like a boat
-item.whistle.info=Right Click an owned and tamed dragon to control it
-item.whistle.nullBlockPos=Cannot Teleport There
-
+tile.dragon_egg.name=Dragon Egg
 
 ##
 # Messages
 ##
-dragon.locked=This Dragon has been locked by the Owner
-dragon.notTamed=Use meat or fish to tame the dragon
-dragon.notOwned=You do not own this dragon
-entity.dragon.tooYoung=Dragon is too young for that, let it grow
-egg.cantHatchEnd.DragonMounts=Dragon Eggs cannot be hatched in The End
-dragon.growth.paused=Poisonous potatoes stops dragon growth, use carrots to continue growth
-commands.dragon.nodragons=There are no dragons nearby
-commands.dragon.canttame=You cannot tame dragons
-msg.dragon.toggleHover=Dragon Hover Toggle
-msg.dragon.toggleFollowYaw=Dragon Follow Yaw
-msg.dragon.toggleYLock=Old Controls (Space and Left ALT)
-
-# Whistle
-whistle.msg.cleared=Dragon has been unbound
-whistle.msg.hasDragon=Dragon Successfully Bound to Whistle
-whistle.msg.unBound=You Must Bind a Dragon First
-whistle.msg.notOwned=You Do not Own This Dragon
-whistle.msg.noDragon=Dragon Whistle is not bound to a Dragon, Left Click an owned and tamed dragon first
-whistle.msg.fail=The Dragon can't hear the whistle...
-whistle.command.new_home=New HomePos at
-
+message.dragonmounts.control.toggleHovering=Dragon Hovering: %s
+message.dragonmounts.control.toggleYawAlignment=Yaw Alignment: %s
+message.dragonmounts.control.togglePitchAlignment=Pitch Alignment: %s
+##### following entries will be shown in action bar. btw I am not sure if native speakers would like to capitalize the words there
+message.dragonmounts.dragon.untamed=The dragon is untamed
+message.dragonmounts.dragon.locked=This Dragon has been locked by the Owner
+message.dragonmounts.dragon.notOwner=You do not own this dragon
+message.dragonmounts.dragon.tooYoung=Dragon is too young for that, let it grow
+message.dragonmounts.dragon.growthPaused=The growth of the dragon is paused
+message.dragonmounts.egg.wrongDimension=Dragon Eggs cannot be hatched in this dimension
+message.dragonmounts.whistle.success=Dragon Successfully Bound to Whistle
+message.dragonmounts.whistle.existing=Please Unbind the Whistle First
+message.dragonmounts.whistle.cleared=Whistle has been unbound
+message.dragonmounts.whistle.empty=You Must Bind a Dragon First
+message.dragonmounts.whistle.invalidPos=The Dragon Cannot Teleport There
+message.dragonmounts.whistle.failed=The whistle sound fades away
 
 ##
 # Gui Names
 ##
-gui.nothing=Nothing
-gui.circle=Circle Player
-gui.followFlying=Follow Flying
-gui.cometoPlayer=Come To Player
-gui.locked.dragon=LOCK
-gui.unlocked.dragon=UNLOCK
-gui.dragon.sit=Sit
-gui.firesupport=Fire Support
-gui.dragon.hunger=Hunger
-container.dragon_core=Dragon Core
+container.dragonmounts.dragon_core=Dragon Core
+gui.dragonmounts.sit=Sit
+gui.dragonmounts.teleportToPlayer=Come To Player
+gui.dragonmounts.unbindWhistle=Unbind Whistle
+gui.dragonmounts.unbindWhistle.tooltip=Press Left Shift to Unlock
 
 #Controls
 key.categories.dragon=Dragon Mounts
-key.dragon.projectile=UNUSED
-key.dragon.breath=Dragon Breath
-key.dragon.cancelhover=Cancel Hover
-key.dragon.f7=Change Mount Camera
-key.dragon.followYaw=Follow Yaw
-key.dragon.boost=Flight Boost
-key.dragon.dismount=Shoulder Dismount
-key.dragon.lockY=Old Controls
-key.dragon.down=Descent
+key.dragonmounts.breath=Dragon Breath
+key.dragonmounts.boost=Flight Boost
+key.dragonmounts.descent=Descent
+key.dragonmounts.toggleCameraPos=Toggle Camera Position
+key.dragonmounts.toggleHovering=Toggle Dragon Hovering
+key.dragonmounts.toggleYawAlignment=Toggle Yaw Alignment
+key.dragonmounts.togglePitchAlignment=Toggle Pitch Alignment
 
 tooltip.armor_effect.dragonmounts.aether=When the wearer is sprinting, apply Speed II effect for 5s
 tooltip.armor_effect.dragonmounts.enchant=Targets killed by the wearer drop 120%% extra EXP
@@ -176,33 +137,39 @@ tooltip.dragonmounts.armor_effect_cooldown=CD: %ss
 tooltip.dragonmounts.armor_effect_fishing_luck=When the wearer is fishing, apply Luck I effect for 10s without cooldown
 tooltip.dragonmounts.armor_effect_piece_4=4-Piece Set:
 tooltip.dragonmounts.armor_effect_remaining_cooldown=Remaining CD: %ss
+# actually it is related to key binding
+tooltip.dragonmounts.whistle=Right Click an owned and tamed dragon to control it
 tooltip.dragonmounts.whistle.name=Dragon Whistle (%s)
 tooltip.dragonmounts.age=Age: %s
 tooltip.dragonmounts.name=Name: %s
 tooltip.dragonmounts.health=Health: %s
 tooltip.dragonmounts.owner=Owner: %s
-tooltip.dragonmounts.gender=Gender: %s
 tooltip.dragonmounts.hard_shears=Used to get scales from dragons
+# actually it is related to key binding
+tooltip.dragonmounts.amulet.empty=Right Click to store a dragon and carry it
+# actually it is related to key binding
+tooltip.dragonmounts.amulet.usage=Right click on ground to summon
+tooltip.dragonmounts.carriage=Used to make dragons carry multiple passengers like a boat
 
 item.modifiers.equipped=When equipped:
 
 argument.player.toomany=Only one player is allowed, but the provided selector allows more than one
 
-commands.dragon.usage=/dragon <subcommand>
-commands.dragon.breed.usage=/dragon breed <breed> [dragon]
-commands.dragon.breed.invalid='%s' is not a valid breed
-commands.dragon.breed.success=The breed of %s has been set to: %s
-commands.dragon.gender.usage=/dragon gender [dragon]
-commands.dragon.gender.success=The gender of %s has been set to: %s
-commands.dragon.tame.usage=/dragon tame [dragon]
-commands.dragon.tame.success=Dragon %s is tamed by %s now
-commands.dragon.unlock.usage=/dragon unlock [dragon]
-commands.dragon.unlock.success=Dragon %s is unlocked now
-commands.dragon.stage.usage=/dragon stage <stage> [dragon]
-commands.dragon.stage.invalid='%s' is not a valid stage
-commands.dragon.stage.success=The stage of %s has been set to: %s
-commands.dragon.notFound=Could not find dragon based on '%s'
-commands.dragon.unspecified=You must specify which dragon you wish to perform this action on.
+commands.dragonmounts.usage=/dragonmounts <subcommand>
+commands.dragonmounts.gender.usage=/dragonmounts gender [dragon]
+commands.dragonmounts.gender.success=The gender of %s has been set to: %s
+commands.dragonmounts.tame.usage=/dragonmounts tame [dragon]
+commands.dragonmounts.tame.success=Dragon %s is tamed by %s now
+commands.dragonmounts.unlock.usage=/dragonmounts unlock [dragon]
+commands.dragonmounts.unlock.success=Dragon %s is unlocked now
+commands.dragonmounts.stage.usage=/dragonmounts stage <stage> [dragon]
+commands.dragonmounts.stage.invalid='%s' is not a valid stage
+commands.dragonmounts.stage.success=The stage of %s has been set to: %s
+commands.dragonmounts.type.usage=/dragonmounts type <type> [dragon]
+commands.dragonmounts.type.invalid='%s' is not a valid type
+commands.dragonmounts.type.success=The type of %s has been set to: %s
+commands.dragonmounts.notFound=Could not find dragon based on '%s'
+commands.dragonmounts.unspecified=You must specify which dragon you wish to perform this action on.
 config.dragonmounts.category.main=Main
 config.dragonmounts.category.world_gen=World Generation
 config.dragonmounts.category.client=Client

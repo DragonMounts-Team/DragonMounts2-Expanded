@@ -3,8 +3,9 @@ package net.dragonmounts.capability;
 import net.dragonmounts.api.IArmorEffect;
 import net.dragonmounts.registry.CooldownCategory;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.INBTSerializable;
 
-public interface IArmorEffectManager {
+public interface IArmorEffectManager extends INBTSerializable<NBTTagCompound> {
     @SuppressWarnings("UnusedReturnValue")
     int stackLevel(IArmorEffect effect);
 
@@ -22,10 +23,6 @@ public interface IArmorEffectManager {
     boolean isAvailable(CooldownCategory category);
 
     void tick();
-
-    NBTTagCompound saveNBT();
-
-    void readNBT(NBTTagCompound tag);
 
     void sendInitPacket();
 }

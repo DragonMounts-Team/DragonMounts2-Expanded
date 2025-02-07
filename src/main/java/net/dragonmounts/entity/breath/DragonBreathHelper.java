@@ -1,6 +1,5 @@
 package net.dragonmounts.entity.breath;
 
-import net.dragonmounts.DragonMounts;
 import net.dragonmounts.client.render.dragon.breathweaponFX.BreathWeaponEmitter;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.sound.SoundController;
@@ -8,11 +7,13 @@ import net.dragonmounts.entity.breath.sound.SoundEffectBreathWeapon;
 import net.dragonmounts.entity.breath.weapons.BreathWeapon;
 import net.dragonmounts.entity.helper.DragonHelper;
 import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.util.LogUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -55,7 +56,7 @@ public class DragonBreathHelper extends DragonHelper {
 
     public DragonBreathHelper(TameableDragonEntity dragon, DataParameter<String> i_dataParamBreathWeaponTarget, DataParameter<Integer> i_dataParamBreathWeaponMode) {
         super(dragon);
-        if (dragon.isClient()) {
+        if (dragon.world.isRemote) {
             breathWeaponEmitter=new BreathWeaponEmitter();
         }
         //dataWatcher.register(dataParamBreathWeaponTarget, "");  //already registered by caller
@@ -82,7 +83,7 @@ public class DragonBreathHelper extends DragonHelper {
                 return MathHelper.clamp(ticksSpentStopping / (float) BREATH_STOP_DURATION, 0.0F, 1.0F);
             }
             default: {
-                DragonMounts.loggerLimit.error_once("Unknown currentBreathState:" + currentBreathState);
+                LogUtil.once(Level.ERROR, "Unknown currentBreathState:" + currentBreathState);
                 return 0.0F;
             }
         }
@@ -103,17 +104,17 @@ public class DragonBreathHelper extends DragonHelper {
     private void onLivingUpdateServer() {
         TameableDragonEntity dragon = this.dragon;
         updateBreathState(dragon.isUsingBreathWeapon());
-
-        if (this.weapon != null && dragon.isUsingBreathWeapon()) {
+        if (this.weapon == null) return;
+        if (dragon.isUsingBreathWeapon()) {
             Vec3d origin=dragon.getAnimator().getThroatPosition();
             Vec3d lookDirection=dragon.getLook(1.0f);
             Vec3d endOfLook=origin.add(lookDirection.x, lookDirection.y, lookDirection.z);
-            BreathNode.Power power=dragon.getLifeStageHelper().getBreathPower();
+            BreathPower power = dragon.getLifeStageHelper().getBreathPower();
             if (currentBreathState == BreathState.SUSTAIN) {
                 this.breathAffectedArea.continueBreathing(dragon.world, origin, endOfLook, power);
-                this.breathAffectedArea.updateTick(dragon.world, this.weapon);
             }
         }
+        this.breathAffectedArea.updateTick(dragon.world, this.weapon);
     }
 
     private void onLivingUpdateClient() {
@@ -172,8 +173,7 @@ public class DragonBreathHelper extends DragonHelper {
                 break;
             }
             default: {
-                DragonMounts.loggerLimit.error_once("Unknown currentBreathState:" + currentBreathState);
-                return;
+                LogUtil.once(Level.ERROR, "Unknown currentBreathState:" + currentBreathState);
             }
         }
     }

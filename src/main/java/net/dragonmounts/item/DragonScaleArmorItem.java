@@ -13,7 +13,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -33,11 +32,6 @@ public class DragonScaleArmorItem extends ItemArmor implements IArmorEffectSourc
 		if (effect instanceof CooldownCategory) {
 			CooldownOverlayCompat.register((CooldownCategory) effect, this);
 		}
-	}
-
-	@Deprecated
-	protected boolean isActive(Potion effects, EntityPlayer player) {
-		return !player.isPotionActive(effects);
 	}
 
 	@Override

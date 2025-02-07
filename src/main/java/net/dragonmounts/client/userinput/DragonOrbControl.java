@@ -2,42 +2,41 @@
 package net.dragonmounts.client.userinput;
 
 import net.dragonmounts.DragonMounts;
+import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.entity.breath.BreathWeaponTarget;
 import net.dragonmounts.init.DMItems;
 import net.dragonmounts.network.MessageDragonTarget;
-import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.RayTraceServer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 /**
  * This event handler is used to capture player input while the player is holding the dragon orb:
  * If the player is holding the dragon orb, records whether the player is holding down the
- *   trigger and what the current target is (where the player is pointing the cursor)
+ * trigger and what the current target is (where the player is pointing the cursor)
  * Transmits this information to the server.
  * If the AutoLock option is selected, the orb will lock on to a target for as long as the trigger is held down.
  * If the autolock option isn't selected, the orb will change to whatever target is currently being looked at
- *
+ * <p>
  * Usage:
  * SETUP
  * (1) Register a server-side message handler for MessageDragonTarget
  * (2) Create the singleton in PostInit (client only) using DragonOrbControl.createSingleton(getNetwork());
  * (3) Initialise the keypress interception in PostInit (client only) using DragonOrbControl.initialiseInterceptors();
  * (4) Register the handler in PostInit(client only) using FMLCommonHandler.instance().bus()
- *        .register(DragonOrbControl.getInstance());
- *
+ * .register(DragonOrbControl.getInstance());
+ * <p>
  * POLLING
  * (1) get the singleton instance using getInstance()
  * (2) getTargetBeingLookedAt() returns the target being looked at, regardless of whether the trigger is held or not, and
- *       regardless of whether there is an autolock target
+ * regardless of whether there is an autolock target
  * (3) getTarget() returns the target of the orb while the trigger is being held.
  * (4) getTargetLockedOn() returns the target being breathed at (may be different to getTarget() if autolock is on).
- *     Client side only.
- *
+ * Client side only.
  */
 
 /*
@@ -51,11 +50,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
  */
 
 public class DragonOrbControl {
-
-  private SimpleNetworkWrapper network;
-
-  static public DragonOrbControl createSingleton(SimpleNetworkWrapper i_network) {
-    instance = new DragonOrbControl(i_network);
+  static public DragonOrbControl createSingleton() {
+    instance = new DragonOrbControl();
     return instance;
   }
 
@@ -66,6 +62,7 @@ public class DragonOrbControl {
   /**
    * Every tick, check if the player is holding the Dragon Orb, and if so, whether the player is targeting something with it
    * Send the target to the server at periodic intervals (if the target has changed significantly, or at least every x ticks)
+   *
    * @param evt
    */
   @SubscribeEvent
@@ -75,12 +72,8 @@ public class DragonOrbControl {
     if (entityPlayerSP == null) return;
 
     boolean oldTriggerHeld = triggerHeld;
-
-    if (!DMUtils.hasEquipped(entityPlayerSP, DMItems.DRAGON_ORB)) {
-      enableClickInterception(false);
-      triggerHeld = false;
-      targetBeingLookedAt = null;
-    } else {
+    ItemStack stack = entityPlayerSP.getHeldItemMainhand();
+    if (!stack.isEmpty() && stack.getItem() == DMItems.DRAGON_ORB) {
       enableClickInterception(true);
       final float MAX_ORB_RANGE = 20.0F;
       RayTraceResult mop = RayTraceServer.getMouseOver(entityPlayerSP.getEntityWorld(), entityPlayerSP, MAX_ORB_RANGE);
@@ -89,9 +82,13 @@ public class DragonOrbControl {
       if (triggerHeld) {
         breathWeaponTarget = BreathWeaponTarget.fromMovingObjectPosition(mop, entityPlayerSP);
       }
+    } else {
+      enableClickInterception(false);
+      triggerHeld = false;
+      targetBeingLookedAt = null;
     }
 
-    boolean needToSendMessage = false;
+    boolean needToSendMessage;
     if (!triggerHeld) {
       needToSendMessage = oldTriggerHeld;
     } else {
@@ -116,12 +113,12 @@ public class DragonOrbControl {
       } else {
         message = MessageDragonTarget.createUntargetMessage();
       }
-      network.sendToServer(message);
+      DragonMounts.NETWORK_WRAPPER.sendToServer(message);
     }
 
     // if autolock is on, only change target when the player releases the button
     // (used on client side only, for rendering)  Server side AI is used for the real autolock
-    boolean orbTargetAutoLock = DragonMounts.instance.getConfig().isOrbTargetAutoLock();
+    boolean orbTargetAutoLock = DragonMountsConfig.isOrbTargetAutoLock();
     if (breathWeaponTarget != null && triggerHeld) {
       if (!orbTargetAutoLock || targetLockedOn == null) {
         targetLockedOn = breathWeaponTarget;
@@ -131,14 +128,15 @@ public class DragonOrbControl {
     }
   }
 
-  private final int MAX_TIME_NO_MESSAGE = 20;  // send a message at least this many ticks or less
+  private static final int MAX_TIME_NO_MESSAGE = 20;  // send a message at least this many ticks or less
   private int ticksSinceLastMessage = 0;
+
   /**
    * Get the block or entity being targeted by the dragon orb
+   *
    * @return BreathWeaponTarget, or null for no target
    */
-  public BreathWeaponTarget getTarget()
-  {
+  public BreathWeaponTarget getTarget() {
     if (triggerHeld) {
       return breathWeaponTarget;
     } else {
@@ -148,15 +146,14 @@ public class DragonOrbControl {
 
   /**
    * Get the block or entity that the dragon orb cursor is currently pointing at
+   *
    * @return BreathWeaponTarget, or null for none
    */
-  public BreathWeaponTarget getTargetBeingLookedAt()
-  {
+  public BreathWeaponTarget getTargetBeingLookedAt() {
     return targetBeingLookedAt;
   }
 
-  public BreathWeaponTarget getTargetLockedOn()
-  {
+  public BreathWeaponTarget getTargetLockedOn() {
     return targetLockedOn;
   }
 
@@ -168,16 +165,14 @@ public class DragonOrbControl {
 
   private static DragonOrbControl instance = null;
 
-  private DragonOrbControl(SimpleNetworkWrapper i_network) {
-    network = i_network;
+  private DragonOrbControl() {
     lastTargetSent = null;
   }
 
   private static KeyBindingInterceptor attackButtonInterceptor;
   private static KeyBindingInterceptor useItemButtonInterceptor;
 
-  public static void initialiseInterceptors()
-  {
+  public static void initialiseInterceptors() {
     attackButtonInterceptor = new KeyBindingInterceptor(Minecraft.getMinecraft().gameSettings.keyBindAttack);
     Minecraft.getMinecraft().gameSettings.keyBindAttack = attackButtonInterceptor;
     attackButtonInterceptor.setInterceptionActive(false);
@@ -187,8 +182,7 @@ public class DragonOrbControl {
 //    useItemButtonInterceptor.setInterceptionActive(false);
   }
 
-  public static void enableClickInterception(boolean interception)
-  {
+  public static void enableClickInterception(boolean interception) {
 //    useItemButtonInterceptor.setInterceptionActive(interception);
     attackButtonInterceptor.setInterceptionActive(interception);
   }

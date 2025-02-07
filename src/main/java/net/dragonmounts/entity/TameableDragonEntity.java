@@ -11,28 +11,30 @@ package net.dragonmounts.entity;
 
 import com.google.common.base.Optional;
 import io.netty.buffer.ByteBuf;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.block.HatchableDragonEggBlock;
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
+import net.dragonmounts.capability.IDragonFood;
 import net.dragonmounts.capability.IHardShears;
 import net.dragonmounts.client.gui.GuiHandler;
 import net.dragonmounts.client.model.dragon.anim.DragonAnimator;
 import net.dragonmounts.entity.ai.ground.EntityAIDragonSit;
 import net.dragonmounts.entity.ai.path.PathNavigateFlying;
 import net.dragonmounts.entity.breath.DragonBreathHelper;
-import net.dragonmounts.entity.breath.DragonBreathHelperP;
 import net.dragonmounts.entity.helper.*;
 import net.dragonmounts.init.*;
 import net.dragonmounts.inventory.DragonInventory;
 import net.dragonmounts.item.DragonArmorItem;
 import net.dragonmounts.item.DragonEssenceItem;
 import net.dragonmounts.item.DragonSpawnEggItem;
-import net.dragonmounts.network.MessageDragonBreath;
-import net.dragonmounts.network.MessageDragonExtras;
+import net.dragonmounts.network.CDragonBreathPacket;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
-import net.dragonmounts.util.DMUtils;
+import net.dragonmounts.util.EntityUtil;
+import net.dragonmounts.util.ItemUtil;
+import net.dragonmounts.util.MutableBlockPosEx;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -54,7 +56,6 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -69,7 +70,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -134,7 +134,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     private static final DataParameter<ItemStack> DATA_CHEST = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.ITEM_STACK);
     private static final DataParameter<ItemStack> DATA_SADDLE = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.ITEM_STACK);
     // server/client delegates
-    private final Map<Class<?>, DragonHelper> helpers = new HashMap<>();
+    private final Map<Class<?>, DragonHelper> helpers = new Reference2ObjectOpenHashMap<>();
     // client-only delegates
     private final DragonBodyHelper dragonBodyHelper = new DragonBodyHelper(this);
     public EntityEnderCrystal healingEnderCrystal;
@@ -165,7 +165,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         addHelper(new DragonReproductionHelper(this, DATA_BREEDER, DATA_REPRO_COUNT));
         addHelper(new DragonBreathHelper(this, DATA_BREATH_WEAPON_TARGET, DATA_BREATH_WEAPON_MODE));
         addHelper(new DragonHungerHelper(this));
-        if (isServer()) addHelper(new DragonBrain(this));
+        if (!world.isRemote) addHelper(new DragonBrain(this));
 
         // set base size
         setSize(4.8F, 4.2F);//TODO: use DragonType or something else
@@ -503,56 +503,29 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         return state.getMaterial().isSolid() || (this.getControllingPlayer() != null && state.getMaterial().isLiquid());
     }
 
-    @Override
-    public void onEntityUpdate() {
-        if (getRNG().nextInt(1500) == 1 && !isEgg()) roar();
-        super.onEntityUpdate();
-    }
-
     @SideOnly(Side.CLIENT)
     public void updateKeys() {
-        Minecraft mc = Minecraft.getMinecraft();
-        if (mc.player != null && (hasControllingPlayer(mc.player) || mc.player.equals(this.getRidingEntity()))) {
-            boolean isBoosting = DMKeyBindings.BOOST.isKeyDown();
-            boolean isDown = DMKeyBindings.DOWN.isKeyDown();
-            boolean projectile = DMKeyBindings.KEY_PROJECTILE.isPressed();
-            boolean unhover = DMKeyBindings.KEY_HOVERCANCEL.isPressed();
-            boolean followyaw = DMKeyBindings.FOLLOW_YAW.isPressed();
-            boolean locky = DMKeyBindings.KEY_LOCKEDY.isPressed();
-            boolean isBreathing = DMKeyBindings.KEY_BREATH.isKeyDown();
-            DragonMounts.NETWORK_WRAPPER.sendToServer(new MessageDragonBreath(getEntityId(), isBreathing));
-            DragonMounts.NETWORK_WRAPPER.sendToServer(new MessageDragonExtras(getEntityId(), unhover, followyaw, locky, isBoosting, isDown));
-        }
-    }
-
-    @Override
-    public void onUpdate() {
-        super.onUpdate();
-//        EntityPlayer rider = getControllingPlayer();
-//        if (rider != null) {
-//            if (entityIsJumping(rider)) {
-//                motionY += 0.4;
-//            } else if (isGoingDown()) {
-//                motionY -= 0.4;
-//            }
-//        }
-        if (world.isRemote) {
-            this.updateKeys();
+        EntityPlayer player = Minecraft.getMinecraft().player;
+        if (player != null && player == this.getRidingEntity()) {
+            DragonMounts.NETWORK_WRAPPER.sendToServer(new CDragonBreathPacket(
+                    this.getEntityId(),
+                    DMKeyBindings.KEY_BREATH.isKeyDown()
+            ));
         }
     }
 
     @Override
     public void onLivingUpdate() {
+        boolean isServer = !this.world.isRemote;
         this.variantHelper.onLivingUpdate();
         helpers.values().forEach(DragonHelper::onLivingUpdate);
         this.getVariant().type.tick(this);
-
-        if (isServer()) {
-            final float DUMMY_MOVETIME = 0;
-            final float DUMMY_MOVESPEED = 0;
-            animator.setMovement(DUMMY_MOVETIME, DUMMY_MOVESPEED);
-            float netYawHead = getRotationYawHead() - renderYawOffset;
-            animator.setLook(netYawHead, rotationPitch);
+        if (isServer) {
+            animator.setMovement(0, 0); // dummy
+            animator.setLook(
+                    getRotationYawHead() - renderYawOffset, // netYawHead
+                    rotationPitch
+            );
             animator.tickingUpdate();
             animator.animate();
 
@@ -585,6 +558,8 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
                 getEntityAttribute(FOLLOW_RANGE).setBaseValue(getDragonSpeed());
 
                 // update pathfinding method
+
+                //TODO: reuse?
                 if (flying) {
                     navigator = new PathNavigateFlying(this, world);
                 } else {
@@ -598,6 +573,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
         } else {
             animator.tickingUpdate();
+            this.updateKeys();
         }
 
         if (ticksSinceLastAttack >= 0) { // used for jaw animation
@@ -607,7 +583,9 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
             }
         }
 
-        if (roarTicks >= 0) {
+        if (this.rand.nextFloat() < 0.001F && !this.isEgg()) {
+            this.roar();
+        } else if (roarTicks >= 0) {
             ++roarTicks;
             if (roarTicks > 1000) {
                 roarTicks = -1;
@@ -633,67 +611,68 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
             if (this.healingEnderCrystal != null) {
                 if (this.healingEnderCrystal.isDead) {
                     this.healingEnderCrystal = null;
-                } else if (this.ticksExisted % 10 == 0) {
-                    if (this.getHealth() < this.getMaxHealth()) {
-                        this.setHealth(this.getHealth() + 1.0F);
-                    }
-
-                    addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 15 * 20));
+                } else if (isServer && this.ticksExisted % 10 == 0) {
+                    this.heal(1.0F);
+                    EntityUtil.addOrResetEffect(this, MobEffects.STRENGTH, 300, 0, false, false, 201);
                 }
             }
 
             if (this.rand.nextInt(10) == 0) {
-                List<EntityEnderCrystal> list = this.world.getEntitiesWithinAABB(EntityEnderCrystal.class, this.getEntityBoundingBox().grow(32.0D));
                 EntityEnderCrystal target = null;
                 double min = Double.MAX_VALUE;
-
-                for (EntityEnderCrystal crystal : list) {
+                for (EntityEnderCrystal crystal : this.world.getEntitiesWithinAABB(
+                        EntityEnderCrystal.class,
+                        this.getEntityBoundingBox().grow(32.0D)
+                )) {
                     double distance = crystal.getDistanceSq(this);
                     if (distance < min) {
                         min = distance;
                         target = crystal;
                     }
                 }
-
                 this.healingEnderCrystal = target;
             }
         }
 
-        doBlockCollisions();
-        List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(0.2, -0.01, 0.2), EntitySelectors.getTeamCollisionPredicate(this));
+        this.doBlockCollisions();
 
-        if (!list.isEmpty() && this.isSaddled()) {
-            boolean onServer = !this.world.isRemote;
-
-            for (int j = 0; j < list.size(); ++j) {
-                Entity entity = list.get(j);
-                if (!entity.isPassenger(this) && !entity.isRiding() && entity instanceof CarriageEntity) {
-                    if (onServer && this.getPassengers().size() < 5 && !entity.isRiding() && !isBaby() && (isJuvenile() || isAdult())) {
-                        entity.startRiding(this);
-                    } else {
-                        this.applyEntityCollision(entity);
-                    }
-                }
-            }
-        }
-
-        if (getControllingPlayer() == null && !isFlying() && isSitting()) {
-            removePassengers();
-        }
-        EnumParticleTypes sneeze = this.getVariant().type.sneezeParticle;
-
-        if (sneeze != null && rand.nextInt(700) == 0 && !this.isUsingBreathWeapon() && !isBaby() && !isEgg()) {
-            for (int i = -1; i < 2; i++) {
-                if (world.isRemote) {
-                    double throatPosX = (this.getAnimator().getThroatPosition().x);
-                    double throatPosY = (this.getAnimator().getThroatPosition().y + i);
-                    double throatPosZ = (this.getAnimator().getThroatPosition().z);
-                    world.spawnParticle(sneeze, throatPosX, throatPosY, throatPosZ, 0, 0.3, 0);
-                    world.playSound(null, new BlockPos(throatPosX, throatPosY, throatPosZ), DMSounds.DRAGON_SNEEZE, SoundCategory.NEUTRAL, 0.8F, 1);
+        if (!isServer) {
+            EnumParticleTypes sneeze = this.getVariant().type.sneezeParticle;
+            if (sneeze != null && rand.nextInt(700) == 0 && !this.isUsingBreathWeapon() && this.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE)) {
+                Vec3d throatPos = this.getAnimator().getThroatPosition();
+                double throatPosX = throatPos.x;
+                double throatPosY = throatPos.y;
+                double throatPosZ = throatPos.z;
+                int floorY = MathHelper.floor(throatPosY);
+                MutableBlockPosEx pos = new MutableBlockPosEx(MathHelper.floor(throatPosX), floorY, MathHelper.floor(throatPosZ));
+                for (int i = -1; i < 2; ++i) {
+                    world.spawnParticle(sneeze, throatPosX, throatPosY + i, throatPosZ, 0, 0.3, 0);
+                    world.playSound(null, pos.withY(floorY + i), DMSounds.DRAGON_SNEEZE, SoundCategory.NEUTRAL, 0.8F, 1);
                 }
             }
         }
         super.onLivingUpdate();
+        if (this.getControllingPlayer() == null && !this.isFlying() && this.isSitting()) {
+            this.removePassengers();
+        }
+    }
+
+    @Override
+    protected void collideWithEntity(Entity other) {
+        if (other instanceof CarriageEntity &&
+                !this.world.isRemote &&
+                this.isSaddled() &&
+                !other.isRiding() &&
+                this.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE) &&
+                !other.isPassenger(this)
+        ) {
+            List<Entity> passengers = this.getPassengers();
+            if (passengers.isEmpty() || passengers.size() < (passengers.get(0) instanceof EntityPlayer ? 5 : 4)) {
+                other.startRiding(this);
+                return;
+            }
+        }
+        super.collideWithEntity(other);
     }
 
     public void spawnBodyParticle(EnumParticleTypes type) {
@@ -873,9 +852,8 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     public void onWingsDown(float speed) {
         if (!isInWater() && isFlying()) {
             // play wing sounds
-            float pitch = (1);
             float volume = 0.8f + (getScale() - speed);
-            playSound(getWingsSound(), volume, pitch, false);
+            playSound(getWingsSound(), volume, 1, false);
         }
     }
 
@@ -884,9 +862,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
      */
     public void playStepSound(BlockPos entityPos, Block block) {
         // no sounds for eggs or underwater action
-        if (isEgg() || isInWater() || isOverWater()) return;
-
-        if (isFlying() || isSitting()) return;
+        if (isEgg() || isInWater() || isOverWater() || isFlying() || isSitting()) return;
 
         SoundEvent stepSound;
         // baby has quiet steps, larger have stomping sound
@@ -917,7 +893,8 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     }
 
     @Override
-    public void playSound(SoundEvent sound, float volume, float pitch) {
+    public void playSound(@Nullable SoundEvent sound, float volume, float pitch) {
+        if (sound == null) return;
         playSound(sound, volume, pitch, false);
     }
 
@@ -957,35 +934,28 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         return 1;
     }
 
-    /**
-     * Get this Entity's EnumCreatureAttribute
-     */
-    @Override
-    public EnumCreatureAttribute getCreatureAttribute() {
-        return EnumCreatureAttribute.UNDEFINED;
-    }
-
     @Override
     protected float getWaterSlowDown() {
         return 0.925F;// Vanilla: 0.8F
     }
 
-    public void tamedFor(EntityPlayer player, boolean successful) {
-        if (successful) {
-            setTamed(true);
-            navigator.clearPath(); // replacement for setPathToEntity(null);
-            setAttackTarget(null);
-            setOwnerId(player.getUniqueID());
-            playTameEffect(true);
-            world.setEntityState(this, (byte) 7);
-        } else {
-            playTameEffect(false);
-            world.setEntityState(this, (byte) 6);
-        }
+    public void tame(EntityPlayer player) {
+        this.setTamedBy(player);
+        this.navigator.clearPath();
+        this.setAttackTarget(null);
+        this.playTameEffect(true);
+        this.world.setEntityState(this, (byte) 7);
     }
 
-    public boolean isTamedFor(EntityPlayer player) {
-        return isTamed() && isOwner(player);
+    public boolean tryTame(EntityPlayer player, float probability) {
+        if (probability == 0) return false;
+        if (this.rand.nextFloat() < probability) {
+            this.tame(player);
+            return true;
+        }
+        this.playTameEffect(false);
+        this.world.setEntityState(this, (byte) 6);
+        return false;
     }
 
     /**
@@ -993,8 +963,9 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
      * (wheat, carrots or seeds depending on the animal type)
      */
     @Override
-    public boolean isBreedingItem(ItemStack item) {
-        return Items.FISH == item.getItem();//TODO: update DragonType.behavior
+    public boolean isBreedingItem(ItemStack stack) {
+        IDragonFood food = stack.getCapability(DMCapabilities.DRAGON_FOOD, null);
+        return food != null && food.isBreedingItem(this, stack);
     }
 
     /**
@@ -1002,28 +973,12 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
      */
     @Override
     public float getEyeHeight() {
+        if (this.isEgg()) return 1.3F;
         float eyeHeight = height * 0.85F;
-
         if (isSitting()) {
             eyeHeight *= 0.8f;
         }
-
-        if (isEgg()) {
-            eyeHeight = 1.3f;
-        }
-
         return eyeHeight;
-    }
-
-    /**
-     * Returns the Y offset from the entity's position for any entity riding this
-     * one.
-     * May not be necessary since we also override updatePassenger()
-     */
-    @Override
-    public double getMountedYOffset() {
-        //final int DEFAULT_PASSENGER_NUMBER = 0;
-        return this.getVariant().type.locatePassenger(0, this.isSitting()).y * getScale();
     }
 
     /**
@@ -1056,14 +1011,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     }
 
     /**
-     * Determines if an entity can be despawned, used on idle far away entities
-     */
-    @Override
-    protected boolean canDespawn() {
-        return false;
-    }
-
-    /**
      * returns true if this entity is by a ladder, false otherwise
      */
     @Override
@@ -1090,13 +1037,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     }
 
     public void setImmuneToFire(boolean isImmuneToFire) {
-        L.trace("setImmuneToFire({})", isImmuneToFire);
         this.isImmuneToFire = isImmuneToFire;
-    }
-
-    public void setAttackDamage(double damage) {
-        L.trace("setAttackDamage({})", damage);
-        getEntityAttribute(ATTACK_DAMAGE).setBaseValue(damage);
     }
 
     @Override
@@ -1108,10 +1049,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
                 return true;
             }
 
-            // ignore damage from riders
-            if (isPassenger(srcEnt)) {
-                return true;
-            }
+
         }
 
         // don't drown as egg
@@ -1124,34 +1062,23 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        Entity sourceEntity = source.getTrueSource();
-
+        if (this.isBaby() && isJumping) return false; // ?
+        Entity attacker = source.getTrueSource();
+        // ignore damage from riders
+        if (attacker != null) {
+            if (this.isPassengerBroadly(attacker)) return false;
+        }
         if (source != DamageSource.IN_WALL) {
             // don't just sit there!
             this.getAISit().setSitting(false);
         }
-
-        if (this.isBeingRidden() && sourceEntity != null && this.isPassenger(sourceEntity) && damage < 1) {
-            return false;
+        if (super.attackEntityFrom(source, damage)) {
+            if (!this.world.isRemote && this.rand.nextFloat() < 0.25F && !this.isEgg()) {
+                this.roar();
+            }
+            return true;
         }
-
-        if (getRidingCarriage() != null && getRidingCarriage().isPassenger(sourceEntity)) {
-            return false;
-        }
-
-        if (!world.isRemote && sourceEntity != null && this.getRNG().nextInt(4) == 0 && !isEgg()) {
-            this.roar();
-        }
-
-        if (isBaby() && isJumping) {
-            return false;
-        }
-
-        if (sourceEntity != null && sourceEntity.isPassenger(this)) {
-            return false;
-        }
-
-        return super.attackEntityFrom(source, damage);
+        return false;
     }
 
     /**
@@ -1172,16 +1099,8 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     }
 
     @Override
-    public boolean shouldAttackEntity(EntityLivingBase target, EntityLivingBase owner) {
-        if (target.isChild()) return super.shouldAttackEntity(target, owner);
-        if (target instanceof EntityTameable) {
-            if (((EntityTameable) target).isTamed()) {
-                return false;
-            }
-        } else if (target instanceof EntityPlayer && this.isTamedFor((EntityPlayer) target)) {
-            return false;
-        }
-        return super.shouldAttackEntity(target, owner);
+    public boolean shouldAttackEntity(@Nonnull EntityLivingBase target, @Nullable EntityLivingBase owner) {
+        return target instanceof EntityTameable ? !(((EntityTameable) target).getOwner() instanceof EntityPlayer) : !this.isOwner(target);
     }
 
     /**
@@ -1248,11 +1167,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         return getHelper(DragonBreathHelper.class);
     }
 
-    public DragonBreathHelperP getBreathHelperP() {  // enable compilation only
-        throw new UnsupportedOperationException();
-        //return getHelper(DragonBreathHelperP.class);
-    }
-
     public DragonAnimator getAnimator() {
         return animator;
     }
@@ -1267,8 +1181,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
     public void updateIntendedRideRotation(EntityPlayer rider) {
         if (isUsingBreathWeapon()) this.rotationYawHead = this.renderYawOffset;
-        boolean hasRider = this.hasControllingPlayer(rider);
-        if (hasRider && rider.moveStrafing == 0) {
+        if (rider.equals(this.getControllingPlayer()) && rider.moveStrafing == 0) {
             this.rotationYaw = rider.rotationYaw;
             this.prevRotationYaw = this.rotationYaw;
             this.rotationPitch = rider.rotationPitch;
@@ -1276,10 +1189,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
             this.renderYawOffset = this.rotationYaw;
         }
     }
-//
-//    public boolean canBeSteered() {
-//        return true;
-//    }
 
     @Override
     public boolean canBeSteered() {
@@ -1300,7 +1209,8 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
     @Nullable
     public Entity getControllingPassenger() {
-        return this.getPassengers().isEmpty() ? null : getPassengers().get(0);
+        List<Entity> passengers = this.getPassengers();
+        return passengers.isEmpty() ? null : passengers.get(0);
     }
 
     /**
@@ -1310,37 +1220,19 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
      */
     @Nullable
     public EntityPlayer getControllingPlayer() {
-        Entity entity = this.getPassengers().isEmpty() ? null : getPassengers().get(0);
-        if (entity instanceof EntityPlayer) {
-            return (EntityPlayer) entity;
-        } else {
-            return null;
-        }
+        List<Entity> passengers = this.getPassengers();
+        if (passengers.isEmpty()) return null;
+        Entity entity = passengers.get(0);
+        return entity instanceof EntityPlayer ? (EntityPlayer) entity : null;
     }
 
-    /**
-     * gets the passengers and check if there is any carriages
-     *
-     * @return a riding carriage
-     */
-    @Nullable
-    public Entity getRidingCarriage() {
-        List<Entity> entity = this.getPassengers().isEmpty() ? null : this.getPassengers();
-        if (entity instanceof CarriageEntity) {
-            return (CarriageEntity) entity;
-        } else {
-            return null;
+    public boolean isPassengerBroadly(Entity entity) {
+        for (Entity rider : this.getPassengers()) {
+            if (rider == entity || (
+                    rider instanceof CarriageEntity && rider.getPassengers().contains(entity)
+            )) return true;
         }
-    }
-
-    /**
-     * Gets a controlling player along with clientside
-     *
-     * @param player
-     * @return
-     */
-    public boolean hasControllingPlayer(EntityPlayer player) {
-        return player.equals(this.getControllingPlayer());
+        return false;
     }
 
     /**
@@ -1355,12 +1247,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         player.startRiding(this);
     }
 
-    public boolean isRidingAboveGround(Entity entityBeingRidden) {
-        int groundPos = world.getHeight(getPosition()).getY();
-        double altitude = entityBeingRidden.posY - groundPos;
-        return altitude > 2.0;
-    }
-
     @Override
     public void updateRidden() {
         Entity vehicle = this.getRidingEntity();
@@ -1371,7 +1257,9 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
             this.motionY = 0.0D;
             this.motionZ = 0.0D;
             this.onUpdate();
-            if (vehicle instanceof EntityPlayer) this.updateRiding((EntityPlayer) vehicle);
+            if (vehicle instanceof EntityPlayer) {
+                this.updateRiding((EntityPlayer) vehicle);
+            }
         }
     }
 
@@ -1387,24 +1275,26 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
      * @param riding
      */
     public void updateRiding(@Nonnull EntityPlayer riding) {
-        if (riding.isPassenger(this)) {
-            int index = riding.getPassengers().indexOf(this);
-            boolean flying = riding.isElytraFlying();
-            float radius = (index == 2 ? 0F : 0.4F) + (flying ? 2 : 0);
-            float angle = (0.01745329251F * riding.renderYawOffset) + (index == 1 ? -90 : index == 0 ? 90 : 0);
-            double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
-            double extraZ = radius * MathHelper.cos(angle);
-            double extraY = (!riding.isSneaking() ? 1.4D : 1.1D) + (index == 2 ? 0.4D : 0D);
-            this.rotationYaw = riding.rotationYaw;
-            this.prevRotationYaw = riding.prevRotationYaw;
-            this.renderYawOffset = riding.renderYawOffset;
-            this.rotationYawHead = riding.rotationYawHead;
-            this.prevRotationYawHead = riding.prevRotationYawHead;
-            this.rotationPitch = riding.rotationPitch;
-            this.prevRotationPitch = riding.prevRotationPitch;
-            this.setPosition(riding.posX + extraX, riding.posY + extraY, riding.posZ + extraZ);
-            this.setFlying(isRidingAboveGround(riding) && !riding.capabilities.isFlying && !riding.onGround || flying);
-        }
+        int index = riding.getPassengers().indexOf(this);
+        if (index == -1) return;
+        boolean flying = riding.isElytraFlying();
+        float radius = (index == 2 ? 0F : 0.4F) + (flying ? 2 : 0);
+        float angle = (0.01745329251F * riding.renderYawOffset) + (index == 1 ? -90 : index == 0 ? 90 : 0);
+        double extraX = radius * MathHelper.sin(angle + (float) Math.PI);
+        double extraZ = radius * MathHelper.cos(angle);
+        double extraY = (riding.isSneaking() ? 1.1D : 1.4D) + (index == 2 ? 0.4D : 0D);
+        this.rotationYaw = riding.rotationYaw;
+        this.prevRotationYaw = riding.prevRotationYaw;
+        this.renderYawOffset = riding.renderYawOffset;
+        this.rotationYawHead = riding.rotationYawHead;
+        this.prevRotationYawHead = riding.prevRotationYawHead;
+        this.rotationPitch = riding.rotationPitch;
+        this.prevRotationPitch = riding.prevRotationPitch;
+        this.setPosition(riding.posX + extraX, riding.posY + extraY, riding.posZ + extraZ);
+        this.setFlying(flying || !riding.onGround &&
+                !riding.capabilities.isFlying &&
+                riding.posY - this.world.getHeight(MathHelper.floor(this.posX), MathHelper.floor(this.posZ)) > 2.0
+        );
     }
 
     /**
@@ -1418,55 +1308,30 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     }
 
     /**
-     * Applies this boat's yaw to the given entity. Used to update the orientation of its passenger.
-     */
-    protected void applyYawToEntity(Entity entityToUpdate) {
-        entityToUpdate.setRenderYawOffset(this.rotationYaw);
-        float f = MathHelper.wrapDegrees(entityToUpdate.rotationYaw - this.rotationYaw);
-        float f1 = MathHelper.clamp(f, -105.0F, 105.0F);
-        entityToUpdate.prevRotationYaw += f1 - f;
-        entityToUpdate.rotationYaw += f1 - f;
-        entityToUpdate.setRotationYawHead(entityToUpdate.rotationYaw);
-    }
-
-    /**
      * This code is called when the passenger is riding on the dragon
      *
      * @param passenger
      */
     @Override
     public void updatePassenger(Entity passenger) {
-        if (this.isPassenger(passenger)) {
-            List<Entity> passengers = getPassengers();
-            int passengerNumber = passengers.indexOf(passenger);
-            if (passengerNumber < 0) {  // should never happen!
-                DragonMounts.loggerLimit.error_once("Logic error- passenger not found");
-                return;
-            }
+        List<Entity> passengers = getPassengers();
+        int index = passengers.indexOf(passenger);
+        if (index == -1) return;
+        //getBreed().getAdultModelRenderScaleFactor() * getScale();
+        Vec3d position = this.getVariant().type.locatePassenger(index, this.isSitting(), this.getScale())
+                .rotateYaw((float) Math.toRadians(-renderYawOffset))
+                .add(this.posX, this.posY + passenger.getYOffset(), this.posZ);
+        passenger.setPosition(position.x, position.y, position.z);
 
-            Vec3d mountedPositionOffset = this.getVariant().type.locatePassenger(passengerNumber, this.isSitting());
-
-            double dragonScaling = getScale(); //getBreed().getAdultModelRenderScaleFactor() * getScale();
-
-            mountedPositionOffset = mountedPositionOffset.scale(dragonScaling);
-            mountedPositionOffset = mountedPositionOffset.rotateYaw((float) Math.toRadians(-renderYawOffset)); // oops
-            mountedPositionOffset = mountedPositionOffset.add(0, passenger.getYOffset(), 0);
-
-            if (!(passenger instanceof EntityPlayer)) {
-                passenger.rotationYaw = this.rotationYaw;
-                passenger.setRotationYawHead(passenger.getRotationYawHead() + this.rotationYaw);
-                this.applyYawToEntity(passenger);
-            }
-            Vec3d passengerPosition = mountedPositionOffset.add(this.posX, this.posY, this.posZ);
-            passenger.setPosition(passengerPosition.x, passengerPosition.y, passengerPosition.z);
-
-            // fix rider rotation
+        // fix rider rotation
+        if (passenger instanceof EntityPlayer) {
             if (passenger == getControllingPlayer()) {
-                EntityPlayer rider = getControllingPlayer();
-                rider.prevRotationPitch = rider.rotationPitch;
-                rider.prevRotationYaw = rider.rotationYaw;
-                rider.renderYawOffset = renderYawOffset;
+                passenger.prevRotationPitch = passenger.rotationPitch;
+                passenger.prevRotationYaw = passenger.rotationYaw;
+                ((EntityPlayer) passenger).renderYawOffset = renderYawOffset;
             }
+        } else {
+            EntityUtil.clampYaw(passenger, this.rotationYaw, 105.0F);
         }
     }
 
@@ -1557,28 +1422,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         return getLifeStageHelper().isBaby();
     }
 
-    /**
-     * Checks if this entity is running on a client.
-     * <p>
-     * Required since MCP's isClientWorld returns the exact opposite...
-     *
-     * @return true if the entity runs on a client or false if it runs on a server
-     */
-    @Deprecated
-    public final boolean isClient() {
-        return world.isRemote;
-    }
-
-    /**
-     * Checks if this entity is running on a server.
-     *
-     * @return true if the entity runs on a server or false if it runs on a client
-     */
-    @Deprecated
-    public final boolean isServer() {
-        return !world.isRemote;
-    }
-
     @Override
     public boolean shouldDismountInWater(Entity rider) {
         return false;
@@ -1621,42 +1464,29 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
             this.setVariant(DragonTypes.WITHER.variants.draw(this.rand, null));
             this.playSound(SoundEvents.BLOCK_PORTAL_TRIGGER, 2, 1);
             this.playSound(SoundEvents.BLOCK_END_PORTAL_SPAWN, 2, 1);
-        }
-
-        if (current == DragonTypes.WATER) {
+        } else if (current == DragonTypes.WATER) {
             this.setVariant(DragonTypes.STORM.variants.draw(this.rand, null));
             this.playSound(SoundEvents.BLOCK_PORTAL_TRIGGER, 2, 1);
             this.playSound(SoundEvents.BLOCK_END_PORTAL_SPAWN, 2, 1);
         }
-
         addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 35 * 20));
     }
 
-    @Nullable
-    public String checkAccess(EntityPlayer player) {
-        if (!this.isTamed() && !isEgg()) {
-            return "dragon.notTamed";
-        } else if (!this.allowedOtherPlayers() && !this.isTamedFor(player) && this.isTamed()) {
-            return "dragon.locked";
-        } else return null;
+    public void resetFeedTimer() {
+        if (this.forcedAgeTimer == 0) {
+            this.forcedAgeTimer = 40;
+        }
     }
 
     /**
-     * is the dragon allowed to be controlled by other players? Uses dragon is not owned status messages
-     *
-     * @param player
-     * @return
+     * @see EntityAnimal#ageUp(int, boolean)
      */
-    public boolean isAllowed(EntityPlayer player) {
-        String warn = this.checkAccess(player);
-        if (warn == null) return true;
-        player.sendStatusMessage(new TextComponentTranslation(warn), true);
-        return false;
-    }
-
-    private void eatEvent(ItemStack stack) {
+    public void consumeFood(ItemStack stack, int level, int growth) {
         this.playSound(this.getEatSound(), 1f, 0.75f);
+        this.setHunger(this.getHunger() + level);
+        this.getLifeStageHelper().ageUp(growth);
         if (this.world.isRemote) {
+            this.resetFeedTimer();
             Vec3d pos = this.getAnimator().getThroatPosition();
             Random random = this.rand;
             this.world.spawnParticle(
@@ -1674,11 +1504,10 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     }
 
     public static boolean isInertItem(ItemStack stack) {
-        if (stack.isEmpty()) return true;
-        if (stack.getItemUseAction() != EnumAction.NONE) return false;
-        Item item = stack.getItem();
-        if (DMItems.DRAGON_INTERACTABLE.contains(item)) return false;
-        return !(item instanceof ItemFood);
+        return stack.isEmpty() || (stack.getItemUseAction() == EnumAction.NONE &&
+                !DMItems.DRAGON_INTERACTABLE.contains(stack.getItem()) &&
+                !stack.hasCapability(DMCapabilities.DRAGON_FOOD, null)
+        );
     }
 
     /**
@@ -1703,13 +1532,13 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
         ItemStack stack = player.getHeldItem(hand);
 
-        final String warn = checkAccess(player);
-        final boolean allow = warn == null;
+        final Relation relation = Relation.checkRelation(this, player);
+        final boolean isTrusted = relation != Relation.STRANGER;
 
         /*
          * Dragon Riding The Player
          */
-        if (allow && !isSitting() && this.isBaby() && !player.isSneaking() && player.getPassengers().size() < 2 && isInertItem(stack)) {
+        if (isTrusted && !isSitting() && this.isBaby() && !player.isSneaking() && player.getPassengers().size() < 2 && isInertItem(stack)) {
             this.setAttackTarget(null);
             this.getNavigator().clearPath();
             this.getAISit().setSitting(false);
@@ -1727,7 +1556,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
                         this.setSheared(cooldown);
                         this.playSound(SoundEvents.ENTITY_ITEM_BREAK, 1.0F, 1.0F);
                         this.playSound(DMSounds.ENTITY_DRAGON_GROWL, 1.0F, 1.0F);
-                        if (!allow) {
+                        if (!isTrusted) {
                             this.setAttackTarget(player);
                         }
                         return true;
@@ -1735,11 +1564,11 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
                 } else return true;
             }
         }
-        if (allow && isInertItem(stack)) {
+        if (isTrusted && isInertItem(stack)) {
             /*
              * Sit
              */
-            if (this.onGround && !stack.isEmpty() && DMUtils.anyMatches(stack, OreDictionary.getOreID("stickWood"), OreDictionary.getOreID("bone"))) {
+            if (this.onGround && !stack.isEmpty() && ItemUtil.anyMatches(stack, OreDictionary.getOreID("stickWood"), OreDictionary.getOreID("bone"))) {
                 if (isServer) {
                     this.getAISit().setSitting(!this.isSitting());
                     this.getNavigator().clearPath();
@@ -1759,7 +1588,8 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
                  * Player Riding the Dragon
                  */
                 if (this.isSaddled()) {
-                    if (this.getPassengers().size() < 3) {
+                    List<Entity> passengers = this.getPassengers();
+                    if (passengers.size() < 3) {
                         if (isServer) {
                             this.setRidingPlayer(player);
                         }
@@ -1784,70 +1614,8 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
          * Consume
          */
         if (stack.isEmpty()) return false;
-        Item item = stack.getItem();
-        if (!(item instanceof ItemFood)) return false;
-        boolean isTamed = this.isTamed();
-        if (isTamed && this.getHunger() >= 100) return false;
-        ItemFood food = (ItemFood) item;
-        boolean isAquaticFood;
-        if (food.isWolfsFavoriteMeat()) {
-            if (this.consumeFood(player, stack, food)) return true;
-            isAquaticFood = DMItems.isAquaticFood(stack);
-        } else {
-            isAquaticFood = DMItems.isAquaticFood(stack);
-            if (isAquaticFood && this.consumeFood(player, stack, food)) return true;
-        }
-        if (!allow) {
-            player.sendStatusMessage(new TextComponentTranslation(warn), true);
-            return false;
-        }
-        if (isGrowthPaused()) {
-            // Continue growth
-            if (Items.CARROT == food) {//TODO: Re-implement dragon food
-                setGrowthPaused(false);
-                eatEvent(stack);
-                playSound(SoundEvents.ENTITY_PLAYER_BURP, 1, 0.8F);
-                consumeItemFromStack(player, stack);
-                return true;
-            }
-        } else {
-            // Stop Growth
-            if (Items.POISONOUS_POTATO == food) {
-                setGrowthPaused(true);
-                eatEvent(stack);
-                playSound(SoundEvents.ENTITY_PLAYER_BURP, 1f, 0.8F);
-                player.sendStatusMessage(new TextComponentTranslation("dragon.growth.paused"), true);
-                consumeItemFromStack(player, stack);
-                return true;
-            }
-        }
-        // Mate
-        if ((isAquaticFood || Items.FISH == food) && isTamed && this.isAdult() && !this.isInLove()) {
-            setInLove(player);
-            eatEvent(stack);
-            consumeItemFromStack(player, stack);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean consumeFood(EntityPlayer player, ItemStack stack, ItemFood food) {
-        // Taming
-        if (!this.isTamed()) {
-            consumeItemFromStack(player, stack);
-            eatEvent(stack);
-            tamedFor(player, this.getRNG().nextInt(4) == 0);
-            return true;
-        }
-
-        //  hunger
-        if (this.getHunger() < 100) {
-            consumeItemFromStack(player, stack);
-            eatEvent(stack);
-            setHunger(this.getHunger() + food.getHealAmount(stack) * 2);
-            return true;
-        }
-        return false;
+        IDragonFood food = stack.getCapability(DMCapabilities.DRAGON_FOOD, null);
+        return food != null && food.tryFeed(this, player, relation, stack, hand);
     }
 
     /**
@@ -1855,7 +1623,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
      */
     public void openGUI(EntityPlayer playerEntity, int guiId) {
         if (!this.world.isRemote && (!this.isPassenger(playerEntity))) {
-            playerEntity.openGui(DragonMounts.instance, guiId, this.world, this.getEntityId(), 0, 0);
+            playerEntity.openGui(DragonMounts.INSTANCE, guiId, this.world, this.getEntityId(), 0, 0);
         }
     }
 
@@ -1873,10 +1641,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
             //Pair<Float, Float> size = this.getBreed().getAdultEntitySize();TODO: use DragonType or something else
             this.setSize(4.8F, 4.2F);
         }
-    }
-
-    public final boolean isFirstUpdate() {
-        return this.firstUpdate;
     }
 
     @Override
@@ -1977,6 +1741,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         this.dataManager.set(DATA_VARIANT, variant);
     }
 
+    @Nonnull
     @Override
     public ItemStack getPickedResult(RayTraceResult target) {
         return new ItemStack(this.isEgg()

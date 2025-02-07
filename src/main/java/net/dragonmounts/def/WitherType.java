@@ -1,7 +1,7 @@
 package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.breath.BreathNode;
+import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.effects.WitherBreathFX;
 import net.dragonmounts.entity.breath.weapons.BreathWeapon;
 import net.dragonmounts.entity.breath.weapons.BreathWeaponWither;
@@ -42,7 +42,7 @@ public class WitherType extends DragonType {
     @Nullable
     @Override
     public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
-        return new BreathWeaponWither(dragon);
+        return new BreathWeaponWither(dragon, 0.6F);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class WitherType extends DragonType {
     }
 
     @Override
-    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathNode.Power power, float partialTicks) {
+    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
         world.spawnEntity(new WitherBreathFX(world, position, direction, power, partialTicks));
     }
 }

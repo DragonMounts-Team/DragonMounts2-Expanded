@@ -1,11 +1,17 @@
 package net.dragonmounts.entity.breath;
 
+import net.dragonmounts.util.MutableBlockPosEx;
 import net.dragonmounts.util.math.MathX;
 import net.dragonmounts.util.math.Pair;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.*;
 
-import java.util.*;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Random;
+import java.util.function.Function;
 
 /**
  * Created by TGG on 31/07/2015.
@@ -23,47 +29,28 @@ import java.util.*;
  * perform collision checks of the against the node against blocks or entities
  */
 public class NodeLineSegment {
-    public NodeLineSegment(Vec3d i_startPoint, Vec3d i_endPoint, float i_radius) {
-        this(i_startPoint, i_endPoint, i_radius, null);
-    }
+    public final Vec3d startPoint;
+    public final Vec3d endPoint;
+    public final float radius;
+    public final AxisAlignedBB box;
+    private final Collection<Pair<EnumFacing, AxisAlignedBB>> collisions; // TODO: remove
 
-    public NodeLineSegment(Vec3d i_startPoint, Vec3d i_endPoint, float i_radius, Collection<Pair<EnumFacing, AxisAlignedBB>> i_collisions) {
-        startPoint=i_startPoint;
-        endPoint=i_endPoint;
-        radius=i_radius;
-        collisions=(i_collisions!=null) ? i_collisions : new ArrayList<Pair<EnumFacing, AxisAlignedBB>>();
-    }
-
-    /**
-     * Make a deep copy of the LineSegment i.e. duplicate the points
-     *
-     * @return the new deep copy
-     */
-
-    public NodeLineSegment deepCopy() {
-        return new NodeLineSegment(startPoint, endPoint, radius);
-    }
-
-    /**
-     * Make a deep copy of the LineSegment List - i.e. will duplicate all the segments and all the Vec3d
-     *
-     * @param sourceList the LineSegment list to be copied, empty ok but not null!
-     * @return the new deep copy
-     */
-    public static ArrayList<NodeLineSegment> deepCopy(List<NodeLineSegment> sourceList) {
-        ArrayList<NodeLineSegment> newCopy=new ArrayList<NodeLineSegment>(sourceList.size());
-        for (NodeLineSegment nodeLineSegment : sourceList) {
-            newCopy.add(nodeLineSegment.deepCopy());
+    public NodeLineSegment(Vec3d start, Vec3d end, float radius, @Nullable Collection<Pair<EnumFacing, AxisAlignedBB>> collisions) {
+        this.startPoint = start;
+        this.endPoint = end;
+        this.radius = radius;
+        this.collisions = (collisions == null) ? Collections.emptyList() : collisions;
+        double minX = Math.min(start.x, end.x) - radius;
+        double maxX = Math.max(start.x, end.x) + radius;
+        double minY = Math.min(start.y, end.y) - radius;
+        double maxY = Math.max(start.y, end.y) + radius;
+        double minZ = Math.min(start.z, end.z) - radius;
+        double maxZ = Math.max(start.z, end.z) + radius;
+        AxisAlignedBB box = new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
+        for (Pair<EnumFacing, AxisAlignedBB> collision : this.collisions) {
+            box = box.union(collision.getSecond());
         }
-        return newCopy;
-    }
-
-    public double getSegmentLength() {
-        double deltaX=startPoint.x - endPoint.x;
-        double deltaY=startPoint.y - endPoint.y;
-        double deltaZ=startPoint.z - endPoint.z;
-        double length=Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
-        return length;
+        this.box = box;
     }
 
     /**
@@ -76,39 +63,17 @@ public class NodeLineSegment {
     }
 
     /**
-     * getChangeInValue an AABB which encompasses the entire line segment including the node radius around each end
-     *
-     * @return
-     */
-    public AxisAlignedBB getAxisAlignedBoundingBox() {
-        double minX=Math.min(startPoint.x, endPoint.x) - radius;
-        double maxX=Math.max(startPoint.x, endPoint.x) + radius;
-        double minY=Math.min(startPoint.y, endPoint.y) - radius;
-        double maxY=Math.max(startPoint.y, endPoint.y) + radius;
-        double minZ=Math.min(startPoint.z, endPoint.z) - radius;
-        double maxZ=Math.max(startPoint.z, endPoint.z) + radius;
-        AxisAlignedBB aabb=new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
-        for (Pair<EnumFacing, AxisAlignedBB> collision : collisions) {
-            aabb=aabb.union(collision.getSecond());
-        }
-        return aabb;
-    }
-
-    /**
      * return an AABB which contains all the line segments
      *
-     * @param nodeLineSegments
+     * @param segments
      * @return the AABB which contains all the line segments; null if collection empty
      */
-    public static AxisAlignedBB getAxisAlignedBoundingBoxForAll(Collection<NodeLineSegment> nodeLineSegments) {
-        if (nodeLineSegments==null || nodeLineSegments.isEmpty()) return null;
-
-        AxisAlignedBB aabb=null;
-        for (NodeLineSegment nodeLineSegment : nodeLineSegments) {
-            aabb=(aabb==null) ? nodeLineSegment.getAxisAlignedBoundingBox() : aabb.union(nodeLineSegment.getAxisAlignedBoundingBox());
-
+    public static AxisAlignedBB getAxisAlignedBoundingBoxForAll(Collection<NodeLineSegment> segments) {
+        AxisAlignedBB box = MathX.ZERO_AABB;
+        for (NodeLineSegment segment : segments) {
+            box = box.union(segment.box);
         }
-        return aabb;
+        return box;
     }
 
     /**
@@ -142,9 +107,10 @@ public class NodeLineSegment {
                 return totalDensity;
             }
         }
-        float stochasticHitDensity=collisionCheckAABBstochastic(aabb, totalDensity, numberOfCloudPoints);
-        float aabbCornersHitDensity=collisionCheckAABBcorners(aabb, totalDensity);
-        return Math.max(stochasticHitDensity, aabbCornersHitDensity);
+        return Math.max(
+                checkAABBStochastic(aabb, totalDensity, numberOfCloudPoints), // stochastic density
+                checkAABBCorners(aabb, totalDensity) // corner density
+        );
     }
 
     /**
@@ -155,7 +121,7 @@ public class NodeLineSegment {
      * @param totalDensity the density of a complete collision
      * @return a value from 0.0 (no collision) to totalDensity (total collision)
      */
-    public float collisionCheckAABBcorners(AxisAlignedBB aabb, float totalDensity) {
+    public float checkAABBCorners(AxisAlignedBB aabb, float totalDensity) {
         int cornersInside=0;
         cornersInside+=isPointWithinNodeLineSegment(aabb.minX, aabb.minY, aabb.minZ) ? 1 : 0;
         cornersInside+=isPointWithinNodeLineSegment(aabb.minX, aabb.minY, aabb.maxZ) ? 1 : 0;
@@ -197,8 +163,6 @@ public class NodeLineSegment {
         return closestPoint.squareDistanceTo(deltaPointToCheck) <= radius * radius;
     }
 
-    private final float NO_HIT_DENSITY_VALUE=0.0F;
-
     /**
      * Choose a number of random points from the nodelinesegment and see how many of them lie within the given aabb.
      * Most useful for when the aabb is larger than the nodelinesegment.
@@ -208,9 +172,8 @@ public class NodeLineSegment {
      * @param numberOfCloudPoints number of cloud points to use (1 - 1000) - clamped if out of range
      * @return a value from 0.0 (no collision) to totalDensity (total collision)
      */
-    private float collisionCheckAABBstochastic(AxisAlignedBB aabb, float totalDensity, int numberOfCloudPoints) {
-        float retval=NO_HIT_DENSITY_VALUE;
-        initialiseTables();
+    private float checkAABBStochastic(AxisAlignedBB aabb, float totalDensity, int numberOfCloudPoints) {
+        float retval = 0.0F;
         final int MINIMUM_REASONABLE_CLOUD_POINTS=1;
         final int MAXIMUM_REASONABLE_CLOUD_POINTS=1000;
         numberOfCloudPoints=MathHelper.clamp(numberOfCloudPoints, MINIMUM_REASONABLE_CLOUD_POINTS, MAXIMUM_REASONABLE_CLOUD_POINTS);
@@ -224,9 +187,7 @@ public class NodeLineSegment {
         //    z = r.cos(phi)
         Random random=new Random();
         for (int i=0; i < NUMBER_OF_CLOUD_POINTS; ++i) {
-            double linePos=i * SUBSEGMENT_WIDTH;
-            double jitter=random.nextDouble() * SUBSEGMENT_WIDTH;
-            linePos+=jitter;
+            double linePos = i * SUBSEGMENT_WIDTH + random.nextDouble() * SUBSEGMENT_WIDTH;
             double x=MathX.lerp(startPoint.x, endPoint.x, linePos);
             double y=MathX.lerp(startPoint.y, endPoint.y, linePos);
             double z=MathX.lerp(startPoint.z, endPoint.z, linePos);
@@ -265,62 +226,48 @@ public class NodeLineSegment {
      * @param totalDensity        the total density to be added (eg 1.0F)
      * @param numberOfCloudPoints number of cloud points to use (1 - 1000) - clamped if out of range
      */
-    public void addBlockCollisionsAndStochasticCloud(Map<Vec3i, BreathAffectedBlock> hitDensity, float totalDensity, int numberOfCloudPoints) {
-        initialiseTables();
-        final int MINIMUM_REASONABLE_CLOUD_POINTS=1;
-        final int MAXIMUM_REASONABLE_CLOUD_POINTS=1000;
-        numberOfCloudPoints=MathHelper.clamp(numberOfCloudPoints, MINIMUM_REASONABLE_CLOUD_POINTS, MAXIMUM_REASONABLE_CLOUD_POINTS);
-        final int NUMBER_OF_CLOUD_POINTS=numberOfCloudPoints;
-        final float DENSITY_PER_POINT=totalDensity / NUMBER_OF_CLOUD_POINTS;
-
-        final double SUBSEGMENT_WIDTH=1.0 / (NUMBER_OF_CLOUD_POINTS + 1);
+    public void addBlockCollisionsAndStochasticCloud(Random random, Map<BlockPos, BreathAffectedBlock> hitDensity, float totalDensity, int numberOfCloudPoints) {
+        numberOfCloudPoints = MathHelper.clamp(numberOfCloudPoints, 1, 1000);
+        final float DENSITY_PER_POINT = totalDensity / numberOfCloudPoints;
+        final double SUBSEGMENT_WIDTH = 1.0 / (numberOfCloudPoints + 1);
+        Function<BlockPos, BreathAffectedBlock> fallback = ignored -> new BreathAffectedBlock();
 
         //    Equation of sphere converting from polar to cartesian:
         //    x = r.cos(theta).sin(phi)
         //    y = r.sin(theta).sin(phi)
         //    z = r.cos(phi)
         //TODO: Deprecated
-        Random random=new Random();
-        for (int i=0; i < NUMBER_OF_CLOUD_POINTS; ++i) {
-            double linePos=i * SUBSEGMENT_WIDTH;
-            double jitter=random.nextDouble() * SUBSEGMENT_WIDTH;
-            linePos+=jitter;
+        MutableBlockPosEx pos = new MutableBlockPosEx(0, 0, 0);
+        for (int i = 0; i < numberOfCloudPoints; ++i) {
+            double linePos = i * SUBSEGMENT_WIDTH + random.nextDouble() * SUBSEGMENT_WIDTH;
             double x=MathX.lerp(startPoint.x, endPoint.x, linePos);
             double y=MathX.lerp(startPoint.y, endPoint.y, linePos);
             double z=MathX.lerp(startPoint.z, endPoint.z, linePos);
             int theta=random.nextInt(TABLE_POINTS);
             int phi=random.nextInt(TABLE_POINTS);
             double r=random.nextDouble() * radius;
-            double dx=r * cosTable[theta] * sinTable[phi];
-            double dy=r * sinTable[theta] * sinTable[phi];
-            double dz=r * cosTable[phi];
-
-            Vec3i gridLoc=new Vec3i(x + dx, y + dy, z + dz);
-
-            BreathAffectedBlock breathAffectedBlock=hitDensity.get(gridLoc);
-            if (breathAffectedBlock==null) {
-                breathAffectedBlock=new BreathAffectedBlock();
-            }
-            EnumFacing faceHit=getIntersectedFace(x, y, z, x + dx, y + dy, z + dz);
-            breathAffectedBlock.addHitDensity(faceHit, DENSITY_PER_POINT);
-            hitDensity.put(gridLoc, breathAffectedBlock);
+            double hitX = r * cosTable[theta] * sinTable[phi] + x;
+            double hitY = r * sinTable[theta] * sinTable[phi] + y;
+            double hitZ = r * cosTable[phi] + z;
+            hitDensity.computeIfAbsent(pos.with(hitX, hitY, hitZ), fallback)
+                    .addHitDensity(getIntersectedFace(x, y, z, hitX, hitY, hitZ), DENSITY_PER_POINT);
         }
 
+        final double CONTRACTION = 0.001;
         for (Pair<EnumFacing, AxisAlignedBB> collision : collisions) {
-            final double CONTRACTION=0.001;
             AxisAlignedBB aabb=collision.getSecond();
             if (aabb.maxX - aabb.minX > 2 * CONTRACTION && aabb.maxY - aabb.minY > 2 * CONTRACTION && aabb.maxZ - aabb.minZ > 2 * CONTRACTION) {
                 aabb=aabb.contract(CONTRACTION, CONTRACTION, CONTRACTION);
-                BlockPos blockposMin=new BlockPos(aabb.minX, aabb.minY, aabb.minZ);
-                BlockPos blockposMax=new BlockPos(aabb.maxX, aabb.maxY, aabb.maxZ);
-
-                for (BlockPos blockpos : BlockPos.getAllInBox(blockposMin, blockposMax)) {
-                    BreathAffectedBlock breathAffectedBlock = hitDensity.get(blockpos);
-                    if (breathAffectedBlock == null) {
-                        breathAffectedBlock = new BreathAffectedBlock();
-                    }
-                    breathAffectedBlock.addHitDensity(collision.getFirst().getOpposite(), totalDensity);
-                    hitDensity.put(blockpos, breathAffectedBlock);
+                for (BlockPos blockpos : BlockPos.getAllInBox(
+                        MathHelper.floor(aabb.minX),
+                        MathHelper.floor(aabb.minY),
+                        MathHelper.floor(aabb.minZ),
+                        MathHelper.floor(aabb.maxX),
+                        MathHelper.floor(aabb.maxY),
+                        MathHelper.floor(aabb.maxZ)
+                )) {
+                    hitDensity.computeIfAbsent(blockpos, fallback)
+                            .addHitDensity(collision.getFirst().getOpposite(), totalDensity);
                 }
             }
         }
@@ -339,32 +286,32 @@ public class NodeLineSegment {
      * @return the face which was hit.  If none (was inside block), returns null
      */
     public static EnumFacing getIntersectedFace(double xOrigin, double yOrigin, double zOrigin, double xHit, double yHit, double zHit) {
-        AxisAlignedBB aabb=new AxisAlignedBB(Math.floor(xHit), Math.floor(yHit), Math.floor(zHit), Math.ceil(xHit), Math.ceil(yHit), Math.ceil(zHit));
-
-        RayTraceResult mop=aabb.calculateIntercept(new Vec3d(xOrigin, yOrigin, zOrigin), new Vec3d(xHit, yHit, zHit));
-        if (mop==null) return null;
-        return mop.sideHit;
+        RayTraceResult mop = new AxisAlignedBB(
+                Math.floor(xHit),
+                Math.floor(yHit),
+                Math.floor(zHit),
+                Math.ceil(xHit),
+                Math.ceil(yHit),
+                Math.ceil(zHit)
+        ).calculateIntercept(new Vec3d(xOrigin, yOrigin, zOrigin), new Vec3d(xHit, yHit, zHit));
+        return mop == null ? null : mop.sideHit;
     }
 
 
-    private static boolean tablesInitialised=false;
     private static final int TABLE_POINTS=256;
-    private static double[] sinTable=new double[TABLE_POINTS];
-    private static double[] cosTable=new double[TABLE_POINTS];
+    private static final float[] sinTable;
+    private static final float[] cosTable;
 
-    private static void initialiseTables() {
-        if (tablesInitialised) return;
-        for (int i=0; i < TABLE_POINTS; ++i) {
-            double angle=i * 2.0 * Math.PI / TABLE_POINTS;
-            sinTable[i]=Math.sin(angle);
-            cosTable[i]=Math.cos(angle);
+    static {
+        float[] sin = new float[TABLE_POINTS];
+        float[] cos = new float[TABLE_POINTS];
+        for (int i = 0; i < TABLE_POINTS; ++i) {
+            double angle = i * 2.0 * Math.PI / TABLE_POINTS;
+            sin[i] = (float) Math.sin(angle);
+            cos[i] = (float) Math.cos(angle);
         }
-        tablesInitialised=true;
+        sinTable = sin;
+        cosTable = cos;
     }
 
-
-    public Vec3d startPoint;
-    public Vec3d endPoint;
-    public float radius;
-    private Collection<Pair<EnumFacing, AxisAlignedBB>> collisions;
 }

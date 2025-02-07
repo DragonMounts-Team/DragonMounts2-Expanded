@@ -17,7 +17,7 @@ import net.dragonmounts.registry.CarriageType;
 import net.dragonmounts.registry.CooldownCategory;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
-import net.dragonmounts.util.DMUtils;
+import net.dragonmounts.util.LogUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -31,6 +31,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.DataSerializerEntry;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -55,7 +56,7 @@ public class RegistryEventHandler {
         registry.register(DragonMountsCompat.DRAGON_EGG_BLOCK);
         GameRegistry.registerTileEntity(DragonCoreBlockEntity.class, makeId("dragon_core"));
         GameRegistry.registerTileEntity(DragonHeadBlockEntity.class, makeId("dragon_head"));
-        DMUtils.getLogger().info("Block Registries Successfully Registered");
+        LogUtil.LOGGER.info("Block Registries Successfully Registered");
     }
 
     @SubscribeEvent
@@ -72,11 +73,11 @@ public class RegistryEventHandler {
         if (DragonMountsConfig.isDebug()) {
             registry.register(DMItems.TEST_RUNNER);
         }
-        DMUtils.getLogger().info("Item Registries Successfully Registered!");
+        LogUtil.LOGGER.info("Item Registries Successfully Registered!");
     }
 
     @SubscribeEvent
-    public static void registerCarriageType(RegistryEvent.Register<CarriageType> event) {
+    public static void registerCarriageTypes(RegistryEvent.Register<CarriageType> event) {
         IForgeRegistry<CarriageType> registry = event.getRegistry();
         registry.register(CarriageTypes.OAK);
         registry.register(CarriageTypes.SPRUCE);
@@ -87,7 +88,7 @@ public class RegistryEventHandler {
     }
 
     @SubscribeEvent
-    public static void registerCooldownCategory(RegistryEvent.Register<CooldownCategory> event) {
+    public static void registerCooldownCategories(RegistryEvent.Register<CooldownCategory> event) {
         IForgeRegistry<CooldownCategory> registry = event.getRegistry();
         registry.register(DMArmorEffects.AETHER_EFFECT);
         registry.register(DMArmorEffects.ENDER_EFFECT);
@@ -100,7 +101,7 @@ public class RegistryEventHandler {
     }
 
     @SubscribeEvent
-    public static void registerDragonType(RegistryEvent.Register<DragonType> event) {
+    public static void registerDragonTypes(RegistryEvent.Register<DragonType> event) {
         IForgeRegistry<DragonType> registry = event.getRegistry();
         registry.register(DragonTypes.AETHER);
         registry.register(DragonTypes.ENCHANT);
@@ -121,15 +122,23 @@ public class RegistryEventHandler {
     }
 
     @SubscribeEvent
-    public static void registerDragonVariant(RegistryEvent.Register<DragonVariant> event) {
+    public static void registerDragonVariants(RegistryEvent.Register<DragonVariant> event) {
         DragonVariants.BUILTIN_VALUES.forEach(event.getRegistry()::register);
     }
 
     @SubscribeEvent
-    public static void registerDataSerializer(RegistryEvent.Register<DataSerializerEntry> event) {
+    public static void registerDataSerializers(RegistryEvent.Register<DataSerializerEntry> event) {
         IForgeRegistry<DataSerializerEntry> registry = event.getRegistry();
         registry.register(new DataSerializerEntry(CarriageType.SERIALIZER).setRegistryName(DragonMountsTags.MOD_ID + ":carriage_type"));
         registry.register(new DataSerializerEntry(DragonVariant.SERIALIZER).setRegistryName(DragonMountsTags.MOD_ID + ":dragon_variant"));
+    }
+
+    @SubscribeEvent
+    public static void registerEntities(RegistryEvent.Register<EntityEntry> event) {
+        IForgeRegistry<EntityEntry> registry = event.getRegistry();
+        registry.register(DMEntities.DRAGON);
+        registry.register(DMEntities.CARRIAGE);
+        registry.register(DMEntities.CONTAINER_ITEM);
     }
 
     @SubscribeEvent
@@ -203,11 +212,11 @@ public class RegistryEventHandler {
             });
             ModelBakery.registerItemVariants(amulet, models);
         }
-        DMUtils.getLogger().info("Models Sucessfully Registered");
+        LogUtil.LOGGER.info("Models Sucessfully Registered");
     }
 
     public static void initRegistries() {
-        NetworkRegistry.INSTANCE.registerGuiHandler(DragonMounts.instance, new GuiHandler());
-        DMUtils.getLogger().info("Gui's Successfully Registered");
+        NetworkRegistry.INSTANCE.registerGuiHandler(DragonMounts.INSTANCE, new GuiHandler());
+        LogUtil.LOGGER.info("Gui's Successfully Registered");
     }
 }

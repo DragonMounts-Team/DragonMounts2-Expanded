@@ -1,13 +1,13 @@
 package net.dragonmounts.item;
 
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
+import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.compat.DragonMountsCompat;
 import net.dragonmounts.entity.EntityContainerItemEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMItems;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
-import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.EntityUtil;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -72,7 +72,7 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
                 target.setDead();
                 return true;
             } else {
-                player.sendStatusMessage(new TextComponentTranslation("dragon.notOwned"), true);
+                player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.dragon.notOwner"), true);
             }
         }
         return false;
@@ -83,7 +83,7 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
         if (level.isRemote) return EnumActionResult.FAIL;
         ItemStack stack = player.getHeldItem(hand);
         if (this.isEmpty(stack.getTagCompound())) return EnumActionResult.FAIL;
-        Entity entity = this.loadEntity(level, stack, player, clicked.offset(facing), true, "dragon.notOwned");
+        Entity entity = this.loadEntity(level, stack, player, clicked.offset(facing), true, "message.dragonmounts.dragon.notOwner");
         if (entity == null) return EnumActionResult.FAIL;
         stack.shrink(1);
         ItemStack amulet = new ItemStack(DMItems.AMULET);
@@ -99,18 +99,22 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World level, List<String> tooltips, ITooltipFlag flag) {
         NBTTagCompound root = stack.getTagCompound();
-        if (root == null) return;
+        if (root == null) {
+            tooltips.add(ClientUtil.translateToLocal("tooltip.dragonmounts.amulet.empty"));
+            return;
+        }
         NBTTagCompound data = root.getCompoundTag("EntityTag");
         if (data.hasKey("CustomName")) {
             tooltips.add(I18n.format("tooltip.dragonmounts.name", data.getString("CustomName")));
         } else {
             DragonType type = this.getDragonType(data);
-            tooltips.add(I18n.format("tooltip.dragonmounts.name", type.formatting + DMUtils.translateBothToLocal("entity.dragonmounts.dragon", type.translationKey)));
+            tooltips.add(I18n.format("tooltip.dragonmounts.name", type.formatting + ClientUtil.translateBothToLocal("entity.dragonmounts.dragon", type.translationKey)));
         }
         tooltips.add(I18n.format("tooltip.dragonmounts.health", TextFormatting.GREEN.toString() + Math.round(data.getDouble("Health"))));
         if (data.hasKey("OwnerName")) {
             tooltips.add(I18n.format("tooltip.dragonmounts.owner", TextFormatting.GOLD + data.getString("OwnerName")));
         }
+        tooltips.add(ClientUtil.translateToLocal("tooltip.dragonmounts.amulet.usage"));
     }
 
     @Nonnull

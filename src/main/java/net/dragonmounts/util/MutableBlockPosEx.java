@@ -1,6 +1,7 @@
 package net.dragonmounts.util;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 
 public class MutableBlockPosEx extends BlockPos.MutableBlockPos {
     public MutableBlockPosEx(int x, int y, int z) {
@@ -26,6 +27,18 @@ public class MutableBlockPosEx extends BlockPos.MutableBlockPos {
         this.x = x;
         this.y = y;
         this.z = z;
+        return this;
+    }
+
+    public MutableBlockPosEx with(double x, double y, double z) {
+        this.x = MathHelper.floor(x);
+        this.y = MathHelper.floor(y);
+        this.z = MathHelper.floor(z);
+        return this;
+    }
+
+    public MutableBlockPosEx climb() {
+        ++this.y;
         return this;
     }
 }

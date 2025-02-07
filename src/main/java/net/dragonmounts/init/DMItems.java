@@ -16,18 +16,11 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.oredict.OreDictionary;
-import org.apache.commons.lang3.ArrayUtils;
 
 @MethodsReturnNonnullByDefault
 public class DMItems {
     public static final ObjectArrayList<Item> ITEMS = new ObjectArrayList<>();
     public static final ReferenceOpenHashSet<Item> DRAGON_INTERACTABLE = new ReferenceOpenHashSet<>();
-    public static final ReferenceOpenHashSet<Item> HARDCODED_AQUATIC_FOOD = new ReferenceOpenHashSet<>();
-
-    public static boolean isAquaticFood(ItemStack stack) {
-        return HARDCODED_AQUATIC_FOOD.contains(stack.getItem()) || ArrayUtils.contains(OreDictionary.getOreIDs(stack), OreDictionary.getOreID("listAllfishraw"));
-    }
 
     //Blocks
     public static final CraftableBlockItem DRAGON_NEST = createItem("dragon_nest", new CraftableBlockItem(DMBlocks.DRAGON_NEST, DMItemGroups.MAIN));
@@ -305,7 +298,7 @@ public class DMItems {
 
     //Dragon Spawn Eggs
     public static final DragonSpawnEggItem AETHER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("aether_dragon_spawn_egg", DragonTypes.AETHER, 0x06E9FA, 0x281EE7);
-    public static final DragonSpawnEggItem DARK_DRAGON_SPAWN_EGG = createDragonSpawnEgg("dark_dragon_spawn_egg", DragonTypes.DARK, 0x1D1D24, 0x900996);
+    public static final DragonSpawnEggItem DARK_DRAGON_SPAWN_EGG = createDragonSpawnEgg("dark_dragon_spawn_egg", DragonTypes.DARK, 0x222121, 0x971B1B);
     public static final DragonSpawnEggItem ENCHANT_DRAGON_SPAWN_EGG = createDragonSpawnEgg("enchant_dragon_spawn_egg", DragonTypes.ENCHANT, 0xF30FFF, 0xD7D7D7);
     public static final DragonSpawnEggItem ENDER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("ender_dragon_spawn_egg", DragonTypes.ENDER, 0x1D1D24, 0x900996);
     public static final DragonSpawnEggItem FIRE_DRAGON_SPAWN_EGG = createDragonSpawnEgg("fire_dragon_spawn_egg", DragonTypes.FIRE, 0x9F2909, 0xF7A502);
@@ -321,7 +314,7 @@ public class DMItems {
     public static final DragonSpawnEggItem WITHER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("wither_dragon_spawn_egg", DragonTypes.WITHER, 0x839292, 0x383F40);
     public static final DragonSpawnEggItem ZOMBIE_DRAGON_SPAWN_EGG = createDragonSpawnEgg("zombie_dragon_spawn_egg", DragonTypes.ZOMBIE, 0x56562E, 0xA7BF2F);
     //?
-    public static final VariantSwitcherItem VARIANT_SWITCHER = createItem("variant_switcher", new VariantSwitcherItem());
+    public static final VariantSwitcherItem VARIANT_SWITCHER = createItem("variant_switcher", "dragonmounts.variation_orb", new VariantSwitcherItem());
     public static final DragonWandItem DRAGON_WAND = createItem("dragon_wand", new DragonWandItem());
     public static final DragonWhistleItem DRAGON_WHISTLE = createItem("dragon_whistle", new DragonWhistleItem());
     //Shears
@@ -374,6 +367,11 @@ public class DMItems {
 
     static <T extends Item> T createItem(String name, T item) {
         ITEMS.add(item.setTranslationKey(name).setRegistryName(name));
+        return item;
+    }
+
+    static <T extends Item> T createItem(String name, String translationKey, T item) {
+        ITEMS.add(item.setTranslationKey(translationKey).setRegistryName(name));
         return item;
     }
 
@@ -499,8 +497,6 @@ public class DMItems {
         DRAGON_INTERACTABLE.add(DIAMOND_DRAGON_ARMOR);
         DRAGON_INTERACTABLE.add(Items.BONE);
         DRAGON_INTERACTABLE.add(Items.STICK);
-        HARDCODED_AQUATIC_FOOD.add(Items.FISH);
-        HARDCODED_AQUATIC_FOOD.add(Items.COOKED_FISH);
         DRAGON_ORB.setTranslationKey("dragon_orb").setRegistryName("dragon_orb");
         TEST_RUNNER.setTranslationKey("test_runner").setRegistryName("test_runner");
         for (DragonVariant variant : DragonVariants.BUILTIN_VALUES) {

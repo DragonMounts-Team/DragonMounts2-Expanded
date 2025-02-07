@@ -1,10 +1,10 @@
 package net.dragonmounts.item;
 
 import net.dragonmounts.capability.IHardShears;
+import net.dragonmounts.client.ClientUtil;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMCapabilities;
 import net.dragonmounts.init.DMItemGroups;
-import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.util.DMUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -66,7 +66,7 @@ public class HardShearsItem extends ItemShears implements IHardShears, ICapabili
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World level, List<String> tooltips, ITooltipFlag flag) {
-        tooltips.add(TextFormatting.GRAY + DMUtils.translateToLocal("tooltip.dragonmounts.hard_shears"));
+        tooltips.add(TextFormatting.GRAY + ClientUtil.translateToLocal("tooltip.dragonmounts.hard_shears"));
     }
 
     @Override

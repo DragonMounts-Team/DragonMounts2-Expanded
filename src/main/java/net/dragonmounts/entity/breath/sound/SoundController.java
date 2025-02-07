@@ -1,6 +1,6 @@
 package net.dragonmounts.entity.breath.sound;
 
-import net.dragonmounts.util.DMUtils;
+import net.dragonmounts.util.LogUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSound;
 
@@ -14,23 +14,23 @@ import java.util.Map;
  * Was intended to encapsulate sound effects.  Doesn't do anything at the moment.
  */
 public class SoundController {
-    private HashMap<PositionedSound, SoundEffectTickLink> soundEffectsToTick = new HashMap<PositionedSound, SoundEffectTickLink>();
+    private final HashMap<PositionedSound, SoundEffectTickLink> soundEffectsToTick = new HashMap<PositionedSound, SoundEffectTickLink>();
 
     public SoundController() {}
 
     public void playSound(PositionedSound sound) {
-        DMUtils.getLogger().info("play sound 1");
+        LogUtil.LOGGER.info("play sound 1");
         Minecraft.getMinecraft().getSoundHandler().playSound(sound);
     }
 
     public void playSound(PositionedSound sound, SoundEffectTickLink soundEffectTickLink) {
-        DMUtils.getLogger().info("play sound 2");
+        LogUtil.LOGGER.info("play sound 2");
         Minecraft.getMinecraft().getSoundHandler().playSound(sound);
         soundEffectsToTick.put(sound, soundEffectTickLink);
     }
 
     public void stopSound(PositionedSound sound) {
-        DMUtils.getLogger().info("stop sound");
+        LogUtil.LOGGER.info("stop sound");
         Minecraft.getMinecraft().getSoundHandler().stopSound(sound);
         soundEffectsToTick.remove(sound);
     }

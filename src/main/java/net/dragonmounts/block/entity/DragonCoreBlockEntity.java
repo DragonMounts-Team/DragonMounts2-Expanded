@@ -76,7 +76,7 @@ public class DragonCoreBlockEntity extends TileEntityLockableLoot implements ITi
 
     @Override
     public String getName() {
-        return this.hasCustomName() ? this.customName : "container.dragon_core";
+        return this.hasCustomName() ? this.customName : "container.dragonmounts.dragon_core";
     }
 
     @Override

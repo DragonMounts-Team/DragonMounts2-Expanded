@@ -12,15 +12,15 @@ package net.dragonmounts.client.gui;
 import it.unimi.dsi.fastutil.objects.Reference2IntMap;
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
+import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.entity.helper.DragonLifeStageHelper;
 import net.dragonmounts.entity.helper.DragonReproductionHelper;
 import net.dragonmounts.entity.helper.DragonVariantHelper;
 import net.dragonmounts.registry.DragonType;
-import net.dragonmounts.util.DMUtils;
+import net.dragonmounts.util.LogUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.Entity;
@@ -59,7 +59,6 @@ public class GuiDragonDebug extends Gui {
     public static boolean enabled = true;
     
     private final Minecraft mc = Minecraft.getMinecraft();
-    private final FontRenderer fr;
     private final GuiTextPrinter text;
     private final DecimalFormat dfShort = new DecimalFormat("0.00");
     private final DecimalFormat dfLong = new DecimalFormat("0.0000");
@@ -68,8 +67,7 @@ public class GuiDragonDebug extends Gui {
     private TameableDragonEntity serverCache;
     
     public GuiDragonDebug() {
-        fr = mc.fontRenderer;
-        text = new GuiTextPrinter(fr);
+        text = new GuiTextPrinter(mc.fontRenderer);
     }
     
     @SubscribeEvent
@@ -148,7 +146,7 @@ public class GuiDragonDebug extends Gui {
 
     private void renderTitle() {
         String title = String.format("%s %s Debug", DragonMountsTags.MOD_NAME,
-                DragonMounts.instance.getMetadata().version);
+                DragonMounts.INSTANCE.getMetadata().version);
         
         text.setOrigin(16, 8);
         text.setColor(GREY);
@@ -197,7 +195,7 @@ public class GuiDragonDebug extends Gui {
         text.print("Type: ");
         DragonType type = dragon.getVariant().type;
         text.setColor(type.color);
-        text.println(DMUtils.translateToLocal(type.translationKey));
+        text.println(ClientUtil.translateToLocal(type.translationKey));
         text.setColor(WHITE);
 
         // life stage
@@ -258,7 +256,7 @@ public class GuiDragonDebug extends Gui {
         Collection<IAttributeInstance> attrs = dragon.getAttributeMap().getAllAttributes();
 
         attrs.forEach(attr -> {
-            String attribName = DMUtils.translateToLocal("attribute.name." + attr.getAttribute().getName());
+            String attribName = ClientUtil.translateToLocal("attribute.name." + attr.getAttribute().getName());
             String attribValue = dfShort.format(attr.getAttributeValue());
             String attribBase = dfShort.format(attr.getBaseValue());
             text.println(attribName + " = " + attribValue + " (" + attribBase + ")");
@@ -276,7 +274,7 @@ public class GuiDragonDebug extends Gui {
         DragonVariantHelper helper = dragon.variantHelper;
         for (Reference2IntMap.Entry<DragonType> entry : helper.getBreedPoints().reference2IntEntrySet()) {
             text.setColor(entry.getKey().color);
-            text.printf("%s: %d", DMUtils.translateToLocal(entry.getKey().translationKey), entry.getIntValue());
+            text.printf("%s: %d", ClientUtil.translateToLocal(entry.getKey().translationKey), entry.getIntValue());
             if (text.getX() > data[1]) {
                 data[1] = text.getX();
             }
@@ -347,6 +345,6 @@ public class GuiDragonDebug extends Gui {
         text.println("GUI exception:");
         text.printf(ExceptionUtils.getStackTrace(ex));
         text.setColor(WHITE);
-        DMUtils.getLogger().error("Error rendering", ex);
+        LogUtil.LOGGER.error("Error rendering", ex);
     }
 }

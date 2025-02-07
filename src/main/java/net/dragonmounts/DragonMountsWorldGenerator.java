@@ -1,6 +1,6 @@
 package net.dragonmounts;
 
-import net.dragonmounts.util.DMUtils;
+import net.dragonmounts.util.LogUtil;
 import net.dragonmounts.util.MutableBlockPosEx;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.Set;
 
-import static net.dragonmounts.util.DMUtils.getSurface;
+import static net.dragonmounts.util.LevelUtil.getSurface;
 
 /**
  * Handles world generation for dragon nests, make a separate package if we are gonna use Mappers to optimize instead of the IWorldGenerator
@@ -246,7 +246,7 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
     public static void loadStructure(MutableBlockPosEx pos, World world, ResourceLocation structure, @Nullable ResourceLocation lootTable, Random rand) {
         WorldServer worldserver = (WorldServer) world;
         if (DragonMountsConfig.isDebug()) {
-            DMUtils.getLogger().info("Placing Dragon Nest at [" + pos.toString() + "]: " + structure);
+            LogUtil.LOGGER.info("Placing Dragon Nest at [{}]: {}", pos.toString(), structure);
         }
         Template template = worldserver.getStructureTemplateManager().getTemplate(world.getMinecraftServer(), structure);
         IBlockState iblockstate = world.getBlockState(pos);

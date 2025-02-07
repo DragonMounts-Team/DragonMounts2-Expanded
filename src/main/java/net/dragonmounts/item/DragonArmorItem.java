@@ -1,8 +1,8 @@
 package net.dragonmounts.item;
 
+import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMItemGroups;
-import net.dragonmounts.util.DMUtils;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -56,7 +56,7 @@ public class DragonArmorItem extends Item {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World level, List<String> tooltips, ITooltipFlag flag) {
         tooltips.add("");
-        tooltips.add(DMUtils.translateToLocal("item.modifiers.equipped"));
+        tooltips.add(ClientUtil.translateToLocal("item.modifiers.equipped"));
         tooltips.add(TextFormatting.BLUE + I18n.translateToLocalFormatted("attribute.modifier.plus.0", ItemStack.DECIMALFORMAT.format(this.protection), I18n.translateToLocal("attribute.name.generic.armor")));
     }
 

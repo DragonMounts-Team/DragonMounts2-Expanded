@@ -1,9 +1,9 @@
 package net.dragonmounts.network;
 
+import io.netty.buffer.ByteBuf;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.inventory.DragonInventory;
-import net.dragonmounts.util.DMUtils;
-import io.netty.buffer.ByteBuf;
+import net.dragonmounts.util.LogUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
@@ -15,8 +15,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import java.io.IOException;
 
-import static net.dragonmounts.util.VarInt.readVarInt;
-import static net.dragonmounts.util.VarInt.writeVarInt;
+import static net.dragonmounts.util.ByteBufferUtil.readVarInt;
+import static net.dragonmounts.util.ByteBufferUtil.writeVarInt;
 
 public class SSyncBannerPacket implements IMessage {
     public static void writeBanners(ByteBuf raw, int flag, ItemStack[] banners) {
@@ -51,7 +51,7 @@ public class SSyncBannerPacket implements IMessage {
             try {
                 banners[i] = buffer.readItemStack();
             } catch (IOException e) {
-                DMUtils.getLogger().error("Error reading item stack", e);
+                LogUtil.LOGGER.error("Error reading item stack", e);
                 banners[i] = ItemStack.EMPTY;
             }
         }

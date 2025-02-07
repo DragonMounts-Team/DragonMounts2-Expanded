@@ -12,19 +12,15 @@ package net.dragonmounts.entity.ai;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.Random;
-
-import static net.minecraft.entity.SharedMonsterAttributes.FOLLOW_RANGE;
 
 /**
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public abstract class EntityAIDragonBase extends EntityAIBase {
-
     protected TameableDragonEntity dragon;
     protected World world;
     protected Random random;
@@ -33,15 +29,6 @@ public abstract class EntityAIDragonBase extends EntityAIBase {
     public EntityAIDragonBase(TameableDragonEntity dragon) {
         this.dragon = dragon;
         this.world = dragon.world;
-        this.random = dragon.getRNG(); 
-        rider = dragon.getControllingPlayer();
-    }
-
-    protected boolean tryMoveToBlockPos(BlockPos pos, double speed) {
-        return dragon.getNavigator().tryMoveToXYZ(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, speed);
-    }
-
-    protected double getFollowRange() {
-        return dragon.getAttributeMap().getAttributeInstance(FOLLOW_RANGE).getAttributeValue();
+        this.random = dragon.getRNG();
     }
 }

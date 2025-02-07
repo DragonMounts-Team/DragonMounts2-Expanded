@@ -24,7 +24,7 @@ public class EntityAIDragonMate extends EntityAIDragonBase {
 
     private TameableDragonEntity dragonMate;
     private int spawnBabyDelay = 0;
-    private double speed;
+    private final double speed;
 
     public EntityAIDragonMate(TameableDragonEntity dragon, double speed) {
         super(dragon);
@@ -84,7 +84,7 @@ public class EntityAIDragonMate extends EntityAIDragonBase {
      * that can be mated with. Returns the first valid mate found.
      */
     private TameableDragonEntity getNearbyMate() {
-        double followRange = getFollowRange();
+        double followRange = dragon.getNavigator().getPathSearchRange();
         List<TameableDragonEntity> nearbyDragons = world.getEntitiesWithinAABB(
                 TameableDragonEntity.class,
                 dragon.getEntityBoundingBox().grow(followRange, followRange, followRange)

@@ -2,6 +2,7 @@ package net.dragonmounts.entity;
 
 import net.dragonmounts.init.CarriageTypes;
 import net.dragonmounts.registry.CarriageType;
+import net.dragonmounts.util.EntityUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
@@ -61,7 +62,7 @@ public class CarriageEntity extends Entity {
     public CarriageEntity(World level) {
         super(level);
         this.preventEntitySpawning = true;
-        this.setSize(0.8F, 0.8F);
+        this.setSize(1.0F, 0.5F);
     }
 
     public CarriageEntity(World level, Vec3d pos) {
@@ -316,34 +317,14 @@ public class CarriageEntity extends Entity {
     }
 
     @Override
-    public boolean isEntityInvulnerable(DamageSource source) {
-        return super.isEntityInvulnerable(source);
-    }
-
-    @Override
     public void updatePassenger(Entity passenger) {
         float f = 0.0F;
         float f1 = (float) ((this.isDead ? 0.009999999776482582D : this.getMountedYOffset()) + passenger.getYOffset());
         Vec3d vec3d = (new Vec3d(f, 0.0D, 0.0D)).rotateYaw(-this.rotationYaw * 0.017453292F - ((float) Math.PI / 2F));
         passenger.setPosition(this.posX + vec3d.x, this.posY + f1, this.posZ + vec3d.z);
         if (!(passenger instanceof EntityPlayer)) {
-            passenger.rotationYaw = this.rotationYaw;
-            passenger.setRotationYawHead(passenger.getRotationYawHead() + this.rotationYaw);
-            this.applyYawToEntity(passenger);
+            EntityUtil.clampYaw(passenger, this.rotationYaw, 105.0F);
         }
-    }
-
-    /**
-     * Applies this boat's yaw to the given entity. Used to update the orientation of its passenger.
-     */
-    protected void applyYawToEntity(Entity passenger) {
-        //float rotation = dragon.isPassenger(this) && this == dragon.getPassengers().get(0) ? -50: dragon.isPassenger(this) && this == dragon.getPassengers().get(0) ? 50: 0;
-        passenger.setRenderYawOffset(this.rotationYaw);
-        float f = MathHelper.wrapDegrees(passenger.rotationYaw - this.rotationYaw);
-        float f1 = MathHelper.clamp(f, -105.0F, 105.0F);
-        passenger.prevRotationYaw += f1 - f;
-        passenger.rotationYaw += f1 - f;
-        passenger.setRotationYawHead(passenger.rotationYaw);
     }
 
     /**

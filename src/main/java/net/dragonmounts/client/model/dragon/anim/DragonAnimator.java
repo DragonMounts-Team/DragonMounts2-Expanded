@@ -9,17 +9,18 @@
  */
 package net.dragonmounts.client.model.dragon.anim;
 
-import net.dragonmounts.DragonMounts;
 import net.dragonmounts.client.model.dragon.DragonModel;
 import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreathHelper;
 import net.dragonmounts.entity.breath.DragonHeadPositionHelper;
 import net.dragonmounts.entity.helper.SegmentSizePositionRotation;
+import net.dragonmounts.util.LogUtil;
 import net.dragonmounts.util.math.Interpolation;
 import net.dragonmounts.util.math.MathX;
 import net.dragonmounts.util.math.Spline;
 import net.minecraft.util.math.Vec3d;
+import org.apache.logging.log4j.Level;
 
 /**
  * Animation control class to put useless reptiles in motion.
@@ -327,7 +328,7 @@ public class DragonAnimator {
                 break;
             }
             default: {
-                DragonMounts.loggerLimit.error_once("unexpected breathstate:" + breathState);
+                LogUtil.once(Level.ERROR, "unexpected breathstate:" + breathState);
                 return;
             }
         }

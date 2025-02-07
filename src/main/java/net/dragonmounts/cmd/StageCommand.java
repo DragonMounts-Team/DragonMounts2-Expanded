@@ -1,8 +1,8 @@
 package net.dragonmounts.cmd;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.helper.DragonLifeStage;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.EntityNotFoundException;
 import net.minecraft.command.ICommandSender;
@@ -34,7 +34,7 @@ public class StageCommand extends DragonHandlerCommand {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "commands.dragon.stage.usage";
+        return "commands.dragonmounts.stage.usage";
     }
 
     @Override
@@ -46,16 +46,16 @@ public class StageCommand extends DragonHandlerCommand {
                 break;
             case 2:
                 dragons = getSelectedDragons(server, sender, args[1]);
-                if (dragons.isEmpty()) throw new EntityNotFoundException("commands.dragon.notFound", args[1]);
+                if (dragons.isEmpty()) throw new EntityNotFoundException("commands.dragonmounts.notFound", args[1]);
                 break;
             default:
-                throw new WrongUsageException("commands.dragon.stage.usage");
+                throw new WrongUsageException("commands.dragonmounts.stage.usage");
         }
         DragonLifeStage stage = this.stages.get(args[0]);
-        if (stage == null) throw new CommandException("commands.dragon.stage.invalid");
+        if (stage == null) throw new CommandException("commands.dragonmounts.stage.invalid");
         for (TameableDragonEntity dragon : dragons) {
             dragon.getLifeStageHelper().setLifeStage(stage);
-            sender.sendMessage(new TextComponentTranslation("commands.dragon.breed.success", dragon.getDisplayName(), stage.identifier));
+            sender.sendMessage(new TextComponentTranslation("commands.dragonmounts.stage.success", dragon.getDisplayName(), stage.identifier));
         }
     }
 

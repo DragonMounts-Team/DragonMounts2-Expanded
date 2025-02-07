@@ -2,11 +2,11 @@ package net.dragonmounts.client.gui;
 
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
+import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.client.model.dragon.anim.DragonAnimator;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.inventory.ContainerDragon;
 import net.dragonmounts.network.MessageDragonGui;
-import net.dragonmounts.util.DMUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -115,7 +115,7 @@ public class GuiDragon extends GuiContainer {
         this.buttonList.clear();
         Keyboard.enableRepeatEvents(true);
         buttonList.add(lockButton = new LockButton(2, width / 2 + 63, height / 2 - 54, 18, 20, dragon));
-        buttonList.add(new GuiButton(1, width / 2 + 45, height / 2 - 54, 18, 20, DMUtils.translateToLocal("gui.dragon.sit")));
+        buttonList.add(new GuiButton(1, width / 2 + 45, height / 2 - 54, 18, 20, ClientUtil.translateToLocal("gui.dragonmounts.sit")));
     }
 
     @Override

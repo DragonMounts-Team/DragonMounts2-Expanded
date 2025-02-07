@@ -10,27 +10,22 @@
 package net.dragonmounts.entity.ai.ground;
 
 import net.dragonmounts.entity.TameableDragonEntity;
-
 import net.minecraft.entity.ai.EntityAILookIdle;
 /**
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public class EntityAIDragonWatchIdle extends EntityAILookIdle {
+    private final TameableDragonEntity dragon;
 
-    private TameableDragonEntity dragon;
-
-    public EntityAIDragonWatchIdle(TameableDragonEntity par1EntityLiving) {
-        super(par1EntityLiving);
-        this.dragon = par1EntityLiving;
+    public EntityAIDragonWatchIdle(TameableDragonEntity dragon) {
+        super(dragon);
+        this.dragon = dragon;
         this.setMutexBits(2);
     }
 
     @Override
     public boolean shouldExecute() {
-        if(dragon.getControllingPlayer()!=null) {
-            return  false;
-        }
-        return super.shouldExecute();
+        return dragon.getControllingPlayer() == null && super.shouldExecute();
     }
 }

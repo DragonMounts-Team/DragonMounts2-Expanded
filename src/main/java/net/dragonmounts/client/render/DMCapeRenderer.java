@@ -33,7 +33,7 @@ public class DMCapeRenderer {
     }
 
     @SubscribeEvent
-    public void playerRender(RenderPlayerEvent.Pre event) {
+    public static void playerRender(RenderPlayerEvent.Pre event) {
         EntityPlayer player = event.getEntityPlayer();
         if (player instanceof AbstractClientPlayer) {
             NetworkPlayerInfo info = ((AbstractClientPlayer) player).playerInfo;

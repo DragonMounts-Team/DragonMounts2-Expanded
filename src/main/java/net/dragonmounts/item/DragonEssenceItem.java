@@ -43,7 +43,7 @@ public class DragonEssenceItem extends Item implements IEntityContainer<Tameable
     public EnumActionResult onItemUse(EntityPlayer player, World level, BlockPos clicked, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (level.isRemote) return EnumActionResult.FAIL;
         ItemStack stack = player.getHeldItem(hand);
-        Entity entity = this.loadEntity(level, stack, player, clicked.offset(facing), true, "dragon.notOwned");
+        Entity entity = this.loadEntity(level, stack, player, clicked.offset(facing), true, "message.dragonmounts.dragon.notOwner");
         if (entity == null) return EnumActionResult.FAIL;
         if (!player.capabilities.isCreativeMode) {
             stack.shrink(1);

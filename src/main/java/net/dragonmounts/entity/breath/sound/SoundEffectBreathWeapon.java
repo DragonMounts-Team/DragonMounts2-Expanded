@@ -1,8 +1,8 @@
 package net.dragonmounts.entity.breath.sound;
 
-import net.dragonmounts.DragonMounts;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.helper.DragonLifeStage;
+import net.dragonmounts.util.LogUtil;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.PositionedSound;
@@ -10,6 +10,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
+import org.apache.logging.log4j.Level;
 
 import java.util.Collection;
 
@@ -148,7 +149,7 @@ public class SoundEffectBreathWeapon {
           break;
         }
         default: {
-          DragonMounts.loggerLimit.error_once(
+          LogUtil.once(Level.ERROR,
                   "Illegal weaponSoundInfo.breathingState:" + weaponSoundInfo.breathingState + " in " + this
                           .getClass());
         }
@@ -179,7 +180,7 @@ public class SoundEffectBreathWeapon {
         break;
       }
       default: {
-        DragonMounts.loggerLimit.error_once("Unknown currentWeaponState:" + currentWeaponState);
+        LogUtil.once(Level.ERROR, "Unknown currentWeaponState:" + currentWeaponState);
       }
     }
   }

@@ -2,7 +2,7 @@ package net.dragonmounts.entity.breath;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.dragonmounts.DragonMounts;
+import net.dragonmounts.util.LogUtil;
 import net.dragonmounts.util.math.Base64;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityLookHelper;
@@ -13,6 +13,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.Level;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -154,7 +155,7 @@ public class BreathWeaponTarget
         return (entityPlayer == null) ? null : targetDirection(entityPlayer.getLook(1.0F));
       }
       default: {
-        DragonMounts.loggerLimit.error_once("Unknown typeOfHit:" + movingObjectPosition.typeOfHit);
+        LogUtil.once(Level.ERROR, "Unknown typeOfHit:" + movingObjectPosition.typeOfHit);
         return null;
       }
     }
@@ -192,7 +193,7 @@ public class BreathWeaponTarget
         break;
       }
       default: {
-        DragonMounts.loggerLimit.error_once("Unknown typeOfTarget:" + typeOfTarget);
+        LogUtil.once(Level.ERROR, "Unknown typeOfTarget:" + typeOfTarget);
         break;
       }
     }
@@ -222,7 +223,7 @@ public class BreathWeaponTarget
         break;
       }
       default: {
-        DragonMounts.loggerLimit.error_once("Unknown typeOfTarget:" + typeOfTarget);
+        LogUtil.once(Level.ERROR, "Unknown typeOfTarget:" + typeOfTarget);
         break;
       }
     }
@@ -253,7 +254,7 @@ public class BreathWeaponTarget
         return;
       }
       default: {
-        DragonMounts.loggerLimit.error_once("Unknown typeOfTarget:" + typeOfTarget);
+        LogUtil.once(Level.ERROR, "Unknown typeOfTarget:" + typeOfTarget);
         return;
       }
     }
@@ -319,7 +320,7 @@ public class BreathWeaponTarget
         return -1;
       }
       default: {
-        DragonMounts.loggerLimit.error_once("Unknown typeOfTarget:" + typeOfTarget);
+        LogUtil.once(Level.ERROR, "Unknown typeOfTarget:" + typeOfTarget);
         return -1;
       }
     }
@@ -351,7 +352,7 @@ public class BreathWeaponTarget
         break;
       }
       default: {
-        DragonMounts.loggerLimit.error_once("Unexpected target type:" + typeOfTarget);
+        LogUtil.once(Level.ERROR, "Unexpected target type:" + typeOfTarget);
         destination = null;
         break;
       }
@@ -378,7 +379,7 @@ public class BreathWeaponTarget
         break;
       }
       default: {
-        DragonMounts.loggerLimit.error_once("Unknown type of hit:" + typeOfTarget);
+        LogUtil.once(Level.ERROR, "Unknown type of hit:" + typeOfTarget);
         break;
       }
     }
@@ -451,7 +452,7 @@ public class BreathWeaponTarget
         return cosAngle > Math.cos(Math.toRadians(THRESHOLD_CHANGE_IN_ANGLE));
       }
       default: {
-        DragonMounts.loggerLimit.error_once("invalid typeOfTarget:" + typeOfTarget);
+        LogUtil.once(Level.ERROR, "invalid typeOfTarget:" + typeOfTarget);
         return false;
       }
     }
@@ -477,7 +478,7 @@ public class BreathWeaponTarget
                 && this.coordinates.z == other.coordinates.z);
       }
       default: {
-        DragonMounts.loggerLimit.error_once("invalid typeOfTarget:" + typeOfTarget);
+        LogUtil.once(Level.ERROR, "invalid typeOfTarget:" + typeOfTarget);
         return false;
       }
     }

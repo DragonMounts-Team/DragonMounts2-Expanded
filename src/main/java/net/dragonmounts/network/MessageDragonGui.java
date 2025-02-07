@@ -1,14 +1,14 @@
 package net.dragonmounts.network;
 
-import net.dragonmounts.entity.TameableDragonEntity;
 import io.netty.buffer.ByteBuf;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-import static net.dragonmounts.util.VarInt.readVarInt;
-import static net.dragonmounts.util.VarInt.writeVarInt;
+import static net.dragonmounts.util.ByteBufferUtil.readVarInt;
+import static net.dragonmounts.util.ByteBufferUtil.writeVarInt;
 
 public class MessageDragonGui implements IMessage {
 
