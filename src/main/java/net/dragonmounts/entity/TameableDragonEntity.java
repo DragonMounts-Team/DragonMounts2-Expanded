@@ -1651,6 +1651,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     @Override
     public void readSpawnData(ByteBuf buffer) {
         this.inventory.readSpawnData(buffer);
+        this.getLifeStageHelper().sync();
     }
 
     @Override

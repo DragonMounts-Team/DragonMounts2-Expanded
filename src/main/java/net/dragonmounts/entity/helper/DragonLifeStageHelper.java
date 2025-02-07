@@ -25,7 +25,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import org.apache.logging.log4j.Level;
@@ -295,12 +294,7 @@ public class DragonLifeStageHelper extends DragonHelper {
         double ox = (rand.nextDouble() - 0.3) * 2;
         double oy = (rand.nextDouble() - 0.3) * 2;
         double oz = (rand.nextDouble() - 0.3) * 2;
-        dragon.world.spawnParticle(this.getEggParticle(), px, py, pz, ox, oy, oz);
-
-    }
-
-    protected EnumParticleTypes getEggParticle() {
-        return this.dragon.getVariant().type.eggParticle;
+        dragon.world.spawnParticle(this.dragon.getVariant().type.eggParticle, px, py, pz, ox, oy, oz);
     }
 
     @Override
@@ -345,7 +339,7 @@ public class DragonLifeStageHelper extends DragonHelper {
     public void ageUp(int ticks) {
         // if the dragon is not an adult or paused, update its growth ticks
         if (dragon.world.isRemote) {
-            ticksSinceCreationClient.updateFromServer(dataWatcher.get(dataParam));
+            this.sync();
             if (!isFullyGrown()) ticksSinceCreationClient.tick();
         } else {
             if (!isFullyGrown() && !dragon.isGrowthPaused()) {
@@ -357,5 +351,9 @@ public class DragonLifeStageHelper extends DragonHelper {
         updateLifeStage();
         updateEgg();
         dragon.setScalePublic(getScale());
+    }
+
+    public void sync() {
+        this.ticksSinceCreationClient.updateFromServer(this.dataWatcher.get(this.dataParam));
     }
 }

@@ -11,6 +11,7 @@ package net.dragonmounts.client.gui;
 
 import it.unimi.dsi.fastutil.objects.Reference2IntMap;
 import net.dragonmounts.DragonMounts;
+import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.entity.TameableDragonEntity;
@@ -49,15 +50,13 @@ import java.util.Collection;
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public class GuiDragonDebug extends Gui {
-    
     private static final int WHITE = 0xFFFFFF;
     private static final int GREY = 0xAAAAAA;
     private static final int YELLOW = 0xFFFF00;
     private static final int RED = 0xFF8888;
 
     public static Object probe; // what is this? --2190303755
-    public static boolean enabled = true;
-    
+
     private final Minecraft mc = Minecraft.getMinecraft();
     private final GuiTextPrinter text;
     private final DecimalFormat dfShort = new DecimalFormat("0.00");
@@ -65,14 +64,14 @@ public class GuiDragonDebug extends Gui {
     private ScaledResolution res;
     private TameableDragonEntity clientCache;
     private TameableDragonEntity serverCache;
-    
+
     public GuiDragonDebug() {
         text = new GuiTextPrinter(mc.fontRenderer);
     }
     
     @SubscribeEvent
     public void onRenderOverlay(RenderGameOverlayEvent event) {
-        if (!enabled || event.isCancelable() || event.getType() != ElementType.TEXT) return;
+        if (!DragonMountsConfig.debugScreen || event.isCancelable() || event.getType() != ElementType.TEXT) return;
         TameableDragonEntity client = this.getClientDragon();
         if (client == null) return;
         TameableDragonEntity server = this.getServerDragon(client);
@@ -99,7 +98,7 @@ public class GuiDragonDebug extends Gui {
             } else {
                 renderEntityInfo(selected);
             }
-            renderProbe();
+            //renderProbe();
         } catch (Exception ex) {
             renderException(ex);
         }
