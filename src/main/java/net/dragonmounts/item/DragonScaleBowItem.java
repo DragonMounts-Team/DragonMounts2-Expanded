@@ -26,7 +26,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
+
 public class DragonScaleBowItem extends ItemBow {
+    public static final String TRANSLATION_KEY = TRANSLATION_KEY_PREFIX + "dragon_scale_bow";
     public final DragonType type;
     public final int enchantability;
 

@@ -2,6 +2,7 @@ package net.dragonmounts.compat;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.dragonmounts.block.DragonEggCompatBlock;
+import net.dragonmounts.block.HatchableDragonEggBlock;
 import net.dragonmounts.compat.fixer.DMBlockEntityCompat;
 import net.dragonmounts.compat.fixer.DragonEntityCompat;
 import net.dragonmounts.init.DMBlocks;
@@ -18,10 +19,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod.EventBusSubscriber
 public abstract class DragonMountsCompat {
-    public static final int VERSION = 0;
+    public static final int VERSION = 1;
     public static final Object2ObjectOpenHashMap<String, Item> ITEM_MAPPINGS;
     public static final DragonEntityCompat DRAGON_ENTITY_FIX = new DragonEntityCompat();
-    public static final Block DRAGON_EGG_BLOCK = new DragonEggCompatBlock().setTranslationKey("dragon_egg").setRegistryName("dragon_egg");
+    public static final Block DRAGON_EGG_BLOCK = new DragonEggCompatBlock().setTranslationKey(HatchableDragonEggBlock.TRANSLATION_KEY).setRegistryName("dragon_egg");
     public static final Item DRAGON_EGG_ITEM = new DragonEggCompatItem().setRegistryName("dragon_egg");
 
     public static void load(ModFixs fixer) {
@@ -60,7 +61,8 @@ public abstract class DragonMountsCompat {
         mappings.put("block_dragon_shulker", DMItems.DRAGON_CORE);
         //Misc
         mappings.put("dragon_amulet", DMItems.AMULET);
-        mappings.put("dragon_gender", DMItems.VARIANT_SWITCHER);
+        mappings.put("dragon_gender", DMItems.VARIATION_ORB);
+        mappings.put("variant_switcher", DMItems.VARIATION_ORB);
         mappings.put("end_dragon_amulet", DMItems.ENDER_DRAGON_AMULET);
         mappings.put("end_dragon_essence", DMItems.ENDER_DRAGON_ESSENCE);
         //Carriage

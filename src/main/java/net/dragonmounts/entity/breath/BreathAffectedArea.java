@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.dragonmounts.DragonMountsConfig;
-import net.dragonmounts.entity.breath.weapons.BreathWeapon;
 import net.dragonmounts.util.MutableBlockPosEx;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -55,7 +54,7 @@ public class BreathAffectedArea {
     /**
      * updates the BreathAffectedArea, called once per tick
      */
-    public void updateTick(World world, BreathWeapon weapon) {
+    public void updateTick(World world, DragonBreath weapon) {
         int size = this.entityBreathNodes.size();
         if (size == 0) return;
         ObjectArrayList<NodeLineSegment> segments = new ObjectArrayList<>(size);
@@ -80,14 +79,14 @@ public class BreathAffectedArea {
         this.affectedEntities.entrySet().removeIf(predicate);
     }
 
-    private static void implementEffectsOnBlocksTick(World world, BreathWeapon weapon, Map<BlockPos, BreathAffectedBlock> affectedBlocks) {
+    private static void implementEffectsOnBlocksTick(World world, DragonBreath weapon, Map<BlockPos, BreathAffectedBlock> affectedBlocks) {
         if (!DragonMountsConfig.doBreathweaponsAffectBlocks()) return;
         for (Map.Entry<BlockPos, BreathAffectedBlock> blockInfo : affectedBlocks.entrySet()) {
             blockInfo.setValue(weapon.affectBlock(world, blockInfo.getKey(), blockInfo.getValue()));
         }
     }
 
-    private static void implementEffectsOnEntitiesTick(World world, BreathWeapon weapon, Map<EntityLivingBase, BreathAffectedEntity> affectedEntities) {
+    private static void implementEffectsOnEntitiesTick(World world, DragonBreath weapon, Map<EntityLivingBase, BreathAffectedEntity> affectedEntities) {
         Iterator<Map.Entry<EntityLivingBase, BreathAffectedEntity>> iterator = affectedEntities.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<EntityLivingBase, BreathAffectedEntity> entry = iterator.next();
@@ -117,7 +116,7 @@ public class BreathAffectedArea {
      */
     private static void updateBlockAndEntityHitDensities(
             World world,
-            BreathWeapon weapon,
+            DragonBreath weapon,
             List<NodeLineSegment> nodeLineSegments,
             List<EntityBreathNode> entityBreathNodes,
             Map<BlockPos, BreathAffectedBlock> affectedBlocks,

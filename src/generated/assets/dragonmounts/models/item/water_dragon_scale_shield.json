@@ -1,7 +1,7 @@
 {
   "parent": "dragonmounts:item/shield/shield",
   "textures": {
-    "base": "dragonmounts:entities/dragon_shield/water"
+    "base": "dragonmounts:entities/dragon_scale_shield/water"
   },
   "overrides": [
     {

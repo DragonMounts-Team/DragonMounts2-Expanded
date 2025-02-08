@@ -17,7 +17,7 @@ public class DMKeyBindings {
     public static void init() {
         KEY_BREATH = new KeyBinding("key.dragonmounts.breath", Keyboard.KEY_R, KEY_CATEGORY);
         KEY_BOOST = new KeyBinding("key.dragonmounts.boost", Keyboard.KEY_LCONTROL, KEY_CATEGORY);
-        KEY_DESCENT = new KeyBinding("key.dragonmounts.descent", Keyboard.KEY_LMENU, KEY_CATEGORY);
+        KEY_DESCENT = new KeyBinding("key.dragonmounts.descent", Keyboard.KEY_NONE, KEY_CATEGORY);
         TOGGLE_CAMERA_POS = new KeyBinding("key.dragonmounts.toggleCameraPos", Keyboard.KEY_F7, KEY_CATEGORY);
         TOGGLE_HOVERING = new KeyBinding("key.dragonmounts.toggleHovering", Keyboard.KEY_NONE, KEY_CATEGORY);
         TOGGLE_YAW_ALIGNMENT = new KeyBinding("key.dragonmounts.toggleYawAlignment", Keyboard.KEY_NONE, KEY_CATEGORY);

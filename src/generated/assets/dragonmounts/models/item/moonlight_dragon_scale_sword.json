@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "dragonmounts:items/tools/sword/moonlight_dragon_sword"
+    "layer0": "dragonmounts:items/sword/moonlight_dragon_sword"
   }
 }

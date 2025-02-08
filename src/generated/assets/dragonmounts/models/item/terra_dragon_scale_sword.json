@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "dragonmounts:items/tools/sword/terra_dragon_sword"
+    "layer0": "dragonmounts:items/sword/terra_dragon_sword"
   }
 }

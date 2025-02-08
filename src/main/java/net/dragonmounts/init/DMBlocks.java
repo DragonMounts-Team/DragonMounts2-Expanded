@@ -8,6 +8,8 @@ import net.dragonmounts.registry.DragonType;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 
+import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
+
 
 public class DMBlocks {
     public static final ObjectArrayList<Block> BLOCKS = new ObjectArrayList<>();
@@ -31,14 +33,14 @@ public class DMBlocks {
     public static final HatchableDragonEggBlock DARK_DRAGON_EGG = registerDragonEgg("dark_dragon_egg", DragonTypes.DARK);
 
     static <T extends Block> T register(String name, T block) {
-        BLOCKS.add(block.setTranslationKey(name).setRegistryName(name));
+        BLOCKS.add(block.setTranslationKey(TRANSLATION_KEY_PREFIX + name).setRegistryName(name));
         return block;
     }
 
     static HatchableDragonEggBlock registerDragonEgg(String name, DragonType type) {
         HatchableDragonEggBlock block = new HatchableDragonEggBlock(type);
         type.bindInstance(HatchableDragonEggBlock.class, block);
-        BLOCKS.add(block.setRegistryName(name));
+        BLOCKS.add(block.setTranslationKey(HatchableDragonEggBlock.TRANSLATION_KEY).setRegistryName(name));
         DMItems.ITEMS.add(new ItemBlock(block).setRegistryName(name));
         return block;
     }

@@ -45,45 +45,45 @@ life_stage.dragon.adult=成体
 ##
 # Item Names
 ##
-item.diamond_shears.name=ダイヤのハサミ
-item.dragon_spawn_egg.name=ドラゴンのスポーンエッグ
-item.dragon_essence.name=ドラゴンエッセンス
-item.dragon_whistle.name=ドラゴンホイッスル
-item.dragon_amulet.name=ドラゴンアミュレット
-item.dragon_orb.name=ドラゴンオーブ
+item.dragonmounts.diamond_shears.name=ダイヤのハサミ
+item.dragonmounts.dragon_spawn_egg.name=ドラゴンのスポーンエッグ
+item.dragonmounts.dragon_essence.name=ドラゴンエッセンス
+item.dragonmounts.dragon_whistle.name=ドラゴンホイッスル
+item.dragonmounts.dragon_amulet.name=ドラゴンアミュレット
+item.dragonmounts.dragon_orb.name=ドラゴンオーブ
 ##### Untranslated
 item.dragonmounts.variation_orb.name=Orb of Variation
 
-item.oak_carriage.name=オークのカーゴボブ
-item.birch_carriage.name=白樺のカーゴボブ
-item.spruce_carriage.name=トウヒのカーゴボブ
-item.acacia_carriage.name=アカシアのカーゴボブ
-item.dark_oak_carriage.name=ダークオークのカーゴボブ
-item.jungle_carriage.name=ジャングルのカーゴボブ
+item.dragonmounts.oak_carriage.name=オークのカーゴボブ
+item.dragonmounts.birch_carriage.name=白樺のカーゴボブ
+item.dragonmounts.spruce_carriage.name=トウヒのカーゴボブ
+item.dragonmounts.acacia_carriage.name=アカシアのカーゴボブ
+item.dragonmounts.dark_oak_carriage.name=ダークオークのカーゴボブ
+item.dragonmounts.jungle_carriage.name=ジャングルのカーゴボブ
 
 # Armory Items
-item.dragon_scales.name=ドラゴンスケール
-item.dragon_scale_sword.name=ドラゴンソード
-item.dragon_scale_pickaxe.name=ドラゴンピッケル
-item.dragon_scale_axe.name=ドラゴンアックス
-item.dragon_scale_shovel.name=ドラゴンシャベル
-item.dragon_scale_hoe.name=ドラゴンのクワ
-item.dragon_scale_shield.name=ドラゴンシールド
-item.dragon_scale_bow.name=ドラゴンボウ
-item.dragon_scale_helmet.name=ドラゴンスケールキャップ
-item.dragon_scale_chestplate.name=ドラゴンスケールチェスト
-item.dragon_scale_leggings.name=ドラゴンスケールレギンス
-item.dragon_scale_boots.name=ドラゴンスケールブーツ
-item.diamond_dragon_armor.name=ダイヤモンドドラゴンアーマー
-item.iron_dragon_armor.name=アイアンドラゴンアーマー
-item.golden_dragon_armor.name=ゴールドドラゴンアーマー
-item.emerald_dragon_armor.name=エメラルドドラゴンアーマー
+item.dragonmounts.dragon_scales.name=ドラゴンスケール
+item.dragonmounts.dragon_scale_sword.name=ドラゴンソード
+item.dragonmounts.dragon_scale_pickaxe.name=ドラゴンピッケル
+item.dragonmounts.dragon_scale_axe.name=ドラゴンアックス
+item.dragonmounts.dragon_scale_shovel.name=ドラゴンシャベル
+item.dragonmounts.dragon_scale_hoe.name=ドラゴンのクワ
+item.dragonmounts.dragon_scale_shield.name=ドラゴンシールド
+item.dragonmounts.dragon_scale_bow.name=ドラゴンボウ
+item.dragonmounts.dragon_scale_helmet.name=ドラゴンスケールキャップ
+item.dragonmounts.dragon_scale_chestplate.name=ドラゴンスケールチェスト
+item.dragonmounts.dragon_scale_leggings.name=ドラゴンスケールレギンス
+item.dragonmounts.dragon_scale_boots.name=ドラゴンスケールブーツ
+item.dragonmounts.diamond_dragon_armor.name=ダイヤモンドドラゴンアーマー
+item.dragonmounts.iron_dragon_armor.name=アイアンドラゴンアーマー
+item.dragonmounts.golden_dragon_armor.name=ゴールドドラゴンアーマー
+item.dragonmounts.emerald_dragon_armor.name=エメラルドドラゴンアーマー
 
 # Tiles
-tile.dragon_nest.name=ネストブロック
-tile.dragon_core.name=ドラゴンコア
-tile.dragon_head.name=ドラゴンの頭
-tile.dragon_egg.name=ドラゴンの卵
+tile.dragonmounts.dragon_nest.name=ネストブロック
+tile.dragonmounts.dragon_core.name=ドラゴンコア
+tile.dragonmounts.dragon_head.name=ドラゴンの頭
+tile.dragonmounts.dragon_egg.name=ドラゴンの卵
 
 ##
 # Messages

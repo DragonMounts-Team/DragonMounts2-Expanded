@@ -9,11 +9,11 @@ import it.unimi.dsi.fastutil.objects.ReferenceSets;
 import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathPower;
+import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.effects.FlameBreathFX;
+import net.dragonmounts.entity.breath.impl.FireBreath;
 import net.dragonmounts.entity.breath.sound.SoundEffectName;
 import net.dragonmounts.entity.breath.sound.SoundState;
-import net.dragonmounts.entity.breath.weapons.BreathWeapon;
-import net.dragonmounts.entity.breath.weapons.FireBreath;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.util.DMUtils;
@@ -125,7 +125,7 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
     }
 
     @Nullable
-    public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
+    public DragonBreath initBreath(TameableDragonEntity dragon) {
         return new FireBreath(dragon, 0.7F);
     }
 

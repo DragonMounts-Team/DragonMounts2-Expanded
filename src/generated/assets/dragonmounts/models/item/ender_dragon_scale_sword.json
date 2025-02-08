@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "dragonmounts:items/tools/sword/ender_dragon_sword"
+    "layer0": "dragonmounts:items/sword/ender_dragon_sword"
   }
 }

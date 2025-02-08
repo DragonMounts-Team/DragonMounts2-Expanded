@@ -25,7 +25,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
+
 public class HatchableDragonEggBlock extends BlockDragonEgg {
+    public static final String TRANSLATION_KEY = TRANSLATION_KEY_PREFIX + "dragon_egg";
     @Nullable
     public static TameableDragonEntity spawn(World level, BlockPos pos, DragonType type) {
         level.setBlockToAir(pos);
@@ -44,7 +47,6 @@ public class HatchableDragonEggBlock extends BlockDragonEgg {
     public HatchableDragonEggBlock(DragonType type) {
         this.type = type;
         this.setSoundType(SoundType.STONE)
-                .setTranslationKey("dragon_egg")
                 .setHardness(0)
                 .setResistance(30)
                 .setLightLevel(0.125F)

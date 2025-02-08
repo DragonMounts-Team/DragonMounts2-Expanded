@@ -15,12 +15,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
+
 public class DragonScalePickaxeItem extends ItemPickaxe {
+    public static final String TRANSLATION_KEY = TRANSLATION_KEY_PREFIX + "dragon_scale_pickaxe";
     public final DragonType type;
 
     public DragonScalePickaxeItem(Item.ToolMaterial material, DragonType type) {
         super(material);
-        this.setTranslationKey("dragon_scale_pickaxe");
         this.type = type;
     }
 

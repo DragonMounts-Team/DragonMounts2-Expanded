@@ -70,7 +70,7 @@ public class DragonCoreBlock extends BlockContainer {
         if (worldIn.isRemote) return true;
         else if (playerIn.isSpectator()) return true;
         else if (worldIn.getTileEntity(pos) instanceof DragonCoreBlockEntity) {
-            playerIn.openGui(DragonMounts.INSTANCE, GuiHandler.GUI_DRAGON_CORE, worldIn, pos.getX(), pos.getY(), pos.getZ());
+            playerIn.openGui(DragonMounts.getInstance(), GuiHandler.GUI_DRAGON_CORE, worldIn, pos.getX(), pos.getY(), pos.getZ());
             return true;
         }
         return false;

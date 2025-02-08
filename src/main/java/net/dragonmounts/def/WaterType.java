@@ -2,11 +2,11 @@ package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathPower;
+import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.effects.HydroBreathFX;
+import net.dragonmounts.entity.breath.impl.WaterBreath;
 import net.dragonmounts.entity.breath.sound.SoundEffectName;
 import net.dragonmounts.entity.breath.sound.SoundState;
-import net.dragonmounts.entity.breath.weapons.BreathWeapon;
-import net.dragonmounts.entity.breath.weapons.BreathWeaponHydro;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.EntityUtil;
@@ -51,8 +51,8 @@ public class WaterType extends DragonType {
 
     @Nullable
     @Override
-    public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
-        return new BreathWeaponHydro(dragon, 0.7F);
+    public DragonBreath initBreath(TameableDragonEntity dragon) {
+        return new WaterBreath(dragon, 0.7F);
     }
 
     @Override

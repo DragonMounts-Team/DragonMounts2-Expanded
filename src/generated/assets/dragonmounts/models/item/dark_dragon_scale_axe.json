@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "dragonmounts:items/tools/axe/dark_dragon_axe"
+    "layer0": "dragonmounts:items/axe/dark_dragon_axe"
   }
 }

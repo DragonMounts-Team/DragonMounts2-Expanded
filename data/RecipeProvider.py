@@ -155,7 +155,7 @@ def generateRecipes(output: Output):
     .pattern('X ')\
     .unlockedBy('has_diamond', hasDiamond)\
     .save(output, 'combat')
-  shaped(makeId('variant_switcher'))\
+  shaped(makeId('variation_orb'))\
     .define('W', 'emerald')\
     .define('o', 'gold_ingot')\
     .define('z', ingot['diamond'])\
@@ -175,15 +175,15 @@ def generateRecipes(output: Output):
     .unlockedBy('has_bow', has(dragonScaleBows))\
     .save(output, 'redstone')
   for material in DragonArmorMaterial:
-    block = material.value[1]
-    shaped(makeId(material.name.lower() + '_dragon_armor'))\
+    items = material.value
+    shaped(items[0])\
       .groupBy('dragon_armor')\
-      .define('#', material.value[0])\
-      .define('X', block)\
+      .define('#', items[1])\
+      .define('X', items[2])\
       .pattern('X #')\
       .pattern(' XX')\
       .pattern('## ')\
-      .unlockedBy('has_block', has(block))\
+      .unlockedBy('has_block', has(items[2]))\
       .save(output, 'combat')
   shaped('saddle')\
     .define('#', ingot['iron'])\

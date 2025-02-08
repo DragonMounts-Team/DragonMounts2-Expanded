@@ -2,9 +2,9 @@ package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathPower;
+import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.effects.EnderBreathFX;
-import net.dragonmounts.entity.breath.weapons.BreathWeapon;
-import net.dragonmounts.entity.breath.weapons.BreathWeaponEnder;
+import net.dragonmounts.entity.breath.impl.EnderBreath;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.init.SoundEvents;
@@ -19,8 +19,8 @@ public class EnderType extends DragonType {
     }
 
     @Override
-    public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
-        return new BreathWeaponEnder(dragon, 0.9F);
+    public DragonBreath initBreath(TameableDragonEntity dragon) {
+        return new EnderBreath(dragon, 0.9F);
     }
 
     @Override

@@ -34,7 +34,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static net.dragonmounts.item.DragonSpawnEggItem.DRAGON_ID;
+import static net.dragonmounts.init.DMEntities.DRAGON_ID;
 import static net.dragonmounts.util.EntityUtil.notOwner;
 
 public class AmuletItem<E extends Entity> extends Item implements IEntityContainer<E>, ICapabilityProvider {

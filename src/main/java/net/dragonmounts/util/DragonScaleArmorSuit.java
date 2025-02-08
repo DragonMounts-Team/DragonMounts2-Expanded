@@ -6,7 +6,13 @@ import net.dragonmounts.registry.DragonType;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 
+import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
+
 public class DragonScaleArmorSuit extends ArmorSuit<DragonScaleArmorItem> {
+    public static final String TRANSLATION_KEY_HELMET = TRANSLATION_KEY_PREFIX + "dragon_scale_helmet";
+    public static final String TRANSLATION_KEY_CHESTPLATE = TRANSLATION_KEY_PREFIX + "dragon_scale_chestplate";
+    public static final String TRANSLATION_KEY_LEGGINGS = TRANSLATION_KEY_PREFIX + "dragon_scale_leggings";
+    public static final String TRANSLATION_KEY_BOOTS = TRANSLATION_KEY_PREFIX + "dragon_scale_boots";
     public final ItemArmor.ArmorMaterial material;
     public final IDescribableArmorEffect effect;
     public final DragonType type;
@@ -21,9 +27,5 @@ public class DragonScaleArmorSuit extends ArmorSuit<DragonScaleArmorItem> {
         this.type = type;
         this.material = material;
         this.effect = effect;
-        this.helmet.setTranslationKey("dragon_scale_helmet");
-        this.chestplate.setTranslationKey("dragon_scale_chestplate");
-        this.leggings.setTranslationKey("dragon_scale_leggings");
-        this.boots.setTranslationKey("dragon_scale_boots");
     }
 }

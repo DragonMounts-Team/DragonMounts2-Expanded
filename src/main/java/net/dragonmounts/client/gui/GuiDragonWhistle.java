@@ -2,9 +2,9 @@ package net.dragonmounts.client.gui;
 
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.client.ClientUtil;
+import net.dragonmounts.network.CSitOrderPacket;
+import net.dragonmounts.network.CTeleportOrderPacket;
 import net.dragonmounts.network.CUnbindWhistlePacket;
-import net.dragonmounts.network.MessageDragonSit;
-import net.dragonmounts.network.MessageDragonTeleport;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -56,10 +56,10 @@ public class GuiDragonWhistle extends GuiScreen {
                     break;
                 case 2:
                     EntityPlayer player = this.mc.player;
-                    DragonMounts.NETWORK_WRAPPER.sendToServer(new MessageDragonTeleport(uuid, player.rotationPitch, player.rotationYawHead));
+                    DragonMounts.NETWORK_WRAPPER.sendToServer(new CTeleportOrderPacket(uuid, player.rotationPitch, player.rotationYawHead));
                     break;
                 case 3:
-                    DragonMounts.NETWORK_WRAPPER.sendToServer(new MessageDragonSit(uuid));
+                    DragonMounts.NETWORK_WRAPPER.sendToServer(new CSitOrderPacket(uuid));
                     break;
             }
 

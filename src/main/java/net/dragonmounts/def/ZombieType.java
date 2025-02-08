@@ -2,11 +2,11 @@ package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathPower;
+import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.effects.PoisonBreathFX;
+import net.dragonmounts.entity.breath.impl.ZombieBreath;
 import net.dragonmounts.entity.breath.sound.SoundEffectName;
 import net.dragonmounts.entity.breath.sound.SoundState;
-import net.dragonmounts.entity.breath.weapons.BreathWeapon;
-import net.dragonmounts.entity.breath.weapons.BreathWeaponPoison;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.registry.DragonType;
@@ -24,8 +24,8 @@ public class ZombieType extends DragonType {
 
     @Nullable
     @Override
-    public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
-        return new BreathWeaponPoison(dragon, 0.6F);
+    public DragonBreath initBreath(TameableDragonEntity dragon) {
+        return new ZombieBreath(dragon, 0.6F);
     }
 
     @Override

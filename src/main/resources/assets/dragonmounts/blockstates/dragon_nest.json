@@ -1,7 +1,7 @@
 {
-    "variants": {
-	    "normal":{
-		    "model": "dragonmounts:dragon_nest"
-		} 
-	}  
+  "variants": {
+    "normal":{
+      "model": "dragonmounts:dragon_nest"
+    }
+  }
 }

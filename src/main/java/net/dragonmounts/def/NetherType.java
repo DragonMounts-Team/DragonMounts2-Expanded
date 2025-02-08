@@ -2,9 +2,9 @@ package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathPower;
+import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.effects.NetherBreathFX;
-import net.dragonmounts.entity.breath.weapons.BreathWeapon;
-import net.dragonmounts.entity.breath.weapons.BreathWeaponNether;
+import net.dragonmounts.entity.breath.impl.NetherBreath;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.registry.DragonType;
@@ -56,8 +56,8 @@ public class NetherType extends DragonType {
     }
 
     @Override
-    public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
-        return new BreathWeaponNether(dragon, 0.9F);
+    public DragonBreath initBreath(TameableDragonEntity dragon) {
+        return new NetherBreath(dragon, 0.9F);
     }
 
     @Override

@@ -13,7 +13,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 
-import static net.dragonmounts.init.DMCapabilities.DRAGON_FOOD;
+import static net.dragonmounts.capability.DMCapabilities.DRAGON_FOOD;
 
 public class Carrot implements ICapabilityProvider, IDragonFood {
     @Override

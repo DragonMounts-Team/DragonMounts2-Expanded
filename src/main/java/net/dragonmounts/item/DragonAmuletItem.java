@@ -1,12 +1,14 @@
 package net.dragonmounts.item;
 
 import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.init.DMItems;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.EntityUtil;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,9 +20,11 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 
+import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
 import static net.dragonmounts.util.EntityUtil.notOwner;
 
 public class DragonAmuletItem extends AmuletItem<TameableDragonEntity> {
+    public static final String TRANSLATION_KEY = TRANSLATION_KEY_PREFIX + "dragon_amulet";
     public final DragonType type;
 
     public DragonAmuletItem(DragonType type) {
@@ -73,6 +77,12 @@ public class DragonAmuletItem extends AmuletItem<TameableDragonEntity> {
         ItemMonsterPlacer.applyItemEntityDataToEntity(level, player, stack, dragon);
         level.playSound(null, pos, SoundEvents.ENTITY_ILLAGER_MIRROR_MOVE, SoundCategory.NEUTRAL, 1, 1);
         return dragon;
+    }
+
+    @Nullable
+    @Override
+    public Item getContainerItem() {
+        return DMItems.AMULET;
     }
 
     @Nullable

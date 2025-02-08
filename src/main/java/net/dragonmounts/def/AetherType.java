@@ -2,11 +2,11 @@ package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathPower;
+import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.effects.AetherBreathFX;
+import net.dragonmounts.entity.breath.impl.AetherBreath;
 import net.dragonmounts.entity.breath.sound.SoundEffectName;
 import net.dragonmounts.entity.breath.sound.SoundState;
-import net.dragonmounts.entity.breath.weapons.BreathWeapon;
-import net.dragonmounts.entity.breath.weapons.BreathWeaponAether;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.entity.Entity;
@@ -44,8 +44,8 @@ public class AetherType extends DragonType {
     }
 
     @Override
-    public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
-        return new BreathWeaponAether(dragon, 0.7F);
+    public DragonBreath initBreath(TameableDragonEntity dragon) {
+        return new AetherBreath(dragon, 0.7F);
     }
 
     @Override

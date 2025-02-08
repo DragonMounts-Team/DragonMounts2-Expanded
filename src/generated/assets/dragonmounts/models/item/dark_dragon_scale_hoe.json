@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "dragonmounts:items/tools/hoe/dark_dragon_hoe"
+    "layer0": "dragonmounts:items/hoe/dark_dragon_hoe"
   }
 }

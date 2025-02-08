@@ -1,7 +1,6 @@
 package net.dragonmounts.item;
 
 import com.mojang.authlib.GameProfile;
-import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.client.gui.GuiDragonWhistle;
 import net.dragonmounts.compat.DragonTypeCompat;
@@ -46,7 +45,7 @@ import static net.minecraft.util.text.translation.I18n.translateToLocal;
  */
 public class DragonWhistleItem extends Item {
     public final String DRAGON_UUID_KEY = "DragonUUID";
-    public final String DEPRECATED_UUID_KEY = DragonMountsTags.MOD_ID + "dragon";
+    public final String DEPRECATED_UUID_KEY = "dragonmountsdragon";
 
     @Nullable
     public static String getDragonName(NBTTagCompound tag) {

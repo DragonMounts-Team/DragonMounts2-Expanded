@@ -42,45 +42,45 @@ life_stage.dragon.adult=Adulte
 ##
 # Item Names
 ##
-item.diamond_shears.name=Cisailles en Diamants
-item.dragon_spawn_egg.name=Faire Apparaitre un Dragon
-item.dragon_essence.name=Essence Draconique 
-item.dragon_whistle.name=Flute Draconique
-item.dragon_amulet.name=Amulette Draconique
-item.dragon_orb.name=Orbe Draconique
+item.dragonmounts.diamond_shears.name=Cisailles en Diamants
+item.dragonmounts.dragon_spawn_egg.name=Faire Apparaitre un Dragon
+item.dragonmounts.dragon_essence.name=Essence Draconique 
+item.dragonmounts.dragon_whistle.name=Flute Draconique
+item.dragonmounts.dragon_amulet.name=Amulette Draconique
+item.dragonmounts.dragon_orb.name=Orbe Draconique
 ##### Untranslated
 item.dragonmounts.variation_orb.name=Orb of Variation
 
-item.oak_carriage.name=Nacelle en Chêne
-item.birch_carriage.name=Nacelle en Bouleau
-item.spruce_carriage.name=Nacelle en Sapin
-item.acacia_carriage.name=Nacelle en Acacia
-item.dark_oak_carriage.name=Nacelle en Chêne Noir
-item.jungle_carriage.name=Nacelle en Acajou
+item.dragonmounts.oak_carriage.name=Nacelle en Chêne
+item.dragonmounts.birch_carriage.name=Nacelle en Bouleau
+item.dragonmounts.spruce_carriage.name=Nacelle en Sapin
+item.dragonmounts.acacia_carriage.name=Nacelle en Acacia
+item.dragonmounts.dark_oak_carriage.name=Nacelle en Chêne Noir
+item.dragonmounts.jungle_carriage.name=Nacelle en Acajou
 
 # Armory Items
-item.dragon_scales.name=Ecailles de Dragon
-item.dragon_scale_sword.name=Epée Draconique
-item.dragon_scale_pickaxe.name=Pioche Draconique
-item.dragon_scale_axe.name=Hache Draconique
-item.dragon_scale_shovel.name=Pelle Draconique
-item.dragon_scale_hoe.name=Houe Draconique
-item.dragon_scale_shield.name=Bouclier Draconique
-item.dragon_scale_bow.name=Arc Draconique
-item.dragon_scale_helmet.name=Casque en Ecailles de Dragon
-item.dragon_scale_chestplate.name=Plastron en Ecailles de Dragon
-item.dragon_scale_leggings.name=Jambières en Ecailles de Dragon
-item.dragon_scale_boots.name=Bottes en Ecailles de Dragon
-item.diamond_dragon_armor.name=Armure en Diamant pour Dragon
-item.iron_dragon_armor.name=Armure en Fer pour Dragon
-item.golden_dragon_armor.name=Armure en Or pour Dragon
-item.emerald_dragon_armor.name=Armure en Emeraude pour Dragon
+item.dragonmounts.dragon_scales.name=Ecailles de Dragon
+item.dragonmounts.dragon_scale_sword.name=Epée Draconique
+item.dragonmounts.dragon_scale_pickaxe.name=Pioche Draconique
+item.dragonmounts.dragon_scale_axe.name=Hache Draconique
+item.dragonmounts.dragon_scale_shovel.name=Pelle Draconique
+item.dragonmounts.dragon_scale_hoe.name=Houe Draconique
+item.dragonmounts.dragon_scale_shield.name=Bouclier Draconique
+item.dragonmounts.dragon_scale_bow.name=Arc Draconique
+item.dragonmounts.dragon_scale_helmet.name=Casque en Ecailles de Dragon
+item.dragonmounts.dragon_scale_chestplate.name=Plastron en Ecailles de Dragon
+item.dragonmounts.dragon_scale_leggings.name=Jambières en Ecailles de Dragon
+item.dragonmounts.dragon_scale_boots.name=Bottes en Ecailles de Dragon
+item.dragonmounts.diamond_dragon_armor.name=Armure en Diamant pour Dragon
+item.dragonmounts.iron_dragon_armor.name=Armure en Fer pour Dragon
+item.dragonmounts.golden_dragon_armor.name=Armure en Or pour Dragon
+item.dragonmounts.emerald_dragon_armor.name=Armure en Emeraude pour Dragon
 
 # Tiles
-tile.dragon_nest.name=Pile de bois
-tile.dragon_core.name=Coeur Draconique
-tile.dragon_head.name=Tête de dragon
-tile.dragon_egg.name=Oeuf de dragon
+tile.dragonmounts.dragon_nest.name=Pile de bois
+tile.dragonmounts.dragon_core.name=Coeur Draconique
+tile.dragonmounts.dragon_head.name=Tête de dragon
+tile.dragonmounts.dragon_egg.name=Oeuf de dragon
 
 ##
 # Messages

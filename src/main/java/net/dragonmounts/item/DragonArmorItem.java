@@ -31,8 +31,7 @@ public class DragonArmorItem extends Item {
     public DragonArmorItem(ResourceLocation texture, int protection) {
         this.texture = texture;
         this.protection = protection;
-        this.setMaxStackSize(1);
-        this.setCreativeTab(CreativeTabs.COMBAT);
+        this.setMaxStackSize(1).setCreativeTab(CreativeTabs.COMBAT);
     }
 
     @Override

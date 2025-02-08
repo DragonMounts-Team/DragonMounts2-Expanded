@@ -14,12 +14,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
+
 public class DragonScaleHoeItem extends ItemHoe {
+    public static final String TRANSLATION_KEY = TRANSLATION_KEY_PREFIX + "dragon_scale_hoe";
     public final DragonType type;
 
     public DragonScaleHoeItem(ToolMaterial material, DragonType type) {
         super(material);
-        this.setTranslationKey("dragon_scale_hoe");
         this.type = type;
     }
 

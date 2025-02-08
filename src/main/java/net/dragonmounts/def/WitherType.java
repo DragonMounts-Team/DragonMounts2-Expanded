@@ -2,9 +2,9 @@ package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathPower;
+import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.effects.WitherBreathFX;
-import net.dragonmounts.entity.breath.weapons.BreathWeapon;
-import net.dragonmounts.entity.breath.weapons.BreathWeaponWither;
+import net.dragonmounts.entity.breath.impl.WitherBreath;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.util.EnumParticleTypes;
@@ -41,8 +41,8 @@ public class WitherType extends DragonType {
 
     @Nullable
     @Override
-    public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
-        return new BreathWeaponWither(dragon, 0.6F);
+    public DragonBreath initBreath(TameableDragonEntity dragon) {
+        return new WitherBreath(dragon, 0.6F);
     }
 
     @Override

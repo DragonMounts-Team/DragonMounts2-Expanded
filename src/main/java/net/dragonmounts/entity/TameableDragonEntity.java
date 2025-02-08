@@ -16,6 +16,7 @@ import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.block.HatchableDragonEggBlock;
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
+import net.dragonmounts.capability.DMCapabilities;
 import net.dragonmounts.capability.IDragonFood;
 import net.dragonmounts.capability.IHardShears;
 import net.dragonmounts.client.gui.GuiHandler;
@@ -1623,7 +1624,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
      */
     public void openGUI(EntityPlayer playerEntity, int guiId) {
         if (!this.world.isRemote && (!this.isPassenger(playerEntity))) {
-            playerEntity.openGui(DragonMounts.INSTANCE, guiId, this.world, this.getEntityId(), 0, 0);
+            playerEntity.openGui(DragonMounts.getInstance(), guiId, this.world, this.getEntityId(), 0, 0);
         }
     }
 

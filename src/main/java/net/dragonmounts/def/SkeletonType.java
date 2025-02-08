@@ -1,7 +1,7 @@
 package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.breath.weapons.BreathWeapon;
+import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.entity.Entity;
@@ -22,7 +22,7 @@ public class SkeletonType extends DragonType {
 
     @Nullable
     @Override
-    public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
+    public DragonBreath initBreath(TameableDragonEntity dragon) {
         return null;
     }
 

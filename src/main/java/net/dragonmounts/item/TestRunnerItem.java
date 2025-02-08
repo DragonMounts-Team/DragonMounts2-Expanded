@@ -2,7 +2,6 @@ package net.dragonmounts.item;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.util.ITestCase;
 import net.dragonmounts.util.LogUtil;
 import net.dragonmounts.util.debugging.TestRunner;
@@ -33,7 +32,6 @@ public class TestRunnerItem extends Item implements ITestCase {
     private final Int2ObjectOpenHashMap<ITestCase> server = new Int2ObjectOpenHashMap<>();
 
     public TestRunnerItem() {
-        this.setCreativeTab(DMItemGroups.MAIN);
         TestRunner.register(this);
     }
 
@@ -97,5 +95,10 @@ public class TestRunnerItem extends Item implements ITestCase {
             execute(entry.getValue(), level, player, stack, entry.getIntKey());
         }
         return true;
+    }
+
+    @Override
+    public String getItemStackDisplayName(ItemStack stack) {
+        return "Test #" + stack.getCount();
     }
 }

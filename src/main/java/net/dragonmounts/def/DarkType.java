@@ -2,11 +2,11 @@ package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathPower;
+import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.effects.DarkBreathFX;
+import net.dragonmounts.entity.breath.impl.DarkBreath;
 import net.dragonmounts.entity.breath.sound.SoundEffectName;
 import net.dragonmounts.entity.breath.sound.SoundState;
-import net.dragonmounts.entity.breath.weapons.BreathWeapon;
-import net.dragonmounts.entity.breath.weapons.BreathWeaponDark;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.entity.Entity;
@@ -44,8 +44,8 @@ public class DarkType extends DragonType {
     }
 
     @Override
-    public BreathWeapon createBreathWeapon(TameableDragonEntity dragon) {
-        return new BreathWeaponDark(dragon, 0.6F);
+    public DragonBreath initBreath(TameableDragonEntity dragon) {
+        return new DarkBreath(dragon, 0.6F);
     }
 
     @Override

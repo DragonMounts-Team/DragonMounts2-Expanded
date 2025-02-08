@@ -32,7 +32,7 @@ def dragonScaleToolItem(output: Output, type: DragonType, name: str):
   handheldItem(
     output,
     type.value.withSuffix('_dragon_scale_' + name),
-    ResourceLocation(type.value.namespace, 'items/tools/' + name + '/' + type.value.path + '_dragon_' + name)
+    ResourceLocation(type.value.namespace, 'items/' + name + '/' + type.value.path + '_dragon_' + name)
   )
 
 def dragonScaleArmorItem(output: Output, type: DragonType, name: str, nick: str):
@@ -77,7 +77,7 @@ def generateItemModels(output: Output):
   blockingShieldModel = makeId('item/shield/shield_blocking')
   spawnEggModel = ResourceLocation('item/spawn_egg')
   dragonHeadModel = ResourceLocation('item/skull_dragon')
-  basicItem(output, makeId('variant_switcher'))
+  basicItem(output, makeId('variation_orb'))
   for type in CarriageType:
     basicItem(
       output,
@@ -85,11 +85,10 @@ def generateItemModels(output: Output):
       makeId('items/carriage/carriage_' + type.name)
     )
   for material in DragonArmorMaterial:
-    name = material.name.lower()
     basicItem(
       output,
-      makeId(name + '_dragon_armor'),
-      makeId('items/armor/dragon/dragonarmor_' + ('gold' if name == 'golden' else name))
+      material.value[0],
+      makeId('items/armor/dragon/' + material.name.lower())
     )
   for variant in DragonVariant:
     model(dragonHeadModel).save(output, variant.value.path + '_dragon_head')
@@ -113,7 +112,7 @@ def generateItemModels(output: Output):
     dragonScaleArmorItem(output, type, 'leggings', 'leggings')
     dragonScaleArmorItem(output, type, 'boots', 'boots')
     root = name + '_dragon_scale_shield'
-    texture = makeId('entities/dragon_shield/' + name)
+    texture = makeId('entities/dragon_scale_shield/' + name)
     blocking = root + '_blocking'
     model(blockingShieldModel)\
       .texture('base', texture)\

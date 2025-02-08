@@ -29,9 +29,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
 import static net.dragonmounts.util.EntityUtil.notOwner;
 
 public class DragonEssenceItem extends Item implements IEntityContainer<TameableDragonEntity> {
+    public static final String TRANSLATION_KEY = TRANSLATION_KEY_PREFIX + "dragon_essence";
     public final DragonType type;
 
     public DragonEssenceItem(DragonType type) {

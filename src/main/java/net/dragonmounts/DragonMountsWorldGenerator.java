@@ -107,32 +107,33 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
         boolean isPlains = types.contains(Type.PLAINS);
         boolean isMesa = types.contains(Type.MESA);
         boolean isOcean = types.contains(Type.OCEAN);
-
-        if (isOcean && random.nextInt((DragonMountsConfig.OceanNestRarity)) == 1) {
+        if (isOcean && random.nextInt(DragonMountsConfig.OceanNestRarity) == 1) {
             loadStructure(height.withY(height.getY() + 10), world, random.nextBoolean() ? AETHER : MOONLIGHT, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
 
-        } else if (isSnowy && random.nextInt((DragonMountsConfig.IceNestRarity)) == 1 && canSpawnHere(world, height, 7, false)) {
+        } else if (isSnowy && random.nextInt(DragonMountsConfig.IceNestRarity) == 1 && canSpawnHere(world, height, 7, false)) {
 
             loadStructure(height.withY(height.getY() - 2), world, ICE, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
 
-        } else if (isJungle && random.nextInt((DragonMountsConfig.JungleNestRarity)) == 1) {
+        } else if (isJungle && random.nextInt(DragonMountsConfig.JungleNestRarity) == 1) {
             loadStructure(height, world, FOREST1, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
 
-        } else if (isDesert && random.nextInt((DragonMountsConfig.SunlightNestRarity)) == 1 && canSpawnHere(world, height, 22, false)) {
+        } else if (isDesert && random.nextInt(DragonMountsConfig.SunlightNestRarity) == 1 && canSpawnHere(world, height, 22, false)) {
 
             loadStructure(height.withY(height.getY() - 10), world, SUNLIGHT, LootTableList.CHESTS_DESERT_PYRAMID, random);
 
-        } else if (isMesa && random.nextInt((DragonMountsConfig.TerraNestRarity)) == 1 && canSpawnHere(world, height, 4, false)) {
+        } else if (isMesa && random.nextInt(DragonMountsConfig.TerraNestRarity) == 1 && canSpawnHere(world, height, 4, false)) {
             loadStructure(height.withY(height.getY() - 2), world, TERRA, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
 
-        } else if ((isSwamp) && random.nextInt((DragonMountsConfig.WaterNestRarity)) == 1 && canSpawnHere(world, height, 4, true)) {
+        } else if ((isSwamp) && random.nextInt(DragonMountsConfig.WaterNestRarity) == 1 && canSpawnHere(world, height, 4, true)) {
             loadStructure(height.withY(height.getY() - 4), world, WATER3, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
 
-        } else if ((isPlains || isForest) && random.nextInt((DragonMountsConfig.ForestNestRarity)) == 1 && canSpawnHere(world, height, 4, false)) {
+        } else if ((isPlains || isForest) && random.nextInt(DragonMountsConfig.ForestNestRarity) == 1 && canSpawnHere(world, height, 4, false)) {
             loadStructure(height.withY(height.getY() - 2), world, FOREST2, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
 
         } else if (isMountainOrBeach && random.nextInt(DragonMountsConfig.FireNestRarity) == 1 && canSpawnHere(world, height, 4, false)) {
             loadStructure(height.withY(height.getY() - 2), world, FIRE, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
+        } else if (types.contains(Type.VOID) && types.contains(Type.MAGICAL) && random.nextInt(DragonMountsConfig.OceanNestRarity) == 0) {
+            loadStructure(height.withY(height.getY() + 10), world, AETHER, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
         }
     }
 

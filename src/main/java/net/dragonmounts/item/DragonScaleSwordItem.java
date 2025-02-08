@@ -18,12 +18,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
+
 public class DragonScaleSwordItem extends ItemSword {
+    public static final String TRANSLATION_KEY = TRANSLATION_KEY_PREFIX + "dragon_scale_sword";
     public final DragonType type;
 
     public DragonScaleSwordItem(ToolMaterial material, DragonType type) {
         super(material);
-        this.setTranslationKey("dragon_scale_sword");
         this.type = type;
     }
 

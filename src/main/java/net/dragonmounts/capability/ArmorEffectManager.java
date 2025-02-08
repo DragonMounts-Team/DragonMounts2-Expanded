@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 import static java.lang.System.arraycopy;
 import static java.util.Arrays.fill;
 import static net.dragonmounts.DragonMounts.NETWORK_WRAPPER;
-import static net.dragonmounts.init.DMCapabilities.ARMOR_EFFECT_MANAGER;
+import static net.dragonmounts.capability.DMCapabilities.ARMOR_EFFECT_MANAGER;
 
 @SuppressWarnings("DataFlowIssue")
 public final class ArmorEffectManager implements IArmorEffectManager {

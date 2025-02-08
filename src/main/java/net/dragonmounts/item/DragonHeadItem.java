@@ -27,7 +27,7 @@ import static net.minecraft.block.BlockStandingSign.ROTATION;
 
 public class DragonHeadItem extends Item {
     public final DragonVariant variant;
-    public String translationKey;
+    private String translationKey;
 
     public DragonHeadItem(DragonVariant variant) {
         this.variant = variant;

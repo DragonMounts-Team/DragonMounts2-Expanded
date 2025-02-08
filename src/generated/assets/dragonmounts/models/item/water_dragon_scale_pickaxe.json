@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "dragonmounts:items/tools/pickaxe/water_dragon_pickaxe"
+    "layer0": "dragonmounts:items/pickaxe/water_dragon_pickaxe"
   }
 }

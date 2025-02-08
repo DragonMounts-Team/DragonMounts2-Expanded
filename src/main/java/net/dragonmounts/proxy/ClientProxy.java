@@ -98,8 +98,8 @@ public class ClientProxy extends ServerProxy {
         addCredit(credits, "TheGreyGhost", "Old DM1 Developer. Prototype Dragon Breath.");
         addCredit(credits, "Tomanex", "Dragon Mounts Team Founder and Texture Artist. Revamped various textures");
         addCredit(credits, "JDSK0ala", "Dragon Mounts Team Founder and Beta Tester");
-        addCredit(credits, "2190303755 (Number-Man)", "Lead Developer and Coder for Dragon Mounts 2: Continued");
-        addCredit(credits, "Moaswies", "Coder for Dragon Mounts 2: Continued");
+        addCredit(credits, "2190303755 (Number-Man)", "Lead Developer and Coder for Dragon Mounts 2: Expanded");
+        addCredit(credits, "Moaswies", "Coder for Dragon Mounts 2: Expanded");
         addCredit(credits, "EnderEXE", "Beta Tester");
         addCredit(credits, "Tomohiko", "For contributing Japanese localization");
         addCredit(credits, "Signis Kerman", "For contributing French localization");

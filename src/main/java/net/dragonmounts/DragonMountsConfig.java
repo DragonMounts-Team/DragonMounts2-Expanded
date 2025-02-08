@@ -96,7 +96,7 @@ public class DragonMountsConfig {
     }
 
     public static void clientPreInit() {
-        MinecraftForge.EVENT_BUS.register(new ConfigEventHandler());
+        MinecraftForge.EVENT_BUS.register(ConfigEventHandler.class);
     }
 
     public static void syncFromFiles() {
@@ -351,7 +351,7 @@ public class DragonMountsConfig {
     public static class ConfigEventHandler {
 
         @SubscribeEvent(priority = EventPriority.LOWEST)
-        public void onEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
+        public static void onEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
             if (event.getModID().equals(DragonMountsTags.MOD_ID)) {
                 syncFromGui();
             }

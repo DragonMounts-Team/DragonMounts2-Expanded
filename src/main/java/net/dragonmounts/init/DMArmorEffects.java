@@ -29,7 +29,7 @@ import java.util.Random;
 
 import static net.dragonmounts.DragonMounts.NETWORK_WRAPPER;
 import static net.dragonmounts.DragonMounts.makeId;
-import static net.dragonmounts.init.DMCapabilities.ARMOR_EFFECT_MANAGER;
+import static net.dragonmounts.capability.DMCapabilities.ARMOR_EFFECT_MANAGER;
 import static net.dragonmounts.util.EntityUtil.addOrMergeEffect;
 import static net.dragonmounts.util.EntityUtil.addOrResetEffect;
 

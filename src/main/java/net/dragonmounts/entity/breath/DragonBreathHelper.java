@@ -4,7 +4,6 @@ import net.dragonmounts.client.render.dragon.breathweaponFX.BreathWeaponEmitter;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.sound.SoundController;
 import net.dragonmounts.entity.breath.sound.SoundEffectBreathWeapon;
-import net.dragonmounts.entity.breath.weapons.BreathWeapon;
 import net.dragonmounts.entity.helper.DragonHelper;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.LogUtil;
@@ -51,7 +50,7 @@ public class DragonBreathHelper extends DragonHelper {
     private int tickCounter=0;
     protected BreathWeaponEmitter breathWeaponEmitter=null;
     public final BreathAffectedArea breathAffectedArea;
-    private BreathWeapon weapon;
+    private DragonBreath breath;
     private static final Logger L=LogManager.getLogger();
 
     public DragonBreathHelper(TameableDragonEntity dragon, DataParameter<String> i_dataParamBreathWeaponTarget, DataParameter<Integer> i_dataParamBreathWeaponMode) {
@@ -104,7 +103,7 @@ public class DragonBreathHelper extends DragonHelper {
     private void onLivingUpdateServer() {
         TameableDragonEntity dragon = this.dragon;
         updateBreathState(dragon.isUsingBreathWeapon());
-        if (this.weapon == null) return;
+        if (this.breath == null) return;
         if (dragon.isUsingBreathWeapon()) {
             Vec3d origin=dragon.getAnimator().getThroatPosition();
             Vec3d lookDirection=dragon.getLook(1.0f);
@@ -114,12 +113,12 @@ public class DragonBreathHelper extends DragonHelper {
                 this.breathAffectedArea.continueBreathing(dragon.world, origin, endOfLook, power);
             }
         }
-        this.breathAffectedArea.updateTick(dragon.world, this.weapon);
+        this.breathAffectedArea.updateTick(dragon.world, this.breath);
     }
 
     private void onLivingUpdateClient() {
         TameableDragonEntity dragon = this.dragon;
-        if (this.weapon == null) {
+        if (this.breath == null) {
             this.currentBreathState = BreathState.IDLE;
             return;
         }
@@ -202,7 +201,7 @@ public class DragonBreathHelper extends DragonHelper {
             infoToUpdate.dragonHeadLocation=origin;
             infoToUpdate.relativeVolume=dragon.getScale();
             infoToUpdate.lifeStage=dragon.getLifeStageHelper().getLifeStage();
-            infoToUpdate.breathingState = DragonBreathHelper.this.weapon != null && dragon.isUsingBreathWeapon() && currentBreathState == BreathState.SUSTAIN
+            infoToUpdate.breathingState = DragonBreathHelper.this.breath != null && dragon.isUsingBreathWeapon() && currentBreathState == BreathState.SUSTAIN
                     ? SoundEffectBreathWeapon.WeaponSoundInfo.State.BREATHING
                     : SoundEffectBreathWeapon.WeaponSoundInfo.State.IDLE;
             return true;
@@ -214,10 +213,10 @@ public class DragonBreathHelper extends DragonHelper {
     }
 
     public void onBreedChange(DragonType type) {
-        this.weapon = type.createBreathWeapon(this.dragon);
+        this.breath = type.initBreath(this.dragon);
     }
 
     public boolean hasWeapon() {
-        return this.weapon != null;
+        return this.breath != null;
     }
 }

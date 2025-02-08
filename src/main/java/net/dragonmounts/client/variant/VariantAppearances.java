@@ -37,7 +37,8 @@ public class VariantAppearances {
 
     public static final VariantAppearance AETHER_FEMALE;
     public static final VariantAppearance AETHER_MALE;
-    public static final VariantAppearance DARK = createDefaultAppearance(MOD_ID, "dark", false, false, false);
+    public static final VariantAppearance DARK_FEMALE = createDefaultAppearance(MOD_ID, "dark/female", false, false, false);
+    public static final VariantAppearance DARK_MALE = createDefaultAppearance(MOD_ID, "dark/male", false, false, false);
     public static final VariantAppearance ENCHANT_FEMALE = createAgeableAppearance(MOD_ID, "enchant/female", false, false);
     public static final VariantAppearance ENCHANT_MALE = createAgeableAppearance(MOD_ID, "enchant/male", false, false);
     public static final VariantAppearance ENDER_FEMALE;
@@ -131,7 +132,8 @@ public class VariantAppearances {
         Object2ObjectOpenHashMap<String, VariantAppearance> map = new Object2ObjectOpenHashMap<>();
         map.put("aether_female", AETHER_FEMALE);
         map.put("aether_male", AETHER_MALE);
-        map.put("dark", DARK);
+        map.put("dark_female", DARK_FEMALE);
+        map.put("dark_male", DARK_MALE);
         map.put("enchant_female", ENCHANT_FEMALE);
         map.put("enchant_male", ENCHANT_MALE);
         map.put("ender_female", ENDER_FEMALE);

@@ -27,7 +27,7 @@ public class CameraHandler {
     public static void applyZoom(Entity camera, boolean direct, float scale, float yaw, float pitch, double partialTicks) {
         int view = Minecraft.getMinecraft().gameSettings.thirdPersonView;
         if (view == 0) {
-            GlStateManager.translate(0F, direct ? -0.6F * scale : -0.9F * scale, 0.0F);
+            GlStateManager.translate(0F, direct ? -1.0F * scale : -1.5F * scale, 0.0F);
             return;
         }
         double x = camera.prevPosX + (camera.posX - camera.prevPosX) * partialTicks;

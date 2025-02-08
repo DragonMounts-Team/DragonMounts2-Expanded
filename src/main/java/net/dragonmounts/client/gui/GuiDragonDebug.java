@@ -144,8 +144,7 @@ public class GuiDragonDebug extends Gui {
     }
 
     private void renderTitle() {
-        String title = String.format("%s %s Debug", DragonMountsTags.MOD_NAME,
-                DragonMounts.INSTANCE.getMetadata().version);
+        String title = String.format("%s %s Debug", DragonMountsTags.MOD_NAME, DragonMounts.getMetadata().version);
         
         text.setOrigin(16, 8);
         text.setColor(GREY);

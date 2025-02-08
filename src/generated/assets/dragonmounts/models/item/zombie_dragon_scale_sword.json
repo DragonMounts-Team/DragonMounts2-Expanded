@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "dragonmounts:items/tools/sword/zombie_dragon_sword"
+    "layer0": "dragonmounts:items/sword/zombie_dragon_sword"
   }
 }

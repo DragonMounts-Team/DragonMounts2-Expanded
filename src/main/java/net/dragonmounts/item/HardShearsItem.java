@@ -1,9 +1,9 @@
 package net.dragonmounts.item;
 
+import net.dragonmounts.capability.DMCapabilities;
 import net.dragonmounts.capability.IHardShears;
 import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.init.DMCapabilities;
 import net.dragonmounts.init.DMItemGroups;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;

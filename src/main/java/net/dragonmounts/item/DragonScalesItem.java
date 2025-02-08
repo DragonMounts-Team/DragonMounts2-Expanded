@@ -12,11 +12,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
+
 public class DragonScalesItem extends Item {
+    public static final String TRANSLATION_KEY = TRANSLATION_KEY_PREFIX + "dragon_scales";
     public final DragonType type;
 
     public DragonScalesItem(DragonType type) {
-        this.setTranslationKey("dragon_scales");
         this.setCreativeTab(DMItemGroups.MAIN);
         this.type = type;
     }

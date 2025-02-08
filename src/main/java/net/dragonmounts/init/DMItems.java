@@ -17,14 +17,21 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
+
 @MethodsReturnNonnullByDefault
 public class DMItems {
     public static final ObjectArrayList<Item> ITEMS = new ObjectArrayList<>();
     public static final ReferenceOpenHashSet<Item> DRAGON_INTERACTABLE = new ReferenceOpenHashSet<>();
 
     //Blocks
-    public static final CraftableBlockItem DRAGON_NEST = createItem("dragon_nest", new CraftableBlockItem(DMBlocks.DRAGON_NEST, DMItemGroups.MAIN));
-    public static final ItemBlock DRAGON_CORE = createItem("dragon_core", new ItemBlock(DMBlocks.DRAGON_CORE));
+    public static final CraftableBlockItem DRAGON_NEST = new CraftableBlockItem(DMBlocks.DRAGON_NEST, DMItemGroups.MAIN);
+    public static final ItemBlock DRAGON_CORE = new ItemBlock(DMBlocks.DRAGON_CORE);
+
+    static {
+        ITEMS.add(DRAGON_NEST.setRegistryName("dragon_nest"));
+        ITEMS.add(DRAGON_CORE.setRegistryName("dragon_core"));
+    }
     //Scales Start
     public static final DragonScalesItem FOREST_DRAGON_SCALES = createDragonScalesItem("forest_dragon_scales", DragonTypes.FOREST);
     public static final DragonScalesItem FIRE_DRAGON_SCALES = createDragonScalesItem("fire_dragon_scales", DragonTypes.FIRE);
@@ -314,7 +321,7 @@ public class DMItems {
     public static final DragonSpawnEggItem WITHER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("wither_dragon_spawn_egg", DragonTypes.WITHER, 0x839292, 0x383F40);
     public static final DragonSpawnEggItem ZOMBIE_DRAGON_SPAWN_EGG = createDragonSpawnEgg("zombie_dragon_spawn_egg", DragonTypes.ZOMBIE, 0x56562E, 0xA7BF2F);
     //?
-    public static final VariantSwitcherItem VARIANT_SWITCHER = createItem("variant_switcher", "dragonmounts.variation_orb", new VariantSwitcherItem());
+    public static final VariationOrbItem VARIATION_ORB = createItem("variation_orb", new VariationOrbItem());
     public static final DragonWandItem DRAGON_WAND = createItem("dragon_wand", new DragonWandItem());
     public static final DragonWhistleItem DRAGON_WHISTLE = createItem("dragon_whistle", new DragonWhistleItem());
     //Shears
@@ -366,32 +373,27 @@ public class DMItems {
     public static final TestRunnerItem TEST_RUNNER = new TestRunnerItem();
 
     static <T extends Item> T createItem(String name, T item) {
-        ITEMS.add(item.setTranslationKey(name).setRegistryName(name));
-        return item;
-    }
-
-    static <T extends Item> T createItem(String name, String translationKey, T item) {
-        ITEMS.add(item.setTranslationKey(translationKey).setRegistryName(name));
+        ITEMS.add(item.setTranslationKey(TRANSLATION_KEY_PREFIX + name).setRegistryName(name));
         return item;
     }
 
     static DragonAmuletItem createDragonAmuletItem(String name, DragonType type) {
         DragonAmuletItem item = new DragonAmuletItem(type);
         type.bindInstance(DragonAmuletItem.class, item);
-        ITEMS.add(item.setTranslationKey("dragon_amulet").setRegistryName(name));
+        ITEMS.add(item.setTranslationKey(DragonAmuletItem.TRANSLATION_KEY).setRegistryName(name));
         return item;
     }
 
     static DragonArmorItem createDragonArmorItem(String name, String texture, int protection) {
         DragonArmorItem item = new DragonArmorItem(new ResourceLocation(DragonMountsTags.MOD_ID, texture), protection);
-        ITEMS.add(item.setTranslationKey(name).setRegistryName(name));
+        ITEMS.add(item.setTranslationKey(TRANSLATION_KEY_PREFIX + name).setRegistryName(name));
         return item;
     }
 
     static DragonScaleAxeItem createDragonScaleAxeItem(String name, DragonType type, Item.ToolMaterial tier, float attackDamageModifier, float attackSpeedModifier) {
         DragonScaleAxeItem item = new DragonScaleAxeItem(tier, type, attackDamageModifier, attackSpeedModifier);
         type.bindInstance(DragonScaleAxeItem.class, item);
-        ITEMS.add(item.setRegistryName(name));
+        ITEMS.add(item.setTranslationKey(DragonScaleAxeItem.TRANSLATION_KEY).setRegistryName(name));
         return item;
     }
 
@@ -402,28 +404,28 @@ public class DMItems {
     static DragonScaleBowItem createDragonScaleBowItem(String name, DragonType type, Item.ToolMaterial tier) {
         DragonScaleBowItem item = new DragonScaleBowItem(type, tier);
         type.bindInstance(DragonScaleBowItem.class, item);
-        ITEMS.add(item.setTranslationKey("dragon_scale_bow").setRegistryName(name));
+        ITEMS.add(item.setTranslationKey(DragonScaleBowItem.TRANSLATION_KEY).setRegistryName(name));
         return item;
     }
 
     static DragonEssenceItem createDragonEssenceItem(String name, DragonType type) {
         DragonEssenceItem item = new DragonEssenceItem(type);
         type.bindInstance(DragonEssenceItem.class, item);
-        ITEMS.add(item.setTranslationKey("dragon_essence").setRegistryName(name));
+        ITEMS.add(item.setTranslationKey(DragonEssenceItem.TRANSLATION_KEY).setRegistryName(name));
         return item;
     }
 
     static DragonScaleHoeItem createDragonScaleHoeItem(String name, DragonType type, Item.ToolMaterial tier) {
         DragonScaleHoeItem item = new DragonScaleHoeItem(tier, type);
         type.bindInstance(DragonScaleHoeItem.class, item);
-        ITEMS.add(item.setRegistryName(name));
+        ITEMS.add(item.setTranslationKey(DragonScaleHoeItem.TRANSLATION_KEY).setRegistryName(name));
         return item;
     }
 
     static DragonScalePickaxeItem createDragonScalePickaxeItem(String name, DragonType type, Item.ToolMaterial tier) {
         DragonScalePickaxeItem item = new DragonScalePickaxeItem(tier, type);
         type.bindInstance(DragonScalePickaxeItem.class, item);
-        ITEMS.add(item.setRegistryName(name));
+        ITEMS.add(item.setTranslationKey(DragonScalePickaxeItem.TRANSLATION_KEY).setRegistryName(name));
         return item;
     }
 
@@ -438,56 +440,56 @@ public class DMItems {
     ) {
         DragonScaleArmorSuit suit = new DragonScaleArmorSuit(material, type, effect);
         type.bindInstance(DragonScaleArmorSuit.class, suit);
-        ITEMS.add(suit.helmet.setRegistryName(helmet));
-        ITEMS.add(suit.chestplate.setRegistryName(chestplate));
-        ITEMS.add(suit.leggings.setRegistryName(leggings));
-        ITEMS.add(suit.boots.setRegistryName(boots));
+        ITEMS.add(suit.helmet.setTranslationKey(DragonScaleArmorSuit.TRANSLATION_KEY_HELMET).setRegistryName(helmet));
+        ITEMS.add(suit.chestplate.setTranslationKey(DragonScaleArmorSuit.TRANSLATION_KEY_CHESTPLATE).setRegistryName(chestplate));
+        ITEMS.add(suit.leggings.setTranslationKey(DragonScaleArmorSuit.TRANSLATION_KEY_LEGGINGS).setRegistryName(leggings));
+        ITEMS.add(suit.boots.setTranslationKey(DragonScaleArmorSuit.TRANSLATION_KEY_BOOTS).setRegistryName(boots));
         return suit;
     }
 
     static DragonScalesItem createDragonScalesItem(String name, DragonType type) {
         DragonScalesItem item = new DragonScalesItem(type);
         type.bindInstance(DragonScalesItem.class, item);
-        ITEMS.add(item.setRegistryName(name));
+        ITEMS.add(item.setTranslationKey(DragonScalesItem.TRANSLATION_KEY).setRegistryName(name));
         return item;
     }
 
     static DragonScaleShieldItem createDragonScaleShieldItem(String name, DragonType type, ItemArmor.ArmorMaterial material) {
         DragonScaleShieldItem item = new DragonScaleShieldItem(type, material);
         type.bindInstance(DragonScaleShieldItem.class, item);
-        ITEMS.add(item.setRegistryName(name));
+        ITEMS.add(item.setTranslationKey(DragonScaleShieldItem.TRANSLATION_KEY).setRegistryName(name));
         return item;
     }
 
     static DragonScaleShovelItem createDragonScaleShovelItem(String name, DragonType type, Item.ToolMaterial tier) {
         DragonScaleShovelItem item = new DragonScaleShovelItem(tier, type);
         type.bindInstance(DragonScaleShovelItem.class, item);
-        ITEMS.add(item.setRegistryName(name));
+        ITEMS.add(item.setTranslationKey(DragonScaleShovelItem.TRANSLATION_KEY).setRegistryName(name));
         return item;
     }
 
     static DragonScaleSwordItem createDragonScaleSwordItem(String name, DragonType type, Item.ToolMaterial tier) {
         DragonScaleSwordItem item = new DragonScaleSwordItem(tier, type);
         type.bindInstance(DragonScaleSwordItem.class, item);
-        ITEMS.add(item.setRegistryName(name));
+        ITEMS.add(item.setTranslationKey(DragonScaleSwordItem.TRANSLATION_KEY).setRegistryName(name));
         return item;
     }
 
     static DragonSpawnEggItem createDragonSpawnEgg(String name, DragonType type, int background, int highlight) {
         DragonSpawnEggItem item = new DragonSpawnEggItem(type, background, highlight);
         type.bindInstance(DragonSpawnEggItem.class, item);
-        ITEMS.add(item.setRegistryName(name));
+        ITEMS.add(item.setTranslationKey(DragonSpawnEggItem.TRANSLATION_KEY).setRegistryName(name));
         return item;
     }
 
     static HardShearsItem createHardShearsItem(String name, Item.ToolMaterial tier, int durability) {
         HardShearsItem item = new HardShearsItem(tier);
-        ITEMS.add(item.setMaxDamage(durability).setTranslationKey(name).setRegistryName(name));
+        ITEMS.add(item.setMaxDamage(durability).setTranslationKey(TRANSLATION_KEY_PREFIX + name).setRegistryName(name));
         return item;
     }
 
     static {
-        ITEMS.add(AMULET.setTranslationKey("dragon_amulet").setRegistryName("amulet").setCreativeTab(DMItemGroups.MAIN));
+        ITEMS.add(AMULET.setTranslationKey(DragonAmuletItem.TRANSLATION_KEY).setRegistryName("amulet").setCreativeTab(DMItemGroups.MAIN));
         DRAGON_INTERACTABLE.add(AMULET);
         DRAGON_INTERACTABLE.add(DRAGON_WAND);
         DRAGON_INTERACTABLE.add(DRAGON_WHISTLE);
@@ -497,8 +499,8 @@ public class DMItems {
         DRAGON_INTERACTABLE.add(DIAMOND_DRAGON_ARMOR);
         DRAGON_INTERACTABLE.add(Items.BONE);
         DRAGON_INTERACTABLE.add(Items.STICK);
-        DRAGON_ORB.setTranslationKey("dragon_orb").setRegistryName("dragon_orb");
-        TEST_RUNNER.setTranslationKey("test_runner").setRegistryName("test_runner");
+        DRAGON_ORB.setTranslationKey(TRANSLATION_KEY_PREFIX + "dragon_orb").setRegistryName("dragon_orb");
+        TEST_RUNNER.setRegistryName("test_runner");
         for (DragonVariant variant : DragonVariants.BUILTIN_VALUES) {
             ITEMS.add(variant.head.item);
         }
@@ -509,41 +511,44 @@ public class DMItems {
         ItemStack stack = new ItemStack(FOREST_DRAGON_SCALES);
         DMMaterials.FOREST_DRAGON_SCALE.setRepairItem(stack);
         DMTiers.FOREST_DRAGON_SCALE.setRepairItem(stack);
-        stack = (new ItemStack(FIRE_DRAGON_SCALES));
+        stack = new ItemStack(FIRE_DRAGON_SCALES);
         DMMaterials.FIRE_DRAGON_SCALE.setRepairItem(stack);
         DMTiers.FIRE_DRAGON_SCALE.setRepairItem(stack);
-        stack = (new ItemStack(ICE_DRAGON_SCALES));
+        stack = new ItemStack(ICE_DRAGON_SCALES);
         DMMaterials.ICE_DRAGON_SCALE.setRepairItem(stack);
         DMTiers.ICE_DRAGON_SCALE.setRepairItem(stack);
-        stack = (new ItemStack(WATER_DRAGON_SCALES));
+        stack = new ItemStack(WATER_DRAGON_SCALES);
         DMMaterials.WATER_DRAGON_SCALE.setRepairItem(stack);
         DMTiers.WATER_DRAGON_SCALE.setRepairItem(stack);
-        stack = (new ItemStack(AETHER_DRAGON_SCALES));
+        stack = new ItemStack(AETHER_DRAGON_SCALES);
         DMMaterials.AETHER_DRAGON_SCALE.setRepairItem(stack);
         DMTiers.AETHER_DRAGON_SCALE.setRepairItem(stack);
-        stack = (new ItemStack(NETHER_DRAGON_SCALES));
+        stack = new ItemStack(NETHER_DRAGON_SCALES);
         DMMaterials.NETHER_DRAGON_SCALE.setRepairItem(stack);
         DMTiers.NETHER_DRAGON_SCALE.setRepairItem(stack);
-        stack = (new ItemStack(ENDER_DRAGON_SCALES));
+        stack = new ItemStack(ENDER_DRAGON_SCALES);
         DMMaterials.ENDER_DRAGON_SCALE.setRepairItem(stack);
         DMTiers.ENDER_DRAGON_SCALE.setRepairItem(stack);
-        stack = (new ItemStack(SUNLIGHT_DRAGON_SCALES));
+        stack = new ItemStack(SUNLIGHT_DRAGON_SCALES);
         DMMaterials.SUNLIGHT_DRAGON_SCALE.setRepairItem(stack);
         DMTiers.SUNLIGHT_DRAGON_SCALE.setRepairItem(stack);
-        stack = (new ItemStack(ENCHANT_DRAGON_SCALES));
+        stack = new ItemStack(ENCHANT_DRAGON_SCALES);
         DMMaterials.ENCHANT_DRAGON_SCALE.setRepairItem(stack);
         DMTiers.ENCHANT_DRAGON_SCALE.setRepairItem(stack);
-        stack = (new ItemStack(STORM_DRAGON_SCALES));
+        stack = new ItemStack(STORM_DRAGON_SCALES);
         DMMaterials.STORM_DRAGON_SCALE.setRepairItem(stack);
         DMTiers.STORM_DRAGON_SCALE.setRepairItem(stack);
-        stack = (new ItemStack(TERRA_DRAGON_SCALES));
+        stack = new ItemStack(TERRA_DRAGON_SCALES);
         DMMaterials.TERRA_DRAGON_SCALE.setRepairItem(stack);
         DMTiers.TERRA_DRAGON_SCALE.setRepairItem(stack);
-        stack = (new ItemStack(ZOMBIE_DRAGON_SCALES));
+        stack = new ItemStack(ZOMBIE_DRAGON_SCALES);
         DMMaterials.ZOMBIE_DRAGON_SCALE.setRepairItem(stack);
         DMTiers.ZOMBIE_DRAGON_SCALE.setRepairItem(stack);
-        stack = (new ItemStack(MOONLIGHT_DRAGON_SCALES));
+        stack = new ItemStack(MOONLIGHT_DRAGON_SCALES);
         DMMaterials.MOONLIGHT_DRAGON_SCALE.setRepairItem(stack);
         DMTiers.MOONLIGHT_DRAGON_SCALE.setRepairItem(stack);
+        stack = new ItemStack(DARK_DRAGON_SCALES);
+        DMMaterials.DARK_DRAGON_SCALE.setRepairItem(stack);
+        DMTiers.DARK_DRAGON_SCALE.setRepairItem(stack);
     }
 }

@@ -21,7 +21,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
+
 public abstract class DragonHeadBlock extends BlockContainer {
+    public static final String TRANSLATION_KEY = TRANSLATION_KEY_PREFIX + "dragon_head";
     protected static final AxisAlignedBB SHAPE = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 0.5D, 0.75D);
     public final DragonVariant variant;
     public final boolean isOnWall;

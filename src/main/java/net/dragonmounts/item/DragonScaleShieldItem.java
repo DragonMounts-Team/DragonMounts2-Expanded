@@ -19,12 +19,16 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
+
 public class DragonScaleShieldItem extends ItemShield {
+    public static final String TRANSLATION_KEY = TRANSLATION_KEY_PREFIX + "dragon_scale_shield";
     public final DragonType type;
+    private String translationKeyCompat;
+    private String translationKey;
 
     public DragonScaleShieldItem(DragonType type, ItemArmor.ArmorMaterial material) {
-        this.setMaxDamage(material.getDurability(EntityEquipmentSlot.CHEST) * 10 / 3);
-        this.setMaxStackSize(1);
+        this.setMaxDamage(material.getDurability(EntityEquipmentSlot.CHEST) * 10 / 3).setMaxStackSize(1);
         this.type = type;
     }
 
@@ -37,7 +41,7 @@ public class DragonScaleShieldItem extends ItemShield {
     //Necessary because were extending from ItemShield, which creates its own displayname method
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        return I18n.translateToLocal("item.dragon_scale_shield.name");
+        return I18n.translateToLocal(this.translationKey);
     }
 
     @Override
@@ -65,5 +69,22 @@ public class DragonScaleShieldItem extends ItemShield {
         for (CreativeTabs tab : this.getCreativeTabs())
             if (tab == targetTab) return true;
         return targetTab == CreativeTabs.SEARCH;
+    }
+
+    @Override
+    public DragonScaleShieldItem setTranslationKey(String translationKey) {
+        this.translationKey = "item." + translationKey + ".name";
+        this.translationKeyCompat = this.translationKey.substring(0, this.translationKey.length() - 5);
+        return this;
+    }
+
+    @Override
+    public String getTranslationKey() {
+        return this.translationKeyCompat;
+    }
+
+    @Override
+    public String getTranslationKey(ItemStack stack) {
+        return this.translationKeyCompat;
     }
 }

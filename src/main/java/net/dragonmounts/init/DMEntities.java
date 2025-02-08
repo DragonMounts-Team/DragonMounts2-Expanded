@@ -8,11 +8,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 
+import static net.dragonmounts.DragonMounts.makeId;
+
 public class DMEntities {
+    public static final ResourceLocation DRAGON_ID = makeId("dragon");
     public static final EntityEntry DRAGON = EntityEntryBuilder.create()
             .entity(TameableDragonEntity.class)
             .factory(TameableDragonEntity::new)
-            .id(new ResourceLocation(DragonMountsTags.MOD_ID, "dragon"), 1)
+            .id(DRAGON_ID, 1)
             .tracker(80, 3, true)
             .name("dragonmounts.dragon.name")
             .build();

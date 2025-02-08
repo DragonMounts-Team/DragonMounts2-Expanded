@@ -19,7 +19,8 @@ public class DragonVariants {
     public static final ObjectArrayList<DragonVariant> BUILTIN_VALUES = new ObjectArrayList<>();
     public static final DragonVariant AETHER_FEMALE;
     public static final DragonVariant AETHER_MALE;
-    public static final DragonVariant DARK;
+    public static final DragonVariant DARK_FEMALE;
+    public static final DragonVariant DARK_MALE;
     public static final DragonVariant ENCHANT_FEMALE;
     public static final DragonVariant ENCHANT_MALE;
     public static final DragonVariant ENDER_FEMALE;
@@ -55,14 +56,15 @@ public class DragonVariants {
 
     static DragonVariant make(Function<String, VariantAppearance> supplier, DragonType type, String name) {
         return new DragonVariant(type, makeId(name), supplier.apply(name), variant -> {
+            final String key = DragonHeadBlock.TRANSLATION_KEY;
             DragonHeadItem item = new DragonHeadItem(variant);
             DragonHeadStandingBlock standing = new DragonHeadStandingBlock(Material.CIRCUITS, variant);
             DragonHeadWallBlock wall = new DragonHeadWallBlock(Material.CIRCUITS, variant);
             String full = name + "_dragon_head_wall";
             String base = full.substring(0, full.length() - 5);
-            item.setCreativeTab(DMItemGroups.MAIN).setTranslationKey("dragon_head").setRegistryName(base);
-            standing.setRegistryName(base);
-            wall.setRegistryName(full);
+            item.setCreativeTab(DMItemGroups.MAIN).setTranslationKey(key).setRegistryName(base);
+            standing.setTranslationKey(key).setRegistryName(base);
+            wall.setTranslationKey(key).setRegistryName(full);
             return new DragonHeadBlock.Holder(standing, wall, item);
         });
     }
@@ -71,7 +73,8 @@ public class DragonVariants {
         Function<String, VariantAppearance> appearance = DragonMounts.PROXY.getBuiltinAppearances();
         BUILTIN_VALUES.add(AETHER_FEMALE = make(appearance, DragonTypes.AETHER, "aether_female"));
         BUILTIN_VALUES.add(AETHER_MALE = make(appearance, DragonTypes.AETHER, "aether_male"));
-        BUILTIN_VALUES.add(DARK = make(appearance, DragonTypes.DARK, "dark"));
+        BUILTIN_VALUES.add(DARK_FEMALE = make(appearance, DragonTypes.DARK, "dark_female"));
+        BUILTIN_VALUES.add(DARK_MALE = make(appearance, DragonTypes.DARK, "dark_male"));
         BUILTIN_VALUES.add(ENCHANT_FEMALE = make(appearance, DragonTypes.ENCHANT, "enchant_female"));
         BUILTIN_VALUES.add(ENCHANT_MALE = make(appearance, DragonTypes.ENCHANT, "enchant_male"));
         BUILTIN_VALUES.add(ENDER_FEMALE = make(appearance, DragonTypes.ENDER, "ender_female"));

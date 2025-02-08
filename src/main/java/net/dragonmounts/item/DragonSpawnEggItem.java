@@ -1,8 +1,9 @@
 package net.dragonmounts.item;
 
-import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.helper.DragonLifeStage;
+import net.dragonmounts.init.DMEntities;
+import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.EntityUtil;
 import net.minecraft.block.BlockLiquid;
@@ -31,17 +32,16 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static net.dragonmounts.DragonMounts.makeId;
+import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
 
 public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityContainer<Entity> {
-    public static final ResourceLocation DRAGON_ID = makeId("dragon");
+    public static final String TRANSLATION_KEY = TRANSLATION_KEY_PREFIX + "dragon_spawn_egg";
     public final DragonType type;
     public final int backgroundColor;
     public final int highlightColor;
 
     public DragonSpawnEggItem(final DragonType type, int background, int highlight) {
         this.type = type;
-        this.setTranslationKey("dragon_spawn_egg");
         this.setCreativeTab(DMItemGroups.MAIN);
         this.backgroundColor = background;
         this.highlightColor = highlight;
@@ -106,7 +106,7 @@ public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityCont
     public Entity loadEntity(World level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos, boolean yOffset, @Nullable String feedback) {
         ResourceLocation identifier = getEntityTypeFrom(stack);
         Entity entity;
-        if (DRAGON_ID.equals(identifier)) {
+        if (DMEntities.DRAGON_ID.equals(identifier)) {
             TameableDragonEntity dragon = new TameableDragonEntity(level);
             dragon.setVariant(this.type.variants.draw(level.rand, null));
             dragon.getLifeStageHelper().setLifeStage(player != null && player.isSneaking()
@@ -152,6 +152,6 @@ public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityCont
     @Nonnull
     public static ResourceLocation getEntityTypeFrom(ItemStack stack) {
         ResourceLocation identifier = getNamedIdFrom(stack);
-        return identifier == null ? DRAGON_ID : identifier;
+        return identifier == null ? DMEntities.DRAGON_ID : identifier;
     }
 }
