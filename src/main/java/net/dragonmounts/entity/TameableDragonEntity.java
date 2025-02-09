@@ -154,12 +154,11 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     private boolean chested;
     private boolean saddled;
     protected int shearCooldown;
-
     public TameableDragonEntity(World world) {
         super(world);
 
         // enables walking over blocks
-        stepHeight = 1;
+        stepHeight = (float) DragonMountsConfig.stepHeight;
 
         // create entity delegates
         addHelper(new DragonLifeStageHelper(this, DATA_TICKS_SINCE_CREATION));

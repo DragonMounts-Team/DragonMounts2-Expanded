@@ -88,6 +88,7 @@ public class DragonMountsConfig {
 
     private static boolean configHasLoaded = false; // used to detect code which tries to access a property before the config has been loaded
     // can be caused by static instantiation of classes especially Items Blocks and similar
+    public static double stepHeight = 1.0F;
 
     public static void PreInit() {
         File configFile = new File(Loader.instance().getConfigDir(), DragonMountsTags.MOD_ID + ".cfg");
@@ -233,10 +234,16 @@ public class DragonMountsConfig {
         forcedRename = prop.getBoolean(false);
         propOrder.add(prop.getName());
 
+        prop = config.get(CATEGORY_MAIN, "Step Height", 1.0);
+        prop.setComment("Enables Walking Over Blocks");
+        stepHeight = prop.getDouble();
+        propOrder.add(prop.getName());
+
         prop = config.get(CATEGORY_CLIENTDM2, "Max Flight Height", 20.0);
         prop.setComment("Max flight for dragons circling players on a whistle");
         maxFLightHeight = prop.getDouble();
         propOrder.add(prop.getName());
+
 
         prop = config.get(CATEGORY_CLIENTDM2, "Third Person Zoom BACK", 20.0);
         prop.setComment("Zoom out for third person 2 while riding the the dragon and dragon carriages DO NOT EXXAGERATE IF YOU DONT WANT CORRUPTED WORLDS");
