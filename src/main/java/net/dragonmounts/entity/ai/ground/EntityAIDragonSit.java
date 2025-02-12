@@ -5,11 +5,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAISit;
 
 public class EntityAIDragonSit extends EntityAISit {
-    public TameableDragonEntity dragon;
-
-    /**
-     * If the Entitydragon is sitting.
-     */
+    public final TameableDragonEntity dragon;
     private boolean isSitting;
 
     public EntityAIDragonSit(TameableDragonEntity dragon) {
@@ -17,9 +13,6 @@ public class EntityAIDragonSit extends EntityAISit {
         this.dragon = dragon;
     }
 
-    /**
-     * Returns whether the EntityAIBase should begin execution.
-     */
     public boolean shouldExecute() {
         if (!this.isSitting ||
                 !this.dragon.isTamed() ||
@@ -31,26 +24,17 @@ public class EntityAIDragonSit extends EntityAISit {
         return owner == null || (this.dragon.getDistanceSq(owner) >= 144.0D || owner.getRevengeTarget() == null);
     }
 
-    /**
-     * Execute a one shot task or start executing a continuous task
-     */
     @Override
     public void startExecuting() {
         this.dragon.getNavigator().clearPath();
         this.dragon.setSitting(true);
     }
 
-    /**
-     * Reset the task's internal state. Called when this task is interrupted by another one
-     */
     @Override
     public void resetTask() {
         this.dragon.setSitting(false);
     }
 
-    /**
-     * Sets the sitting flag.
-     */
     @Override
     public void setSitting(boolean sitting) {
         this.isSitting = sitting;

@@ -16,6 +16,7 @@ import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -25,7 +26,7 @@ import java.util.Random;
 
 import static net.dragonmounts.util.math.MathX.parseColor;
 
-public class DragonVariantHelper extends DragonHelper {
+public class DragonVariantHelper implements ITickable {
     public static final String NBT_VARIANT_POINTS = "VariantPoints";
     private static final int BLOCK_RANGE = 2;
     private static final int POINTS_BLOCK = 1;
@@ -36,11 +37,12 @@ public class DragonVariantHelper extends DragonHelper {
     private static final int TICK_RATE_PARTICLES = 2;
     private static final int TICK_RATE_BLOCK = 20;
     private final Reference2IntOpenHashMap<DragonType> points = new Reference2IntOpenHashMap<>();
+    public final TameableDragonEntity dragon;
     protected final Random rand;
     private DragonType lastType;
 
     public DragonVariantHelper(TameableDragonEntity dragon) {
-        super(dragon);
+        this.dragon = dragon;
         this.rand = dragon.getRNG();
     }
 
@@ -48,7 +50,6 @@ public class DragonVariantHelper extends DragonHelper {
         return Reference2IntMaps.unmodifiable(this.points);
     }
 
-    @Override
     public void writeToNBT(NBTTagCompound nbt) {
         NBTTagCompound points = new NBTTagCompound();
         for (Reference2IntMap.Entry<DragonType> entry : this.points.reference2IntEntrySet()) {
@@ -57,7 +58,6 @@ public class DragonVariantHelper extends DragonHelper {
         nbt.setTag(NBT_VARIANT_POINTS, points);
     }
 
-    @Override
     public void readFromNBT(NBTTagCompound nbt) {
         NBTTagCompound points = nbt.getCompoundTag(NBT_VARIANT_POINTS);
         for (Reference2IntMap.Entry<DragonType> entry : this.points.reference2IntEntrySet()) {
@@ -66,7 +66,7 @@ public class DragonVariantHelper extends DragonHelper {
     }
 
     @Override
-    public void onLivingUpdate() {
+    public void update() {
         TameableDragonEntity dragon = this.dragon;
         if (!dragon.isEgg()) return;
         DragonType current = dragon.getVariant().type;
@@ -134,7 +134,7 @@ public class DragonVariantHelper extends DragonHelper {
         DragonType type = variant.type;
         if (this.lastType == type) return;
         TameableDragonEntity dragon = this.dragon;
-        dragon.getBreathHelper().onBreedChange(type);
+        dragon.breathHelper.onBreedChange(type);
         if (dragon.world.isRemote) {
             this.lastType = type;
             return;

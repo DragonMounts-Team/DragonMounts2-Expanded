@@ -2,7 +2,6 @@ package net.dragonmounts.event;
 
 import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.block.HatchableDragonEggBlock;
-import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DragonTypes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -29,9 +28,6 @@ public class VanillaEggHandler {
 			event.getEntityPlayer().sendStatusMessage(new TextComponentTranslation("message.dragonmounts.egg.wrongDimension"), true);
 			return;  //cant hatch in the end
 		}
-		TameableDragonEntity egg = HatchableDragonEggBlock.spawn(level, pos, DragonTypes.ENDER);
-		if (egg != null) {
-			egg.getReproductionHelper().setBreeder(event.getEntityPlayer());
-		}
+		HatchableDragonEggBlock.spawn(level, pos, DragonTypes.ENDER);
 	}
 }

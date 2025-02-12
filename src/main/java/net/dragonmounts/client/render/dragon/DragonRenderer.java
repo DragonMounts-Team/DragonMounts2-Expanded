@@ -89,7 +89,7 @@ public class DragonRenderer extends RenderLiving<TameableDragonEntity> {
     @Override
     protected void renderModel(TameableDragonEntity dragon, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
 
-        float death = dragon.getDeathTime() / (float) dragon.getMaxDeathTime();
+        float death = dragon.deathTime / (float) dragon.getMaxDeathTime();
 
         if (death > 0) {
             glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);

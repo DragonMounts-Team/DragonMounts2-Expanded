@@ -5,27 +5,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.EnumDifficulty;
 
-public class DragonHungerHelper extends DragonHelper {
-    /**
-     * The player's food saturation.
-     */
+public class DragonHungerHelper {
+    public final TameableDragonEntity dragon;
     private float foodSaturationLevel = 5.0F;
-    /**
-     * The player's food exhaustion.
-     */
     private float foodExhaustionLevel;
-    /**
-     * The player's food timer value.
-     */
     private int foodTimer;
 
     public DragonHungerHelper(TameableDragonEntity dragon) {
-        super(dragon);
+        this.dragon = dragon;
     }
 
-    /**
-     * Checks if the player's health is not full and not zero.
-     */
     public boolean shouldHeal(TameableDragonEntity dragon) {
         return dragon.getHealth() > 0.0F && dragon.getHealth() < dragon.getMaxHealth();
     }
@@ -73,9 +62,6 @@ public class DragonHungerHelper extends DragonHelper {
         }
     }
 
-    /**
-     * Reads the food data for the dragon.
-     */
     public void readNBT(NBTTagCompound compound) {
         if (compound.hasKey("foodLevel", 99)) {
             this.foodTimer = compound.getInteger("foodTickTimer");
@@ -84,20 +70,13 @@ public class DragonHungerHelper extends DragonHelper {
         }
     }
 
-    /**
-     * Writes the food data for the player.
-     */
     public void writeNBT(NBTTagCompound compound) {
         compound.setInteger("foodTickTimer", this.foodTimer);
         compound.setFloat("foodSaturationLevel", this.foodSaturationLevel);
         compound.setFloat("foodExhaustionLevel", this.foodExhaustionLevel);
     }
 
-    /**
-     * adds input to foodExhaustionLevel to a max of 40
-     */
     public void addExhaustion(float exhaustion) {
         this.foodExhaustionLevel = Math.min(this.foodExhaustionLevel + exhaustion, 40.0F);
     }
-
 }

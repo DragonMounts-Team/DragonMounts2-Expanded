@@ -56,9 +56,9 @@ public class DragonHeadPositionHelper {
     currentSegment.rotateAngleX = 0;
     currentSegment.rotateAngleY = 0;
     currentSegment.rotateAngleZ = 0;
-
+    TameableDragonEntity dragon = this.dragon;
     dragon.getAnimator().setLook(netLookYaw, lookPitch);
-    double health = dragon.getHealthRelative();
+    float health = dragon.getHealth() / dragon.getMaxHealth();
     for (int i = 0; i < NUMBER_OF_NECK_SEGMENTS; i++) {
       float vertMulti = (i + 1) / (float)NUMBER_OF_NECK_SEGMENTS;
 

@@ -17,7 +17,7 @@ public class ClientBreathHelper extends DragonBreathHelper implements SoundEffec
     }
 
     @Override
-    public void onLivingUpdate() {
+    public void update() {
         ++tickCounter;
         TameableDragonEntity dragon = this.dragon;
         if (this.breath == null) {
@@ -30,7 +30,7 @@ public class ClientBreathHelper extends DragonBreathHelper implements SoundEffec
                     dragon.world,
                     dragon.getAnimator().getThroatPosition(),
                     dragon.getLook(1.0F),
-                    dragon.getLifeStageHelper().getLifeStage().power,
+                    dragon.lifeStageHelper.getLifeStage().power,
                     this.tickCounter,
                     dragon.getVariant().type
             );
@@ -45,7 +45,7 @@ public class ClientBreathHelper extends DragonBreathHelper implements SoundEffec
     public boolean refreshWeaponSoundInfo(SoundEffectBreathWeapon.WeaponSoundInfo infoToUpdate) {
         infoToUpdate.dragonHeadLocation = dragon.getAnimator().getThroatPosition();
         infoToUpdate.relativeVolume = dragon.getScale();
-        infoToUpdate.lifeStage = dragon.getLifeStageHelper().getLifeStage();
+        infoToUpdate.lifeStage = dragon.lifeStageHelper.getLifeStage();
         infoToUpdate.breathingState = this.breath != null && dragon.isUsingBreathWeapon() && currentBreathState == BreathState.SUSTAIN
                 ? SoundEffectBreathWeapon.WeaponSoundInfo.State.BREATHING
                 : SoundEffectBreathWeapon.WeaponSoundInfo.State.IDLE;

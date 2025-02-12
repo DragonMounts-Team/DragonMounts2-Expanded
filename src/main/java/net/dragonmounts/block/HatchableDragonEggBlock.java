@@ -36,7 +36,7 @@ public class HatchableDragonEggBlock extends BlockDragonEgg {
         if (variant == null) return null;
         egg.setVariant(variant);
         egg.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-        egg.getLifeStageHelper().setLifeStage(DragonLifeStage.EGG);
+        egg.lifeStageHelper.setLifeStage(DragonLifeStage.EGG);
         level.spawnEntity(egg);
         return egg;
     }
@@ -71,10 +71,7 @@ public class HatchableDragonEggBlock extends BlockDragonEgg {
             level.playSound(player, pos, SoundEvents.BLOCK_WOOD_HIT, SoundCategory.PLAYERS, 1, 1);
             return true;
         }
-        TameableDragonEntity egg = spawn(level, pos, this.getDragonType(this.getMetaFromState(state)));
-        if (egg != null) {
-            egg.getReproductionHelper().setBreeder(player);
-        }
+        spawn(level, pos, this.getDragonType(this.getMetaFromState(state)));
         return true;
     }
 

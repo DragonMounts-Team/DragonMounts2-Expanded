@@ -10,7 +10,7 @@ public class ServerBreathHelper extends DragonBreathHelper {
     }
 
     @Override
-    public void onLivingUpdate() {
+    public void update() {
         ++tickCounter;
         TameableDragonEntity dragon = this.dragon;
         this.updateBreathState(dragon.isUsingBreathWeapon());
@@ -19,7 +19,7 @@ public class ServerBreathHelper extends DragonBreathHelper {
             Vec3d origin = dragon.getAnimator().getThroatPosition();
             Vec3d lookDirection = dragon.getLook(1.0F);
             Vec3d endOfLook = origin.add(lookDirection.x, lookDirection.y, lookDirection.z);
-            this.breathAffectedArea.continueBreathing(dragon.world, origin, endOfLook, dragon.getLifeStageHelper().getLifeStage().power);
+            this.breathAffectedArea.continueBreathing(dragon.world, origin, endOfLook, dragon.lifeStageHelper.getLifeStage().power);
         }
         this.breathAffectedArea.updateTick(dragon.world, this.breath);
     }

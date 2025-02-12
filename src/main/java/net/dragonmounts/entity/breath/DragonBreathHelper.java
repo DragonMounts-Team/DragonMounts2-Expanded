@@ -3,9 +3,9 @@ package net.dragonmounts.entity.breath;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.impl.ClientBreathHelper;
 import net.dragonmounts.entity.breath.impl.ServerBreathHelper;
-import net.dragonmounts.entity.helper.DragonHelper;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.LogUtil;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.MathHelper;
 import org.apache.logging.log4j.Level;
 
@@ -34,12 +34,13 @@ import org.apache.logging.log4j.Level;
  * 4) getCurrentBreathState() and getBreathStateFractionComplete() should be called by animation routines for
  * the dragon during breath weapon (eg jaw opening)
  */
-public abstract class DragonBreathHelper extends DragonHelper {
+public abstract class DragonBreathHelper implements ITickable {
     public static DragonBreathHelper newInstance(TameableDragonEntity dragon) {
         return dragon.world.isRemote ? new ClientBreathHelper(dragon) : new ServerBreathHelper(dragon);
     }
 
     public final BreathAffectedArea breathAffectedArea = new BreathAffectedArea();
+    public final TameableDragonEntity dragon;
     protected final int BREATH_START_DURATION = 5; // ticks
     protected final int BREATH_STOP_DURATION = 5; // ticks
     protected BreathState currentBreathState = BreathState.IDLE;
@@ -48,7 +49,7 @@ public abstract class DragonBreathHelper extends DragonHelper {
     protected int tickCounter = 0;
 
     public DragonBreathHelper(TameableDragonEntity dragon) {
-        super(dragon);
+        this.dragon = dragon;
     }
 
     public enum BreathState {IDLE, STARTING, SUSTAIN, STOPPING}

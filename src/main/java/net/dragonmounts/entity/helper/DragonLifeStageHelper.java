@@ -31,7 +31,7 @@ import static net.minecraft.entity.SharedMonsterAttributes.*;
 /**
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class DragonLifeStageHelper extends DragonHelper {
+public class DragonLifeStageHelper {
     public static final UUID DRAGON_AEG_MODIFIER_ID = UUID.fromString("856d4ba4-9ffe-4a52-8606-890bb9be538b");
     private static final Logger L = LogManager.getLogger();
     private static final String NBT_TICKS_SINCE_CREATION = "TicksSinceCreation";
@@ -39,6 +39,7 @@ public class DragonLifeStageHelper extends DragonHelper {
     private static final float EGG_CRACK_THRESHOLD = 0.9f;
     private static final float EGG_WIGGLE_THRESHOLD = 0.75f;
     private static final float EGG_WIGGLE_BASE_CHANCE = 20;
+    public final TameableDragonEntity dragon;
     protected final Random rand;
     // the ticks since creation is used to control the dragon's life stage.  It is only updated by the server occasionally.
     // the client keeps a cached copy of it and uses client ticks to interpolate in the gaps.
@@ -48,15 +49,11 @@ public class DragonLifeStageHelper extends DragonHelper {
     private DragonLifeStage lifeStagePrev;
     private int eggWiggleX;
     private int eggWiggleZ;
-    //    private final Map<EnumDragonBreed, AtomicInteger> breedPoints = new EnumMap<>(EnumDragonBreed.class);
     private int ticksSinceCreationServer;
 
     public DragonLifeStageHelper(TameableDragonEntity dragon, DataParameter<Integer> dataParam) {
-        super(dragon);
-
+        this.dragon = dragon;
         this.dataParam = dataParam;
-        dataWatcher.register(dataParam, ticksSinceCreationServer);
-
         if (dragon.world.isRemote) {
             ticksSinceCreationClient = new ClientServerSynchronisedTickCount(TICKS_SINCE_CREATION_UPDATE_INTERVAL);
             ticksSinceCreationClient.reset(ticksSinceCreationServer);
@@ -113,7 +110,7 @@ public class DragonLifeStageHelper extends DragonHelper {
             L.error("setLifeStage called on Client");
         } else {
             ticksSinceCreationServer = lifeStage.boundaryTick - lifeStage.durationTicks;
-            dataWatcher.set(dataParam, ticksSinceCreationServer);
+            this.dragon.getDataManager().set(dataParam, ticksSinceCreationServer);
         }
         updateLifeStage();
     }
@@ -130,17 +127,15 @@ public class DragonLifeStageHelper extends DragonHelper {
         ticksSinceCreationServer = ticksSinceCreation;
     }
 
-    @Override
     public void writeToNBT(NBTTagCompound nbt) {
         nbt.setInteger(NBT_TICKS_SINCE_CREATION, getTicksSinceCreation());
     }
 
-    @Override
     public void readFromNBT(NBTTagCompound nbt) {
         int ticksRead = nbt.getInteger(NBT_TICKS_SINCE_CREATION);
         ticksRead = DragonLifeStage.clipTickCountToValid(ticksRead);
         ticksSinceCreationServer = ticksRead;
-        dataWatcher.set(dataParam, ticksSinceCreationServer);
+        this.dragon.getDataManager().set(dataParam, ticksSinceCreationServer);
         float health = this.dragon.getHealth();
         DragonLifeStage stage = getLifeStageFromTickCount(ticksRead);
         this.onNewLifeStage(stage, this.lifeStagePrev);
@@ -184,11 +179,6 @@ public class DragonLifeStageHelper extends DragonHelper {
             }
         }
         dragon.onLifeStageChange(lifeStage);
-    }
-
-    @Override
-    public void onLivingUpdate() {
-        this.ageUp(1);
     }
 
     private void updateLifeStage() {
@@ -264,6 +254,7 @@ public class DragonLifeStageHelper extends DragonHelper {
     }
 
     public void ageUp(int ticks) {
+        TameableDragonEntity dragon = this.dragon;
         // if the dragon is not an adult or paused, update its growth ticks
         if (dragon.world.isRemote) {
             this.sync();
@@ -274,7 +265,7 @@ public class DragonLifeStageHelper extends DragonHelper {
             if (DragonLifeStage.ADULT != this.getLifeStage() && !dragon.isGrowthPaused()) {
                 ticksSinceCreationServer += ticks;
                 if (ticks > TICKS_SINCE_CREATION_UPDATE_INTERVAL || ticksSinceCreationServer % TICKS_SINCE_CREATION_UPDATE_INTERVAL == 0)
-                    dataWatcher.set(dataParam, ticksSinceCreationServer);
+                    dragon.getDataManager().set(dataParam, ticksSinceCreationServer);
             }
         }
         updateLifeStage();
@@ -285,6 +276,6 @@ public class DragonLifeStageHelper extends DragonHelper {
     }
 
     public void sync() {
-        this.ticksSinceCreationClient.updateFromServer(this.dataWatcher.get(this.dataParam));
+        this.ticksSinceCreationClient.updateFromServer(this.dragon.getDataManager().get(this.dataParam));
     }
 }

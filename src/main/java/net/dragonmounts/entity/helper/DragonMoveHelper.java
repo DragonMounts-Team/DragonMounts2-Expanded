@@ -2,6 +2,7 @@ package net.dragonmounts.entity.helper;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.util.math.Vec3d;
 
@@ -36,7 +37,7 @@ public class DragonMoveHelper extends EntityMoveHelper {
             // move towards target if it's far away enough   dragon.width
             if (dist > dragon.width) {
                 double boost = dragon.boosting() ? 4 : 1;
-                double flySpeed = dragon.getEntityAttribute(TameableDragonEntity.MOVEMENT_SPEED_AIR).getAttributeValue() * boost;
+                double flySpeed = dragon.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).getAttributeValue() * boost;
 
                 // update velocity to approach target
                 dragon.motionX = dir.x * flySpeed;

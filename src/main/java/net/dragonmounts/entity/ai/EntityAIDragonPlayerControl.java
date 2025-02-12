@@ -37,6 +37,7 @@ public class EntityAIDragonPlayerControl extends EntityAIDragonBase {
     @Override
     public void startExecuting() {
         dragon.getNavigator().clearPath();
+        dragon.getAISit().setSitting(false);
     }
 
     @Override

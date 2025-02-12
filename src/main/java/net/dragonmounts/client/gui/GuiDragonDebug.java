@@ -17,7 +17,6 @@ import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.entity.helper.DragonLifeStageHelper;
-import net.dragonmounts.entity.helper.DragonReproductionHelper;
 import net.dragonmounts.entity.helper.DragonVariantHelper;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.LogUtil;
@@ -25,7 +24,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
@@ -177,7 +175,7 @@ public class GuiDragonDebug extends Gui {
         // health
         String health = dfShort.format(dragon.getHealth());
         String healthMax = dfShort.format(dragon.getMaxHealth());
-        String healthRel = dfShort.format(dragon.getHealthRelative() * 100);
+        String healthRel = dfShort.format(dragon.getHealth() / dragon.getMaxHealth() * 100);
         text.printf("Health: %s/%s (%s%%)\n", health, healthMax, healthRel);
         // hunger
         String hunger = dfShort.format(dragon.getHunger());
@@ -235,18 +233,7 @@ public class GuiDragonDebug extends Gui {
         	allowOthersString = "no";
         }
         text.println("AllowedOthers: " + allowOthersString);
-
-        // breeder name
-        DragonReproductionHelper reproduction = dragon.getReproductionHelper();
-        EntityPlayer breeder = reproduction.getBreeder();
-        String breederName;
-        if (breeder == null) {
-            breederName = "none";
-        } else {
-            breederName = breeder.getName();
-        }
-        text.println("Breeder: " + breederName);
-        text.println("ReproTicks: " + reproduction.getReproCount());
+        text.println("Reproduction Count: " + dragon.getReproductionCount());
     }
 
     private void renderAttributes(TameableDragonEntity dragon) {

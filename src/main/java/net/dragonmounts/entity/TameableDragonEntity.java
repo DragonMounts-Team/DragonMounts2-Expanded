@@ -9,9 +9,7 @@ c ** 2012 August 13
  */
 package net.dragonmounts.entity;
 
-import com.google.common.base.Optional;
 import io.netty.buffer.ByteBuf;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.block.HatchableDragonEggBlock;
@@ -43,14 +41,12 @@ import net.dragonmounts.util.MutableBlockPosEx;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
-import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.monster.IMob;
@@ -72,10 +68,7 @@ import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -93,7 +86,10 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 import static net.dragonmounts.util.EntityUtil.replaceAttributeModifier;
 import static net.minecraft.entity.SharedMonsterAttributes.ATTACK_DAMAGE;
@@ -106,11 +102,8 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     // base attributes
     public static final double BASE_GROUND_SPEED = 0.4;
     public static final double BASE_AIR_SPEED = 0.9;
-    public static final IAttribute MOVEMENT_SPEED_AIR = new RangedAttribute(null, "generic.movementSpeedAir", 0.9, 0.0, Double.MAX_VALUE).setDescription("Movement Speed Air").setShouldWatch(true);
-    public static final double BASE_DAMAGE = DragonMountsConfig.BASE_DAMAGE;
-    public static final double BASE_ARMOR = DragonMountsConfig.ARMOR;
     public static final double BASE_TOUGHNESS = 30.0D;
-    public static final float RESISTANCE = 10.0f;
+    public static final float RESISTANCE = 10.0F;
     public static final double BASE_FOLLOW_RANGE = 70;
     public static final double BASE_FOLLOW_RANGE_FLYING = BASE_FOLLOW_RANGE * 2;
     public static final int HOME_RADIUS = 64;
@@ -127,9 +120,8 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     private static final DataParameter<Boolean> HOVER_CANCELLED = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> Y_LOCKED = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> FOLLOW_YAW = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Optional<UUID>> DATA_BREEDER = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.OPTIONAL_UNIQUE_ID);
     private static final DataParameter<DragonVariant> DATA_VARIANT = EntityDataManager.createKey(TameableDragonEntity.class, DragonVariant.SERIALIZER);
-    private static final DataParameter<Integer> DATA_REPRO_COUNT = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> DATA_REPRODUCTION_COUNT = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> HUNGER = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> DATA_TICKS_SINCE_CREATION = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> DATA_SHEARED = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
@@ -139,14 +131,13 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     private static final DataParameter<ItemStack> DATA_ARMOR = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.ITEM_STACK);
     private static final DataParameter<ItemStack> DATA_CHEST = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.ITEM_STACK);
     private static final DataParameter<ItemStack> DATA_SADDLE = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.ITEM_STACK);
-    // server/client delegates
-    private final Map<Class<?>, DragonHelper> helpers = new Reference2ObjectOpenHashMap<>();
-    // client-only delegates
-    private final DragonBodyHelper dragonBodyHelper = new DragonBodyHelper(this);
-    public EntityEnderCrystal healingEnderCrystal;
     public final DragonInventory inventory = new DragonInventory(this);
     public final DragonVariantHelper variantHelper = new DragonVariantHelper(this);
+    public final DragonLifeStageHelper lifeStageHelper = new DragonLifeStageHelper(this, DATA_TICKS_SINCE_CREATION);
+    public final DragonReproductionHelper reproductionHelper = new DragonReproductionHelper(this);
     public final DragonBreathHelper breathHelper = DragonBreathHelper.newInstance(this);
+    // public final DragonHungerHelper hungerHelper = new DragonHungerHelper(this);
+    public EntityEnderCrystal healingEnderCrystal;
     public int inAirTicks;
     public int roarTicks;
     protected int ticksSinceLastAttack;
@@ -163,30 +154,16 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
     public TameableDragonEntity(World world) {
         super(world);
-
         // enables walking over blocks
-        stepHeight = (float) DragonMountsConfig.stepHeight;
-        DragonLifeStageHelper helper;
-        // create entity delegates
-        addHelper(helper = new DragonLifeStageHelper(this, DATA_TICKS_SINCE_CREATION));
-        addHelper(new DragonReproductionHelper(this, DATA_BREEDER, DATA_REPRO_COUNT));
-        addHelper(this.breathHelper);
-        addHelper(new DragonHungerHelper(this));
-
-        // set base size
-        setSize(4.8F, 4.2F);//TODO: use DragonType or something else
-
-        // init helpers
-        moveHelper = new DragonMoveHelper(this);
-        aiSit = new EntityAIDragonSit(this);
-        animator = new DragonAnimator(this);
-        helper.applyEntityAttributes();
+        this.stepHeight = (float) DragonMountsConfig.stepHeight;
+        this.moveHelper = new DragonMoveHelper(this);
+        this.animator = new DragonAnimator(this);
+        this.lifeStageHelper.applyEntityAttributes();
     }
 
     @Override
-    protected float updateDistance(float f1, float f2) {
-        dragonBodyHelper.updateRenderAngles();
-        return f2;
+    protected @Nonnull EntityBodyHelper createBodyHelper() {
+        return new DragonBodyHelper(this);
     }
 
     @Override
@@ -211,10 +188,13 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         manager.register(DATA_CHEST, ItemStack.EMPTY);
         manager.register(DATA_SADDLE, ItemStack.EMPTY);
         manager.register(DATA_VARIANT, DragonVariants.ENDER_FEMALE);
+        manager.register(DATA_TICKS_SINCE_CREATION, 0);
+        manager.register(DATA_REPRODUCTION_COUNT, 0);
     }
 
     @Override
     protected void initEntityAI() {
+        this.aiSit = new EntityAIDragonSit(this);
         // mutex 1: generic targeting
         EntityAITasks targets = this.targetTasks;
         targets.addTask(2, new EntityAIOwnerHurtByTarget(this)); // mutex 1
@@ -279,14 +259,14 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         AbstractAttributeMap attributes = this.getAttributeMap();
-        attributes.registerAttribute(MOVEMENT_SPEED_AIR);
+        attributes.registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
         attributes.registerAttribute(ATTACK_DAMAGE);
-        attributes.getAttributeInstance(MOVEMENT_SPEED_AIR).setBaseValue(BASE_AIR_SPEED);
+        attributes.getAttributeInstance(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(BASE_AIR_SPEED);
         attributes.getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(BASE_GROUND_SPEED);
-        attributes.getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(BASE_DAMAGE);
+        attributes.getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(DragonMountsConfig.BASE_DAMAGE);
         attributes.getAttributeInstance(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(BASE_FOLLOW_RANGE);
         attributes.getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(RESISTANCE);
-        attributes.getAttributeInstance(SharedMonsterAttributes.ARMOR).setBaseValue(BASE_ARMOR);
+        attributes.getAttributeInstance(SharedMonsterAttributes.ARMOR).setBaseValue(DragonMountsConfig.ARMOR);
         attributes.getAttributeInstance(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(BASE_TOUGHNESS);
         attributes.getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(DragonMountsConfig.BASE_HEALTH);
         attributes.getAttributeInstance(SWIM_SPEED).setBaseValue(5.0);
@@ -303,7 +283,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         //nbt.setBoolean("projectile", this.isUsingAltBreathWeapon());
         nbt.setBoolean("unhovered", this.isUnHovered());
         nbt.setBoolean("followyaw", this.followYaw());
-        nbt.setInteger("AgeTicks", this.getLifeStageHelper().getTicksSinceCreation());
         nbt.setInteger("hunger", this.getHunger());
         nbt.setBoolean("boosting", this.boosting());
         nbt.setBoolean("ylocked", this.isYLocked());
@@ -312,10 +291,9 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         nbt.setString(DragonVariant.DATA_PARAMETER_KEY, this.getVariant().getSerializedName());
         //        nbt.setBoolean("sleeping", this.isSleeping()); //unused as of now
         this.inventory.saveAdditionalData(nbt);
+        this.lifeStageHelper.writeToNBT(nbt);
         this.variantHelper.writeToNBT(nbt);
-        for (DragonHelper helper : this.helpers.values()) {
-            helper.writeToNBT(nbt);
-        }
+        this.reproductionHelper.writeToNBT(nbt);
     }
 
     /**
@@ -329,7 +307,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         this.setGrowthPaused(nbt.getBoolean("growthpause"));
         this.setUsingBreathWeapon(nbt.getBoolean("Breathing"));
         //this.setUsingProjectile(nbt.getBoolean("projectile"));
-        this.getLifeStageHelper().setTicksSinceCreation(nbt.getInteger("AgeTicks"));
         this.setUnHovered(nbt.getBoolean("unhovered"));
         this.setYLocked(nbt.getBoolean("ylocked"));
         this.setFollowYaw(nbt.getBoolean("followyaw"));
@@ -351,7 +328,8 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
             this.setVariant(DragonVariant.byName(nbt.getString(DragonVariant.DATA_PARAMETER_KEY)));
         }
         this.variantHelper.readFromNBT(nbt);
-        helpers.values().forEach(helper -> helper.readFromNBT(nbt));
+        this.lifeStageHelper.readFromNBT(nbt);
+        this.reproductionHelper.readFromNBT(nbt);
     }
 
     public boolean boosting() {
@@ -502,6 +480,14 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         }
     }
 
+    public int getReproductionCount() {
+        return this.dataManager.get(DATA_REPRODUCTION_COUNT);
+    }
+
+    public void setReproductionCount(int count) {
+        this.dataManager.set(DATA_REPRODUCTION_COUNT, count);
+    }
+
     /**
      * Called when the mob is falling. Calculates and applies fall damage.
      */
@@ -556,21 +542,21 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
      * Checks if the blocks below the dragons hitbox is present and solid
      */
     public boolean onSolidGround() {
-        for (double y = -3.0; y <= -1.0; ++y) {
-            for (double xz = -2.0; xz < 3.0; ++xz) {
-                if (isBlockSolid(posX + xz, posY + y, posZ + xz)) return true;
+        MutableBlockPosEx pos = new MutableBlockPosEx(0, 0, 0);
+        AxisAlignedBB box = this.getEntityBoundingBox();
+        World level = this.world;
+        int startX = MathHelper.ceil(box.minX), endX = MathHelper.floor(box.maxX);
+        int startZ = MathHelper.ceil(box.minZ), endZ = MathHelper.floor(box.maxZ);
+        boolean hasController = this.getControllingPlayer() != null;
+        for (int endY = MathHelper.ceil(box.minY), y = endY - 3; y <= endY; ++y) {
+            for (int x = startX; x <= endX; ++x) {
+                for (int z = startZ; z <= endZ; ++z) {
+                    Material material = level.getBlockState(pos.with(x, y, z)).getMaterial();
+                    if (material.isSolid() || (hasController && material.isLiquid())) return true;
+                }
             }
         }
         return false;
-    }
-
-    /*
-     * Called in onSolidGround()
-     */
-    private boolean isBlockSolid(double xcoord, double ycoord, double zcoord) {
-        BlockPos pos = new BlockPos(xcoord, ycoord, zcoord);
-        IBlockState state = world.getBlockState(pos);
-        return state.getMaterial().isSolid() || (this.getControllingPlayer() != null && state.getMaterial().isLiquid());
     }
 
     @SideOnly(Side.CLIENT)
@@ -587,8 +573,9 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     @Override
     public void onLivingUpdate() {
         boolean isServer = !this.world.isRemote;
-        this.variantHelper.onLivingUpdate();
-        helpers.values().forEach(DragonHelper::onLivingUpdate);
+        this.variantHelper.update();
+        this.lifeStageHelper.ageUp(1);
+        this.breathHelper.update();
         this.getVariant().type.tick(this);
         if (isServer) {
             animator.setMovement(0, 0); // dummy
@@ -1049,22 +1036,11 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
     /**
      * Returns render size modifier for the shadow
+     * See {@code net.minecraft.client.renderer.entity.Render#renderShadow(Entity, double, double, double, float, float)}
      */
     @Override
     public float getRenderSizeModifier() {
-        return getScale() / (isChild() ? 0.5F : 1.0F);
-//  0.5 isChild() correction is required due to the code in Render::renderShadow which shrinks the shadow for a child
-//    if (entityIn instanceof EntityLiving)
-//    {
-//      EntityLiving entityliving = (EntityLiving)entityIn;
-//      f *= entityliving.getRenderSizeModifier();
-//
-//      if (entityliving.isChild())
-//      {
-//        f *= 0.5F;
-//      }
-//    }
-
+        return this.isChild() ? 2.0F * this.getScale() : this.getScale();
     }
 
     /**
@@ -1085,19 +1061,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         return false;
     }
 
-    /**
-     * Returns the entity's health relative to the maximum health.
-     *
-     * @return health normalized between 0 and 1
-     */
-    public double getHealthRelative() {
-        return getHealth() / (double) getMaxHealth();
-    }
-
-    public int getDeathTime() {
-        return deathTime;
-    }
-
     public int getMaxDeathTime() {
         return 120;
     }
@@ -1108,14 +1071,9 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
     @Override
     public boolean isEntityInvulnerable(DamageSource src) {
-        Entity srcEnt = src.getImmediateSource();
-        if (srcEnt != null) {
+        if (src.getImmediateSource() == this) {
             // ignore own damage
-            if (srcEnt == this) {
-                return true;
-            }
-
-
+            return true;
         }
 
         // don't drown as egg
@@ -1134,7 +1092,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         if (attacker != null) {
             if (this.isPassengerBroadly(attacker)) return false;
         }
-        if (source != DamageSource.IN_WALL) {
+        if (source != DamageSource.IN_WALL && !this.world.isRemote) {
             // don't just sit there!
             this.getAISit().setSitting(false);
         }
@@ -1208,27 +1166,29 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
      */
     @Override
     public EntityAgeable createChild(EntityAgeable mate) {
-        return mate instanceof TameableDragonEntity ? this.getReproductionHelper().createChild((TameableDragonEntity) mate) : null;
+        return mate instanceof TameableDragonEntity ? this.reproductionHelper.createChild((TameableDragonEntity) mate) : null;
     }
 
-    private void addHelper(DragonHelper helper) {
-        L.trace("addHelper({})", helper.getClass().getName());
-        helpers.put(helper.getClass(), helper);
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T extends DragonHelper> T getHelper(Class<T> clazz) {
-        return (T) helpers.get(clazz);
-    }
-
+    /**
+     * @deprecated Access {@link #lifeStageHelper} directly.
+     */
+    @Deprecated
     public DragonLifeStageHelper getLifeStageHelper() {
-        return getHelper(DragonLifeStageHelper.class);
+        return this.lifeStageHelper;
     }
 
+    /**
+     * @deprecated Access {@link #reproductionHelper} directly.
+     */
+    @Deprecated
     public DragonReproductionHelper getReproductionHelper() {
-        return getHelper(DragonReproductionHelper.class);
+        return this.reproductionHelper;
     }
 
+    /**
+     * @deprecated Access {@link #breathHelper} directly.
+     */
+    @Deprecated
     public DragonBreathHelper getBreathHelper() {
         return this.breathHelper;
     }
@@ -1299,8 +1259,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
     /**
      * sets the riding player alongide with its rotationYaw and rotationPitch
-     *
-     * @param player
      */
     public void setRidingPlayer(EntityPlayer player) {
         L.trace("setRidingPlayer({})", player.getName());
@@ -1588,8 +1546,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
          */
         if (isTrusted && !isSitting() && this.isChild() && !player.isSneaking() && player.getPassengers().size() < 2 && isInertItem(stack)) {
             this.setAttackTarget(null);
-            this.getNavigator().clearPath();
-            this.getAISit().setSitting(false);
             this.startRiding(player, true);
             return true;
         }
