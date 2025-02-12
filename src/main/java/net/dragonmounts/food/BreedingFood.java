@@ -2,6 +2,7 @@ package net.dragonmounts.food;
 
 import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
@@ -19,7 +20,7 @@ public class BreedingFood extends CommonFood {
     @Override
     public boolean tryFeed(TameableDragonEntity dragon, EntityPlayer player, Relation relation, ItemStack stack, EnumHand hand) {
         if (super.tryFeed(dragon, player, relation, stack, hand)) {
-            if (!dragon.world.isRemote && dragon.isTamed() && dragon.isAdult() && !dragon.isInLove()) {
+            if (!dragon.world.isRemote && dragon.isTamed() && DragonLifeStage.ADULT == dragon.getLifeStageHelper().getLifeStage() && !dragon.isInLove()) {
                 dragon.setInLove(player);
             }
             return true;

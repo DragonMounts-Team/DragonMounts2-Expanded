@@ -1,0 +1,26 @@
+package net.dragonmounts.entity.breath.impl;
+
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.breath.DragonBreathHelper;
+import net.minecraft.util.math.Vec3d;
+
+public class ServerBreathHelper extends DragonBreathHelper {
+    public ServerBreathHelper(TameableDragonEntity dragon) {
+        super(dragon);
+    }
+
+    @Override
+    public void onLivingUpdate() {
+        ++tickCounter;
+        TameableDragonEntity dragon = this.dragon;
+        this.updateBreathState(dragon.isUsingBreathWeapon());
+        if (this.breath == null) return;
+        if (BreathState.SUSTAIN == this.currentBreathState) {
+            Vec3d origin = dragon.getAnimator().getThroatPosition();
+            Vec3d lookDirection = dragon.getLook(1.0F);
+            Vec3d endOfLook = origin.add(lookDirection.x, lookDirection.y, lookDirection.z);
+            this.breathAffectedArea.continueBreathing(dragon.world, origin, endOfLook, dragon.getLifeStageHelper().getLifeStage().power);
+        }
+        this.breathAffectedArea.updateTick(dragon.world, this.breath);
+    }
+}

@@ -9,8 +9,8 @@
  */
 package net.dragonmounts.entity.ai;
 
-import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
@@ -55,7 +55,7 @@ public class EntityAIDragonPlayerControl extends EntityAIDragonBase {
         }
 
         // if we're breathing at a target, look at it
-        if (dragon.isUsingBreathWeapon() && dragon.getBreathHelper().hasWeapon()) {
+        if (dragon.isUsingBreathWeapon() && dragon.getBreathHelper().canBreathe()) {
             Vec3d dragonEyePos = dragon.getPositionVector().add(0, dragon.getEyeHeight(), 0);
             Vec3d lookDirection = rider.getLook(1.0F);
             Vec3d endOfLook = dragonEyePos.add(lookDirection.x, lookDirection.y, lookDirection.z);

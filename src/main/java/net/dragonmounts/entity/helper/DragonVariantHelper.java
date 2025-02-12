@@ -12,6 +12,8 @@ import net.dragonmounts.registry.DragonVariant;
 import net.minecraft.block.Block;
 import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -19,6 +21,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 import static net.dragonmounts.util.math.MathX.parseColor;
 
@@ -33,10 +36,12 @@ public class DragonVariantHelper extends DragonHelper {
     private static final int TICK_RATE_PARTICLES = 2;
     private static final int TICK_RATE_BLOCK = 20;
     private final Reference2IntOpenHashMap<DragonType> points = new Reference2IntOpenHashMap<>();
+    protected final Random rand;
     private DragonType lastType;
 
     public DragonVariantHelper(TameableDragonEntity dragon) {
         super(dragon);
+        this.rand = dragon.getRNG();
     }
 
     public Reference2IntMap<DragonType> getBreedPoints() {
@@ -135,7 +140,10 @@ public class DragonVariantHelper extends DragonHelper {
             return;
         }
         if (this.lastType == null || this.lastType.avoidWater != type.avoidWater) {
-            dragon.getBrain().setAvoidsWater(type.avoidWater);
+            PathNavigate navigator = dragon.getNavigator();
+            if (navigator instanceof PathNavigateGround) {
+                ((PathNavigateGround) navigator).setCanSwim(!type.avoidWater); // originally setAvoidsWater()
+            }
         }
 
         // check for fire immunity and disable fire particles

@@ -52,11 +52,11 @@ public class AgeableAppearance extends VariantAppearance {
 
     @Override
     public ResourceLocation getBody(TameableDragonEntity dragon) {
-        return dragon != null && dragon.isBaby() ? this.babyBody : this.body;
+        return dragon != null && dragon.isChild() ? this.babyBody : this.body;
     }
 
     @Override
     public ResourceLocation getGlow(TameableDragonEntity dragon) {
-        return dragon != null && dragon.isBaby() ? this.babyGlow : this.glow;
+        return dragon != null && dragon.isChild() ? this.babyGlow : this.glow;
     }
 }

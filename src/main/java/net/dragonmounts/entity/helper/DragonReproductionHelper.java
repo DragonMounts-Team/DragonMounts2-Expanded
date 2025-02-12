@@ -19,6 +19,7 @@ import net.minecraft.network.datasync.DataParameter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -33,12 +34,15 @@ public class DragonReproductionHelper extends DragonHelper {
     public static final String NBT_BREEDER_OLD = "HatchedBy";
     public static final byte REPRO_LIMIT = 2;
     private static final Logger L = LogManager.getLogger();
+    protected final Random rand;
     private final DataParameter<Optional<UUID>> dataParamBreeder;
     private final DataParameter<Integer> dataParamReproduced;
 
-    public DragonReproductionHelper(TameableDragonEntity dragon,
-                                    DataParameter<Optional<UUID>> dataParamBreeder,
-                                    DataParameter<Integer> dataIndexReproCount) {
+    public DragonReproductionHelper(
+            TameableDragonEntity dragon,
+            DataParameter<Optional<UUID>> dataParamBreeder,
+            DataParameter<Integer> dataIndexReproCount
+    ) {
         super(dragon);
 
         this.dataParamBreeder = dataParamBreeder;
@@ -46,6 +50,7 @@ public class DragonReproductionHelper extends DragonHelper {
 
         dataWatcher.register(dataParamBreeder, Optional.absent());
         dataWatcher.register(dataIndexReproCount, 0);
+        this.rand = dragon.getRNG();
     }
 
     @Override

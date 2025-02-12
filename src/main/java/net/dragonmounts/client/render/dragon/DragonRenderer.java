@@ -125,7 +125,7 @@ public class DragonRenderer extends RenderLiving<TameableDragonEntity> {
         GlStateManager.rotate(tickZ > 0 ? MathHelper.sin(tickZ - partialTicks) * 8 : 0, 0, 0, 1);
         GlStateManager.disableLighting();
 
-        bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
         // prepare egg rendering
         Tessellator tessellator = Tessellator.getInstance();

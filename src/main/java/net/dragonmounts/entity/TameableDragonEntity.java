@@ -21,7 +21,10 @@ import net.dragonmounts.capability.IDragonFood;
 import net.dragonmounts.capability.IHardShears;
 import net.dragonmounts.client.gui.GuiHandler;
 import net.dragonmounts.client.model.dragon.anim.DragonAnimator;
-import net.dragonmounts.entity.ai.ground.EntityAIDragonSit;
+import net.dragonmounts.entity.ai.*;
+import net.dragonmounts.entity.ai.air.EntityAIDragonFlight;
+import net.dragonmounts.entity.ai.air.EntityAIDragonFollowOwnerElytraFlying;
+import net.dragonmounts.entity.ai.ground.*;
 import net.dragonmounts.entity.ai.path.PathNavigateFlying;
 import net.dragonmounts.entity.breath.DragonBreathHelper;
 import net.dragonmounts.entity.helper.*;
@@ -33,6 +36,7 @@ import net.dragonmounts.item.DragonSpawnEggItem;
 import net.dragonmounts.network.CDragonBreathPacket;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
+import net.dragonmounts.util.ClassPredicate;
 import net.dragonmounts.util.EntityUtil;
 import net.dragonmounts.util.ItemUtil;
 import net.dragonmounts.util.MutableBlockPosEx;
@@ -42,14 +46,15 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityEnderCrystal;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -141,6 +146,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     public EntityEnderCrystal healingEnderCrystal;
     public final DragonInventory inventory = new DragonInventory(this);
     public final DragonVariantHelper variantHelper = new DragonVariantHelper(this);
+    public final DragonBreathHelper breathHelper = DragonBreathHelper.newInstance(this);
     public int inAirTicks;
     public int roarTicks;
     protected int ticksSinceLastAttack;
@@ -154,18 +160,18 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     private boolean chested;
     private boolean saddled;
     protected int shearCooldown;
+
     public TameableDragonEntity(World world) {
         super(world);
 
         // enables walking over blocks
         stepHeight = (float) DragonMountsConfig.stepHeight;
-
+        DragonLifeStageHelper helper;
         // create entity delegates
-        addHelper(new DragonLifeStageHelper(this, DATA_TICKS_SINCE_CREATION));
+        addHelper(helper = new DragonLifeStageHelper(this, DATA_TICKS_SINCE_CREATION));
         addHelper(new DragonReproductionHelper(this, DATA_BREEDER, DATA_REPRO_COUNT));
-        addHelper(new DragonBreathHelper(this, DATA_BREATH_WEAPON_TARGET, DATA_BREATH_WEAPON_MODE));
+        addHelper(this.breathHelper);
         addHelper(new DragonHungerHelper(this));
-        if (!world.isRemote) addHelper(new DragonBrain(this));
 
         // set base size
         setSize(4.8F, 4.2F);//TODO: use DragonType or something else
@@ -173,8 +179,8 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         // init helpers
         moveHelper = new DragonMoveHelper(this);
         aiSit = new EntityAIDragonSit(this);
-        helpers.values().forEach(DragonHelper::applyEntityAttributes);
         animator = new DragonAnimator(this);
+        helper.applyEntityAttributes();
     }
 
     @Override
@@ -205,6 +211,68 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         manager.register(DATA_CHEST, ItemStack.EMPTY);
         manager.register(DATA_SADDLE, ItemStack.EMPTY);
         manager.register(DATA_VARIANT, DragonVariants.ENDER_FEMALE);
+    }
+
+    @Override
+    protected void initEntityAI() {
+        // mutex 1: generic targeting
+        EntityAITasks targets = this.targetTasks;
+        targets.addTask(2, new EntityAIOwnerHurtByTarget(this)); // mutex 1
+        targets.addTask(3, new EntityAIOwnerHurtTarget(this)); // mutex 1
+        targets.addTask(4, new EntityAIDragonHurtByTarget(this)); // mutex 1
+        targets.addTask(5, new EntityAINearestAttackableTarget<>(this, EntityLiving.class, 10, false, true, IMob.VISIBLE_MOB_SELECTOR));
+        targets.addTask(6, new EntityAIDragonHunt(this, false, new ClassPredicate<>(
+                EntitySheep.class,
+                EntityPig.class,
+                EntityChicken.class,
+                EntityRabbit.class,
+                EntityLlama.class
+        ))); // mutex 1
+    }
+
+    /**
+     * do not use {@link #initEntityAI()} because initialization is not completed at that time
+     */
+    public void setupTasks() {
+        // eggs don't have any tasks
+        EntityAITasks tasks = this.tasks;
+        if (!this.firstUpdate) {
+            Iterator<EntityAITasks.EntityAITaskEntry> iterator = tasks.taskEntries.iterator();
+            while (iterator.hasNext()) {
+                EntityAITasks.EntityAITaskEntry entry = iterator.next();
+                if (entry.using) {
+                    entry.using = false;
+                    entry.action.resetTask();
+                    tasks.executingTaskEntries.remove(entry);
+                }
+                iterator.remove();
+            }
+        }
+        DragonLifeStage stage = this.getLifeStageHelper().getLifeStage();
+        if (DragonLifeStage.EGG == stage) return;
+
+        // mutex 1: movement
+        // mutex 2: looking
+        // mutex 4: special state
+        tasks.addTask(0, new EntityAIDragonCatchOwner(this)); // mutex all
+        tasks.addTask(1, new EntityAIDragonPlayerControl(this)); // mutex all
+        tasks.addTask(2, this.getAISit()); // mutex 4+1
+        tasks.addTask(2, new EntityAISwimming(this)); // mutex 4
+        tasks.addTask(3, new EntityAIDragonFlight(this, 1)); // mutex 1
+        tasks.addTask(5, new EntityAIAttackMelee(this, 1, true)); // mutex 2+1
+        tasks.addTask(6, new EntityAIDragonFollowOwnerElytraFlying(this)); // mutex 2+1
+        tasks.addTask(6, new EntityAIDragonFollowOwner(this, 1.25, 20, 16)); // mutex 2+1
+        tasks.addTask(8, new EntityAIMoveTowardsRestriction(this, 1)); // mutex 1
+        tasks.addTask(10, new EntityAIWander(this, 1)); // mutex 1
+        tasks.addTask(11, new EntityAIDragonWatchIdle(this)); // mutex 2
+        tasks.addTask(11, new EntityAIDragonWatchLiving(this, 16, 0.05f)); // mutex 2
+        if (stage.isBaby()) {
+            tasks.addTask(4, new EntityAILeapAtTarget(this, 0.7F)); // mutex 1
+            tasks.addTask(7, new DragonTemptGoal(this, 0.75)); // mutex 2+1
+            tasks.addTask(9, new EntityAIDragonFollowParent(this, 1.4f));
+        } else if (DragonLifeStage.ADULT == stage) {
+            tasks.addTask(8, new EntityAIDragonMate(this, 0.6)); // mutex 2+1
+        }
     }
 
     @Override
@@ -245,7 +313,9 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         //        nbt.setBoolean("sleeping", this.isSleeping()); //unused as of now
         this.inventory.saveAdditionalData(nbt);
         this.variantHelper.writeToNBT(nbt);
-        helpers.values().forEach(helper -> helper.writeToNBT(nbt));
+        for (DragonHelper helper : this.helpers.values()) {
+            helper.writeToNBT(nbt);
+        }
     }
 
     /**
@@ -310,7 +380,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
     public boolean canFly() {
         // eggs can't fly
-        return !isEgg() && !isBaby();
+        return !isEgg() && !isChild();
     }
 
     /**
@@ -561,16 +631,14 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
                 //TODO: reuse?
                 if (flying) {
-                    navigator = new PathNavigateFlying(this, world);
+                    this.navigator = new PathNavigateFlying(this, world);
                 } else {
-                    navigator = new PathNavigateGround(this, world);
+                    PathNavigateGround navigator = new PathNavigateGround(this, world);
+                    this.navigator = navigator;
+                    navigator.setCanSwim(true);
+                    navigator.setEnterDoors(this.isChild());
                 }
-
-                // tasks need to be updated after switching modes
-                getBrain().updateAITasks();
-
             }
-
         } else {
             animator.tickingUpdate();
             this.updateKeys();
@@ -744,8 +812,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
      */
     @Override
     protected void onDeathUpdate() {
-        helpers.values().forEach(DragonHelper::onDeathUpdate);
-
         // unmount any riding entities
         removePassengers();
 
@@ -762,7 +828,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
     @Override
     public void setDead() {
-        helpers.values().forEach(DragonHelper::onDeath);
+        this.getLifeStageHelper().onDeath();
         super.setDead();
     }
 
@@ -866,7 +932,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
         SoundEvent stepSound;
         // baby has quiet steps, larger have stomping sound
-        if (isBaby()) {
+        if (isChild()) {
             SoundType soundType;
             // override sound type if the top block is snowy
             if (world.getBlockState(entityPos.up()).getBlock() == Blocks.SNOW_LAYER)
@@ -1062,7 +1128,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if (this.isBaby() && isJumping) return false; // ?
+        if (this.isChild() && isJumping) return false; // ?
         Entity attacker = source.getTrueSource();
         // ignore damage from riders
         if (attacker != null) {
@@ -1164,15 +1230,11 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     }
 
     public DragonBreathHelper getBreathHelper() {
-        return getHelper(DragonBreathHelper.class);
+        return this.breathHelper;
     }
 
     public DragonAnimator getAnimator() {
         return animator;
-    }
-
-    public DragonBrain getBrain() {
-        return getHelper(DragonBrain.class);
     }
 
     public double getDragonSpeed() {
@@ -1250,7 +1312,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     @Override
     public void updateRidden() {
         Entity vehicle = this.getRidingEntity();
-        if (this.isDead || vehicle != null && vehicle.isSneaking() || !isBaby()) {
+        if (this.isDead || vehicle != null && vehicle.isSneaking() || !isChild()) {
             this.dismountRidingEntity();
         } else {
             this.motionX = 0.0D;
@@ -1337,21 +1399,19 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
     /**
      * Public wrapper for protected final setScale(), used by DragonLifeStageHelper.
-     *
-     * @param scale
      */
+    @Deprecated
     public void setScalePublic(float scale) {
-        double posXTmp = posX;
-        double posYTmp = posY;
-        double posZTmp = posZ;
         boolean onGroundTmp = onGround;
-
-        setScale(scale);
-
+        //this.stepHeight = 2.0F * scale;
+        float width = this.width;
+        this.setScale(scale);
         // workaround for a vanilla bug; the position is apparently not set correcty
         // after changing the entity size, causing asynchronous server/client
         // positioning
-        setPosition(posXTmp, posYTmp, posZTmp);
+        if (this.world.isRemote && this.width > width && !this.firstUpdate) {
+            this.move(MoverType.SELF, width - this.width, 0.0D, width - this.width);
+        }
 
         // otherwise, setScale stops the dragon from landing while it is growing
         onGround = onGroundTmp;
@@ -1366,7 +1426,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     @Override
     public int getGrowingAge() {
         // adapter for vanilla code to enable breeding interaction
-        return isAdult() ? 0 : -1;
+        return DragonLifeStage.ADULT == this.getLifeStageHelper().getLifeStage() ? 0 : -1;
     }
 
     /**
@@ -1401,25 +1461,13 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         return getLifeStageHelper().isEgg();
     }
 
-    public boolean isBaby() {
-        return getLifeStageHelper().isBaby();
-    }
-
     public boolean isOldEnoughToBreathe() {
         return getLifeStageHelper().isOldEnough(DragonLifeStage.INFANT);
     }
 
-    public boolean isJuvenile() {
-        return getLifeStageHelper().isJuvenile();
-    }
-
-    public boolean isAdult() {
-        return getLifeStageHelper().isFullyGrown();
-    }
-
     @Override
     public boolean isChild() {
-        return getLifeStageHelper().isBaby();
+        return getLifeStageHelper().getLifeStage().isBaby();
     }
 
     @Override
@@ -1441,7 +1489,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
     @Override
     protected ResourceLocation getLootTable() {
-        return !isTamed() && !isEgg() || !isBaby() ? this.getVariant().type.lootTable : null;
+        return !isTamed() && !isEgg() || !isChild() ? this.getVariant().type.lootTable : null;
     }
 
     public boolean isSheared() {
@@ -1538,7 +1586,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         /*
          * Dragon Riding The Player
          */
-        if (isTrusted && !isSitting() && this.isBaby() && !player.isSneaking() && player.getPassengers().size() < 2 && isInertItem(stack)) {
+        if (isTrusted && !isSitting() && this.isChild() && !player.isSneaking() && player.getPassengers().size() < 2 && isInertItem(stack)) {
             this.setAttackTarget(null);
             this.getNavigator().clearPath();
             this.getAISit().setSitting(false);
@@ -1583,7 +1631,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
                 this.openGUI(player, GuiHandler.GUI_DRAGON);
                 return true;
             }
-            if (!this.isBaby()) {
+            if (!this.isChild()) {
                 /*
                  * Player Riding the Dragon
                  */
@@ -1635,7 +1683,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     }
 
     public final void onLifeStageChange(DragonLifeStage stage) {
-        if (stage.isEgg()) {
+        if (DragonLifeStage.EGG == stage) {
             this.setSize(3.5F, 4.0F);
         } else {
             //Pair<Float, Float> size = this.getBreed().getAdultEntitySize();TODO: use DragonType or something else

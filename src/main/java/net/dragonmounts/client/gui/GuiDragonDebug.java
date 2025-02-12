@@ -23,7 +23,6 @@ import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.LogUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,6 +31,7 @@ import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.GuiIngameForge;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -54,24 +54,21 @@ public class GuiDragonDebug extends Gui {
     private static final int GREY = 0xAAAAAA;
     private static final int YELLOW = 0xFFFF00;
     private static final int RED = 0xFF8888;
-
-    public static Object probe; // what is this? --2190303755
-
-    private final Minecraft mc = Minecraft.getMinecraft();
+    private static final DecimalFormat dfShort = new DecimalFormat("0.00");
+    private static final DecimalFormat dfLong = new DecimalFormat("0.0000");
+    private final Minecraft mc;
     private final GuiTextPrinter text;
-    private final DecimalFormat dfShort = new DecimalFormat("0.00");
-    private final DecimalFormat dfLong = new DecimalFormat("0.0000");
-    private ScaledResolution res;
     private TameableDragonEntity clientCache;
     private TameableDragonEntity serverCache;
 
     public GuiDragonDebug() {
-        text = new GuiTextPrinter(mc.fontRenderer);
+        this.mc = Minecraft.getMinecraft();
+        this.text = new GuiTextPrinter(mc.fontRenderer);
     }
     
     @SubscribeEvent
     public void onRenderOverlay(RenderGameOverlayEvent event) {
-        if (!DragonMountsConfig.debugScreen || event.isCancelable() || event.getType() != ElementType.TEXT) return;
+        if (!DragonMountsConfig.showDebugScreen || event.isCancelable() || event.getType() != ElementType.TEXT) return;
         TameableDragonEntity client = this.getClientDragon();
         if (client == null) return;
         TameableDragonEntity server = this.getServerDragon(client);
@@ -81,7 +78,6 @@ public class GuiDragonDebug extends Gui {
                 ? client
                 : server;
         GuiIngameForge gui = (GuiIngameForge) mc.ingameGUI;
-        res = gui.getResolution();
         renderTitle();
         try {
             if (server != null) {
@@ -98,7 +94,6 @@ public class GuiDragonDebug extends Gui {
             } else {
                 renderEntityInfo(selected);
             }
-            //renderProbe();
         } catch (Exception ex) {
             renderException(ex);
         }
@@ -153,15 +148,14 @@ public class GuiDragonDebug extends Gui {
     }
 
     private void renderEntityInfo(TameableDragonEntity dragon) {
+        DecimalFormat dfShort = GuiDragonDebug.dfShort;
         text.setOrigin(16, 32);
 
         text.setColor(YELLOW);
-        text.println("Entity");
+        text.print("Entity ");
         text.setColor(WHITE);
-
+        text.printf("(#%s)\n", dragon.getEntityId());
         text.println("Side: " + (dragon.world.isRemote ? "client" : "server"));
-
-        text.println("ID: " + dragon.getEntityId());
         text.println("UUID: " + StringUtils.abbreviate(dragon.getUniqueID().toString(), 22));
         text.println("Name: " + dragon.getName());
 
@@ -172,13 +166,13 @@ public class GuiDragonDebug extends Gui {
         String mx = dfShort.format(dragon.motionX);
         String my = dfShort.format(dragon.motionY);
         String mz = dfShort.format(dragon.motionZ);
-        text.printf("x: %s y: %s z: %s\n", px, py, pz, mx, my, mz);
+        text.printf("Position: (%s, %s, %s)\nMotion: (%s, %s, %s)\n", px, py, pz, mx, my, mz);
 
         // rotation
         String pitch = dfShort.format(dragon.rotationPitch);
         String yaw = dfShort.format(dragon.rotationYaw);
         String yawHead = dfShort.format(dragon.rotationYawHead);
-        text.printf("p: %s y: %s yh: %s\n", pitch, yaw, yawHead);
+        text.printf("Pitch: %s; Yaw: %s; HeadYaw: %s\n", pitch, yaw, yawHead);
 
         // health
         String health = dfShort.format(dragon.getHealth());
@@ -205,7 +199,19 @@ public class GuiDragonDebug extends Gui {
         String scale = dfShort.format(helper.getScale());
         String width = dfShort.format(dragon.width);
         String height = dfShort.format(dragon.height);
-        text.printf("Size: %s (w:%s h:%s)\n", scale, width, height);
+        AxisAlignedBB box = dragon.getEntityBoundingBox();
+        text.printf(
+                "Size: %s (w:%s h:%s)\nBox: (%s, %s, %s) (%s, %s, %s)\n",
+                scale,
+                width,
+                height,
+                dfShort.format(box.minX),
+                dfShort.format(box.minY),
+                dfShort.format(box.minZ),
+                dfShort.format(box.maxX),
+                dfShort.format(box.maxY),
+                dfShort.format(box.maxZ)
+        );
 
         // tamed flag/owner name
         //String tamedString = dragon.getOwnerName();
@@ -215,7 +221,7 @@ public class GuiDragonDebug extends Gui {
             if (player != null) {
                 tamedString = "yes (" + player.getName()+ ")";
             } else {
-                tamedString = "yes (" + StringUtils.abbreviate(dragon.getOwnerId().toString(), 22) + ")";
+                tamedString = "yes (" + StringUtils.abbreviate(String.valueOf(dragon.getOwnerId()), 22) + ")";
             }
         } else {
             tamedString = "no";
@@ -241,7 +247,6 @@ public class GuiDragonDebug extends Gui {
         }
         text.println("Breeder: " + breederName);
         text.println("ReproTicks: " + reproduction.getReproCount());
-        text.println("Saddled: " + dragon.isSaddled());
     }
 
     private void renderAttributes(TameableDragonEntity dragon) {
@@ -329,12 +334,6 @@ public class GuiDragonDebug extends Gui {
         text.setColor(YELLOW);
         text.println("AI tasks");
         text.setColor(WHITE);
-    }
-    
-    private void renderProbe() {
-        if (probe == null) return;
-        text.setOrigin(16, res.getScaledHeight() - text.getLineSpace() * 2);
-        text.println(probe.getClass().getSimpleName() + ":" + probe);
     }
 
     private void renderException(Exception ex) {

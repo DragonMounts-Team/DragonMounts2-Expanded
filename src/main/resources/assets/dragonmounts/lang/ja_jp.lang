@@ -121,7 +121,6 @@ gui.dragonmounts.unbindWhistle.tooltip=Press Left Shift to Unlock
 ##### proofreading needed!
 key.categories.dragon=ドラゴンマウント
 key.dragonmounts.breath=ドラゴンブレス
-key.dragonmounts.boost=スピードブースト
 key.dragonmounts.descent=降下
 key.dragonmounts.toggleCameraPos=マウントカメラの変更
 key.dragonmounts.toggleHovering=Toggle Dragon Hovering

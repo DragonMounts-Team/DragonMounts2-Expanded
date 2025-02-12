@@ -9,6 +9,7 @@
  */
 package net.dragonmounts.entity.helper;
 
+import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.util.math.MathHelper;
 
@@ -20,14 +21,13 @@ import static net.dragonmounts.util.DMUtils.TICKS_PER_MINECRAFT_HOUR;
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public enum DragonLifeStage {
-
-  //order, duration of stage in hours of minecraft time, scaleAtStartOfStage, scaleAtEndOfStage
-  EGG(null, 36, 0.25f, 0.25f),
-  HATCHLING(EGG, 48, 0.04f, 0.09f),
-  INFANT(HATCHLING, 24, 0.10f, 0.18f),
-  PREJUVENILE(INFANT, 32, 0.19f, 0.60f),
-  JUVENILE(PREJUVENILE, 60, 0.61f, 0.99f),
-  ADULT(JUVENILE, 0, 1.00f, 1.00f);        // scale of the final stage should be 1.00F to avoid breaking other code
+    EGG(null, 36, 0.25F, 0.25F, BreathPower.SMALL),
+    HATCHLING(EGG, 48, 0.04F, 0.09F, BreathPower.SMALL),
+    INFANT(HATCHLING, 24, 0.10f, 0.18F, BreathPower.SMALL),
+    PREJUVENILE(INFANT, 32, 0.19F, 0.60F, BreathPower.SMALL),
+    JUVENILE(PREJUVENILE, 60, 0.61F, 0.99F, BreathPower.MEDIUM),
+    // scale of the final stage should be 1.00F to avoid breaking other code
+    ADULT(JUVENILE, 0, 1.00F, 1.00f, BreathPower.LARGE);
 
 //  desired durations (30 Jun 2019)
 //  egg = 30 minutes
@@ -37,87 +37,68 @@ public enum DragonLifeStage {
 //  juvenile = 50 minutes
 //          adult = 1 hour
 
-  public final String identifier;
-  public final String translationKey;
-  public final int durationTicks;
-  public final float startScale;
-  public final float finalScale;
-  public final int boundaryTick;
+    public final String identifier;
+    public final String translationKey;
+    public final BreathPower power;
+    public final int durationTicks;
+    public final float startScale;
+    public final float finalScale;
+    public final int boundaryTick;
 
-  /**
-   * Which life stage is the dragon in?
-   * @param minecraftTimeHours = the duration of this stage in game time hours (each hour game time is 50 seconds in real life)
-   * @param scaleAtEndOfStage size of this stage relative to the final scale (adult)
-   */
-  DragonLifeStage(DragonLifeStage prior, int minecraftTimeHours, float scaleAtStartOfStage, float scaleAtEndOfStage) {
-    this.durationTicks = minecraftTimeHours * TICKS_PER_MINECRAFT_HOUR;
-    this.startScale = scaleAtStartOfStage;
-    this.finalScale = scaleAtEndOfStage;
-    this.boundaryTick = prior == null ? this.durationTicks : prior.boundaryTick + this.durationTicks;
-    this.identifier = this.name().toLowerCase();
-    this.translationKey = "life_stage.dragon." + this.identifier;
-  }
-
-  /** true if we're in the egg, false otherwise
-   * @return
-   */
-  public boolean isEgg() {
-    return this == EGG;
-  }
-
-  /**
-   * does this stage act like a minecraft baby
-   * @return
-   */
-  public boolean isBaby() {
-    return this == HATCHLING || this == INFANT;
-  }
-
-  public boolean isJuvenile() {
-    return  this == JUVENILE || this == PREJUVENILE;
-  }
-
-  /**
-   * is the dragon fully grown?
-   * @return
-   */
-  public boolean isFullyGrown() {
-    return this == ADULT;
-  }
-
-  public boolean isOldEnough(DragonLifeStage stage) {
-    return this.ordinal() >= stage.ordinal();
-  }
-
-  /**
-   * get the current life stage based on the dragon's age
-   * @param ticksSinceCreation number of ticks since the egg was created
-   * @return
-   */
-  public static DragonLifeStage getLifeStageFromTickCount(int ticksSinceCreation) {
-    for (DragonLifeStage stage : values()) {
-      if (ticksSinceCreation < stage.boundaryTick) return stage;
+    DragonLifeStage(DragonLifeStage prior, int minecraftTimeHours, float scaleAtStartOfStage, float scaleAtEndOfStage, BreathPower power) {
+        this.durationTicks = minecraftTimeHours * TICKS_PER_MINECRAFT_HOUR;
+        this.startScale = scaleAtStartOfStage;
+        this.finalScale = scaleAtEndOfStage;
+        this.boundaryTick = prior == null ? this.durationTicks : prior.boundaryTick + this.durationTicks;
+        this.identifier = this.name().toLowerCase();
+        this.translationKey = "life_stage.dragon." + this.identifier;
+        this.power = power;
     }
-    return DragonLifeStage.ADULT;
-  }
 
-  public static float getStageProgressFromTickCount(int ticksSinceCreation) {
-    DragonLifeStage stage = getLifeStageFromTickCount(ticksSinceCreation);
-    if (stage.durationTicks == 0) return 1.0F;
-    return 1.0F + MathHelper.clamp((ticksSinceCreation - stage.boundaryTick) / (float) stage.durationTicks, -1.0F, 0.0F);
-  }
+    /**
+     * does this stage act like a minecraft baby
+     */
+    public boolean isBaby() {
+        return this == HATCHLING || this == INFANT;
+    }
 
-  public static float getScaleFromTickCount(int ticksSinceCreation) {
-    DragonLifeStage stage = getLifeStageFromTickCount(ticksSinceCreation);
-    if (stage.durationTicks == 0) return stage.startScale;
-    return MathX.lerp(
-            stage.startScale,
-            stage.finalScale,
-            1.0F + MathHelper.clamp((ticksSinceCreation - stage.boundaryTick) / (float) stage.durationTicks, -1.0F, 0.0F)
-    );
-  }
+    public boolean isJuvenile() {
+        return this == JUVENILE || this == PREJUVENILE;
+    }
 
-  public static int clipTickCountToValid(int ticksSinceCreation) {
-    return MathHelper.clamp(ticksSinceCreation, 0, ADULT.boundaryTick);
-  }
+    public boolean isOldEnough(DragonLifeStage stage) {
+        return this.ordinal() >= stage.ordinal();
+    }
+
+    /**
+     * get the current life stage based on the dragon's age
+     *
+     * @param ticksSinceCreation number of ticks since the egg was created
+     */
+    public static DragonLifeStage getLifeStageFromTickCount(int ticksSinceCreation) {
+        for (DragonLifeStage stage : values()) {
+            if (ticksSinceCreation < stage.boundaryTick) return stage;
+        }
+        return DragonLifeStage.ADULT;
+    }
+
+    public static float getStageProgressFromTickCount(int ticksSinceCreation) {
+        DragonLifeStage stage = getLifeStageFromTickCount(ticksSinceCreation);
+        if (stage.durationTicks == 0) return 1.0F;
+        return 1.0F + MathHelper.clamp((ticksSinceCreation - stage.boundaryTick) / (float) stage.durationTicks, -1.0F, 0.0F);
+    }
+
+    public static float getScaleFromTickCount(int ticksSinceCreation) {
+        DragonLifeStage stage = getLifeStageFromTickCount(ticksSinceCreation);
+        if (stage.durationTicks == 0) return stage.startScale;
+        return MathX.lerp(
+                stage.startScale,
+                stage.finalScale,
+                1.0F + MathHelper.clamp((ticksSinceCreation - stage.boundaryTick) / (float) stage.durationTicks, -1.0F, 0.0F)
+        );
+    }
+
+    public static int clipTickCountToValid(int ticksSinceCreation) {
+        return MathHelper.clamp(ticksSinceCreation, 0, ADULT.boundaryTick);
+    }
 }

@@ -124,7 +124,6 @@ gui.dragonmounts.unbindWhistle.tooltip=Press Left Shift to Unlock
 #Controls
 key.categories.dragon=Dragon Mounts
 key.dragonmounts.breath=Souffle du Dragon
-key.dragonmounts.boost=Boost de vitesse
 key.dragonmounts.descent=Descendre du Dragon
 ##### Mismatched
 key.dragonmounts.toggleCameraPos=Changer de caméra sur la monture

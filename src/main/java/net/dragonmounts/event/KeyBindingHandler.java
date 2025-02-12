@@ -14,7 +14,8 @@ public class KeyBindingHandler {
     @SubscribeEvent
     public static void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) return;
-        EntityPlayer player = Minecraft.getMinecraft().player;
+        Minecraft mc = Minecraft.getMinecraft();
+        EntityPlayer player = mc.player;
         if (player == null) return;
         Entity vehicle = player.getRidingEntity();
         if (vehicle instanceof TameableDragonEntity) {
@@ -25,7 +26,7 @@ public class KeyBindingHandler {
                 DragonMounts.NETWORK_WRAPPER.sendToServer(new CDragonControlPacket(
                         vehicle.getEntityId(),
                         DMKeyBindings.KEY_BREATH.isKeyDown(),
-                        DMKeyBindings.KEY_BOOST.isKeyDown(),
+                        mc.gameSettings.keyBindSprint.isKeyDown(),
                         DMKeyBindings.KEY_DESCENT.isKeyDown(),
                         DMKeyBindings.TOGGLE_HOVERING.isPressed(),
                         DMKeyBindings.TOGGLE_YAW_ALIGNMENT.isPressed(),

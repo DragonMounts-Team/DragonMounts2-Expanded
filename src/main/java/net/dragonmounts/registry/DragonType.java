@@ -134,7 +134,7 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
     }
 
     public SoundEvent getLivingSound(TameableDragonEntity dragon) {
-        return dragon.isBaby() ? DMSounds.ENTITY_DRAGON_HATCHLING_GROWL :
+        return dragon.isChild() ? DMSounds.ENTITY_DRAGON_HATCHLING_GROWL :
                 (dragon.getRNG().nextInt(3) == 0
                         ? DMSounds.ENTITY_DRAGON_GROWL
                         : DMSounds.ENTITY_DRAGON_BREATHE
@@ -142,7 +142,7 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
     }
 
     public SoundEvent getRoarSound(TameableDragonEntity dragon) {
-        return dragon.isBaby() ? DMSounds.HATCHLING_DRAGON_ROAR : DMSounds.DRAGON_ROAR;
+        return dragon.isChild() ? DMSounds.HATCHLING_DRAGON_ROAR : DMSounds.DRAGON_ROAR;
     }
 
     public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {

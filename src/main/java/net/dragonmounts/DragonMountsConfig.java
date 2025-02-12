@@ -36,7 +36,7 @@ public class DragonMountsConfig {
     // config properties
     private static boolean disableBlockOverride = false;
     private static boolean debug = false;
-    public static boolean debugScreen = false;
+    public static boolean showDebugScreen = false;
     public static boolean shouldChangeBreedViaHabitatOrBlock = true;
     public static boolean canDragonDespawn = true;
 
@@ -166,8 +166,8 @@ public class DragonMountsConfig {
         debug = prop.getBoolean();
         propOrder.add(prop.getName());
 
-        prop = config.get(CATEGORY_CLIENTDM2, "debugScreen", false, "Display Debug Screen for developers.").setLanguageKey("config.dragonmounts.debugScreen");
-        debugScreen = debug && prop.getBoolean();
+        prop = config.get(CATEGORY_CLIENTDM2, "showDebugScreen", false, "Display Debug Screen for developers.").setLanguageKey("config.dragonmounts.showDebugScreen");
+        showDebugScreen = debug && prop.getBoolean();
         propOrder.add(prop.getName());
 
         prop = config.get(CATEGORY_MAIN, "can eggs change breeds", true);

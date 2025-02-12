@@ -93,7 +93,6 @@ gui.dragonmounts.lock.tooltip=信任陌生人：%s
 
 key.categories.dragon=龙骑士
 key.dragonmounts.breath=吐息
-key.dragonmounts.boost=飞行加速
 key.dragonmounts.descent=降落
 key.dragonmounts.toggleCameraPos=切换骑乘视角
 key.dragonmounts.toggleHovering=切换悬停状态

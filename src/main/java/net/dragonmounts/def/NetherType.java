@@ -62,7 +62,7 @@ public class NetherType extends DragonType {
 
     @Override
     public SoundEvent getLivingSound(TameableDragonEntity dragon) {
-        return dragon.isBaby() ? DMSounds.ENTITY_DRAGON_HATCHLING_GROWL : DMSounds.ENTITY_NETHER_DRAGON_GROWL;
+        return dragon.isChild() ? DMSounds.ENTITY_DRAGON_HATCHLING_GROWL : DMSounds.ENTITY_NETHER_DRAGON_GROWL;
     }
 
     @Override
