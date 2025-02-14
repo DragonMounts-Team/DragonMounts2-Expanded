@@ -1,6 +1,5 @@
 package net.dragonmounts.client.other;
 
-import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.client.userinput.DragonOrbControl;
 import net.dragonmounts.entity.breath.BreathWeaponTarget;
 import net.dragonmounts.util.LogUtil;
@@ -13,7 +12,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
 
@@ -32,7 +30,7 @@ public class TargetHighlighter {
      *
      * @param event the event
      */
-    @SubscribeEvent
+    //@SubscribeEvent
     public void blockHighlightDecider(DrawBlockHighlightEvent event) {
         BreathWeaponTarget targetBeingLookedAt = DragonOrbControl.getInstance().getTargetBeingLookedAt();
         if (targetBeingLookedAt == null) {
@@ -40,10 +38,6 @@ public class TargetHighlighter {
         }
 
         event.setCanceled(true);
-
-        if (!DragonMountsConfig.isOrbHighlightTarget()) {
-            return;
-        }
 
         BreathWeaponTarget targetToHighlight = targetBeingLookedAt;
         BreathWeaponTarget targetLockedOn = DragonOrbControl.getInstance().getTargetLockedOn();

@@ -1,21 +1,61 @@
 package net.dragonmounts.event;
 
+import net.dragonmounts.DragonMounts;
+import net.dragonmounts.DragonMountsTags;
+import net.dragonmounts.config.DMConfig;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMItems;
+import net.dragonmounts.init.DMKeyBindings;
 import net.dragonmounts.item.DragonSpawnEggItem;
+import net.dragonmounts.network.CDragonControlPacket;
 import net.dragonmounts.util.math.MathX;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.ItemColors;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-/**
- * Created by TGG on 29/05/2019.
- */
-public class IItemColorRegistration {
+public class ClientMisc {
     @SubscribeEvent
-    public static void registerItemHandlers(ColorHandlerEvent.Item event) {
+    public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
+        if (event.getModID().equals(DragonMountsTags.MOD_ID)) {
+            DMConfig.load();
+        }
+    }
+
+    @SubscribeEvent
+    public static void onTick(TickEvent.ClientTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) return;
+        Minecraft mc = Minecraft.getMinecraft();
+        EntityPlayer player = mc.player;
+        if (player == null) return;
+        Entity vehicle = player.getRidingEntity();
+        if (vehicle instanceof TameableDragonEntity) {
+            if (DMKeyBindings.TOGGLE_CAMERA_POS.isPressed()) {
+                CameraHandler.toggleCamera();
+            }
+            if (player == vehicle.getControllingPassenger()) {
+                DragonMounts.NETWORK_WRAPPER.sendToServer(new CDragonControlPacket(
+                        vehicle.getEntityId(),
+                        DMKeyBindings.KEY_BREATH.isKeyDown(),
+                        mc.gameSettings.keyBindSprint.isKeyDown(),
+                        DMKeyBindings.KEY_DESCENT.isKeyDown(),
+                        DMKeyBindings.TOGGLE_HOVERING.isPressed(),
+                        DMKeyBindings.TOGGLE_YAW_ALIGNMENT.isPressed(),
+                        DMKeyBindings.TOGGLE_PITCH_ALIGNMENT.isPressed()
+                ));
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void registerItemColors(ColorHandlerEvent.Item event) {
         // Dragon Whistle String Color
         ItemColors colors = event.getItemColors();
         colors.registerItemColorHandler((stack, tintIndex) -> {

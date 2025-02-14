@@ -1,7 +1,7 @@
 package net.dragonmounts.event;
 
-import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.block.HatchableDragonEggBlock;
+import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.init.DragonTypes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -23,7 +23,7 @@ public class VanillaEggHandler {
 		if (level.isRemote) return; //do nothing on client world
 		BlockPos pos = event.getPos();
 		if (level.getBlockState(pos).getBlock() != Blocks.DRAGON_EGG) return; //ignore all other blocks
-		if (DragonMountsConfig.isDisableBlockOverride()) return; //do nothing if config is set
+		if (!DMConfig.BLOCK_OVERRIDE.value) return; //do nothing if config is set
 		if (level.provider.getDimensionType() == DimensionType.THE_END) {
 			event.getEntityPlayer().sendStatusMessage(new TextComponentTranslation("message.dragonmounts.egg.wrongDimension"), true);
 			return;  //cant hatch in the end

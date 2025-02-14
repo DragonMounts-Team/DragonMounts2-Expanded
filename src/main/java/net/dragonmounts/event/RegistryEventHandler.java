@@ -3,7 +3,6 @@ package net.dragonmounts.event;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
-import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.block.entity.DragonHeadBlockEntity;
 import net.dragonmounts.capability.ArmorEffectManager;
@@ -12,6 +11,7 @@ import net.dragonmounts.capability.IDragonFood;
 import net.dragonmounts.capability.IHardShears;
 import net.dragonmounts.compat.DragonMountsCompat;
 import net.dragonmounts.compat.DragonTypeCompat;
+import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.breath.sound.SoundEffectName;
 import net.dragonmounts.food.CommonFood;
 import net.dragonmounts.init.*;
@@ -83,10 +83,8 @@ public class RegistryEventHandler {
             registry.register(item);
         }
         registry.register(DragonMountsCompat.DRAGON_EGG_ITEM);
-        if (DragonMountsConfig.isPrototypeBreathweapons()) {
+        if (DMConfig.DEBUG_MODE.value) {
             registry.register(DMItems.DRAGON_ORB);
-        }
-        if (DragonMountsConfig.isDebug()) {
             registry.register(DMItems.TEST_RUNNER);
         }
     }

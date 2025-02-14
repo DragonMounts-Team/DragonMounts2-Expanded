@@ -9,11 +9,9 @@
  */
 package net.dragonmounts.proxy;
 
-import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.block.entity.DragonHeadBlockEntity;
 import net.dragonmounts.client.gui.GuiDragonDebug;
-import net.dragonmounts.client.other.TargetHighlighter;
 import net.dragonmounts.client.render.CarriageRenderer;
 import net.dragonmounts.client.render.DMCapeRenderer;
 import net.dragonmounts.client.render.DragonCoreBlockEntityRenderer;
@@ -23,12 +21,12 @@ import net.dragonmounts.client.render.dragon.breathweaponFX.ClientBreathNodeRend
 import net.dragonmounts.client.userinput.DragonOrbControl;
 import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.client.variant.VariantAppearances;
+import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.CarriageEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.effects.ClientBreathNodeEntity;
 import net.dragonmounts.event.CameraHandler;
-import net.dragonmounts.event.IItemColorRegistration;
-import net.dragonmounts.event.KeyBindingHandler;
+import net.dragonmounts.event.ClientMisc;
 import net.dragonmounts.init.DMItems;
 import net.dragonmounts.init.DMKeyBindings;
 import net.dragonmounts.init.DragonVariants;
@@ -65,9 +63,7 @@ public class ClientProxy extends ServerProxy {
     @Override
     public void PreInitialization(FMLPreInitializationEvent event) {
         super.PreInitialization(event);
-        MinecraftForge.EVENT_BUS.register(IItemColorRegistration.class);
-        // register dragon entity renderer
-        DragonMountsConfig.clientPreInit();
+        MinecraftForge.EVENT_BUS.register(ClientMisc.class);
         RenderingRegistry.registerEntityRenderingHandler(TameableDragonEntity.class, DragonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ClientBreathNodeEntity.class, ClientBreathNodeRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(CarriageEntity.class, CarriageRenderer::new);
@@ -126,17 +122,14 @@ public class ClientProxy extends ServerProxy {
     @Override
     public void PostInitialization(FMLPostInitializationEvent event) {
         super.PostInitialization(event);
-        if (DragonMountsConfig.isDebug()) {
+        if (DMConfig.DEBUG_MODE.value) {
             MinecraftForge.EVENT_BUS.register(new GuiDragonDebug());
-        }
-        if (DragonMountsConfig.isPrototypeBreathweapons()) {
             DragonOrbControl.createSingleton();
             DragonOrbControl.initialiseInterceptors();
             MinecraftForge.EVENT_BUS.register(DragonOrbControl.getInstance());
-            MinecraftForge.EVENT_BUS.register(new TargetHighlighter());
+            //MinecraftForge.EVENT_BUS.register(new TargetHighlighter());
         }
         MinecraftForge.EVENT_BUS.register(CameraHandler.class);
-        MinecraftForge.EVENT_BUS.register(KeyBindingHandler.class);
         MinecraftForge.EVENT_BUS.register(DMCapeRenderer.class);
     }
 

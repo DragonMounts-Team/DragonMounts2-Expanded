@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.objects.Reference2IntMap;
 import it.unimi.dsi.fastutil.objects.Reference2IntMaps;
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceSet;
-import net.dragonmounts.DragonMountsConfig;
+import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.registry.DragonType;
@@ -85,7 +85,7 @@ public class DragonVariantHelper implements ITickable {
         }
 
         // update egg breed every second on the server
-        if (DragonMountsConfig.shouldChangeBreedViaHabitatOrBlock && current.convertible && dragon.ticksExisted % TICK_RATE_BLOCK == 0) {
+        if (DMConfig.ADAPTIVE_CONVERSION.value && current.convertible && dragon.ticksExisted % TICK_RATE_BLOCK == 0) {
             BlockPos eggPos = dragon.getPosition();
             // scan surrounding for breed-loving blocks
             for (BlockPos pos : BlockPos.getAllInBoxMutable(

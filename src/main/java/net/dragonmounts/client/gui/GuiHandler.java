@@ -9,8 +9,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
-public class GuiHandler implements IGuiHandler {
-
+public enum GuiHandler implements IGuiHandler {
+    INSTANCE;
     public static final int GUI_DRAGON = 0;
     public static final int GUI_DRAGON_WAND = 1;
     public static final int GUI_DRAGON_CORE = 3;

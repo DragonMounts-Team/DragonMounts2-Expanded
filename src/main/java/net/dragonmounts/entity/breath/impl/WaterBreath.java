@@ -1,5 +1,6 @@
 package net.dragonmounts.entity.breath.impl;
 
+import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathAffectedBlock;
 import net.dragonmounts.entity.breath.BreathAffectedEntity;
@@ -30,10 +31,12 @@ public class WaterBreath extends DragonBreath {
 
     @Override
     public BreathAffectedBlock affectBlock(World level, BlockPos pos, BreathAffectedBlock hit) {
+        level.spawnParticle(EnumParticleTypes.WATER_SPLASH, pos.getX(), pos.getY(), pos.getZ(), 1.0D, 4.0D, 1.0D);
+        if (!DMConfig.BREATH_EFFECTS.value) return new BreathAffectedBlock();
         IBlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
-        level.spawnParticle(EnumParticleTypes.WATER_SPLASH, pos.getX(), pos.getY(), pos.getZ(), 1.0D, 4.0D, 1.0D);
         if (block == Blocks.LAVA || block == Blocks.FLOWING_LAVA) {
+            if (!DMConfig.QUENCHING_BREATH.value) return new BreathAffectedBlock();
             int value = state.getValue(BlockLiquid.LEVEL);
             if (value == 0) {
                 level.setBlockState(pos, Blocks.OBSIDIAN.getDefaultState());

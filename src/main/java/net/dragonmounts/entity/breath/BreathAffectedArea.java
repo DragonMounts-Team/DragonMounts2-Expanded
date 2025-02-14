@@ -4,7 +4,6 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
-import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.util.MutableBlockPosEx;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -80,7 +79,6 @@ public class BreathAffectedArea {
     }
 
     private static void implementEffectsOnBlocksTick(World world, DragonBreath weapon, Map<BlockPos, BreathAffectedBlock> affectedBlocks) {
-        if (!DragonMountsConfig.doBreathweaponsAffectBlocks()) return;
         for (Map.Entry<BlockPos, BreathAffectedBlock> blockInfo : affectedBlocks.entrySet()) {
             blockInfo.setValue(weapon.affectBlock(world, blockInfo.getKey(), blockInfo.getValue()));
         }

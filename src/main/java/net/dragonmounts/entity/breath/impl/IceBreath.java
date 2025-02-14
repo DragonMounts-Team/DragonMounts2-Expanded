@@ -1,6 +1,6 @@
 package net.dragonmounts.entity.breath.impl;
 
-import net.dragonmounts.DragonMountsConfig;
+import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathAffectedBlock;
 import net.dragonmounts.entity.breath.BreathAffectedEntity;
@@ -30,10 +30,12 @@ public class IceBreath extends DragonBreath {
 
     @Override
     public BreathAffectedBlock affectBlock(World level, BlockPos pos, BreathAffectedBlock hit) {
+        if (!DMConfig.BREATH_EFFECTS.value) return new BreathAffectedBlock();
         IBlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
         BlockPos upper;
         if (block == Blocks.LAVA || block == Blocks.FLOWING_LAVA) {
+            if (!DMConfig.QUENCHING_BREATH.value) return new BreathAffectedBlock();
             int value = state.getValue(BlockLiquid.LEVEL);
             if (value == 0) {
                 level.setBlockState(pos, Blocks.OBSIDIAN.getDefaultState());
@@ -46,8 +48,8 @@ public class IceBreath extends DragonBreath {
             LevelUtil.playExtinguishEffect(level, pos);
         } else if (LevelUtil.isAir(level, upper = pos.offset(EnumFacing.UP))) {
             if ((block == Blocks.WATER || block == Blocks.FLOWING_WATER)) {
-                level.setBlockState(pos, (DragonMountsConfig.canIceBreathBePermanent ? Blocks.ICE : Blocks.FROSTED_ICE).getDefaultState());
-            } else if (DragonMountsConfig.canIceBreathBePermanent && (
+                level.setBlockState(pos, (DMConfig.FROSTY_BREATH.value ? Blocks.ICE : Blocks.FROSTED_ICE).getDefaultState());
+            } else if (DMConfig.FROSTY_BREATH.value && (
                     block.isLeaves(state, level, pos) || state.getBlockFaceShape(level, pos, EnumFacing.UP) == BlockFaceShape.SOLID
             )) {
                 level.setBlockState(upper, Blocks.SNOW_LAYER.getDefaultState());

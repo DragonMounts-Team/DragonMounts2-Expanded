@@ -1,6 +1,7 @@
 package net.dragonmounts.entity.breath.impl;
 
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
+import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathAffectedBlock;
 import net.dragonmounts.entity.breath.BreathAffectedEntity;
@@ -29,6 +30,7 @@ public class AetherBreath extends DragonBreath {
 
     @Override
     public BreathAffectedBlock affectBlock(World level, BlockPos pos, BreathAffectedBlock hit) {
+        if (!DMConfig.DESTRUCTIVE_BREATH.value) return new BreathAffectedBlock();
         IBlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
         // effects- which occur after the block has been exposed for sufficient time

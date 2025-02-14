@@ -1,6 +1,6 @@
 package net.dragonmounts.entity.breath.impl;
 
-import net.dragonmounts.DragonMountsConfig;
+import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathAffectedBlock;
 import net.dragonmounts.entity.breath.BreathAffectedEntity;
@@ -30,7 +30,7 @@ public class NetherBreath extends FireBreath {
         // 1) liquids (except lava) evaporate
         // 2) If the block can be smelted (eg sand), then convert the block to the smelted version
         // 3) If the block can't be smelted then convert to lava
-        if (DragonMountsConfig.canFireBreathAffectBlocks) {
+        if (DMConfig.SMELTING_BREATH.value) {
             IBlockState state = level.getBlockState(pos);
             Block block = state.getBlock();
             Random rand = level.rand;

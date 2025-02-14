@@ -1,9 +1,9 @@
 package net.dragonmounts.registry;
 
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
-import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.block.DragonHeadBlock;
 import net.dragonmounts.client.variant.VariantAppearance;
+import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.util.LogUtil;
 import net.dragonmounts.util.RegisteredObjectSerializer;
 import net.minecraft.util.ResourceLocation;
@@ -175,7 +175,7 @@ public class DragonVariant extends IForgeRegistryEntry.Impl<DragonVariant> {
 
         @Override
         public void onClear(IForgeRegistryInternal<DragonVariant> owner, RegistryManager stage) {
-            if (DragonMountsConfig.isDebug()) {
+            if (DMConfig.DEBUG_MODE.value) {
                 LogUtil.LOGGER.info("Clearing Registry!", new Throwable("Clearing Registry!"));
             }
             ReferenceOpenHashSet<DragonType> cleared = new ReferenceOpenHashSet<>();

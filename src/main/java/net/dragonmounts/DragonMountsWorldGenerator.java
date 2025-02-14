@@ -1,5 +1,6 @@
 package net.dragonmounts;
 
+import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.util.LogUtil;
 import net.dragonmounts.util.MutableBlockPosEx;
 import net.minecraft.block.Block;
@@ -52,7 +53,7 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
     public void generate(Random random, int x, int z, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
         if (world.isRemote ||
                 // isGenerationDisabled:
-                DragonMountsConfig.limitedDimensions.contains(world.provider.getDimension()) != DragonMountsConfig.allowDeclaredDimensionsOnly
+                DMConfig.LIMITED_DIMENSIONS.value.contains(world.provider.getDimension()) != DMConfig.ALLOW_DECLARED_DIMENSIONS_ONLY.value
         ) return;
         DimensionType type = world.provider.getDimensionType();
         if (type == DimensionType.NETHER) {
@@ -107,32 +108,32 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
         boolean isPlains = types.contains(Type.PLAINS);
         boolean isMesa = types.contains(Type.MESA);
         boolean isOcean = types.contains(Type.OCEAN);
-        if (isOcean && random.nextInt(DragonMountsConfig.OceanNestRarity) == 1) {
+        if (isOcean && random.nextInt(DMConfig.OceanNestRarity) == 1) {
             loadStructure(height.withY(height.getY() + 10), world, random.nextBoolean() ? AETHER : MOONLIGHT, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
 
-        } else if (isSnowy && random.nextInt(DragonMountsConfig.IceNestRarity) == 1 && canSpawnHere(world, height, 7, false)) {
+        } else if (isSnowy && random.nextInt(DMConfig.IceNestRarity) == 1 && canSpawnHere(world, height, 7, false)) {
 
             loadStructure(height.withY(height.getY() - 2), world, ICE, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
 
-        } else if (isJungle && random.nextInt(DragonMountsConfig.JungleNestRarity) == 1) {
+        } else if (isJungle && random.nextInt(DMConfig.JungleNestRarity) == 1) {
             loadStructure(height, world, FOREST1, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
 
-        } else if (isDesert && random.nextInt(DragonMountsConfig.SunlightNestRarity) == 1 && canSpawnHere(world, height, 22, false)) {
+        } else if (isDesert && random.nextInt(DMConfig.SunlightNestRarity) == 1 && canSpawnHere(world, height, 22, false)) {
 
             loadStructure(height.withY(height.getY() - 10), world, SUNLIGHT, LootTableList.CHESTS_DESERT_PYRAMID, random);
 
-        } else if (isMesa && random.nextInt(DragonMountsConfig.TerraNestRarity) == 1 && canSpawnHere(world, height, 4, false)) {
+        } else if (isMesa && random.nextInt(DMConfig.TerraNestRarity) == 1 && canSpawnHere(world, height, 4, false)) {
             loadStructure(height.withY(height.getY() - 2), world, TERRA, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
 
-        } else if ((isSwamp) && random.nextInt(DragonMountsConfig.WaterNestRarity) == 1 && canSpawnHere(world, height, 4, true)) {
+        } else if ((isSwamp) && random.nextInt(DMConfig.WaterNestRarity) == 1 && canSpawnHere(world, height, 4, true)) {
             loadStructure(height.withY(height.getY() - 4), world, WATER3, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
 
-        } else if ((isPlains || isForest) && random.nextInt(DragonMountsConfig.ForestNestRarity) == 1 && canSpawnHere(world, height, 4, false)) {
+        } else if ((isPlains || isForest) && random.nextInt(DMConfig.ForestNestRarity) == 1 && canSpawnHere(world, height, 4, false)) {
             loadStructure(height.withY(height.getY() - 2), world, FOREST2, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
 
-        } else if (isMountainOrBeach && random.nextInt(DragonMountsConfig.FireNestRarity) == 1 && canSpawnHere(world, height, 4, false)) {
+        } else if (isMountainOrBeach && random.nextInt(DMConfig.FireNestRarity) == 1 && canSpawnHere(world, height, 4, false)) {
             loadStructure(height.withY(height.getY() - 2), world, FIRE, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
-        } else if (types.contains(Type.VOID) && types.contains(Type.MAGICAL) && random.nextInt(DragonMountsConfig.OceanNestRarity) == 0) {
+        } else if (types.contains(Type.VOID) && types.contains(Type.MAGICAL) && random.nextInt(DMConfig.OceanNestRarity) == 0) {
             loadStructure(height.withY(height.getY() + 10), world, AETHER, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
         }
     }
@@ -194,11 +195,11 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
     }
 
     public static void generateNestAtNether(World world, Random random, int chunkX, int chunkZ) {
-        if (random.nextInt(DragonMountsConfig.netherNestRarity) == 1) {
+        if (random.nextInt(DMConfig.netherNestRarity) == 1) {
             MutableBlockPosEx pos = getNetherHeight(
                     world,
-                    chunkX * 16 + random.nextInt(DragonMountsConfig.netherNestRarerityInX),
-                    chunkZ * 16 + random.nextInt(DragonMountsConfig.netherNestRarerityInZ)
+                    chunkX * 16 + random.nextInt(DMConfig.netherNestRarerityInX),
+                    chunkZ * 16 + random.nextInt(DMConfig.netherNestRarerityInZ)
             );
             if (pos != null && canSpawnNetherHere(world, pos, 6)) {
                 loadStructure(pos, world, NETHER, LootTableList.CHESTS_NETHER_BRIDGE, random);
@@ -207,11 +208,11 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
     }
 
     public static void generateZombieAtNether(World world, Random random, int chunkX, int chunkZ) {
-        int x = chunkX * 16 + random.nextInt(DragonMountsConfig.zombieNestRarerityInX);
-        int z = chunkZ * 16 + random.nextInt(DragonMountsConfig.zombieNestRarerityInZ);
+        int x = chunkX * 16 + random.nextInt(DMConfig.zombieNestRarerityInX);
+        int z = chunkZ * 16 + random.nextInt(DMConfig.zombieNestRarerityInZ);
         MutableBlockPosEx pos = new MutableBlockPosEx(x, 85, z);
         for (int y = 85; y >= 5; --y) {
-            if (world.getBlockState(pos.withY(y)).isBlockNormalCube() && random.nextInt(DragonMountsConfig.zombieNestRarity) == 1) {
+            if (world.getBlockState(pos.withY(y)).isBlockNormalCube() && random.nextInt(DMConfig.zombieNestRarity) == 1) {
                 boolean invalid = false;
                 for (int Y = 1; Y < 4; ++Y) {
                     for (int Z = 0; Z < 3; ++Z) {
@@ -233,7 +234,7 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
     }
 
     public static void generateNestAtEnd(World world, Random random, int chunkX, int chunkZ) {
-        if (random.nextInt(DragonMountsConfig.EnchantNestRarity) == 1) {
+        if (random.nextInt(DMConfig.EnchantNestRarity) == 1) {
             int x = (chunkX * 16) + random.nextInt(16);
             int z = (chunkZ * 16) + random.nextInt(16);
             MutableBlockPosEx height = getSurface(world, x, z);
@@ -246,7 +247,7 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
 
     public static void loadStructure(MutableBlockPosEx pos, World world, ResourceLocation structure, @Nullable ResourceLocation lootTable, Random rand) {
         WorldServer worldserver = (WorldServer) world;
-        if (DragonMountsConfig.isDebug()) {
+        if (DMConfig.DEBUG_MODE.value) {
             LogUtil.LOGGER.info("Placing Dragon Nest at [{}]: {}", pos.toString(), structure);
         }
         Template template = worldserver.getStructureTemplateManager().getTemplate(world.getMinecraftServer(), structure);

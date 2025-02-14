@@ -1,6 +1,6 @@
 package net.dragonmounts.event;
 
-import net.dragonmounts.DragonMountsConfig;
+import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.CarriageEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.client.Minecraft;
@@ -37,7 +37,7 @@ public class CameraHandler {
         Vec3d start = new Vec3d(x, y, z);
         yaw *= 0.017453292F;
         pitch = view == 2 ? (pitch + 180.F) * 0.017453292F : pitch * 0.017453292F;
-        double distance = DragonMountsConfig.ThirdPersonZoom * scale;
+        double distance = DMConfig.CAMERA_DISTANCE.value * scale;
         double temp = MathHelper.cos(pitch) * distance;
         double d4 = -MathHelper.sin(yaw) * temp;
         double d5 = MathHelper.cos(yaw) * temp;

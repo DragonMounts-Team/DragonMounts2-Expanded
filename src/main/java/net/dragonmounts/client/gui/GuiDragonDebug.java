@@ -11,9 +11,9 @@ package net.dragonmounts.client.gui;
 
 import it.unimi.dsi.fastutil.objects.Reference2IntMap;
 import net.dragonmounts.DragonMounts;
-import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.client.ClientUtil;
+import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.entity.helper.DragonLifeStageHelper;
@@ -66,7 +66,8 @@ public class GuiDragonDebug extends Gui {
     
     @SubscribeEvent
     public void onRenderOverlay(RenderGameOverlayEvent event) {
-        if (!DragonMountsConfig.showDebugScreen || event.isCancelable() || event.getType() != ElementType.TEXT) return;
+        if (!DMConfig.ENABLE_DEBUG_SCREEN.value || event.isCancelable() || event.getType() != ElementType.TEXT)
+            return;
         TameableDragonEntity client = this.getClientDragon();
         if (client == null) return;
         TameableDragonEntity server = this.getServerDragon(client);
@@ -189,7 +190,7 @@ public class GuiDragonDebug extends Gui {
         text.setColor(WHITE);
 
         // life stage
-        DragonLifeStageHelper helper = dragon.getLifeStageHelper();
+        DragonLifeStageHelper helper = dragon.lifeStageHelper;
         int ticksSinceCreation = helper.getTicksSinceCreation();
         text.printf("Life Stage: %s %s (%d)\n", helper.getLifeStage().name(), dfShort.format(DragonLifeStage.getStageProgressFromTickCount(ticksSinceCreation)), ticksSinceCreation);
 

@@ -11,7 +11,6 @@ package net.dragonmounts.entity;
 
 import io.netty.buffer.ByteBuf;
 import net.dragonmounts.DragonMounts;
-import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.block.HatchableDragonEggBlock;
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.capability.DMCapabilities;
@@ -19,6 +18,7 @@ import net.dragonmounts.capability.IDragonFood;
 import net.dragonmounts.capability.IHardShears;
 import net.dragonmounts.client.gui.GuiHandler;
 import net.dragonmounts.client.model.dragon.anim.DragonAnimator;
+import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.ai.*;
 import net.dragonmounts.entity.ai.air.EntityAIDragonFlight;
 import net.dragonmounts.entity.ai.air.EntityAIDragonFollowOwnerElytraFlying;
@@ -154,8 +154,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
     public TameableDragonEntity(World world) {
         super(world);
-        // enables walking over blocks
-        this.stepHeight = (float) DragonMountsConfig.stepHeight;
         this.moveHelper = new DragonMoveHelper(this);
         this.animator = new DragonAnimator(this);
         this.lifeStageHelper.applyEntityAttributes();
@@ -263,12 +261,12 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         attributes.registerAttribute(ATTACK_DAMAGE);
         attributes.getAttributeInstance(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(BASE_AIR_SPEED);
         attributes.getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(BASE_GROUND_SPEED);
-        attributes.getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(DragonMountsConfig.BASE_DAMAGE);
+        attributes.getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(DMConfig.BASE_DAMAGE.value);
         attributes.getAttributeInstance(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(BASE_FOLLOW_RANGE);
         attributes.getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(RESISTANCE);
-        attributes.getAttributeInstance(SharedMonsterAttributes.ARMOR).setBaseValue(DragonMountsConfig.ARMOR);
+        attributes.getAttributeInstance(SharedMonsterAttributes.ARMOR).setBaseValue(DMConfig.BASE_ARMOR.value);
         attributes.getAttributeInstance(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(BASE_TOUGHNESS);
-        attributes.getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(DragonMountsConfig.BASE_HEALTH);
+        attributes.getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(DMConfig.BASE_HEALTH.value);
         attributes.getAttributeInstance(SWIM_SPEED).setBaseValue(5.0);
     }
 
@@ -654,7 +652,8 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
                 this.setUnHovered(true);
             }
         }
-        if (this.ticksExisted % (DragonMountsConfig.hungerDecrement) == 1) {
+        // TODO: config
+        if (this.ticksExisted % 6000 == 1) {
             if (this.getHunger() > 0) {
                 this.setHunger(this.getHunger() - 1);
             }
@@ -1361,7 +1360,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     @Deprecated
     public void setScalePublic(float scale) {
         boolean onGroundTmp = onGround;
-        //this.stepHeight = 2.0F * scale;
+        this.stepHeight = scale * (float) DMConfig.BASE_STEP_HEIGHT.value;
         float width = this.width;
         this.setScale(scale);
         // workaround for a vanilla bug; the position is apparently not set correcty

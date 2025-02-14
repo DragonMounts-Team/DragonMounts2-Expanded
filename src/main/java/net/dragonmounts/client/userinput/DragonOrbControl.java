@@ -2,7 +2,6 @@
 package net.dragonmounts.client.userinput;
 
 import net.dragonmounts.DragonMounts;
-import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.entity.breath.BreathWeaponTarget;
 import net.dragonmounts.init.DMItems;
 import net.dragonmounts.network.MessageDragonTarget;
@@ -118,9 +117,8 @@ public class DragonOrbControl {
 
     // if autolock is on, only change target when the player releases the button
     // (used on client side only, for rendering)  Server side AI is used for the real autolock
-    boolean orbTargetAutoLock = DragonMountsConfig.isOrbTargetAutoLock();
     if (breathWeaponTarget != null && triggerHeld) {
-      if (!orbTargetAutoLock || targetLockedOn == null) {
+      if (targetLockedOn == null) { // orbTargetAutoLock
         targetLockedOn = breathWeaponTarget;
       }
     } else {

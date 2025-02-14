@@ -10,11 +10,9 @@
 package net.dragonmounts.proxy;
 
 import net.dragonmounts.DragonMounts;
-import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.capability.ArmorEffectManager;
 import net.dragonmounts.capability.DMCapabilities;
 import net.dragonmounts.client.variant.VariantAppearance;
-import net.dragonmounts.command.DragonCommandTree;
 import net.dragonmounts.event.VanillaEggHandler;
 import net.dragonmounts.init.DMArmorEffects;
 import net.dragonmounts.network.*;
@@ -26,7 +24,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.function.Function;
@@ -37,7 +34,6 @@ import java.util.function.Function;
  */
 public class ServerProxy {
     public void PreInitialization(FMLPreInitializationEvent event) {
-        DragonMountsConfig.PreInit();
         CarriageType.REGISTRY.register();
         CooldownCategory.REGISTRY.register();
         DragonType.REGISTRY.register();
@@ -66,10 +62,6 @@ public class ServerProxy {
     public void PostInitialization(FMLPostInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(DMArmorEffects.class);
         MinecraftForge.EVENT_BUS.register(ArmorEffectManager.Events.class);
-    }
-
-    public void ServerStarting(FMLServerStartingEvent event) {
-        event.registerServerCommand(new DragonCommandTree());
     }
 
     public Function<String, VariantAppearance> getBuiltinAppearances() {
