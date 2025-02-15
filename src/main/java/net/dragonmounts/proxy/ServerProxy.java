@@ -13,7 +13,7 @@ import net.dragonmounts.DragonMounts;
 import net.dragonmounts.capability.ArmorEffectManager;
 import net.dragonmounts.capability.DMCapabilities;
 import net.dragonmounts.client.variant.VariantAppearance;
-import net.dragonmounts.event.VanillaEggHandler;
+import net.dragonmounts.event.CommonMisc;
 import net.dragonmounts.init.DMArmorEffects;
 import net.dragonmounts.network.*;
 import net.dragonmounts.registry.CarriageType;
@@ -41,7 +41,7 @@ public class ServerProxy {
     }
 
     public void Initialization(FMLInitializationEvent evt) {
-        MinecraftForge.EVENT_BUS.register(VanillaEggHandler.class);
+        MinecraftForge.EVENT_BUS.register(CommonMisc.class);
         DragonMounts.NETWORK_WRAPPER.registerMessage(MessageDragonTargetHandlerServer.class, MessageDragonTarget.class, 73, Side.SERVER);
 
         DragonMounts.NETWORK_WRAPPER.registerMessage(CDragonBreathPacket.Handler.class, CDragonBreathPacket.class, 0, Side.SERVER);

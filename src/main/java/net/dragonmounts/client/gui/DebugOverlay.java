@@ -22,6 +22,7 @@ import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.LogUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
@@ -314,6 +315,15 @@ public class DebugOverlay {
         text.setColor(YELLOW);
         text.println("AI tasks");
         text.setColor(WHITE);
+
+        EntityLivingBase target = dragon.getAttackTarget();
+        if (target == null) {
+            text.println("Current Target: None");
+        } else {
+            text.println("Current Target: " + target.getDisplayName().getFormattedText());
+            text.println("Target Type: " + target.getClass().getName());
+            text.println("Target UUID: " + target.getUniqueID());
+        }
     }
 
     private static void renderException(Exception ex) {

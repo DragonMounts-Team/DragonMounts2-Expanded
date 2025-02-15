@@ -21,7 +21,7 @@ public class EntityAIDragonSit extends EntityAISit {
                 this.dragon.getControllingPlayer() != null
         ) return false;
         EntityLivingBase owner = this.dragon.getOwner();
-        return owner == null || (this.dragon.getDistanceSq(owner) >= 144.0D || owner.getRevengeTarget() == null);
+        return owner == null || (this.dragon.getDistanceSq(owner) >= 144.0D && owner.getRevengeTarget() == null);
     }
 
     @Override

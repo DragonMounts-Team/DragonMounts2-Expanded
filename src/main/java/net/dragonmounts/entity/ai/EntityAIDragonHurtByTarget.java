@@ -4,10 +4,10 @@ import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAITarget;
 
+/**
+ * @see net.minecraft.entity.ai.EntityAIHurtByTarget
+ */
 public class EntityAIDragonHurtByTarget extends EntityAITarget {
-    /**
-     * Store the previous revengeTimer value
-     */
     private int revengeTimerOld;
     private final TameableDragonEntity dragon;
 
@@ -17,23 +17,17 @@ public class EntityAIDragonHurtByTarget extends EntityAITarget {
         this.setMutexBits(1);
     }
 
-    /**
-     * Returns whether the EntityAIBase should begin execution.
-     */
     public boolean shouldExecute() {
-        int i = this.dragon.getRevengeTimer();
+        int time = this.dragon.getRevengeTimer();
         EntityLivingBase target = this.dragon.getRevengeTarget();
-        return i != this.revengeTimerOld && target != null && this.isSuitableTarget(target, false) && this.dragon.shouldAttackEntity(target, dragon.getOwner());
+        return time != this.revengeTimerOld &&
+                target != null &&
+                this.isSuitableTarget(target, false);
     }
 
-    /**
-     * Execute a one shot task or start executing a continuous task
-     */
     public void startExecuting() {
         TameableDragonEntity dragon = this.dragon;
-        EntityLivingBase owner = dragon.getOwner();
-        EntityLivingBase target = this.target = dragon.getRevengeTarget();
-        dragon.setAttackTarget(target);
+        dragon.setAttackTarget(this.target = dragon.getRevengeTarget());
         this.revengeTimerOld = dragon.getRevengeTimer();
         this.unseenMemoryTicks = 300;
         super.startExecuting();

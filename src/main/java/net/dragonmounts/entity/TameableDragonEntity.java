@@ -1123,7 +1123,15 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
     @Override
     public boolean shouldAttackEntity(@Nonnull EntityLivingBase target, @Nullable EntityLivingBase owner) {
-        return target instanceof EntityTameable ? !(((EntityTameable) target).getOwner() instanceof EntityPlayer) : !this.isOwner(target);
+        if (target instanceof EntityTameable) {
+            EntityTameable tameable = (EntityTameable) target;
+            return !tameable.isTamed() || tameable.getOwner() != owner;
+        } else if (target instanceof EntityPlayer) {
+            return !(owner instanceof EntityPlayer) || ((EntityPlayer) owner).canAttackPlayer((EntityPlayer) target);
+        } else if (owner != null && target instanceof AbstractHorse) {
+            return !((AbstractHorse) target).isTame();
+        }
+        return true;
     }
 
     /**
@@ -1290,8 +1298,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
     /**
      * This code is called when the dragon is riding on the shoulder of the player. Credits: Ice and Fire
-     *
-     * @param riding
      */
     public void updateRiding(@Nonnull EntityPlayer riding) {
         int index = riding.getPassengers().indexOf(this);
@@ -1359,7 +1365,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
      */
     @Deprecated
     public void setScalePublic(float scale) {
-        boolean onGroundTmp = onGround;
         this.stepHeight = scale * (float) DMConfig.BASE_STEP_HEIGHT.value;
         float width = this.width;
         this.setScale(scale);
@@ -1369,9 +1374,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         if (this.world.isRemote && this.width > width && !this.firstUpdate) {
             this.move(MoverType.SELF, width - this.width, 0.0D, width - this.width);
         }
-
-        // otherwise, setScale stops the dragon from landing while it is growing
-        onGround = onGroundTmp;
     }
 
     /**

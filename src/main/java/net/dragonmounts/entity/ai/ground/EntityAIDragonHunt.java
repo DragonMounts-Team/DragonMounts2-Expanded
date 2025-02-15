@@ -29,6 +29,6 @@ public class EntityAIDragonHunt extends EntityAITargetNonTamed<EntityAnimal> {
 
     @Override
     public boolean shouldExecute() {
-        return this.dragon.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE) && this.dragon.getHunger() < 50 && super.shouldExecute();
+        return this.dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE) && this.dragon.getHunger() < 50 && super.shouldExecute();
     }
 }
