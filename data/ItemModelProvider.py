@@ -25,8 +25,8 @@ def handheldItem(output: Output, identifier: ResourceLocation, texture: Resource
     .save(output, identifier.path)
 
 def dragonScalesItem(output: Output, type: DragonType):
-  identifier = type.value
-  basicItem(output, identifier.withSuffix('_dragon_scales'), makeId('items/scales/' + identifier.path + '_dragon_scales'))
+  identifier = type.value.withSuffix('_dragon_scales')
+  basicItem(output, identifier, makeId('items/scales/' + identifier.path))
 
 def dragonScaleToolItem(output: Output, type: DragonType, name: str):
   handheldItem(
@@ -35,11 +35,12 @@ def dragonScaleToolItem(output: Output, type: DragonType, name: str):
     ResourceLocation(type.value.namespace, 'items/' + name + '/' + type.value.path + '_dragon_' + name)
   )
 
-def dragonScaleArmorItem(output: Output, type: DragonType, name: str, nick: str):
+def dragonScaleArmorItem(output: Output, type: DragonType, name: str):
+  identifier = type.value.withSuffix('_dragon_scale_' + name)
   basicItem(
     output,
-    type.value.withSuffix('_dragon_scale_' + name),
-    ResourceLocation(type.value.namespace, 'items/armor/' + type.value.path + '/' + type.value.path + '_dragonscale_' + nick)
+    identifier,
+    ResourceLocation(type.value.namespace, 'items/armor/' + type.value.path + '/' + identifier.path)
   )
 
 def dragonScaleBowItem(output: Output, type: DragonType):
@@ -107,10 +108,10 @@ def generateItemModels(output: Output):
     dragonScaleToolItem(output, type, 'hoe')
     dragonScaleToolItem(output, type, 'shovel')
     dragonScaleToolItem(output, type, 'sword')
-    dragonScaleArmorItem(output, type, 'helmet', 'cap')
-    dragonScaleArmorItem(output, type, 'chestplate', 'tunic')
-    dragonScaleArmorItem(output, type, 'leggings', 'leggings')
-    dragonScaleArmorItem(output, type, 'boots', 'boots')
+    dragonScaleArmorItem(output, type, 'helmet')
+    dragonScaleArmorItem(output, type, 'chestplate')
+    dragonScaleArmorItem(output, type, 'leggings')
+    dragonScaleArmorItem(output, type, 'boots')
     root = name + '_dragon_scale_shield'
     texture = makeId('entities/dragon_scale_shield/' + name)
     blocking = root + '_blocking'

@@ -11,7 +11,7 @@ package net.dragonmounts.proxy;
 
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.block.entity.DragonHeadBlockEntity;
-import net.dragonmounts.client.gui.GuiDragonDebug;
+import net.dragonmounts.client.gui.DebugOverlay;
 import net.dragonmounts.client.render.CarriageRenderer;
 import net.dragonmounts.client.render.DMCapeRenderer;
 import net.dragonmounts.client.render.DragonCoreBlockEntityRenderer;
@@ -123,7 +123,7 @@ public class ClientProxy extends ServerProxy {
     public void PostInitialization(FMLPostInitializationEvent event) {
         super.PostInitialization(event);
         if (DMConfig.DEBUG_MODE.value) {
-            MinecraftForge.EVENT_BUS.register(new GuiDragonDebug());
+            MinecraftForge.EVENT_BUS.register(DebugOverlay.class);
             DragonOrbControl.createSingleton();
             DragonOrbControl.initialiseInterceptors();
             MinecraftForge.EVENT_BUS.register(DragonOrbControl.getInstance());

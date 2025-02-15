@@ -35,7 +35,7 @@ public class FireBreath extends DragonBreath {
         // 1) liquids (except lava) evaporate
         // 2) If the block can be smelted (eg sand), then convert the block to the smelted version
         // 3) If the block can't be smelted then convert to lava
-        if (DMConfig.SMELTING_BREATH.value) {
+        if (DMConfig.IGNITING_BREATH.value || DMConfig.SMELTING_BREATH.value) {
             IBlockState state = level.getBlockState(pos);
             Block block = state.getBlock();
             Random rand = level.rand;
@@ -54,7 +54,7 @@ public class FireBreath extends DragonBreath {
                     //   level.setBlockToAir(pos);
                 }
             }
-            if (max > 0.5F) {
+            if (DMConfig.SMELTING_BREATH.value && max > 0.5F) {
                 this.smeltBlock(level, pos, state);
             }
         }
@@ -97,6 +97,7 @@ public class FireBreath extends DragonBreath {
     }
 
     protected float calcIgnitionThreshold(World world, BlockPos pos, Block block, EnumFacing side) {
+        if (!DMConfig.IGNITING_BREATH.value) return Float.MAX_VALUE;
         int flammability = block.getFlammability(world, pos, side);
         return flammability == 0 ? Float.MAX_VALUE : 15.0F / flammability;
     }

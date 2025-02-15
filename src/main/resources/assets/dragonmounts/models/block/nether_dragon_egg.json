@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/dragon_egg",
   "textures": {
-    "all": "dragonmounts:entities/dragon/nether/egg",
-    "particle": "dragonmounts:entities/dragon/nether/egg"
+    "all": "minecraft:blocks/magma",
+    "particle": "minecraft:blocks/magma"
   }
 }

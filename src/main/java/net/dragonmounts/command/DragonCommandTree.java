@@ -14,6 +14,9 @@ import net.minecraft.command.ICommandSender;
 import net.minecraftforge.server.command.CommandTreeBase;
 import net.minecraftforge.server.command.CommandTreeHelp;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
@@ -29,7 +32,7 @@ public class DragonCommandTree extends CommandTreeBase {
 
     @Override
     public String getName() {
-        return "dragon";
+        return "dragonmounts";
     }
 
     @Override
@@ -44,6 +47,11 @@ public class DragonCommandTree extends CommandTreeBase {
 
     @Override
     public void addSubcommand(ICommand command) {
-        throw new UnsupportedOperationException("Don't add sub-commands to /dragon, create your own command.");
+        throw new UnsupportedOperationException("Don't add sub-commands to /dragonmounts, create your own command.");
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return Collections.singletonList("dragon");
     }
 }

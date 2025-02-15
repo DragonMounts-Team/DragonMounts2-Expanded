@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "dragonmounts:items/armor/water/water_dragonscale_boots"
+    "layer0": "dragonmounts:items/armor/water/water_dragon_scale_boots"
   }
 }

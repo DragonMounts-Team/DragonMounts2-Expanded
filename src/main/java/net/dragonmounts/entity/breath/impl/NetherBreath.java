@@ -30,7 +30,7 @@ public class NetherBreath extends FireBreath {
         // 1) liquids (except lava) evaporate
         // 2) If the block can be smelted (eg sand), then convert the block to the smelted version
         // 3) If the block can't be smelted then convert to lava
-        if (DMConfig.SMELTING_BREATH.value) {
+        if (DMConfig.IGNITING_BREATH.value || DMConfig.SMELTING_BREATH.value) {
             IBlockState state = level.getBlockState(pos);
             Block block = state.getBlock();
             Random rand = level.rand;
@@ -49,7 +49,7 @@ public class NetherBreath extends FireBreath {
                     //   level.setBlockToAir(pos);
                 }
             }
-            if (max > 0.25F) {
+            if (DMConfig.SMELTING_BREATH.value && max > 0.25F) {
                 this.smeltBlock(level, pos, state);
             }
         }

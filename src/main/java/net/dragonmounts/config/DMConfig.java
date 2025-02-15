@@ -19,7 +19,7 @@ public class DMConfig {
     public static final String CATEGORY_WORLD_GEN = "world_gen";
     // DEBUG:
     public static final BooleanEntry DEBUG_MODE = new BooleanEntry("debugMode", false);
-    public static final BooleanEntry ENABLE_DEBUG_SCREEN = new BooleanEntry("enableDebugScreen", false);
+    public static final BooleanEntry ENABLE_DEBUG_OVERLAY = new BooleanEntry("enableDebugOverlay", false);
     // CLIENT:
     public static final DoubleEntry CAMERA_DISTANCE = new DoubleEntry("cameraDistance", 20.0);
     // ATTRIBUTES:
@@ -33,6 +33,7 @@ public class DMConfig {
     public static final BooleanEntry ADAPTIVE_CONVERSION = new BooleanEntry("adaptiveConversion", true);
     public static final BooleanEntry BREATH_EFFECTS = new BooleanEntry("breathEffects", true);
     public static final BooleanEntry DESTRUCTIVE_BREATH = new BooleanEntry("destructiveBreath", true);
+    public static final BooleanEntry IGNITING_BREATH = new BooleanEntry("ignitingBreath", true);
     public static final BooleanEntry SMELTING_BREATH = new BooleanEntry("smeltingBreath", false);
     public static final BooleanEntry FROSTY_BREATH = new BooleanEntry("frostyBreath", true);
     public static final BooleanEntry QUENCHING_BREATH = new BooleanEntry("quenchingBreath", true);
@@ -72,8 +73,8 @@ public class DMConfig {
             register(category, order, DEBUG_MODE)
                     .setLanguageKey("config.dragonmounts.debugMode")
                     .setRequiresMcRestart(true);
-            register(category, order, ENABLE_DEBUG_SCREEN)
-                    .setLanguageKey("config.dragonmounts.debugScreen");
+            register(category, order, ENABLE_DEBUG_OVERLAY)
+                    .setLanguageKey("config.dragonmounts.debugOverlay");
             category.setPropertyOrder(order);
             // CLIENT:
             order = new ObjectArrayList<>();
@@ -129,6 +130,9 @@ public class DMConfig {
             register(category, order, DESTRUCTIVE_BREATH)
                     .setLanguageKey("config.dragonmounts.destructiveBreath")
                     .setComment("Whether airflow-like dragon breath can destroy the hit blocks.");
+            register(category, order, IGNITING_BREATH)
+                    .setLanguageKey("config.dragonmounts.ignitingBreath")
+                    .setComment("Whether fire-like dragon breath can ignite the hit blocks.");
             register(category, order, SMELTING_BREATH)
                     .setLanguageKey("config.dragonmounts.smeltingBreath")
                     .setComment("Whether fire-like dragon breath can smelt the hit blocks.");
@@ -158,7 +162,7 @@ public class DMConfig {
         Configuration config = getConfig();
         ConfigCategory category = config.getCategory(CATEGORY_DEBUG);
         load(category, DEBUG_MODE);
-        loadConditional(category, DEBUG_MODE.value, ENABLE_DEBUG_SCREEN);
+        loadConditional(category, DEBUG_MODE.value, ENABLE_DEBUG_OVERLAY);
 
         load(config.getCategory(CATEGORY_CLIENT), CAMERA_DISTANCE);
 
@@ -175,6 +179,7 @@ public class DMConfig {
         load(category, BREATH_EFFECTS);
         boolean flag = BREATH_EFFECTS.value;
         loadConditional(category, flag, DESTRUCTIVE_BREATH);
+        loadConditional(category, flag, IGNITING_BREATH);
         loadConditional(category, flag, SMELTING_BREATH);
         loadConditional(category, flag, FROSTY_BREATH);
         loadConditional(category, flag, QUENCHING_BREATH);

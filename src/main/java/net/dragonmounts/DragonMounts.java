@@ -10,6 +10,7 @@
 package net.dragonmounts;
 
 import net.dragonmounts.client.gui.GuiHandler;
+import net.dragonmounts.command.DragonCommandTree;
 import net.dragonmounts.compat.BaublesCompat;
 import net.dragonmounts.compat.DragonMountsCompat;
 import net.dragonmounts.config.DMConfig;
@@ -25,6 +26,7 @@ import net.minecraftforge.fml.common.Mod.Metadata;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -75,6 +77,11 @@ public class DragonMounts {
     @EventHandler
     public void PostInitialization(FMLPostInitializationEvent event) {
         PROXY.PostInitialization(event);
+    }
+
+    @EventHandler
+    public void ServerStarting(FMLServerStartingEvent event) {
+        event.registerServerCommand(new DragonCommandTree());
     }
 
     @Instance(value = DragonMountsTags.MOD_ID)

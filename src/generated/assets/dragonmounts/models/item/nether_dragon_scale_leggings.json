@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "dragonmounts:items/armor/nether/nether_dragonscale_leggings"
+    "layer0": "dragonmounts:items/armor/nether/nether_dragon_scale_leggings"
   }
 }

@@ -31,11 +31,11 @@ public class IceType extends DragonType {
     public void tick(TameableDragonEntity dragon) {
         World level = dragon.world;
         if (level.isRemote) return;
+        DragonLifeStage stage = dragon.lifeStageHelper.getLifeStage();
         if (dragon.isOverWater()) {
-            EnchantmentFrostWalker.freezeNearby(dragon, level, new BlockPos(dragon), 1);
+            EnchantmentFrostWalker.freezeNearby(dragon, level, new BlockPos(dragon), DragonLifeStage.EGG == stage ? 0 : 1);
         }
         Random random = level.rand;
-        DragonLifeStage stage = dragon.getLifeStageHelper().getLifeStage();
         if (!dragon.isDead && dragon.posY > level.getHeight() * 1.25 && stage.isOldEnough(DragonLifeStage.PREJUVENILE) && BiomeDictionary.hasType(level.getBiome(dragon.getPosition()), BiomeDictionary.Type.SNOWY)) {
             float s = dragon.getScale() * 1.2f;
             float f = (dragon.width - 0.65F) * s;

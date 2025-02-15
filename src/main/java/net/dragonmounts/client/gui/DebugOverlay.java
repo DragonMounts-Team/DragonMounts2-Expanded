@@ -21,7 +21,6 @@ import net.dragonmounts.entity.helper.DragonVariantHelper;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.LogUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.pathfinding.Path;
@@ -31,7 +30,6 @@ import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.client.GuiIngameForge;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -44,39 +42,35 @@ import java.text.DecimalFormat;
 import java.util.Collection;
 
 /**
- * @TheRPGAdventurer NOT affiliated with GuiDragon.class
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class GuiDragonDebug extends Gui {
+public class DebugOverlay {
     private static final int WHITE = 0xFFFFFF;
     private static final int GREY = 0xAAAAAA;
     private static final int YELLOW = 0xFFFF00;
     private static final int RED = 0xFF8888;
     private static final DecimalFormat dfShort = new DecimalFormat("0.00");
     private static final DecimalFormat dfLong = new DecimalFormat("0.0000");
-    private final Minecraft mc;
-    private final GuiTextPrinter text;
-    private TameableDragonEntity clientCache;
-    private TameableDragonEntity serverCache;
-
-    public GuiDragonDebug() {
-        this.mc = Minecraft.getMinecraft();
-        this.text = new GuiTextPrinter(mc.fontRenderer);
-    }
+    private static GuiTextPrinter text;
+    private static TameableDragonEntity clientCache;
+    private static TameableDragonEntity serverCache;
     
     @SubscribeEvent
-    public void onRenderOverlay(RenderGameOverlayEvent event) {
-        if (!DMConfig.ENABLE_DEBUG_SCREEN.value || event.isCancelable() || event.getType() != ElementType.TEXT)
+    public static void onRenderOverlay(RenderGameOverlayEvent event) {
+        if (!DMConfig.ENABLE_DEBUG_OVERLAY.value || event.isCancelable() || event.getType() != ElementType.TEXT)
             return;
-        TameableDragonEntity client = this.getClientDragon();
+        Minecraft minecraft = Minecraft.getMinecraft();
+        if (text == null) {
+            text = new GuiTextPrinter(minecraft.fontRenderer);
+        }
+        TameableDragonEntity client = getClientDragon(minecraft);
         if (client == null) return;
-        TameableDragonEntity server = this.getServerDragon(client);
+        TameableDragonEntity server = getServerDragon(minecraft, client);
         TameableDragonEntity selected = server == null
                 ? client
                 : Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
                 ? client
                 : server;
-        GuiIngameForge gui = (GuiIngameForge) mc.ingameGUI;
         renderTitle();
         try {
             if (server != null) {
@@ -96,58 +90,56 @@ public class GuiDragonDebug extends Gui {
         } catch (Exception ex) {
             renderException(ex);
         }
-
         if (client.isDead) {
-            this.clientCache = null;
-            this.serverCache = null;
+            clientCache = null;
+            serverCache = null;
         }
     }
 
     @Nullable
-    private TameableDragonEntity getClientDragon() {
+    private static TameableDragonEntity getClientDragon(Minecraft minecraft) {
         // always return currently ridden dragon first
-        Entity entity = this.mc.player.getRidingEntity();
+        Entity entity = minecraft.player.getRidingEntity();
         if (entity instanceof TameableDragonEntity) {
-            return this.clientCache = (TameableDragonEntity) entity;
+            return clientCache = (TameableDragonEntity) entity;
         }
-        if (this.mc.objectMouseOver == null) return this.clientCache;
-        entity = this.mc.objectMouseOver.entityHit;
+        if (minecraft.objectMouseOver == null) return clientCache;
+        entity = minecraft.objectMouseOver.entityHit;
         if (entity instanceof TameableDragonEntity) {
-            return this.clientCache = (TameableDragonEntity) entity;
+            return clientCache = (TameableDragonEntity) entity;
         }
-        return this.clientCache;
+        return clientCache;
     }
 
     @Nullable
-    private TameableDragonEntity getServerDragon(TameableDragonEntity client) {
-        if (!this.mc.isSingleplayer()) return null; // impossible on dedicated
+    private static TameableDragonEntity getServerDragon(Minecraft minecraft, TameableDragonEntity client) {
+        if (!minecraft.isSingleplayer()) return null; // impossible on dedicated
         int target = client.getEntityId();
-        if (this.serverCache != null && this.serverCache.getEntityId() == target) {
+        if (serverCache != null && serverCache.getEntityId() == target) {
             // cache hit
-            return this.serverCache;
+            return serverCache;
         }
-        MinecraftServer server = this.mc.getIntegratedServer();
+        MinecraftServer server = minecraft.getIntegratedServer();
         if (server == null) return null; // unnecessary, but safe
         for (WorldServer level : server.worlds) {
             Entity entity = level.getEntityByID(target);
             if (entity instanceof TameableDragonEntity) {
-                return this.serverCache = (TameableDragonEntity) entity;
+                return serverCache = (TameableDragonEntity) entity;
             }
         }
         return null;
     }
 
-    private void renderTitle() {
+    private static void renderTitle() {
         String title = String.format("%s %s Debug", DragonMountsTags.MOD_NAME, DragonMounts.getMetadata().version);
-        
         text.setOrigin(16, 8);
         text.setColor(GREY);
         text.println(title);
         text.setColor(WHITE);
     }
 
-    private void renderEntityInfo(TameableDragonEntity dragon) {
-        DecimalFormat dfShort = GuiDragonDebug.dfShort;
+    private static void renderEntityInfo(TameableDragonEntity dragon) {
+        DecimalFormat dfShort = DebugOverlay.dfShort;
         text.setOrigin(16, 32);
 
         text.setColor(YELLOW);
@@ -237,7 +229,7 @@ public class GuiDragonDebug extends Gui {
         text.println("Reproduction Count: " + dragon.getReproductionCount());
     }
 
-    private void renderAttributes(TameableDragonEntity dragon) {
+    private static void renderAttributes(TameableDragonEntity dragon) {
         text.setOrigin(text.getX() + 180, 8);
 
         text.setColor(YELLOW);
@@ -256,7 +248,7 @@ public class GuiDragonDebug extends Gui {
         text.println();
     }
 
-    private void renderBreedPoints(TameableDragonEntity dragon) {
+    private static void renderBreedPoints(TameableDragonEntity dragon) {
         text.setColor(YELLOW);
         text.println("Breed points");
         text.setColor(WHITE);
@@ -277,7 +269,7 @@ public class GuiDragonDebug extends Gui {
         }
     }
 
-    private void renderNavigation(TameableDragonEntity dragon) {
+    private static void renderNavigation(TameableDragonEntity dragon) {
         text.setOrigin(16, 32);
         
         text.setColor(YELLOW);
@@ -316,7 +308,7 @@ public class GuiDragonDebug extends Gui {
         text.println("Altitude: " + dfLong.format(dragon.getAltitude()));
     }
 
-    private void renderAITasks(TameableDragonEntity dragon) {
+    private static void renderAITasks(TameableDragonEntity dragon) {
         text.setOrigin(text.getX() + 180, 8);
 
         text.setColor(YELLOW);
@@ -324,7 +316,7 @@ public class GuiDragonDebug extends Gui {
         text.setColor(WHITE);
     }
 
-    private void renderException(Exception ex) {
+    private static void renderException(Exception ex) {
         text.setOrigin(16, 32);
         text.setColor(RED);
         text.println("GUI exception:");
