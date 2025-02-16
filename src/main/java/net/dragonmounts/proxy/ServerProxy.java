@@ -11,7 +11,6 @@ package net.dragonmounts.proxy;
 
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.capability.ArmorEffectManager;
-import net.dragonmounts.capability.DMCapabilities;
 import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.event.CommonMisc;
 import net.dragonmounts.init.DMArmorEffects;
@@ -42,21 +41,21 @@ public class ServerProxy {
 
     public void Initialization(FMLInitializationEvent evt) {
         MinecraftForge.EVENT_BUS.register(CommonMisc.class);
-        DragonMounts.NETWORK_WRAPPER.registerMessage(MessageDragonTargetHandlerServer.class, MessageDragonTarget.class, 73, Side.SERVER);
-
-        DragonMounts.NETWORK_WRAPPER.registerMessage(CDragonBreathPacket.Handler.class, CDragonBreathPacket.class, 0, Side.SERVER);
-        DragonMounts.NETWORK_WRAPPER.registerMessage(CDragonControlPacket.Handler.class, CDragonControlPacket.class, 1, Side.SERVER);
-        DragonMounts.NETWORK_WRAPPER.registerMessage(CUnbindWhistlePacket.Handler.class, CUnbindWhistlePacket.class, 2, Side.SERVER);
-        DragonMounts.NETWORK_WRAPPER.registerMessage(CDragonConfigPacket.Handler.class, CDragonConfigPacket.class, 3, Side.SERVER);
-        DragonMounts.NETWORK_WRAPPER.registerMessage(SSyncBannerPacket.Handler.class, SSyncBannerPacket.class, 4, Side.CLIENT);
-        DragonMounts.NETWORK_WRAPPER.registerMessage(CSitOrderPacket.Handler.class, CSitOrderPacket.class, 5, Side.SERVER);
-        DragonMounts.NETWORK_WRAPPER.registerMessage(CTeleportOrderPacket.Handler.class, CTeleportOrderPacket.class, 6, Side.SERVER);
-
-        DragonMounts.NETWORK_WRAPPER.registerMessage(SInitCooldownPacket.Handler.class, SInitCooldownPacket.class, 7, Side.CLIENT);
-        DragonMounts.NETWORK_WRAPPER.registerMessage(SSyncCooldownPacket.Handler.class, SSyncCooldownPacket.class, 8, Side.CLIENT);
-        DragonMounts.NETWORK_WRAPPER.registerMessage(SRiposteEffectPacket.Handler.class, SRiposteEffectPacket.class, 9, Side.CLIENT);
-
-        MinecraftForge.EVENT_BUS.register(DMCapabilities.class);
+        int discriminator = 0;
+        // S2C:
+        DragonMounts.NETWORK_WRAPPER.registerMessage(SSyncBannerPacket.Handler.class, SSyncBannerPacket.class, ++discriminator, Side.CLIENT);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(SInitCooldownPacket.Handler.class, SInitCooldownPacket.class, ++discriminator, Side.CLIENT);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(SSyncCooldownPacket.Handler.class, SSyncCooldownPacket.class, ++discriminator, Side.CLIENT);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(SRiposteEffectPacket.Handler.class, SRiposteEffectPacket.class, ++discriminator, Side.CLIENT);
+        // C2S:
+        DragonMounts.NETWORK_WRAPPER.registerMessage(MessageDragonTargetHandlerServer.class, MessageDragonTarget.class, ++discriminator, Side.SERVER);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(CDragonBreathPacket.Handler.class, CDragonBreathPacket.class, ++discriminator, Side.SERVER);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(CDragonControlPacket.Handler.class, CDragonControlPacket.class, ++discriminator, Side.SERVER);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(CDragonConfigPacket.Handler.class, CDragonConfigPacket.class, ++discriminator, Side.SERVER);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(CUnbindWhistlePacket.Handler.class, CUnbindWhistlePacket.class, ++discriminator, Side.SERVER);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(CTeleportOrderPacket.Handler.class, CTeleportOrderPacket.class, ++discriminator, Side.SERVER);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(CSitOrderPacket.Handler.class, CSitOrderPacket.class, ++discriminator, Side.SERVER);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(CFollowOrderPacket.Handler.class, CFollowOrderPacket.class, ++discriminator, Side.SERVER);
     }
 
     public void PostInitialization(FMLPostInitializationEvent event) {

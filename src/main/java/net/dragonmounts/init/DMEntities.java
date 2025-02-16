@@ -17,7 +17,7 @@ public class DMEntities {
             .factory(TameableDragonEntity::new)
             .id(DRAGON_ID, 1)
             .tracker(80, 3, true)
-            .name("dragonmounts.dragon.name")
+            .name("dragonmounts.dragon")
             .build();
     public static final EntityEntry CARRIAGE = EntityEntryBuilder.create()
             .entity(CarriageEntity.class)

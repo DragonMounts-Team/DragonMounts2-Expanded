@@ -138,6 +138,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     public final DragonBreathHelper breathHelper = DragonBreathHelper.newInstance(this);
     // public final DragonHungerHelper hungerHelper = new DragonHungerHelper(this);
     public EntityEnderCrystal healingEnderCrystal;
+    public boolean followOwner = true;
     public int inAirTicks;
     public int roarTicks;
     protected int ticksSinceLastAttack;
@@ -226,7 +227,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
                 iterator.remove();
             }
         }
-        DragonLifeStage stage = this.getLifeStageHelper().getLifeStage();
+        DragonLifeStage stage = this.lifeStageHelper.getLifeStage();
         if (DragonLifeStage.EGG == stage) return;
 
         // mutex 1: movement
@@ -239,17 +240,17 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         tasks.addTask(3, new EntityAIDragonFlight(this, 1)); // mutex 1
         tasks.addTask(5, new EntityAIAttackMelee(this, 1, true)); // mutex 2+1
         tasks.addTask(6, new EntityAIDragonFollowOwnerElytraFlying(this)); // mutex 2+1
-        tasks.addTask(6, new EntityAIDragonFollowOwner(this, 1.25, 20, 16)); // mutex 2+1
-        tasks.addTask(8, new EntityAIMoveTowardsRestriction(this, 1)); // mutex 1
-        tasks.addTask(10, new EntityAIWander(this, 1)); // mutex 1
-        tasks.addTask(11, new EntityAIDragonWatchIdle(this)); // mutex 2
-        tasks.addTask(11, new EntityAIDragonWatchLiving(this, 16, 0.05f)); // mutex 2
+        tasks.addTask(7, new EntityAIDragonFollowOwner(this, 1.25, 20, 16)); // mutex 2+1
+        tasks.addTask(9, new EntityAIMoveTowardsRestriction(this, 1)); // mutex 1
+        tasks.addTask(11, new EntityAIWander(this, 1)); // mutex 1
+        tasks.addTask(12, new EntityAIDragonWatchIdle(this)); // mutex 2
+        tasks.addTask(12, new EntityAIDragonWatchLiving(this, 16, 0.05f)); // mutex 2
         if (stage.isBaby()) {
             tasks.addTask(4, new EntityAILeapAtTarget(this, 0.7F)); // mutex 1
             tasks.addTask(7, new DragonTemptGoal(this, 0.75)); // mutex 2+1
-            tasks.addTask(9, new EntityAIDragonFollowParent(this, 1.4f));
+            tasks.addTask(8, new EntityAIDragonFollowParent(this, 1.4f));
         } else if (DragonLifeStage.ADULT == stage) {
-            tasks.addTask(8, new EntityAIDragonMate(this, 0.6)); // mutex 2+1
+            tasks.addTask(6, new EntityAIDragonMate(this, 0.6)); // mutex 2+1
         }
     }
 
@@ -286,6 +287,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         nbt.setBoolean("ylocked", this.isYLocked());
         nbt.setBoolean("growthpause", this.isGrowthPaused());
         nbt.setBoolean("AllowOtherPlayers", this.allowedOtherPlayers());
+        nbt.setBoolean("FollowOwner", this.followOwner);
         nbt.setString(DragonVariant.DATA_PARAMETER_KEY, this.getVariant().getSerializedName());
         //        nbt.setBoolean("sleeping", this.isSleeping()); //unused as of now
         this.inventory.saveAdditionalData(nbt);
@@ -311,6 +313,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         this.setBoosting(nbt.getBoolean("boosting"));
         //        this.setSleeping(nbt.getBoolean("sleeping")); //unused as of now
         this.setToAllowedOtherPlayers(nbt.getBoolean("AllowOtherPlayers"));
+        this.followOwner = nbt.getBoolean("FollowOwner");
         this.inventory.readAdditionalData(nbt);
         if (nbt.getBoolean("DataFix$IsForest")) {
             boolean male = this.rand.nextBoolean();
@@ -818,12 +821,16 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         super.setDead();
     }
 
+    @Nonnull
     @Override
+    @SuppressWarnings("deprecation")
     public String getName() {
         if (this.hasCustomName()) return this.getCustomNameTag();
         String name = EntityList.getEntityString(this);
-        name = name == null ? "entity.dragonmounts.dragon" : "entity." + name;
-        return I18n.translateToLocalFormatted(name, I18n.translateToLocal(this.getVariant().type.translationKey));
+        return "dragonmounts.dragon".equals(name) ? (this.isEgg()
+                ? I18n.translateToLocalFormatted("entity.dragonmounts.dragon_egg", I18n.translateToLocal(this.getVariant().type.translationKey))
+                : I18n.translateToLocalFormatted("entity.dragonmounts.dragon", I18n.translateToLocal(this.getVariant().type.translationKey))
+        ) : I18n.translateToLocal("entity." + name + ".name");
     }
 
     public void roar() {
@@ -1124,11 +1131,13 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     @Override
     public boolean shouldAttackEntity(@Nonnull EntityLivingBase target, @Nullable EntityLivingBase owner) {
         if (target instanceof EntityTameable) {
-            EntityTameable tameable = (EntityTameable) target;
-            return !tameable.isTamed() || tameable.getOwner() != owner;
+            EntityTameable other = (EntityTameable) target;
+            return !other.isTamed() || other.getOwner() != owner || !(
+                    other instanceof TameableDragonEntity && ((TameableDragonEntity) other).isEgg()
+            );
         } else if (target instanceof EntityPlayer) {
             return !(owner instanceof EntityPlayer) || ((EntityPlayer) owner).canAttackPlayer((EntityPlayer) target);
-        } else if (owner != null && target instanceof AbstractHorse) {
+        } else if (this.isTamed() && target instanceof AbstractHorse) {
             return !((AbstractHorse) target).isTame();
         }
         return true;
@@ -1164,7 +1173,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
      */
     @Override
     public boolean canMateWith(EntityAnimal mate) {
-        return getReproductionHelper().canMateWith(mate);
+        return this.reproductionHelper.canMateWith(mate);
     }
 
     /**
@@ -1172,7 +1181,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
      * generate the new baby animal.
      */
     @Override
-    public EntityAgeable createChild(EntityAgeable mate) {
+    public TameableDragonEntity createChild(EntityAgeable mate) {
         return mate instanceof TameableDragonEntity ? this.reproductionHelper.createChild((TameableDragonEntity) mate) : null;
     }
 

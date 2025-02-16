@@ -110,23 +110,29 @@ public class DragonVariantHelper implements ITickable {
                     this.points.addTo(type, POINTS_ENV);
                 }
             }
-            DragonType neo = current;
-            int point = this.points.getInt(current);
-            for (Reference2IntMap.Entry<DragonType> entry : this.points.reference2IntEntrySet()) {
-                if (entry.getIntValue() > point) {
-                    point = entry.getIntValue();
-                    neo = entry.getKey();
-                }
+            this.applyPoints(current);
+        }
+    }
+
+    public void applyPoints(DragonType current) {
+        DragonType neo = current;
+        int point = this.points.getInt(current);
+        for (Reference2IntMap.Entry<DragonType> entry : this.points.reference2IntEntrySet()) {
+            if (entry.getIntValue() > point) {
+                point = entry.getIntValue();
+                neo = entry.getKey();
             }
-            if (neo != current) {
-                dragon.setVariant(neo.variants.draw(this.rand, null));
-            }
+        }
+        if (neo != current) {
+            dragon.setVariant(neo.variants.draw(this.rand, null));
         }
     }
 
     public void inheritBreed(TameableDragonEntity parent1, TameableDragonEntity parent2) {
         this.points.addTo(parent1.getVariant().type, POINTS_INHERIT + rand.nextInt(POINTS_INHERIT));
         this.points.addTo(parent2.getVariant().type, POINTS_INHERIT + rand.nextInt(POINTS_INHERIT));
+        this.applyPoints(this.dragon.getVariant().type);
+
     }
 
     public void onVariantChanged(DragonVariant variant) {

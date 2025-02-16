@@ -34,10 +34,13 @@ public class DragonInventoryGui extends GuiContainer {
     private final DragonAnimator animator;
     private final EntityPlayer player;
     private LockButton lock;
+    private GuiButton order;
     private boolean chested;
     private String name;
     private String hunger;
     private String tip;
+    private String sit;
+    private String stand;
     private int size;
     private int color;
 
@@ -61,9 +64,6 @@ public class DragonInventoryGui extends GuiContainer {
         GlStateManager.scale(0.6, 0.6, 0.6);
         this.fontRenderer.drawString(this.hunger, 60, 106, 0Xe99e0c);
         GlStateManager.popMatrix();
-    }
-
-    private void hunger(int x, int y) {
     }
 
     @Override
@@ -90,7 +90,8 @@ public class DragonInventoryGui extends GuiContainer {
         this.buttonList.clear();
         Keyboard.enableRepeatEvents(true);
         int x = this.width / 2 + 45, y = this.height / 2 - 54;
-        this.buttonList.add(new GuiButton(1, x, y, 18, 20, ClientUtil.translateToLocal("gui.dragonmounts.sit")));
+        this.stand = ClientUtil.translateToLocal("gui.dragonmounts.stand");
+        this.buttonList.add(this.order = new GuiButton(1, x, y, 18, 20, this.sit = ClientUtil.translateToLocal("gui.dragonmounts.sit")));
         this.buttonList.add(this.lock = new LockButton(2, x + 18, y, 18, 20));
         this.updateScreen();
     }
@@ -118,7 +119,8 @@ public class DragonInventoryGui extends GuiContainer {
         this.chested = dragon.isChested();
         this.hunger = dragon.getHunger() + "/100";
         this.color = dragon.getVariant().type.color;
-        switch (dragon.getLifeStageHelper().getLifeStage()) {
+        this.order.displayString = dragon.isSitting() ? this.stand : this.sit;
+        switch (dragon.lifeStageHelper.getLifeStage()) {
             case EGG:
                 this.size = 140;
                 break;

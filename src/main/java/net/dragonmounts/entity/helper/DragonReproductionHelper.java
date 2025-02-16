@@ -10,7 +10,6 @@
 package net.dragonmounts.entity.helper;
 
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.logging.log4j.LogManager;
@@ -77,7 +76,7 @@ public class DragonReproductionHelper {
         }
     }
 
-    public EntityAgeable createChild(TameableDragonEntity mate) {
+    public TameableDragonEntity createChild(TameableDragonEntity mate) {
         TameableDragonEntity self = this.dragon;
         TameableDragonEntity baby = new TameableDragonEntity(self.world);
 
@@ -122,13 +121,12 @@ public class DragonReproductionHelper {
             baby.setCustomNameTag(babyName);
         }
 
+        baby.lifeStageHelper.setLifeStage(DragonLifeStage.EGG);
         // inherit the baby's breed from its parents
         baby.variantHelper.inheritBreed(self, mate);
-
         // increase reproduction counter
         this.addReproduced();
         mate.reproductionHelper.addReproduced();
-
         return baby;
     }
 

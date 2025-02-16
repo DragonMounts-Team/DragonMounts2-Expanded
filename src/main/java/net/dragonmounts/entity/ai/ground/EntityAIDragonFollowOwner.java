@@ -48,7 +48,7 @@ public class EntityAIDragonFollowOwner extends EntityAIDragonBase {
     @Override
     public boolean shouldExecute() {
         TameableDragonEntity dragon = this.dragon;
-        if (dragon.isSitting() || dragon.getControllingPlayer() != null) return false;
+        if (!dragon.followOwner || dragon.isSitting() || dragon.getControllingPlayer() != null) return false;
         EntityLivingBase owner = dragon.getOwner();
         if (owner == null || (
                 owner instanceof EntityPlayer && ((EntityPlayer) owner).isSpectator()
@@ -63,7 +63,7 @@ public class EntityAIDragonFollowOwner extends EntityAIDragonBase {
     @Override
     public boolean shouldContinueExecuting() {
         TameableDragonEntity dragon = this.dragon;
-        return !dragon.getNavigator().noPath() && !dragon.isSitting() && dragon.getDistanceSq(this.owner) > (this.stopDist * this.stopDist);
+        return dragon.followOwner && !dragon.getNavigator().noPath() && !dragon.isSitting() && dragon.getDistanceSq(this.owner) > (this.stopDist * this.stopDist);
     }
 
     /**

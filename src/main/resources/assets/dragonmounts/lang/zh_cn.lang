@@ -4,6 +4,7 @@ itemGroup.dragonmounts.combat=龙骑2：延续·装备
 effect.dragonmounts.dark_dragons_grace=暝龙赐福
 
 entity.dragonmounts.dragon=%s龙
+entity.dragonmounts.dragon_egg=%s龙蛋
 entity.dragonmounts.dragon.name=龙
 
 dragon_type.dragonmounts.forest=森林
@@ -85,7 +86,10 @@ message.dragonmounts.whistle.invalidPos=龙无法传送到那里
 message.dragonmounts.whistle.failed=哨声随风飘散了
 
 container.dragonmounts.dragon_core=龙核心
-gui.dragonmounts.sit=坐下
+gui.dragonmounts.sit=坐
+gui.dragonmounts.stand=起
+gui.dragonmounts.toggleSit=坐下 / 起立
+gui.dragonmounts.toggleFollow=跟随 / 闲逛
 gui.dragonmounts.teleportToPlayer=传送至玩家
 gui.dragonmounts.unbindWhistle=解绑龙哨
 gui.dragonmounts.unbindWhistle.tooltip=按下左Shift键以解锁

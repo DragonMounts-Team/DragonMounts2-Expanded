@@ -38,6 +38,7 @@ public class EntityAIDragonPlayerControl extends EntityAIDragonBase {
     public void startExecuting() {
         dragon.getNavigator().clearPath();
         dragon.getAISit().setSitting(false);
+        dragon.resetInLove();
     }
 
     @Override

@@ -1,7 +1,7 @@
 package net.dragonmounts.compat.fixer;
 
-import net.dragonmounts.init.DragonVariants;
 import net.dragonmounts.entity.helper.DragonVariantHelper;
+import net.dragonmounts.init.DragonVariants;
 import net.dragonmounts.registry.DragonVariant;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.datafix.IFixableData;
@@ -9,12 +9,13 @@ import net.minecraft.util.datafix.IFixableData;
 public class DragonEntityCompat implements IFixableData {
     @Override
     public int getFixVersion() {
-        return 0;
+        return 1;
     }
 
     @Override
     public NBTTagCompound fixTagCompound(NBTTagCompound tag) {
         if (!tag.getString("id").equals("dragonmounts:dragon")) return tag;
+        tag.setBoolean("FollowOwner", true);
         if (tag.hasKey("breedPoints")) {
             tag.setTag(DragonVariantHelper.NBT_VARIANT_POINTS, tag.getCompoundTag("breedPoints"));
             tag.removeTag("breedPoints");

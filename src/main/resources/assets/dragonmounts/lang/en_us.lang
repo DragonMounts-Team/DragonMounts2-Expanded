@@ -9,6 +9,7 @@ effect.dragonmounts.dark_dragons_grace=Dark Dragon's Grace
 # Dragon Names
 ##
 entity.dragonmounts.dragon=%s Dragon
+entity.dragonmounts.dragon_egg=%s Dragon Egg
 entity.dragonmounts.dragon.name=Dragon
 
 #Dragon Types
@@ -105,6 +106,9 @@ message.dragonmounts.whistle.failed=The whistle sound fades away
 ##
 container.dragonmounts.dragon_core=Dragon Core
 gui.dragonmounts.sit=Sit
+gui.dragonmounts.stand=Up
+gui.dragonmounts.toggleSit=Sit / Stand
+gui.dragonmounts.toggleFollow=Follow / Wander
 gui.dragonmounts.teleportToPlayer=Come To Player
 gui.dragonmounts.unbindWhistle=Unbind Whistle
 gui.dragonmounts.unbindWhistle.tooltip=Press Left Shift to Unlock

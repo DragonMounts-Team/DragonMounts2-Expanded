@@ -2,6 +2,7 @@ package net.dragonmounts.client.gui;
 
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.client.ClientUtil;
+import net.dragonmounts.network.CFollowOrderPacket;
 import net.dragonmounts.network.CSitOrderPacket;
 import net.dragonmounts.network.CTeleportOrderPacket;
 import net.dragonmounts.network.CUnbindWhistlePacket;
@@ -34,17 +35,24 @@ public class GuiDragonWhistle extends GuiScreen {
         super.initGui();
         buttonList.clear();
         Keyboard.enableRepeatEvents(true);
-        FontRenderer font = this.fontRenderer;
-        String sitText = ClientUtil.translateToLocal("gui.dragonmounts.sit");
-        String tpText = ClientUtil.translateToLocal("gui.dragonmounts.teleportToPlayer");
         String unbindText = ClientUtil.translateToLocal("gui.dragonmounts.unbindWhistle");
+        String tpText = ClientUtil.translateToLocal("gui.dragonmounts.teleportToPlayer");
+        String sitText = ClientUtil.translateToLocal("gui.dragonmounts.toggleSit");
+        String followText = ClientUtil.translateToLocal("gui.dragonmounts.toggleFollow");
         this.tooltip = ClientUtil.translateToLocal("gui.dragonmounts.unbindWhistle.tooltip");
-        int buttonWidth = Math.max(font.getStringWidth(sitText), Math.max(font.getStringWidth(tpText), font.getStringWidth(unbindText))) + 25;
+        int buttonWidth = maxTextWidth(
+                this.fontRenderer,
+                sitText,
+                tpText,
+                unbindText,
+                followText
+        ) + 25;
         int buttonStart = (width - buttonWidth) / 2;
         int center = height / 2;
         buttonList.add(this.unbind = new GuiButton(1, buttonStart, center - 50, buttonWidth, 20, unbindText));
         buttonList.add(new GuiButton(2, buttonStart, center - 25, buttonWidth, 20, tpText));
         buttonList.add(new GuiButton(3, buttonStart, center + 5, buttonWidth, 20, sitText));
+        buttonList.add(new GuiButton(4, buttonStart, center + 30, buttonWidth, 20, followText));
     }
 
     @Override
@@ -61,6 +69,9 @@ public class GuiDragonWhistle extends GuiScreen {
                 case 3:
                     DragonMounts.NETWORK_WRAPPER.sendToServer(new CSitOrderPacket(uuid));
                     break;
+                case 4:
+                    DragonMounts.NETWORK_WRAPPER.sendToServer(new CFollowOrderPacket(uuid));
+                    break;
             }
 
             //Close GUI when option is selected
@@ -75,5 +86,16 @@ public class GuiDragonWhistle extends GuiScreen {
         if (!this.unbind.enabled && this.unbind.isMouseOver()) {
             this.drawHoveringText(this.tooltip, mouseX, mouseY);
         }
+    }
+
+    private static int maxTextWidth(FontRenderer font, String... text) {
+        int max = 0;
+        for (String str : text) {
+            int width = font.getStringWidth(str);
+            if (width > max) {
+                max = width;
+            }
+        }
+        return max;
     }
 }

@@ -36,7 +36,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
         name = DragonMountsTags.MOD_NAME,
         version = DragonMountsTags.VERSION,
         useMetadata = true,
-        /// the canonical name of {@link net.dragonmounts.client.gui.ConfigGui}
+        /// @see Class#forName, the fully qualified name of {@link net.dragonmounts.client.gui.ConfigGui}
         guiFactory = "net.dragonmounts.client.gui.ConfigGui"
 )
 public class DragonMounts {
