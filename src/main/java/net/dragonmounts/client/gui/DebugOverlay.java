@@ -24,6 +24,7 @@ import net.dragonmounts.util.LogUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
@@ -313,11 +314,21 @@ public class DebugOverlay {
 
     private static void renderAITasks(TameableDragonEntity dragon) {
         text.setOrigin(text.getX() + 180, 8);
-
         text.setColor(YELLOW);
         text.println("AI tasks");
+        text.println("Running Goals");
         text.setColor(WHITE);
-
+        for (EntityAITasks.EntityAITaskEntry entry : dragon.tasks.executingTaskEntries) {
+            text.println(entry.action.getClass().getName());
+        }
+        text.println();
+        text.setColor(YELLOW);
+        text.println("Running Target Goals");
+        text.setColor(WHITE);
+        for (EntityAITasks.EntityAITaskEntry entry : dragon.targetTasks.executingTaskEntries) {
+            text.println(entry.action.getClass().getName());
+        }
+        text.println();
         EntityLivingBase target = dragon.getAttackTarget();
         if (target == null) {
             text.println("Current Target: None");

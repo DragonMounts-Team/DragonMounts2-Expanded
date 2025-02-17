@@ -1374,6 +1374,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
      */
     @Deprecated
     public void setScalePublic(float scale) {
+        boolean onGround = this.onGround;
         this.stepHeight = scale * (float) DMConfig.BASE_STEP_HEIGHT.value;
         float width = this.width;
         this.setScale(scale);
@@ -1383,6 +1384,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         if (this.world.isRemote && this.width > width && !this.firstUpdate) {
             this.move(MoverType.SELF, width - this.width, 0.0D, width - this.width);
         }
+        this.onGround = onGround;
     }
 
     /**
