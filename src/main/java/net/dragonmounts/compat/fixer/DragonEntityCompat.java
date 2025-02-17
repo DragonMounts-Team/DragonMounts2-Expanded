@@ -35,7 +35,7 @@ public class DragonEntityCompat implements IFixableData {
                     break;
                 case "forest":
                     tag.setBoolean("DataFix$IsForest", true);
-                    variant = isMale ? DragonVariants.FOREST_MALE : DragonVariants.FOREST_FEMALE;
+                    variant = DragonVariants.FOREST_MALE;
                     break;
                 case "ice":
                     variant = isMale ? DragonVariants.ICE_MALE : DragonVariants.ICE_FEMALE;
@@ -47,7 +47,7 @@ public class DragonEntityCompat implements IFixableData {
                     variant = isMale ? DragonVariants.NETHER_MALE : DragonVariants.NETHER_FEMALE;
                     break;
                 case "skeleton":
-                    variant = isMale ? DragonVariants.SKELETON_MALE : DragonVariants.SKELETON_FEMALE;
+                    variant = DragonVariants.SKELETON;
                     break;
                 case "storm":
                     variant = isMale ? DragonVariants.STORM_MALE : DragonVariants.STORM_FEMALE;
@@ -62,10 +62,10 @@ public class DragonEntityCompat implements IFixableData {
                     variant = isMale ? DragonVariants.WATER_MALE : DragonVariants.WATER_FEMALE;
                     break;
                 case "wither":
-                    variant = isMale ? DragonVariants.WITHER_MALE : DragonVariants.WITHER_FEMALE;
+                    variant = DragonVariants.WITHER;
                     break;
                 case "zombie":
-                    variant = isMale ? DragonVariants.ZOMBIE_MALE : DragonVariants.ZOMBIE_FEMALE;
+                    variant = DragonVariants.ZOMBIE;
                     break;
                 case "ender":
                 default:

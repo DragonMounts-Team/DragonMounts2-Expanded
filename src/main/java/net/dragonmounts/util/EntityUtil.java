@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeEventFactory;
 
 import javax.annotation.Nullable;
@@ -47,18 +48,26 @@ public class EntityUtil {
         return true;
     }
 
-    public static void finalizeSpawn(World level, Entity entity, BlockPos pos, boolean yOffset, IEntityLivingData data) {
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public static boolean finalizeSpawn(WorldServer level, Entity entity, BlockPos pos, boolean yOffset, IEntityLivingData data) {
         float x = pos.getX() + 0.5F, y = yOffset ? getSpawnHeight(level, pos) : pos.getY(), z = pos.getZ() + 0.5F;
         entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(level.rand.nextFloat() * 360.0F), 0.0F);
         if (entity instanceof EntityLiving) {
             EntityLiving $entity = (EntityLiving) entity;
             $entity.rotationYawHead = $entity.rotationYaw;
             $entity.renderYawOffset = $entity.rotationYaw;
-            if (ForgeEventFactory.doSpecialSpawn($entity, level, x, y, z, null)) return;
+            if (ForgeEventFactory.doSpecialSpawn($entity, level, x, y, z, null)) return false;
             $entity.onInitialSpawn(level.getDifficultyForLocation(new BlockPos($entity)), data);
-            level.spawnEntity(entity);
+            UUID uuid = $entity.getUniqueID();
+            while (level.getEntityFromUuid(uuid) != null) {
+                uuid = MathHelper.getRandomUUID($entity.getRNG());
+            }
+            $entity.setUniqueId(uuid);
+            boolean result = level.spawnEntity($entity);
             $entity.playLivingSound();
+            return result;
         }
+        return false;
     }
 
     public static boolean notOwner(NBTTagCompound data, @Nullable EntityPlayer player, @Nullable String feedback) {

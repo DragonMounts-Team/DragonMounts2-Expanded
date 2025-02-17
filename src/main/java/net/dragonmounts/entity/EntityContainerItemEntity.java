@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public class EntityContainerItemEntity extends EntityItem {
     private int animationAge;
@@ -38,13 +39,14 @@ public class EntityContainerItemEntity extends EntityItem {
     public boolean attackEntityFrom(DamageSource source, float amount) {
         boolean isDead = this.isDead;
         super.attackEntityFrom(source, amount);
+        if (!(this.world instanceof WorldServer)) return false;
         if (isDead != this.isDead) {
             ItemStack stack = this.getItem();
             Item item = stack.getItem();
             if (item instanceof IEntityContainer<?>) {
                 IEntityContainer<?> container = (IEntityContainer<?>) item;
                 if (!container.isEmpty(stack.getTagCompound())) {
-                    Entity entity = container.loadEntity(this.world, stack, null, this.getPosition(), false, null);
+                    Entity entity = container.loadEntity((WorldServer) this.world, stack, null, this.getPosition(), false, null);
                     if (entity != null) {
                         entity.setPosition(this.posX, this.posY, this.posZ);
                         entity.rotationYaw = this.rand.nextInt(180);

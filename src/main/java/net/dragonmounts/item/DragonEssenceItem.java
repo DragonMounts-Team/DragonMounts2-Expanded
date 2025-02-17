@@ -22,6 +22,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -43,9 +44,9 @@ public class DragonEssenceItem extends Item implements IEntityContainer<Tameable
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World level, BlockPos clicked, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (level.isRemote) return EnumActionResult.FAIL;
+        if (!(level instanceof WorldServer)) return EnumActionResult.FAIL;
         ItemStack stack = player.getHeldItem(hand);
-        Entity entity = this.loadEntity(level, stack, player, clicked.offset(facing), true, "message.dragonmounts.dragon.notOwner");
+        Entity entity = this.loadEntity((WorldServer) level, stack, player, clicked.offset(facing), true, "message.dragonmounts.dragon.notOwner");
         if (entity == null) return EnumActionResult.FAIL;
         if (!player.capabilities.isCreativeMode) {
             stack.shrink(1);
@@ -69,7 +70,7 @@ public class DragonEssenceItem extends Item implements IEntityContainer<Tameable
 
     @Nullable
     @Override
-    public Entity loadEntity(World level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos, boolean yOffset, String feedback) {
+    public Entity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos, boolean yOffset, String feedback) {
         TameableDragonEntity dragon = new TameableDragonEntity(level);
         NBTTagCompound root = stack.getTagCompound();
         boolean flag = root == null;
@@ -84,12 +85,12 @@ public class DragonEssenceItem extends Item implements IEntityContainer<Tameable
         if (flag) {
             dragon.setVariant(this.type.variants.draw(level.rand, null));
         }
-        EntityUtil.finalizeSpawn(level, dragon, pos, true, null);
+        if (!EntityUtil.finalizeSpawn(level, dragon, pos, true, null)) return null;
         if (stack.hasDisplayName()) {
             dragon.setCustomNameTag(stack.getDisplayName());
         }
         ItemMonsterPlacer.applyItemEntityDataToEntity(level, player, stack, dragon);
-        dragon.getLifeStageHelper().setLifeStage(DragonLifeStage.HATCHLING);
+        dragon.lifeStageHelper.setLifeStage(DragonLifeStage.HATCHLING);
         level.playSound(null, pos, SoundEvents.ENTITY_ILLAGER_MIRROR_MOVE, SoundCategory.NEUTRAL, 1, 1);
         return dragon;
     }

@@ -99,7 +99,9 @@ def generateItemModels(output: Output):
     essence = type.value.withSuffix('_dragon_essence')
     basicItem(output, essence, essence.withPrefix('items/essence/'))
     model(spawnEggModel).save(output, name + '_dragon_spawn_egg')
-    model(ResourceLocation(type.value.namespace, 'block/' + name + '_dragon_egg')).save(output, name + '_dragon_egg')
+    if (type is not DragonType.ENDER):
+      model(ResourceLocation(type.value.namespace, 'block/' + name + '_dragon_egg'))\
+        .save(output, name + '_dragon_egg')
     if (type is DragonType.SKELETON or type is DragonType.WITHER): continue
     dragonScalesItem(output, type)
     dragonScaleBowItem(output, type)

@@ -132,7 +132,7 @@ public class DragonWhistleItem extends Item {
                 if (dragon.hasCustomName()) {
                     nbt.setString("Name", dragon.getCustomNameTag());
                 }
-                nbt.setString("Age", dragon.getLifeStageHelper().getLifeStage().translationKey);
+                nbt.setString("Age", dragon.lifeStageHelper.getLifeStage().translationKey);
                 nbt.setString("OwnerName", owner.getName());
                 nbt.setUniqueId("Owner", owner.getUniqueID());
                 DragonType type = dragon.getVariant().type;

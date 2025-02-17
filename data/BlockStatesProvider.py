@@ -2,20 +2,29 @@ from Core.Output import Output
 from DragonVariant import DragonVariant
 
 def generateBlockStates(output: Output):
-  model = {
-    'model': 'dragonmounts:dragon_head'
-  }
   rotation = {
+    'forge_marker': 1,
+    'defaults': {
+      'model': 'dragonmounts:dragon_head',
+    },
     'variants': {
-      'rotation=' + str(i): model for i in range(16)
+      'rotation': {
+        str(i): {} for i in range(16)
+      }
     }
   }
   facing = {
+    'forge_marker': 1,
+    'defaults': {
+      'model': 'dragonmounts:dragon_head',
+    },
     'variants': {
-      'facing=south': model,
-      'facing=west': model,
-      'facing=north': model,
-      'facing=east': model
+      'facing': {
+        'south': {},
+        'west': {},
+        'north': {},
+        'east': {}
+      }
     }
   }
   for variant in DragonVariant:

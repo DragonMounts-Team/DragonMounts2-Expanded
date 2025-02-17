@@ -32,7 +32,6 @@ public abstract class VariantAppearance {
         return ImmutableList.of(
                 // standard layers
                 new LayerRendererDragonGlow(),
-//        layers.add(new LayerRendererDragonGlowAnim(parent, this, model),
                 new LayerRendererDragonSaddle(),
                 new LayerRendererDragonArmor(),
                 new LayerRendererDragonChest(),

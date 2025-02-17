@@ -19,6 +19,7 @@ import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.entity.helper.DragonLifeStageHelper;
 import net.dragonmounts.entity.helper.DragonVariantHelper;
 import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.LogUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -175,11 +176,12 @@ public class DebugOverlay {
         String hunger = dfShort.format(dragon.getHunger());
         text.printf("Hunger: %s\n", hunger);
 
-        // type
+        // variant
+        DragonVariant variant = dragon.getVariant();
+        text.println("Variant: " + variant.getRegistryName());
         text.print("Type: ");
-        DragonType type = dragon.getVariant().type;
-        text.setColor(type.color);
-        text.println(ClientUtil.translateToLocal(type.translationKey));
+        text.setColor(variant.type.color);
+        text.println(ClientUtil.translateToLocal(variant.type.translationKey));
         text.setColor(WHITE);
 
         // life stage

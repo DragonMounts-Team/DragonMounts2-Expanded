@@ -7,7 +7,9 @@ import net.dragonmounts.compat.fixer.DMBlockEntityCompat;
 import net.dragonmounts.compat.fixer.DragonEntityCompat;
 import net.dragonmounts.init.DMBlocks;
 import net.dragonmounts.init.DMItems;
+import net.dragonmounts.init.DragonVariants;
 import net.dragonmounts.item.DragonEggCompatItem;
+import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.DragonScaleArmorSuit;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -49,6 +51,50 @@ public abstract class DragonMountsCompat {
                     break;
                 case "block_dragon_shulker":
                     mapping.remap(DMBlocks.DRAGON_CORE);
+                    break;
+                case "skeleton_female_dragon_head":
+                case "skeleton_male_dragon_head":
+                    mapping.remap(DragonVariants.SKELETON.head.standing);
+                    break;
+                case "wither_female_dragon_head":
+                case "wither_male_dragon_head":
+                    mapping.remap(DragonVariants.WITHER.head.standing);
+                    break;
+                case "zombie_female_dragon_head":
+                case "zombie_male_dragon_head":
+                    mapping.remap(DragonVariants.ZOMBIE.head.standing);
+                    break;
+                case "skeleton_female_dragon_head_wall":
+                case "skeleton_male_dragon_head_wall":
+                    mapping.remap(DragonVariants.SKELETON.head.wall);
+                    break;
+                case "wither_female_dragon_head_wall":
+                case "wither_male_dragon_head_wall":
+                    mapping.remap(DragonVariants.WITHER.head.wall);
+                    break;
+                case "zombie_female_dragon_head_wall":
+                case "zombie_male_dragon_head_wall":
+                    mapping.remap(DragonVariants.ZOMBIE.head.wall);
+                    break;
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void remapVariant(RegistryEvent.MissingMappings<DragonVariant> event) {
+        for (RegistryEvent.MissingMappings.Mapping<DragonVariant> mapping : event.getMappings()) {
+            switch (mapping.key.getPath()) {
+                case "skeleton_female":
+                case "skeleton_male":
+                    mapping.remap(DragonVariants.SKELETON);
+                    break;
+                case "wither_female":
+                case "wither_male":
+                    mapping.remap(DragonVariants.WITHER);
+                    break;
+                case "zombie_female":
+                case "zombie_male":
+                    mapping.remap(DragonVariants.ZOMBIE);
                     break;
             }
         }
@@ -94,6 +140,12 @@ public abstract class DragonMountsCompat {
         mappings.put("summon_wither", DMItems.WITHER_DRAGON_SPAWN_EGG);
         mappings.put("summon_zombie", DMItems.ZOMBIE_DRAGON_SPAWN_EGG);
         //Items
+        mappings.put("skeleton_female_dragon_head", DragonVariants.SKELETON.head.item);
+        mappings.put("skeleton_male_dragon_head", DragonVariants.SKELETON.head.item);
+        mappings.put("wither_female_dragon_head", DragonVariants.WITHER.head.item);
+        mappings.put("wither_male_dragon_head", DragonVariants.WITHER.head.item);
+        mappings.put("zombie_female_dragon_head", DragonVariants.ZOMBIE.head.item);
+        mappings.put("zombie_male_dragon_head", DragonVariants.ZOMBIE.head.item);
         mappings.put("aether_dragonscales", DMItems.AETHER_DRAGON_SCALES);
         mappings.put("dragon_bow_aether", DMItems.AETHER_DRAGON_SCALE_BOW);
         mappings.put("dragon_shield_aether", DMItems.AETHER_DRAGON_SCALE_SHIELD);

@@ -15,7 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
@@ -45,8 +45,6 @@ public class DragonAmuletItem extends AmuletItem<TameableDragonEntity> {
         if (owner != null) {
             data.setString("OwnerName", owner.getName());
         }
-        data.removeTag("UUIDMost");
-        data.removeTag("UUIDLeast");
         root.setTag("EntityTag", data);
         ItemStack stack = new ItemStack(this);
         stack.setTagCompound(root);
@@ -55,7 +53,7 @@ public class DragonAmuletItem extends AmuletItem<TameableDragonEntity> {
 
     @Nullable
     @Override
-    public TameableDragonEntity loadEntity(World level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos, boolean yOffset, String feedback) {
+    public TameableDragonEntity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos, boolean yOffset, String feedback) {
         TameableDragonEntity dragon = new TameableDragonEntity(level);
         NBTTagCompound root = stack.getTagCompound();
         boolean flag = root == null;
@@ -70,7 +68,7 @@ public class DragonAmuletItem extends AmuletItem<TameableDragonEntity> {
         if (flag) {
             dragon.setVariant(this.type.variants.draw(level.rand, null));
         }
-        EntityUtil.finalizeSpawn(level, dragon, pos, true, null);
+        if (!EntityUtil.finalizeSpawn(level, dragon, pos, true, null)) return null;
         if (stack.hasDisplayName()) {
             dragon.setCustomNameTag(stack.getDisplayName());
         }

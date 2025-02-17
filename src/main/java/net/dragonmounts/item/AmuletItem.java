@@ -25,8 +25,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -63,6 +65,8 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
                 stack.shrink(1);
                 ItemStack result = amulet.saveEntity(dragon);
                 if (stack.isEmpty()) {
+                    stack.setCount(1); // prevent from clearing item
+                    ForgeEventFactory.onPlayerDestroyItem(player, stack.copy(), hand);
                     player.setHeldItem(hand, result);
                 } else if (!player.addItemStackToInventory(result)) {
                     player.dropItem(result, false);
@@ -80,10 +84,10 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World level, BlockPos clicked, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (level.isRemote) return EnumActionResult.FAIL;
+        if (!(level instanceof WorldServer)) return EnumActionResult.FAIL;
         ItemStack stack = player.getHeldItem(hand);
         if (this.isEmpty(stack.getTagCompound())) return EnumActionResult.FAIL;
-        Entity entity = this.loadEntity(level, stack, player, clicked.offset(facing), true, "message.dragonmounts.dragon.notOwner");
+        Entity entity = this.loadEntity((WorldServer) level, stack, player, clicked.offset(facing), true, "message.dragonmounts.dragon.notOwner");
         if (entity == null) return EnumActionResult.FAIL;
         stack.shrink(1);
         ItemStack amulet = new ItemStack(DMItems.AMULET);
@@ -133,8 +137,6 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
         NBTTagCompound data = new NBTTagCompound();
         if (entity.writeToNBTOptional(data)) {
             NBTTagCompound root = new NBTTagCompound();
-            data.removeTag("UUIDMost");
-            data.removeTag("UUIDLeast");
             root.setTag("EntityTag", IEntityContainer.simplifyData(data));
             ItemStack stack = new ItemStack(this);
             stack.setTagCompound(root);
@@ -145,7 +147,7 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
 
     @Nullable
     @Override
-    public Entity loadEntity(World level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos, boolean yOffset, @Nullable String feedback) {
+    public Entity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos, boolean yOffset, @Nullable String feedback) {
         NBTTagCompound root = stack.getTagCompound();
         if (root == null) return null;
         NBTTagCompound data = root.getCompoundTag("EntityTag");
@@ -158,7 +160,7 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
             entity = EntityList.createEntityByIDFromName(identifier, level);
             if (entity == null) return null;
         } else return null;
-        EntityUtil.finalizeSpawn(level, entity, pos, true, null);
+        if (!EntityUtil.finalizeSpawn(level, entity, pos, true, null)) return null;
         if (entity instanceof EntityLivingBase && stack.hasDisplayName()) {
             entity.setCustomNameTag(stack.getDisplayName());
         }
