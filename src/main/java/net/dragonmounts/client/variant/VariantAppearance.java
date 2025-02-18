@@ -43,10 +43,6 @@ public abstract class VariantAppearance {
 
     public abstract boolean hasSideTailScale(TameableDragonEntity dragon);
 
-    public abstract boolean hasTailHornsOnShoulder();
-
-    public abstract boolean hasSideTailScaleOnShoulder();
-
     public abstract ResourceLocation getBody(@Nullable TameableDragonEntity dragon);
 
     public abstract ResourceLocation getGlow(@Nullable TameableDragonEntity dragon);

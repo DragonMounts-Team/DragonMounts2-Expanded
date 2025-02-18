@@ -315,11 +315,11 @@ public class DragonAnimator {
             }
             case STARTING: {
                 biteTimer.set(0.0F);
-                breathTimer.set(dragon.getBreathHelper().getBreathStateFractionComplete());
+                breathTimer.set(dragon.breathHelper.getBreathStateFractionComplete());
                 break;
             }
             case STOPPING: {
-                float breathStateFractionComplete = dragon.getBreathHelper().getBreathStateFractionComplete();
+                float breathStateFractionComplete = dragon.breathHelper.getBreathStateFractionComplete();
                 breathTimer.set(1.0F - breathStateFractionComplete);
                 break;
             }

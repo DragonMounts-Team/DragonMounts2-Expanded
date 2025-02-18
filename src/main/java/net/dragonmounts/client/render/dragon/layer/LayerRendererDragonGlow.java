@@ -1,6 +1,6 @@
 package net.dragonmounts.client.render.dragon.layer;
 
-import net.dragonmounts.client.model.dragon.DragonModelMode;
+import net.dragonmounts.client.render.dragon.DragonRenderMode;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.client.renderer.GlStateManager;
 
@@ -19,8 +19,7 @@ public class LayerRendererDragonGlow extends DragonLayerRenderer {
 
         /*if (!dragon.isAsleep)*/
         disableLighting();
-        model.setMode(DragonModelMode.FULL);
-        model.render(dragon, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
+        model.render(DragonRenderMode.FULL, dragon, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
         enableLighting(dragon.getBrightnessForRender());
 
         GlStateManager.disableBlend();

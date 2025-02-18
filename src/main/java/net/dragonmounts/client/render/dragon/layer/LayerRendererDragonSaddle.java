@@ -1,5 +1,6 @@
 package net.dragonmounts.client.render.dragon.layer;
 
+import net.dragonmounts.client.render.dragon.DragonRenderMode;
 import net.dragonmounts.entity.TameableDragonEntity;
 
 /**
@@ -12,7 +13,7 @@ public class LayerRendererDragonSaddle extends DragonLayerRenderer {
                               float lookPitch, float scale) {
         if (!dragon.isSaddled()) return;
         renderer.bindTexture(dragon.getVariant().appearance.getSaddle(dragon));
-        model.render(dragon, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
+        model.render(DragonRenderMode.SADDLE, dragon, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
     }
 
     @Override

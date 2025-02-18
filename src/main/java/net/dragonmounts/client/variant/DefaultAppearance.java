@@ -29,16 +29,6 @@ public class DefaultAppearance extends VariantAppearance {
     }
 
     @Override
-    public boolean hasTailHornsOnShoulder() {
-        return this.hasTailHorns;
-    }
-
-    @Override
-    public boolean hasSideTailScaleOnShoulder() {
-        return this.hasSideTailScale;
-    }
-
-    @Override
     public ResourceLocation getBody(TameableDragonEntity dragon) {
         return this.body;
     }

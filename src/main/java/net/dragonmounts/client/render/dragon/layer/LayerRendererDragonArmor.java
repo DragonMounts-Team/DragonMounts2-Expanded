@@ -1,5 +1,6 @@
 package net.dragonmounts.client.render.dragon.layer;
 
+import net.dragonmounts.client.render.dragon.DragonRenderMode;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.item.DragonArmorItem;
 import net.minecraft.item.Item;
@@ -16,7 +17,7 @@ public class LayerRendererDragonArmor extends DragonLayerRenderer {
         Item item = stack.getItem();
         if (item instanceof DragonArmorItem) {
             this.renderer.bindTexture(((DragonArmorItem) item).texture);
-            this.model.render(dragon, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
+            this.model.render(DragonRenderMode.FULL, dragon, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
         }
 	}
 

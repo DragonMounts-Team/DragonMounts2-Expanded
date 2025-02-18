@@ -315,7 +315,6 @@ public class DebugOverlay {
     private static void renderAITasks(TameableDragonEntity dragon) {
         text.setOrigin(text.getX() + 180, 8);
         text.setColor(YELLOW);
-        text.println("AI tasks");
         text.println("Running Goals");
         text.setColor(WHITE);
         for (EntityAITasks.EntityAITaskEntry entry : dragon.tasks.executingTaskEntries) {
@@ -340,11 +339,11 @@ public class DebugOverlay {
     }
 
     private static void renderException(Exception ex) {
+        LogUtil.LOGGER.error("Error rendering", ex);
         text.setOrigin(16, 32);
         text.setColor(RED);
-        text.println("GUI exception:");
+        text.println("GUI Exception:");
         text.printf(ExceptionUtils.getStackTrace(ex));
         text.setColor(WHITE);
-        LogUtil.LOGGER.error("Error rendering", ex);
     }
 }

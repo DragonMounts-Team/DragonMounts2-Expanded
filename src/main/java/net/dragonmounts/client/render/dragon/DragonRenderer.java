@@ -11,7 +11,6 @@ package net.dragonmounts.client.render.dragon;
 
 import net.dragonmounts.block.HatchableDragonEggBlock;
 import net.dragonmounts.client.model.dragon.DragonModel;
-import net.dragonmounts.client.model.dragon.DragonModelMode;
 import net.dragonmounts.client.render.dragon.layer.DragonLayerRenderer;
 import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.entity.TameableDragonEntity;
@@ -55,9 +54,7 @@ public class DragonRenderer extends RenderLiving<TameableDragonEntity> {
             renderEgg(dragon, x, y, z, yaw, partialTicks);
             return;
         }
-        DragonModel breedModel = dragon.getVariant().appearance.model;
-        breedModel.setMode(DragonModelMode.FULL);
-        mainModel = breedModel;
+        this.mainModel = dragon.getVariant().appearance.model;
         super.doRender(dragon, x, y, z, yaw, partialTicks);
         if (dragon.getAnimator().isInGui) return;
         EntityEnderCrystal crystal = dragon.healingEnderCrystal;

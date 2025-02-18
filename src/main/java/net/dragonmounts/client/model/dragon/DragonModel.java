@@ -11,6 +11,7 @@
 package net.dragonmounts.client.model.dragon;
 
 import net.dragonmounts.client.model.dragon.anim.DragonAnimator;
+import net.dragonmounts.client.render.dragon.DragonRenderMode;
 import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonHeadPositionHelper;
@@ -91,9 +92,7 @@ public class DragonModel extends ModelBase {
     public float offsetY;
     public float offsetZ;
     public float pitch;
-    public float size;
     public final VariantAppearance appearance;
-    private DragonModelMode mode;
 
     // final X rotation angles for ground
     private float[] xGround={0, 0, 0, 0};
@@ -184,10 +183,6 @@ public class DragonModel extends ModelBase {
         buildTail();
         buildWing();
         buildLegs();
-    }
-
-    public void setMode(DragonModelMode mode) {
-        this.mode=mode;
     }
 
     private void buildHead() {
@@ -521,7 +516,7 @@ public class DragonModel extends ModelBase {
         boolean flag = this.appearance.hasSideTailScale(dragon);
         tailScaleMiddle.showModel = !flag;
         tailScaleLeft.showModel = tailScaleRight.showModel = flag;
-        tailHornLeft.showModel = tailHornRight.showModel = this.appearance.hasSideTailScale(dragon);
+        tailHornLeft.showModel = tailHornRight.showModel = this.appearance.hasTailHorns(dragon);
 
         for (int i=0; i < tailSegmentData.length; i++) {
             copyPositionRotationLocation(tail, tailSegmentData[i]);
@@ -643,12 +638,9 @@ public class DragonModel extends ModelBase {
      */
     @Override
     public void setLivingAnimations(EntityLivingBase entity, float moveTime, float moveSpeed, float partialTicks) {
-        setLivingAnimations((TameableDragonEntity) entity, moveTime, moveSpeed, partialTicks);
-    }
-
-    public void setLivingAnimations(TameableDragonEntity dragon, float moveTime, float moveSpeed, float partialTicks) {
-        DragonAnimator animator=dragon.getAnimator();
-        animator.setPartialTicks(partialTicks);
+        if (entity instanceof TameableDragonEntity) {
+            ((TameableDragonEntity) entity).getAnimator().setPartialTicks(partialTicks);
+        }
     }
 
     /**
@@ -656,76 +648,44 @@ public class DragonModel extends ModelBase {
      */
     @Override
     public void render(Entity entity, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
-        render((TameableDragonEntity) entity, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
+        this.render(DragonRenderMode.FULL, (TameableDragonEntity) entity, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
     }
 
-    public void render(TameableDragonEntity dragon, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
+    public void render(DragonRenderMode mode, TameableDragonEntity dragon, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
         DragonAnimator animator=dragon.getAnimator();
         animator.setMovement(moveTime, moveSpeed);
         animator.setLook(lookYaw, lookPitch);
         animator.animate();
         updateFromAnimator(dragon);
 
-        size=dragon.getScale();
-
-        renderModel(dragon, scale);
-    }
-
-    /**
-     * Renders the model after all animations are applied.
-     */
-    public void renderModel(TameableDragonEntity dragon, float scale) {
-        if (mode==null) {
-            return;
-        }
-
         GlStateManager.pushMatrix();
         GlStateManager.translate(offsetX, offsetY, offsetZ);
         GlStateManager.rotate(-pitch, 1, 0, 0);
-
-        switch (mode) {
-            case BODY_ONLY:
-                renderBody(scale);
-                break;
-            case WINGS_ONLY:
-                renderWings(scale);
-                break;
-            default:
-                renderHead(scale);
-                renderNeck(scale);
-                renderBody(scale);
-                renderLegs(scale);
-                renderTail(scale);
-                if (mode!=DragonModelMode.NO_WINGS) {
-                    renderWings(scale);
-                }
-        }
-
+        mode.render(this, scale);
         GlStateManager.popMatrix();
     }
 
-    protected void renderBody(float scale) {
+    public void renderBody(float scale) {
         body.render(scale);
     }
 
-    protected void renderHead(float scale) {
-        float headScale=scale * 0.92f;
-        head.render((headScale));
+    public void renderHead(float scale) {
+        head.render(scale * 0.92F);
     }
 
-    protected void renderNeck(float scale) {
+    public void renderNeck(float scale) {
         for (ModelPartProxy proxy : neckProxy) {
             proxy.render(scale);
         }
     }
 
-    protected void renderTail(float scale) {
+    public void renderTail(float scale) {
         for (ModelPartProxy proxy : tailProxy) {
             proxy.render(scale);
         }
     }
 
-    protected void renderWings(float scale) {
+    public void renderWings(float scale) {
         GlStateManager.pushMatrix();
         GlStateManager.enableCull();
         GlStateManager.cullFace(GlStateManager.CullFace.FRONT);
@@ -745,7 +705,7 @@ public class DragonModel extends ModelBase {
         GlStateManager.popMatrix();
     }
 
-    protected void renderLegs(float scale) {
+    public void renderLegs(float scale) {
         GlStateManager.enableCull();
         GlStateManager.cullFace(GlStateManager.CullFace.BACK);
 
