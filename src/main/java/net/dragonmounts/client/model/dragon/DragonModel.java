@@ -16,6 +16,7 @@ import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonHeadPositionHelper;
 import net.dragonmounts.entity.helper.SegmentSizePositionRotation;
+import net.dragonmounts.util.math.Interpolation;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
@@ -92,22 +93,23 @@ public class DragonModel extends ModelBase {
     public float offsetY;
     public float offsetZ;
     public float pitch;
+    public float partialTicks;
     public final VariantAppearance appearance;
 
     // final X rotation angles for ground
-    private float[] xGround={0, 0, 0, 0};
+    private final float[] xGround = {0, 0, 0, 0};
 
     // X rotation angles for ground
     // 1st dim - front, hind
     // 2nd dim - thigh, crus, foot, toe
-    private float[][] xGroundStand={{0.8f, -1.5f, 1.3f, 0}, {-0.3f, 1.5f, -0.2f, 0},};
-    private float[][] xGroundSit={{0.3f, -1.8f, 1.8f, 0}, {-0.8f, 1.8f, -0.9f, 0},};
+    private final float[][] xGroundStand = {{0.8f, -1.5f, 1.3f, 0}, {-0.3f, 1.5f, -0.2f, 0},};
+    private final float[][] xGroundSit = {{0.3f, -1.8f, 1.8f, 0}, {-0.8f, 1.8f, -0.9f, 0},};
 
     // X rotation angles for walking
     // 1st dim - animation keyframe
     // 2nd dim - front, hind
     // 3rd dim - thigh, crus, foot, toe
-    private float[][][] xGroundWalk={{{0.4f, -1.4f, 1.3f, 0}, // move down and forward
+    private final float[][][] xGroundWalk = {{{0.4f, -1.4f, 1.3f, 0}, // move down and forward
             {0.1f, 1.2f, -0.5f, 0} // move back
     }, {{1.2f, -1.6f, 1.3f, 0}, // move back
             {-0.3f, 2.1f, -0.9f, 0.6f} // move up and forward
@@ -116,23 +118,20 @@ public class DragonModel extends ModelBase {
     }};
 
     // final X rotation angles for walking
-    private float[] xGroundWalk2={0, 0, 0, 0};
+    private final float[] xGroundWalk2 = {0, 0, 0, 0};
 
     // Y rotation angles for ground, thigh only
-    private float[] yGroundStand={-0.25f, 0.25f};
-    private float[] yGroundSit={0.1f, 0.35f};
-    private float[] yGroundWalk={-0.1f, 0.1f};
-
-    // final X rotation angles for air
-    private float[] xAir;
+    private final float[] yGroundStand = {-0.25f, 0.25f};
+    private final float[] yGroundSit = {0.1f, 0.35f};
+    private final float[] yGroundWalk = {-0.1f, 0.1f};
 
     // X rotation angles for air
     // 1st dim - front, hind
     // 2nd dim - thigh, crus, foot, toe
-    private float[][] xAirAll={{0, 0, 0, 0}, {0, 0, 0, 0}};
+    private final float[][] xAirAll = {{0, 0, 0, 0}, {0, 0, 0, 0}};
 
     // Y rotation angles for air, thigh only
-    private float[] yAirAll={-0.1f, 0.1f};
+    private final float[] yAirAll = {-0.1f, 0.1f};
 
     public DragonModel(VariantAppearance appearance) {
         textureWidth=256;
@@ -410,21 +409,19 @@ public class DragonModel extends ModelBase {
         crus.addChild(foot);
 
         // toe variables
-        int toeWidth=footWidth;
-        int toeHeight=footHeight;
         int toeLength=(int) (baseLength * (hind ? 0.27f : 0.33f));
 
         float toePosX=0;
         float toePosY=0;
         float toePosZ=footOfsZ - (footOfsY / 2f);
 
-        float toeOfsX=-(toeWidth / 2f);
-        float toeOfsY=-(toeHeight / 2f);
+        float toeOfsX = -(footWidth / 2f);
+        float toeOfsY = -(footHeight / 2f);
         float toeOfsZ=-toeLength;
 
         ModelPart toe=new ModelPart(this, baseName + "toe");
         toe.setRotationPoint(toePosX, toePosY, toePosZ);
-        toe.addBox("main", toeOfsX, toeOfsY, toeOfsZ, toeWidth, toeHeight, toeLength);
+        toe.addBox("main", toeOfsX, toeOfsY, toeOfsZ, footWidth, footHeight, toeLength);
         foot.addChild(toe);
 
         if (hind) {
@@ -444,30 +441,24 @@ public class DragonModel extends ModelBase {
      * Applies the animations on the model. Called every frame before the model
      * is rendered.
      */
-    private void updateFromAnimator(TameableDragonEntity dragon) {
-        DragonAnimator dragonAnimator=dragon.getAnimator();
-        dragonAnimator.animate();
-
-        // update flags
-        back.isHidden = dragon.isSaddled();
-
+    private void updateFromAnimator(DragonAnimator animator) {
         // update offsets
-        offsetX=dragonAnimator.getModelOffsetX();
-        offsetY=dragonAnimator.getModelOffsetY();
-        offsetZ=dragonAnimator.getModelOffsetZ();
+        offsetX = animator.getModelOffsetX();
+        offsetY = animator.getModelOffsetY();
+        offsetZ = animator.getModelOffsetZ();
 
         // update pitch
-        pitch=dragonAnimator.getBodyPitch();
+        pitch = animator.getBodyPitch(this.partialTicks);
 
         // updateFromAnimator body parts
-        animHeadAndNeck(dragon);
-        animTail(dragon);
-        animWings(dragon);
-        animLegs(dragon);
+        animHeadAndNeck(animator);
+        animTail(animator);
+        animWings(animator);
+        animLegs(animator);
     }
 
-    protected void animHeadAndNeck(TameableDragonEntity dragon) {
-        DragonHeadPositionHelper headPositionHelper=dragon.getAnimator().getDragonHeadPositionHelper();
+    protected void animHeadAndNeck(DragonAnimator animator) {
+        DragonHeadPositionHelper headPositionHelper = animator.getDragonHeadPositionHelper();
 
         SegmentSizePositionRotation[] segmentData=headPositionHelper.getNeckSegmentPositionSizeLocations();
 
@@ -476,50 +467,42 @@ public class DragonModel extends ModelBase {
         }
 
         for (int i=0; i < neckProxy.length; i++) {
-            copyPositionRotationLocation(neck, segmentData[i]);
+            neck.applySegment(segmentData[i]);
             // hide the first and every second scale
             neckScale.isHidden=i % 2!=0 || i==0;
 
             // update proxy
             neckProxy[i].update();
         }
-
-        copyPositionRotationLocation(neck, headPositionHelper.getNeckPositionSizeLocation());
-        copyPositionRotationLocation(head, headPositionHelper.getHeadPositionSizeLocation());
-
-        jaw.rotateAngleX=dragon.getAnimator().getJawRotateAngleX();
+        this.neck.applySegment(headPositionHelper.getNeckPositionSizeLocation());
+        this.head.applySegment(headPositionHelper.getHeadPositionSizeLocation());
+        jaw.rotateAngleX = animator.getJawRotateAngleX();
     }
 
-    protected void animWings(TameableDragonEntity dragon) {
-        DragonAnimator dragonAnimatorCommon=dragon.getAnimator();
+    protected void animWings(DragonAnimator animator) {
         // apply angles
-        wingArm.rotateAngleX=dragonAnimatorCommon.getWingArmRotateAngleX();
-        wingArm.rotateAngleY=dragonAnimatorCommon.getWingArmRotateAngleY();
-        wingArm.rotateAngleZ=dragonAnimatorCommon.getWingArmRotateAngleZ();
-        wingArm.preRotateAngleX=dragonAnimatorCommon.getWingArmPreRotateAngleX();
-        wingForearm.rotateAngleX=dragonAnimatorCommon.getWingForearmRotateAngleX();
-        wingForearm.rotateAngleY=dragonAnimatorCommon.getWingForearmRotateAngleY();
-        wingForearm.rotateAngleZ=dragonAnimatorCommon.getWingForearmRotateAngleZ();
+        wingArm.rotateAngleX = animator.getWingArmRotateAngleX();
+        wingArm.rotateAngleY = animator.getWingArmRotateAngleY();
+        wingArm.rotateAngleZ = animator.getWingArmRotateAngleZ();
+        wingArm.preRotateAngleX = animator.getWingArmPreRotateAngleX();
+        wingForearm.rotateAngleX = animator.getWingForearmRotateAngleX();
+        wingForearm.rotateAngleY = animator.getWingForearmRotateAngleY();
+        wingForearm.rotateAngleZ = animator.getWingForearmRotateAngleZ();
 
         // set wing finger angles
         for (int i=0; i < wingFinger.length; i++) {
-            wingFinger[i].rotateAngleX=dragonAnimatorCommon.getWingFingerRotateX(i);
-            wingFinger[i].rotateAngleY=dragonAnimatorCommon.getWingFingerRotateY(i);
+            wingFinger[i].rotateAngleX = animator.getWingFingerRotateX(i);
+            wingFinger[i].rotateAngleY = animator.getWingFingerRotateY(i);
         }
 
     }
 
-    protected void animTail(TameableDragonEntity dragon) {
-        DragonAnimator DragonAnimator=dragon.getAnimator();
-        SegmentSizePositionRotation[] tailSegmentData=DragonAnimator.getTailSegments();
+    protected void animTail(DragonAnimator animator) {
+        SegmentSizePositionRotation[] tailSegmentData = animator.tailSegments;
         final int TAIL_SEGMENTS=tailSegmentData.length;
-        boolean flag = this.appearance.hasSideTailScale(dragon);
-        tailScaleMiddle.showModel = !flag;
-        tailScaleLeft.showModel = tailScaleRight.showModel = flag;
-        tailHornLeft.showModel = tailHornRight.showModel = this.appearance.hasTailHorns(dragon);
 
         for (int i=0; i < tailSegmentData.length; i++) {
-            copyPositionRotationLocation(tail, tailSegmentData[i]);
+            tail.applySegment(tailSegmentData[i]);
 
             // display horns near the tip
             boolean horn=i > TAIL_SEGMENTS - 7 && i < TAIL_SEGMENTS - 3;
@@ -528,20 +511,18 @@ public class DragonModel extends ModelBase {
             // update proxy
             tailProxy[i].update();
         }
-
-        copyPositionRotationLocation(tail, DragonAnimator.getTail());
+        this.tail.applySegment(animator.tail);
     }
 
     // left this in DragonModel because it isn't really needed by the server and is difficult to move.
-    protected void animLegs(TameableDragonEntity dragon) {
-        DragonAnimator DragonAnimator=dragon.getAnimator();
+    protected void animLegs(DragonAnimator animator) {
 
         // dangling legs for flying
-        float ground=DragonAnimator.getGroundTime();
-        float speed=DragonAnimator.getSpeed();
-        float walk=DragonAnimator.getWalkTime();
-        float sit=DragonAnimator.getSitTime();
-        float cycleOfs=DragonAnimator.getCycleOfs();
+        float ground = animator.getGroundTime();
+        float speed = animator.getSpeed();
+        float walk = animator.getWalkTime();
+        float sit = animator.getSitTime();
+        float cycleOfs = animator.getCycleOfs();
         if (ground < 1) {
             float footAirOfs=cycleOfs * 0.1f;
             float footAirX=0.75f + cycleOfs * 0.1f;
@@ -580,10 +561,11 @@ public class DragonModel extends ModelBase {
                 thigh.rotationPointZ=46;
             }
 
-            xAir=xAirAll[i % 2];
+            // final X rotation angles for air
+            float[] xAir = xAirAll[i % 2];
 
             // interpolate between sitting and standing
-            DragonAnimator.slerpArrays(xGroundStand[i % 2], xGroundSit[i % 2], xGround, sit);
+            MathX.slerpArrays(xGroundStand[i % 2], xGroundSit[i % 2], xGround, sit);
 
             // align the toes so they're always horizontal on the ground
             xGround[3]=-(xGround[0] + xGround[1] + xGround[2]);
@@ -591,11 +573,11 @@ public class DragonModel extends ModelBase {
             // apply walking cycle
             if (walk > 0) {
                 // interpolate between the keyframes, based on the cycle
-                DragonAnimator.splineArrays(DragonAnimator.getMoveTime() * 0.2f, i > 1, xGroundWalk2, xGroundWalk[0][i % 2], xGroundWalk[1][i % 2], xGroundWalk[2][i % 2]);
+                Interpolation.splineArrays(animator.getMoveTime() * 0.2f, i > 1, xGroundWalk2, xGroundWalk[0][i % 2], xGroundWalk[1][i % 2], xGroundWalk[2][i % 2]);
                 // align the toes so they're always horizontal on the ground
                 xGroundWalk2[3]-=xGroundWalk2[0] + xGroundWalk2[1] + xGroundWalk2[2];
 
-                DragonAnimator.slerpArrays(xGround, xGroundWalk2, xGround, walk);
+                MathX.slerpArrays(xGround, xGroundWalk2, xGround, walk);
             }
 
             float yAir=yAirAll[i % 2];
@@ -619,27 +601,18 @@ public class DragonModel extends ModelBase {
         }
     }
 
-    protected void copyPositionRotationLocation(ModelPart modelPart, SegmentSizePositionRotation segmentData) {
-        modelPart.rotateAngleX=segmentData.copyIfValid(segmentData.rotateAngleX, modelPart.rotateAngleX);
-        modelPart.rotateAngleY=segmentData.copyIfValid(segmentData.rotateAngleY, modelPart.rotateAngleY);
-        modelPart.rotateAngleZ=segmentData.copyIfValid(segmentData.rotateAngleZ, modelPart.rotateAngleZ);
-        modelPart.renderScaleX=segmentData.copyIfValid(segmentData.scaleX, modelPart.renderScaleX);
-        modelPart.renderScaleY=segmentData.copyIfValid(segmentData.scaleY, modelPart.renderScaleY);
-        modelPart.renderScaleZ=segmentData.copyIfValid(segmentData.scaleZ, modelPart.renderScaleZ);
-        modelPart.rotationPointX=segmentData.copyIfValid(segmentData.rotationPointX, modelPart.rotationPointX);
-        modelPart.rotationPointY=segmentData.copyIfValid(segmentData.rotationPointY, modelPart.rotationPointY);
-        modelPart.rotationPointZ=segmentData.copyIfValid(segmentData.rotationPointZ, modelPart.rotationPointZ);
-    }
-
-
-    /**
-     * Used for easily adding entity-dependent animations. The second and third float params here are the same second
-     * and third as in the setRotationAngles method.
-     */
     @Override
     public void setLivingAnimations(EntityLivingBase entity, float moveTime, float moveSpeed, float partialTicks) {
+        this.partialTicks = partialTicks;
+    }
+
+    @Override
+    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entity) {
         if (entity instanceof TameableDragonEntity) {
-            ((TameableDragonEntity) entity).getAnimator().setPartialTicks(partialTicks);
+            DragonAnimator animator = ((TameableDragonEntity) entity).getAnimator();
+            animator.setMovement(limbSwing, limbSwingAmount);
+            animator.setLook(netHeadYaw, headPitch);
+            animator.animate(this.partialTicks);
         }
     }
 
@@ -652,11 +625,13 @@ public class DragonModel extends ModelBase {
     }
 
     public void render(DragonRenderMode mode, TameableDragonEntity dragon, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
-        DragonAnimator animator=dragon.getAnimator();
-        animator.setMovement(moveTime, moveSpeed);
-        animator.setLook(lookYaw, lookPitch);
-        animator.animate();
-        updateFromAnimator(dragon);
+        // update flags
+        back.isHidden = dragon.isSaddled();
+        boolean flag = this.appearance.hasSideTailScale(dragon);
+        tailScaleMiddle.showModel = !flag;
+        tailScaleLeft.showModel = tailScaleRight.showModel = flag;
+        tailHornLeft.showModel = tailHornRight.showModel = this.appearance.hasTailHorns(dragon);
+        this.updateFromAnimator(dragon.getAnimator());
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(offsetX, offsetY, offsetZ);

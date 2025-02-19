@@ -176,7 +176,7 @@ public class DragonHeadPositionHelper {
 
     Vec3d headPlusThroatOffset = headOffset.add(throatOffset);
 
-    float bodyPitch = dragon.getBodyPitch();
+    float bodyPitch = dragon.getAnimator().getBodyPitch(0.0F);
     Vec3d CENTRE_OFFSET = new Vec3d(0, -6 * BODY_Y_SCALE,  19 * BODY_Z_SCALE);
 
     //rotate body
@@ -189,9 +189,7 @@ public class DragonHeadPositionHelper {
 
     headPlusThroatOffset = headPlusThroatOffset.rotateYaw((float) (Math.toRadians(-renderYawOffset) + Math.PI));
 
-    Vec3d throatPos = bodyOrigin.add(headPlusThroatOffset);
-
-    return throatPos;
+    return bodyOrigin.add(headPlusThroatOffset);
   }
 
   /**

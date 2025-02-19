@@ -79,4 +79,32 @@ public class Interpolation {
     }
 
     private Interpolation() {}
+
+    public static void splineArrays(float x, boolean shift, float[] result, float[]... nodes) {
+        // uncomment to disable interpolation
+//        if (true) {
+//            if (shift) {
+//                System.arraycopy(nodes[(int) (x + 1) % nodes.length], 0, result, 0, nodes.length);
+//            } else {
+//                System.arraycopy(nodes[(int) x % nodes.length], 0, result, 0, nodes.length);
+//            }
+//            return;
+//        }
+
+        int i1 = (int) x % nodes.length;
+        int i2 = (i1 + 1) % nodes.length;
+        int i3 = (i1 + 2) % nodes.length;
+
+        float[] a1 = nodes[i1];
+        float[] a2 = nodes[i2];
+        float[] a3 = nodes[i3];
+
+        float xn = x % nodes.length - i1;
+
+        if (shift) {
+            Spline.interp(xn, result, a2, a3, a1, a2);
+        } else {
+            Spline.interp(xn, result, a1, a2, a3, a1);
+        }
+    }
 }

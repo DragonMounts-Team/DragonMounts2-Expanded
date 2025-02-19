@@ -505,13 +505,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     }
 
     /**
-     * returns the pitch of the dragon's body
-     */
-    public float getBodyPitch() {
-        return getAnimator().getBodyPitch();
-    }
-
-    /**
      * Returns the distance to the ground while the entity is flying.
      */
     public double getAltitude() {
@@ -585,7 +578,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
                     rotationPitch
             );
             animator.tickingUpdate();
-            animator.animate();
+            animator.animate(0.0F);
 
             // set home position near owner when tamed
             if (isTamed()) {
@@ -1343,8 +1336,6 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
     /**
      * This code is called when the passenger is riding on the dragon
-     *
-     * @param passenger
      */
     @Override
     public void updatePassenger(Entity passenger) {
@@ -1358,12 +1349,10 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         passenger.setPosition(position.x, position.y, position.z);
 
         // fix rider rotation
-        if (passenger instanceof EntityPlayer) {
-            if (passenger == getControllingPlayer()) {
+        if (index == 0 && passenger instanceof EntityPlayer) {
                 passenger.prevRotationPitch = passenger.rotationPitch;
                 passenger.prevRotationYaw = passenger.rotationYaw;
                 ((EntityPlayer) passenger).renderYawOffset = renderYawOffset;
-            }
         } else {
             EntityUtil.clampYaw(passenger, this.rotationYaw, 105.0F);
         }
@@ -1396,7 +1385,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     @Override
     public int getGrowingAge() {
         // adapter for vanilla code to enable breeding interaction
-        return DragonLifeStage.ADULT == this.getLifeStageHelper().getLifeStage() ? 0 : -1;
+        return DragonLifeStage.ADULT == this.lifeStageHelper.getLifeStage() ? 0 : -1;
     }
 
     /**
@@ -1424,20 +1413,26 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
      * @return scale
      */
     public float getScale() {
-        return getLifeStageHelper().getScale();
+        return this.lifeStageHelper.getScale();
+    }
+
+    @Nonnull
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+        return this.getEntityBoundingBox().grow(2.0, 0.0, 2.0);
     }
 
     public boolean isEgg() {
-        return getLifeStageHelper().isEgg();
+        return this.lifeStageHelper.isEgg();
     }
 
     public boolean isOldEnoughToBreathe() {
-        return getLifeStageHelper().isOldEnough(DragonLifeStage.INFANT);
+        return this.lifeStageHelper.isOldEnough(DragonLifeStage.INFANT);
     }
 
     @Override
     public boolean isChild() {
-        return getLifeStageHelper().getLifeStage().isBaby();
+        return this.lifeStageHelper.getLifeStage().isBaby();
     }
 
     @Override

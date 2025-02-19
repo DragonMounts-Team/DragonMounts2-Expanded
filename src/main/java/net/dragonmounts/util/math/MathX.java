@@ -216,11 +216,6 @@ public class MathX {
 
     /**
      * Smoothed float linear interpolation, similar to terp() but faster
-     *
-     * @param a
-     * @param b
-     * @param x
-     * @return
      */
     public static float slerp(float a, float b, float x) {
         if (x <= 0) {
@@ -233,13 +228,27 @@ public class MathX {
         return lerp(a, b, x * x * (3 - 2 * x));
     }
 
+    public static void slerpArrays(float[] a, float[] b, float[] c, float x) {
+        if (a.length != b.length || b.length != c.length) {
+            throw new IllegalArgumentException();
+        }
+
+        if (x <= 0) {
+            System.arraycopy(a, 0, c, 0, a.length);
+            return;
+        }
+        if (x >= 1) {
+            System.arraycopy(b, 0, c, 0, a.length);
+            return;
+        }
+
+        for (int i = 0; i < c.length; i++) {
+            c[i] = slerp(a[i], b[i], x);
+        }
+    }
+
     /**
      * Float trigonometric interpolation
-     *
-     * @param a
-     * @param b
-     * @param x
-     * @return
      */
     public static float terp(float a, float b, float x) {
         if (x <= 0) {

@@ -9,6 +9,7 @@
  */
 package net.dragonmounts.client.model.dragon;
 
+import net.dragonmounts.entity.helper.SegmentSizePositionRotation;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -25,9 +26,6 @@ import static org.lwjgl.opengl.GL11.*;
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public class ModelPart extends ModelRenderer {
-
-    public static boolean renderAxes;
-
     public float renderScaleX = 1;
     public float renderScaleY = 1;
     public float renderScaleZ = 1;
@@ -36,7 +34,7 @@ public class ModelPart extends ModelRenderer {
     public float preRotateAngleY;
     public float preRotateAngleZ;
 
-    private ModelBase base;
+    private final ModelBase base;
     private boolean compiled;
     private int displayList;
 
@@ -159,5 +157,24 @@ public class ModelPart extends ModelRenderer {
         if (renderScaleX != 0 || renderScaleY != 0 || renderScaleZ != 0) {
             GlStateManager.scale(renderScaleX, renderScaleY, renderScaleZ);
         }
+    }
+
+    public void applySegment(SegmentSizePositionRotation segment) {
+        this.rotateAngleX = takeInValid(segment.rotateAngleX, this.rotateAngleX);
+        this.rotateAngleY = takeInValid(segment.rotateAngleY, this.rotateAngleY);
+        this.rotateAngleZ = takeInValid(segment.rotateAngleZ, this.rotateAngleZ);
+        this.renderScaleX = takeInValid(segment.scaleX, this.renderScaleX);
+        this.renderScaleY = takeInValid(segment.scaleY, this.renderScaleY);
+        this.renderScaleZ = takeInValid(segment.scaleZ, this.renderScaleZ);
+        this.rotationPointX = takeInValid(segment.rotationPointX, this.rotationPointX);
+        this.rotationPointY = takeInValid(segment.rotationPointY, this.rotationPointY);
+        this.rotationPointZ = takeInValid(segment.rotationPointZ, this.rotationPointZ);
+    }
+
+    /**
+     * @return neo if valid (not NaN), old otherwise
+     */
+    public static float takeInValid(float neo, float old) {
+        return Float.isNaN(neo) ? old : neo;
     }
 }

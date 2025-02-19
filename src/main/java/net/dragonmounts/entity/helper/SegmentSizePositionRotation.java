@@ -27,15 +27,6 @@ public class SegmentSizePositionRotation implements Cloneable {
     }
   }
 
-  /** returns newValue, or oldValue if newValue is not valid (NaN)
-   * @param newValue
-   * @param oldValue
-   * @return newValue if not NAN, oldValue otherwise
-   */
-  public float copyIfValid(float newValue, float oldValue) {
-    return Float.isNaN(newValue) ? oldValue : newValue;
-  }
-
   public void setScale(float scaleX, float scaleY, float scaleZ) {
     this.scaleX = scaleX;
     this.scaleY = scaleY;

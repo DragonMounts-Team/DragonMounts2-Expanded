@@ -1,5 +1,6 @@
 package net.dragonmounts.client.render.dragon.layer;
 
+import net.dragonmounts.client.model.dragon.anim.DragonAnimator;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.inventory.DragonInventory;
 import net.dragonmounts.util.math.Interpolation;
@@ -21,6 +22,8 @@ public class LayerRendererDragonBanner extends DragonLayerRenderer {
 
     @Override
     public void doRenderLayer(TameableDragonEntity dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        DragonAnimator animator = dragon.getAnimator();
+        float pitch = animator.getBodyPitch(partialTicks);
         DragonInventory inventory = dragon.inventory;
         ItemStack itemstack1 = inventory.getBanner(0);
         ItemStack itemstack2 = inventory.getBanner(1);
@@ -41,7 +44,7 @@ public class LayerRendererDragonBanner extends DragonLayerRenderer {
             GlStateManager.translate(0, Interpolation.smoothStep(0.2F, dragon.getAnimator().getModelOffsetY() + 1.2F, dragon.getAnimator().getSpeed()), 0);
             GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
             GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
-            GlStateManager.rotate(-dragon.getBodyPitch(), 0.0F, 0.0F, 1.0F);
+            GlStateManager.rotate(-pitch, 0.0F, 0.0F, 1.0F);
             GlStateManager.scale(0.625F, -0.625F, -0.625F);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1);
             renderer.bindTexture(resourcelocation1);
@@ -64,7 +67,7 @@ public class LayerRendererDragonBanner extends DragonLayerRenderer {
             GlStateManager.translate(0, Interpolation.smoothStep(0.2F, dragon.getAnimator().getModelOffsetY() + 1.2F, dragon.getAnimator().getSpeed()), 0);
             GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
             GlStateManager.rotate(-180.0F, 0.0F, 0.0F, 1.0F);
-            GlStateManager.rotate(dragon.getBodyPitch(), 0.0F, 0.0F, 1.0F);
+            GlStateManager.rotate(pitch, 0.0F, 0.0F, 1.0F);
             GlStateManager.scale(0.625F, -0.625F, -0.625F);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1);
             renderer.bindTexture(resourcelocation2);
@@ -86,7 +89,7 @@ public class LayerRendererDragonBanner extends DragonLayerRenderer {
             GlStateManager.translate(0, 0, Interpolation.smoothStep(-2.3F, dragon.getAnimator().getModelOffsetZ() + 1.0F, dragon.getAnimator().getSpeed()));
             GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
             GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
-            GlStateManager.rotate(dragon.getBodyPitch(), 1.0F, 0.0F, 0.0F);
+            GlStateManager.rotate(pitch, 1.0F, 0.0F, 0.0F);
             GlStateManager.scale(0.525F, -0.625F, -0.625F);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1);
             renderer.bindTexture(resourcelocation3);
@@ -107,7 +110,7 @@ public class LayerRendererDragonBanner extends DragonLayerRenderer {
             GlStateManager.translate(0, 0, Interpolation.smoothStep(-2.3F, dragon.getAnimator().getModelOffsetZ() + 1.0F, dragon.getAnimator().getSpeed()));
             GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
             GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
-            GlStateManager.rotate(dragon.getBodyPitch(), 1.0F, 0.0F, 0.0F);
+            GlStateManager.rotate(pitch, 1.0F, 0.0F, 0.0F);
             GlStateManager.scale(0.525F, -0.625F, -0.625F);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1);
             renderer.bindTexture(resourcelocation4);
