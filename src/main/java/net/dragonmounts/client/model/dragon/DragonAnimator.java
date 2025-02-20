@@ -7,14 +7,14 @@
  **    May you find forgiveness for yourself and forgive others.
  **    May you share freely, never taking more than you give.
  */
-package net.dragonmounts.client.model.dragon.anim;
+package net.dragonmounts.client.model.dragon;
 
-import net.dragonmounts.client.model.dragon.DragonModel;
 import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreathHelper;
 import net.dragonmounts.entity.breath.DragonHeadPositionHelper;
 import net.dragonmounts.entity.helper.SegmentSizePositionRotation;
+import net.dragonmounts.util.CircularBuffer;
 import net.dragonmounts.util.LogUtil;
 import net.dragonmounts.util.math.Interpolation;
 import net.dragonmounts.util.math.LinearInterpolation;

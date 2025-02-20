@@ -10,7 +10,6 @@
 
 package net.dragonmounts.client.model.dragon;
 
-import net.dragonmounts.client.model.dragon.anim.DragonAnimator;
 import net.dragonmounts.client.render.dragon.DragonRenderMode;
 import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.entity.TameableDragonEntity;
@@ -40,43 +39,17 @@ public class DragonModel extends ModelBase {
 
     // model parts
     public ModelPart head;
-    public ModelPart neck;
-    public ModelPart neckScale;
-    public ModelPart tail;
-    public ModelPart tailHornLeft;
-    public ModelPart tailHornRight;
-    public ModelPart tailScaleLeft;
-    public ModelPart tailScaleMiddle;
-    public ModelPart tailScaleRight;
+    public final NeckPart neck;
+    public final TailPart tail;
+    public final LegPart foreLeg;
+    public final LegPart hindLeg;
     public ModelPart jaw;
     public ModelPart body;
-    public ModelPart heart;
     public ModelPart back;
-    public ModelPart saddle;
-    public ModelPart saddleFront;
-    public ModelPart saddleBack;
-    public ModelPart saddleTieL;
-    public ModelPart saddleMetalL;
-    public ModelPart saddleTieR;
-    public ModelPart saddleMetalR;
-    public ModelPart chestR;
-    public ModelPart chestL;
-    public ModelPart forethigh;
-    public ModelPart forecrus;
-    public ModelPart forefoot;
-    public ModelPart foretoe;
-    public ModelPart hindthigh;
-    public ModelPart hindcrus;
-    public ModelPart hindfoot;
-    public ModelPart hindtoe;
+    public ModelPart chest;
     public ModelPart wingArm;
     public ModelPart wingForearm;
-    public ModelPart[] wingFinger=new ModelPart[4];
-
-    // model attributes
-    public ModelPartProxy[] neckProxy=new ModelPartProxy[VERTS_NECK];
-    public ModelPartProxy[] tailProxy=new ModelPartProxy[VERTS_TAIL];
-    public ModelPartProxy[] thighProxy=new ModelPartProxy[4];
+    public final ModelPart[] wingFinger = new ModelPart[4];
 
 /*    // animation parameters
     private float[] wingArmf = new float[3];
@@ -133,7 +106,7 @@ public class DragonModel extends ModelBase {
     // Y rotation angles for air, thigh only
     private final float[] yAirAll = {-0.1f, 0.1f};
 
-    public DragonModel(VariantAppearance appearance) {
+    public DragonModel(VariantAppearance appearance, IModelFactory factory) {
         textureWidth=256;
         textureHeight=256;
 
@@ -142,28 +115,26 @@ public class DragonModel extends ModelBase {
         setTextureOffset("body.body", 0, 0);
         setTextureOffset("body.scale", 0, 32);
         setTextureOffset("body.heart", 130, 110);
-        setTextureOffset("body.saddle", 184, 98);
+        setTextureOffset("body.saddle", 184, 98);/*
         setTextureOffset("body.saddleFront", 214, 120);
         setTextureOffset("body.saddleBack", 214, 120);
-        setTextureOffset("body.saddleTieL", 220, 100);
-        setTextureOffset("body.saddleTieR", 220, 100);
-        setTextureOffset("body.saddleMetalL", 224, 132);
-        setTextureOffset("body.saddleMetalR", 224, 132);
-        setTextureOffset("body.chestL", 192, 132);
-        setTextureOffset("body.chestR", 224, 132);
+        setTextureOffset("body.saddleTie", 220, 100);
+        setTextureOffset("body.saddleMetal", 224, 132);*/
+        setTextureOffset("chest.left", 192, 132);
+        setTextureOffset("chest.right", 224, 132);
         setTextureOffset("head.nostril", 48, 0);
         setTextureOffset("head.mainhead", 0, 0);
         setTextureOffset("head.upperjaw", 56, 88);
         setTextureOffset("head.lowerjaw", 0, 88);
         setTextureOffset("head.horn", 28, 32);
-        setTextureOffset("forethigh.main", 112, 0);
-        setTextureOffset("forecrus.main", 148, 0);
-        setTextureOffset("forefoot.main", 210, 0);
-        setTextureOffset("foretoe.main", 176, 0);
-        setTextureOffset("hindthigh.main", 112, 29);
-        setTextureOffset("hindcrus.main", 152, 29);
-        setTextureOffset("hindfoot.main", 180, 29);
-        setTextureOffset("hindtoe.main", 215, 29);
+        setTextureOffset("foreLeg.thigh", 112, 0);
+        setTextureOffset("foreLeg.shank", 148, 0);
+        setTextureOffset("foreLeg.foot", 210, 0);
+        setTextureOffset("foreLeg.toe", 176, 0);
+        setTextureOffset("hindLeg.thigh", 112, 29);
+        setTextureOffset("hindLeg.shank", 152, 29);
+        setTextureOffset("hindLeg.foot", 180, 29);
+        setTextureOffset("hindLeg.toe", 215, 29);
         setTextureOffset("neck.box", 112, 88);
         setTextureOffset("neck.scale", 0, 0);
         setTextureOffset("tail.box", 152, 88);
@@ -177,11 +148,12 @@ public class DragonModel extends ModelBase {
         setTextureOffset("wingforearm.bone", 0, 164);
 
         buildBody();
-        buildNeck();
+        this.neck = new NeckPart(this, "neck");
         buildHead();
-        buildTail();
+        this.tail = new TailPart(this, "tail");
         buildWing();
-        buildLegs();
+        this.foreLeg = factory.makeForeLeg(this);
+        this.hindLeg = factory.makeHindLeg(this);
     }
 
     private void buildHead() {
@@ -225,78 +197,24 @@ public class DragonModel extends ModelBase {
 
     }
 
-    private void buildNeck() {
-        neck=new ModelPart(this, "neck");
-        neck.addBox("box", -5, -5, -5, NECK_SIZE, NECK_SIZE, NECK_SIZE);
-        neckScale=neck.addChildBox("scale", -1, -7, -3, 2, 4, 6);
-
-        // initialize model proxies
-        for (int i=0; i < neckProxy.length; i++) {
-            neckProxy[i]=new ModelPartProxy(neck);
-        }
-    }
-
-    private void buildTail() {
-        tail=new ModelPart(this, "tail");
-        tail.addBox("box", -5, -5, -5, TAIL_SIZE, TAIL_SIZE, TAIL_SIZE);
-        float scaleRotZ=MathX.toRadians(45);
-        tailScaleLeft=tail.addChildBox("scale", -1, -8, -3, 2, 4, 6).setAngles(0, 0, scaleRotZ);
-        tailScaleMiddle=tail.addChildBox("scale", -1, -8, -3, 2, 4, 6).setAngles(0, 0, 0);
-        tailScaleRight=tail.addChildBox("scale", -1, -8, -3, 2, 4, 6).setAngles(0, 0, -scaleRotZ);
-
-        this.tailHornRight = buildTailHorn(false);
-        this.tailHornLeft = buildTailHorn(true);
-
-        // initialize model proxies
-        for (int i=0; i < tailProxy.length; i++) {
-            tailProxy[i]=new ModelPartProxy(tail);
-        }
-    }
-
-    private ModelPart buildTailHorn(boolean mirror) {
-        int hornThick=3;
-        int hornLength=32;
-
-        float hornOfs=-(hornThick / 2f);
-
-        float hornPosX=0;
-        float hornPosY=hornOfs;
-        float hornPosZ=TAIL_SIZE / 2f;
-
-        float hornRotX=MathX.toRadians(-15);
-        float hornRotY=MathX.toRadians(-145);
-        float hornRotZ=0;
-
-        if (mirror) {
-            hornPosX*=-1;
-            hornRotY*=-1;
-        }
-
-        tail.mirror=mirror;
-        ModelPart horn=tail.addChildBox("horn", hornOfs, hornOfs, hornOfs, hornThick, hornThick, hornLength);
-        horn.setRotationPoint(hornPosX, hornPosY, hornPosZ);
-        horn.setAngles(hornRotX, hornRotY, hornRotZ);
-        horn.isHidden=true;
-        return horn;
-    }
-
     private void buildBody() {
-        body=new ModelPart(this, "body");
+        body = new ModelPart(this, "body");
         body.setRotationPoint(0, 4, 8);
         body.addBox("body", -12, 0, -16, 24, 24, 64);
         body.addBox("scale", -1, -6, 10, 2, 6, 12);
         body.addBox("scale", -1, -6, 30, 2, 6, 12);
-        heart=body.addChildBox("heart", -4, 12, -5, 8, 6, 15);
-        back=body.addChildBox("scale", -1, -6, -10, 2, 6, 12);
-        chestL=body.addChildBox("chestL", 12, 0, 21, 4, 12, 12);
-        chestR=body.addChildBox("chestR", -16, 0, 21, 4, 12, 12);
-        saddle=body.addChildBox("saddle", -7, -2, -15, 15, 3, 20);
-        saddleFront=body.addChildBox("saddleFront", -3, -3, -14, 6, 1, 2);
-        saddleBack=body.addChildBox("saddleBack", -6, -4, 2, 13, 2, 2);
-        saddleTieL=body.addChildBox("saddleTieL", 12, 0, -14, 1, 14, 2);
-        saddleMetalL=body.addChildBox("saddleMetalL", 12, 14, -15, 1, 5, 4);
-        saddleTieR=body.addChildBox("saddleTieR", -13, 0, -14, 1, 10, 2);
-        saddleMetalR=body.addChildBox("saddleMetalR", -13, 10, -15, 1, 5, 4);
+        body.addBox("heart", -4, 12, -5, 8, 6, 15);
+        back = body.addChildBox("scale", -1, -6, -10, 2, 6, 12);
+        body.addChildBox("saddle", -7, -2, -15, 15, 3, 20);/*
+        saddle.addBox("saddleFront", -3, -3, -14, 6, 1, 2)
+                .addBox("saddleTie", 12, 0, -14, 1, 14, 2) // left
+                .addBox("saddleTie", -13, 0, -14, 1, 10, 2) // right
+                .addBox("saddleMetal", 12, 14, -15, 1, 5, 4) // left
+                .addBox("saddleMetal", -13, 10, -15, 1, 5, 4) // right
+                .addBox("saddleBack", -6, -4, 2, 13, 2, 2);*/
+        this.body.addChild(this.chest = new ModelPart(this, "chest"));
+        chest.addBox("left", 12, 0, 21, 4, 12, 12)
+                .addBox("right", -16, 0, 21, 4, 12, 12);
     }
 
     private void buildWing() {
@@ -331,112 +249,6 @@ public class DragonModel extends ModelBase {
         return finger;
     }
 
-    private void buildLegs() {
-        buildLeg(false);
-        buildLeg(true);
-
-        // initialize model proxies
-        for (int i=0; i < 4; i++) {
-            if (i % 2==0) {
-                thighProxy[i]=new ModelPartProxy(forethigh);
-            } else {
-                thighProxy[i]=new ModelPartProxy(hindthigh);
-            }
-        }
-    }
-
-    private void buildLeg(boolean hind) {
-        // thinner legs for skeletons
-
-        float baseLength=26;
-        String baseName=hind ? "hind" : "fore";
-
-        // thigh variables
-        float thighPosX=-11;
-        float thighPosY=18;
-        float thighPosZ=4;
-
-        int thighThick = this.appearance.isSkeleton ? 7 : 9;
-        int thighLength=(int) (baseLength * (hind ? 0.9f : 0.77f));
-
-        if (hind) {
-            thighThick++;
-            thighPosY-=5;
-        }
-
-        float thighOfs=-(thighThick / 2f);
-
-        ModelPart thigh=new ModelPart(this, baseName + "thigh");
-        thigh.setRotationPoint(thighPosX, thighPosY, thighPosZ);
-        thigh.addBox("main", thighOfs, thighOfs, thighOfs, thighThick, thighLength, thighThick);
-
-        // crus variables
-        float crusPosX=0;
-        float crusPosY=thighLength + thighOfs;
-        float crusPosZ=0;
-
-        int crusThick=thighThick - 2;
-        int crusLength=(int) (baseLength * (hind ? 0.7f : 0.8f));
-
-        if (hind) {
-            crusThick--;
-            crusLength-=2;
-        }
-
-        float crusOfs=-(crusThick / 2f);
-
-        ModelPart crus=new ModelPart(this, baseName + "crus");
-        crus.setRotationPoint(crusPosX, crusPosY, crusPosZ);
-        crus.addBox("main", crusOfs, crusOfs, crusOfs, crusThick, crusLength, crusThick);
-        thigh.addChild(crus);
-
-        // foot variables
-        float footPosX=0;
-        float footPosY=crusLength + (crusOfs / 2f);
-        float footPosZ=0;
-
-        int footWidth=crusThick + 2;
-        int footHeight=4;
-        int footLength=(int) (baseLength * (hind ? 0.67f : 0.34f));
-
-        float footOfsX=-(footWidth / 2f);
-        float footOfsY=-(footHeight / 2f);
-        float footOfsZ=footLength * -0.75f;
-
-        ModelPart foot=new ModelPart(this, baseName + "foot");
-        foot.setRotationPoint(footPosX, footPosY, footPosZ);
-        foot.addBox("main", footOfsX, footOfsY, footOfsZ, footWidth, footHeight, footLength);
-        crus.addChild(foot);
-
-        // toe variables
-        int toeLength=(int) (baseLength * (hind ? 0.27f : 0.33f));
-
-        float toePosX=0;
-        float toePosY=0;
-        float toePosZ=footOfsZ - (footOfsY / 2f);
-
-        float toeOfsX = -(footWidth / 2f);
-        float toeOfsY = -(footHeight / 2f);
-        float toeOfsZ=-toeLength;
-
-        ModelPart toe=new ModelPart(this, baseName + "toe");
-        toe.setRotationPoint(toePosX, toePosY, toePosZ);
-        toe.addBox("main", toeOfsX, toeOfsY, toeOfsZ, footWidth, footHeight, toeLength);
-        foot.addChild(toe);
-
-        if (hind) {
-            hindthigh=thigh;
-            hindcrus=crus;
-            hindfoot=foot;
-            hindtoe=toe;
-        } else {
-            forethigh=thigh;
-            forecrus=crus;
-            forefoot=foot;
-            this.foretoe = toe;
-        }
-    }
-
     /**
      * Applies the animations on the model. Called every frame before the model
      * is rendered.
@@ -458,24 +270,17 @@ public class DragonModel extends ModelBase {
     }
 
     protected void animHeadAndNeck(DragonAnimator animator) {
-        DragonHeadPositionHelper headPositionHelper = animator.getDragonHeadPositionHelper();
-
-        SegmentSizePositionRotation[] segmentData=headPositionHelper.getNeckSegmentPositionSizeLocations();
-
-        if (neckProxy.length!=segmentData.length) {
-            throw new IllegalArgumentException("Mismatch of neck segment count");
-        }
-
-        for (int i=0; i < neckProxy.length; i++) {
-            neck.applySegment(segmentData[i]);
+        DragonHeadPositionHelper helper = animator.getDragonHeadPositionHelper();
+        SegmentSizePositionRotation[] segments = helper.getNeckSegmentPositionSizeLocations();
+        NeckPart neck = this.neck;
+        for (int i = 0; i < segments.length; ++i) {
+            neck.applySegment(segments[i]);
             // hide the first and every second scale
-            neckScale.isHidden=i % 2!=0 || i==0;
-
-            // update proxy
-            neckProxy[i].update();
+            neck.scale.isHidden = (i & 1) == 1 || i == 0;
+            neck.save(i);
         }
-        this.neck.applySegment(headPositionHelper.getNeckPositionSizeLocation());
-        this.head.applySegment(headPositionHelper.getHeadPositionSizeLocation());
+        this.neck.applySegment(helper.getNeckPositionSizeLocation());
+        this.head.applySegment(helper.getHeadPositionSizeLocation());
         jaw.rotateAngleX = animator.getJawRotateAngleX();
     }
 
@@ -499,30 +304,25 @@ public class DragonModel extends ModelBase {
 
     protected void animTail(DragonAnimator animator) {
         SegmentSizePositionRotation[] tailSegmentData = animator.tailSegments;
-        final int TAIL_SEGMENTS=tailSegmentData.length;
-
-        for (int i=0; i < tailSegmentData.length; i++) {
-            tail.applySegment(tailSegmentData[i]);
-
+        final int TAIL_SEGMENTS = tailSegmentData.length;
+        TailPart tail = this.tail;
+        for (int i = 0; i < tailSegmentData.length; ++i) {
             // display horns near the tip
-            boolean horn=i > TAIL_SEGMENTS - 7 && i < TAIL_SEGMENTS - 3;
-            tailHornLeft.isHidden=tailHornRight.isHidden=!horn;
-
-            // update proxy
-            tailProxy[i].update();
+            tail.leftHorn.isHidden = tail.rightHorn.isHidden = !(i > TAIL_SEGMENTS - 7 && i < TAIL_SEGMENTS - 3);
+            tail.applySegment(tailSegmentData[i]);
+            tail.save(i);
         }
-        this.tail.applySegment(animator.tail);
     }
 
     // left this in DragonModel because it isn't really needed by the server and is difficult to move.
     protected void animLegs(DragonAnimator animator) {
-
         // dangling legs for flying
         float ground = animator.getGroundTime();
         float speed = animator.getSpeed();
         float walk = animator.getWalkTime();
         float sit = animator.getSitTime();
         float cycleOfs = animator.getCycleOfs();
+        float move = animator.getMoveTime() * 0.2F;
         if (ground < 1) {
             float footAirOfs=cycleOfs * 0.1f;
             float footAirX=0.75f + cycleOfs * 0.1f;
@@ -538,67 +338,51 @@ public class DragonModel extends ModelBase {
             xAirAll[1][3]=footAirX * 0.5f;
         }
 
-        // 0 - front leg, right side
-        // 1 - hind leg, right side
-        // 2 - front leg, left side
-        // 3 - hind leg, left side
-        for (int i=0; i < thighProxy.length; i++) {
-            ModelPart thigh, crus, foot, toe;
+        this.animLeg(this.foreLeg, ground, walk, sit, move, 0, false);
+        this.animLeg(this.hindLeg, ground, walk, sit, move, 1, false);
+        this.animLeg(this.foreLeg, ground, walk, sit, move, 0, true);
+        this.animLeg(this.hindLeg, ground, walk, sit, move, 1, true);
+    }
 
-            if (i % 2==0) {
-                thigh=forethigh;
-                crus=forecrus;
-                foot=forefoot;
-                toe=foretoe;
+    /**
+     * @param index fore: 0, hind: 1
+     */
+    protected void animLeg(LegPart leg, float ground, float walk, float sit, float move, int index, boolean left) {
+        leg.rotationPointZ = index == 0 ? 4 : 46;
+        // final X rotation angles for air
+        float[] xAir = xAirAll[index];
+        // interpolate between sitting and standing
+        MathX.slerpArrays(xGroundStand[index], xGroundSit[index], xGround, sit);
 
-                thigh.rotationPointZ=4;
-            } else {
-                thigh=hindthigh;
-                crus=hindcrus;
-                foot=hindfoot;
-                toe=hindtoe;
+        // align the toes so they're always horizontal on the ground
+        xGround[3] = -(xGround[0] + xGround[1] + xGround[2]);
 
-                thigh.rotationPointZ=46;
-            }
-
-            // final X rotation angles for air
-            float[] xAir = xAirAll[i % 2];
-
-            // interpolate between sitting and standing
-            MathX.slerpArrays(xGroundStand[i % 2], xGroundSit[i % 2], xGround, sit);
-
+        // apply walking cycle
+        if (walk > 0) {
+            // interpolate between the keyframes, based on the cycle
+            Interpolation.splineArrays(move, left, xGroundWalk2, xGroundWalk[0][index], xGroundWalk[1][index], xGroundWalk[2][index]);
             // align the toes so they're always horizontal on the ground
-            xGround[3]=-(xGround[0] + xGround[1] + xGround[2]);
+            xGroundWalk2[3] -= xGroundWalk2[0] + xGroundWalk2[1] + xGroundWalk2[2];
 
-            // apply walking cycle
-            if (walk > 0) {
-                // interpolate between the keyframes, based on the cycle
-                Interpolation.splineArrays(animator.getMoveTime() * 0.2f, i > 1, xGroundWalk2, xGroundWalk[0][i % 2], xGroundWalk[1][i % 2], xGroundWalk[2][i % 2]);
-                // align the toes so they're always horizontal on the ground
-                xGroundWalk2[3]-=xGroundWalk2[0] + xGroundWalk2[1] + xGroundWalk2[2];
-
-                MathX.slerpArrays(xGround, xGroundWalk2, xGround, walk);
-            }
-
-            float yAir=yAirAll[i % 2];
-            float yGround;
-
-            // interpolate between sitting and standing
-            yGround=MathX.slerp(yGroundStand[i % 2], yGroundSit[i % 2], sit);
-
-            // interpolate between standing and walking
-            yGround=MathX.slerp(yGround, yGroundWalk[i % 2], walk);
-
-            // interpolate between flying and grounded
-            thigh.rotateAngleY=MathX.slerp(yAir, yGround, ground);
-            thigh.rotateAngleX=MathX.slerp(xAir[0], xGround[0], ground);
-            crus.rotateAngleX=MathX.slerp(xAir[1], xGround[1], ground);
-            foot.rotateAngleX=MathX.slerp(xAir[2], xGround[2], ground);
-            toe.rotateAngleX=MathX.slerp(xAir[3], xGround[3], ground);
-
-            // update proxy
-            thighProxy[i].update();
+            MathX.slerpArrays(xGround, xGroundWalk2, xGround, walk);
         }
+
+        float yAir = yAirAll[index];
+        float yGround;
+
+        // interpolate between sitting and standing
+        yGround = MathX.slerp(yGroundStand[index], yGroundSit[index], sit);
+
+        // interpolate between standing and walking
+        yGround = MathX.slerp(yGround, yGroundWalk[index], walk);
+
+        // interpolate between flying and grounded
+        leg.rotateAngleY = MathX.slerp(yAir, yGround, ground);
+        leg.rotateAngleX = MathX.slerp(xAir[0], xGround[0], ground);
+        leg.shank.rotateAngleX = MathX.slerp(xAir[1], xGround[1], ground);
+        leg.foot.rotateAngleX = MathX.slerp(xAir[2], xGround[2], ground);
+        leg.toe.rotateAngleX = MathX.slerp(xAir[3], xGround[3], ground);
+        (left ? leg.left : leg.right).save(leg);
     }
 
     @Override
@@ -628,9 +412,10 @@ public class DragonModel extends ModelBase {
         // update flags
         back.isHidden = dragon.isSaddled();
         boolean flag = this.appearance.hasSideTailScale(dragon);
-        tailScaleMiddle.showModel = !flag;
-        tailScaleLeft.showModel = tailScaleRight.showModel = flag;
-        tailHornLeft.showModel = tailHornRight.showModel = this.appearance.hasTailHorns(dragon);
+        TailPart tail = this.tail;
+        tail.middleScale.showModel = !flag;
+        tail.leftScale.showModel = tail.rightScale.showModel = flag;
+        tail.leftHorn.showModel = tail.rightHorn.showModel = this.appearance.hasTailHorns(dragon);
         this.updateFromAnimator(dragon.getAnimator());
 
         GlStateManager.pushMatrix();
@@ -640,42 +425,16 @@ public class DragonModel extends ModelBase {
         GlStateManager.popMatrix();
     }
 
-    public void renderBody(float scale) {
-        body.render(scale);
-    }
-
-    public void renderHead(float scale) {
-        head.render(scale * 0.92F);
-    }
-
-    public void renderNeck(float scale) {
-        for (ModelPartProxy proxy : neckProxy) {
-            proxy.render(scale);
-        }
-    }
-
-    public void renderTail(float scale) {
-        for (ModelPartProxy proxy : tailProxy) {
-            proxy.render(scale);
-        }
-    }
-
     public void renderWings(float scale) {
         GlStateManager.pushMatrix();
         GlStateManager.enableCull();
         GlStateManager.cullFace(GlStateManager.CullFace.FRONT);
-
-        for (int i=0; i < 2; i++) {
-            wingArm.render(scale);
-
-            if (i==0) {
-                // mirror next wing
-                GlStateManager.scale(-1, 1, 1);
-                // switch to back face culling
-                GlStateManager.cullFace(GlStateManager.CullFace.BACK);
-            }
-        }
-
+        wingArm.render(scale);
+        // mirror following wing
+        GlStateManager.scale(-1, 1, 1);
+        // switch to back face culling
+        GlStateManager.cullFace(GlStateManager.CullFace.BACK);
+        wingArm.render(scale);
         GlStateManager.disableCull();
         GlStateManager.popMatrix();
     }
@@ -683,18 +442,19 @@ public class DragonModel extends ModelBase {
     public void renderLegs(float scale) {
         GlStateManager.enableCull();
         GlStateManager.cullFace(GlStateManager.CullFace.BACK);
-
-        for (int i=0; i < thighProxy.length; i++) {
-            thighProxy[i].render(scale);
-
-            if (i==1) {
-                // mirror next legs
-                GlStateManager.scale(-1, 1, 1);
-                // switch to front face culling
-                GlStateManager.cullFace(GlStateManager.CullFace.FRONT);
-            }
-        }
-
+        LegPart fore = this.foreLeg, hind = this.hindLeg;
+        fore.left.apply(fore);
+        fore.render(scale);
+        hind.left.apply(hind);
+        hind.render(scale);
+        // mirror following legs
+        GlStateManager.scale(-1, 1, 1);
+        // switch to front face culling
+        GlStateManager.cullFace(GlStateManager.CullFace.FRONT);
+        fore.right.apply(fore);
+        fore.render(scale);
+        hind.right.apply(hind);
+        hind.render(scale);
         GlStateManager.cullFace(GlStateManager.CullFace.BACK);
         GlStateManager.disableCull();
     }

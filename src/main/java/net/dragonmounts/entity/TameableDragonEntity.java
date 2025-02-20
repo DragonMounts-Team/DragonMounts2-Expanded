@@ -17,7 +17,7 @@ import net.dragonmounts.capability.DMCapabilities;
 import net.dragonmounts.capability.IDragonFood;
 import net.dragonmounts.capability.IHardShears;
 import net.dragonmounts.client.gui.GuiHandler;
-import net.dragonmounts.client.model.dragon.anim.DragonAnimator;
+import net.dragonmounts.client.model.dragon.DragonAnimator;
 import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.ai.*;
 import net.dragonmounts.entity.ai.air.EntityAIDragonFlight;

@@ -7,7 +7,7 @@
  **    May you find forgiveness for yourself and forgive others.
  **    May you share freely, never taking more than you give.
  */
-package net.dragonmounts.client.model.dragon.anim;
+package net.dragonmounts.util;
 
 import net.dragonmounts.util.math.Interpolation;
 
@@ -23,7 +23,7 @@ public class CircularBuffer {
     private int index = 0;
 
     public CircularBuffer(int size) {
-        if ((size & 1) == 1) throw new IllegalArgumentException(); // & only works if size is a power of 2
+        if ((size & 1) == 1) throw new IllegalArgumentException(); // & with a mask only works if size is a power of 2
         this.buffer = new float[size];
     }
 
@@ -41,8 +41,8 @@ public class CircularBuffer {
 
     public float get(float x, int offset) {
         int i = this.index - offset;
-        int len = this.buffer.length - 1;
-        return Interpolation.linear(this.buffer[i - 1 & len], this.buffer[i & len], x);
+        int mask = this.buffer.length - 1;
+        return Interpolation.linear(this.buffer[i - 1 & mask], this.buffer[i & mask], x);
     }
 
     public float get(float x, int offset1, int offset2) {

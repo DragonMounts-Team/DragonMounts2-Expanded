@@ -35,8 +35,8 @@ public class ModelPart extends ModelRenderer {
     public float preRotateAngleZ;
 
     private final ModelBase base;
-    private boolean compiled;
-    private int displayList;
+    protected boolean compiled;
+    protected int displayList;
 
     public ModelPart(ModelBase base, String name) {
         super(base, name);
@@ -81,7 +81,7 @@ public class ModelPart extends ModelRenderer {
         return setRenderScale(scale, scale, scale);
     }
 
-    private void compileDisplayList(float scale) {
+    protected void compileDisplayList(float scale) {
         BufferBuilder vb = Tessellator.getInstance().getBuffer();
         displayList = GLAllocation.generateDisplayLists(1);
         glNewList(displayList, GL_COMPILE);

@@ -2,6 +2,7 @@ package net.dragonmounts.client.variant;
 
 import com.google.common.collect.ImmutableList;
 import net.dragonmounts.client.model.dragon.DragonModel;
+import net.dragonmounts.client.model.dragon.IModelFactory;
 import net.dragonmounts.client.render.dragon.layer.*;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.util.ResourceLocation;
@@ -17,14 +18,13 @@ public abstract class VariantAppearance {
     public final static ResourceLocation DEFAULT_DISSOLVE = makeId(TEXTURES_ROOT + "dissolve.png");
     public final float positionScale;
     public final float renderScale;
-    public final boolean isSkeleton;
-    public final DragonModel model = new DragonModel(this);
+    public final DragonModel model;
     public final ImmutableList<DragonLayerRenderer> layers;
 
-    public VariantAppearance(float modelScale, boolean isSkeleton) {
+    public VariantAppearance(float modelScale, IModelFactory factory) {
         this.renderScale = modelScale;
         this.positionScale = modelScale / 16.0F;
-        this.isSkeleton = isSkeleton;
+        this.model = new DragonModel(this, factory);
         this.layers = this.getLayers();
     }
 

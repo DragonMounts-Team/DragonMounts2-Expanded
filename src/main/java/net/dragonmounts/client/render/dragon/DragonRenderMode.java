@@ -7,25 +7,28 @@ public enum DragonRenderMode {
     FULL {
         @Override
         public void render(DragonModel model, float scale) {
-            model.renderHead(scale);
-            model.renderNeck(scale);
-            model.renderBody(scale);
+            model.head.render(scale * 0.92F);
+            model.neck.render(scale);
+            model.body.render(scale);
             model.renderLegs(scale);
-            model.renderTail(scale);
+            model.tail.render(scale);
             model.renderWings(scale);
         }
     },
     CHEST {
         @Override
         public void render(DragonModel model, float scale) {
-            model.renderBody(scale);
+            GlStateManager.pushMatrix();
+            model.body.postRender(scale);
+            model.chest.render(scale);
+            GlStateManager.popMatrix();
         }
     },
     SADDLE {
         @Override
         public void render(DragonModel model, float scale) {
-            model.renderNeck(scale);
-            model.renderBody(scale);
+            model.neck.render(scale);
+            model.body.render(scale);
             GlStateManager.scale(-1, 1, 1);
             model.renderWings(scale);
         }

@@ -1,9 +1,7 @@
 package net.dragonmounts.entity.breath;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import net.dragonmounts.util.LogUtil;
-import net.dragonmounts.util.math.Base64;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,7 +13,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 
-import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -383,32 +380,6 @@ public class BreathWeaponTarget
         break;
       }
     }
-  }
-
-  /**
-   * create a BreathWeaponTarget from a string-encoded version
-   * @param targetString
-   * @return the target; or null if no target
-   */
-  public static BreathWeaponTarget fromEncodedString(String targetString) throws IndexOutOfBoundsException, IllegalArgumentException
-  {
-    if (targetString.isEmpty()) return null;
-    byte [] bytes = Base64.decode(targetString);
-    ByteBuf byteBuf = Unpooled.wrappedBuffer(bytes);
-    return fromBytes(byteBuf);
-  }
-
-  /**
-   * writes the BreathWeaponTarget to an encoded string
-   * @return the encoded string
-   */
-  public String toEncodedString()
-  {
-    final int INITIAL_CAPACITY = 256;
-    ByteBuf byteBuf = Unpooled.buffer(INITIAL_CAPACITY);
-    toBytes(byteBuf);
-    byte [] messageonly = Arrays.copyOf(byteBuf.array(), byteBuf.readableBytes());
-    return Base64.encodeToString(messageonly, true);
   }
 
   /**

@@ -3,7 +3,7 @@ package net.dragonmounts.client.gui;
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.client.ClientUtil;
-import net.dragonmounts.client.model.dragon.anim.DragonAnimator;
+import net.dragonmounts.client.model.dragon.DragonAnimator;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.inventory.DragonContainer;
 import net.dragonmounts.network.CDragonConfigPacket;
