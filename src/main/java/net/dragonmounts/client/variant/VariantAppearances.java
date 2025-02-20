@@ -30,7 +30,7 @@ public class VariantAppearances {
                 new ResourceLocation(namespace, TEXTURES_ROOT + path + "/glow.png"),
                 hasTailHorns,
                 hasSideTailScale,
-                BuiltinFactory.SKELETON
+                BuiltinFactory.DEFAULT // disable temporarily
         );
     }
 

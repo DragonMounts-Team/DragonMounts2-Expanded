@@ -114,7 +114,6 @@ public class DragonModel extends ModelBase {
 
         setTextureOffset("body.body", 0, 0);
         setTextureOffset("body.scale", 0, 32);
-        setTextureOffset("body.heart", 130, 110);
         setTextureOffset("body.saddle", 184, 98);/*
         setTextureOffset("body.saddleFront", 214, 120);
         setTextureOffset("body.saddleBack", 214, 120);
@@ -203,7 +202,6 @@ public class DragonModel extends ModelBase {
         body.addBox("body", -12, 0, -16, 24, 24, 64);
         body.addBox("scale", -1, -6, 10, 2, 6, 12);
         body.addBox("scale", -1, -6, 30, 2, 6, 12);
-        body.addBox("heart", -4, 12, -5, 8, 6, 15);
         back = body.addChildBox("scale", -1, -6, -10, 2, 6, 12);
         body.addChildBox("saddle", -7, -2, -15, 15, 3, 20);/*
         saddle.addBox("saddleFront", -3, -3, -14, 6, 1, 2)
