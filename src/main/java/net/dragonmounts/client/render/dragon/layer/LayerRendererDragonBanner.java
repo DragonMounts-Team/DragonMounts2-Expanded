@@ -10,18 +10,23 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityBanner;
-import net.minecraft.util.ResourceLocation;
 
 public class LayerRendererDragonBanner extends DragonLayerRenderer {
-    private final ModelBanner bannerModel=new ModelBanner();
+    private final ModelBanner banner = new ModelBanner();
     private final TileEntityBanner instance = new TileEntityBanner();
 
     public void renderBanner(ItemStack stack) {
         GlStateManager.scale(0.625F, -0.625F, -0.625F);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1);
-        this.renderer.bindTexture(this.getBannerResourceLocation(stack));
-        this.bannerModel.bannerStand.showModel = false;
-        this.bannerModel.renderBanner();
+        this.instance.setItemValues(stack, false);
+        //noinspection DataFlowIssue
+        this.manager.bindTexture(BannerTextures.BANNER_DESIGNS.getResourceLocation(
+                this.instance.getPatternResourceLocation(),
+                this.instance.getPatternList(),
+                this.instance.getColorList()
+        ));
+        this.banner.bannerStand.showModel = false;
+        this.banner.renderBanner();
     }
 
     @Override
@@ -80,11 +85,6 @@ public class LayerRendererDragonBanner extends DragonLayerRenderer {
             this.renderBanner(stack);
             GlStateManager.popMatrix();
         }
-    }
-
-    private ResourceLocation getBannerResourceLocation(ItemStack stack) {
-        this.instance.setItemValues(stack, false);
-        return BannerTextures.BANNER_DESIGNS.getResourceLocation(this.instance.getPatternResourceLocation(), this.instance.getPatternList(), this.instance.getColorList());
     }
 
     @Override

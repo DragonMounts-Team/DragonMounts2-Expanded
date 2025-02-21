@@ -1,6 +1,5 @@
 package net.dragonmounts.entity.breath.sound;
 
-import net.dragonmounts.util.LogUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSound;
 
@@ -19,18 +18,15 @@ public class SoundController {
     public SoundController() {}
 
     public void playSound(PositionedSound sound) {
-        LogUtil.LOGGER.info("play sound 1");
         Minecraft.getMinecraft().getSoundHandler().playSound(sound);
     }
 
     public void playSound(PositionedSound sound, SoundEffectTickLink soundEffectTickLink) {
-        LogUtil.LOGGER.info("play sound 2");
         Minecraft.getMinecraft().getSoundHandler().playSound(sound);
         soundEffectsToTick.put(sound, soundEffectTickLink);
     }
 
     public void stopSound(PositionedSound sound) {
-        LogUtil.LOGGER.info("stop sound");
         Minecraft.getMinecraft().getSoundHandler().stopSound(sound);
         soundEffectsToTick.remove(sound);
     }

@@ -18,9 +18,12 @@ import net.dragonmounts.entity.helper.SegmentSizePositionRotation;
 import net.dragonmounts.util.math.Interpolation;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+
+import static net.dragonmounts.client.ClientUtil.withRotation;
 
 /**
  * Generic model for all winged tetrapod dragons.
@@ -43,24 +46,14 @@ public class DragonModel extends ModelBase {
     public final TailPart tail;
     public final LegPart foreLeg;
     public final LegPart hindLeg;
-    public ModelPart jaw;
-    public ModelPart body;
-    public ModelPart back;
-    public ModelPart chest;
+    public ModelRenderer jaw;
+    public ModelRenderer body;
+    public ModelRenderer back;
+    public ModelRenderer chest;
+    public ModelRenderer saddle;
     public ModelPart wingArm;
-    public ModelPart wingForearm;
-    public final ModelPart[] wingFinger = new ModelPart[4];
-
-/*    // animation parameters
-    private float[] wingArmf = new float[3];
-    private float[] wingForearmf = new float[3];
-    private float[] wingArmFlutterf = new float[3];
-    private float[] wingForearmFlutterf = new float[3];
-    private float[] wingArmGlidef = new float[3];
-    private float[] wingForearmGlidef = new float[3];
-    private float[] wingArmGroundf = new float[3];
-    private float[] wingForearmGroundf = new float[3];
-*/
+    public ModelRenderer wingForearm;
+    public final ModelRenderer[] wingFinger = new ModelRenderer[4];
 
     public float offsetX;
     public float offsetY;
@@ -114,11 +107,11 @@ public class DragonModel extends ModelBase {
 
         setTextureOffset("body.body", 0, 0);
         setTextureOffset("body.scale", 0, 32);
-        setTextureOffset("body.saddle", 184, 98);/*
-        setTextureOffset("body.saddleFront", 214, 120);
-        setTextureOffset("body.saddleBack", 214, 120);
-        setTextureOffset("body.saddleTie", 220, 100);
-        setTextureOffset("body.saddleMetal", 224, 132);*/
+        setTextureOffset("saddle.cushion", 184, 98);
+        setTextureOffset("saddle.front", 214, 120);
+        setTextureOffset("saddle.back", 214, 120);
+        setTextureOffset("saddle.tie", 220, 100);
+        setTextureOffset("saddle.metal", 224, 132);
         setTextureOffset("chest.left", 192, 132);
         setTextureOffset("chest.right", 224, 132);
         setTextureOffset("head.nostril", 48, 0);
@@ -166,8 +159,10 @@ public class DragonModel extends ModelBase {
         buildHorn(false);
         buildHorn(true);
 
-        jaw = head.addChildBox("lowerjaw", -6, 0, -16, 12, 4, 16);
-        jaw.setRotationPoint(0, 4, 8 + HEAD_OFS);
+        this.head.addChild(this.jaw = new ModelRenderer(this, "head")
+                .addBox("lowerjaw", -6, 0, -16, 12, 4, 16)
+        );
+        this.jaw.setRotationPoint(0, 4, 8 + HEAD_OFS);
     }
 
     private void buildHorn(boolean mirror) {
@@ -190,29 +185,37 @@ public class DragonModel extends ModelBase {
         }
 
         head.mirror=mirror;
-        ModelPart horn=head.addChildBox("horn", hornOfs, hornOfs, hornOfs, hornThick, hornThick, hornLength);
-        horn.setRotationPoint(hornPosX, hornPosY, hornPosZ);
-        horn.setAngles(hornRotX, hornRotY, hornRotZ);
-
+        ModelRenderer horn;
+        this.head.addChild(horn = new ModelRenderer(this, "head")
+                .addBox("horn", hornOfs, hornOfs, hornOfs, hornThick, hornThick, hornLength)
+        );
+        withRotation(horn, hornRotX, hornRotY, hornRotZ).setRotationPoint(hornPosX, hornPosY, hornPosZ);
     }
 
     private void buildBody() {
-        body = new ModelPart(this, "body");
-        body.setRotationPoint(0, 4, 8);
-        body.addBox("body", -12, 0, -16, 24, 24, 64);
-        body.addBox("scale", -1, -6, 10, 2, 6, 12);
-        body.addBox("scale", -1, -6, 30, 2, 6, 12);
-        back = body.addChildBox("scale", -1, -6, -10, 2, 6, 12);
-        body.addChildBox("saddle", -7, -2, -15, 15, 3, 20);/*
-        saddle.addBox("saddleFront", -3, -3, -14, 6, 1, 2)
-                .addBox("saddleTie", 12, 0, -14, 1, 14, 2) // left
-                .addBox("saddleTie", -13, 0, -14, 1, 10, 2) // right
-                .addBox("saddleMetal", 12, 14, -15, 1, 5, 4) // left
-                .addBox("saddleMetal", -13, 10, -15, 1, 5, 4) // right
-                .addBox("saddleBack", -6, -4, 2, 13, 2, 2);*/
-        this.body.addChild(this.chest = new ModelPart(this, "chest"));
-        chest.addBox("left", 12, 0, 21, 4, 12, 12)
-                .addBox("right", -16, 0, 21, 4, 12, 12);
+        this.body = new ModelRenderer(this, "body");
+        this.body.addBox("body", -12, 0, -16, 24, 24, 64)
+                .addBox("scale", -1, -6, 10, 2, 6, 12)
+                .addBox("scale", -1, -6, 30, 2, 6, 12)
+                .setRotationPoint(0, 4, 8);
+        this.body.addChild(this.back = new ModelRenderer(this, "body")
+                .addBox("scale", -1, -6, -10, 2, 6, 12)
+        );
+        this.body.addChild(this.saddle = new ModelRenderer(this, "saddle")
+                .addBox("cushion", -7, -2, -15, 15, 3, 20)
+                .addBox("tie", 12, 0, -14, 1, 14, 2) // left
+                .addBox("tie", -13, 0, -14, 1, 10, 2) // right
+                .addBox("metal", 12, 14, -15, 1, 5, 4) // left
+                .addBox("metal", -13, 10, -15, 1, 5, 4) // right
+                .addBox("front", -3, -3, -14, 6, 1, 2)
+                .addBox("back", -6, -4, 2, 13, 2, 2)
+        );
+        this.saddle.showModel = false;
+        this.body.addChild(this.chest = new ModelRenderer(this, "chest")
+                .addBox("left", 12, 0, 21, 4, 12, 12)
+                .addBox("right", -16, 0, 21, 4, 12, 12)
+        );
+        this.chest.showModel = false;
     }
 
     private void buildWing() {
@@ -222,7 +225,7 @@ public class DragonModel extends ModelBase {
         wingArm.addBox("bone", -28, -3, -3, 28, 6, 6);
         wingArm.addBox("skin", -28, 0, 2, 28, 0, 24);
 
-        wingForearm=new ModelPart(this, "wingforearm");
+        wingForearm = new ModelRenderer(this, "wingforearm");
         wingForearm.setRotationPoint(-28, 0, 0);
         wingForearm.addBox("bone", -48, -2, -2, 48, 4, 4);
         wingArm.addChild(wingForearm);
@@ -233,8 +236,8 @@ public class DragonModel extends ModelBase {
         wingFinger[3]=buildWingFinger(true);
     }
 
-    private ModelPart buildWingFinger(boolean small) {
-        ModelPart finger=new ModelPart(this, "wingfinger");
+    private ModelRenderer buildWingFinger(boolean small) {
+        ModelRenderer finger = new ModelRenderer(this, "wingfinger");
         finger.setRotationPoint(-47, 0, 0);
         finger.addBox("bone", -70, -1, -1, 70, 2, 2);
         if (small) {
@@ -243,7 +246,6 @@ public class DragonModel extends ModelBase {
             finger.addBox("skin", -70, 0, 1, 70, 0, 48);
         }
         wingForearm.addChild(finger);
-
         return finger;
     }
 
@@ -269,7 +271,7 @@ public class DragonModel extends ModelBase {
 
     protected void animHeadAndNeck(DragonAnimator animator) {
         DragonHeadPositionHelper helper = animator.getDragonHeadPositionHelper();
-        SegmentSizePositionRotation[] segments = helper.getNeckSegmentPositionSizeLocations();
+        SegmentSizePositionRotation[] segments = helper.neckSegments;
         NeckPart neck = this.neck;
         for (int i = 0; i < segments.length; ++i) {
             neck.applySegment(segments[i]);
@@ -277,7 +279,7 @@ public class DragonModel extends ModelBase {
             neck.scale.isHidden = (i & 1) == 1 || i == 0;
             neck.save(i);
         }
-        this.neck.applySegment(helper.getNeckPositionSizeLocation());
+        neck.applySegment(helper.getNeckPositionSizeLocation());
         this.head.applySegment(helper.getHeadPositionSizeLocation());
         jaw.rotateAngleX = animator.getJawRotateAngleX();
     }
@@ -346,7 +348,7 @@ public class DragonModel extends ModelBase {
      * @param index fore: 0, hind: 1
      */
     protected void animLeg(LegPart leg, float ground, float walk, float sit, float move, int index, boolean left) {
-        leg.rotationPointZ = index == 0 ? 4 : 46;
+        //leg.rotationPointZ = index == 0 ? 4 : 46;
         // final X rotation angles for air
         float[] xAir = xAirAll[index];
         // interpolate between sitting and standing

@@ -52,23 +52,6 @@ public class ModelPart extends ModelRenderer {
         base = modelbase;
     }
 
-    public ModelPart addChildBox(String name, float xOfs, float yOfs, float zOfs, int width, int length, int height) {
-        ModelPart part = new ModelPart(base, boxName);
-        part.mirror = mirror;
-        part.addBox(name, xOfs, yOfs, zOfs, width, length, height);
-        addChild(part);
-
-        return part;
-    }
-
-    public ModelPart setAngles(float x, float y, float z) {
-        rotateAngleX = x;
-        rotateAngleY = y;
-        rotateAngleZ = z;
-
-        return this;
-    }
-
     public ModelPart setRenderScale(float scaleX, float scaleY, float scaleZ) {
         this.renderScaleX = scaleX;
         this.renderScaleY = scaleY;

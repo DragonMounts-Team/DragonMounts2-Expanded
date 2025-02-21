@@ -20,7 +20,7 @@ public class BreedingFood extends CommonFood {
     @Override
     public boolean tryFeed(TameableDragonEntity dragon, EntityPlayer player, Relation relation, ItemStack stack, EnumHand hand) {
         if (super.tryFeed(dragon, player, relation, stack, hand)) {
-            if (!dragon.world.isRemote && dragon.isTamed() && DragonLifeStage.ADULT == dragon.getLifeStageHelper().getLifeStage() && !dragon.isInLove()) {
+            if (!dragon.world.isRemote && dragon.isTamed() && DragonLifeStage.ADULT == dragon.lifeStageHelper.getLifeStage() && !dragon.isInLove()) {
                 dragon.setInLove(player);
             }
             return true;

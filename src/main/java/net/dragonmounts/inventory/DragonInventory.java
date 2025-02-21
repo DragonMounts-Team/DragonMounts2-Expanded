@@ -67,7 +67,42 @@ public final class DragonInventory implements IInventory {
 
     @Override
     public ItemStack decrStackSize(int slot, int count) {
-        ItemStack stack = this.getStackInSlot(slot);
+        if (slot < 0) return ItemStack.EMPTY;
+        ItemStack stack;
+        if (slot >= this.stacks.length) {
+            int take;
+            ItemStack result;
+            switch (slot -= this.stacks.length) {
+                case 4:
+                    result = this.dragon.getChest();
+                    take = Math.min(count, result.getCount());
+                    stack = result.copy();
+                    stack.shrink(take);
+                    this.dragon.setChest(stack);
+                    result.setCount(take);
+                    return result;
+                case 5:
+                    result = this.dragon.getArmor();
+                    take = Math.min(count, result.getCount());
+                    stack = result.copy();
+                    stack.shrink(take);
+                    this.dragon.setArmor(stack);
+                    result.setCount(take);
+                    return result;
+                case 6:
+                    result = this.dragon.getSaddle();
+                    take = Math.min(count, result.getCount());
+                    stack = result.copy();
+                    stack.shrink(take);
+                    this.dragon.setSaddle(stack);
+                    result.setCount(take);
+                    return result;
+                default:
+                    stack = slot < 4 ? this.banners[slot] : ItemStack.EMPTY;
+            }
+        } else {
+            stack = this.stacks[slot];
+        }
         if (stack.isEmpty()) return ItemStack.EMPTY;
         ItemStack result = stack.splitStack(count);
         if (!result.isEmpty()) {

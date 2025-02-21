@@ -16,7 +16,7 @@ public class EnchantType extends DragonType {
 
     @Override
     public void tick(TameableDragonEntity dragon) {
-        if (dragon.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE)) {
+        if (dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {
             World level = dragon.world;
             Random random = level.rand;
             float s = dragon.getScale() * 1.2f;

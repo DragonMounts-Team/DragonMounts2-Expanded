@@ -24,7 +24,7 @@ public class NetherType extends DragonType {
     @Override
     public void tick(TameableDragonEntity dragon) {
         World level = dragon.world;
-        if (level.isRemote || dragon.isDead || !dragon.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE))
+        if (level.isRemote || dragon.isDead || !dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE))
             return;
         Random random = level.rand;
         float s = dragon.getScale();

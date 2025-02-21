@@ -58,7 +58,7 @@ public class GuiTextPrinter {
             x += fr.getStringWidth(text);
         }
     }
-    
+
     public void println(String text) {
         print(text);
         newLine();

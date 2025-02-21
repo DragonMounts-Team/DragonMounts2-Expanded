@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderDragon;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.item.EntityEnderCrystal;
@@ -69,9 +70,10 @@ public class DragonRenderer extends RenderLiving<TameableDragonEntity> {
     @Override
     protected void renderLayers(TameableDragonEntity dragon, float moveTime, float moveSpeed, float partialTicks, float ticksExisted, float lookYaw, float lookPitch, float scale) {
         VariantAppearance appearance = dragon.getVariant().appearance;
+        TextureManager manager = this.renderManager.renderEngine;
         DragonModel model = appearance.model;
         for (DragonLayerRenderer layer : appearance.layers) {
-            layer.bind(this, model);
+            layer.bind(manager, model);
             boolean changed = setBrightness(dragon, partialTicks, layer.shouldCombineTextures());
             layer.doRenderLayer(dragon, moveTime, moveSpeed, partialTicks, ticksExisted, lookYaw, lookPitch, scale);
             if (changed) {
@@ -111,7 +113,7 @@ public class DragonRenderer extends RenderLiving<TameableDragonEntity> {
 
     protected void renderEgg(TameableDragonEntity dragon, double x, double y, double z, float pitch, float partialTicks) {
         // apply egg wiggle
-        DragonLifeStageHelper lifeStage = dragon.getLifeStageHelper();
+        DragonLifeStageHelper lifeStage = dragon.lifeStageHelper;
         float tickX = lifeStage.getEggWiggleX();
         float tickZ = lifeStage.getEggWiggleZ();
 

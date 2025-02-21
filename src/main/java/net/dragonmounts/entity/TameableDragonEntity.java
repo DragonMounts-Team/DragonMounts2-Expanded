@@ -260,7 +260,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         AbstractAttributeMap attributes = this.getAttributeMap();
         attributes.registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
         attributes.registerAttribute(ATTACK_DAMAGE);
-        attributes.getAttributeInstance(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(BASE_AIR_SPEED);
+        attributes.getAttributeInstance(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(DMConfig.BASE_FLYING_SPEED.value);
         attributes.getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(BASE_GROUND_SPEED);
         attributes.getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(DMConfig.BASE_DAMAGE.value);
         attributes.getAttributeInstance(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(BASE_FOLLOW_RANGE);
@@ -688,7 +688,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
         if (!isServer) {
             EnumParticleTypes sneeze = this.getVariant().type.sneezeParticle;
-            if (sneeze != null && rand.nextInt(700) == 0 && !this.isUsingBreathWeapon() && this.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE)) {
+            if (sneeze != null && rand.nextInt(700) == 0 && !this.isUsingBreathWeapon() && this.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {
                 Vec3d throatPos = this.getAnimator().getThroatPosition();
                 double throatPosX = throatPos.x;
                 double throatPosY = throatPos.y;
@@ -713,7 +713,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
                 !this.world.isRemote &&
                 this.isSaddled() &&
                 !other.isRiding() &&
-                this.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE) &&
+                this.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE) &&
                 !other.isPassenger(this)
         ) {
             List<Entity> passengers = this.getPassengers();
@@ -810,7 +810,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
 
     @Override
     public void setDead() {
-        this.getLifeStageHelper().onDeath();
+        this.lifeStageHelper.onDeath();
         super.setDead();
     }
 
@@ -1497,7 +1497,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     public void consumeFood(ItemStack stack, int level, int growth) {
         this.playSound(this.getEatSound(), 1f, 0.75f);
         this.setHunger(this.getHunger() + level);
-        this.getLifeStageHelper().ageUp(growth);
+        this.lifeStageHelper.ageUp(growth);
         if (this.world.isRemote) {
             this.resetFeedTimer();
             Vec3d pos = this.getAnimator().getThroatPosition();
@@ -1558,7 +1558,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
         }
 
         boolean isServer = !this.world.isRemote;
-        if (!this.isSheared() && this.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE)) {
+        if (!this.isSheared() && this.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {
             IHardShears shears = stack.getCapability(DMCapabilities.HARD_SHEARS, null);
             if (shears != null) {
                 if (isServer) {
@@ -1662,7 +1662,7 @@ public class TameableDragonEntity extends EntityTameable implements IEntityAddit
     @Override
     public void readSpawnData(ByteBuf buffer) {
         this.inventory.readSpawnData(buffer);
-        this.getLifeStageHelper().sync();
+        this.lifeStageHelper.sync();
     }
 
     @Override

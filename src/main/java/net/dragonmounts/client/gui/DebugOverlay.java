@@ -9,6 +9,9 @@
  */
 package net.dragonmounts.client.gui;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.Reference2IntMap;
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
@@ -25,24 +28,22 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAITasks;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
-import java.util.Collection;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author Nico Bergemann <barracuda415 at yahoo.de>
@@ -134,24 +135,30 @@ public class DebugOverlay {
     }
 
     private static void renderTitle() {
-        String title = String.format("%s %s Debug", DragonMountsTags.MOD_NAME, DragonMounts.getMetadata().version);
-        text.setOrigin(16, 8);
+        text.setOrigin(8, 8);
         text.setColor(GREY);
-        text.println(title);
+        text.print(DragonMountsTags.MOD_NAME + " " + DragonMounts.getMetadata().version);
         text.setColor(WHITE);
     }
 
     private static void renderEntityInfo(TameableDragonEntity dragon) {
         DecimalFormat dfShort = DebugOverlay.dfShort;
-        text.setOrigin(16, 32);
+        text.setOrigin(8, 32);
 
         text.setColor(YELLOW);
-        text.print("Entity ");
+        text.print(dragon.world.isRemote ? "Client" : "Server");
+        text.print(" Entity ");
         text.setColor(WHITE);
         text.printf("(#%s)\n", dragon.getEntityId());
-        text.println("Side: " + (dragon.world.isRemote ? "client" : "server"));
-        text.println("UUID: " + StringUtils.abbreviate(dragon.getUniqueID().toString(), 22));
         text.println("Name: " + dragon.getName());
+
+        // variant
+        DragonVariant variant = dragon.getVariant();
+        text.print("Type: ");
+        text.setColor(variant.type.color);
+        text.println(ClientUtil.translateToLocal(variant.type.translationKey));
+        text.setColor(WHITE);
+        text.println("Variant: " + variant.getRegistryName());
 
         // position
         String px = dfShort.format(dragon.posX);
@@ -166,24 +173,17 @@ public class DebugOverlay {
         String pitch = dfShort.format(dragon.rotationPitch);
         String yaw = dfShort.format(dragon.rotationYaw);
         String yawHead = dfShort.format(dragon.rotationYawHead);
-        text.printf("Pitch: %s; Yaw: %s; HeadYaw: %s\n", pitch, yaw, yawHead);
+        text.printf("Pitch: %s\nYaw: %s\nHeadYaw: %s\n", pitch, yaw, yawHead);
 
         // health
         String health = dfShort.format(dragon.getHealth());
         String healthMax = dfShort.format(dragon.getMaxHealth());
         String healthRel = dfShort.format(dragon.getHealth() / dragon.getMaxHealth() * 100);
         text.printf("Health: %s/%s (%s%%)\n", health, healthMax, healthRel);
+
         // hunger
         String hunger = dfShort.format(dragon.getHunger());
         text.printf("Hunger: %s\n", hunger);
-
-        // variant
-        DragonVariant variant = dragon.getVariant();
-        text.println("Variant: " + variant.getRegistryName());
-        text.print("Type: ");
-        text.setColor(variant.type.color);
-        text.println(ClientUtil.translateToLocal(variant.type.translationKey));
-        text.setColor(WHITE);
 
         // life stage
         DragonLifeStageHelper helper = dragon.lifeStageHelper;
@@ -191,58 +191,36 @@ public class DebugOverlay {
         text.printf("Life Stage: %s %s (%d)\n", helper.getLifeStage().name(), dfShort.format(DragonLifeStage.getStageProgressFromTickCount(ticksSinceCreation)), ticksSinceCreation);
 
         // size
-        String scale = dfShort.format(helper.getScale());
-        String width = dfShort.format(dragon.width);
-        String height = dfShort.format(dragon.height);
-        AxisAlignedBB box = dragon.getEntityBoundingBox();
-        text.printf(
-                "Size: %s (w:%s h:%s)\nBox: (%s, %s, %s) (%s, %s, %s)\n",
-                scale,
-                width,
-                height,
-                dfShort.format(box.minX),
-                dfShort.format(box.minY),
-                dfShort.format(box.minZ),
-                dfShort.format(box.maxX),
-                dfShort.format(box.maxY),
-                dfShort.format(box.maxZ)
-        );
-
+        text.println(String.format(
+                "Size: %s (w:%s h:%s)",
+                dfShort.format(helper.getScale()),
+                dfShort.format(dragon.width),
+                dfShort.format(dragon.height)
+        ));
+        text.println("Trust Other Players: " + (dragon.allowedOtherPlayers() ? "Yes" : "No"));
+        text.println("Reproduction Count: " + dragon.getReproductionCount());
+        text.print("Tamed: ");
         // tamed flag/owner name
         //String tamedString = dragon.getOwnerName();
-        String tamedString;
         if (dragon.isTamed()) {
             Entity player = dragon.getOwner();
-            if (player != null) {
-                tamedString = "yes (" + player.getName()+ ")";
-            } else {
-                tamedString = "yes (" + StringUtils.abbreviate(String.valueOf(dragon.getOwnerId()), 22) + ")";
-            }
+            text.println("Yes (" + (player == null
+                    ? Objects.requireNonNull(dragon.getOwnerId())
+                    : player.getName()
+            ) + ")");
         } else {
-            tamedString = "no";
+            text.println("No");
         }
-        text.println("Tamed: " + tamedString);
-
-        String allowOthersString;
-        if (dragon.allowedOtherPlayers()) {
-        	allowOthersString = "yes"; 
-        } else {
-        	allowOthersString = "no";
-        }
-        text.println("AllowedOthers: " + allowOthersString);
-        text.println("Reproduction Count: " + dragon.getReproductionCount());
+        text.println("UUID: " + dragon.getUniqueID());
     }
 
     private static void renderAttributes(TameableDragonEntity dragon) {
-        text.setOrigin(text.getX() + 180, 8);
+        text.setOrigin(196, 8);
 
         text.setColor(YELLOW);
         text.println("Attributes");
         text.setColor(WHITE);
-
-        Collection<IAttributeInstance> attrs = dragon.getAttributeMap().getAllAttributes();
-
-        attrs.forEach(attr -> {
+        dragon.getAttributeMap().getAllAttributes().forEach(attr -> {
             String attribName = ClientUtil.translateToLocal("attribute.name." + attr.getAttribute().getName());
             String attribValue = dfShort.format(attr.getAttributeValue());
             String attribBase = dfShort.format(attr.getBaseValue());
@@ -274,7 +252,7 @@ public class DebugOverlay {
     }
 
     private static void renderNavigation(TameableDragonEntity dragon) {
-        text.setOrigin(16, 32);
+        text.setOrigin(8, 32);
         
         text.setColor(YELLOW);
         text.println("Navigation (Ground)");
@@ -302,7 +280,6 @@ public class DebugOverlay {
         }
 
         text.println();
-
         text.setColor(YELLOW);
         text.println("Navigation (Air)");
         text.setColor(WHITE);
@@ -310,24 +287,36 @@ public class DebugOverlay {
         text.println("Can fly: " + dragon.canFly());
         text.println("Flying: " + dragon.isFlying());
         text.println("Altitude: " + dfLong.format(dragon.getAltitude()));
+        text.println();
+    }
+
+    private static void renderTasks(String label, Set<EntityAITasks.EntityAITaskEntry> tasks) {
+        text.setColor(YELLOW);
+        text.println(label);
+        text.setColor(WHITE);
+        Object2ObjectOpenHashMap<String, ObjectArrayList<String>> map = new Object2ObjectOpenHashMap<>();
+        for (EntityAITasks.EntityAITaskEntry entry : tasks) {
+            String full = entry.action.getClass().getName();
+            int dot = full.lastIndexOf('.');
+            map.computeIfAbsent(
+                    full.substring(0, dot),
+                    ignored -> new ObjectArrayList<>()
+            ).add(full.substring(dot + 1));
+        }
+        for (Object2ObjectMap.Entry<String, ObjectArrayList<String>> entry : map.object2ObjectEntrySet()) {
+            text.println(entry.getKey());
+            for (String value : entry.getValue()) {
+                text.print("-   ");
+                text.println(value);
+            }
+        }
+        text.println();
     }
 
     private static void renderAITasks(TameableDragonEntity dragon) {
-        text.setOrigin(text.getX() + 180, 8);
-        text.setColor(YELLOW);
-        text.println("Running Goals");
-        text.setColor(WHITE);
-        for (EntityAITasks.EntityAITaskEntry entry : dragon.tasks.executingTaskEntries) {
-            text.println(entry.action.getClass().getName());
-        }
-        text.println();
-        text.setColor(YELLOW);
-        text.println("Running Target Goals");
-        text.setColor(WHITE);
-        for (EntityAITasks.EntityAITaskEntry entry : dragon.targetTasks.executingTaskEntries) {
-            text.println(entry.action.getClass().getName());
-        }
-        text.println();
+        text.setOrigin(196, 8);
+        renderTasks("Running Goals", dragon.tasks.executingTaskEntries);
+        renderTasks("Running Target Goals", dragon.targetTasks.executingTaskEntries);
         EntityLivingBase target = dragon.getAttackTarget();
         if (target == null) {
             text.println("Current Target: None");
@@ -340,7 +329,7 @@ public class DebugOverlay {
 
     private static void renderException(Exception ex) {
         LogUtil.LOGGER.error("Error rendering", ex);
-        text.setOrigin(16, 32);
+        text.setOrigin(8, 32);
         text.setColor(RED);
         text.println("GUI Exception:");
         text.printf(ExceptionUtils.getStackTrace(ex));

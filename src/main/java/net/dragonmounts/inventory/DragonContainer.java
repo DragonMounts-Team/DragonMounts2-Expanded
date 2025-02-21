@@ -3,30 +3,28 @@ package net.dragonmounts.inventory;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.item.DragonArmorItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
+import org.apache.commons.lang3.ArrayUtils;
 
 public class DragonContainer extends Container {
 	public final DragonInventory inventory;
 	private final TameableDragonEntity dragon;
-	public static final int chestStartIndex = 3;
 
 	public DragonContainer(final TameableDragonEntity dragon, EntityPlayer player) {
 		DragonInventory inventory = this.inventory = dragon.inventory;
 		this.dragon = dragon;
-		final int inventoryColumn = 9;
 		inventory.openInventory(player);
 
 		// location of the slot for the saddle in the dragon inventory
 		this.addSlotToContainer(new Slot(inventory, 33, 8, 18) {
 			public boolean isItemValid(ItemStack stack) {
-				return stack.getItem() == Items.SADDLE && !this.getHasStack();
+				return !stack.isEmpty() && stack.getItem() == Items.SADDLE && !this.getHasStack();
 			}
 
 			@SideOnly(Side.CLIENT)
@@ -38,8 +36,12 @@ public class DragonContainer extends Container {
 
 		// location of the slot for chest in the dragon inventory
 		this.addSlotToContainer(new Slot(inventory, 31, 8, 36) {
+			@Override
 			public boolean isItemValid(ItemStack stack) {
-				return stack.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !this.getHasStack();
+				return !stack.isEmpty() && ArrayUtils.contains(
+						OreDictionary.getOreIDs(stack),
+						OreDictionary.getOreID("chestWood")
+				) && !this.getHasStack();
 			}
 
 			@SideOnly(Side.CLIENT)
@@ -55,20 +57,18 @@ public class DragonContainer extends Container {
 
 		// location of the slot for armor in the dragon inventory
 		this.addSlotToContainer(new Slot(inventory, 32, 8, 54) {
-
 			public boolean isItemValid(ItemStack stack) {
 				return !stack.isEmpty() && stack.getItem() instanceof DragonArmorItem && dragon.isOldEnoughToBreathe();
 			}
-
 		});
 
 		// Build Banner Slots
 		for (int b = 0; b < 4; ++b) {
 			this.addSlotToContainer(new Slot(inventory, 27 + b, b == 1 || b == 2 ? 134 : 152, b < 2 ? 36 : 18) {
 				public boolean isItemValid(ItemStack stack) {
-					return stack.getItem() == Items.BANNER && !this.getHasStack();
+					return !stack.isEmpty() && stack.getItem() == Items.BANNER && !this.getHasStack();
 				}
-				
+
 				@SideOnly(Side.CLIENT)
 				public boolean isEnabled() {
 					return dragon.isOldEnoughToBreathe();
@@ -79,7 +79,7 @@ public class DragonContainer extends Container {
 		// Build Chest Inventory Slots
 		for (int k = 0; k < 3; ++k) {
 			for (int l = 0; l < 9; ++l) {
-				this.addSlotToContainer(new Slot(inventory, l + k * inventoryColumn, 8 + l * 18, 75 + k * 18) {
+				this.addSlotToContainer(new Slot(inventory, l + k * 9, 8 + l * 18, 75 + k * 18) {
 
 					@SideOnly(Side.CLIENT)
 					public boolean isEnabled() {
@@ -107,11 +107,13 @@ public class DragonContainer extends Container {
 		}
 	}
 
-	public boolean canInteractWith(EntityPlayer playerIn) {
-		return this.inventory.isUsableByPlayer(playerIn) && this.dragon.isEntityAlive() && this.dragon.getDistance(playerIn) < 16.0F;
+	@Override
+	public boolean canInteractWith(EntityPlayer player) {
+		return this.inventory.isUsableByPlayer(player) && this.dragon.isEntityAlive() && this.dragon.getDistanceSq(player) < 256.0F;
 	}
 
-	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+	@Override
+	public ItemStack transferStackInSlot(EntityPlayer player, int index) {
 		ItemStack result = ItemStack.EMPTY;
 		Slot slot = this.inventorySlots.get(index);
 		if (slot != null && slot.getHasStack()) {
@@ -135,7 +137,7 @@ public class DragonContainer extends Container {
 				if (!this.mergeItemStack(stack, 0, 1, false)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(stack, 0, size, false)) {
+			} else if (!this.dragon.isChested() || !this.mergeItemStack(stack, 3, size, false)) {
 				return ItemStack.EMPTY;
 			}
 			if (stack.isEmpty()) {
@@ -147,11 +149,9 @@ public class DragonContainer extends Container {
 		return result;
 	}
 
-	/**
-	 * Called when the container is closed.
-	 */
-	public void onContainerClosed(EntityPlayer playerIn) {
-		super.onContainerClosed(playerIn);
-		this.inventory.closeInventory(playerIn);
+	@Override
+	public void onContainerClosed(EntityPlayer player) {
+		super.onContainerClosed(player);
+		this.inventory.closeInventory(player);
 	}
 }

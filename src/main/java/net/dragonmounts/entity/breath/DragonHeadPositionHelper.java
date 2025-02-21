@@ -4,7 +4,6 @@ import net.dragonmounts.client.model.dragon.DragonModel;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.helper.SegmentSizePositionRotation;
 import net.dragonmounts.util.math.MathX;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 /**
@@ -33,16 +32,8 @@ public class DragonHeadPositionHelper {
     NUMBER_OF_NECK_SEGMENTS = i_numberOfNeckSegments;
   }
 
-  /** calculate the position, rotation angles, and scale of the head and all segments in the neck
-   * @param animBase
-   * @param flutter
-   * @param sit
-   * @param walk
-   * @param speed
-   * @param ground
-   * @param netLookYaw
-   * @param lookPitch
-   * @param breath
+  /**
+   * Calculate the position, rotation angles, and scale of the head and all segments in the neck
    */
   public void calculateHeadAndNeck(float animBase, float flutter, float sit, float walk, float speed, float ground, float netLookYaw, float lookPitch, float breath) {
     neckSegments = new SegmentSizePositionRotation[NUMBER_OF_NECK_SEGMENTS];
@@ -138,8 +129,7 @@ public class DragonHeadPositionHelper {
 
     float renderYawOffset = dragon.renderYawOffset;
 
-    Vec3d bodyOrigin = dragon.getPositionVector();
-    bodyOrigin = bodyOrigin.add(0, dragon.getEyeHeight(), 0);
+    Vec3d bodyOrigin = dragon.getPositionVector().add(0, dragon.getEyeHeight(), 0);
     float scale = dragon.getScale();
     final float ADULT_SCALE_FACTOR = 0.1F;//TODO: use DragonType or something else
     final float BODY_X_SCALE = -ADULT_SCALE_FACTOR * scale;
@@ -157,7 +147,6 @@ public class DragonHeadPositionHelper {
     final float HEAD_Y_OFFSET = 0;
     final float HEAD_Z_OFFSET = -15;
 
-    final float THROAT_X_OFFSET = 0;
     final float THROAT_Y_OFFSET = 2;
     final float THROAT_Z_OFFSET = -8;
 
@@ -165,31 +154,17 @@ public class DragonHeadPositionHelper {
                                   (head.rotationPointY + HEAD_Y_OFFSET) * BODY_Y_SCALE,
                                   (head.rotationPointZ + HEAD_Z_OFFSET) * BODY_Z_SCALE);
 
-    // offset of the throat position relative to the head origin- rotate and pitch to match head
-
-    Vec3d throatOffset = new Vec3d(THROAT_X_OFFSET * HEAD_X_SCALE,
-                                   THROAT_Y_OFFSET * HEAD_Y_SCALE,
-                                   THROAT_Z_OFFSET * HEAD_Z_SCALE);
-
-    throatOffset = throatOffset.rotatePitch(head.rotateAngleX);
-    throatOffset = throatOffset.rotateYaw(-head.rotateAngleY);
-
-    Vec3d headPlusThroatOffset = headOffset.add(throatOffset);
-
-    float bodyPitch = dragon.getAnimator().getBodyPitch(0.0F);
     Vec3d CENTRE_OFFSET = new Vec3d(0, -6 * BODY_Y_SCALE,  19 * BODY_Z_SCALE);
 
-    //rotate body
-
-    bodyPitch = (float)Math.toRadians(bodyPitch);
-
-    headPlusThroatOffset = headPlusThroatOffset.add(CENTRE_OFFSET);
-    headPlusThroatOffset = headPlusThroatOffset.rotatePitch(-bodyPitch);
-    headPlusThroatOffset = headPlusThroatOffset.subtract(CENTRE_OFFSET);
-
-    headPlusThroatOffset = headPlusThroatOffset.rotateYaw((float) (Math.toRadians(-renderYawOffset) + Math.PI));
-
-    return bodyOrigin.add(headPlusThroatOffset);
+    return bodyOrigin.add(headOffset.add(
+                    // offset of the throat position relative to the head origin- rotate and pitch to match head
+                    new Vec3d(0, THROAT_Y_OFFSET * HEAD_Y_SCALE, THROAT_Z_OFFSET * HEAD_Z_SCALE)
+                            .rotatePitch(head.rotateAngleX)
+                            .rotateYaw(-head.rotateAngleY)
+            ).add(CENTRE_OFFSET)
+            .rotatePitch(-(float) Math.toRadians(dragon.getAnimator().getBodyPitch(0.0F)))//rotate body
+            .subtract(CENTRE_OFFSET)
+            .rotateYaw((float) (Math.toRadians(-renderYawOffset) + Math.PI)));
   }
 
   /**
@@ -216,37 +191,4 @@ public class DragonHeadPositionHelper {
     scale = MathX.clamp(scale, SCALE_OF_BABY, SCALE_OF_ADULT);
     return A * (scale + B);
   }
-
-  /**
-   * rotate a vector around the X axis
-   * @param angle in radians
-   * @return
-   */
-  public Vec3d rotateX(Vec3d source, float angle) {
-    float cosAngle = MathHelper.cos(angle);
-    float sinAngle = MathHelper.sin(angle);
-    double d0 = source.x;
-    double d1 = source.y * (double)cosAngle + source.z * (double)sinAngle;
-    double d2 = source.z * (double)cosAngle - source.y * (double)sinAngle;
-    return new Vec3d(d0, d1, d2);
-  }
-
-  public Vec3d rotateY(Vec3d source, float angle) {
-    float cosAngle = MathHelper.cos(angle);
-    float sinAngle = MathHelper.sin(angle);
-    double d0 = source.x * (double)cosAngle + source.z * (double)sinAngle;
-    double d1 = source.y;
-    double d2 = source.z * (double)cosAngle - source.x * (double)sinAngle;
-    return new Vec3d(d0, d1, d2);
-  }
-
-  public Vec3d rotateZ(Vec3d source, float angle) {
-    float cosAngle = MathHelper.cos(angle);
-    float sinAngle = MathHelper.sin(angle);
-    double d0 = source.x * (double)cosAngle + source.y * (double)sinAngle;
-    double d1 = source.y * (double)cosAngle - source.x * (double)sinAngle;
-    double d2 = source.z;
-    return new Vec3d(d0, d1, d2);
-  }
-
 }

@@ -7,8 +7,8 @@ public class LayerRendererDragonChest extends DragonLayerRenderer {
     @Override
     public void doRenderLayer(TameableDragonEntity dragon, float moveTime, float moveSpeed, float partialTicks, float ticksExisted, float lookYaw, float lookPitch, float scale) {
         if (dragon.isChested()) {
-            renderer.bindTexture(dragon.getVariant().appearance.getChest(dragon));
-            model.render(DragonRenderMode.CHEST, dragon, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
+            this.manager.bindTexture(dragon.getVariant().appearance.getChest(dragon));
+            this.model.render(DragonRenderMode.CHEST, dragon, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
         }
     }
 

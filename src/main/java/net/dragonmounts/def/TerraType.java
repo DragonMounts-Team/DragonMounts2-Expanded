@@ -18,7 +18,7 @@ public class TerraType extends DragonType {
     @Override
     public void tick(TameableDragonEntity dragon) {
         World level = dragon.world;
-        if (BiomeDictionary.hasType(level.getBiome(dragon.getPosition()), BiomeDictionary.Type.MESA) && dragon.posY > level.getHeight() + 8 && dragon.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE)) {
+        if (BiomeDictionary.hasType(level.getBiome(dragon.getPosition()), BiomeDictionary.Type.MESA) && dragon.posY > level.getHeight() + 8 && dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {
             Random random = level.rand;
             float s = dragon.getScale() * 1.2f;
             float h = dragon.height * s;

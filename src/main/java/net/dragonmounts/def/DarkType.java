@@ -25,7 +25,7 @@ public class DarkType extends DragonType {
     @Override
     public void tick(TameableDragonEntity dragon) {
         World level = dragon.world;
-        if (dragon.posY > level.getHeight() * 1.2 && level.isDaytime() && dragon.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE)) {
+        if (dragon.posY > level.getHeight() * 1.2 && level.isDaytime() && dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {
             Random random = level.rand;
             float s = dragon.getScale() * 1.2f;
             float h = dragon.height * s;

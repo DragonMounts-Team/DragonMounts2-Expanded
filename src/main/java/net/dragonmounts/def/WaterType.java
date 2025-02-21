@@ -29,7 +29,7 @@ public class WaterType extends DragonType {
         if (dragon.isInWater()) {
             EntityUtil.addOrResetEffect(dragon, MobEffects.WATER_BREATHING, 200, 0, false, false, 21);
         }
-        if (dragon.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE)) {
+        if (dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {
             World level = dragon.world;
             Random random = level.rand;
             float s = dragon.getScale() * 1.2f;

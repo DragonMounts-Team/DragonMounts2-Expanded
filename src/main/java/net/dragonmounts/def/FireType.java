@@ -18,7 +18,7 @@ public class FireType extends DragonType {
     @Override
     public void tick(TameableDragonEntity dragon) {
         World level = dragon.world;
-        if (dragon.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE) && (dragon.isInLava() || level.isMaterialInBB(dragon.getEntityBoundingBox().grow(-0.10000000149011612D, -0.4000000059604645D, -0.10000000149011612D), Material.FIRE))) {
+        if (dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE) && (dragon.isInLava() || level.isMaterialInBB(dragon.getEntityBoundingBox().grow(-0.10000000149011612D, -0.4000000059604645D, -0.10000000149011612D), Material.FIRE))) {
             Random random = level.rand;
             float s = dragon.getScale() * 1.2f;
             float h = dragon.height * s;

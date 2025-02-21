@@ -10,36 +10,19 @@
 package net.dragonmounts.client.render.dragon.layer;
 
 import net.dragonmounts.client.model.dragon.DragonModel;
-import net.dragonmounts.client.render.dragon.DragonRenderer;
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.texture.TextureManager;
 
 /**
- *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public abstract class DragonLayerRenderer implements LayerRenderer<TameableDragonEntity> {
-    protected static final ResourceLocation ENCHANTED_ITEM_GLINT_RES = new ResourceLocation("textures/misc/enchanted_item_glint.png");
-    protected DragonRenderer renderer;
+    protected TextureManager manager;
     protected DragonModel model;
 
-    public void bind(DragonRenderer renderer, DragonModel model) {
-        this.renderer = renderer;
+    public void bind(TextureManager manager, DragonModel model) {
+        this.manager = manager;
         this.model = model;
-    }
-
-    protected void disableLighting() {
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
-        GlStateManager.disableLighting();
-    }
-
-    protected void enableLighting(int b) {
-        int u = b % 65536;
-        int v = b / 65536;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, u, v);
-        GlStateManager.enableLighting();
     }
 }

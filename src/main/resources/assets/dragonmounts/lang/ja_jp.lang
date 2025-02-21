@@ -1,16 +1,13 @@
 # 日本語訳
 
 # Creative Menu's
-##### Not sure if we should change the name
 itemGroup.dragonmounts.main=ドラゴンマウント
 itemGroup.dragonmounts.combat=ドラゴンマウント装備
 
-##### Untranslated
-effect.dragonmounts.dark_dragons_grace=Dark Dragon's Grace
+effect.dragonmounts.dark_dragons_grace=ダークドラゴンの恩恵
 ##
 # Dragon Names
 ##
-##### for example, アイス + ドラゴン => アイスドラゴン (?
 entity.dragonmounts.dragon=%sドラゴン
 entity.dragonmounts.dragon.name=ドラゴン
 
@@ -30,15 +27,13 @@ dragon_type.dragonmounts.moonlight=ムーンライト
 dragon_type.dragonmounts.storm=ストーム
 dragon_type.dragonmounts.zombie=ゾンビ
 dragon_type.dragonmounts.terra=テラ
-dragon_type.dragonmounts.dark=暗い
+dragon_type.dragonmounts.dark=ダーク
 
 #Stage
 life_stage.dragon.egg=ドラゴンの卵
 life_stage.dragon.hatchling=幼生
-#Untranslated
-life_stage.dragon.infant=Infant
-#Untranslated
-life_stage.dragon.prejuvenile=Pre-Juvenile
+life_stage.dragon.infant=幼児
+life_stage.dragon.prejuvenile=Pre-幼若
 life_stage.dragon.juvenile=幼体
 life_stage.dragon.adult=成体
 
@@ -51,8 +46,7 @@ item.dragonmounts.dragon_essence.name=ドラゴンエッセンス
 item.dragonmounts.dragon_whistle.name=ドラゴンホイッスル
 item.dragonmounts.dragon_amulet.name=ドラゴンアミュレット
 item.dragonmounts.dragon_orb.name=ドラゴンオーブ
-##### Untranslated
-item.dragonmounts.variation_orb.name=Orb of Variation
+item.dragonmounts.variation_orb.name=バリエーションオーブ
 
 item.dragonmounts.oak_carriage.name=オークのカーゴボブ
 item.dragonmounts.birch_carriage.name=白樺のカーゴボブ
@@ -70,8 +64,8 @@ item.dragonmounts.dragon_scale_shovel.name=ドラゴンシャベル
 item.dragonmounts.dragon_scale_hoe.name=ドラゴンのクワ
 item.dragonmounts.dragon_scale_shield.name=ドラゴンシールド
 item.dragonmounts.dragon_scale_bow.name=ドラゴンボウ
-item.dragonmounts.dragon_scale_helmet.name=ドラゴンスケールキャップ
-item.dragonmounts.dragon_scale_chestplate.name=ドラゴンスケールチェスト
+item.dragonmounts.dragon_scale_helmet.name=ドラゴンスケールヘルメット
+item.dragonmounts.dragon_scale_chestplate.name=ドラゴンスケールチェストプレート
 item.dragonmounts.dragon_scale_leggings.name=ドラゴンスケールレギンス
 item.dragonmounts.dragon_scale_boots.name=ドラゴンスケールブーツ
 item.dragonmounts.diamond_dragon_armor.name=ダイヤモンドドラゴンアーマー
@@ -92,16 +86,16 @@ tile.dragonmounts.dragon_egg.name=ドラゴンの卵
 message.dragonmounts.control.toggleHovering=ドラゴンのホバリング: %s
 message.dragonmounts.control.toggleYawAlignment=プレイヤーの水平視点に追従して回転: %s
 message.dragonmounts.control.togglePitchAlignment=プレイヤーの垂直視点に追従して上昇、降下を無視: %s
-message.dragonmounts.dragon.untamed=The dragon is untamed
+message.dragonmounts.dragon.untamed=ドラゴンは飼いならされていません
 message.dragonmounts.dragon.locked=このドラゴンはオーナーによってロックされています
 message.dragonmounts.dragon.notOwner=このドラゴンはあなたのものではありません
 message.dragonmounts.dragon.tooYoung=ドラゴンはまだ若すぎます、成長させましょう
-message.dragonmounts.dragon.growthPaused=The growth of the dragon is paused
+message.dragonmounts.dragon.growthPaused=ドラゴンの成長は停止しています
 ##### Mismatched
 message.dragonmounts.egg.wrongDimension=ドラゴンの卵はジ・エンドでは孵化できません
-message.dragonmounts.whistle.success=ドラゴンはホイッスルにバインドされた
-message.dragonmounts.whistle.existing=Please Unbind the Whistle First
-message.dragonmounts.whistle.cleared=ドラゴンは解放された
+message.dragonmounts.whistle.success=ドラゴンはホイッスルにバインドされました
+message.dragonmounts.whistle.existing=先にホイッスルを解除してください
+message.dragonmounts.whistle.cleared=ドラゴンはホイッスルから解放された
 ##### You Must Bind a Dragon First / Dragon Whistle is not bound to a Dragon
 message.dragonmounts.whistle.empty=ドラゴンホイッスルはドラゴンにバインドされていません
 message.dragonmounts.whistle.invalidPos=テレポートできません
@@ -114,8 +108,8 @@ message.dragonmounts.whistle.failed=ドラゴンは笛の音を聞くことが�
 container.dragonmounts.dragon_core=ドラゴンコンテナー
 gui.dragonmounts.sit=座る
 gui.dragonmounts.teleportToPlayer=プレイヤーの元に来る
-gui.dragonmounts.unbindWhistle=Unbind Whistle
-gui.dragonmounts.unbindWhistle.tooltip=Press Left Shift to Unlock
+gui.dragonmounts.unbindWhistle=ホイッスルの解除
+gui.dragonmounts.unbindWhistle.tooltip=左Shiftキーを押してロックを解除
 
 #Controls
 ##### proofreading needed!
@@ -123,11 +117,9 @@ key.categories.dragon=ドラゴンマウント
 key.dragonmounts.breath=ドラゴンブレス
 key.dragonmounts.descent=降下
 key.dragonmounts.toggleCameraPos=マウントカメラの変更
-key.dragonmounts.toggleHovering=Toggle Dragon Hovering
-##### Mismatched (toggle)
-key.dragonmounts.toggleYawAlignment=プレイヤーの水平視点に追従
-##### Mismatched (toggle)
-key.dragonmounts.togglePitchAlignment=プレイヤーの垂直視点に追従して上昇、下降を無視
+key.dragonmounts.toggleHovering=ドラゴンのホバリングを切替
+key.dragonmounts.toggleYawAlignment=プレイヤーの水平視点に追従を切替
+key.dragonmounts.togglePitchAlignment=プレイヤーの垂直視点に追従して上昇、下降を切替
 
 tooltip.armor_effect.dragonmounts.aether=着用者が全力疾走しているとき、5秒間移動速度上昇 IIを適用します
 tooltip.armor_effect.dragonmounts.enchant=着用者が倒したターゲットは120%の追加EXPをドロップする
@@ -142,11 +134,10 @@ tooltip.armor_effect.dragonmounts.sunlight=着用者の飢餓値が10未満の�
 tooltip.armor_effect.dragonmounts.terra=30秒間、採掘速度上昇 Iを適用します。
 tooltip.armor_effect.dragonmounts.water=着用者が水中にいる場合、水中呼吸Iを30秒間適用する
 tooltip.armor_effect.dragonmounts.zombie=夜に15秒間、攻撃力上昇 Iを適用します
-##### Untranslated
-tooltip.armor_effect.dragonmounts.dark=Apply Dark Dragon's Grace I effect for 30s
+tooltip.armor_effect.dragonmounts.dark=ダークドラゴンの恩恵効果 Ⅰを30秒間適用する
 tooltip.dragonmounts.armor_effect_cooldown=クールダウン: %ss
 tooltip.dragonmounts.armor_effect_fishing_luck=着用者が釣りをしているとき、クールダウンなしで10秒間幸運 Iを適用します。
-tooltip.dragonmounts.armor_effect_piece_4=4セット効果:
+tooltip.dragonmounts.armor_effect_piece_4=4部位セット効果:
 tooltip.dragonmounts.armor_effect_remaining_cooldown=残りのクールダウン: %ss
 # actually it is related to key binding, so the text will be changed later
 tooltip.dragonmounts.whistle=所有している飼いならしたドラゴンを右クリックして操作します
@@ -162,7 +153,7 @@ tooltip.dragonmounts.amulet.empty=右クリックしてドラゴンを保管し�
 tooltip.dragonmounts.amulet.usage=地面を右クリックすると召喚できます
 tooltip.dragonmounts.carriage=ドラゴンがボートのように複数の乗客を運ぶために使用される
 
-item.modifiers.equipped=When equipped:
+item.modifiers.equipped=装備時:
 
 argument.player.toomany=単体のプレイヤーを指定してください、そのセレクタは複数体指定しています
 
@@ -181,12 +172,10 @@ commands.dragonmounts.type.invalid='%s' is not a valid type
 commands.dragonmounts.type.success=The type of %s has been set to: %s
 commands.dragonmounts.notFound=Could not find dragon based on '%s'
 commands.dragonmounts.unspecified=You must specify which dragon you wish to perform this action on.
-config.dragonmounts.category.main=Main
-config.dragonmounts.category.world_gen=World Generation
-config.dragonmounts.category.client=Client
-config.dragonmounts.debug=Debug
-config.dragonmounts.debug.tooltip=Enable Debug Mode
-config.dragonmounts.toggleDimensionLimitation=Allow Declared Dimensions Only
-config.dragonmounts.toggleDimensionLimitation.tooltip=If enabled, Dragon Nests will only be generated in declared dimensions; otherwise they will not be generated in the declared dimensions
-config.dragonmounts.limitedDimensions=Limited Dimensions
-config.dragonmounts.limitedDimensions.tooltip=A list of limited dimensions' numeric id
+config.dragonmounts.category.world_gen=ワールドジェネレーション
+config.dragonmounts.debugMode=デバッグモード
+config.dragonmounts.debugMode.tooltip=デバッグモードを有効にする
+config.dragonmounts.toggleDimensionLimitation=宣言されたディメンションのみ許可
+config.dragonmounts.toggleDimensionLimitation.tooltip=有効にすると、ドラゴンネストは宣言されたディメンションにのみ生成されます。有効にしない場合は、宣言されたディメンションには生成されません。
+config.dragonmounts.limitedDimensions=ディメンションの制限
+config.dragonmounts.limitedDimensions.tooltip=制限されたディメンションの数値 ID のリスト

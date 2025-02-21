@@ -1,6 +1,5 @@
 package net.dragonmounts.command;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.command.CommandException;
@@ -17,18 +16,10 @@ import net.minecraft.util.text.TextComponentTranslation;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class TypeCommand extends DragonHandlerCommand {
-    private final Object2ObjectOpenHashMap<String, DragonType> types;
-
     public TypeCommand() {
         super(2);
-        Object2ObjectOpenHashMap<String, DragonType> types = new Object2ObjectOpenHashMap<>();
-        for (Map.Entry<ResourceLocation, DragonType> entry : DragonType.REGISTRY.getEntries()) {
-            types.put(entry.getKey().toString(), entry.getValue());
-        }
-        this.types = types;
     }
 
     @Override
@@ -55,7 +46,7 @@ public class TypeCommand extends DragonHandlerCommand {
             default:
                 throw new WrongUsageException("commands.dragonmounts.type.usage");
         }
-        DragonType type = this.types.get(args[0]);
+        DragonType type = DragonType.REGISTRY.getValue(new ResourceLocation(args[0]));
         if (type == null) throw new CommandException("commands.dragonmounts.type.invalid");
         for (TameableDragonEntity dragon : dragons) {
             ITextComponent name = dragon.getDisplayName();
@@ -67,7 +58,7 @@ public class TypeCommand extends DragonHandlerCommand {
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
         return args.length == 1
-                ? getListOfStringsMatchingLastWord(args, this.types.keySet())
+                ? getListOfStringsMatchingLastWord(args, DragonType.REGISTRY.getKeys())
                 : super.getTabCompletions(server, sender, args, pos);
     }
 }

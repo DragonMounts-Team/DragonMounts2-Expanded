@@ -24,7 +24,7 @@ public class MoonlightType extends DragonType {
     @Override
     public void tick(TameableDragonEntity dragon) {
         World level = dragon.world;
-        if (dragon.posY > level.getHeight() && !level.isDaytime() && dragon.getLifeStageHelper().isOldEnough(DragonLifeStage.PREJUVENILE)) {
+        if (dragon.posY > level.getHeight() && !level.isDaytime() && dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {
             Random random = level.rand;
             float s = dragon.getScale() * 1.2f;
             float f = (dragon.width - 0.65F) * s;

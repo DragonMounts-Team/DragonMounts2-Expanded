@@ -27,6 +27,7 @@ public class DMConfig {
     public static final DoubleEntry BASE_DAMAGE = new DoubleEntry("baseDamage", 12.0);
     public static final DoubleEntry BASE_HEALTH = new DoubleEntry("baseHealth", 90.0);
     public static final DoubleEntry BASE_STEP_HEIGHT = new DoubleEntry("baseStepHeight", 1.5);
+    public static final DoubleEntry BASE_FLYING_SPEED = new DoubleEntry("baseFlyingSpeed", 0.9);
     // GAMEPLAY:
     public static final BooleanEntry FORCED_RENAME = new BooleanEntry("forcedRename", false);
     public static final BooleanEntry BLOCK_OVERRIDE = new BooleanEntry("blockOverride", true);
@@ -93,24 +94,25 @@ public class DMConfig {
             register(category, order, BASE_ARMOR)
                     .setMaxValue(Double.MAX_VALUE)
                     .setMinValue(-Double.MAX_VALUE)
-                    .setLanguageKey("config.dragonmounts.baseArmor")
-                    .setRequiresWorldRestart(true);
+                    .setLanguageKey("config.dragonmounts.baseArmor");
             register(category, order, BASE_DAMAGE)
                     .setMaxValue(Double.MAX_VALUE)
                     .setMinValue(-Double.MAX_VALUE)
-                    .setLanguageKey("config.dragonmounts.baseDamage")
-                    .setRequiresWorldRestart(true);
+                    .setLanguageKey("config.dragonmounts.baseDamage");
             register(category, order, BASE_HEALTH)
                     .setMaxValue(Double.MAX_VALUE)
                     .setMinValue(-Double.MAX_VALUE)
-                    .setLanguageKey("config.dragonmounts.baseHealth")
-                    .setRequiresWorldRestart(true);
+                    .setLanguageKey("config.dragonmounts.baseHealth");
+            register(category, order, BASE_FLYING_SPEED)
+                    .setMaxValue(1.75)
+                    .setMinValue(0.25)
+                    .setLanguageKey("config.dragonmounts.baseFlyingSpeed");
             register(category, order, BASE_STEP_HEIGHT)
                     .setMaxValue(Double.MAX_VALUE)
                     .setMinValue(-Double.MAX_VALUE)
                     .setLanguageKey("config.dragonmounts.baseStepHeight")
                     .setRequiresWorldRestart(true);
-            category.setPropertyOrder(order).setRequiresWorldRestart(true);
+            category.setPropertyOrder(order);
             // GAMEPLAY
             order = new ObjectArrayList<>();
             category = config.getCategory(CATEGORY_GAMEPLAY)
@@ -171,6 +173,7 @@ public class DMConfig {
         load(category, BASE_DAMAGE);
         load(category, BASE_HEALTH);
         load(category, BASE_STEP_HEIGHT);
+        load(category, BASE_FLYING_SPEED);
 
         category = config.getCategory(CATEGORY_GAMEPLAY);
         load(category, FORCED_RENAME);

@@ -16,7 +16,7 @@ public class LayerRendererDragonArmor extends DragonLayerRenderer {
         if (stack.isEmpty()) return;
         Item item = stack.getItem();
         if (item instanceof DragonArmorItem) {
-            this.renderer.bindTexture(((DragonArmorItem) item).texture);
+            this.manager.bindTexture(((DragonArmorItem) item).texture);
             this.model.render(DragonRenderMode.FULL, dragon, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
         }
 	}

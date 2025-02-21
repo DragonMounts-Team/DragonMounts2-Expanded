@@ -54,7 +54,7 @@ public class StageCommand extends DragonHandlerCommand {
         DragonLifeStage stage = this.stages.get(args[0]);
         if (stage == null) throw new CommandException("commands.dragonmounts.stage.invalid");
         for (TameableDragonEntity dragon : dragons) {
-            dragon.getLifeStageHelper().setLifeStage(stage);
+            dragon.lifeStageHelper.setLifeStage(stage);
             sender.sendMessage(new TextComponentTranslation("commands.dragonmounts.stage.success", dragon.getDisplayName(), stage.identifier));
         }
     }

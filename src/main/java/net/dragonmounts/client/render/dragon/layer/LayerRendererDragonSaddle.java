@@ -8,12 +8,10 @@ import net.dragonmounts.entity.TameableDragonEntity;
  */
 public class LayerRendererDragonSaddle extends DragonLayerRenderer {
     @Override
-    public void doRenderLayer(TameableDragonEntity dragon, float moveTime,
-                              float moveSpeed, float partialTicks, float ticksExisted, float lookYaw,
-                              float lookPitch, float scale) {
+    public void doRenderLayer(TameableDragonEntity dragon, float moveTime, float moveSpeed, float partialTicks, float ticksExisted, float lookYaw, float lookPitch, float scale) {
         if (!dragon.isSaddled()) return;
-        renderer.bindTexture(dragon.getVariant().appearance.getSaddle(dragon));
-        model.render(DragonRenderMode.SADDLE, dragon, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
+        this.manager.bindTexture(dragon.getVariant().appearance.getSaddle(dragon));
+        this.model.render(DragonRenderMode.SADDLE, dragon, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
     }
 
     @Override
