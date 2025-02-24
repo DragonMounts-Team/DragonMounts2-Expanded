@@ -19,6 +19,7 @@ Creators:
 
 Contributors:
 - HaxTheCharizard (Moderator) - Artist; Armor and Tool Textures. Attachable Models
+- Bluestenonycho64 - Updated Nest Block Texture
 - Signis Kerman - French Translations
 - Tomohiko - Japanese translations
 - Legitdragonb0y - Several Contributions
