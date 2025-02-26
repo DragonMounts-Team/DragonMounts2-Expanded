@@ -26,7 +26,7 @@ Contributors:
 
 Dragon Mounts 2 Creators:
 - BarracudaATA - Original Project; code, textures, ideas.
-- TheRPGAdventurer - Owner & Lead Developer
+- TheRPGAdventurer - Owner, Project Leader and Maintainer
 - Kingdomall - Artist; Updated Dragon Textures
 - Shannieann - Artist; Nether, Terra and Zombie Textures
 - Ukan - Artist; Sunlight and Moonlight Textures
