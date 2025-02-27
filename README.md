@@ -30,6 +30,7 @@ Dragon Mounts 2 Creators:
 - Kingdomall - Artist; Updated Dragon Textures
 - Shannieann - Artist; Nether, Terra and Zombie Textures
 - Ukan - Artist; Sunlight and Moonlight Textures
+- Moon/Moonie - PR Developer and Concept Artist
 - Kay9 - (Ex)-Coder
 
 Original Contributers:
