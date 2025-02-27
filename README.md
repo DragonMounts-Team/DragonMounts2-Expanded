@@ -28,16 +28,16 @@ Dragon Mounts 2 Creators:
 - BarracudaATA - Original Project; code, textures, ideas.
 - TheRPGAdventurer - Owner, Project Leader and Maintainer
 - Kingdomall - Artist; Updated Dragon Textures
-- Shannieann - Artist; Nether, Terra and Zombie Textures
-- Ukan - Artist; Sunlight and Moonlight Textures
+- Shannieann - Artist; Nether, Terra and Zombie Dragon Textures
+- Ukan - Artist; Sunlight and Moonlight Dragon Textures
 - Moon/Moonie - PR Developer and Concept Artist
 - Kay9 - (Ex)-Coder
 
 Original Contributers:
 - AlexModGuy (I&F Owner) - Ice and Fire code
-- FlaemWing - Artist; Nest Block, Tools and Dragon Armor item
-- cesar_zorak - Artist; Dragon Armor model, Breed textures. Several Contributions
+- FlaemWing - Artist; Nest Block, Tools and Dragon Armor item Textures
+- cesar_zorak - Artist; Dragon Armor model and Breed textures. Several Contributions
 - Majty/GuineaOwl - Artist; Amulet Item Texture
-- Unakitononeko - Artist; Updated Forest Textures
-- Crafty - Artist; Updated Ice Textures
+- Unakitononeko - Artist; Updated Forest Dragon Textures
+- Crafty - Artist; Updated Ice Dragon Textures
 - TheGreyGhost - DM1 Developer; Prototype Dragon Breath
