@@ -10,6 +10,7 @@
 package net.dragonmounts.util;
 
 import net.dragonmounts.util.math.Interpolation;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.Arrays;
 
@@ -45,7 +46,7 @@ public class CircularBuffer {
         return Interpolation.linear(this.buffer[i - 1 & mask], this.buffer[i & mask], x);
     }
 
-    public float get(float x, int offset1, int offset2) {
-        return this.get(x, offset2) - this.get(x, offset1);
+    public float getClamped(float x, int offset1, int offset2, float range) {
+        return MathHelper.clamp(this.get(x, offset2) - this.get(x, offset1), -range, range);
     }
 }

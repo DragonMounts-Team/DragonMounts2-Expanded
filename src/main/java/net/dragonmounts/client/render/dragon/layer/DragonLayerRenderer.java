@@ -9,15 +9,15 @@
  */
 package net.dragonmounts.client.render.dragon.layer;
 
+import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.model.dragon.DragonModel;
-import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
 
 /**
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public abstract class DragonLayerRenderer implements LayerRenderer<TameableDragonEntity> {
+public abstract class DragonLayerRenderer implements LayerRenderer<ClientDragonEntity> {
     protected TextureManager manager;
     protected DragonModel model;
 

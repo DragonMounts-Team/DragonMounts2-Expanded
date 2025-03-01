@@ -17,6 +17,7 @@ import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.config.DMConfig;
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.entity.helper.DragonLifeStageHelper;
@@ -37,7 +38,6 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nullable;
@@ -57,7 +57,7 @@ public class DebugOverlay {
     private static final DecimalFormat dfLong = new DecimalFormat("0.0000");
     private static GuiTextPrinter text;
     private static TameableDragonEntity clientCache;
-    private static TameableDragonEntity serverCache;
+    private static ServerDragonEntity serverCache;
     
     @SubscribeEvent
     public static void onRenderOverlay(RenderGameOverlayEvent event) {
@@ -69,7 +69,7 @@ public class DebugOverlay {
         }
         TameableDragonEntity client = getClientDragon(minecraft);
         if (client == null) return;
-        TameableDragonEntity server = getServerDragon(minecraft, client);
+        ServerDragonEntity server = getServerDragon(minecraft, client);
         TameableDragonEntity selected = server == null
                 ? client
                 : Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
@@ -91,8 +91,8 @@ public class DebugOverlay {
             } else {
                 renderEntityInfo(selected);
             }
-        } catch (Exception ex) {
-            renderException(ex);
+        } catch (Exception e) {
+            LogUtil.LOGGER.error("Error rendering", e);
         }
         if (client.isDead) {
             clientCache = null;
@@ -116,7 +116,7 @@ public class DebugOverlay {
     }
 
     @Nullable
-    private static TameableDragonEntity getServerDragon(Minecraft minecraft, TameableDragonEntity client) {
+    private static ServerDragonEntity getServerDragon(Minecraft minecraft, TameableDragonEntity client) {
         if (!minecraft.isSingleplayer()) return null; // impossible on dedicated
         int target = client.getEntityId();
         if (serverCache != null && serverCache.getEntityId() == target) {
@@ -127,8 +127,8 @@ public class DebugOverlay {
         if (server == null) return null; // unnecessary, but safe
         for (WorldServer level : server.worlds) {
             Entity entity = level.getEntityByID(target);
-            if (entity instanceof TameableDragonEntity) {
-                return serverCache = (TameableDragonEntity) entity;
+            if (entity instanceof ServerDragonEntity) {
+                return serverCache = (ServerDragonEntity) entity;
             }
         }
         return null;
@@ -143,7 +143,7 @@ public class DebugOverlay {
 
     private static void renderEntityInfo(TameableDragonEntity dragon) {
         DecimalFormat dfShort = DebugOverlay.dfShort;
-        text.setOrigin(8, 32);
+        text.setOrigin(8, 26);
 
         text.setColor(YELLOW);
         text.print(dragon.world.isRemote ? "Client" : "Server");
@@ -173,7 +173,7 @@ public class DebugOverlay {
         String pitch = dfShort.format(dragon.rotationPitch);
         String yaw = dfShort.format(dragon.rotationYaw);
         String yawHead = dfShort.format(dragon.rotationYawHead);
-        text.printf("Pitch: %s\nYaw: %s\nHeadYaw: %s\n", pitch, yaw, yawHead);
+        text.printf("Pitch: %s\nYaw: %s; Head: %s\n", pitch, yaw, yawHead);
 
         // health
         String health = dfShort.format(dragon.getHealth());
@@ -182,8 +182,7 @@ public class DebugOverlay {
         text.printf("Health: %s/%s (%s%%)\n", health, healthMax, healthRel);
 
         // hunger
-        String hunger = dfShort.format(dragon.getHunger());
-        text.printf("Hunger: %s\n", hunger);
+        text.println("Hunger: " + dfShort.format(dragon.getHunger()));
 
         // life stage
         DragonLifeStageHelper helper = dragon.lifeStageHelper;
@@ -192,7 +191,7 @@ public class DebugOverlay {
 
         // size
         text.println(String.format(
-                "Size: %s (w:%s h:%s)",
+                "Size: %s (w: %s h: %s)",
                 dfShort.format(helper.getScale()),
                 dfShort.format(dragon.width),
                 dfShort.format(dragon.height)
@@ -230,7 +229,7 @@ public class DebugOverlay {
         text.println();
     }
 
-    private static void renderBreedPoints(TameableDragonEntity dragon) {
+    private static void renderBreedPoints(ServerDragonEntity dragon) {
         text.setColor(YELLOW);
         text.println("Breed points");
         text.setColor(WHITE);
@@ -251,7 +250,7 @@ public class DebugOverlay {
         }
     }
 
-    private static void renderNavigation(TameableDragonEntity dragon) {
+    private static void renderNavigation(ServerDragonEntity dragon) {
         text.setOrigin(8, 32);
         
         text.setColor(YELLOW);
@@ -313,7 +312,7 @@ public class DebugOverlay {
         text.println();
     }
 
-    private static void renderAITasks(TameableDragonEntity dragon) {
+    private static void renderAITasks(ServerDragonEntity dragon) {
         text.setOrigin(196, 8);
         renderTasks("Running Goals", dragon.tasks.executingTaskEntries);
         renderTasks("Running Target Goals", dragon.targetTasks.executingTaskEntries);
@@ -325,14 +324,5 @@ public class DebugOverlay {
             text.println("Target Type: " + target.getClass().getName());
             text.println("Target UUID: " + target.getUniqueID());
         }
-    }
-
-    private static void renderException(Exception ex) {
-        LogUtil.LOGGER.error("Error rendering", ex);
-        text.setOrigin(8, 32);
-        text.setColor(RED);
-        text.println("GUI Exception:");
-        text.printf(ExceptionUtils.getStackTrace(ex));
-        text.setColor(WHITE);
     }
 }

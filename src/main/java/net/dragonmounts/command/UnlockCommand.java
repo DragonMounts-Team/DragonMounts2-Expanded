@@ -9,13 +9,13 @@
  */
 package net.dragonmounts.command;
 
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.EntityNotFoundException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.TextComponentTranslation;
 
 import java.util.Collections;
 import java.util.List;
@@ -40,7 +40,7 @@ public class UnlockCommand extends DragonHandlerCommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        List<TameableDragonEntity> dragons;
+        List<ServerDragonEntity> dragons;
         switch (args.length) {
             case 0:
                 dragons = Collections.singletonList(getClosestDragon(sender));
@@ -54,7 +54,7 @@ public class UnlockCommand extends DragonHandlerCommand {
         }
         for (TameableDragonEntity dragon : dragons) {
             dragon.setToAllowedOtherPlayers(true);
-            sender.sendMessage(new TextComponentTranslation("commands.dragonmounts.unlock.success", dragon.getDisplayName()));
+            notifyCommandListener(sender, this, "commands.dragonmounts.unlock.success", dragon.getDisplayName());
         }
     }
 }

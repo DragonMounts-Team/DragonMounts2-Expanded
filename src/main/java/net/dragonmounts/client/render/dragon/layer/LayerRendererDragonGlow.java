@@ -1,7 +1,7 @@
 package net.dragonmounts.client.render.dragon.layer;
 
+import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.render.dragon.DragonRenderMode;
-import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 
@@ -12,7 +12,7 @@ import static org.lwjgl.opengl.GL11.GL_ONE;
  */
 public class LayerRendererDragonGlow extends DragonLayerRenderer {
     @Override
-    public void doRenderLayer(TameableDragonEntity dragon, float moveTime, float moveSpeed, float partialTicks, float ticksExisted, float lookYaw, float lookPitch, float scale) {
+    public void doRenderLayer(ClientDragonEntity dragon, float moveTime, float moveSpeed, float partialTicks, float ticksExisted, float lookYaw, float lookPitch, float scale) {
         this.manager.bindTexture(dragon.getVariant().appearance.getGlow(dragon));
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GL_ONE, GL_ONE);

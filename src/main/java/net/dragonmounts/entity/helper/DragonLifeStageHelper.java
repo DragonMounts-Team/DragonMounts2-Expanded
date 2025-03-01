@@ -9,15 +9,15 @@
  */
 package net.dragonmounts.entity.helper;
 
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.util.ClientServerSynchronisedTickCount;
-import net.dragonmounts.util.math.MathX;
 import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -66,10 +66,10 @@ public class DragonLifeStageHelper {
     public void applyEntityAttributes() {
         AbstractAttributeMap attributes = this.dragon.getAttributeMap();
         double scale = this.getScale();
-        double factor = MathX.clamp(scale, 0.1, 1);
+        double factor = MathHelper.clamp(scale, 0.1, 1);
         replaceAttributeModifier(attributes.getAttributeInstance(MAX_HEALTH), DRAGON_AEG_MODIFIER_ID, "Dragon size modifier", factor, 1, false);
         replaceAttributeModifier(attributes.getAttributeInstance(ATTACK_DAMAGE), DRAGON_AEG_MODIFIER_ID, "Dragon size modifier", factor, 1, false);
-        replaceAttributeModifier(attributes.getAttributeInstance(ARMOR), DRAGON_AEG_MODIFIER_ID, "Dragon size modifier", MathX.clamp(scale, 0.1, 1.2), 1, false);
+        replaceAttributeModifier(attributes.getAttributeInstance(ARMOR), DRAGON_AEG_MODIFIER_ID, "Dragon size modifier", MathHelper.clamp(scale, 0.1, 1.2), 1, false);
     }
 
     /**
@@ -77,11 +77,7 @@ public class DragonLifeStageHelper {
      */
     public void playEggCrackEffect() {
         // dragon.world.playEvent(2001, dragon.getPosition(), Block.getIdFromBlock(BlockDragonBreedEgg.DRAGON_BREED_EGG));
-        this.playEvent(dragon.getPosition());
-    }
-
-    public void playEvent(BlockPos blockPosIn) {
-        dragon.world.playSound(null, blockPosIn, DMSounds.DRAGON_HATCHING, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        dragon.world.playSound(null, dragon.getPosition(), DMSounds.DRAGON_HATCHING, SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
 
     public int getEggWiggleX() {
@@ -158,25 +154,22 @@ public class DragonLifeStageHelper {
     private void onNewLifeStage(DragonLifeStage lifeStage, DragonLifeStage prevLifeStage) {
         L.trace("onNewLifeStage({},{})", prevLifeStage, lifeStage);
         TameableDragonEntity dragon = this.dragon;
-        if (dragon.world.isRemote) {
-            // play particle and sound effects when the dragon hatches
-            if (DragonLifeStage.EGG == prevLifeStage && !lifeStage.isBaby()) {
-                playEggCrackEffect();
-                dragon.world.playSound(dragon.posX, dragon.posY, dragon.posZ, DMSounds.DRAGON_HATCHED, SoundCategory.BLOCKS, 4, 1, false);
-            }
-        } else {
+        if (dragon instanceof ServerDragonEntity) {
             // clear current navigation target
             dragon.getNavigator().clearPath();
             // update AI
-            dragon.setupTasks();
+            ((ServerDragonEntity) dragon).setupTasks();
+            float factor = dragon.getHealth() / dragon.getMaxHealth();
             // update attribute modifier
             applyEntityAttributes();
-
-            // heal dragon to updated full health
-            dragon.setHealth(dragon.getMaxHealth());
+            dragon.setHealth(factor * dragon.getMaxHealth());
             if (DragonLifeStage.EGG == lifeStage) {
                 dragon.variantHelper.resetPoints(null);
             }
+        } else if (DragonLifeStage.EGG == prevLifeStage && !lifeStage.isBaby()) {
+            // play particle and sound effects when the dragon hatches
+            playEggCrackEffect();
+            dragon.world.playSound(dragon.posX, dragon.posY, dragon.posZ, DMSounds.DRAGON_HATCHED, SoundCategory.BLOCKS, 4, 1, false);
         }
         dragon.onLifeStageChange(lifeStage);
     }
@@ -226,12 +219,6 @@ public class DragonLifeStageHelper {
         double oy = (rand.nextDouble() - 0.3) * 2;
         double oz = (rand.nextDouble() - 0.3) * 2;
         dragon.world.spawnParticle(dragon.getVariant().type.eggParticle, px, py, pz, ox, oy, oz);
-    }
-
-    public void onDeath() {
-        if (this.dragon.world.isRemote && this.isEgg()) {
-            this.playEggCrackEffect();
-        }
     }
 
     public boolean isEgg() {

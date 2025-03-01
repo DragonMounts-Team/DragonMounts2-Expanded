@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.compat.DragonMountsCompat;
 import net.dragonmounts.entity.EntityContainerItemEntity;
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMItems;
 import net.dragonmounts.registry.DragonType;
@@ -155,7 +156,7 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
         ResourceLocation identifier = DragonSpawnEggItem.getEntityTypeFrom(stack);
         Entity entity;
         if (DRAGON_ID.equals(identifier)) {
-            entity = new TameableDragonEntity(level);
+            entity = new ServerDragonEntity(level);
         } else if (EntityList.ENTITY_EGGS.containsKey(identifier)) {
             entity = EntityList.createEntityByIDFromName(identifier, level);
             if (entity == null) return null;

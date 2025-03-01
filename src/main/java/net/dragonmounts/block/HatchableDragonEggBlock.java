@@ -1,6 +1,6 @@
 package net.dragonmounts.block;
 
-import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
@@ -29,9 +29,9 @@ import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
 public class HatchableDragonEggBlock extends BlockDragonEgg {
     public static final String TRANSLATION_KEY = TRANSLATION_KEY_PREFIX + "dragon_egg";
     @Nullable
-    public static TameableDragonEntity spawn(World level, BlockPos pos, DragonType type) {
+    public static ServerDragonEntity spawn(World level, BlockPos pos, DragonType type) {
         level.setBlockToAir(pos);
-        TameableDragonEntity egg = new TameableDragonEntity(level);//TODO: use HatchableDragonEggEntity
+        ServerDragonEntity egg = new ServerDragonEntity(level);//TODO: use HatchableDragonEggEntity
         DragonVariant variant = type.variants.draw(level.rand, null);
         if (variant == null) return null;
         egg.setVariant(variant);

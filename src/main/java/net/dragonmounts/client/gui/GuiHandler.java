@@ -1,6 +1,7 @@
 package net.dragonmounts.client.gui;
 
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
+import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.inventory.DragonContainer;
 import net.dragonmounts.inventory.DragonCoreContainer;
@@ -40,8 +41,8 @@ public enum GuiHandler implements IGuiHandler {
         switch (id) {
             case GUI_DRAGON:
                 entity = world.getEntityByID(x);
-                if (entity instanceof TameableDragonEntity) {
-                    return new DragonInventoryGui(player, (TameableDragonEntity) entity);
+                if (entity instanceof ClientDragonEntity) {
+                    return new DragonInventoryGui(player, (ClientDragonEntity) entity);
                 }
                 break;
             case GUI_DRAGON_CORE:

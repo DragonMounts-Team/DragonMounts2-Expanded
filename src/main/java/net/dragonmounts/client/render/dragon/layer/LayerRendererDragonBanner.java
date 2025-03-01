@@ -1,7 +1,7 @@
 package net.dragonmounts.client.render.dragon.layer;
 
+import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.model.dragon.DragonAnimator;
-import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.inventory.DragonInventory;
 import net.dragonmounts.util.math.Interpolation;
 import net.minecraft.client.model.ModelBanner;
@@ -30,9 +30,9 @@ public class LayerRendererDragonBanner extends DragonLayerRenderer {
     }
 
     @Override
-    public void doRenderLayer(TameableDragonEntity dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        DragonAnimator animator = dragon.getAnimator();
-        float pitch = animator.getBodyPitch(partialTicks);
+    public void doRenderLayer(ClientDragonEntity dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        DragonAnimator animator = dragon.animator;
+        float pitch = animator.getPitch();
         DragonInventory inventory = dragon.inventory;
         ItemStack stack;
         if ((stack = inventory.getBanner(0)).getItem() == Items.BANNER) {
@@ -52,9 +52,9 @@ public class LayerRendererDragonBanner extends DragonLayerRenderer {
             GlStateManager.pushMatrix();
             this.model.body.postRender(0.0625F);
             //lower x++ higher x--
-            GlStateManager.translate(-0.7F, 0.0, Interpolation.smoothStep(-2.6F, -0.6F, dragon.getAnimator().getSpeed()));
+            GlStateManager.translate(-0.7F, 0.0, Interpolation.smoothStep(-2.6F, -0.6F, animator.getSpeed()));
             // higher y-- lower y++
-            GlStateManager.translate(0, Interpolation.smoothStep(0.2F, dragon.getAnimator().getModelOffsetY() + 1.2F, dragon.getAnimator().getSpeed()), 0);
+            GlStateManager.translate(0, Interpolation.smoothStep(0.2F, animator.getModelOffsetY() + 1.2F, animator.getSpeed()), 0);
             GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
             GlStateManager.rotate(-180.0F, 0.0F, 0.0F, 1.0F);
             GlStateManager.rotate(pitch, 0.0F, 0.0F, 1.0F);

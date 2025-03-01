@@ -3,12 +3,12 @@ package net.dragonmounts.entity.breath.sound;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.util.LogUtil;
-import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.apache.logging.log4j.Level;
 
@@ -296,8 +296,7 @@ public class SoundEffectBreathWeapon {
           final float MINIMUM_VOLUME_DISTANCE = 40.0F;
           float fractionToMinimum = soundSettings.playerDistanceToEpicentre / MINIMUM_VOLUME_DISTANCE;
           this.volume = soundSettings.masterVolume *
-                  MathX.clamp(MAXIMUM_VOLUME - fractionToMinimum * (MAXIMUM_VOLUME - MINIMUM_VOLUME),
-                          MINIMUM_VOLUME, MAXIMUM_VOLUME);
+                  MathHelper.clamp(MAXIMUM_VOLUME - fractionToMinimum * (MAXIMUM_VOLUME - MINIMUM_VOLUME), MINIMUM_VOLUME, MAXIMUM_VOLUME);
         }
       }
     }

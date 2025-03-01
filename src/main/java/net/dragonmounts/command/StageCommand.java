@@ -1,6 +1,7 @@
 package net.dragonmounts.command;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.minecraft.command.CommandException;
@@ -9,7 +10,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -39,7 +39,7 @@ public class StageCommand extends DragonHandlerCommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        List<TameableDragonEntity> dragons;
+        List<ServerDragonEntity> dragons;
         switch (args.length) {
             case 1:
                 dragons = Collections.singletonList(getClosestDragon(sender));
@@ -55,7 +55,7 @@ public class StageCommand extends DragonHandlerCommand {
         if (stage == null) throw new CommandException("commands.dragonmounts.stage.invalid");
         for (TameableDragonEntity dragon : dragons) {
             dragon.lifeStageHelper.setLifeStage(stage);
-            sender.sendMessage(new TextComponentTranslation("commands.dragonmounts.stage.success", dragon.getDisplayName(), stage.identifier));
+            notifyCommandListener(sender, this, "commands.dragonmounts.stage.success", dragon.getDisplayName(), stage.identifier);
         }
     }
 

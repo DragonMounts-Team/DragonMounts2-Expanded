@@ -9,6 +9,7 @@
  */
 package net.dragonmounts.entity.helper;
 
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.nbt.NBTTagCompound;
@@ -76,9 +77,10 @@ public class DragonReproductionHelper {
         }
     }
 
-    public TameableDragonEntity createChild(TameableDragonEntity mate) {
+    public ServerDragonEntity createChild(TameableDragonEntity mate) {
         TameableDragonEntity self = this.dragon;
-        TameableDragonEntity baby = new TameableDragonEntity(self.world);
+        if (self.world.isRemote) return null;
+        ServerDragonEntity baby = new ServerDragonEntity(self.world);
 
         // mix the custom names in case both parents have one
         if (self.hasCustomName() && mate.hasCustomName()) {

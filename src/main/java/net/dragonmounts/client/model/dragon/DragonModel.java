@@ -10,11 +10,10 @@
 
 package net.dragonmounts.client.model.dragon;
 
+import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.render.dragon.DragonRenderMode;
 import net.dragonmounts.client.variant.VariantAppearance;
-import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.breath.DragonHeadPositionHelper;
-import net.dragonmounts.entity.helper.SegmentSizePositionRotation;
+import net.dragonmounts.util.Segment;
 import net.dragonmounts.util.math.Interpolation;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.model.ModelBase;
@@ -36,7 +35,6 @@ public class DragonModel extends ModelBase {
     // model constants
     public static final int NECK_SIZE=10;
     public static final int TAIL_SIZE=10;
-    public static final int VERTS_NECK=7;
     public static final int VERTS_TAIL=12;
     public static final int HEAD_OFS=-16;
 
@@ -270,8 +268,7 @@ public class DragonModel extends ModelBase {
     }
 
     protected void animHeadAndNeck(DragonAnimator animator) {
-        DragonHeadPositionHelper helper = animator.getDragonHeadPositionHelper();
-        SegmentSizePositionRotation[] segments = helper.neckSegments;
+        Segment[] segments = animator.neckSegments;
         NeckPart neck = this.neck;
         for (int i = 0; i < segments.length; ++i) {
             neck.applySegment(segments[i]);
@@ -279,8 +276,7 @@ public class DragonModel extends ModelBase {
             neck.scale.isHidden = (i & 1) == 1 || i == 0;
             neck.save(i);
         }
-        neck.applySegment(helper.getNeckPositionSizeLocation());
-        this.head.applySegment(helper.getHeadPositionSizeLocation());
+        this.head.applySegment(animator.head);
         jaw.rotateAngleX = animator.getJawRotateAngleX();
     }
 
@@ -303,13 +299,13 @@ public class DragonModel extends ModelBase {
     }
 
     protected void animTail(DragonAnimator animator) {
-        SegmentSizePositionRotation[] tailSegmentData = animator.tailSegments;
-        final int TAIL_SEGMENTS = tailSegmentData.length;
+        Segment[] segments = animator.tailSegments;
+        final int TAIL_SEGMENTS = segments.length;
         TailPart tail = this.tail;
-        for (int i = 0; i < tailSegmentData.length; ++i) {
+        for (int i = 0; i < segments.length; ++i) {
             // display horns near the tip
             tail.leftHorn.isHidden = tail.rightHorn.isHidden = !(i > TAIL_SEGMENTS - 7 && i < TAIL_SEGMENTS - 3);
-            tail.applySegment(tailSegmentData[i]);
+            tail.applySegment(segments[i]);
             tail.save(i);
         }
     }
@@ -392,8 +388,8 @@ public class DragonModel extends ModelBase {
 
     @Override
     public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entity) {
-        if (entity instanceof TameableDragonEntity) {
-            DragonAnimator animator = ((TameableDragonEntity) entity).getAnimator();
+        if (entity instanceof ClientDragonEntity) {
+            DragonAnimator animator = ((ClientDragonEntity) entity).animator;
             animator.setMovement(limbSwing, limbSwingAmount);
             animator.setLook(netHeadYaw, headPitch);
             animator.animate(this.partialTicks);
@@ -405,10 +401,10 @@ public class DragonModel extends ModelBase {
      */
     @Override
     public void render(Entity entity, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
-        this.render(DragonRenderMode.FULL, (TameableDragonEntity) entity, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
+        this.render(DragonRenderMode.FULL, (ClientDragonEntity) entity, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
     }
 
-    public void render(DragonRenderMode mode, TameableDragonEntity dragon, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
+    public void render(DragonRenderMode mode, ClientDragonEntity dragon, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
         // update flags
         back.isHidden = dragon.isSaddled();
         boolean flag = this.appearance.hasSideTailScale(dragon);
@@ -416,7 +412,7 @@ public class DragonModel extends ModelBase {
         tail.middleScale.showModel = !flag;
         tail.leftScale.showModel = tail.rightScale.showModel = flag;
         tail.leftHorn.showModel = tail.rightHorn.showModel = this.appearance.hasTailHorns(dragon);
-        this.updateFromAnimator(dragon.getAnimator());
+        this.updateFromAnimator(dragon.animator);
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(offsetX, offsetY, offsetZ);

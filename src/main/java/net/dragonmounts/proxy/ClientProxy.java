@@ -11,6 +11,7 @@ package net.dragonmounts.proxy;
 
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.block.entity.DragonHeadBlockEntity;
+import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.gui.DebugOverlay;
 import net.dragonmounts.client.render.CarriageRenderer;
 import net.dragonmounts.client.render.DMCapeRenderer;
@@ -23,7 +24,6 @@ import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.client.variant.VariantAppearances;
 import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.CarriageEntity;
-import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.effects.ClientBreathNodeEntity;
 import net.dragonmounts.event.CameraHandler;
 import net.dragonmounts.event.ClientMisc;
@@ -64,7 +64,7 @@ public class ClientProxy extends ServerProxy {
     public void PreInitialization(FMLPreInitializationEvent event) {
         super.PreInitialization(event);
         MinecraftForge.EVENT_BUS.register(ClientMisc.class);
-        RenderingRegistry.registerEntityRenderingHandler(TameableDragonEntity.class, DragonRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ClientDragonEntity.class, DragonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ClientBreathNodeEntity.class, ClientBreathNodeRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(CarriageEntity.class, CarriageRenderer::new);
 

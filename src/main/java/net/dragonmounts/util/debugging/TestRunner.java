@@ -1,8 +1,7 @@
 package net.dragonmounts.util.debugging;
 
-import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.breath.BreathPower;
-import net.dragonmounts.entity.breath.DragonHeadPositionHelper;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.item.TestRunnerItem;
 import net.dragonmounts.util.LogUtil;
@@ -96,7 +95,7 @@ public class TestRunner {
             return true;
         });
         registry.register(Side.SERVER, 2, (level, player, stack) -> {
-            TameableDragonEntity dragon = new TameableDragonEntity(level);
+            ServerDragonEntity dragon = new ServerDragonEntity(level);
             BreathPower power = BreathPower.SMALL;
             ++testCounter;
             Vec3d origin = new Vec3d(0, 24, 0);
@@ -123,10 +122,9 @@ public class TestRunner {
             return true;
         });
         registry.register(Side.SERVER, 60, (level, player, stack) -> {
-            TameableDragonEntity dragon = new TameableDragonEntity(level);
-            DragonHeadPositionHelper helper = new DragonHeadPositionHelper(dragon, 7);
+            ServerDragonEntity dragon = new ServerDragonEntity(level);
             for (float scale = 0.0f; scale <= 1.0F; scale += 0.01F) {
-                float headsize = helper.getRelativeHeadSize(scale);
+                float headsize = dragon.headLocator.getRelativeHeadSize(scale);
                 System.out.println("scale=" + scale + ", relativeheadsize=" + headsize);
             }
             return true;

@@ -2,6 +2,7 @@ package net.dragonmounts.item;
 
 import net.dragonmounts.compat.DragonMountsCompat;
 import net.dragonmounts.entity.EntityContainerItemEntity;
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
@@ -70,8 +71,8 @@ public class DragonEssenceItem extends Item implements IEntityContainer<Tameable
 
     @Nullable
     @Override
-    public Entity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos, boolean yOffset, String feedback) {
-        TameableDragonEntity dragon = new TameableDragonEntity(level);
+    public ServerDragonEntity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos, boolean yOffset, String feedback) {
+        ServerDragonEntity dragon = new ServerDragonEntity(level);
         NBTTagCompound root = stack.getTagCompound();
         boolean flag = root == null;
         if (!flag) {

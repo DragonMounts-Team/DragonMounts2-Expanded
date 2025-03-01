@@ -1,5 +1,6 @@
 package net.dragonmounts.command;
 
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.command.CommandException;
@@ -34,7 +35,7 @@ public class TypeCommand extends DragonHandlerCommand {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        List<TameableDragonEntity> dragons;
+        List<ServerDragonEntity> dragons;
         switch (args.length) {
             case 1:
                 dragons = Collections.singletonList(getClosestDragon(sender));
@@ -51,7 +52,7 @@ public class TypeCommand extends DragonHandlerCommand {
         for (TameableDragonEntity dragon : dragons) {
             ITextComponent name = dragon.getDisplayName();
             dragon.setVariant(type.variants.draw(dragon.getRNG(), dragon.getVariant()));
-            sender.sendMessage(new TextComponentTranslation("commands.dragonmounts.type.success", name, new TextComponentTranslation(type.translationKey).setStyle(new Style().setColor(type.formatting))));
+            notifyCommandListener(sender, this, "commands.dragonmounts.type.success", name, new TextComponentTranslation(type.translationKey).setStyle(new Style().setColor(type.formatting)));
         }
     }
 

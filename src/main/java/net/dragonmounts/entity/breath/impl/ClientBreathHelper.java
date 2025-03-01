@@ -1,25 +1,25 @@
 package net.dragonmounts.entity.breath.impl;
 
+import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.render.dragon.breathweaponFX.BreathWeaponEmitter;
-import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreathHelper;
 import net.dragonmounts.entity.breath.sound.SoundController;
 import net.dragonmounts.entity.breath.sound.SoundEffectBreathWeapon;
 import net.minecraft.client.Minecraft;
 
-public class ClientBreathHelper extends DragonBreathHelper implements SoundEffectBreathWeapon.WeaponSoundUpdateLink {
+public class ClientBreathHelper extends DragonBreathHelper<ClientDragonEntity> implements SoundEffectBreathWeapon.WeaponSoundUpdateLink {
     protected final BreathWeaponEmitter breathWeaponEmitter = new BreathWeaponEmitter();
     private SoundController soundController;
     private SoundEffectBreathWeapon soundEffectBreathWeapon;
 
-    public ClientBreathHelper(TameableDragonEntity dragon) {
+    public ClientBreathHelper(ClientDragonEntity dragon) {
         super(dragon);
     }
 
     @Override
     public void update() {
         ++tickCounter;
-        TameableDragonEntity dragon = this.dragon;
+        ClientDragonEntity dragon = this.dragon;
         if (this.breath == null) {
             this.currentBreathState = BreathState.IDLE;
             return;
@@ -28,7 +28,7 @@ public class ClientBreathHelper extends DragonBreathHelper implements SoundEffec
         if (this.currentBreathState == BreathState.SUSTAIN) {
             this.breathWeaponEmitter.spawnBreathParticles(
                     dragon.world,
-                    dragon.getAnimator().getThroatPosition(),
+                    dragon.getThroatPosition(),
                     dragon.getLook(1.0F),
                     dragon.lifeStageHelper.getLifeStage().power,
                     this.tickCounter,
@@ -43,7 +43,7 @@ public class ClientBreathHelper extends DragonBreathHelper implements SoundEffec
 
     @Override
     public boolean refreshWeaponSoundInfo(SoundEffectBreathWeapon.WeaponSoundInfo infoToUpdate) {
-        infoToUpdate.dragonHeadLocation = dragon.getAnimator().getThroatPosition();
+        infoToUpdate.dragonHeadLocation = dragon.getThroatPosition();
         infoToUpdate.relativeVolume = dragon.getScale();
         infoToUpdate.lifeStage = dragon.lifeStageHelper.getLifeStage();
         infoToUpdate.breathingState = this.breath != null && dragon.isUsingBreathWeapon() && currentBreathState == BreathState.SUSTAIN

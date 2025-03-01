@@ -8,7 +8,6 @@ import net.dragonmounts.init.DMItems;
 import net.dragonmounts.init.DMKeyBindings;
 import net.dragonmounts.item.DragonSpawnEggItem;
 import net.dragonmounts.network.CDragonControlPacket;
-import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.entity.Entity;
@@ -86,7 +85,7 @@ public class ClientMisc {
             double cyclePosRadians = 2 * Math.PI * cyclePosition / (double) (GLOW_CYCLE_PERIOD_SECONDS * NANO_SEC_PER_SEC);
             final float BRIGHTNESS_MIDPOINT = (MIN_GLOW_BRIGHTNESS + MAX_GLOW_BRIGHTNESS) / 2.0F;
             final float BRIGHTNESS_AMPLITUDE = (MAX_GLOW_BRIGHTNESS - BRIGHTNESS_MIDPOINT);
-            int brightness = MathHelper.clamp((int) (255 * (BRIGHTNESS_MIDPOINT + BRIGHTNESS_AMPLITUDE * MathX.sin((float) cyclePosRadians))), 0, 255);
+            int brightness = MathHelper.clamp((int) (255 * (BRIGHTNESS_MIDPOINT + BRIGHTNESS_AMPLITUDE * MathHelper.sin((float) cyclePosRadians))), 0, 255);
             return ((brightness & 0xFF) << 16) | ((brightness & 0xFF) << 8) | (brightness & 0xFF);
         }, DMItems.DRAGON_ORB);
     }

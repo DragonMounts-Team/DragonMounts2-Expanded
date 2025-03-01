@@ -1,6 +1,6 @@
 package net.dragonmounts.item;
 
-import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.init.DMEntities;
 import net.dragonmounts.init.DMItemGroups;
@@ -108,7 +108,7 @@ public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityCont
         ResourceLocation identifier = getEntityTypeFrom(stack);
         Entity entity;
         if (DMEntities.DRAGON_ID.equals(identifier)) {
-            TameableDragonEntity dragon = new TameableDragonEntity(level);
+            ServerDragonEntity dragon = new ServerDragonEntity(level);
             dragon.setVariant(this.type.variants.draw(level.rand, null));
             dragon.lifeStageHelper.setLifeStage(player != null && player.isSneaking()
                     ? DragonLifeStage.HATCHLING

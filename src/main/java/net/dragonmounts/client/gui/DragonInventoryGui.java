@@ -2,8 +2,8 @@ package net.dragonmounts.client.gui;
 
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
+import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.ClientUtil;
-import net.dragonmounts.client.model.dragon.DragonAnimator;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.inventory.DragonContainer;
 import net.dragonmounts.network.CDragonConfigPacket;
@@ -30,8 +30,7 @@ public class DragonInventoryGui extends GuiContainer {
     public static final ResourceLocation LOCK_DISABLED = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/lock_disabled.png");
     private static final ResourceLocation INVENTORY = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/dragon.png");
     private static final ResourceLocation HUNGER_FULL = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/hunger_full.png");
-    private final TameableDragonEntity dragon;
-    private final DragonAnimator animator;
+    private final ClientDragonEntity dragon;
     private final EntityPlayer player;
     private LockButton lock;
     private GuiButton order;
@@ -44,11 +43,10 @@ public class DragonInventoryGui extends GuiContainer {
     private int size;
     private int color;
 
-    public DragonInventoryGui(EntityPlayer player, TameableDragonEntity dragon) {
+    public DragonInventoryGui(EntityPlayer player, ClientDragonEntity dragon) {
         super(new DragonContainer(dragon, player));
         this.player = player;
         this.dragon = dragon;
-        this.animator = dragon.getAnimator();
         this.allowUserInput = false;
         this.ySize = 214;
         this.xSize = 176;
@@ -79,9 +77,9 @@ public class DragonInventoryGui extends GuiContainer {
         this.mc.getTextureManager().bindTexture(HUNGER_FULL);
         drawModalRectWithCustomSizedTexture(x + 26, y + 60, 0.0F, 0.0F, 9, 9, 9, 9);
         //draw dragon entity
-        this.animator.isInGui = true;
+        this.dragon.isInGui = true;
         GuiInventory.drawEntityOnScreen(x + 90, y + 60, this.size, x + 125 - mouseX, y + 28 - mouseY, this.dragon);
-        this.animator.isInGui = false;
+        this.dragon.isInGui = false;
     }
 
     @Override
@@ -100,7 +98,7 @@ public class DragonInventoryGui extends GuiContainer {
     protected void actionPerformed(GuiButton button) {
         int id = button.id;
         if (id == 1 || id == 2) {
-            DragonMounts.NETWORK_WRAPPER.sendToServer(new CDragonConfigPacket(dragon.getEntityId(), id));
+            DragonMounts.NETWORK_WRAPPER.sendToServer(new CDragonConfigPacket(this.dragon.getEntityId(), id));
         }
     }
 

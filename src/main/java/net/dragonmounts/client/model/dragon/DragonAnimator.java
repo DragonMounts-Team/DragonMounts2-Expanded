@@ -9,17 +9,16 @@
  */
 package net.dragonmounts.client.model.dragon;
 
+import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.variant.VariantAppearance;
-import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreathHelper;
-import net.dragonmounts.entity.breath.DragonHeadPositionHelper;
-import net.dragonmounts.entity.helper.SegmentSizePositionRotation;
+import net.dragonmounts.entity.helper.DragonHeadLocator;
 import net.dragonmounts.util.CircularBuffer;
 import net.dragonmounts.util.LogUtil;
-import net.dragonmounts.util.math.Interpolation;
+import net.dragonmounts.util.Segment;
 import net.dragonmounts.util.math.LinearInterpolation;
 import net.dragonmounts.util.math.MathX;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.MathHelper;
 import org.apache.logging.log4j.Level;
 
 /**
@@ -27,36 +26,25 @@ import org.apache.logging.log4j.Level;
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class DragonAnimator {
-
-    private final DragonHeadPositionHelper dragonHeadPositionHelper;
-    public final SegmentSizePositionRotation[] tailSegments;
-    public final SegmentSizePositionRotation tail = new SegmentSizePositionRotation();
-
-    private boolean haveCalculatedAnimations = false;
+public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
+    public static final int JAW_OPENING_TIME_FOR_ATTACK = 5;
+    public static final int JAW_OPENING_TIME_FOR_ROAR = 20;
+    public final Segment[] tailSegments = Segment.makeArray(TAIL_SEGMENTS);
 
     // entity parameters
-    private final TameableDragonEntity dragon;
     private float partialTicks;
     private float moveTime;
     private float moveSpeed;
-    private float lookYaw;
-    private float lookPitch;
     private double prevRenderYawOffset;
     private double yawAbs;
 
     // timing vars
-    private float animBase;
     private float cycleOfs;
-    private float anim;
-    private float ground;
-    private float flutter;
-    private float walk;
-    private float sit;
     private float bite;
     private float breath;
-    private float speed;
     private float roar;
+    public int ticksSinceLastAttack = JAW_OPENING_TIME_FOR_ATTACK;
+    public int ticksSinceLastRoar = JAW_OPENING_TIME_FOR_ROAR;
 
     // timing interp vars
     private final LinearInterpolation animTimer = new LinearInterpolation(0.0F);
@@ -78,7 +66,6 @@ public class DragonAnimator {
     // model flags
     private boolean onGround;
     private boolean openJaw;
-    private boolean wingsDown;
 
     private float jawRotateAngleX;
     private final float[] wingFingerRotateX;
@@ -103,72 +90,14 @@ public class DragonAnimator {
     private float wingForearmRotateAngleZ;
 
     private static final int WING_FINGERS = 4;
-    private static final int NECK_SEGMENTS = 7;
     private static final int TAIL_SEGMENTS = 12;
 
-    public boolean isInGui = false;
-
-/*    // final X rotation angles for ground
-    private float[] xGround = {0, 0, 0, 0};
-
-    // X rotation angles for ground
-    // 1st dim - front, hind
-    // 2nd dim - thigh, crus, foot, toe
-    private float[][] xGroundStand = {
-            {0.8f, -1.5f, 1.3f, 0},
-            {-0.3f, 1.5f, -0.2f, 0},
-    };
-    private float[][] xGroundSit = {
-            {0.3f, -1.8f, 1.8f, 0},
-            {-0.8f, 1.8f, -0.9f, 0},
-    };
-
-    // X rotation angles for walking
-    // 1st dim - animation keyframe
-    // 2nd dim - front, hind
-    // 3rd dim - thigh, crus, foot, toe
-    private float[][][] xGroundWalk = {{
-            {0.4f, -1.4f, 1.3f, 0},    // move down and forward
-            {0.1f, 1.2f, -0.5f, 0}     // move back
-    }, {
-            {1.2f, -1.6f, 1.3f, 0},    // move back
-            {-0.3f, 2.1f, -0.9f, 0.6f} // move up and forward
-    }, {
-            {0.9f, -2.1f, 1.8f, 0.6f}, // move up and forward
-            {-0.7f, 1.4f, -0.2f, 0}    // move down and forward
-    }};
-
-    // final X rotation angles for walking
-    private float[] xGroundWalk2 = {0, 0, 0, 0};
-
-    // Y rotation angles for ground, thigh only
-    private float[] yGroundStand = {-0.25f, 0.25f};
-    private float[] yGroundSit = {0.1f, 0.35f};
-    private float[] yGroundWalk = {-0.1f, 0.1f};
-
-    // final X rotation angles for air
-    private float[] xAir;
-
-    // X rotation angles for air
-    // 1st dim - front, hind
-    // 2nd dim - thigh, crus, foot, toe
-    private float[][] xAirAll = {{0, 0, 0, 0}, {0, 0, 0, 0}};
-
-    // Y rotation angles for air, thigh only
-    private float[] yAirAll = {-0.1f, 0.1f};
-*/
-    public DragonAnimator(TameableDragonEntity dragon) {
-        this.dragon = dragon;
+    public DragonAnimator(ClientDragonEntity dragon) {
+        super(dragon);
         VariantAppearance appearance = dragon.getVariant().appearance;
 
         wingFingerRotateX = new float[WING_FINGERS];
         wingFingerRotateY = new float[WING_FINGERS];
-        tailSegments = new SegmentSizePositionRotation[TAIL_SEGMENTS];
-        dragonHeadPositionHelper = new DragonHeadPositionHelper(dragon, NECK_SEGMENTS);
-    }
-
-    public DragonHeadPositionHelper getDragonHeadPositionHelper() {
-        return dragonHeadPositionHelper;
     }
 
     public void setMovement(float moveTime, float moveSpeed) {
@@ -176,18 +105,11 @@ public class DragonAnimator {
         this.moveSpeed = moveSpeed;
     }
 
-    public void setLook(float lookYaw, float lookPitch) {
-		// don't twist the neck
-        this.lookYaw = MathX.clamp(lookYaw, -120, 120);
-        this.lookPitch = MathX.clamp(lookPitch, -90, 90);
-    }
-
     /**
      * Updates the dragon component parts - position, angles, scale. Called
      * every frame.
      */
     public void animate(float partialTicks) {
-        haveCalculatedAnimations = true;
         anim = animTimer.get(partialTicks);
         ground = groundTimer.get(partialTicks);
         flutter = FlutterTimer.get(partialTicks);
@@ -199,20 +121,11 @@ public class DragonAnimator {
         roar = roarTimer.get(partialTicks);
 
         animBase = anim * MathX.PI_F * 2;
-        cycleOfs = MathX.sin(animBase - 1) + 1;
-
-        // check if the wings are moving down and trigger the event
-        boolean newWingsDown = cycleOfs > 1;
-        if (newWingsDown && !wingsDown && flutter != 0) {
-            dragon.onWingsDown(speed);
-        }
-        wingsDown = newWingsDown;
-
-        cycleOfs = (cycleOfs * cycleOfs + cycleOfs * 2) * 0.05f;
+        cycleOfs = MathHelper.sin(animBase - 1) + 1;
+        cycleOfs = (cycleOfs * cycleOfs + cycleOfs * 2) * 0.05F;
 
         // reduce up/down amplitude
-        cycleOfs *= MathX.lerp(0.5f, 1, flutter);
-        cycleOfs *= MathX.lerp(1, 0.5f, ground);
+        cycleOfs *= MathX.lerp(0.5f, 1, flutter) * MathX.lerp(1, 0.5f, ground);
 
         // updateFromAnimator body parts
         animHeadAndNeck();
@@ -223,7 +136,9 @@ public class DragonAnimator {
     /**
      * Updates the animation state. Called on every tick.
      */
-    public void tickingUpdate() {
+    @Override
+    public void tick() {
+        ClientDragonEntity dragon = this.dragon;
         if (!dragon.isEgg()) {
             setOnGround(!dragon.isFlying());
         }
@@ -249,7 +164,7 @@ public class DragonAnimator {
 
         float speedMax = 0.05f;
         float speedEnt = (float) (dragon.motionX * dragon.motionX + dragon.motionZ * dragon.motionZ);
-        float speedMulti = MathX.clamp(speedEnt / speedMax, 0, 1);
+        float speedMulti = MathX.clamp(speedEnt / speedMax);
 
         // update main animation timer
         float animAdd = 0.035f;
@@ -292,16 +207,9 @@ public class DragonAnimator {
         DragonBreathHelper.BreathState breathState = dragon.breathHelper.getCurrentBreathState();
         switch (breathState) {
             case IDLE: {  // breath is idle, handle bite attack
-                int ticksSinceLastAttack = dragon.getTicksSinceLastAttack();
-                final int JAW_OPENING_TIME_FOR_ATTACK = 5;
-                boolean jawFlag = (ticksSinceLastAttack >= 0 && ticksSinceLastAttack < JAW_OPENING_TIME_FOR_ATTACK);
-                biteTimer.add(jawFlag ? 0.2f : -0.2f);
+                biteTimer.add(this.ticksSinceLastAttack < JAW_OPENING_TIME_FOR_ATTACK ? 0.2F : -0.2F);
                 breathTimer.set(0.0F);
-
-                int roarticks = dragon.roarTicks;
-                final int JAW_OPENING_TIME_FOR_ROAR = 20;
-                boolean jawFlag1 = (roarticks >= 0 && roarticks < JAW_OPENING_TIME_FOR_ROAR);
-                roarTimer.add(jawFlag1 ? 0.2f : -0.2f);
+                roarTimer.add(this.ticksSinceLastRoar < JAW_OPENING_TIME_FOR_ROAR ? 0.2F : -0.2F);
                 break;
             }
             case STARTING: {
@@ -342,6 +250,13 @@ public class DragonAnimator {
         //yTrail.update(entity.posY - entity.getYOffset());
         yawTrail.update((float) yawAbs);
         pitchTrail.update(getBodyPitch(0.0F));
+
+        if (this.ticksSinceLastAttack < JAW_OPENING_TIME_FOR_ATTACK) {
+            ++this.ticksSinceLastAttack;
+        }
+        if (this.ticksSinceLastRoar < JAW_OPENING_TIME_FOR_ROAR) {
+            ++this.ticksSinceLastRoar;
+        }
     }
 
     public float getFlutterTime() {
@@ -352,20 +267,14 @@ public class DragonAnimator {
         return walk;
     }
 
-    public Vec3d getThroatPosition() {
-        if (!haveCalculatedAnimations) {
-            animate(0.0F);
-        }
-        return dragonHeadPositionHelper.getThroatPosition();
-    }
-
     protected void animHeadAndNeck() {
-        dragonHeadPositionHelper.calculateHeadAndNeck(animBase, flutter, sit, walk, speed, ground, lookYaw, lookPitch, breath);
+        this.setLook(lookYaw, lookPitch);
+        this.calculateHeadAndNeck();
         final float BITE_ANGLE = 0.72F;
         final float ROAR_ANGLE = 0.58F;
         final float BREATH_ANGLE = 0.67F;
         jawRotateAngleX = (bite * BITE_ANGLE + breath * BREATH_ANGLE + roar * ROAR_ANGLE);
-        jawRotateAngleX += (1 - MathX.sin(animBase)) * 0.1f * flutter;
+        jawRotateAngleX += (1 - MathHelper.sin(animBase)) * 0.1f * flutter;
     }
 
     protected void animWings() {
@@ -379,33 +288,33 @@ public class DragonAnimator {
 
         if (ground < 1) {
             // Hovering
-            wingArmFlutter[0] = 0.125f - MathX.cos(animBase) * 0.2f;
+            wingArmFlutter[0] = 0.125f - MathHelper.cos(animBase) * 0.2f;
             wingArmFlutter[1] = 0.25f;
-            wingArmFlutter[2] = (MathX.sin(animBase) + 0.125f) * 0.8f;
+            wingArmFlutter[2] = (MathHelper.sin(animBase) + 0.125f) * 0.8f;
 
             wingForearmFlutter[0] = 0;
             wingForearmFlutter[1] = -wingArmFlutter[1] * 2;
-            wingForearmFlutter[2] = -(MathX.sin(animBase + 2) + 0.5f) * 0.75f;
+            wingForearmFlutter[2] = -(MathHelper.sin(animBase + 2) + 0.5f) * 0.75f;
 
             // gliding
-            wingArmGlide[0] = -0.25f - MathX.cos(animBase * 2) * MathX.cos(animBase * 1.5f) * 0.04f;
+            wingArmGlide[0] = -0.25f - MathHelper.cos(animBase * 2) * MathHelper.cos(animBase * 1.5f) * 0.04f;
             wingArmGlide[1] = 0.25f;
-            wingArmGlide[2] = 0.35f + MathX.sin(animBase) * 0.05f;
+            wingArmGlide[2] = 0.35f + MathHelper.sin(animBase) * 0.05f;
 
             wingForearmGlide[0] = 0;
             wingForearmGlide[1] = -wingArmGlide[1] * 2;
-            wingForearmGlide[2] = -0.25f + (MathX.sin(animBase + 2) + 0.5f) * 0.05f;
+            wingForearmGlide[2] = -0.25f + (MathHelper.sin(animBase + 2) + 0.5f) * 0.05f;
         }
 
         if (ground > 0) {
             // standing
             wingArmGround[0] = 0;
-            wingArmGround[1] = 1.4f - MathX.sin(a1) * MathX.sin(a2) * 0.02f;
-            wingArmGround[2] = 0.8f + MathX.sin(a2) * MathX.sin(a3) * 0.05f;
+            wingArmGround[1] = 1.4f - MathHelper.sin(a1) * MathHelper.sin(a2) * 0.02f;
+            wingArmGround[2] = 0.8f + MathHelper.sin(a2) * MathHelper.sin(a3) * 0.05f;
 
             // walking
-            wingArmGround[1] += MathX.sin(moveTime * 0.5f) * 0.02f * walk;
-            wingArmGround[2] += MathX.cos(moveTime * 0.5f) * 0.05f * walk;
+            wingArmGround[1] += MathHelper.sin(moveTime * 0.5f) * 0.02f * walk;
+            wingArmGround[2] += MathHelper.cos(moveTime * 0.5f) * 0.05f * walk;
 
             wingForearmGround[0] = 0;
             wingForearmGround[1] = -wingArmGround[1] * 2;
@@ -435,7 +344,7 @@ public class DragonAnimator {
 
         // set wing finger angles
         float rotX = 0;
-        float rotYOfs = MathX.sin(a1) * MathX.sin(a2) * 0.03f;
+        float rotYOfs = MathHelper.sin(a1) * MathHelper.sin(a2) * 0.03f;
         float rotYMulti = 1;
 
         for (int i = 0; i < WING_FINGERS; i++) {
@@ -446,69 +355,65 @@ public class DragonAnimator {
     }
 
     protected void animTail(float partialTicks) {
-        tail.rotationPointX = 0;
-        tail.rotationPointY = 16;
-        tail.rotationPointZ = 62;
-        tail.rotateAngleX = 0;
-        tail.rotateAngleY = 0;
-        tail.rotateAngleZ = 0;
-
-        float rotXStand = 0;
+        Segment segment = this.tailSegments[0];
+        segment.posX = 0;
+        segment.posY = 16;
+        segment.posZ = 62;
+        segment.rotX = segment.rotY = segment.rotZ = 0.0F;
+        float sit = this.sit;
+        float base = this.animBase;
+        float flutterFactor = 0.04F * MathX.lerp(0.3F, 1.0F, this.flutter);
+        float ground = this.ground;
+        float speedFactor = 2.0F - 2.0F * this.speed;
         float rotYStand = 0;
-        float rotXSit = 0;
-        float rotYSit = 0;
         float rotXAir = 0;
-        float rotYAir = 0;
-
-        for (int i = 0; i < TAIL_SEGMENTS; i++) {
+        for (int i = 0; i < TAIL_SEGMENTS; ++i) {
             float vertMulti = (i + 1) / (float) TAIL_SEGMENTS;
 
             // idle
             float amp = 0.1f + i / (TAIL_SEGMENTS * 2f);
 
-            rotXStand = (i - TAIL_SEGMENTS * 0.6f) * -amp * 0.4f;
-            rotXStand += (MathX.sin(animBase * 0.2f) * MathX.sin(animBase * 0.37f) * 0.4f * amp - 0.1f) * (1 - sit);
-            rotXSit = rotXStand * 0.8f;
-
-            rotYStand = (rotYStand + MathX.sin(i * 0.45f + animBase * 0.5f)) * amp * 0.4f;
-            rotYSit = MathX.sin(vertMulti * MathX.PI_F) * MathX.PI_F * 1.2f - 0.5f; // curl to the left
-
-            rotXAir -= MathX.sin(i * 0.45f + animBase) * 0.04f * MathX.lerp(0.3f, 1, flutter);
-
+            rotYStand = (rotYStand + MathHelper.sin(i * 0.45f + base * 0.5f)) * amp * 0.4f;
+            float rotX = ((
+                    i - TAIL_SEGMENTS * 0.6F) * -amp * 0.4F +
+                    (MathHelper.sin(base * 0.2F) * MathHelper.sin(base * 0.37F) * 0.4F * amp - 0.1F) * (1 - sit)
+            ) * (sit * -0.2F + 1.0F); // sit = 0.8 * stand
             // interpolate between sitting and standing
-            tail.rotateAngleX = MathX.lerp(rotXStand, rotXSit, sit);
-            tail.rotateAngleY = MathX.lerp(rotYStand, rotYSit, sit);
-
-            // interpolate between flying and grounded
-            tail.rotateAngleX = MathX.lerp(rotXAir, tail.rotateAngleX, ground);
-            tail.rotateAngleY = MathX.lerp(rotYAir, tail.rotateAngleY, ground);
+            float rotY = MathX.lerp(
+                    rotYStand,
+                    MathHelper.sin(vertMulti * MathX.PI_F) * MathX.PI_F * 1.2F - 0.5F, // curl to the left
+                    sit
+            );
+            rotXAir -= MathHelper.sin(i * 0.45F + base) * flutterFactor;
 
             // body movement
-            float limit = 160 * vertMulti;
-            float yawOfs = MathX.clamp(yawTrail.get(partialTicks, 0, i + 1) * 2, -limit, limit);
-            float pitchOfs = MathX.clamp(pitchTrail.get(partialTicks, 0, i + 1) * 2, -limit, limit);
+            float limit = 80 * vertMulti;
+            float yawOfs = yawTrail.getClamped(partialTicks, 0, i + 1, limit) * 2;
+            float pitchOfs = pitchTrail.getClamped(partialTicks, 0, i + 1, limit) * 2;
 
-            tail.rotateAngleX += MathX.toRadians(pitchOfs);
-            tail.rotateAngleX -= (1 - speed) * vertMulti * 2;
-            tail.rotateAngleY += MathX.toRadians(180 - yawOfs);
+            // interpolate between flying and grounded
+            rotX = segment.rotX = MathX.lerp(rotXAir, rotX, ground)
+                    + MathX.toRadians(pitchOfs)
+                    - speedFactor * vertMulti;
+            rotY = segment.rotY = MathX.lerp(0, rotY, ground) + MathX.toRadians(180 - yawOfs);
 
             // update scale
-            float neckScale = MathX.lerp(1.5f, 0.3f, vertMulti);
-            tail.setScale(neckScale);
-
-            // update proxy
-            tailSegments[i] = tail.getCopy();
-
-            // move next proxy behind the current one
-            float tailSize = DragonModel.TAIL_SIZE * tail.scaleZ - 0.7f;
-            tail.rotationPointY += MathX.sin(tail.rotateAngleX) * tailSize;
-            tail.rotationPointZ -= MathX.cos(tail.rotateAngleY) * MathX.cos(tail.rotateAngleX) * tailSize;
-            tail.rotationPointX -= MathX.sin(tail.rotateAngleY) * MathX.cos(tail.rotateAngleX) * tailSize;
+            float scale = segment.scaleX = segment.scaleY = segment.scaleZ = MathX.lerp(1.5F, 0.3F, vertMulti);
+            // move next segment behind the current one
+            if (i + 1 == TAIL_SEGMENTS) return;
+            float posX = segment.posX, posY = segment.posY, posZ = segment.posZ;
+            float tailSize = DragonModel.TAIL_SIZE * scale - 0.7F;
+            float cosFactor = MathHelper.cos(rotX) * tailSize;
+            segment = this.tailSegments[i + 1];
+            segment.posX = posX - MathHelper.sin(rotY) * cosFactor;
+            segment.posY = posY + MathHelper.sin(rotX) * tailSize;
+            segment.posZ = posZ - MathHelper.cos(rotY) * cosFactor;
         }
     }
 
+    @Deprecated
     public float getBodyPitch(float pt) {
-        return Interpolation.smoothStep(60, 0, speed);
+        return this.getPitch();
        /* float pitchMovingMax = 90;
         float pitchMoving = MathX.clamp(yTrail.get(pt, 5, 0) * 10, -pitchMovingMax, pitchMovingMax);
         float pitchHoverMax = 60;
@@ -612,6 +517,4 @@ public class DragonAnimator {
     public float getLookYaw() {
         return lookYaw;
     }
-
-
 }

@@ -3,6 +3,7 @@ package net.dragonmounts.init;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.entity.CarriageEntity;
 import net.dragonmounts.entity.EntityContainerItemEntity;
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
@@ -13,8 +14,8 @@ import static net.dragonmounts.DragonMounts.makeId;
 public class DMEntities {
     public static final ResourceLocation DRAGON_ID = makeId("dragon");
     public static final EntityEntry DRAGON = EntityEntryBuilder.create()
-            .entity(TameableDragonEntity.class)
-            .factory(TameableDragonEntity::new)
+            .entity(ServerDragonEntity.class)
+            .factory(TameableDragonEntity::construct)
             .id(DRAGON_ID, 1)
             .tracker(80, 3, true)
             .name("dragonmounts.dragon")

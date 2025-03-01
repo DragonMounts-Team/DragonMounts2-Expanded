@@ -11,9 +11,9 @@ package net.dragonmounts.entity.ai;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DragonTypes;
+import net.dragonmounts.util.EntityUtil;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.Vec3d;
 
 /**
@@ -43,30 +43,29 @@ public class EntityAIDragonPlayerControl extends EntityAIDragonBase {
 
     @Override
     public void updateTask() {
+        TameableDragonEntity dragon = this.dragon;
         Vec3d wp = rider.getLook(1.0F);
 
         double x = dragon.posX;
         double y = dragon.posY;
         double z = dragon.posZ;
 
-        if (dragon.getVariant().type == DragonTypes.WATER) {
-            PotionEffect watereffect = new PotionEffect(MobEffects.WATER_BREATHING, 200);
-            if (!rider.isPotionActive(watereffect.getPotion()) && rider.isInWater()) { // If the Potion isn't currently active,
-                rider.addPotionEffect(watereffect); // Apply a copy of the PotionEffect to the player
-            }
+        if (dragon.getVariant().type == DragonTypes.WATER && this.rider.isInWater()) {
+            EntityUtil.addOrResetEffect(this.rider, MobEffects.WATER_BREATHING, 200, 0, true, true, 21);
         }
 
         // if we're breathing at a target, look at it
         if (dragon.isUsingBreathWeapon() && dragon.breathHelper.canBreathe()) {
-            Vec3d dragonEyePos = dragon.getPositionVector().add(0, dragon.getEyeHeight(), 0);
             Vec3d lookDirection = rider.getLook(1.0F);
-            Vec3d endOfLook = dragonEyePos.add(lookDirection.x, lookDirection.y, lookDirection.z);
+            Vec3d endOfLook = dragon.getPositionVector().add(
+                    lookDirection.x,
+                    lookDirection.y + dragon.getEyeHeight(),
+                    lookDirection.z
+            );
             dragon.getLookHelper().setLookPosition(endOfLook.x, endOfLook.y, endOfLook.z,
                     90, 120);
             dragon.updateIntendedRideRotation(rider);
-        }
-
-        if (dragon.followYaw() && dragon.moveStrafing == 0) {
+        } else if (dragon.followYaw() && dragon.moveStrafing == 0) {
             dragon.updateIntendedRideRotation(rider);
         }
 

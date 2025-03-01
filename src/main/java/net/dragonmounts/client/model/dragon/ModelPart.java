@@ -9,7 +9,7 @@
  */
 package net.dragonmounts.client.model.dragon;
 
-import net.dragonmounts.entity.helper.SegmentSizePositionRotation;
+import net.dragonmounts.util.Segment;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -142,16 +142,16 @@ public class ModelPart extends ModelRenderer {
         }
     }
 
-    public void applySegment(SegmentSizePositionRotation segment) {
-        this.rotateAngleX = takeInValid(segment.rotateAngleX, this.rotateAngleX);
-        this.rotateAngleY = takeInValid(segment.rotateAngleY, this.rotateAngleY);
-        this.rotateAngleZ = takeInValid(segment.rotateAngleZ, this.rotateAngleZ);
+    public void applySegment(Segment segment) {
+        this.rotateAngleX = takeInValid(segment.rotX, this.rotateAngleX);
+        this.rotateAngleY = takeInValid(segment.rotY, this.rotateAngleY);
+        this.rotateAngleZ = takeInValid(segment.rotZ, this.rotateAngleZ);
         this.renderScaleX = takeInValid(segment.scaleX, this.renderScaleX);
         this.renderScaleY = takeInValid(segment.scaleY, this.renderScaleY);
         this.renderScaleZ = takeInValid(segment.scaleZ, this.renderScaleZ);
-        this.rotationPointX = takeInValid(segment.rotationPointX, this.rotationPointX);
-        this.rotationPointY = takeInValid(segment.rotationPointY, this.rotationPointY);
-        this.rotationPointZ = takeInValid(segment.rotationPointZ, this.rotationPointZ);
+        this.rotationPointX = takeInValid(segment.posX, this.rotationPointX);
+        this.rotationPointY = takeInValid(segment.posY, this.rotationPointY);
+        this.rotationPointZ = takeInValid(segment.posZ, this.rotationPointZ);
     }
 
     /**

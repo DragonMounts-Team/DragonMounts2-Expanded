@@ -9,12 +9,14 @@
  */
 package net.dragonmounts;
 
+import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.gui.GuiHandler;
 import net.dragonmounts.command.DragonCommandTree;
 import net.dragonmounts.compat.BaublesCompat;
 import net.dragonmounts.compat.DragonMountsCompat;
 import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.event.RegistryEventHandler;
+import net.dragonmounts.init.DMEntities;
 import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.init.DMItems;
 import net.dragonmounts.proxy.ServerProxy;
@@ -23,13 +25,11 @@ import net.minecraftforge.fml.common.*;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.Mod.Metadata;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.GameData;
 
 @Mod(
         modid = DragonMountsTags.MOD_ID,
@@ -82,6 +82,11 @@ public class DragonMounts {
     @EventHandler
     public void ServerStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new DragonCommandTree());
+    }
+
+    @EventHandler
+    public static void registerEntityMapping(FMLModIdMappingEvent event) {
+        GameData.getEntityClassMap().put(ClientDragonEntity.class, DMEntities.DRAGON);
     }
 
     @Instance(value = DragonMountsTags.MOD_ID)

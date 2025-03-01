@@ -26,7 +26,7 @@ public class DMConfig {
     public static final DoubleEntry BASE_ARMOR = new DoubleEntry("baseArmor", 8.0);
     public static final DoubleEntry BASE_DAMAGE = new DoubleEntry("baseDamage", 12.0);
     public static final DoubleEntry BASE_HEALTH = new DoubleEntry("baseHealth", 90.0);
-    public static final DoubleEntry BASE_STEP_HEIGHT = new DoubleEntry("baseStepHeight", 1.5);
+    public static final DoubleEntry BASE_STEP_HEIGHT = new DoubleEntry("baseStepHeight", 1.25);
     public static final DoubleEntry BASE_FLYING_SPEED = new DoubleEntry("baseFlyingSpeed", 0.9);
     // GAMEPLAY:
     public static final BooleanEntry FORCED_RENAME = new BooleanEntry("forcedRename", false);
