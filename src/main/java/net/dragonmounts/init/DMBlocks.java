@@ -1,9 +1,7 @@
 package net.dragonmounts.init;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.dragonmounts.block.DragonCoreBlock;
-import net.dragonmounts.block.DragonNestBlock;
-import net.dragonmounts.block.HatchableDragonEggBlock;
+import net.dragonmounts.block.*;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.BlockProperties;
 import net.minecraft.block.Block;
@@ -16,6 +14,24 @@ public class DMBlocks {
     public static final ObjectArrayList<Block> BLOCKS = new ObjectArrayList<>();
     public static final DragonNestBlock DRAGON_NEST = register("dragon_nest", new DragonNestBlock());
     public static final DragonCoreBlock DRAGON_CORE = register("dragon_core", new DragonCoreBlock());
+
+    public static final Block AETHER_DRAGON_SCALES_BLOCK = register("aether_dragon_scales_block", new DragonScalesBlock(DragonMountMaterial.AETHER_DRAGON_SCALES));
+    public static final Block WATER_DRAGON_SCALES_BLOCK = register("water_dragon_scales_block", new DragonScalesBlock(DragonMountMaterial.WATER_DRAGON_SCALES));
+    public static final Block ICE_DRAGON_SCALES_BLOCK = register("ice_dragon_scales_block", new DragonScalesBlock(DragonMountMaterial.ICE_DRAGON_SCALES));
+    public static final Block FIRE_DRAGON_SCALES_BLOCK = register("fire_dragon_scales_block", new DragonScalesBlock(DragonMountMaterial.FIRE_DRAGON_SCALES));
+    public static final Block FOREST_DRAGON_SCALES_BLOCK = register("forest_dragon_scales_block", new DragonScalesBlock(DragonMountMaterial.FOREST_DRAGON_SCALES));
+    public static final Block NETHER_DRAGON_SCALES_BLOCK = register("nether_dragon_scales_block", new DragonScalesBlock(DragonMountMaterial.NETHER_DRAGON_SCALES));
+    public static final Block ENDER_DRAGON_SCALES_BLOCK = register("ender_dragon_scales_block", new DragonScalesBlock(DragonMountMaterial.ENDER_DRAGON_SCALES));
+    public static final Block ENCHANT_DRAGON_SCALES_BLOCK = register("enchant_dragon_scales_block", new DragonScalesBlock(DragonMountMaterial.ENCHANT_DRAGON_SCALES));
+    public static final Block SUNLIGHT_DRAGON_SCALES_BLOCK = register("sunlight_dragon_scales_block", new DragonScalesBlock(DragonMountMaterial.SUNLIGHT_DRAGON_SCALES));
+    public static final Block MOONLIGHT_DRAGON_SCALES_BLOCK = register("moonlight_dragon_scales_block", new DragonScalesBlock(DragonMountMaterial.MOONLIGHT_DRAGON_SCALES));
+    public static final Block STORM_DRAGON_SCALES_BLOCK = register("storm_dragon_scales_block", new DragonScalesBlock(DragonMountMaterial.STORM_DRAGON_SCALES));
+    public static final Block TERRA_DRAGON_SCALES_BLOCK = register("terra_dragon_scales_block", new DragonScalesBlock(DragonMountMaterial.TERRA_DRAGON_SCALES));
+    public static final Block ZOMBIE_DRAGON_SCALES_BLOCK = register("zombie_dragon_scales_block", new DragonScalesBlock(DragonMountMaterial.ZOMBIE_DRAGON_SCALES));
+    public static final Block DARK_DRAGON_SCALES_BLOCK = register("dark_dragon_scales_block", new DragonScalesBlock(DragonMountMaterial.DARK_DRAGON_SCALES));
+
+
+
     public static final HatchableDragonEggBlock AETHER_DRAGON_EGG;
     public static final HatchableDragonEggBlock ENCHANT_DRAGON_EGG;
     public static final HatchableDragonEggBlock ENDER_DRAGON_EGG;

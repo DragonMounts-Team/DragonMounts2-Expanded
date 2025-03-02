@@ -68,6 +68,7 @@ tile.dragonmounts.dragon_nest.name=龙巢方块
 tile.dragonmounts.dragon_core.name=龙核心
 tile.dragonmounts.dragon_head.name=龙首
 tile.dragonmounts.dragon_egg.name=龙蛋
+tile.dragonmounts.dragon_scales_block.name=龙鳞块
 
 message.dragonmounts.control.toggleHovering=悬停状态：%s
 message.dragonmounts.control.toggleYawAlignment=偏航角趋同：%s

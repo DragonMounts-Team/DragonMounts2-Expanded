@@ -27,10 +27,39 @@ public class DMItems {
     //Blocks
     public static final CraftableBlockItem DRAGON_NEST = new CraftableBlockItem(DMBlocks.DRAGON_NEST, DMItemGroups.MAIN);
     public static final ItemBlock DRAGON_CORE = new ItemBlock(DMBlocks.DRAGON_CORE);
+    public static final ItemBlock AETHER_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.AETHER_DRAGON_SCALES_BLOCK, DragonTypes.AETHER);
+    public static final ItemBlock WATER_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.WATER_DRAGON_SCALES_BLOCK, DragonTypes.WATER);
+    public static final ItemBlock ICE_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.ICE_DRAGON_SCALES_BLOCK, DragonTypes.ICE);
+    public static final ItemBlock FIRE_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.FIRE_DRAGON_SCALES_BLOCK, DragonTypes.FIRE);
+    public static final ItemBlock FOREST_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.FOREST_DRAGON_SCALES_BLOCK, DragonTypes.FOREST);
+    public static final ItemBlock NETHER_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.NETHER_DRAGON_SCALES_BLOCK, DragonTypes.NETHER);
+    public static final ItemBlock ENDER_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.ENDER_DRAGON_SCALES_BLOCK, DragonTypes.ENDER);
+    public static final ItemBlock ENCHANT_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.ENCHANT_DRAGON_SCALES_BLOCK, DragonTypes.ENCHANT);
+    public static final ItemBlock SUNLIGHT_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.SUNLIGHT_DRAGON_SCALES_BLOCK, DragonTypes.SUNLIGHT);
+    public static final ItemBlock MOONLIGHT_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.MOONLIGHT_DRAGON_SCALES_BLOCK, DragonTypes.MOONLIGHT);
+    public static final ItemBlock STORM_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.STORM_DRAGON_SCALES_BLOCK, DragonTypes.STORM);
+    public static final ItemBlock TERRA_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.TERRA_DRAGON_SCALES_BLOCK, DragonTypes.TERRA);
+    public static final ItemBlock ZOMBIE_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.ZOMBIE_DRAGON_SCALES_BLOCK, DragonTypes.ZOMBIE);
+    public static final ItemBlock DARK_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.DARK_DRAGON_SCALES_BLOCK, DragonTypes.DARK);
 
     static {
         ITEMS.add(DRAGON_NEST.setRegistryName("dragon_nest"));
         ITEMS.add(DRAGON_CORE.setRegistryName("dragon_core"));
+        ITEMS.add(AETHER_DRAGON_SCALES_BLOCK.setRegistryName("aether_dragon_scales_block"));
+        ITEMS.add(WATER_DRAGON_SCALES_BLOCK.setRegistryName("water_dragon_scales_block"));
+        ITEMS.add(ICE_DRAGON_SCALES_BLOCK.setRegistryName("ice_dragon_scales_block"));
+        ITEMS.add(FIRE_DRAGON_SCALES_BLOCK.setRegistryName("fire_dragon_scales_block"));
+        ITEMS.add(FOREST_DRAGON_SCALES_BLOCK.setRegistryName("forest_dragon_scales_block"));
+        ITEMS.add(NETHER_DRAGON_SCALES_BLOCK.setRegistryName("nether_dragon_scales_block"));
+        ITEMS.add(ENDER_DRAGON_SCALES_BLOCK.setRegistryName("ender_dragon_scales_block"));
+        ITEMS.add(ENCHANT_DRAGON_SCALES_BLOCK.setRegistryName("enchant_dragon_scales_block"));
+        ITEMS.add(SUNLIGHT_DRAGON_SCALES_BLOCK.setRegistryName("sunlight_dragon_scales_block"));
+        ITEMS.add(MOONLIGHT_DRAGON_SCALES_BLOCK.setRegistryName("moonlight_dragon_scales_block"));
+        ITEMS.add(STORM_DRAGON_SCALES_BLOCK.setRegistryName("storm_dragon_scales_block"));
+        ITEMS.add(TERRA_DRAGON_SCALES_BLOCK.setRegistryName("terra_dragon_scales_block"));
+        ITEMS.add(ZOMBIE_DRAGON_SCALES_BLOCK.setRegistryName("zombie_dragon_scales_block"));
+        ITEMS.add(DARK_DRAGON_SCALES_BLOCK.setRegistryName("dark_dragon_scales_block"));
+
     }
     //Scales Start
     public static final DragonScalesItem FOREST_DRAGON_SCALES = createDragonScalesItem("forest_dragon_scales", DragonTypes.FOREST);

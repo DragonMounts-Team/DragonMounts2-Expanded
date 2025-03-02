@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "dragon_scales_block",
+  "pattern": [
+    "X"
+  ],
+  "key": {
+    "X": {
+      "item": "dragonmounts:aether_dragon_scales_block"
+    }
+  },
+  "result": {
+    "item": "dragonmounts:aether_dragon_scales",
+    "count": 9
+  }
+}
