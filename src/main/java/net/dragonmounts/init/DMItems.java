@@ -17,6 +17,8 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.function.Consumer;
+
 import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
 
 @MethodsReturnNonnullByDefault
@@ -25,41 +27,11 @@ public class DMItems {
     public static final ReferenceOpenHashSet<Item> DRAGON_INTERACTABLE = new ReferenceOpenHashSet<>();
 
     //Blocks
-    public static final CraftableBlockItem DRAGON_NEST = new CraftableBlockItem(DMBlocks.DRAGON_NEST, DMItemGroups.MAIN);
+    public static final CraftableBlockItem DRAGON_NEST = new CraftableBlockItem(DMBlocks.DRAGON_NEST, DMItemGroups.BLOCKS);
     public static final ItemBlock DRAGON_CORE = new ItemBlock(DMBlocks.DRAGON_CORE);
-    public static final ItemBlock AETHER_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.AETHER_DRAGON_SCALES_BLOCK, DragonTypes.AETHER);
-    public static final ItemBlock WATER_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.WATER_DRAGON_SCALES_BLOCK, DragonTypes.WATER);
-    public static final ItemBlock ICE_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.ICE_DRAGON_SCALES_BLOCK, DragonTypes.ICE);
-    public static final ItemBlock FIRE_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.FIRE_DRAGON_SCALES_BLOCK, DragonTypes.FIRE);
-    public static final ItemBlock FOREST_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.FOREST_DRAGON_SCALES_BLOCK, DragonTypes.FOREST);
-    public static final ItemBlock NETHER_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.NETHER_DRAGON_SCALES_BLOCK, DragonTypes.NETHER);
-    public static final ItemBlock ENDER_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.ENDER_DRAGON_SCALES_BLOCK, DragonTypes.ENDER);
-    public static final ItemBlock ENCHANT_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.ENCHANT_DRAGON_SCALES_BLOCK, DragonTypes.ENCHANT);
-    public static final ItemBlock SUNLIGHT_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.SUNLIGHT_DRAGON_SCALES_BLOCK, DragonTypes.SUNLIGHT);
-    public static final ItemBlock MOONLIGHT_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.MOONLIGHT_DRAGON_SCALES_BLOCK, DragonTypes.MOONLIGHT);
-    public static final ItemBlock STORM_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.STORM_DRAGON_SCALES_BLOCK, DragonTypes.STORM);
-    public static final ItemBlock TERRA_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.TERRA_DRAGON_SCALES_BLOCK, DragonTypes.TERRA);
-    public static final ItemBlock ZOMBIE_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.ZOMBIE_DRAGON_SCALES_BLOCK, DragonTypes.ZOMBIE);
-    public static final ItemBlock DARK_DRAGON_SCALES_BLOCK = new DragonScalesBlockItem(DMBlocks.DARK_DRAGON_SCALES_BLOCK, DragonTypes.DARK);
-
     static {
         ITEMS.add(DRAGON_NEST.setRegistryName("dragon_nest"));
         ITEMS.add(DRAGON_CORE.setRegistryName("dragon_core"));
-        ITEMS.add(AETHER_DRAGON_SCALES_BLOCK.setRegistryName("aether_dragon_scales_block"));
-        ITEMS.add(WATER_DRAGON_SCALES_BLOCK.setRegistryName("water_dragon_scales_block"));
-        ITEMS.add(ICE_DRAGON_SCALES_BLOCK.setRegistryName("ice_dragon_scales_block"));
-        ITEMS.add(FIRE_DRAGON_SCALES_BLOCK.setRegistryName("fire_dragon_scales_block"));
-        ITEMS.add(FOREST_DRAGON_SCALES_BLOCK.setRegistryName("forest_dragon_scales_block"));
-        ITEMS.add(NETHER_DRAGON_SCALES_BLOCK.setRegistryName("nether_dragon_scales_block"));
-        ITEMS.add(ENDER_DRAGON_SCALES_BLOCK.setRegistryName("ender_dragon_scales_block"));
-        ITEMS.add(ENCHANT_DRAGON_SCALES_BLOCK.setRegistryName("enchant_dragon_scales_block"));
-        ITEMS.add(SUNLIGHT_DRAGON_SCALES_BLOCK.setRegistryName("sunlight_dragon_scales_block"));
-        ITEMS.add(MOONLIGHT_DRAGON_SCALES_BLOCK.setRegistryName("moonlight_dragon_scales_block"));
-        ITEMS.add(STORM_DRAGON_SCALES_BLOCK.setRegistryName("storm_dragon_scales_block"));
-        ITEMS.add(TERRA_DRAGON_SCALES_BLOCK.setRegistryName("terra_dragon_scales_block"));
-        ITEMS.add(ZOMBIE_DRAGON_SCALES_BLOCK.setRegistryName("zombie_dragon_scales_block"));
-        ITEMS.add(DARK_DRAGON_SCALES_BLOCK.setRegistryName("dark_dragon_scales_block"));
-
     }
     //Scales Start
     public static final DragonScalesItem FOREST_DRAGON_SCALES = createDragonScalesItem("forest_dragon_scales", DragonTypes.FOREST);
@@ -76,13 +48,11 @@ public class DMItems {
     public static final DragonScalesItem ZOMBIE_DRAGON_SCALES = createDragonScalesItem("zombie_dragon_scales", DragonTypes.ZOMBIE);
     public static final DragonScalesItem MOONLIGHT_DRAGON_SCALES = createDragonScalesItem("moonlight_dragon_scales", DragonTypes.MOONLIGHT);
     public static final DragonScalesItem DARK_DRAGON_SCALES = createDragonScalesItem("dark_dragon_scales", DragonTypes.DARK);
-
     //Dragon Armor
     public static final DragonArmorItem IRON_DRAGON_ARMOR = createDragonArmorItem("iron_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "iron.png", 3);
     public static final DragonArmorItem GOLDEN_DRAGON_ARMOR = createDragonArmorItem("golden_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "gold.png", 5);
     public static final DragonArmorItem DIAMOND_DRAGON_ARMOR = createDragonArmorItem("diamond_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "diamond.png", 9);
     public static final DragonArmorItem EMERALD_DRAGON_ARMOR = createDragonArmorItem("emerald_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "emerald.png", 3);
-
     //Dragon Scale Swords
     public static final DragonScaleSwordItem AETHER_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("aether_dragon_scale_sword", DragonTypes.AETHER, DMTiers.AETHER_DRAGON_SCALE);
     public static final DragonScaleSwordItem WATER_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("water_dragon_scale_sword", DragonTypes.WATER, DMTiers.WATER_DRAGON_SCALE);
@@ -98,7 +68,6 @@ public class DMItems {
     public static final DragonScaleSwordItem TERRA_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("terra_dragon_scale_sword", DragonTypes.TERRA, DMTiers.TERRA_DRAGON_SCALE);
     public static final DragonScaleSwordItem ZOMBIE_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("zombie_dragon_scale_sword", DragonTypes.ZOMBIE, DMTiers.ZOMBIE_DRAGON_SCALE);
     public static final DragonScaleSwordItem DARK_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("dark_dragon_scale_sword", DragonTypes.DARK, DMTiers.DARK_DRAGON_SCALE);
-
     //Dragon Scale Axes
     public static final DragonScaleAxeItem AETHER_DRAGON_SCALE_AXE = createDragonScaleAxeItem("aether_dragon_scale_axe", DragonTypes.AETHER, DMTiers.AETHER_DRAGON_SCALE);
     public static final DragonScaleAxeItem WATER_DRAGON_SCALE_AXE = createDragonScaleAxeItem("water_dragon_scale_axe", DragonTypes.WATER, DMTiers.WATER_DRAGON_SCALE);
@@ -114,7 +83,6 @@ public class DMItems {
     public static final DragonScaleAxeItem TERRA_DRAGON_SCALE_AXE = createDragonScaleAxeItem("terra_dragon_scale_axe", DragonTypes.TERRA, DMTiers.TERRA_DRAGON_SCALE);
     public static final DragonScaleAxeItem ZOMBIE_DRAGON_SCALE_AXE = createDragonScaleAxeItem("zombie_dragon_scale_axe", DragonTypes.ZOMBIE, DMTiers.ZOMBIE_DRAGON_SCALE);
     public static final DragonScaleAxeItem DARK_DRAGON_SCALE_AXE = createDragonScaleAxeItem("dark_dragon_scale_axe", DragonTypes.DARK, DMTiers.DARK_DRAGON_SCALE);
-
     //Dragon Scale Bows
     public static final DragonScaleBowItem AETHER_DRAGON_SCALE_BOW = createDragonScaleBowItem("aether_dragon_scale_bow", DragonTypes.AETHER, DMTiers.AETHER_DRAGON_SCALE);
     public static final DragonScaleBowItem WATER_DRAGON_SCALE_BOW = createDragonScaleBowItem("water_dragon_scale_bow", DragonTypes.WATER, DMTiers.WATER_DRAGON_SCALE);
@@ -130,7 +98,6 @@ public class DMItems {
     public static final DragonScaleBowItem TERRA_DRAGON_SCALE_BOW = createDragonScaleBowItem("terra_dragon_scale_bow", DragonTypes.TERRA, DMTiers.TERRA_DRAGON_SCALE);
     public static final DragonScaleBowItem ZOMBIE_DRAGON_SCALE_BOW = createDragonScaleBowItem("zombie_dragon_scale_bow", DragonTypes.ZOMBIE, DMTiers.ZOMBIE_DRAGON_SCALE);
     public static final DragonScaleBowItem DARK_DRAGON_SCALE_BOW = createDragonScaleBowItem("dark_dragon_scale_bow", DragonTypes.DARK, DMTiers.DARK_DRAGON_SCALE);
-
     //Dragon Scale Shields
     public static final DragonScaleShieldItem AETHER_DRAGON_SCALE_SHIELD = createDragonScaleShieldItem("aether_dragon_scale_shield", DragonTypes.AETHER, DMMaterials.AETHER_DRAGON_SCALE);
     public static final DragonScaleShieldItem WATER_DRAGON_SCALE_SHIELD = createDragonScaleShieldItem("water_dragon_scale_shield", DragonTypes.WATER, DMMaterials.WATER_DRAGON_SCALE);
@@ -146,7 +113,6 @@ public class DMItems {
     public static final DragonScaleShieldItem TERRA_DRAGON_SCALE_SHIELD = createDragonScaleShieldItem("terra_dragon_scale_shield", DragonTypes.TERRA, DMMaterials.TERRA_DRAGON_SCALE);
     public static final DragonScaleShieldItem ZOMBIE_DRAGON_SCALE_SHIELD = createDragonScaleShieldItem("zombie_dragon_scale_shield", DragonTypes.ZOMBIE, DMMaterials.ZOMBIE_DRAGON_SCALE);
     public static final DragonScaleShieldItem DARK_DRAGON_SCALE_SHIELD = createDragonScaleShieldItem("dark_dragon_scale_shield", DragonTypes.DARK, DMMaterials.DARK_DRAGON_SCALE);
-
     //Dragon Scale Tools - Aether
     public static final DragonScaleShovelItem AETHER_DRAGON_SCALE_SHOVEL = createDragonScaleShovelItem("aether_dragon_scale_shovel", DragonTypes.AETHER, DMTiers.AETHER_DRAGON_SCALE);
     public static final DragonScalePickaxeItem AETHER_DRAGON_SCALE_PICKAXE = createDragonScalePickaxeItem("aether_dragon_scale_pickaxe", DragonTypes.AETHER, DMTiers.AETHER_DRAGON_SCALE);
@@ -203,7 +169,6 @@ public class DMItems {
     public static final DragonScaleShovelItem DARK_DRAGON_SCALE_SHOVEL = createDragonScaleShovelItem("dark_dragon_scale_shovel", DragonTypes.DARK, DMTiers.DARK_DRAGON_SCALE);
     public static final DragonScalePickaxeItem DARK_DRAGON_SCALE_PICKAXE = createDragonScalePickaxeItem("dark_dragon_scale_pickaxe", DragonTypes.DARK, DMTiers.DARK_DRAGON_SCALE);
     public static final DragonScaleHoeItem DARK_DRAGON_SCALE_HOE = createDragonScaleHoeItem("dark_dragon_scale_hoe", DragonTypes.DARK, DMTiers.DARK_DRAGON_SCALE);
-
     //Dragon Scale Armors
     public static final DragonScaleArmorSuit AETHER_DRAGON_SCALE_ARMORS = createDragonScaleArmors(
             "aether_dragon_scale_helmet",
@@ -331,39 +296,12 @@ public class DMItems {
             DragonTypes.DARK,
             DMArmorEffects.DARK_EFFECT
     );
-
-    //Dragon Spawn Eggs
-    public static final DragonSpawnEggItem AETHER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("aether_dragon_spawn_egg", DragonTypes.AETHER, 0x06E9FA, 0x281EE7);
-    public static final DragonSpawnEggItem DARK_DRAGON_SPAWN_EGG = createDragonSpawnEgg("dark_dragon_spawn_egg", DragonTypes.DARK, 0x222121, 0x971B1B);
-    public static final DragonSpawnEggItem ENCHANT_DRAGON_SPAWN_EGG = createDragonSpawnEgg("enchant_dragon_spawn_egg", DragonTypes.ENCHANT, 0xF30FFF, 0xD7D7D7);
-    public static final DragonSpawnEggItem ENDER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("ender_dragon_spawn_egg", DragonTypes.ENDER, 0x1D1D24, 0x900996);
-    public static final DragonSpawnEggItem FIRE_DRAGON_SPAWN_EGG = createDragonSpawnEgg("fire_dragon_spawn_egg", DragonTypes.FIRE, 0x9F2909, 0xF7A502);
-    public static final DragonSpawnEggItem FOREST_DRAGON_SPAWN_EGG = createDragonSpawnEgg("forest_dragon_spawn_egg", DragonTypes.FOREST, 0x28AA29, 0x024F06);
-    public static final DragonSpawnEggItem ICE_DRAGON_SPAWN_EGG = createDragonSpawnEgg("ice_dragon_spawn_egg", DragonTypes.ICE, 0xD7D7D7, 0xB3FFF8);
-    public static final DragonSpawnEggItem MOONLIGHT_DRAGON_SPAWN_EGG = createDragonSpawnEgg("moonlight_dragon_spawn_egg", DragonTypes.MOONLIGHT, 0x002A95, 0xDAF3AF);
-    public static final DragonSpawnEggItem NETHER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("nether_dragon_spawn_egg", DragonTypes.NETHER, 0xF79C03, 0x9E4B2B);
-    public static final DragonSpawnEggItem SKELETON_DRAGON_SPAWN_EGG = createDragonSpawnEgg("skeleton_dragon_spawn_egg", DragonTypes.SKELETON, 0xD7D7D7, 0x727F82);
-    public static final DragonSpawnEggItem STORM_DRAGON_SPAWN_EGG = createDragonSpawnEgg("storm_dragon_spawn_egg", DragonTypes.STORM, 0x023C54, 0x0DA2C7);
-    public static final DragonSpawnEggItem SUNLIGHT_DRAGON_SPAWN_EGG = createDragonSpawnEgg("sunlight_dragon_spawn_egg", DragonTypes.SUNLIGHT, 0xF07F07, 0xF2EA04);
-    public static final DragonSpawnEggItem TERRA_DRAGON_SPAWN_EGG = createDragonSpawnEgg("terra_dragon_spawn_egg", DragonTypes.TERRA, 0x543813, 0xB3782A);
-    public static final DragonSpawnEggItem WATER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("water_dragon_spawn_egg", DragonTypes.WATER, 0x4F6AA6, 0x223464);
-    public static final DragonSpawnEggItem WITHER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("wither_dragon_spawn_egg", DragonTypes.WITHER, 0x839292, 0x383F40);
-    public static final DragonSpawnEggItem ZOMBIE_DRAGON_SPAWN_EGG = createDragonSpawnEgg("zombie_dragon_spawn_egg", DragonTypes.ZOMBIE, 0x56562E, 0xA7BF2F);
-    //?
-    public static final VariationOrbItem VARIATION_ORB = createItem("variation_orb", new VariationOrbItem());
-    public static final DragonWandItem DRAGON_WAND = createItem("dragon_wand", new DragonWandItem());
-    public static final DragonWhistleItem DRAGON_WHISTLE = createItem("dragon_whistle", new DragonWhistleItem());
-    //Shears
-    public static final HardShearsItem DIAMOND_SHEARS = createHardShearsItem("diamond_shears", Item.ToolMaterial.DIAMOND, 345);
-    //Carriages
-    public static final CarriageItem ACACIA_CARRIAGE = createItem("acacia_carriage", new CarriageItem(CarriageTypes.ACACIA));
-    public static final CarriageItem BIRCH_CARRIAGE = createItem("birch_carriage", new CarriageItem(CarriageTypes.BIRCH));
-    public static final CarriageItem DARK_OAK_CARRIAGE = createItem("dark_oak_carriage", new CarriageItem(CarriageTypes.DARK_OAK));
-    public static final CarriageItem JUNGLE_CARRIAGE = createItem("jungle_carriage", new CarriageItem(CarriageTypes.JUNGLE));
-    public static final CarriageItem OAK_CARRIAGE = createItem("oak_carriage", new CarriageItem(CarriageTypes.OAK));
-    public static final CarriageItem SPRUCE_CARRIAGE = createItem("spruce_carriage", new CarriageItem(CarriageTypes.SPRUCE));
     //Dragon Amulets
-    public static final AmuletItem<Entity> AMULET = new AmuletItem<>(Entity.class);
+    public static final AmuletItem<Entity> AMULET = createItem(
+            "amulet",
+            new AmuletItem<>(Entity.class),
+            amulet -> DRAGON_INTERACTABLE.add(amulet.setTranslationKey(DragonAmuletItem.TRANSLATION_KEY).setCreativeTab(DMItemGroups.ITEMS))
+    );
     public static final DragonAmuletItem FOREST_DRAGON_AMULET = createDragonAmuletItem("forest_dragon_amulet", DragonTypes.FOREST);
     public static final DragonAmuletItem FIRE_DRAGON_AMULET = createDragonAmuletItem("fire_dragon_amulet", DragonTypes.FIRE);
     public static final DragonAmuletItem ICE_DRAGON_AMULET = createDragonAmuletItem("ice_dragon_amulet", DragonTypes.ICE);
@@ -380,6 +318,27 @@ public class DMItems {
     public static final DragonAmuletItem SKELETON_DRAGON_AMULET = createDragonAmuletItem("skeleton_dragon_amulet", DragonTypes.SKELETON);
     public static final DragonAmuletItem WITHER_DRAGON_AMULET = createDragonAmuletItem("wither_dragon_amulet", DragonTypes.WITHER);
     public static final DragonAmuletItem DARK_DRAGON_AMULET = createDragonAmuletItem("dark_dragon_amulet", DragonTypes.DARK);
+    //Tools
+    public static final DragonWandItem DRAGON_WAND = createItem(
+            "dragon_wand",
+            new DragonWandItem(),
+            item -> DRAGON_INTERACTABLE.add(item.setTranslationKey(TRANSLATION_KEY_PREFIX + "dragon_wand"))
+    );
+    public static final DragonWhistleItem DRAGON_WHISTLE = createItem(
+            "dragon_whistle",
+            new DragonWhistleItem(),
+            whistle -> DRAGON_INTERACTABLE.add(whistle.setTranslationKey(DragonWhistleItem.TRANSLATION_KEY).setCreativeTab(DMItemGroups.ITEMS))
+    );
+    public static final VariationOrbItem VARIATION_ORB = createItem("variation_orb", new VariationOrbItem());
+    //Shears
+    public static final HardShearsItem DIAMOND_SHEARS = createHardShearsItem("diamond_shears", Item.ToolMaterial.DIAMOND, 345);
+    //Carriages
+    public static final CarriageItem ACACIA_CARRIAGE = createItem("acacia_carriage", new CarriageItem(CarriageTypes.ACACIA));
+    public static final CarriageItem BIRCH_CARRIAGE = createItem("birch_carriage", new CarriageItem(CarriageTypes.BIRCH));
+    public static final CarriageItem DARK_OAK_CARRIAGE = createItem("dark_oak_carriage", new CarriageItem(CarriageTypes.DARK_OAK));
+    public static final CarriageItem JUNGLE_CARRIAGE = createItem("jungle_carriage", new CarriageItem(CarriageTypes.JUNGLE));
+    public static final CarriageItem OAK_CARRIAGE = createItem("oak_carriage", new CarriageItem(CarriageTypes.OAK));
+    public static final CarriageItem SPRUCE_CARRIAGE = createItem("spruce_carriage", new CarriageItem(CarriageTypes.SPRUCE));
     //Dragon Essences
     public static final DragonEssenceItem FOREST_DRAGON_ESSENCE = createDragonEssenceItem("forest_dragon_essence", DragonTypes.FOREST);
     public static final DragonEssenceItem FIRE_DRAGON_ESSENCE = createDragonEssenceItem("fire_dragon_essence", DragonTypes.FIRE);
@@ -397,12 +356,35 @@ public class DMItems {
     public static final DragonEssenceItem SKELETON_DRAGON_ESSENCE = createDragonEssenceItem("skeleton_dragon_essence", DragonTypes.SKELETON);
     public static final DragonEssenceItem WITHER_DRAGON_ESSENCE = createDragonEssenceItem("wither_dragon_essence", DragonTypes.WITHER);
     public static final DragonEssenceItem DARK_DRAGON_ESSENCE = createDragonEssenceItem("dark_dragon_essence", DragonTypes.DARK);
+    //Dragon Spawn Eggs
+    public static final DragonSpawnEggItem AETHER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("aether_dragon_spawn_egg", DragonTypes.AETHER, 0x06E9FA, 0x281EE7);
+    public static final DragonSpawnEggItem DARK_DRAGON_SPAWN_EGG = createDragonSpawnEgg("dark_dragon_spawn_egg", DragonTypes.DARK, 0x222121, 0x971B1B);
+    public static final DragonSpawnEggItem ENCHANT_DRAGON_SPAWN_EGG = createDragonSpawnEgg("enchant_dragon_spawn_egg", DragonTypes.ENCHANT, 0xF30FFF, 0xD7D7D7);
+    public static final DragonSpawnEggItem ENDER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("ender_dragon_spawn_egg", DragonTypes.ENDER, 0x1D1D24, 0x900996);
+    public static final DragonSpawnEggItem FIRE_DRAGON_SPAWN_EGG = createDragonSpawnEgg("fire_dragon_spawn_egg", DragonTypes.FIRE, 0x9F2909, 0xF7A502);
+    public static final DragonSpawnEggItem FOREST_DRAGON_SPAWN_EGG = createDragonSpawnEgg("forest_dragon_spawn_egg", DragonTypes.FOREST, 0x28AA29, 0x024F06);
+    public static final DragonSpawnEggItem ICE_DRAGON_SPAWN_EGG = createDragonSpawnEgg("ice_dragon_spawn_egg", DragonTypes.ICE, 0xD7D7D7, 0xB3FFF8);
+    public static final DragonSpawnEggItem MOONLIGHT_DRAGON_SPAWN_EGG = createDragonSpawnEgg("moonlight_dragon_spawn_egg", DragonTypes.MOONLIGHT, 0x002A95, 0xDAF3AF);
+    public static final DragonSpawnEggItem NETHER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("nether_dragon_spawn_egg", DragonTypes.NETHER, 0xF79C03, 0x9E4B2B);
+    public static final DragonSpawnEggItem SKELETON_DRAGON_SPAWN_EGG = createDragonSpawnEgg("skeleton_dragon_spawn_egg", DragonTypes.SKELETON, 0xD7D7D7, 0x727F82);
+    public static final DragonSpawnEggItem STORM_DRAGON_SPAWN_EGG = createDragonSpawnEgg("storm_dragon_spawn_egg", DragonTypes.STORM, 0x023C54, 0x0DA2C7);
+    public static final DragonSpawnEggItem SUNLIGHT_DRAGON_SPAWN_EGG = createDragonSpawnEgg("sunlight_dragon_spawn_egg", DragonTypes.SUNLIGHT, 0xF07F07, 0xF2EA04);
+    public static final DragonSpawnEggItem TERRA_DRAGON_SPAWN_EGG = createDragonSpawnEgg("terra_dragon_spawn_egg", DragonTypes.TERRA, 0x543813, 0xB3782A);
+    public static final DragonSpawnEggItem WATER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("water_dragon_spawn_egg", DragonTypes.WATER, 0x4F6AA6, 0x223464);
+    public static final DragonSpawnEggItem WITHER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("wither_dragon_spawn_egg", DragonTypes.WITHER, 0x839292, 0x383F40);
+    public static final DragonSpawnEggItem ZOMBIE_DRAGON_SPAWN_EGG = createDragonSpawnEgg("zombie_dragon_spawn_egg", DragonTypes.ZOMBIE, 0x56562E, 0xA7BF2F);
     //Misc
     public static final DragonOrbItem DRAGON_ORB = new DragonOrbItem();
     public static final TestRunnerItem TEST_RUNNER = new TestRunnerItem();
 
     static <T extends Item> T createItem(String name, T item) {
         ITEMS.add(item.setTranslationKey(TRANSLATION_KEY_PREFIX + name).setRegistryName(name));
+        return item;
+    }
+
+    static <T extends Item> T createItem(String name, T item, Consumer<T> init) {
+        ITEMS.add(item.setRegistryName(name));
+        init.accept(item);
         return item;
     }
 
@@ -416,6 +398,7 @@ public class DMItems {
     static DragonArmorItem createDragonArmorItem(String name, String texture, int protection) {
         DragonArmorItem item = new DragonArmorItem(new ResourceLocation(DragonMountsTags.MOD_ID, texture), protection);
         ITEMS.add(item.setTranslationKey(TRANSLATION_KEY_PREFIX + name).setRegistryName(name));
+        DRAGON_INTERACTABLE.add(item);
         return item;
     }
 
@@ -518,14 +501,6 @@ public class DMItems {
     }
 
     static {
-        ITEMS.add(AMULET.setTranslationKey(DragonAmuletItem.TRANSLATION_KEY).setRegistryName("amulet").setCreativeTab(DMItemGroups.MAIN));
-        DRAGON_INTERACTABLE.add(AMULET);
-        DRAGON_INTERACTABLE.add(DRAGON_WAND);
-        DRAGON_INTERACTABLE.add(DRAGON_WHISTLE);
-        DRAGON_INTERACTABLE.add(IRON_DRAGON_ARMOR);
-        DRAGON_INTERACTABLE.add(GOLDEN_DRAGON_ARMOR);
-        DRAGON_INTERACTABLE.add(EMERALD_DRAGON_ARMOR);
-        DRAGON_INTERACTABLE.add(DIAMOND_DRAGON_ARMOR);
         DRAGON_INTERACTABLE.add(Items.BONE);
         DRAGON_INTERACTABLE.add(Items.STICK);
         DRAGON_ORB.setTranslationKey(TRANSLATION_KEY_PREFIX + "dragon_orb").setRegistryName("dragon_orb");

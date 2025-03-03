@@ -80,7 +80,7 @@ public class CarriageItem extends Item {
 
     @Override
     public @Nonnull CreativeTabs[] getCreativeTabs() {
-        return new CreativeTabs[]{DMItemGroups.MAIN};
+        return new CreativeTabs[]{DMItemGroups.ITEMS};
     }
 
     @Override

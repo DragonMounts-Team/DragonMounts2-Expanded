@@ -123,7 +123,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     public EntityEnderCrystal healingEnderCrystal;
     public boolean followOwner = true;
     public int inAirTicks;
-    public int roarTicks;
     private boolean isUsingBreathWeapon;
     private boolean isGoingDown;
     private boolean isUnhovered;
@@ -663,14 +662,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
             return !((AbstractHorse) target).isTame();
         }
         return true;
-    }
-
-    /**
-     * Return whether this entity should be rendered as on fire.
-     */
-    @Override
-    public boolean canRenderOnFire() {
-        return super.canRenderOnFire() && !this.getVariant().type.isInvulnerableTo(DamageSource.IN_FIRE);
     }
 
     /**

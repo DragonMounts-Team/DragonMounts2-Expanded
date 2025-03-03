@@ -43,7 +43,7 @@ public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityCont
 
     public DragonSpawnEggItem(final DragonType type, int background, int highlight) {
         this.type = type;
-        this.setCreativeTab(DMItemGroups.MAIN);
+        this.setCreativeTab(DMItemGroups.ITEMS);
         this.backgroundColor = background;
         this.highlightColor = highlight;
     }

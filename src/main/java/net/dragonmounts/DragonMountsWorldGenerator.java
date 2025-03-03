@@ -8,23 +8,20 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
-import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.Set;
 
@@ -34,6 +31,7 @@ import static net.dragonmounts.util.LevelUtil.getSurface;
  * Handles world generation for dragon nests, make a separate package if we are gonna use Mappers to optimize instead of the IWorldGenerator
  */
 public class DragonMountsWorldGenerator implements IWorldGenerator {
+    private static final PlacementSettings PLACEMENT_SETTINGS = new PlacementSettings().setIgnoreEntities(false).setIgnoreStructureBlock(true);
     public static final ResourceLocation AETHER = new ResourceLocation(DragonMountsTags.MOD_ID, "aether");
     public static final ResourceLocation MOONLIGHT = new ResourceLocation(DragonMountsTags.MOD_ID, "moonlight");
     public static final ResourceLocation ICE = new ResourceLocation(DragonMountsTags.MOD_ID, "ice");
@@ -47,7 +45,6 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
     public static final ResourceLocation ZOMBIE = new ResourceLocation(DragonMountsTags.MOD_ID, "zombie");
     public static final ResourceLocation SKELETON = new ResourceLocation(DragonMountsTags.MOD_ID, "skeleton");
     public static final ResourceLocation ENCHANT = new ResourceLocation(DragonMountsTags.MOD_ID, "enchant");
-
 
     @Override
     public void generate(Random random, int x, int z, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
@@ -98,43 +95,44 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
         int x = (chunkX * 16) + random.nextInt(16);
         int z = (chunkZ * 16) + random.nextInt(16);
         MutableBlockPosEx height = getSurface(world, x, z);
-        Set<Type> types = BiomeDictionary.getTypes(world.getBiome(height));
-        boolean isMountainOrBeach = types.contains(Type.MOUNTAIN) || world.getBiomeForCoordsBody(height) == Biomes.STONE_BEACH;
-        boolean isSnowy = types.contains(Type.SNOWY);
-        boolean isJungle = types.contains(Type.JUNGLE);
-        boolean isForest = types.contains(Type.FOREST);
-        boolean isSwamp = types.contains(Type.SWAMP);
-        boolean isDesert = types.contains(Type.SANDY);
-        boolean isPlains = types.contains(Type.PLAINS);
-        boolean isMesa = types.contains(Type.MESA);
-        boolean isOcean = types.contains(Type.OCEAN);
-        if (isOcean && random.nextInt(DMConfig.OceanNestRarity) == 1) {
-            loadStructure(height.withY(height.getY() + 10), world, random.nextBoolean() ? AETHER : MOONLIGHT, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
+        Biome biome = world.getBiomeForCoordsBody(height);
+        Set<Type> types = BiomeDictionary.getTypes(biome);
+        if (types.contains(Type.OCEAN) && random.nextInt(DMConfig.OceanNestRarity) == 1) {
 
-        } else if (isSnowy && random.nextInt(DMConfig.IceNestRarity) == 1 && canSpawnHere(world, height, 7, false)) {
+            loadStructure(world, height.withY(height.getY() + 10), random.nextBoolean() ? AETHER : MOONLIGHT);
 
-            loadStructure(height.withY(height.getY() - 2), world, ICE, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
+        } else if (types.contains(Type.SNOWY) && random.nextInt(DMConfig.IceNestRarity) == 1 && canSpawnHere(world, height, 7, false)) {
 
-        } else if (isJungle && random.nextInt(DMConfig.JungleNestRarity) == 1) {
-            loadStructure(height, world, FOREST1, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
+            loadStructure(world, height.withY(height.getY() - 2), ICE);
 
-        } else if (isDesert && random.nextInt(DMConfig.SunlightNestRarity) == 1 && canSpawnHere(world, height, 22, false)) {
+        } else if (types.contains(Type.JUNGLE) && random.nextInt(DMConfig.JungleNestRarity) == 1) {
 
-            loadStructure(height.withY(height.getY() - 10), world, SUNLIGHT, LootTableList.CHESTS_DESERT_PYRAMID, random);
+            loadStructure(world, height, FOREST1);
 
-        } else if (isMesa && random.nextInt(DMConfig.TerraNestRarity) == 1 && canSpawnHere(world, height, 4, false)) {
-            loadStructure(height.withY(height.getY() - 2), world, TERRA, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
+        } else if (types.contains(Type.SANDY) && random.nextInt(DMConfig.SunlightNestRarity) == 1 && canSpawnHere(world, height, 22, false)) {
 
-        } else if ((isSwamp) && random.nextInt(DMConfig.WaterNestRarity) == 1 && canSpawnHere(world, height, 4, true)) {
-            loadStructure(height.withY(height.getY() - 4), world, WATER3, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
+            loadStructure(world, height.withY(height.getY() - 10), SUNLIGHT);
 
-        } else if ((isPlains || isForest) && random.nextInt(DMConfig.ForestNestRarity) == 1 && canSpawnHere(world, height, 4, false)) {
-            loadStructure(height.withY(height.getY() - 2), world, FOREST2, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
+        } else if (types.contains(Type.MESA) && random.nextInt(DMConfig.TerraNestRarity) == 1 && canSpawnHere(world, height, 4, false)) {
 
-        } else if (isMountainOrBeach && random.nextInt(DMConfig.FireNestRarity) == 1 && canSpawnHere(world, height, 4, false)) {
-            loadStructure(height.withY(height.getY() - 2), world, FIRE, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
+            loadStructure(world, height.withY(height.getY() - 2), TERRA);
+
+        } else if (types.contains(Type.SWAMP) && random.nextInt(DMConfig.WaterNestRarity) == 1 && canSpawnHere(world, height, 4, true)) {
+
+            loadStructure(world, height.withY(height.getY() - 4), WATER3);
+
+        } else if ((types.contains(Type.PLAINS) || types.contains(Type.FOREST)) && random.nextInt(DMConfig.ForestNestRarity) == 1 && canSpawnHere(world, height, 4, false)) {
+
+            loadStructure(world, height.withY(height.getY() - 2), FOREST2);
+
+        } else if ((types.contains(Type.MOUNTAIN) || biome == Biomes.STONE_BEACH) && random.nextInt(DMConfig.FireNestRarity) == 1 && canSpawnHere(world, height, 4, false)) {
+
+            loadStructure(world, height.withY(height.getY() - 2), FIRE);
+
         } else if (types.contains(Type.VOID) && types.contains(Type.MAGICAL) && random.nextInt(DMConfig.OceanNestRarity) == 0) {
-            loadStructure(height.withY(height.getY() + 10), world, AETHER, LootTableList.CHESTS_SIMPLE_DUNGEON, random);
+
+            loadStructure(world, height.withY(height.getY() + 10), AETHER);
+
         }
     }
 
@@ -202,7 +200,7 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
                     chunkZ * 16 + random.nextInt(DMConfig.netherNestRarerityInZ)
             );
             if (pos != null && canSpawnNetherHere(world, pos, 6)) {
-                loadStructure(pos, world, NETHER, LootTableList.CHESTS_NETHER_BRIDGE, random);
+                loadStructure(world, pos, NETHER);
             }
         }
     }
@@ -227,7 +225,7 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
                     }
                 }
                 if (invalid) continue;
-                loadStructure(pos.with(x, y - 10, z), world, random.nextBoolean() ? SKELETON : ZOMBIE, LootTableList.CHESTS_NETHER_BRIDGE, random);
+                loadStructure(world, pos.with(x, y - 10, z), random.nextBoolean() ? SKELETON : ZOMBIE);
                 return;
             }
         }
@@ -238,39 +236,24 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
             int x = (chunkX * 16) + random.nextInt(16);
             int z = (chunkZ * 16) + random.nextInt(16);
             MutableBlockPosEx height = getSurface(world, x, z);
-
             if (canSpawnHere(world, height, 5, false)) {
-                loadStructure(height.withY(height.getY() - 1), world, ENCHANT, LootTableList.CHESTS_END_CITY_TREASURE, random);
+                loadStructure(world, height.withY(height.getY() - 1), ENCHANT);
             }
         }
     }
 
-    public static void loadStructure(MutableBlockPosEx pos, World world, ResourceLocation structure, @Nullable ResourceLocation lootTable, Random rand) {
-        WorldServer worldserver = (WorldServer) world;
+    public static void loadStructure(World world, MutableBlockPosEx pos, ResourceLocation structure) {
         if (DMConfig.DEBUG_MODE.value) {
-            LogUtil.LOGGER.info("Placing Dragon Nest at [{}]: {}", pos.toString(), structure);
+            LogUtil.LOGGER.info("Placing Dragon Nest at [{}]: {}", pos, structure);
         }
-        Template template = worldserver.getStructureTemplateManager().getTemplate(world.getMinecraftServer(), structure);
-        IBlockState iblockstate = world.getBlockState(pos);
-        world.notifyBlockUpdate(pos, iblockstate, iblockstate, 2);
+        Template template = ((WorldServer) world).getStructureTemplateManager().getTemplate(world.getMinecraftServer(), structure);
+        IBlockState state = world.getBlockState(pos);
+        world.notifyBlockUpdate(pos, state, state, 2); // ?
         BlockPos size = template.getSize();
         template.addBlocksToWorldChunk(world, pos.with(
                 pos.getX() - size.getX() / 2,
                 pos.getY() + 1,
                 pos.getZ() - size.getZ() / 2
-        ), new PlacementSettings().setIgnoreEntities(false).setIgnoreStructureBlock(true));
-        if (lootTable == null) return;
-        int sizeX = size.getX(), sizeY = size.getY(), sizeZ = size.getZ();
-        int posX = pos.getX(), posY = pos.getY(), posZ = pos.getZ();
-        for (int x = 0; x <= sizeX; ++x) {
-            for (int y = 0; y <= sizeY; ++y) {
-                for (int z = 0; z <= sizeZ; ++z) {
-                    TileEntity tileentity = world.getTileEntity(pos.with(posX + x, posY + y, posZ + z));
-                    if (tileentity instanceof TileEntityChest) {
-                        ((TileEntityChest) tileentity).setLootTable(lootTable, rand.nextLong());
-                    }
-                }
-            }
-        }
+        ), PLACEMENT_SETTINGS);
     }
 }

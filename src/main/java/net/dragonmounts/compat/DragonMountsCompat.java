@@ -5,6 +5,7 @@ import net.dragonmounts.block.DragonEggCompatBlock;
 import net.dragonmounts.block.HatchableDragonEggBlock;
 import net.dragonmounts.compat.fixer.DMBlockEntityCompat;
 import net.dragonmounts.compat.fixer.DragonEntityCompat;
+import net.dragonmounts.compat.fixer.DragonNestCompat;
 import net.dragonmounts.init.DMBlocks;
 import net.dragonmounts.init.DMItems;
 import net.dragonmounts.init.DragonVariants;
@@ -30,6 +31,7 @@ public abstract class DragonMountsCompat {
     public static void load(ModFixs fixer) {
         fixer.registerFix(FixTypes.ENTITY, DRAGON_ENTITY_FIX);
         fixer.registerFix(FixTypes.BLOCK_ENTITY, new DMBlockEntityCompat());
+        fixer.registerFix(FixTypes.STRUCTURE, new DragonNestCompat());
     }
 
     @SubscribeEvent

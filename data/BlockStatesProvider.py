@@ -1,6 +1,10 @@
 from Core.Output import Output
+from Core.Util import ResourceLocation
 from DragonVariant import DragonVariant
 from DragonType import  DragonType
+
+def makeSimpleBlock(output: Output, block: ResourceLocation):
+  output.accept('blockstates/' + block.path, { 'variants': { 'normal': { 'model': block } } })
 
 def generateBlockStates(output: Output):
   rotation = {
@@ -28,24 +32,12 @@ def generateBlockStates(output: Output):
       }
     }
   }
-
   for variant in DragonVariant:
-
     base = "blockstates/" + variant.value.path + "_dragon_head"
-
     output.accept(base, rotation)
     output.accept(base + '_wall', facing)
-
-  for types in DragonType:
-    scales_block = {
-      "variants": {
-        "normal": {
-          "model": "dragonmounts:" + types.value.path + "_dragon_scales_block"
-        }
-      }
-    }
-    scales_base = "blockstates/" + types.value.path+ "_dragon_scales_block"
-    output.accept(scales_base, scales_block)
-
+  for type in DragonType:
+    if (type is DragonType.SKELETON or type is DragonType.WITHER): continue
+    makeSimpleBlock(output, type.value.withSuffix('_dragon_scale_block'))
   output.log('block state(s)')
 

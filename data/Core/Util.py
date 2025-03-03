@@ -68,7 +68,10 @@ class Ingredient(ABC, JsonSerializable):
 
 class StackIngredient(Ingredient):
   def __init__(self, stack):
-    self.stack = cast2Stack(stack)
+    stack = cast2Stack(stack)
+    self.stack = stack if (
+      stack.count == 1
+    ) else ItemStack(stack.item, 1, stack.data)
 
   def toJson(self):
     return self.stack.toJson()

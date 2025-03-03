@@ -71,7 +71,7 @@ public class HardShearsItem extends ItemShears implements IHardShears, ICapabili
 
     @Override
     public @Nonnull CreativeTabs[] getCreativeTabs() {
-        return new CreativeTabs[]{DMItemGroups.MAIN};
+        return new CreativeTabs[]{DMItemGroups.ITEMS};
     }
 
     @Override

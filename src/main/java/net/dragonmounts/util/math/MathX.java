@@ -35,11 +35,6 @@ public abstract class MathX {
      */
     private static final float RADIANS_TO_DEGREES = 180.F / PI_F;
 
-    /**
-     * You no take constructor!
-     */
-    private MathX() {}
-
     // float degrees to radians conversion
     public static float toRadians(float angdeg) {
         return angdeg * DEGREES_TO_RADIANS;
@@ -69,17 +64,11 @@ public abstract class MathX {
      *
      * @param mean       the mean of the distribution
      * @param threeSigma three times the standard deviation of the distribution
-     * @return
      */
     public static double getTruncatedGaussian(Random rand, double mean, double threeSigma) {
         double rawValue = rand.nextGaussian();
         rawValue = MathHelper.clamp(rawValue, -3.0, +3.0);
         return mean + rawValue * threeSigma / 3.0;
-    }
-
-    // float square root
-    public static float sqrtf(float f) {
-        return (float) Math.sqrt(f);
     }
 
     @SuppressWarnings("ManualMinMaxCalculation")
@@ -174,15 +163,11 @@ public abstract class MathX {
 
     /**
      * return the modulus (always positive)
-     *
-     * @param numerator
-     * @param divisor
      * @return calculates the numerator modulus by divisor, always positive
      */
     public static int modulus(int numerator, int divisor) {
         return (numerator % divisor + divisor) % divisor;
     }
-
 
     /**
      * interpolate from vector 1 to vector 2 using fraction
@@ -201,4 +186,6 @@ public abstract class MathX {
     public static float parseColor(int color, int area) {
         return (color >> (area << 3) & 0xFF) / 255F;
     }
+
+    private MathX() {}
 }

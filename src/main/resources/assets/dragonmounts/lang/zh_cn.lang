@@ -1,4 +1,5 @@
-itemGroup.dragonmounts.main=龙骑2：延续
+itemGroup.dragonmounts.blocks=龙骑2：延续·方块
+itemGroup.dragonmounts.items=龙骑2：延续·物品
 itemGroup.dragonmounts.combat=龙骑2：延续·装备
 
 effect.dragonmounts.dark_dragons_grace=暝龙赐福
@@ -68,7 +69,7 @@ tile.dragonmounts.dragon_nest.name=龙巢方块
 tile.dragonmounts.dragon_core.name=龙核心
 tile.dragonmounts.dragon_head.name=龙首
 tile.dragonmounts.dragon_egg.name=龙蛋
-tile.dragonmounts.dragon_scales_block.name=龙鳞块
+tile.dragonmounts.dragon_scale_block.name=龙鳞块
 
 message.dragonmounts.control.toggleHovering=悬停状态：%s
 message.dragonmounts.control.toggleYawAlignment=偏航角趋同：%s

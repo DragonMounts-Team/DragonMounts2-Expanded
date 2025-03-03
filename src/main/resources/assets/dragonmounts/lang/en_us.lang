@@ -1,8 +1,9 @@
 # US English Translations
 
-# Creative Menu's
-itemGroup.dragonmounts.main=DM2: Expanded
-itemGroup.dragonmounts.combat=DM2: Expanded-Equipment
+# Creative Tabs
+itemGroup.dragonmounts.blocks=DM2: Expanded - Blocks
+itemGroup.dragonmounts.items=DM2: Expanded - Items
+itemGroup.dragonmounts.combat=DM2: Expanded - Equipments
 
 effect.dragonmounts.dark_dragons_grace=Dark Dragon's Grace
 ##
@@ -80,7 +81,7 @@ tile.dragonmounts.dragon_nest.name=Nest Block
 tile.dragonmounts.dragon_core.name=Dragon Core
 tile.dragonmounts.dragon_head.name=Dragon Head
 tile.dragonmounts.dragon_egg.name=Dragon Egg
-tile.dragonmounts.dragon_scales_block.name=Dragon Scales Block
+tile.dragonmounts.dragon_scale_block.name=Block of Dragon Scale
 ##
 # Messages
 ##

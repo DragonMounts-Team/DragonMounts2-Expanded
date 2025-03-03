@@ -15,7 +15,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 
 public class VariationOrbItem extends Item {
     public VariationOrbItem() {
-        this.setCreativeTab(DMItemGroups.MAIN).setMaxStackSize(16);
+        this.setCreativeTab(DMItemGroups.ITEMS).setMaxStackSize(16);
     }
 
     @Override

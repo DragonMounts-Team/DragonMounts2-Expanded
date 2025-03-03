@@ -1,12 +1,12 @@
 package net.dragonmounts.item;
 
 import com.mojang.authlib.GameProfile;
+import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.client.gui.GuiDragonWhistle;
 import net.dragonmounts.compat.DragonTypeCompat;
 import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.client.Minecraft;
@@ -44,8 +44,9 @@ import static net.minecraft.util.text.translation.I18n.translateToLocal;
  * @modifier WolfShotz
  */
 public class DragonWhistleItem extends Item {
-    public final String DRAGON_UUID_KEY = "DragonUUID";
-    public final String DEPRECATED_UUID_KEY = "dragonmountsdragon";
+    public static final String TRANSLATION_KEY = DragonMountsTags.TRANSLATION_KEY_PREFIX + "dragon_whistle";
+    public static final String DRAGON_UUID_KEY = "DragonUUID";
+    public static final String DEPRECATED_UUID_KEY = "dragonmountsdragon";
 
     @Nullable
     public static String getDragonName(NBTTagCompound tag) {
@@ -58,7 +59,7 @@ public class DragonWhistleItem extends Item {
     }
 
     public DragonWhistleItem() {
-        this.setMaxStackSize(1).setCreativeTab(DMItemGroups.MAIN);
+        this.setMaxStackSize(1);
     }
 
     /**

@@ -1,14 +1,11 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "group": "dragon_scales_block",
-  "pattern": [
-    "X"
-  ],
-  "key": {
-    "X": {
-      "item": "dragonmounts:forest_dragon_scales_block"
+  "type": "minecraft:crafting_shapeless",
+  "group": "dragon_scales",
+  "ingredients": [
+    {
+      "item": "dragonmounts:forest_dragon_scale_block"
     }
-  },
+  ],
   "result": {
     "item": "dragonmounts:forest_dragon_scales",
     "count": 9

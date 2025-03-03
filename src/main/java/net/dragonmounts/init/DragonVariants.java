@@ -64,7 +64,7 @@ public class DragonVariants {
             DragonHeadWallBlock wall = new DragonHeadWallBlock(Material.CIRCUITS, variant);
             String full = name + "_dragon_head_wall";
             String base = full.substring(0, full.length() - 5);
-            item.setCreativeTab(DMItemGroups.MAIN).setTranslationKey(key).setRegistryName(base);
+            item.setCreativeTab(DMItemGroups.BLOCKS).setTranslationKey(key).setRegistryName(base);
             standing.setTranslationKey(key).setRegistryName(base);
             wall.setTranslationKey(key).setRegistryName(full);
             return new DragonHeadBlock.Holder(standing, wall, item);

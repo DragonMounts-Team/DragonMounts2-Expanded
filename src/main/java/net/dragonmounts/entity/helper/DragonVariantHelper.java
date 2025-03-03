@@ -132,7 +132,6 @@ public class DragonVariantHelper implements ITickable {
         this.points.addTo(parent1.getVariant().type, POINTS_INHERIT + rand.nextInt(POINTS_INHERIT));
         this.points.addTo(parent2.getVariant().type, POINTS_INHERIT + rand.nextInt(POINTS_INHERIT));
         this.applyPoints(this.dragon.getVariant().type);
-
     }
 
     public void onVariantChanged(DragonVariant variant) {
@@ -141,6 +140,9 @@ public class DragonVariantHelper implements ITickable {
         if (this.lastType == type) return;
         TameableDragonEntity dragon = this.dragon;
         dragon.breathHelper.onBreedChange(type);
+        // check for fire immunity and disable fire particles
+        ReferenceSet<DamageSource> immunities = type.getImmunities();
+        dragon.setImmuneToFire(immunities.contains(DamageSource.LAVA) || immunities.contains(DamageSource.IN_FIRE) || immunities.contains(DamageSource.ON_FIRE));
         if (dragon.world.isRemote) {
             this.lastType = type;
             return;
@@ -151,10 +153,6 @@ public class DragonVariantHelper implements ITickable {
                 ((PathNavigateGround) navigator).setCanSwim(!type.avoidWater); // originally setAvoidsWater()
             }
         }
-
-        // check for fire immunity and disable fire particles
-        ReferenceSet<DamageSource> immunities = type.getImmunities();
-        dragon.setImmuneToFire(immunities.contains(DamageSource.IN_FIRE) || immunities.contains(DamageSource.ON_FIRE) || immunities.contains(DamageSource.LAVA));
 
         // reset breed points
         if (dragon.isEgg()) {
