@@ -1,6 +1,6 @@
 from Core.Util import ResourceLocation, makeId
 from Core.Output import Output
-from Core.ItemModelBuilder import ItemModelBuilder as model
+from Core.ModelBuilder import ItemModelBuilder as model
 from DragonType import DragonType
 from DragonVariant import DragonVariant
 from DragonArmorMaterial import DragonArmorMaterial

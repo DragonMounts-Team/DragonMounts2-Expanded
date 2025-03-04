@@ -1,17 +1,14 @@
 from DragonType import DragonType
 from Core.Output import Output
-from Core.Model import ModelTemplate, TextureSlot, TextureMapping
+from Core.Util import ResourceLocation
+from Core.ModelBuilder import BlockModelBuilder as model
 
-TEXTURE_SLOT_ALL = TextureSlot('all')
-TEMPLATE_CUBE_ALL = ModelTemplate('block/cube_all', TEXTURE_SLOT_ALL)
+cubeAllModel = ResourceLocation('block/cube_all')
 
 def generateBlockModels(output: Output):
   for type in DragonType:
     if (type is DragonType.SKELETON or type is DragonType.WITHER): continue
-    TEMPLATE_CUBE_ALL.create(
-      output,
-      'models/block/' + type.value.path + '_dragon_scale_block',
-      TextureMapping()\
-        .put(TEXTURE_SLOT_ALL, 'dragonmounts:blocks/' + type.value.path + '_dragon_scale_block')
-    )
+    model(cubeAllModel)\
+      .texture('all', 'dragonmounts:blocks/' + type.value.path + '_dragon_scale_block')\
+      .save(output, type.value.path + '_dragon_scale_block')
   output.log('block model(s)')

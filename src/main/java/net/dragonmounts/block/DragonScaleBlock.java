@@ -3,6 +3,8 @@ package net.dragonmounts.block;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.BlockProperties;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.MapColor;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -18,8 +20,8 @@ public class DragonScaleBlock extends Block {
 	public static final String TRANSLATION_KEY = TRANSLATION_KEY_PREFIX + "dragon_scale_block";
 	public final DragonType type;
 
-	public DragonScaleBlock(DragonType type, BlockProperties props) {
-		super(props.material, props.getColor());
+	public DragonScaleBlock(DragonType type, Material material, MapColor color, BlockProperties props) {
+		super(material, color);
 		this.type = type;
 		this.setSoundType(props.sound)
 				.setHardness(props.hardness)
