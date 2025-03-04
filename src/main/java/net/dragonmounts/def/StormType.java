@@ -1,9 +1,8 @@
 package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.breath.sound.SoundEffectName;
-import net.dragonmounts.entity.breath.sound.SoundState;
-import net.dragonmounts.entity.helper.DragonLifeStage;
+import net.dragonmounts.entity.breath.DragonBreath;
+import net.dragonmounts.entity.breath.impl.StormBreath;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,7 +23,7 @@ public class StormType extends WaterType {
     }
 
     @Override
-    public SoundEffectName getBreathSound(DragonLifeStage stage, SoundState state) {
-        return state.ice;// why?
+    public DragonBreath initBreath(TameableDragonEntity dragon) {
+        return new StormBreath(dragon, 0.7F);
     }
 }

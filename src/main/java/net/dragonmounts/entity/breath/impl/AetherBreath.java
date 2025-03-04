@@ -5,7 +5,11 @@ import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathAffectedBlock;
 import net.dragonmounts.entity.breath.BreathAffectedEntity;
+import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.DragonBreath;
+import net.dragonmounts.entity.breath.effects.AetherBreathFX;
+import net.dragonmounts.entity.helper.DragonLifeStage;
+import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -13,6 +17,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -98,6 +103,26 @@ public class AetherBreath extends DragonBreath {
         // final int DELAY_UNTIL_DECAY=5;
         // final float DECAY_PERCENTAGE_PER_TICK=10.0F;
         //        currentHitDensity.setDecayParameters(DECAY_PERCENTAGE_PER_TICK, DELAY_UNTIL_DECAY);
+    }
+
+    @Override
+    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
+        world.spawnEntity(new AetherBreathFX(world, position, direction, power, partialTicks));
+    }
+
+    @Override
+    public SoundEvent getStartSound(DragonLifeStage stage) {
+        return DMSounds.DRAGON_BREATH_START_AIRFLOW;
+    }
+
+    @Override
+    public SoundEvent getLoopSound(DragonLifeStage stage) {
+        return DMSounds.DRAGON_BREATH_LOOP_AIRFLOW;
+    }
+
+    @Override
+    public SoundEvent getStopSound(DragonLifeStage stage) {
+        return DMSounds.DRAGON_BREATH_STOP_AIRFLOW;
     }
 
     static {

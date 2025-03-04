@@ -137,7 +137,7 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
      * Updates the animation state. Called on every tick.
      */
     @Override
-    public void tick() {
+    public void update() {
         ClientDragonEntity dragon = this.dragon;
         if (!dragon.isEgg()) {
             setOnGround(!dragon.isFlying());

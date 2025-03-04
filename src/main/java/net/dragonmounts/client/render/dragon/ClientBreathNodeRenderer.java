@@ -1,4 +1,4 @@
-package net.dragonmounts.client.render.dragon.breathweaponFX;
+package net.dragonmounts.client.render.dragon;
 
 import net.dragonmounts.entity.breath.effects.ClientBreathNodeEntity;
 import net.minecraft.client.renderer.BufferBuilder;

@@ -1,12 +1,8 @@
 package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.DragonBreath;
-import net.dragonmounts.entity.breath.effects.IceBreathFX;
 import net.dragonmounts.entity.breath.impl.IceBreath;
-import net.dragonmounts.entity.breath.sound.SoundEffectName;
-import net.dragonmounts.entity.breath.sound.SoundState;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.enchantment.EnchantmentFrostWalker;
@@ -14,7 +10,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
 
@@ -73,15 +68,5 @@ public class IceType extends DragonType {
     @Override
     public DragonBreath initBreath(TameableDragonEntity dragon) {
         return new IceBreath(dragon, 0.7F);
-    }
-
-    @Override
-    public SoundEffectName getBreathSound(DragonLifeStage stage, SoundState state) {
-        return state.ice;
-    }
-
-    @Override
-    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
-        world.spawnEntity(new IceBreathFX(world, position, direction, power, partialTicks));
     }
 }

@@ -9,10 +9,13 @@
  */
 package net.dragonmounts.entity.helper;
 
+import net.dragonmounts.block.HatchableDragonEggBlock;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.init.DMBlocks;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.util.ClientServerSynchronisedTickCount;
+import net.minecraft.block.Block;
 import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -72,12 +75,11 @@ public class DragonLifeStageHelper {
         replaceAttributeModifier(attributes.getAttributeInstance(ARMOR), DRAGON_AEG_MODIFIER_ID, "Dragon size modifier", MathHelper.clamp(scale, 0.1, 1.2), 1, false);
     }
 
-    /**
-     * Generates some egg shell particles and a breaking sound.
-     */
     public void playEggCrackEffect() {
-        // dragon.world.playEvent(2001, dragon.getPosition(), Block.getIdFromBlock(BlockDragonBreedEgg.DRAGON_BREED_EGG));
-        dragon.world.playSound(null, dragon.getPosition(), DMSounds.DRAGON_HATCHING, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        TameableDragonEntity dragon = this.dragon;
+        dragon.world.playEvent(2001, dragon.getPosition(), Block.getIdFromBlock(
+                dragon.getVariant().type.getInstance(HatchableDragonEggBlock.class, DMBlocks.ENDER_DRAGON_EGG)
+        ));
     }
 
     public int getEggWiggleX() {
@@ -168,8 +170,7 @@ public class DragonLifeStageHelper {
             }
         } else if (DragonLifeStage.EGG == prevLifeStage && !lifeStage.isBaby()) {
             // play particle and sound effects when the dragon hatches
-            playEggCrackEffect();
-            dragon.world.playSound(dragon.posX, dragon.posY, dragon.posZ, DMSounds.DRAGON_HATCHED, SoundCategory.BLOCKS, 4, 1, false);
+            dragon.world.playSound(dragon.posX, dragon.posY, dragon.posZ, DMSounds.DRAGON_EGG_SHATTER, SoundCategory.BLOCKS, 4, 1, false);
         }
         dragon.onLifeStageChange(lifeStage);
     }
@@ -197,7 +198,8 @@ public class DragonLifeStageHelper {
             } else if (rand.nextFloat() < wiggleChance) {
                 eggWiggleX = rand.nextBoolean() ? 10 : 20;
                 if (progress > EGG_CRACK_THRESHOLD) {
-                    playEggCrackEffect();
+                    this.playEggCrackEffect();
+                    dragon.world.playSound(null, dragon.getPosition(), DMSounds.DRAGON_EGG_CRACK, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
             }
 
@@ -206,7 +208,8 @@ public class DragonLifeStageHelper {
             } else if (rand.nextFloat() < wiggleChance) {
                 eggWiggleZ = rand.nextBoolean() ? 10 : 20;
                 if (progress > EGG_CRACK_THRESHOLD) {
-                    playEggCrackEffect();
+                    this.playEggCrackEffect();
+                    dragon.world.playSound(null, dragon.getPosition(), DMSounds.DRAGON_EGG_CRACK, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 }
             }
         }

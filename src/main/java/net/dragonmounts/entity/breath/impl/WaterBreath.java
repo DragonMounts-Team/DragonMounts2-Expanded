@@ -4,7 +4,11 @@ import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathAffectedBlock;
 import net.dragonmounts.entity.breath.BreathAffectedEntity;
+import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.DragonBreath;
+import net.dragonmounts.entity.breath.effects.HydroBreathFX;
+import net.dragonmounts.entity.helper.DragonLifeStage;
+import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.util.LevelUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFarmland;
@@ -17,7 +21,9 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 
@@ -68,5 +74,25 @@ public class WaterBreath extends DragonBreath {
         }
         target.attackEntityFrom(DamageSource.causeMobDamage(dragon), damage);
         target.knockBack(dragon, 0.2F, dragon.posX - target.posX, dragon.posZ - target.posZ);
+    }
+
+    @Override
+    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
+        world.spawnEntity(new HydroBreathFX(world, position, direction, power, partialTicks));
+    }
+
+    @Override
+    public SoundEvent getStartSound(DragonLifeStage stage) {
+        return DMSounds.DRAGON_BREATH_START_WATER;
+    }
+
+    @Override
+    public SoundEvent getLoopSound(DragonLifeStage stage) {
+        return DMSounds.DRAGON_BREATH_LOOP_WATER;
+    }
+
+    @Override
+    public SoundEvent getStopSound(DragonLifeStage stage) {
+        return DMSounds.DRAGON_BREATH_STOP_WATER;
     }
 }

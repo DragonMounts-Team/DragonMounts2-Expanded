@@ -212,7 +212,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
                 this.rotationYawHead - this.renderYawOffset, // netYawHead
                 this.rotationPitch
         );
-        this.headLocator.tick();
+        this.headLocator.update();
 
         // set home position near owner when tamed
         if (isTamed()) {
@@ -336,7 +336,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
                 if (cooldown != 0) {
                     this.setSheared(cooldown);
                     this.playSound(SoundEvents.ENTITY_ITEM_BREAK, 1.0F, 1.0F);
-                    this.playSound(DMSounds.ENTITY_DRAGON_GROWL, 1.0F, 1.0F);
+                    this.playSound(DMSounds.DRAGON_PURR, 1.0F, 1.0F);
                     if (!isTrusted) {
                         this.setAttackTarget(player);
                     }

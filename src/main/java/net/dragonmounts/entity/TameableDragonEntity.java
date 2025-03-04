@@ -412,46 +412,27 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
 
     @Override
     protected SoundEvent getDeathSound() {
-        return this.isEgg() ? DMSounds.DRAGON_HATCHED : DMSounds.ENTITY_DRAGON_DEATH;//TODO: update DragonType.behavior
+        return this.getVariant().type.getDeathSound(this);
     }
 
-    public SoundEvent getLivingSound() {
-        return isEgg() || isUsingBreathWeapon() ? null : this.getVariant().type.getLivingSound(this);
+    @Override
+    public SoundEvent getAmbientSound() {
+        return this.isEgg() || this.isUsingBreathWeapon() ? null : this.getVariant().type.getLivingSound(this);
     }
 
     @Override
     public SoundEvent getHurtSound(DamageSource src) {
         return isEgg()
-                ? DMSounds.DRAGON_HATCHING
-                : SoundEvents.ENTITY_ENDERDRAGON_HURT;//TODO: update DragonType.behavior
+                ? DMSounds.DRAGON_EGG_CRACK
+                : SoundEvents.ENTITY_ENDERDRAGON_HURT;
     }
 
     public SoundEvent getWingsSound() {
-        return SoundEvents.ENTITY_ENDERDRAGON_FLAP;//TODO: update DragonType.behavior
+        return SoundEvents.ENTITY_ENDERDRAGON_FLAP;
     }
 
     public SoundEvent getStepSound() {
-        return DMSounds.ENTITY_DRAGON_STEP;//TODO: update DragonType.behavior
-    }
-
-    public SoundEvent getEatSound() {
-        return SoundEvents.ENTITY_GENERIC_EAT;//TODO: update DragonType.behavior
-    }
-
-    public SoundEvent getAttackSound() {
-        return SoundEvents.ENTITY_GENERIC_EAT;//TODO: update DragonType.behavior
-    }
-
-    /**
-     * Plays living's sound at its position
-     */
-    public void playLivingSound() {
-        SoundEvent sound = getLivingSound();
-        if (sound == null && !isEgg() && isUsingBreathWeapon()) {
-            return;
-        }
-
-        playSound(sound, 0.8f, 1);
+        return DMSounds.DRAGON_STEP;
     }
 
     /**
@@ -526,7 +507,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     @Override
     protected float getSoundVolume() {
         // note: unused, managed in playSound()
-        return 1;
+        return 0.8F;
     }
 
     /**
@@ -927,7 +908,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
      * @see EntityAnimal#ageUp(int, boolean)
      */
     public void consumeFood(ItemStack stack, int level, int growth) {
-        this.playSound(this.getEatSound(), 1f, 0.75f);
+        this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1f, 0.75f);
         this.setHunger(this.getHunger() + level);
         this.lifeStageHelper.ageUp(growth);
         if (this.world.isRemote) {

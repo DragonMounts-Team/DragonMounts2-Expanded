@@ -12,7 +12,6 @@ import net.dragonmounts.capability.IHardShears;
 import net.dragonmounts.compat.DragonMountsCompat;
 import net.dragonmounts.compat.DragonTypeCompat;
 import net.dragonmounts.config.DMConfig;
-import net.dragonmounts.entity.breath.sound.SoundEffectName;
 import net.dragonmounts.food.CommonFood;
 import net.dragonmounts.init.*;
 import net.dragonmounts.registry.CarriageType;
@@ -161,29 +160,7 @@ public class RegistryEventHandler {
 
     @SubscribeEvent
     public static void registerSoundEvents(final RegistryEvent.Register<SoundEvent> event) {
-        IForgeRegistry<SoundEvent> registry = event.getRegistry();
-        registry.register(DMSounds.ENTITY_DRAGON_STEP);
-        registry.register(DMSounds.ENTITY_DRAGON_BREATHE);
-        registry.register(DMSounds.ENTITY_DRAGON_DEATH);
-        registry.register(DMSounds.ENTITY_DRAGON_GROWL);
-        registry.register(DMSounds.ENTITY_NETHER_DRAGON_GROWL);
-        registry.register(DMSounds.ENTITY_SKELETON_DRAGON_GROWL);
-        registry.register(DMSounds.ENTITY_DRAGON_HATCHLING_GROWL);
-        registry.register(DMSounds.ENTITY_HATCHLING_NETHER_DRAGON_GROWL);
-        registry.register(DMSounds.ENTITY_HATCHLING_SKELETON_DRAGON_GROWL);
-        registry.register(DMSounds.ZOMBIE_DRAGON_GROWL);
-        registry.register(DMSounds.ZOMBIE_DRAGON_DEATH);
-        registry.register(DMSounds.DRAGON_SNEEZE);
-        registry.register(DMSounds.DRAGON_HATCHED);
-        registry.register(DMSounds.DRAGON_HATCHING);
-        registry.register(DMSounds.DRAGON_WHISTLE);
-        registry.register(DMSounds.DRAGON_WHISTLE1);
-        registry.register(DMSounds.DRAGON_ROAR);
-        registry.register(DMSounds.HATCHLING_DRAGON_ROAR);
-        registry.register(DMSounds.DRAGON_SWITCH);
-        for (SoundEffectName sound : SoundEffectName.values()) {
-            registry.register(sound.sound);
-        }
+        DMSounds.INSTANCES.forEach(event.getRegistry()::register);
     }
 
     @SubscribeEvent

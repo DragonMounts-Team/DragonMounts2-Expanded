@@ -1,73 +1,5 @@
 {
-  "mob.dragon.growl": {
-  "category": "dragon_growl",
-    "sounds": [
-      "dragonmounts:mob/dragon/growl",
-      "dragonmounts:mob/dragon/growl1"
-    ]
-  },
-  
-  "mob.dragon.hatchlingroar": {
-  "category": "dragon_hatchling_roar",
-    "sounds": [
-      "dragonmounts:mob/dragon/hatchlingroar1",
-	   "dragonmounts:mob/dragon/hatchlingroar2"
-    ]
-  },
-
-  "mob.dragon.hatchlinggrowl": {
-  "category": "dragon_hatchling_growl",
-    "sounds": [
-      "dragonmounts:mob/dragon/hatchlinggrowl1",
-      "dragonmounts:mob/dragon/hatchlinggrowl2"
-    ]
-  },
-
-  "mob.dragon.roar": {
-  "category": "dragon_roar",
-    "sounds": [
-      "dragonmounts:mob/dragon/roar",
-      "dragonmounts:mob/dragon/roar1",
-	   "dragonmounts:mob/dragon/roar2",
-	   "dragonmounts:mob/dragon/roar3"
-    ]
-  },
-      
-  "item.gender_switch": {
-  "category": "dragon_roar",
-    "sounds": [
-      "dragonmounts:item/gender_switch"
-    ]
-  },
-  
-  "mob.dragon.nethergrowl": {
-  "category": "nether_dragon_growl",
-    "sounds": [
-      "dragonmounts:mob/dragon/nethergrowl",
-      "dragonmounts:mob/dragon/nethergrowl1",
-      "dragonmounts:mob/dragon/nethergrowl2",
-	  "dragonmounts:mob/dragon/nethergrowl3"
-    ]
-  },
-  
-    "mob.dragon.zombiegrowl": {
-  "category": "zombie_dragon_growl",
-    "sounds": [
-      "dragonmounts:mob/dragon/zombiegrowl",
-      "dragonmounts:mob/dragon/zombiegrowl1",
-      "dragonmounts:mob/dragon/zombiegrowl2"
-    ]
-  },
-  
-  "mob.dragon.skeletongrowl": {
-  "category": "skeleton_dragon_growl",
-    "sounds": [
-      "dragonmounts:mob/dragon/skeletongrowl1"
-    ]
-  },
-  
-  "mob.dragon.breathe": {
-  "category": "dragon_breathe",
+  "entity.dragon.ambient": {
     "sounds": [
       {
         "name": "minecraft:mob/cow/say2",
@@ -79,175 +11,273 @@
         "volume": 0.5,
         "pitch": 0.5
       }
-    ]
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.ambient"
   },
-    "mob.dragon.sneeze": {
-    "category": "dragon_sneeze",
+  "entity.dragon.ambient.water": {
     "sounds": [
-      "dragonmounts:mob/dragon/sneeze"
-    ]
+      "dragonmounts:entity/dragon/ambient/water1",
+      "dragonmounts:entity/dragon/ambient/water2",
+      "dragonmounts:entity/dragon/ambient/water3",
+      "dragonmounts:entity/dragon/ambient/water4"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.ambient"
   },
-  "mob.dragon.step": {
-    "category": "dragon_step",
+  "entity.dragon.death": {
     "sounds": [
-      "dragonmounts:mob/dragon/step1",
-      "dragonmounts:mob/dragon/step2",
-      "dragonmounts:mob/dragon/step3",
-      "dragonmounts:mob/dragon/step4"
-    ]
+      "dragonmounts:entity/dragon/death"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.death"
   },
-   "mob.dragon.death": {
-    "category": "dragon_death",
+  "entity.dragon.death.zombie": {
     "sounds": [
-      "dragonmounts:mob/dragon/death"
-    ]
+      "dragonmounts:entity/dragon/death_zombie"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.death"
   },
-     "mob.dragon.zombiedeath": {
-    "category": "dragon_zombie_death",
+  "entity.dragon.roar": {
     "sounds": [
-      "dragonmounts:mob/dragon/zombiedeath"
-    ]
+      "dragonmounts:entity/dragon/roar/common1",
+      "dragonmounts:entity/dragon/roar/common2",
+      "dragonmounts:entity/dragon/roar/common3",
+      "dragonmounts:entity/dragon/roar/common4"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.roar"
   },
-    "mob.dragon.hatched": {
-  "category": "dragon_hatched",
-  "sounds": [
-      "dragonmounts:mob/dragon/hatched"
-    ]
-  },
-  "mob.dragon.hatching": {
-  "category": "dragon_hatching",
-  "sounds": [
-    "dragonmounts:mob/dragon/hatching1",
-    "dragonmounts:mob/dragon/hatching2"
-    ]
-  },
-  "item.whistle": {
-  "category": "dragon_whistle",
-  "sounds": [
-      "dragonmounts:item/whistle"
-    ]
-  },
-  "mob.dragon.whistle1": {
-  "category": "dragon_whistle1",
-  "sounds": [
-      "dragonmounts:item/whistle1"
-    ]
-  },
-  "mob.dragon.breathweapon.fire.adultbreathefirestart": {
-    "category": "dragon_start",
+  "entity.dragon.roar.hatchling": {
     "sounds": [
-      "dragonmounts:mob/dragon/breathweapon/fire/adultbreathefirestart"
-    ]
+      "dragonmounts:entity/dragon/roar/hatchling1",
+      "dragonmounts:entity/dragon/roar/hatchling2"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.roar"
   },
-  "mob.dragon.breathweapon.fire.adultbreathefireloop": {
-    "category": "dragon_loop",
+  "entity.dragon.roar.water": {
     "sounds": [
-      "dragonmounts:mob/dragon/breathweapon/fire/adultbreathefireloop"
-    ]
+      "dragonmounts:entity/dragon/roar/water1",
+      "dragonmounts:entity/dragon/roar/water2",
+      "dragonmounts:entity/dragon/roar/water3"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.roar"
   },
-  "mob.dragon.breathweapon.fire.adultbreathefirestop": {
-    "category": "dragon_stop",
+  "entity.dragon.purr": {
     "sounds": [
-      "dragonmounts:mob/dragon/breathweapon/fire/adultbreathefirestop"
-    ]
+      "dragonmounts:entity/dragon/purr/common1",
+      "dragonmounts:entity/dragon/purr/common2"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.purr"
   },
-  "mob.dragon.breathweapon.fire.juvenilebreathefirestart": {
-    "category": "dragon_start",
+  "entity.dragon.purr.hatchling": {
     "sounds": [
-      "dragonmounts:mob/dragon/breathweapon/fire/juvenilebreathefirestart"
-    ]
+      "dragonmounts:entity/dragon/purr/hatchling1",
+      "dragonmounts:entity/dragon/purr/hatchling2"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.purr"
   },
-  "mob.dragon.breathweapon.fire.juvenilebreathefireloop": {
-    "category": "dragon_loop",
+  "entity.dragon.purr.nether": {
     "sounds": [
-      "dragonmounts:mob/dragon/breathweapon/fire/juvenilebreathefireloop"
-    ]
+      "dragonmounts:entity/dragon/purr/nether1",
+      "dragonmounts:entity/dragon/purr/nether2",
+      "dragonmounts:entity/dragon/purr/nether3",
+      "dragonmounts:entity/dragon/purr/nether4"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.purr"
   },
-  "mob.dragon.breathweapon.fire.juvenilebreathefirestop": {
-    "category": "dragon_stop",
+  "entity.dragon.purr.nether.hatchling": {
     "sounds": [
-      "dragonmounts:mob/dragon/breathweapon/fire/juvenilebreathefirestop"
-    ]
+      "dragonmounts:entity/dragon/purr/nether1",
+      "dragonmounts:entity/dragon/purr/nether2",
+      "dragonmounts:entity/dragon/purr/nether3",
+      "dragonmounts:entity/dragon/purr/nether4"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.purr"
   },
-  "mob.dragon.breathweapon.fire.hatchlingbreathefirestart": {
-    "category": "dragon_start",
+  "entity.dragon.purr.skeleton": {
     "sounds": [
-      "dragonmounts:mob/dragon/breathweapon/fire/hatchlingbreathefirestart"
-    ]
+      "dragonmounts:entity/dragon/purr/skeleton1",
+      "dragonmounts:entity/dragon/purr/skeleton2"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.purr"
   },
-  "mob.dragon.breathweapon.fire.hatchlingbreathefireloop": {
-    "category": "dragon_loop",
+  "entity.dragon.purr.skeleton.hatchling": {
     "sounds": [
-      "dragonmounts:mob/dragon/breathweapon/fire/hatchlingbreathefireloop"
-    ]
+      "dragonmounts:entity/dragon/purr/skeleton1",
+      "dragonmounts:entity/dragon/purr/skeleton2"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.purr"
   },
-  "mob.dragon.breathweapon.fire.hatchlingbreathefirestop": {
-    "category": "dragon_stop",
+  "entity.dragon.purr.zombie": {
     "sounds": [
-      "dragonmounts:mob/dragon/breathweapon/fire/hatchlingbreathefirestop"
-    ]
+      "dragonmounts:entity/dragon/purr/zombie1",
+      "dragonmounts:entity/dragon/purr/zombie2",
+      "dragonmounts:entity/dragon/purr/zombie3"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.purr"
   },
-  "mob.dragon.breathweapon.ice.adultbreatheicestart": {
-    "category": "dragon_start",
+  "entity.dragon.sneeze": {
     "sounds": [
-      "dragonmounts:mob/dragon/breathweapon/ice/adultbreatheicestart"
-    ]
+      "dragonmounts:entity/dragon/sneeze"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.sneeze"
   },
-  "mob.dragon.breathweapon.ice.adultbreatheiceloop": {
-    "category": "dragon_loop",
+  "entity.dragon.step": {
     "sounds": [
-      "dragonmounts:mob/dragon/breathweapon/ice/adultbreatheiceloop"
-    ]
+      "dragonmounts:entity/dragon/step1",
+      "dragonmounts:entity/dragon/step2",
+      "dragonmounts:entity/dragon/step3",
+      "dragonmounts:entity/dragon/step4"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.step"
   },
-  "mob.dragon.breathweapon.ice.adultbreatheicestop": {
-    "category": "dragon_stop",
+  "entity.dragon.breath_start.adult": {
     "sounds": [
-      "dragonmounts:mob/dragon/breathweapon/ice/adultbreatheicestop"
-    ]
+      "dragonmounts:entity/dragon/breath_start/adult"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_start"
   },
-  "mob.dragon.breathweapon.air.breathewaterstart": {
-    "category": "neutral",
+  "entity.dragon.breath_start.juvenile": {
     "sounds": [
-      "dragonmounts:mob/dragon/breathweapon/water/breathewaterstart"
-    ]
+      "dragonmounts:entity/dragon/breath_start/juvenile"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_start"
   },
-  "mob.dragon.breathweapon.water.breathewaterstart": {
-    "category": "neutral",
+  "entity.dragon.breath_start.hatchling": {
     "sounds": [
-      "dragonmounts:mob/dragon/breathweapon/water/breathewaterstart"
-    ]
+      "dragonmounts:entity/dragon/breath_start/hatchling"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_start"
   },
-  "mob.dragon.breathweapon.water.breathewaterloop": {
-    "category": "neutral",
+  "entity.dragon.breath_start.ice": {
     "sounds": [
-      "dragonmounts:mob/dragon/breathweapon/water/breathewaterloop"
-    ]
+      "dragonmounts:entity/dragon/breath_start/ice"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_start"
   },
-  "mob.dragon.breathweapon.water.breathewaterstop": {
-    "category": "neutral",
+  "entity.dragon.breath_start.forest": {
     "sounds": [
-      "dragonmounts:mob/dragon/breathweapon/water/breathewaterstop"
-    ]
+      "dragonmounts:entity/dragon/breath_start/fire"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_start"
   },
-  "mob.dragon.breathweapon.air.breatheairstart": {
-    "category": "neutral",
+  "entity.dragon.breath_start.airflow": {
     "sounds": [
-      "dragonmounts:mob/dragon/breathweapon/air/breatheairstart"
-    ]
+      "dragonmounts:entity/dragon/breath_start/airflow"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_start"
   },
-  "mob.dragon.breathweapon.air.breatheairloop": {
-    "category": "neutral",
+  "entity.dragon.breath_start.water": {
     "sounds": [
-      "dragonmounts:mob/dragon/breathweapon/air/breatheairloop"
-    ]
+      "dragonmounts:entity/dragon/breath_start/water"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_start"
   },
-  "mob.dragon.breathweapon.air.breatheairstop": {
-    "category": "neutral",
+  "entity.dragon.breath_loop.adult": {
     "sounds": [
-      "dragonmounts:mob/dragon/breathweapon/air/breatheairstop"
-    ]
+      "dragonmounts:entity/dragon/breath_loop/adult"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_loop"
   },
-  "silence": {
-    "sounds": []
+  "entity.dragon.breath_loop.juvenile": {
+    "sounds": [
+      "dragonmounts:entity/dragon/breath_loop/juvenile"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_loop"
+  },
+  "entity.dragon.breath_loop.hatchling": {
+    "sounds": [
+      "dragonmounts:entity/dragon/breath_loop/hatchling"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_loop"
+  },
+  "entity.dragon.breath_loop.ice": {
+    "sounds": [
+      "dragonmounts:entity/dragon/breath_loop/ice"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_loop"
+  },
+  "entity.dragon.breath_loop.forest": {
+    "sounds": [
+      "dragonmounts:entity/dragon/breath_loop/fire"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_loop"
+  },
+  "entity.dragon.breath_loop.airflow": {
+    "sounds": [
+      "dragonmounts:entity/dragon/breath_loop/airflow"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_loop"
+  },
+  "entity.dragon.breath_loop.water": {
+    "sounds": [
+      "dragonmounts:entity/dragon/breath_loop/water"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_loop"
+  },
+  "entity.dragon.breath_stop.adult": {
+    "sounds": [
+      "dragonmounts:entity/dragon/breath_stop/adult"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_stop"
+  },
+  "entity.dragon.breath_stop.juvenile": {
+    "sounds": [
+      "dragonmounts:entity/dragon/breath_stop/juvenile"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_stop"
+  },
+  "entity.dragon.breath_stop.hatchling": {
+    "sounds": [
+      "dragonmounts:entity/dragon/breath_stop/hatchling"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_stop"
+  },
+  "entity.dragon.breath_stop.ice": {
+    "sounds": [
+      "dragonmounts:entity/dragon/breath_stop/ice"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_stop"
+  },
+  "entity.dragon.breath_stop.forest": {
+    "sounds": [
+      "dragonmounts:entity/dragon/breath_stop/fire"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_stop"
+  },
+  "entity.dragon.breath_stop.airflow": {
+    "sounds": [
+      "dragonmounts:entity/dragon/breath_stop/airflow"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_stop"
+  },
+  "entity.dragon.breath_stop.water": {
+    "sounds": [
+      "dragonmounts:entity/dragon/breath_stop/water"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_stop"
+  },
+  "entity.dragon_egg.shatter": {
+    "sounds": [
+      "dragonmounts:entity/dragon_egg/shatter"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon_egg.shatter"
+  },
+  "entity.dragon_egg.hatching": {
+    "sounds": [
+      "dragonmounts:entity/dragon_egg/crack1",
+      "dragonmounts:entity/dragon_egg/crack2"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon_egg.crack"
+  },
+  "item.whistle.blow": {
+    "sounds": [
+      "dragonmounts:item/whistle1",
+      "dragonmounts:item/whistle2"
+    ],
+    "subtitle": "subtitles.item.dragonmounts.whistle.blow"
+  },
+  "item.variation_orb.activate": {
+    "sounds": [
+      "dragonmounts:item/variation_orb"
+    ],
+    "subtitle": "subtitles.item.dragonmounts.variation_orb.activate"
   }
 }

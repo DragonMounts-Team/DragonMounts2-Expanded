@@ -28,6 +28,6 @@ public class SkeletonType extends DragonType {
 
     @Override
     public SoundEvent getLivingSound(TameableDragonEntity dragon) {
-        return dragon.isChild() ? DMSounds.ENTITY_DRAGON_HATCHLING_GROWL : DMSounds.ENTITY_SKELETON_DRAGON_GROWL;
+        return dragon.isChild() ? DMSounds.DRAGON_PURR_SKELETON_HATCHLING : DMSounds.DRAGON_PURR_SKELETON;
     }
 }

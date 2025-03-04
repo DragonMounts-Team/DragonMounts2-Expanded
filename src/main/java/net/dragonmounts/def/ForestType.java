@@ -1,8 +1,8 @@
 package net.dragonmounts.def;
 
-import net.dragonmounts.entity.breath.sound.SoundEffectName;
-import net.dragonmounts.entity.breath.sound.SoundState;
-import net.dragonmounts.entity.helper.DragonLifeStage;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.breath.DragonBreath;
+import net.dragonmounts.entity.breath.impl.ForestBreath;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.util.ResourceLocation;
 
@@ -12,7 +12,7 @@ public class ForestType extends DragonType {
     }
 
     @Override
-    public SoundEffectName getBreathSound(DragonLifeStage stage, SoundState state) {
-        return state.forest;
+    public DragonBreath initBreath(TameableDragonEntity dragon) {
+        return new ForestBreath(dragon, 0.7F);
     }
 }

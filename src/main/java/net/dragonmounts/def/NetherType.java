@@ -1,9 +1,7 @@
 package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.DragonBreath;
-import net.dragonmounts.entity.breath.effects.NetherBreathFX;
 import net.dragonmounts.entity.breath.impl.NetherBreath;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.init.DMSounds;
@@ -11,7 +9,6 @@ import net.dragonmounts.registry.DragonType;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -62,11 +59,6 @@ public class NetherType extends DragonType {
 
     @Override
     public SoundEvent getLivingSound(TameableDragonEntity dragon) {
-        return dragon.isChild() ? DMSounds.ENTITY_DRAGON_HATCHLING_GROWL : DMSounds.ENTITY_NETHER_DRAGON_GROWL;
-    }
-
-    @Override
-    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
-        world.spawnEntity(new NetherBreathFX(world, position, direction, power, partialTicks));
+        return dragon.isChild() ? DMSounds.DRAGON_PURR_NETHER_HATCHLING : DMSounds.DRAGON_PURR_NETHER;
     }
 }

@@ -107,8 +107,8 @@ public class DMBlocks {
         ICE_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("ice_dragon_scale_block", DragonTypes.ICE, MapColor.ICE, props);
         FIRE_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("fire_dragon_scale_block", DragonTypes.FIRE, MapColor.RED, props);
         FOREST_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("forest_dragon_scale_block", DragonTypes.FOREST, MapColor.GRASS, props);
-        NETHER_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("nether_dragon_scale_block", DragonTypes.NETHER, MapColor.NETHERRACK, props.setLightLevel(0.125F));
-        ENDER_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("ender_dragon_scale_block", DragonTypes.ENDER, MapColor.PURPLE, props.setLightLevel(0));
+        NETHER_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("nether_dragon_scale_block", DragonTypes.NETHER, MapColor.NETHERRACK, props.setLightLevel(0.1875F));
+        ENDER_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("ender_dragon_scale_block", DragonTypes.ENDER, MapColor.PURPLE, props.setLightLevel(0.0F));
         ENCHANT_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("enchant_dragon_scale_block", DragonTypes.ENCHANT, MapColor.MAGENTA, props);
         SUNLIGHT_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("sunlight_dragon_scale_block", DragonTypes.SUNLIGHT, MapColor.YELLOW, props);
         MOONLIGHT_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("moonlight_dragon_scale_block", DragonTypes.MOONLIGHT, MapColor.SILVER, props);

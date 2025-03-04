@@ -18,6 +18,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
@@ -61,7 +62,7 @@ public class ClientDragonEntity extends TameableDragonEntity {
         this.lifeStageHelper.ageUp(1);
         this.breathHelper.update();
         this.getVariant().type.tick(this);
-        this.animator.tick();
+        this.animator.update();
         if (!this.isDead) {
             if (this.healingEnderCrystal != null && this.healingEnderCrystal.isDead) {
                 this.healingEnderCrystal = null;
@@ -184,8 +185,7 @@ public class ClientDragonEntity extends TameableDragonEntity {
     public void handleStatusUpdate(byte id) {
         switch (id) {
             case DO_ATTACK:
-                // play eating sound
-                this.playSound(this.getAttackSound(), 1.0F, 0.7F);
+                this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1.0F, 0.7F);
                 // play attack animation
                 this.animator.ticksSinceLastAttack = 0;
                 break;

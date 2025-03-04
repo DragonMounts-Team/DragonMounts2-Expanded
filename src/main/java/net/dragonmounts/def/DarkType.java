@@ -1,18 +1,13 @@
 package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.DragonBreath;
-import net.dragonmounts.entity.breath.effects.DarkBreathFX;
 import net.dragonmounts.entity.breath.impl.DarkBreath;
-import net.dragonmounts.entity.breath.sound.SoundEffectName;
-import net.dragonmounts.entity.breath.sound.SoundState;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -51,15 +46,5 @@ public class DarkType extends DragonType {
     @Override
     public boolean isHabitatEnvironment(Entity egg) {
         return egg.posY > egg.world.getHeight() * 0.66;
-    }
-
-    @Override
-    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
-        world.spawnEntity(new DarkBreathFX(world, position, direction, power, partialTicks));
-    }
-
-    @Override
-    public SoundEffectName getBreathSound(DragonLifeStage stage, SoundState state) {
-        return state.aether;
     }
 }

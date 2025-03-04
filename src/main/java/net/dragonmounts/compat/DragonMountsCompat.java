@@ -14,6 +14,7 @@ import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.DragonScaleArmorSuit;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.datafix.FixTypes;
 import net.minecraftforge.common.util.ModFixs;
 import net.minecraftforge.event.RegistryEvent;
@@ -100,6 +101,11 @@ public abstract class DragonMountsCompat {
                     break;
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void ignoreSound(RegistryEvent.MissingMappings<SoundEvent> event) {
+        event.getMappings().forEach(RegistryEvent.MissingMappings.Mapping::ignore);
     }
 
     static {

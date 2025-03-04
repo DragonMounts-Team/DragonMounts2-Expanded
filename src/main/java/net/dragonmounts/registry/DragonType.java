@@ -8,13 +8,8 @@ import it.unimi.dsi.fastutil.objects.ReferenceSet;
 import it.unimi.dsi.fastutil.objects.ReferenceSets;
 import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.DragonBreath;
-import net.dragonmounts.entity.breath.effects.FlameBreathFX;
 import net.dragonmounts.entity.breath.impl.FireBreath;
-import net.dragonmounts.entity.breath.sound.SoundEffectName;
-import net.dragonmounts.entity.breath.sound.SoundState;
-import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.util.DMUtils;
 import net.minecraft.block.Block;
@@ -27,7 +22,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.registries.*;
@@ -129,24 +123,20 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
         return new FireBreath(dragon, 0.7F);
     }
 
-    public SoundEffectName getBreathSound(DragonLifeStage stage, SoundState state) {
-        return state.getSoundByAge(stage);
+    public SoundEvent getLivingSound(TameableDragonEntity dragon) {
+        return dragon.isChild() ? DMSounds.DRAGON_PURR_HATCHLING : (
+                dragon.getRNG().nextFloat() < 0.33F
+                        ? DMSounds.DRAGON_PURR
+                        : DMSounds.DRAGON_AMBIENT
+        );
     }
 
-    public SoundEvent getLivingSound(TameableDragonEntity dragon) {
-        return dragon.isChild() ? DMSounds.ENTITY_DRAGON_HATCHLING_GROWL :
-                (dragon.getRNG().nextInt(3) == 0
-                        ? DMSounds.ENTITY_DRAGON_GROWL
-                        : DMSounds.ENTITY_DRAGON_BREATHE
-                );
+    public SoundEvent getDeathSound(TameableDragonEntity dragon) {
+        return dragon.isEgg() ? DMSounds.DRAGON_EGG_SHATTER : DMSounds.DRAGON_DEATH;
     }
 
     public SoundEvent getRoarSound(TameableDragonEntity dragon) {
-        return dragon.isChild() ? DMSounds.HATCHLING_DRAGON_ROAR : DMSounds.DRAGON_ROAR;
-    }
-
-    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
-        world.spawnEntity(new FlameBreathFX(world, position, direction, power, partialTicks));
+        return dragon.isChild() ? DMSounds.DRAGON_ROAR_HATCHLING : DMSounds.DRAGON_ROAR;
     }
 
     public String getName() {

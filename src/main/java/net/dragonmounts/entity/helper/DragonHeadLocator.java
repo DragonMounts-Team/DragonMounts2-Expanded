@@ -5,10 +5,11 @@ import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.util.Segment;
 import net.dragonmounts.util.math.Interpolation;
 import net.dragonmounts.util.math.MathX;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
-public class DragonHeadLocator<T extends TameableDragonEntity> {
+public class DragonHeadLocator<T extends TameableDragonEntity> implements ITickable {
     public static final int NECK_SEGMENTS = 7;
     public final T dragon;
     public final Segment[] neckSegments = Segment.makeArray(NECK_SEGMENTS);
@@ -36,7 +37,8 @@ public class DragonHeadLocator<T extends TameableDragonEntity> {
         this.lookPitch = MathHelper.clamp(lookPitch, (float) -90, (float) 90);
     }
 
-    public void tick() {
+    @Override
+    public void update() {
         // server side impl:
         TameableDragonEntity dragon = this.dragon;
         // don't move anything during death sequence

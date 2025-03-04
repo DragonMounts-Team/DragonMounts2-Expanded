@@ -33,10 +33,10 @@ import org.apache.logging.log4j.Level;
  * the dragon during breath weapon (eg jaw opening)
  */
 public abstract class DragonBreathHelper<T extends TameableDragonEntity> implements ITickable {
+    public static final int BREATH_START_DURATION = 5; // ticks
+    public static final int BREATH_STOP_DURATION = 5; // ticks
     public final BreathAffectedArea breathAffectedArea = new BreathAffectedArea();
     public final T dragon;
-    protected final int BREATH_START_DURATION = 5; // ticks
-    protected final int BREATH_STOP_DURATION = 5; // ticks
     protected BreathState currentBreathState = BreathState.IDLE;
     protected DragonBreath breath;
     protected int transitionStartTick;

@@ -1,22 +1,18 @@
 package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.DragonBreath;
-import net.dragonmounts.entity.breath.effects.HydroBreathFX;
 import net.dragonmounts.entity.breath.impl.WaterBreath;
-import net.dragonmounts.entity.breath.sound.SoundEffectName;
-import net.dragonmounts.entity.breath.sound.SoundState;
 import net.dragonmounts.entity.helper.DragonLifeStage;
+import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.EntityUtil;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 public class WaterType extends DragonType {
@@ -49,19 +45,13 @@ public class WaterType extends DragonType {
         }
     }
 
-    @Nullable
     @Override
     public DragonBreath initBreath(TameableDragonEntity dragon) {
         return new WaterBreath(dragon, 0.7F);
     }
 
     @Override
-    public SoundEffectName getBreathSound(DragonLifeStage stage, SoundState state) {
-        return state.water;
-    }
-
-    @Override
-    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
-        world.spawnEntity(new HydroBreathFX(world, position, direction, power, partialTicks));
+    public SoundEvent getRoarSound(TameableDragonEntity dragon) {
+        return dragon.isChild() ? DMSounds.DRAGON_ROAR_HATCHLING : DMSounds.DRAGON_ROAR_WATER;
     }
 }

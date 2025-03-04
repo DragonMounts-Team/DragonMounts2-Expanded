@@ -176,7 +176,7 @@ public abstract class MathX {
      * @return interpolated vector
      */
     public static Vec3d interpolateVec(Vec3d start, Vec3d end, float fraction) {
-        return new Vec3d(
+        return start == end ? end : new Vec3d(
                 start.x * (1 - fraction) + end.x * fraction,
                 start.y * (1 - fraction) + end.y * fraction,
                 start.z * (1 - fraction) + end.z * fraction

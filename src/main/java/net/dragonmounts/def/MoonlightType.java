@@ -1,17 +1,12 @@
 package net.dragonmounts.def;
 
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.DragonBreath;
-import net.dragonmounts.entity.breath.effects.AetherBreathFX;
-import net.dragonmounts.entity.breath.impl.AetherBreath;
-import net.dragonmounts.entity.breath.sound.SoundEffectName;
-import net.dragonmounts.entity.breath.sound.SoundState;
+import net.dragonmounts.entity.breath.impl.MoonlightBreath;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -42,16 +37,6 @@ public class MoonlightType extends DragonType {
 
     @Override
     public DragonBreath initBreath(TameableDragonEntity dragon) {
-        return new AetherBreath(dragon, 0.7F);
-    }
-
-    @Override
-    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
-        world.spawnEntity(new AetherBreathFX(world, position, direction, power, partialTicks));
-    }
-
-    @Override
-    public SoundEffectName getBreathSound(DragonLifeStage stage, SoundState state) {
-        return state.ice;// why?
+        return new MoonlightBreath(dragon, 0.7F);
     }
 }

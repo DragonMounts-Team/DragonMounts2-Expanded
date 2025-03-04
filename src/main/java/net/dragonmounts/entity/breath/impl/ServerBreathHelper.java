@@ -12,9 +12,9 @@ public class ServerBreathHelper extends DragonBreathHelper<ServerDragonEntity> {
     @Override
     public void update() {
         ++tickCounter;
+        if (this.breath == null) return;
         ServerDragonEntity dragon = this.dragon;
         this.updateBreathState(dragon.isUsingBreathWeapon());
-        if (this.breath == null) return;
         if (BreathState.SUSTAIN == this.currentBreathState) {
             Vec3d origin = dragon.getThroatPosition();
             Vec3d lookDirection = dragon.getLook(1.0F);
