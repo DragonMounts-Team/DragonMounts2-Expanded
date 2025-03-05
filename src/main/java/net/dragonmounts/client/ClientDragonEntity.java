@@ -3,6 +3,7 @@ package net.dragonmounts.client;
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.capability.DMCapabilities;
 import net.dragonmounts.capability.IDragonFood;
+import net.dragonmounts.capability.IHardShears;
 import net.dragonmounts.client.model.dragon.DragonAnimator;
 import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.TameableDragonEntity;
@@ -14,7 +15,6 @@ import net.dragonmounts.network.CDragonBreathPacket;
 import net.dragonmounts.util.ItemUtil;
 import net.dragonmounts.util.MutableBlockPosEx;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -27,9 +27,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
-
-import java.util.List;
 
 public class ClientDragonEntity extends TameableDragonEntity {
     public final DragonAnimator animator = new DragonAnimator(this);
@@ -102,58 +99,30 @@ public class ClientDragonEntity extends TameableDragonEntity {
 
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
-        if (this.isEgg()) return player.isSneaking();
+        DragonLifeStage stage = this.lifeStageHelper.getLifeStage();
+        if (DragonLifeStage.EGG == stage) return player.isSneaking();
         // prevent doing any interactions when a hatchling rides you, the hitbox could block the player's raytraceresult for rightclick
         if (player.isPassenger(this)) return false;
-
         ItemStack stack = player.getHeldItem(hand);
-
         final Relation relation = Relation.checkRelation(this, player);
         final boolean isTrusted = relation != Relation.STRANGER;
-
-        /*
-         * Dragon Riding The Player
-         */
-        if (isTrusted && !isSitting() && this.isChild() && !player.isSneaking() && player.getPassengers().size() < 2 && isInertItem(stack)) {
-            return true;
-        }
-
-        boolean isServer = false;
-        if (!this.isSheared() && this.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE) && stack.hasCapability(DMCapabilities.HARD_SHEARS, null)) {
-            return true;
-        }
-        if (isTrusted && isInertItem(stack)) {
-            /*
-             * Sit
-             */
-            if (this.onGround && !stack.isEmpty() && ItemUtil.anyMatches(stack, OreDictionary.getOreID("stickWood"), OreDictionary.getOreID("bone"))) {
+        if (!stack.isEmpty()) {
+            final boolean oldEnough = !stage.isBaby();
+            if (oldEnough && !this.isSheared()) {
+                IHardShears shears = stack.getCapability(DMCapabilities.HARD_SHEARS, null);
+                if (shears != null && shears.canShear(stack, player, this)) return true;
+            }
+            if (isTrusted && ((
+                    this.onGround && ItemUtil.anyMatches(stack, "stickWood", "bone")
+            ) || (
+                    oldEnough && !this.isSaddled() && stack.getItem() == Items.SADDLE
+            ))) {
                 return true;
             }
-            /*
-             * GUI
-             */
-            if (player.isSneaking()) return true;
-            if (!this.isChild()) {
-                /*
-                 * Player Riding the Dragon
-                 */
-                if (this.isSaddled()) {
-                    List<Entity> passengers = this.getPassengers();
-                    if (passengers.size() < 3) {
-                        return true;
-                    }
-                } else if (!stack.isEmpty() && stack.getItem() == Items.SADDLE) {
-                    return true;
-                }
-            }
+            IDragonFood food = stack.getCapability(DMCapabilities.DRAGON_FOOD, null);
+            if (food != null && food.tryFeed(this, player, relation, stack, hand)) return true;
         }
-
-        /*
-         * Consume
-         */
-        if (stack.isEmpty()) return false;
-        IDragonFood food = stack.getCapability(DMCapabilities.DRAGON_FOOD, null);
-        return food != null && food.tryFeed(this, player, relation, stack, hand);
+        return stack.interactWithEntity(player, this, hand) || isTrusted;
     }
 
     @Override

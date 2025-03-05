@@ -48,7 +48,8 @@ public class DMSounds {
 	public static final SoundEvent DRAGON_BREATH_STOP_WATER;
 	public static final SoundEvent DRAGON_EGG_CRACK;
 	public static final SoundEvent DRAGON_EGG_SHATTER;
-	public static final SoundEvent WHISTLE_BLOW;
+	public static final SoundEvent WHISTLE_BLOW_SHORT;
+	public static final SoundEvent WHISTLE_BLOW_LONG;
 	public static final SoundEvent VARIATION_ORB_ACTIVATE;
 
 	static SoundEvent create(String name) {
@@ -97,7 +98,8 @@ public class DMSounds {
 		list.add(DRAGON_BREATH_STOP_WATER = create("entity.dragon.breath_stop.water"));
 		list.add(DRAGON_EGG_CRACK = create("entity.dragon_egg.crack"));
 		list.add(DRAGON_EGG_SHATTER = create("entity.dragon_egg.shatter"));
-		list.add(WHISTLE_BLOW = create("item.whistle.blow"));
+		list.add(WHISTLE_BLOW_SHORT = create("item.whistle.blow.short"));
+		list.add(WHISTLE_BLOW_LONG = create("item.whistle.blow.long"));
 		list.add(VARIATION_ORB_ACTIVATE = create("item.variation_orb.activate"));
 		INSTANCES = ObjectLists.unmodifiable(list);
 	}

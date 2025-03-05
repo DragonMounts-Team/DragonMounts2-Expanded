@@ -1,7 +1,6 @@
 package net.dragonmounts.init;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import mcp.MethodsReturnNonnullByDefault;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.api.IDescribableArmorEffect;
@@ -10,7 +9,6 @@ import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.DragonScaleArmorSuit;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemBlock;
@@ -24,7 +22,6 @@ import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
 @MethodsReturnNonnullByDefault
 public class DMItems {
     public static final ObjectArrayList<Item> ITEMS = new ObjectArrayList<>();
-    public static final ReferenceOpenHashSet<Item> DRAGON_INTERACTABLE = new ReferenceOpenHashSet<>();
 
     //Blocks
     public static final CraftableBlockItem DRAGON_NEST = new CraftableBlockItem(DMBlocks.DRAGON_NEST, DMItemGroups.BLOCKS);
@@ -300,7 +297,7 @@ public class DMItems {
     public static final AmuletItem<Entity> AMULET = createItem(
             "amulet",
             new AmuletItem<>(Entity.class),
-            amulet -> DRAGON_INTERACTABLE.add(amulet.setTranslationKey(DragonAmuletItem.TRANSLATION_KEY).setCreativeTab(DMItemGroups.ITEMS))
+            amulet -> amulet.setTranslationKey(DragonAmuletItem.TRANSLATION_KEY).setCreativeTab(DMItemGroups.ITEMS)
     );
     public static final DragonAmuletItem FOREST_DRAGON_AMULET = createDragonAmuletItem("forest_dragon_amulet", DragonTypes.FOREST);
     public static final DragonAmuletItem FIRE_DRAGON_AMULET = createDragonAmuletItem("fire_dragon_amulet", DragonTypes.FIRE);
@@ -322,16 +319,24 @@ public class DMItems {
     public static final DragonWandItem DRAGON_WAND = createItem(
             "dragon_wand",
             new DragonWandItem(),
-            item -> DRAGON_INTERACTABLE.add(item.setTranslationKey(TRANSLATION_KEY_PREFIX + "dragon_wand"))
+            item -> item.setTranslationKey(TRANSLATION_KEY_PREFIX + "dragon_wand")
     );
     public static final DragonWhistleItem DRAGON_WHISTLE = createItem(
             "dragon_whistle",
             new DragonWhistleItem(),
-            whistle -> DRAGON_INTERACTABLE.add(whistle.setTranslationKey(DragonWhistleItem.TRANSLATION_KEY).setCreativeTab(DMItemGroups.ITEMS))
+            whistle -> whistle.setTranslationKey(DragonWhistleItem.TRANSLATION_KEY).setCreativeTab(DMItemGroups.ITEMS)
     );
-    public static final VariationOrbItem VARIATION_ORB = createItem("variation_orb", new VariationOrbItem());
+    public static final VariationOrbItem VARIATION_ORB = createItem(
+            "variation_orb",
+            new VariationOrbItem(),
+            item -> item.setTranslationKey(VariationOrbItem.TRANSLATION_KEY).setCreativeTab(DMItemGroups.ITEMS).setMaxStackSize(16)
+    );
     //Shears
-    public static final HardShearsItem DIAMOND_SHEARS = createHardShearsItem("diamond_shears", Item.ToolMaterial.DIAMOND, 345);
+    public static final HardShearsItem DIAMOND_SHEARS = createItem(
+            "diamond_shears",
+            new HardShearsItem(Item.ToolMaterial.DIAMOND),
+            shears -> shears.setMaxDamage(345).setTranslationKey(TRANSLATION_KEY_PREFIX + "diamond_shears")
+    );
     //Carriages
     public static final CarriageItem ACACIA_CARRIAGE = createItem("acacia_carriage", new CarriageItem(CarriageTypes.ACACIA));
     public static final CarriageItem BIRCH_CARRIAGE = createItem("birch_carriage", new CarriageItem(CarriageTypes.BIRCH));
@@ -398,7 +403,6 @@ public class DMItems {
     static DragonArmorItem createDragonArmorItem(String name, String texture, int protection) {
         DragonArmorItem item = new DragonArmorItem(new ResourceLocation(DragonMountsTags.MOD_ID, texture), protection);
         ITEMS.add(item.setTranslationKey(TRANSLATION_KEY_PREFIX + name).setRegistryName(name));
-        DRAGON_INTERACTABLE.add(item);
         return item;
     }
 
@@ -494,15 +498,7 @@ public class DMItems {
         return item;
     }
 
-    static HardShearsItem createHardShearsItem(String name, Item.ToolMaterial tier, int durability) {
-        HardShearsItem item = new HardShearsItem(tier);
-        ITEMS.add(item.setMaxDamage(durability).setTranslationKey(TRANSLATION_KEY_PREFIX + name).setRegistryName(name));
-        return item;
-    }
-
     static {
-        DRAGON_INTERACTABLE.add(Items.BONE);
-        DRAGON_INTERACTABLE.add(Items.STICK);
         DRAGON_ORB.setTranslationKey(TRANSLATION_KEY_PREFIX + "dragon_orb").setRegistryName("dragon_orb");
         TEST_RUNNER.setRegistryName("test_runner");
         for (DragonVariant variant : DragonVariants.BUILTIN_VALUES) {

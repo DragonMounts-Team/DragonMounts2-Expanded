@@ -1,10 +1,11 @@
 package net.dragonmounts.item;
 
 
+import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.registry.DragonVariant;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -12,12 +13,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.util.List;
+
+import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
 
 public class VariationOrbItem extends Item {
-    public VariationOrbItem() {
-        this.setCreativeTab(DMItemGroups.ITEMS).setMaxStackSize(16);
-    }
-
+    public static final String TRANSLATION_KEY = TRANSLATION_KEY_PREFIX + "variation_orb";
     @Override
     public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
         if (target instanceof TameableDragonEntity) {
@@ -38,5 +45,11 @@ public class VariationOrbItem extends Item {
             player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.dragon.notOwner"), true);
         }
         return false;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World level, List<String> tooltips, ITooltipFlag flag) {
+        tooltips.add(TextFormatting.GRAY + ClientUtil.translateToLocal("tooltip.dragonmounts.variation_orb"));
     }
 }

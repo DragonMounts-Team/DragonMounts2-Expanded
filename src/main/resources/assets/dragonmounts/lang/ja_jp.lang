@@ -141,7 +141,6 @@ tooltip.dragonmounts.armor_effect_piece_4=4部位セット効果:
 tooltip.dragonmounts.armor_effect_remaining_cooldown=残りのクールダウン: %ss
 # actually it is related to key binding, so the text will be changed later
 tooltip.dragonmounts.whistle=所有している飼いならしたドラゴンを右クリックして操作します
-tooltip.dragonmounts.whistle.name=ドラゴンホイッスル (%s)
 tooltip.dragonmounts.age=年齢: %s
 tooltip.dragonmounts.name=名前: %s
 tooltip.dragonmounts.health=健康: %s

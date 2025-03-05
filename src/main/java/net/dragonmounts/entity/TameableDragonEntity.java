@@ -16,7 +16,6 @@ import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.breath.DragonBreathHelper;
 import net.dragonmounts.entity.helper.*;
-import net.dragonmounts.init.DMItems;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.init.DragonVariants;
@@ -40,7 +39,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
@@ -74,13 +72,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         return level.isRemote ? new ClientDragonEntity(level) : new ServerDragonEntity(level);
     }
 
-    public static boolean isInertItem(ItemStack stack) {
-        return stack.isEmpty() || (stack.getItemUseAction() == EnumAction.NONE &&
-                !DMItems.DRAGON_INTERACTABLE.contains(stack.getItem()) &&
-                !stack.hasCapability(DMCapabilities.DRAGON_FOOD, null)
-        );
-    }
-
     // base attributes
     public static final double BASE_GROUND_SPEED = 0.4;
     public static final double BASE_TOUGHNESS = 30.0D;
@@ -103,17 +94,14 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     private static final DataParameter<Boolean> HOVER_CANCELLED = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> Y_LOCKED = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> FOLLOW_YAW = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<DragonVariant> DATA_VARIANT = EntityDataManager.createKey(TameableDragonEntity.class, DragonVariant.SERIALIZER);
+    protected static final DataParameter<DragonVariant> DATA_VARIANT = EntityDataManager.createKey(TameableDragonEntity.class, DragonVariant.SERIALIZER);
     private static final DataParameter<Integer> DATA_REPRODUCTION_COUNT = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> HUNGER = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> DATA_TICKS_SINCE_CREATION = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.VARINT);
-    private static final DataParameter<Boolean> DATA_SHEARED = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
-    //private static final DataParameter<Boolean> SLEEP = EntityDataManager.createKey(EntityTameableDragon.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<String> DATA_BREATH_WEAPON_TARGET = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.STRING);
-    private static final DataParameter<Integer> DATA_BREATH_WEAPON_MODE = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.VARINT);
-    private static final DataParameter<ItemStack> DATA_ARMOR = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.ITEM_STACK);
-    private static final DataParameter<ItemStack> DATA_CHEST = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.ITEM_STACK);
-    private static final DataParameter<ItemStack> DATA_SADDLE = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.ITEM_STACK);
+    protected static final DataParameter<Boolean> DATA_SHEARED = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<ItemStack> DATA_ARMOR = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.ITEM_STACK);
+    protected static final DataParameter<ItemStack> DATA_CHEST = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.ITEM_STACK);
+    protected static final DataParameter<ItemStack> DATA_SADDLE = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.ITEM_STACK);
     public final DragonInventory inventory = new DragonInventory(this);
     public final DragonVariantHelper variantHelper = new DragonVariantHelper(this);
     public final DragonLifeStageHelper lifeStageHelper = new DragonLifeStageHelper(this, DATA_TICKS_SINCE_CREATION);
@@ -121,7 +109,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     public final DragonBreathHelper<?> breathHelper = this.createBreathHelper();
     // public final DragonHungerHelper hungerHelper = new DragonHungerHelper(this);
     public EntityEnderCrystal healingEnderCrystal;
-    public boolean followOwner = true;
     public int inAirTicks;
     private boolean isUsingBreathWeapon;
     private boolean isGoingDown;
@@ -131,7 +118,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     private boolean armored;
     private boolean chested;
     private boolean saddled;
-    protected int shearCooldown;
 
     public TameableDragonEntity(World world) {
         super(world);
@@ -161,10 +147,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         manager.register(ALLOW_OTHERPLAYERS, false);
         manager.register(BOOSTING, false);
         manager.register(DATA_SHEARED, false);
-        //        manager.register(SLEEP, false); //unused as of now
         manager.register(FOLLOW_YAW, true);
-        manager.register(DATA_BREATH_WEAPON_TARGET, "");
-        manager.register(DATA_BREATH_WEAPON_MODE, 0);
         manager.register(HUNGER, 100);
         manager.register(DATA_ARMOR, ItemStack.EMPTY);
         manager.register(DATA_CHEST, ItemStack.EMPTY);
@@ -793,8 +776,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     /**
      * Public wrapper for protected final setScale(), used by DragonLifeStageHelper.
      */
-    @Deprecated
-    public void setScalePublic(float scale) {
+    public void applyScale(float scale) {
         boolean onGround = this.onGround;
         this.stepHeight = 0.5F + scale * (float) DMConfig.BASE_STEP_HEIGHT.value;
         float width = this.width;
@@ -872,10 +854,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         return false;
     }
 
-    public boolean canBeLeashedTo(EntityPlayer player) {
-        return true;
-    }
-
     public int getHunger() {
         return dataManager.get(HUNGER);
     }
@@ -891,11 +869,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
 
     public boolean isSheared() {
         return this.dataManager.get(DATA_SHEARED);
-    }
-
-    public void setSheared(int cooldown) {
-        this.shearCooldown = cooldown;
-        this.dataManager.set(DATA_SHEARED, cooldown > 0);
     }
 
     public void resetFeedTimer() {
@@ -961,9 +934,24 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         super.notifyDataManagerChange(key);
         if (DATA_VARIANT.equals(key)) {
             this.variantHelper.onVariantChanged(this.getVariant());
+            if (!this.firstUpdate && this.world.isRemote) {
+                Random random = this.rand;
+                World level = this.world;
+                for (int i = 0, count = 2 + (int) (this.getScale() * 18); i < count; ++i) {
+                    level.spawnParticle(
+                            EnumParticleTypes.CLOUD,
+                            this.posX + (random.nextDouble() - 0.5D) * this.width,
+                            this.posY + random.nextDouble() * this.height,
+                            this.posZ + (random.nextDouble() - 0.5D) * this.width,
+                            0.0D,
+                            0.0D,
+                            0.0D
+                    );
+                }
+            }
         } else if (DATA_CHEST.equals(key)) {
             ItemStack stack = this.getChest();
-            boolean chested = !stack.isEmpty() && stack.getItem() == Item.getItemFromBlock(Blocks.CHEST);
+            boolean chested = DragonInventory.isValidChest(stack);
             if (!this.firstUpdate && chested && !this.chested) {
                 this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.PLAYERS, 1F, 1F, false);
             } else if (!chested && this.chested) {

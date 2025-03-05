@@ -43,7 +43,6 @@ public class DragonLifeStageHelper {
     private static final float EGG_WIGGLE_THRESHOLD = 0.75f;
     private static final float EGG_WIGGLE_BASE_CHANCE = 20;
     public final TameableDragonEntity dragon;
-    protected final Random rand;
     // the ticks since creation is used to control the dragon's life stage.  It is only updated by the server occasionally.
     // the client keeps a cached copy of it and uses client ticks to interpolate in the gaps.
     // when the watcher is updated from the server, the client will tick it faster or slower to resynchronise
@@ -63,7 +62,6 @@ public class DragonLifeStageHelper {
         } else {
             ticksSinceCreationClient = null;
         }
-        this.rand = dragon.getRNG();
     }
 
     public void applyEntityAttributes() {
@@ -186,31 +184,29 @@ public class DragonLifeStageHelper {
 
     private void updateEgg() {
         TameableDragonEntity dragon = this.dragon;
+        Random rand = dragon.getRNG();
         // animate egg wiggle based on the time the eggs take to hatch
         float progress = DragonLifeStage.getStageProgressFromTickCount(getTicksSinceCreation());
 
         // wait until the egg is nearly hatched
         if (progress > EGG_WIGGLE_THRESHOLD) {
             float wiggleChance = (progress - EGG_WIGGLE_THRESHOLD) / EGG_WIGGLE_BASE_CHANCE * (1 - EGG_WIGGLE_THRESHOLD);
-
+            boolean mayCrack = false;
             if (eggWiggleX > 0) {
                 eggWiggleX--;
             } else if (rand.nextFloat() < wiggleChance) {
                 eggWiggleX = rand.nextBoolean() ? 10 : 20;
-                if (progress > EGG_CRACK_THRESHOLD) {
-                    this.playEggCrackEffect();
-                    dragon.world.playSound(null, dragon.getPosition(), DMSounds.DRAGON_EGG_CRACK, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                }
+                mayCrack = true;
             }
-
             if (eggWiggleZ > 0) {
                 eggWiggleZ--;
             } else if (rand.nextFloat() < wiggleChance) {
                 eggWiggleZ = rand.nextBoolean() ? 10 : 20;
-                if (progress > EGG_CRACK_THRESHOLD) {
-                    this.playEggCrackEffect();
-                    dragon.world.playSound(null, dragon.getPosition(), DMSounds.DRAGON_EGG_CRACK, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                }
+                mayCrack = true;
+            }
+            if (mayCrack && progress > EGG_CRACK_THRESHOLD) {
+                this.playEggCrackEffect();
+                dragon.world.playSound(null, dragon.getPosition(), DMSounds.DRAGON_EGG_CRACK, SoundCategory.BLOCKS, 1.0F, 1.0F);
             }
         }
 
@@ -225,7 +221,7 @@ public class DragonLifeStageHelper {
     }
 
     public boolean isEgg() {
-        return this.getLifeStage() == DragonLifeStage.EGG;
+        return this.getTicksSinceCreation() < DragonLifeStage.EGG.boundaryTick;
     }
 
     /**
@@ -240,7 +236,7 @@ public class DragonLifeStageHelper {
     }
 
     public boolean isOldEnough(DragonLifeStage stage) {
-        return getLifeStage().isOldEnough(stage);
+        return this.getTicksSinceCreation() + stage.durationTicks >= stage.boundaryTick;
     }
 
     public void ageUp(int ticks) {
@@ -262,7 +258,7 @@ public class DragonLifeStageHelper {
         if (this.isEgg()) {
             updateEgg();
         }
-        dragon.setScalePublic(getScale());
+        dragon.applyScale(getScale());
     }
 
     public void sync() {

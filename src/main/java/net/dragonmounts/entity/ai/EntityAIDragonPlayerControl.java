@@ -13,6 +13,7 @@ import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.util.EntityUtil;
 import net.dragonmounts.util.math.MathX;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.Vec3d;
 
@@ -22,6 +23,7 @@ import net.minecraft.util.math.Vec3d;
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public class EntityAIDragonPlayerControl extends EntityAIDragonBase {
+    protected EntityPlayer rider;
 
     public EntityAIDragonPlayerControl(TameableDragonEntity dragon) {
         super(dragon);

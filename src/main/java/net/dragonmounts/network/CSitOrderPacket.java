@@ -29,7 +29,7 @@ public class CSitOrderPacket extends CUUIDPacket {
                 EntityPlayer player = ctx.getServerHandler().player;
                 if (Relation.checkRelation(dragon, player) != Relation.STRANGER) {
                     dragon.getAISit().setSitting(!dragon.isSitting());
-                    player.world.playSound(null, player.posX, player.posY, player.posZ, DMSounds.WHISTLE_BLOW, SoundCategory.PLAYERS, 1, 1);
+                    player.world.playSound(null, player.posX, player.posY, player.posZ, DMSounds.WHISTLE_BLOW_SHORT, SoundCategory.PLAYERS, 1, 1);
                     return null;
                 }
             }

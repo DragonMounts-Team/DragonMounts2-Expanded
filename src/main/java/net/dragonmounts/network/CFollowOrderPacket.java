@@ -1,7 +1,7 @@
 package net.dragonmounts.network;
 
 import net.dragonmounts.entity.Relation;
-import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.init.DMSounds;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,12 +24,12 @@ public class CFollowOrderPacket extends CUUIDPacket {
         @Override
         public IMessage onMessage(CFollowOrderPacket message, MessageContext ctx) {
             Entity entity = ctx.getServerHandler().server.getEntityFromUuid(message.uuid);
-            if (entity instanceof TameableDragonEntity) {
-                TameableDragonEntity dragon = (TameableDragonEntity) entity;
+            if (entity instanceof ServerDragonEntity) {
+                ServerDragonEntity dragon = (ServerDragonEntity) entity;
                 EntityPlayer player = ctx.getServerHandler().player;
                 if (Relation.checkRelation(dragon, player) != Relation.STRANGER) {
                     dragon.followOwner = !dragon.followOwner;
-                    player.world.playSound(null, player.posX, player.posY, player.posZ, DMSounds.WHISTLE_BLOW, SoundCategory.PLAYERS, 1, 1);
+                    player.world.playSound(null, player.posX, player.posY, player.posZ, DMSounds.WHISTLE_BLOW_SHORT, SoundCategory.PLAYERS, 1, 1);
                     return null;
                 }
             }

@@ -12,6 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.oredict.OreDictionary;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
@@ -21,6 +23,13 @@ import static net.dragonmounts.DragonMounts.NETWORK_WRAPPER;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public final class DragonInventory implements IInventory {
+    public static boolean isValidChest(ItemStack stack) {
+        return !stack.isEmpty() && ArrayUtils.contains(
+                OreDictionary.getOreIDs(stack),
+                OreDictionary.getOreID("chestWood")
+        );
+    }
+
     public final TameableDragonEntity dragon;
     /**
      * item stacks in chest
@@ -179,9 +188,7 @@ public final class DragonInventory implements IInventory {
     }
 
     @Override
-    public void markDirty() {
-        //this.dragon.refreshInventory();
-    }
+    public void markDirty() {}
 
     @Override
     public boolean isUsableByPlayer(EntityPlayer player) {

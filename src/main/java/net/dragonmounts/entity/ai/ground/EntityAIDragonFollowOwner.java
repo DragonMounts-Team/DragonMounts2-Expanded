@@ -9,12 +9,12 @@
  */
 package net.dragonmounts.entity.ai.ground;
 
-import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.ai.EntityAIDragonBase;
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.util.MutableBlockPosEx;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.EnumFacing;
@@ -25,8 +25,10 @@ import net.minecraft.world.World;
  * Modified EntityAIFollowOwner that has dynamic navigator
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
+ * @see net.minecraft.entity.ai.EntityAIFollowOwner
  */
-public class EntityAIDragonFollowOwner extends EntityAIDragonBase {
+public class EntityAIDragonFollowOwner extends EntityAIBase {
+    public final ServerDragonEntity dragon;
     private EntityLivingBase owner;
     private final double speed;
     private final float stopDist;
@@ -34,20 +36,17 @@ public class EntityAIDragonFollowOwner extends EntityAIDragonBase {
     private int timeToRecalcPath;
     private boolean avoidWater;
 
-    public EntityAIDragonFollowOwner(TameableDragonEntity dragon, double speed, float startDist, float stopDist) {
-        super(dragon);
+    public EntityAIDragonFollowOwner(ServerDragonEntity dragon, double speed, float startDist, float stopDist) {
+        this.dragon = dragon;
         this.speed = speed;
         this.startDist = startDist;
         this.stopDist = stopDist;
         this.setMutexBits(3);
     }
 
-    /**
-     * Returns whether the EntityAIBase should begin execution.
-     */
     @Override
     public boolean shouldExecute() {
-        TameableDragonEntity dragon = this.dragon;
+        ServerDragonEntity dragon = this.dragon;
         if (!dragon.followOwner || dragon.isSitting() || dragon.getControllingPlayer() != null) return false;
         EntityLivingBase owner = dragon.getOwner();
         if (owner == null || (
@@ -57,26 +56,17 @@ public class EntityAIDragonFollowOwner extends EntityAIDragonBase {
         return true;
     }
 
-    /**
-     * Returns whether an in-progress EntityAIBase should continue executing
-     */
     @Override
     public boolean shouldContinueExecuting() {
-        TameableDragonEntity dragon = this.dragon;
+        ServerDragonEntity dragon = this.dragon;
         return dragon.followOwner && !dragon.getNavigator().noPath() && !dragon.isSitting() && dragon.getDistanceSq(this.owner) > (this.stopDist * this.stopDist);
     }
 
-    /**
-     * Execute a one shot task or start executing a continuous task
-     */
     @Override
     public void startExecuting() {
         this.timeToRecalcPath = 0;
     }
 
-    /**
-     * Resets the task
-     */
     @Override
     public void resetTask() {
         this.owner = null;
@@ -88,7 +78,7 @@ public class EntityAIDragonFollowOwner extends EntityAIDragonBase {
      */
     @Override
     public void updateTask() {
-        TameableDragonEntity dragon = this.dragon;
+        ServerDragonEntity dragon = this.dragon;
         if (dragon.getControllingPlayer() != null) return;
         EntityLivingBase owner = this.owner;
         // look towards owner

@@ -9,8 +9,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
-import org.apache.commons.lang3.ArrayUtils;
 
 public class DragonContainer extends Container {
 	public final DragonInventory inventory;
@@ -32,16 +30,22 @@ public class DragonContainer extends Container {
 				return dragon.isOldEnoughToBreathe();
 			}
 
+			@Override
+			public boolean canTakeStack(EntityPlayer player) {
+				return dragon.getPassengers().isEmpty();
+			}
+
+			@Override
+			public int getSlotStackLimit() {
+				return 1;
+			}
 		});
 
 		// location of the slot for chest in the dragon inventory
 		this.addSlotToContainer(new Slot(inventory, 31, 8, 36) {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
-				return !stack.isEmpty() && ArrayUtils.contains(
-						OreDictionary.getOreIDs(stack),
-						OreDictionary.getOreID("chestWood")
-				) && !this.getHasStack();
+				return DragonInventory.isValidChest(stack) && !this.getHasStack();
 			}
 
 			@SideOnly(Side.CLIENT)

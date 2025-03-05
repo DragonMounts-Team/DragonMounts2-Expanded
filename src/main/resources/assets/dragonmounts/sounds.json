@@ -267,10 +267,15 @@
     ],
     "subtitle": "subtitles.entity.dragonmounts.dragon_egg.crack"
   },
-  "item.whistle.blow": {
+  "item.whistle.blow.short": {
     "sounds": [
-      "dragonmounts:item/whistle1",
-      "dragonmounts:item/whistle2"
+      "dragonmounts:item/whistle_short"
+    ],
+    "subtitle": "subtitles.item.dragonmounts.whistle.blow"
+  },
+  "item.whistle.blow.long": {
+    "sounds": [
+      "dragonmounts:item/whistle_long"
     ],
     "subtitle": "subtitles.item.dragonmounts.whistle.blow"
   },

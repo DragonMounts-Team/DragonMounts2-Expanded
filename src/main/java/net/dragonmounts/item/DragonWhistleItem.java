@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static net.minecraft.tileentity.TileEntitySkull.updateGameProfile;
-import static net.minecraft.util.text.translation.I18n.translateToLocal;
 
 /**
  * Dragon Whistle Item for controlling certain dragon behaviour remotely.
@@ -47,16 +46,6 @@ public class DragonWhistleItem extends Item {
     public static final String TRANSLATION_KEY = DragonMountsTags.TRANSLATION_KEY_PREFIX + "dragon_whistle";
     public static final String DRAGON_UUID_KEY = "DragonUUID";
     public static final String DEPRECATED_UUID_KEY = "dragonmountsdragon";
-
-    @Nullable
-    public static String getDragonName(NBTTagCompound tag) {
-        if (tag.hasKey("Name")) return tag.getString("Name");
-        if (tag.hasKey("Type")) {
-            DragonType type = DragonType.REGISTRY.getValue(new ResourceLocation(tag.getString("Type")));
-            return type == null ? null : type.formatting + translateToLocal(type.translationKey) + TextFormatting.RESET;
-        }
-        return null;
-    }
 
     public DragonWhistleItem() {
         this.setMaxStackSize(1);
@@ -98,9 +87,6 @@ public class DragonWhistleItem extends Item {
 
     /**
      * Open Dragon Whistle gui for dragon with given uuid
-     *
-     * @param uuid
-     * @param world
      */
     @SideOnly(Side.CLIENT)
     private void openDragonWhistleGui(@Nullable UUID uuid, World world, EnumHand hand) {
@@ -108,11 +94,6 @@ public class DragonWhistleItem extends Item {
         Minecraft.getMinecraft().displayGuiScreen(new GuiDragonWhistle(world, uuid, hand));
     }
 
-
-    /**
-     * Called when the player right clicks the dragon
-     * <p> Registers dragon id as well as cosmetic keys to the whistle
-     */
     @Override
     public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity target) {
         if (target.world.isRemote) return false;
@@ -177,27 +158,22 @@ public class DragonWhistleItem extends Item {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public String getItemStackDisplayName(ItemStack stack) {
-        NBTTagCompound nbt = stack.getTagCompound();
-        if (nbt != null && nbt.hasUniqueId(DRAGON_UUID_KEY)) {
-            String name = getDragonName(nbt);
-            if (name != null) return I18n.format("tooltip.dragonmounts.whistle.name", name);
-        }
-        return super.getItemStackDisplayName(stack);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        NBTTagCompound nbt = stack.getTagCompound();
-        if (nbt != null && nbt.hasUniqueId(DRAGON_UUID_KEY)) {
-            String name = getDragonName(nbt);
-            if (name != null) {
-                tooltip.add(I18n.format("tooltip.dragonmounts.name", name));
+    public void addInformation(ItemStack stack, World level, List<String> tooltip, ITooltipFlag flag) {
+        NBTTagCompound root = stack.getTagCompound();
+        if (root != null && root.hasUniqueId(DRAGON_UUID_KEY)) {
+            if (root.hasKey("Name")) {
+                tooltip.add(I18n.format("tooltip.dragonmounts.name", root.getString("Name")));
+            } else if (root.hasKey("Type")) {
+                DragonType type = DragonType.REGISTRY.getValue(new ResourceLocation(root.getString("Type")));
+                if (type != null) {
+                    tooltip.add(I18n.format(
+                            "tooltip.dragonmounts.name",
+                            type.formatting + ClientUtil.translateToLocal(type.translationKey) + TextFormatting.RESET)
+                    );
+                }
             }
-            tooltip.add(I18n.format("tooltip.dragonmounts.age", TextFormatting.AQUA + ClientUtil.translateToLocal(nbt.getString("Age")) + TextFormatting.RESET));
-            tooltip.add(I18n.format("tooltip.dragonmounts.owner", TextFormatting.GOLD + nbt.getString("OwnerName") + TextFormatting.RESET));
-
+            tooltip.add(I18n.format("tooltip.dragonmounts.age", TextFormatting.AQUA + ClientUtil.translateToLocal(root.getString("Age")) + TextFormatting.RESET));
+            tooltip.add(I18n.format("tooltip.dragonmounts.owner", TextFormatting.GOLD + root.getString("OwnerName") + TextFormatting.RESET));
         }
         tooltip.add(ClientUtil.translateToLocal("tooltip.dragonmounts.whistle"));
     }

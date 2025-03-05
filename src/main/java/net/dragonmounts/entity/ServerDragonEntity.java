@@ -53,7 +53,6 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -68,6 +67,8 @@ public class ServerDragonEntity extends TameableDragonEntity {
     public static final UUID FLYING_RANGE_UUID = UUID.fromString("26C6E399-2FB2-534B-8A0D-843015DA2C1F");
     public static final AttributeModifier FLYING_RANGE_MODIFIER = new AttributeModifier(FLYING_RANGE_UUID, "Flying range bonus", 2.0D, Constants.AttributeModifierOperation.MULTIPLY).setSaved(false);
     public final DragonHeadLocator<ServerDragonEntity> headLocator = new DragonHeadLocator<>(this);
+    public boolean followOwner = true;
+    protected int shearCooldown;
 
     public ServerDragonEntity(World level) {
         super(level);
@@ -261,8 +262,8 @@ public class ServerDragonEntity extends TameableDragonEntity {
                 this.setHunger(this.getHunger() - 1);
             }
         }
-        if (this.shearCooldown > 0) {
-            this.setSheared(this.shearCooldown - 1);
+        if (this.shearCooldown > 0 && --this.shearCooldown == 0) {
+            this.setSheared(0);
         }
         if (!this.isDead) {
             if (this.healingEnderCrystal != null) {
@@ -299,10 +300,8 @@ public class ServerDragonEntity extends TameableDragonEntity {
 
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
-        if (this.isEgg()) {
-            /*
-             * Turning it to block
-             */
+        DragonLifeStage stage = this.lifeStageHelper.getLifeStage();
+        if (DragonLifeStage.EGG == stage) {
             if (player.isSneaking()) {
                 world.playSound(player, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.PLAYERS, 0.5F, 1);
                 world.setBlockState(this.getPosition(), this.getVariant().type.getInstance(HatchableDragonEggBlock.class, DMBlocks.ENDER_DRAGON_EGG).getDefaultState());
@@ -313,66 +312,33 @@ public class ServerDragonEntity extends TameableDragonEntity {
         }
         // prevent doing any interactions when a hatchling rides you, the hitbox could block the player's raytraceresult for rightclick
         if (player.isPassenger(this)) return false;
-
         ItemStack stack = player.getHeldItem(hand);
-
         final Relation relation = Relation.checkRelation(this, player);
         final boolean isTrusted = relation != Relation.STRANGER;
-
-        /*
-         * Dragon Riding The Player
-         */
-        if (isTrusted && !isSitting() && this.isChild() && !player.isSneaking() && player.getPassengers().size() < 2 && isInertItem(stack)) {
-            this.setAttackTarget(null);
-            this.startRiding(player, true);
-            return true;
-        }
-
-        boolean isServer = true;
-        if (!this.isSheared() && this.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {
-            IHardShears shears = stack.getCapability(DMCapabilities.HARD_SHEARS, null);
-            if (shears != null) {
-                int cooldown = shears.onShear(stack, player, this);
-                if (cooldown != 0) {
-                    this.setSheared(cooldown);
-                    this.playSound(SoundEvents.ENTITY_ITEM_BREAK, 1.0F, 1.0F);
-                    this.playSound(DMSounds.DRAGON_PURR, 1.0F, 1.0F);
-                    if (!isTrusted) {
-                        this.setAttackTarget(player);
-                    }
-                    return true;
-                }
-            }
-        }
-        if (isTrusted && isInertItem(stack)) {
-            /*
-             * Sit
-             */
-            if (this.onGround && !stack.isEmpty() && ItemUtil.anyMatches(stack, OreDictionary.getOreID("stickWood"), OreDictionary.getOreID("bone"))) {
-                this.getAISit().setSitting(!this.isSitting());
-                this.getNavigator().clearPath();
-                return true;
-            }
-            /*
-             * GUI
-             */
-            if (player.isSneaking() && !this.isPassenger(player)) {
-                // Dragon Inventory
-                player.openGui(DragonMounts.getInstance(), GuiHandler.GUI_DRAGON, this.world, this.getEntityId(), 0, 0);
-                return true;
-            }
-            if (!this.isChild()) {
-                /*
-                 * Player Riding the Dragon
-                 */
-                if (this.isSaddled()) {
-                    if (this.getPassengers().size() < 3) {
-                        player.rotationYaw = rotationYaw;
-                        player.rotationPitch = rotationPitch;
-                        player.startRiding(this);
+        final boolean isChild = stage.isBaby();
+        if (!stack.isEmpty()) {
+            if (!isChild && !this.isSheared()) {
+                IHardShears shears = stack.getCapability(DMCapabilities.HARD_SHEARS, null);
+                if (shears != null) {
+                    int cooldown = shears.onShear(stack, player, this);
+                    if (cooldown != 0) {
+                        this.setSheared(cooldown);
+                        this.playSound(SoundEvents.ENTITY_ITEM_BREAK, 1.0F, 1.0F);
+                        this.playSound(DMSounds.DRAGON_PURR, 1.0F, 1.0F);
+                        if (!isTrusted) {
+                            this.setAttackTarget(player);
+                        }
                         return true;
                     }
-                } else if (!stack.isEmpty() && stack.getItem() == Items.SADDLE) {
+                }
+            }
+            if (isTrusted) {
+                if (this.onGround && ItemUtil.anyMatches(stack, "stickWood", "bone")) {
+                    this.getAISit().setSitting(!this.isSitting());
+                    this.getNavigator().clearPath();
+                    return true;
+                }
+                if (!isChild && !this.isSaddled() && stack.getItem() == Items.SADDLE) {
                     if (player.capabilities.isCreativeMode) {
                         ItemStack saddle = stack.copy();
                         saddle.setCount(1);
@@ -383,10 +349,38 @@ public class ServerDragonEntity extends TameableDragonEntity {
                     return true;
                 }
             }
+            IDragonFood food = stack.getCapability(DMCapabilities.DRAGON_FOOD, null);
+            if (food != null && food.tryFeed(this, player, relation, stack, hand)) return true;
         }
-        if (stack.isEmpty()) return false;
-        IDragonFood food = stack.getCapability(DMCapabilities.DRAGON_FOOD, null);
-        return food != null && food.tryFeed(this, player, relation, stack, hand);
+        if (stack.interactWithEntity(player, this, hand)) return true;
+        if (!isTrusted) return false;
+        if (!player.isSneaking()) {
+            if (isChild) {
+                if (!isSitting() && player.getPassengers().size() < 2) {
+                    this.setAttackTarget(null);
+                    this.startRiding(player, true);
+                }
+            } else if (this.isSaddled()) {
+                List<Entity> passengers = this.getPassengers();
+                if (passengers.size() < 3) {
+                    boolean flag = true;
+                    for (Entity passenger : passengers) {
+                        if (passenger == player) {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag) {
+                        player.rotationYaw = rotationYaw;
+                        player.rotationPitch = rotationPitch;
+                        player.startRiding(this);
+                        return true;
+                    }
+                }
+            }
+        }
+        player.openGui(DragonMounts.getInstance(), GuiHandler.GUI_DRAGON, this.world, this.getEntityId(), 0, 0);
+        return true;
     }
 
     @Override
@@ -469,6 +463,11 @@ public class ServerDragonEntity extends TameableDragonEntity {
             }
         }
         super.collideWithEntity(other);
+    }
+
+    public void setSheared(int cooldown) {
+        this.shearCooldown = cooldown;
+        this.dataManager.set(DATA_SHEARED, cooldown > 0);
     }
 
     @Nonnull

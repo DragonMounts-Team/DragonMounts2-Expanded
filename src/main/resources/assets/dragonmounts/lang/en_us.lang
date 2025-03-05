@@ -144,7 +144,7 @@ tooltip.dragonmounts.armor_effect_piece_4=4-Piece Set:
 tooltip.dragonmounts.armor_effect_remaining_cooldown=Remaining CD: %ss
 # actually it is related to key binding
 tooltip.dragonmounts.whistle=Right Click an owned and tamed dragon to control it
-tooltip.dragonmounts.whistle.name=Dragon Whistle (%s)
+tooltip.dragonmounts.variation_orb=Used to change dragon's variant randomly
 tooltip.dragonmounts.age=Age: %s
 tooltip.dragonmounts.name=Name: %s
 tooltip.dragonmounts.health=Health: %s
@@ -157,6 +157,20 @@ tooltip.dragonmounts.amulet.usage=Right click on ground to summon
 tooltip.dragonmounts.carriage=Used to make dragons carry multiple passengers like a boat
 
 item.modifiers.equipped=When equipped:
+
+subtitles.entity.dragonmounts.dragon.ambient=Dragon roars
+subtitles.entity.dragonmounts.dragon.death=Dragon dies
+subtitles.entity.dragonmounts.dragon.roar=Dragon roars
+subtitles.entity.dragonmounts.dragon.purr=Dragon purrs
+subtitles.entity.dragonmounts.dragon.sneeze=Dragon sneezes
+subtitles.entity.dragonmounts.dragon.step=Dragon steps
+subtitles.entity.dragonmounts.dragon.breath_start=Dragon breathing
+subtitles.entity.dragonmounts.dragon.breath_loop=Dragon breathing
+subtitles.entity.dragonmounts.dragon.breath_stop=Dragon breath completed
+subtitles.entity.dragonmounts.dragon_egg.shatter=Dragon Egg shatters
+subtitles.entity.dragonmounts.dragon_egg.crack=Dragon Egg cracks
+subtitles.item.dragonmounts.whistle.blow=Dragon Whistle plays
+subtitles.item.dragonmounts.variation_orb.activate=Orb of Variation activates
 
 argument.player.toomany=Only one player is allowed, but the provided selector allows more than one
 

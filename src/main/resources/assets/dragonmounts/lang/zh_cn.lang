@@ -124,7 +124,7 @@ tooltip.dragonmounts.armor_effect_fishing_luck=当装备者钓鱼时，给予其
 tooltip.dragonmounts.armor_effect_piece_4=4件套：
 tooltip.dragonmounts.armor_effect_remaining_cooldown=剩余冷却时间：%s秒
 tooltip.dragonmounts.whistle=(Placeholder)
-tooltip.dragonmounts.whistle.name=龙哨（%s）
+tooltip.dragonmounts.variation_orb=(Placeholder)
 tooltip.dragonmounts.name=名称：%s
 tooltip.dragonmounts.age=年龄：%s
 tooltip.dragonmounts.health=生命值：%s
@@ -135,6 +135,20 @@ tooltip.dragonmounts.amulet.usage=(Placeholder)
 tooltip.dragonmounts.carriage=让龙像一艘船一样携带多个生物
 
 item.modifiers.equipped=在装备后：
+
+subtitles.entity.dragonmounts.dragon.ambient=龙：呼吸
+subtitles.entity.dragonmounts.dragon.death=龙：死亡
+subtitles.entity.dragonmounts.dragon.roar=龙：咆哮
+subtitles.entity.dragonmounts.dragon.purr=龙：低鸣
+subtitles.entity.dragonmounts.dragon.sneeze=龙：鼻痒
+subtitles.entity.dragonmounts.dragon.step=龙：脚步声
+subtitles.entity.dragonmounts.dragon.breath_start=龙：吐息
+subtitles.entity.dragonmounts.dragon.breath_loop=龙：吐息
+subtitles.entity.dragonmounts.dragon.breath_stop=Dragon breath completed
+subtitles.entity.dragonmounts.dragon_egg.shatter=龙蛋：破裂
+subtitles.entity.dragonmounts.dragon_egg.crack=龙蛋：开裂
+subtitles.item.dragonmounts.whistle.blow=龙哨：吹奏
+subtitles.item.dragonmounts.variation_orb.activate=Orb of Variation：激活
 
 argument.player.toomany=只允许一名玩家，但提供的选择器允许多名玩家
 

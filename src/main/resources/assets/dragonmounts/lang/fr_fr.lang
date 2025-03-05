@@ -155,7 +155,6 @@ tooltip.dragonmounts.armor_effect_piece_4=Ensemble de 4 pièces:
 tooltip.dragonmounts.armor_effect_remaining_cooldown=Temps de recharge restant : %ss
 # actually it is related to key binding, so the text will be changed later
 tooltip.dragonmounts.whistle=Clic Droit sur un Dragon possédé et apprivoisé pour le contrôler
-tooltip.dragonmounts.whistle.name=Flute draconique (%s)
 tooltip.dragonmounts.age=Age: %s
 tooltip.dragonmounts.name=Nom: %s
 tooltip.dragonmounts.health=Vie: %s

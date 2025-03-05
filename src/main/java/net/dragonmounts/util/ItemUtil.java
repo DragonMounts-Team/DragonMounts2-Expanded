@@ -6,18 +6,15 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemUtil {
-    public static boolean anyMatches(ItemStack stack, int... ore) {
+    public static boolean anyMatches(ItemStack stack, String... names) {
         if (stack.isEmpty()) return false;
-        int len = ore.length;
         int[] ores = OreDictionary.getOreIDs(stack);
-        int i = ores.length;
-        while (--i >= 0) {
-            int v = ores[i];
-            int j = len;
-            while (--j >= 0) {
-                if (v == ore[j]) {
-                    return true;
-                }
+        int len = ores.length, match = names.length;
+        while (--match >= 0) {
+            int id = OreDictionary.getOreID(names[match]);
+            int i = len;
+            while (--i >= 0) {
+                if (ores[i] == id) return true;
             }
         }
         return false;

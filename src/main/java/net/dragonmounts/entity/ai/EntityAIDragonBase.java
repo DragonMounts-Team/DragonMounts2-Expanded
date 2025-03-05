@@ -11,7 +11,6 @@ package net.dragonmounts.entity.ai;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -20,11 +19,11 @@ import java.util.Random;
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
+@Deprecated
 public abstract class EntityAIDragonBase extends EntityAIBase {
     protected TameableDragonEntity dragon;
     protected World world;
     protected Random random;
-    protected EntityPlayer rider;
 
     public EntityAIDragonBase(TameableDragonEntity dragon) {
         this.dragon = dragon;
