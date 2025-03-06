@@ -20,8 +20,7 @@ public class DragonTypes {
                     .addImmunity(DamageSource.HOT_FLOOR)
                     .addImmunity(DamageSource.LIGHTNING_BOLT)
                     .addImmunity(DamageSource.WITHER)
-                    .addHabitat(Blocks.LAPIS_BLOCK)
-                    .addHabitat(Blocks.LAPIS_ORE)
+                    .addHabitat(DMBlocks.AETHER_DRAGON_SCALE_BLOCK)
     );
     public static final EnchantType ENCHANT = new EnchantType(
             makeId("enchant"),
@@ -30,8 +29,7 @@ public class DragonTypes {
                     .addImmunity(DamageSource.HOT_FLOOR)
                     .addImmunity(DamageSource.LIGHTNING_BOLT)
                     .addImmunity(DamageSource.WITHER)
-                    .addHabitat(Blocks.BOOKSHELF)
-                    .addHabitat(Blocks.ENCHANTING_TABLE)
+                    .addHabitat(DMBlocks.ENCHANT_DRAGON_SCALE_BLOCK)
     );
     public static final EnderType ENDER = new EnderType(
             DragonType.DEFAULT_KEY,
@@ -53,10 +51,7 @@ public class DragonTypes {
                     .addImmunity(DamageSource.HOT_FLOOR)
                     .addImmunity(DamageSource.LIGHTNING_BOLT)
                     .addImmunity(DamageSource.WITHER)
-                    .addHabitat(Blocks.FIRE)
-                    .addHabitat(Blocks.LIT_FURNACE)
-                    .addHabitat(Blocks.LAVA)
-                    .addHabitat(Blocks.FLOWING_LAVA)
+                    .addHabitat(DMBlocks.FIRE_DRAGON_SCALE_BLOCK)
     );
     public static final ForestType FOREST = new ForestType(
             makeId("forest"),
@@ -65,15 +60,8 @@ public class DragonTypes {
                     .addImmunity(DamageSource.HOT_FLOOR)
                     .addImmunity(DamageSource.LIGHTNING_BOLT)
                     .addImmunity(DamageSource.WITHER)
-                    .addHabitat(Blocks.YELLOW_FLOWER)
-                    .addHabitat(Blocks.RED_FLOWER)
-                    .addHabitat(Blocks.MOSSY_COBBLESTONE)
-                    .addHabitat(Blocks.VINE)
-                    .addHabitat(Blocks.SAPLING)
-                    .addHabitat(Blocks.LEAVES)
-                    .addHabitat(Blocks.LEAVES2)
                     .addHabitat(Biomes.JUNGLE)
-                    .addHabitat(Biomes.JUNGLE_HILLS)
+                    .addHabitat(DMBlocks.FOREST_DRAGON_SCALE_BLOCK)
     );
     public static final IceType ICE = new IceType(
             makeId("ice"),
@@ -82,11 +70,7 @@ public class DragonTypes {
                     .addImmunity(DamageSource.HOT_FLOOR)
                     .addImmunity(DamageSource.LIGHTNING_BOLT)
                     .addImmunity(DamageSource.WITHER)
-                    .addHabitat(Blocks.SNOW)
-                    .addHabitat(Blocks.SNOW_LAYER)
-                    .addHabitat(Blocks.ICE)
-                    .addHabitat(Blocks.PACKED_ICE)
-                    .addHabitat(Blocks.FROSTED_ICE)
+                    .addHabitat(DMBlocks.ICE_DRAGON_SCALE_BLOCK)
                     .addHabitat(Biomes.FROZEN_OCEAN)
                     .addHabitat(Biomes.FROZEN_RIVER)
                     .setSneezeParticle(null)
@@ -107,6 +91,7 @@ public class DragonTypes {
                     .addImmunity(DamageSource.LIGHTNING_BOLT)
                     .addImmunity(DamageSource.WITHER)
                     .addHabitat(Biomes.HELL)
+                    .addHabitat(DMBlocks.NETHER_DRAGON_SCALE_BLOCK)
                     .setEggParticle(EnumParticleTypes.DRIP_LAVA)
     );
     public static final SkeletonType SKELETON = new SkeletonType(
@@ -116,7 +101,6 @@ public class DragonTypes {
                     .putAttributeModifier(SharedMonsterAttributes.MAX_HEALTH, "DragonTypeBonus", -15.0D, 0)
                     .addImmunity(DamageSource.LIGHTNING_BOLT)
                     .addImmunity(DamageSource.WITHER)
-                    .addHabitat(Blocks.BONE_BLOCK)
                     .setSneezeParticle(null)
     );
     public static final StormType STORM = new StormType(
@@ -132,19 +116,12 @@ public class DragonTypes {
     public static final SunlightType SUNLIGHT = new SunlightType(
             makeId("sunlight"),
             new DragonType.Properties(0xFFDE00, TextFormatting.YELLOW)
-                    .addHabitat(Blocks.GLOWSTONE)
-                    .addHabitat(Blocks.DAYLIGHT_DETECTOR)
-                    .addHabitat(Blocks.YELLOW_GLAZED_TERRACOTTA)
+                    .addHabitat(DMBlocks.SUNLIGHT_DRAGON_SCALE_BLOCK)
     );
     public static final TerraType TERRA = new TerraType(
             makeId("terra"),
             new DragonType.Properties(0xA56C21, TextFormatting.GOLD)
-                    .addHabitat(Blocks.HARDENED_CLAY)
-                    .addHabitat(Blocks.SAND)
-                    .addHabitat(Blocks.SANDSTONE)
-                    .addHabitat(Blocks.SANDSTONE_STAIRS)
-                    .addHabitat(Blocks.RED_SANDSTONE)
-                    .addHabitat(Blocks.RED_SANDSTONE_STAIRS)
+                    .addHabitat(DMBlocks.TERRA_DRAGON_SCALE_BLOCK)
                     .addHabitat(Biomes.MESA)
                     .addHabitat(Biomes.MESA_ROCK)
                     .addHabitat(Biomes.MESA_CLEAR_ROCK)
@@ -159,8 +136,7 @@ public class DragonTypes {
                     .addImmunity(DamageSource.HOT_FLOOR)
                     .addImmunity(DamageSource.LIGHTNING_BOLT)
                     .addImmunity(DamageSource.WITHER)
-                    .addHabitat(Blocks.WATER)
-                    .addHabitat(Blocks.FLOWING_WATER)
+                    .addHabitat(DMBlocks.WATER_DRAGON_SCALE_BLOCK)
                     .addHabitat(Biomes.OCEAN)
                     .addHabitat(Biomes.RIVER)
                     .setSneezeParticle(null)
@@ -185,9 +161,7 @@ public class DragonTypes {
                     .addImmunity(DamageSource.HOT_FLOOR)
                     .addImmunity(DamageSource.LIGHTNING_BOLT)
                     .addImmunity(DamageSource.WITHER)
-                    .addHabitat(Blocks.SOUL_SAND)
-                    .addHabitat(Blocks.SOUL_SAND)
-                    .addHabitat(Blocks.NETHER_WART_BLOCK)
+                    .addHabitat(DMBlocks.ZOMBIE_DRAGON_SCALE_BLOCK)
                     .setSneezeParticle(null)
     );
     public static final DarkType DARK = new DarkType(
@@ -197,7 +171,6 @@ public class DragonTypes {
                     .addImmunity(DamageSource.HOT_FLOOR)
                     .addImmunity(DamageSource.LIGHTNING_BOLT)
                     .addImmunity(DamageSource.WITHER)
-                    .addHabitat(Blocks.LAPIS_BLOCK)
-                    .addHabitat(Blocks.LAPIS_ORE)
+                    .addHabitat(DMBlocks.DARK_DRAGON_SCALE_BLOCK)
     );
 }
