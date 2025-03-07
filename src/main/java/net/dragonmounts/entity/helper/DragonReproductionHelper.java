@@ -9,8 +9,8 @@
  */
 package net.dragonmounts.entity.helper;
 
+import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.ServerDragonEntity;
-import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.logging.log4j.LogManager;
@@ -24,66 +24,48 @@ import java.util.Random;
 public class DragonReproductionHelper {
     private static final Logger L = LogManager.getLogger();
     public static final String NBT_REPRODUCTION_COUNT = "ReproductionCount";
-    // old NBT keys
+    /**
+     * old NBT key
+     */
     public static final String NBT_REPRODUCED = "HasReproduced";
-    public static final int REPRODUCTION_LIMIT = 2;
-    public final TameableDragonEntity dragon;
-    protected final Random rand;
+    public final ServerDragonEntity dragon;
+    private int reproduced = 0;
 
-    public DragonReproductionHelper(TameableDragonEntity dragon) {
+    public DragonReproductionHelper(ServerDragonEntity dragon) {
         this.dragon = dragon;
-        this.rand = dragon.getRNG();
     }
 
     public void writeToNBT(NBTTagCompound nbt) {
-        nbt.setInteger(NBT_REPRODUCTION_COUNT, this.dragon.getReproductionCount());
+        nbt.setInteger(NBT_REPRODUCTION_COUNT, this.reproduced);
     }
 
     public void readFromNBT(NBTTagCompound nbt) {
-        int count = 0;
         if (nbt.hasKey(NBT_REPRODUCTION_COUNT)) {
-            count = nbt.getInteger(NBT_REPRODUCTION_COUNT);
+            this.reproduced = nbt.getInteger(NBT_REPRODUCTION_COUNT);
         } else if (nbt.hasKey(NBT_REPRODUCED) && nbt.getBoolean(NBT_REPRODUCED)) {
             // convert old boolean value
-            ++count;
-        }
-        this.dragon.setReproductionCount(count);
-    }
-
-    public void addReproduced() {
-        this.dragon.setReproductionCount(this.dragon.getReproductionCount() + 1);
-    }
-
-    public boolean canReproduce() {
-        return this.dragon.isTamed() && this.dragon.getReproductionCount() < REPRODUCTION_LIMIT;
-    }
-
-    public boolean canMateWith(EntityAnimal mate) {
-        if (mate == this.dragon) {
-            // No. Just... no.
-            return false;
-        } else if (!(mate instanceof TameableDragonEntity)) {
-            return false;
-        } else if (!canReproduce()) {
-            return false;
-        }
-
-        TameableDragonEntity dragonMate = (TameableDragonEntity) mate;
-
-        if (!dragonMate.isTamed()) {
-            return false;
-        } else  {
-            return dragon.isInLove() && dragonMate.isInLove();
+            this.reproduced = 1;
         }
     }
 
-    public ServerDragonEntity createChild(TameableDragonEntity mate) {
-        TameableDragonEntity self = this.dragon;
-        if (self.world.isRemote) return null;
+    public boolean canMateWith(EntityAnimal other) {
+        if (other == this.dragon ||
+                !(other instanceof ServerDragonEntity) ||
+                this.reproduced >= DMConfig.REPRODUCTION_LIMIT.value ||
+                !this.dragon.isTamed() ||
+                !this.dragon.isInLove()
+        ) return false;
+        ServerDragonEntity mate = (ServerDragonEntity) other;
+        return mate.isInLove() && mate.isTamed() && !mate.isSitting();
+    }
+
+    public ServerDragonEntity createChild(ServerDragonEntity mate) {
+        ServerDragonEntity self = this.dragon;
         ServerDragonEntity baby = new ServerDragonEntity(self.world);
 
         // mix the custom names in case both parents have one
         if (self.hasCustomName() && mate.hasCustomName()) {
+            Random random = baby.getRNG();
             String p1Name = self.getCustomNameTag();
             String p2Name = mate.getCustomNameTag();
             String babyName;
@@ -95,21 +77,21 @@ public class DragonReproductionHelper {
                 String[] p1Names = p1Name.split(" ");
                 String[] p2Names = p2Name.split(" ");
 
-                p1Name = fixChildName(p1Names[rand.nextInt(p1Names.length)]);
-                p2Name = fixChildName(p2Names[rand.nextInt(p2Names.length)]);
+                p1Name = fixChildName(p1Names[random.nextInt(p1Names.length)]);
+                p2Name = fixChildName(p2Names[random.nextInt(p2Names.length)]);
 
-                babyName = rand.nextBoolean() ? p1Name + " " + p2Name : p2Name + " " + p1Name;
+                babyName = random.nextBoolean() ? p1Name + " " + p2Name : p2Name + " " + p1Name;
             } else {
                 // scramble two words
                 // "Eirmod" + "Voluptua"
                 // = "Eirvolu" or "Volueir" or "Modptua" or "Ptuamod" or ...
-                if (rand.nextBoolean()) {
+                if (random.nextBoolean()) {
                     p1Name = p1Name.substring(0, (p1Name.length() - 1) / 2);
                 } else {
                     p1Name = p1Name.substring((p1Name.length() - 1) / 2);
                 }
 
-                if (rand.nextBoolean()) {
+                if (random.nextBoolean()) {
                     p2Name = p2Name.substring(0, (p2Name.length() - 1) / 2);
                 } else {
                     p2Name = p2Name.substring((p2Name.length() - 1) / 2);
@@ -117,7 +99,7 @@ public class DragonReproductionHelper {
 
                 p2Name = fixChildName(p2Name);
 
-                babyName = rand.nextBoolean() ? p1Name + p2Name : p2Name + p1Name;
+                babyName = random.nextBoolean() ? p1Name + p2Name : p2Name + p1Name;
             }
 
             baby.setCustomNameTag(babyName);
@@ -127,8 +109,8 @@ public class DragonReproductionHelper {
         // inherit the baby's breed from its parents
         baby.variantHelper.inheritBreed(self, mate);
         // increase reproduction counter
-        this.addReproduced();
-        mate.reproductionHelper.addReproduced();
+        ++this.reproduced;
+        ++mate.reproductionHelper.reproduced;
         return baby;
     }
 
@@ -150,5 +132,9 @@ public class DragonReproductionHelper {
         }
 
         return nameNew;
+    }
+
+    public int getReproductionCount() {
+        return this.reproduced;
     }
 }

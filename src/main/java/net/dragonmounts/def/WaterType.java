@@ -22,7 +22,7 @@ public class WaterType extends DragonType {
 
     @Override
     public void tick(TameableDragonEntity dragon) {
-        if (dragon.isInWater()) {
+        if (!dragon.world.isRemote && dragon.isInWater()) {
             EntityUtil.addOrResetEffect(dragon, MobEffects.WATER_BREATHING, 200, 0, false, false, 21);
         }
         if (dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {

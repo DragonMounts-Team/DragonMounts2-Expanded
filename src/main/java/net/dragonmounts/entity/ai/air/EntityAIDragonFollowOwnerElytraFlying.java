@@ -9,18 +9,20 @@
  */
 package net.dragonmounts.entity.ai.air;
 
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.ai.EntityAIDragonBase;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.EntityAIBase;
 
 /**
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class EntityAIDragonFollowOwnerElytraFlying extends EntityAIDragonBase {
+public class EntityAIDragonFollowOwnerElytraFlying extends EntityAIBase {
+    public final ServerDragonEntity dragon;
     protected EntityLivingBase owner;
 
-    public EntityAIDragonFollowOwnerElytraFlying(TameableDragonEntity dragon) {
-        super(dragon);
+    public EntityAIDragonFollowOwnerElytraFlying(ServerDragonEntity dragon) {
+        this.dragon = dragon;
         this.setMutexBits(3);
     }
 

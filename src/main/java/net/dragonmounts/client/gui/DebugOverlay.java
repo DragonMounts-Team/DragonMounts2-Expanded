@@ -197,7 +197,9 @@ public class DebugOverlay {
                 dfShort.format(dragon.height)
         ));
         text.println("Trust Other Players: " + (dragon.allowedOtherPlayers() ? "Yes" : "No"));
-        text.println("Reproduction Count: " + dragon.getReproductionCount());
+        if (dragon instanceof ServerDragonEntity) {
+            text.println("Reproduction Count: " + ((ServerDragonEntity) dragon).reproductionHelper.getReproductionCount());
+        }
         text.print("Tamed: ");
         // tamed flag/owner name
         //String tamedString = dragon.getOwnerName();

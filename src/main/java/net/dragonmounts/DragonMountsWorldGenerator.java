@@ -237,7 +237,7 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
             int z = (chunkZ * 16) + random.nextInt(16);
             MutableBlockPosEx height = getSurface(world, x, z);
             if (canSpawnHere(world, height, 5, false)) {
-                loadStructure(world, height.withY(height.getY() - 1), ENCHANT);
+                loadStructure(world, height.descent(), ENCHANT);
             }
         }
     }

@@ -82,10 +82,6 @@ public class EntityAIDragonAttack extends EntityAIBase {
         dragon.getLookHelper().setLookPositionWithEntity(target, 30.0F, 30.0F);
         double targetDistSq = dragon.getDistanceSq(target.posX, target.getEntityBoundingBox().minY, target.posZ);
         --this.delayCounter;
-        if (target.isDead) {
-            dragon.setHunger(dragon.getHunger() + getPoints(target));
-        }
-
         if (this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || target.getDistanceSq(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.dragon.getRNG().nextFloat() < 0.05F)) {
             this.targetX = target.posX;
             this.targetY = target.getEntityBoundingBox().minY;
@@ -116,7 +112,12 @@ public class EntityAIDragonAttack extends EntityAIBase {
         if (shouldUseMelee) {
             this.attackTick = 20;
             dragon.world.setEntityState(dragon, TameableDragonEntity.DO_ATTACK);
+            float health = target.getHealth();
             dragon.attackEntityAsMob(target);
+            float delta = target.getHealth() - health;
+            if (delta > 0.0F) {
+                dragon.setHunger(dragon.getHunger() + 1 + (int) (getPoints(target) * delta / target.getMaxHealth()));
+            }
         }/* else if (shouldUseRange) {
             this.attackTick = 20;
             dragon.setUsingBreathWeapon(target.isEntityAlive());

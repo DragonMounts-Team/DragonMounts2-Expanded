@@ -73,9 +73,6 @@ public class EntityAIDragonFollowOwner extends EntityAIBase {
         this.dragon.getNavigator().clearPath();
     }
 
-    /**
-     * Updates the task
-     */
     @Override
     public void updateTask() {
         ServerDragonEntity dragon = this.dragon;

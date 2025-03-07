@@ -17,7 +17,7 @@ public class StormType extends WaterType {
     public void tick(TameableDragonEntity dragon) {
         super.tick(dragon);
         EntityLivingBase target = dragon.getAttackTarget();
-        if (target != null && target.isEntityAlive() && (!(target instanceof EntityPlayer) || !((EntityPlayer) target).capabilities.isCreativeMode) && dragon.world.isRaining() && dragon.world.rand.nextInt(70) == 0) {
+        if (target != null && target.isEntityAlive() && (!(target instanceof EntityPlayer) || !((EntityPlayer) target).capabilities.isCreativeMode) && target.world.isRaining() && target.world.rand.nextInt(70) == 0) {
             target.world.addWeatherEffect(new EntityLightningBolt(target.world, target.posX, target.posY, target.posZ, false));
         }
     }

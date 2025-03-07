@@ -9,8 +9,10 @@
  */
 package net.dragonmounts.entity.ai;
 
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -20,12 +22,12 @@ import net.minecraft.item.ItemStack;
 /**
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class EntityAIDragonCatchOwner extends EntityAIDragonBase {
-
+public class EntityAIDragonCatchOwner extends EntityAIBase {
+    public final ServerDragonEntity dragon;
     protected EntityPlayer owner;
 
-    public EntityAIDragonCatchOwner(TameableDragonEntity dragon) {
-        super(dragon);
+    public EntityAIDragonCatchOwner(ServerDragonEntity dragon) {
+        this.dragon = dragon;
     }
 
     @Override

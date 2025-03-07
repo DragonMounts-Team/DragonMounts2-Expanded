@@ -29,7 +29,7 @@ public class AetherType extends DragonType {
                 double x = dragon.posX + (random.nextDouble() - 0.5) * f;
                 double y = dragon.posY + (random.nextDouble() - 0.5) * h;
                 double z = dragon.posZ + (random.nextDouble() - 0.5) * f;
-                if (random.nextInt(5) == 0) {
+                if (random.nextFloat() < 0.2F) {
                     level.spawnParticle(EnumParticleTypes.SPELL_MOB, x, y, z, 1, 1, 0, 0, 0, 0); //yellow
                 } else {
                     level.spawnParticle(EnumParticleTypes.SPELL_MOB, x, y, z, 0, 1, 1, 0, 0, 0); //aqua

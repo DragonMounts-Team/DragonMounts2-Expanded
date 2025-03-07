@@ -24,13 +24,19 @@ public class DMConfig {
     public static final DoubleEntry CAMERA_DISTANCE = new DoubleEntry("cameraDistance", 20.0);
     // ATTRIBUTES:
     public static final DoubleEntry BASE_ARMOR = new DoubleEntry("baseArmor", 8.0);
+    public static final DoubleEntry BASE_ARMOR_TOUGHNESS = new DoubleEntry("baseArmorToughness", 30.0);
     public static final DoubleEntry BASE_DAMAGE = new DoubleEntry("baseDamage", 12.0);
     public static final DoubleEntry BASE_HEALTH = new DoubleEntry("baseHealth", 90.0);
-    public static final DoubleEntry BASE_STEP_HEIGHT = new DoubleEntry("baseStepHeight", 1.25);
+    public static final DoubleEntry BASE_KNOCKBACK_RESISTANCE = new DoubleEntry("baseKnockbackResistance", 10.0);
+    public static final DoubleEntry BASE_FOLLOW_RANGE = new DoubleEntry("baseFollowRange", 70.0);
+    public static final DoubleEntry BASE_MOVEMENT_SPEED = new DoubleEntry("baseMovementSpeed", 0.4);
     public static final DoubleEntry BASE_FLYING_SPEED = new DoubleEntry("baseFlyingSpeed", 0.9);
+    public static final DoubleEntry BASE_SWIMMING_SPEED = new DoubleEntry("baseSwimmingSpeed", 5.0);
+    public static final DoubleEntry BASE_STEP_HEIGHT = new DoubleEntry("baseStepHeight", 1.25);
     // GAMEPLAY:
     public static final BooleanEntry FORCED_RENAME = new BooleanEntry("forcedRename", false);
     public static final BooleanEntry BLOCK_OVERRIDE = new BooleanEntry("blockOverride", true);
+    public static final IntEntry REPRODUCTION_LIMIT = new IntEntry("reproductionLimit", 3);
     public static final BooleanEntry ADAPTIVE_CONVERSION = new BooleanEntry("adaptiveConversion", true);
     public static final BooleanEntry BREATH_EFFECTS = new BooleanEntry("breathEffects", true);
     public static final BooleanEntry DESTRUCTIVE_BREATH = new BooleanEntry("destructiveBreath", true);
@@ -95,6 +101,10 @@ public class DMConfig {
                     .setMaxValue(Double.MAX_VALUE)
                     .setMinValue(-Double.MAX_VALUE)
                     .setLanguageKey("config.dragonmounts.baseArmor");
+            register(category, order, BASE_ARMOR_TOUGHNESS)
+                    .setMaxValue(Double.MAX_VALUE)
+                    .setMinValue(-Double.MAX_VALUE)
+                    .setLanguageKey("config.dragonmounts.baseArmorToughness");
             register(category, order, BASE_DAMAGE)
                     .setMaxValue(Double.MAX_VALUE)
                     .setMinValue(-Double.MAX_VALUE)
@@ -103,10 +113,26 @@ public class DMConfig {
                     .setMaxValue(Double.MAX_VALUE)
                     .setMinValue(-Double.MAX_VALUE)
                     .setLanguageKey("config.dragonmounts.baseHealth");
+            register(category, order, BASE_KNOCKBACK_RESISTANCE)
+                    .setMaxValue(Double.MAX_VALUE)
+                    .setMinValue(-Double.MAX_VALUE)
+                    .setLanguageKey("config.dragonmounts.baseKnockbackResistance");
+            register(category, order, BASE_FOLLOW_RANGE)
+                    .setMaxValue(Double.MAX_VALUE)
+                    .setMinValue(-Double.MAX_VALUE)
+                    .setLanguageKey("config.dragonmounts.baseFollowRange");
+            register(category, order, BASE_MOVEMENT_SPEED)
+                    .setMaxValue(1.75)
+                    .setMinValue(0.25)
+                    .setLanguageKey("config.dragonmounts.baseMovementSpeed");
             register(category, order, BASE_FLYING_SPEED)
                     .setMaxValue(1.75)
                     .setMinValue(0.25)
                     .setLanguageKey("config.dragonmounts.baseFlyingSpeed");
+            register(category, order, BASE_SWIMMING_SPEED)
+                    .setMaxValue(10.0)
+                    .setMinValue(0.0)
+                    .setLanguageKey("config.dragonmounts.baseSwimmingSpeed");
             register(category, order, BASE_STEP_HEIGHT)
                     .setMaxValue(Double.MAX_VALUE)
                     .setMinValue(-Double.MAX_VALUE)
@@ -123,6 +149,9 @@ public class DMConfig {
             register(category, order, BLOCK_OVERRIDE)
                     .setLanguageKey("config.dragonmounts.blockOverride")
                     .setComment("Whether interaction hook about vanilla dragon egg is enabled.");
+            register(category, order, REPRODUCTION_LIMIT)
+                    .setMinValue(0)
+                    .setLanguageKey("config.dragonmounts.reproductionLimit");
             register(category, order, ADAPTIVE_CONVERSION)
                     .setLanguageKey("config.dragonmounts.adaptiveConversion")
                     .setComment("Whether dragon eggs will be converted to another type to adapt to the environment.");
@@ -170,14 +199,20 @@ public class DMConfig {
 
         category = config.getCategory(CATEGORY_ATTRIBUTES);
         load(category, BASE_ARMOR);
+        load(category, BASE_ARMOR_TOUGHNESS);
         load(category, BASE_DAMAGE);
         load(category, BASE_HEALTH);
-        load(category, BASE_STEP_HEIGHT);
+        load(category, BASE_KNOCKBACK_RESISTANCE);
+        load(category, BASE_FOLLOW_RANGE);
+        load(category, BASE_MOVEMENT_SPEED);
         load(category, BASE_FLYING_SPEED);
+        load(category, BASE_SWIMMING_SPEED);
+        load(category, BASE_STEP_HEIGHT);
 
         category = config.getCategory(CATEGORY_GAMEPLAY);
         load(category, FORCED_RENAME);
         load(category, BLOCK_OVERRIDE);
+        load(category, REPRODUCTION_LIMIT);
         load(category, ADAPTIVE_CONVERSION);
         load(category, BREATH_EFFECTS);
         boolean flag = BREATH_EFFECTS.value;
@@ -276,6 +311,10 @@ public class DMConfig {
 
     static void load(ConfigCategory category, DoubleEntry entry) {
         entry.value = entry.getOrCreate(category).getDouble(entry.fallback);
+    }
+
+    static void load(ConfigCategory category, IntEntry entry) {
+        entry.value = entry.getOrCreate(category).getInt(entry.fallback);
     }
 
     static void load(ConfigCategory category, IntSetEntry entry) {

@@ -2,6 +2,7 @@ package net.dragonmounts.inventory;
 
 import io.netty.buffer.ByteBuf;
 import mcp.MethodsReturnNonnullByDefault;
+import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.network.SSyncBannerPacket;
 import net.dragonmounts.util.EntityUtil;
@@ -192,7 +193,7 @@ public final class DragonInventory implements IInventory {
 
     @Override
     public boolean isUsableByPlayer(EntityPlayer player) {
-        return true;
+        return Relation.checkRelation(this.dragon, player) != Relation.STRANGER;
     }
 
     @Override

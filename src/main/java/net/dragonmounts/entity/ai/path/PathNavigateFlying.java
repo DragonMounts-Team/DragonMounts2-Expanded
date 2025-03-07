@@ -12,7 +12,6 @@ package net.dragonmounts.entity.ai.path;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 /**
@@ -39,11 +38,4 @@ public class PathNavigateFlying extends PathNavigateSwimmer {
     protected boolean canNavigate() {
         return !isInLiquid();
     }
-
-    public void setVector(Vec3d vec) {
-        posX = vec.x;
-        posY = vec.y;
-        posZ = vec.z;
-    }
-
 }

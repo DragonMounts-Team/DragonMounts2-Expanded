@@ -15,15 +15,14 @@ import net.dragonmounts.network.CDragonBreathPacket;
 import net.dragonmounts.util.ItemUtil;
 import net.dragonmounts.util.MutableBlockPosEx;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.item.EntityEnderCrystal;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -108,17 +107,17 @@ public class ClientDragonEntity extends TameableDragonEntity {
         final boolean isTrusted = relation != Relation.STRANGER;
         if (!stack.isEmpty()) {
             final boolean oldEnough = !stage.isBaby();
-            if (oldEnough && !this.isSheared()) {
+            if (oldEnough && this.canShare()) {
                 IHardShears shears = stack.getCapability(DMCapabilities.HARD_SHEARS, null);
                 if (shears != null && shears.canShear(stack, player, this)) return true;
             }
             if (isTrusted && ((
                     this.onGround && ItemUtil.anyMatches(stack, "stickWood", "bone")
+            ) || (oldEnough && (
+                    this.canCollectBreath() && stack.getItem() == Items.GLASS_BOTTLE
             ) || (
-                    oldEnough && !this.isSaddled() && stack.getItem() == Items.SADDLE
-            ))) {
-                return true;
-            }
+                    !this.isSaddled() && stack.getItem() == Items.SADDLE
+            )))) return true;
             IDragonFood food = stack.getCapability(DMCapabilities.DRAGON_FOOD, null);
             if (food != null && food.tryFeed(this, player, relation, stack, hand)) return true;
         }
@@ -143,11 +142,11 @@ public class ClientDragonEntity extends TameableDragonEntity {
     }
 
     @Override
-    public void setDead() {
+    public void onDeath(DamageSource cause) {
         if (this.isEgg()) {
             this.lifeStageHelper.playEggCrackEffect();
         }
-        super.setDead();
+        super.onDeath(cause);
     }
 
     @Override
@@ -206,5 +205,21 @@ public class ClientDragonEntity extends TameableDragonEntity {
         double z = this.posZ + (rand.nextDouble() - 0.5) * this.width * s;
 
         this.world.spawnParticle(type, x, y, z, ox, oy, oz);
+    }
+
+    /**
+     * Unsupported Operation
+     */
+    @Override
+    public boolean canMateWith(EntityAnimal mate) {
+        return false;
+    }
+
+    /**
+     * Unsupported Operation
+     */
+    @Override
+    public TameableDragonEntity createChild(EntityAgeable mate) {
+        return null;
     }
 }

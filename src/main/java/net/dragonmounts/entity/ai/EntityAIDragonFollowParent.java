@@ -1,25 +1,24 @@
 package net.dragonmounts.entity.ai;
 
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
+import net.minecraft.entity.ai.EntityAIBase;
 
 import java.util.List;
 
-public class EntityAIDragonFollowParent extends EntityAIDragonBase {
-
+public class EntityAIDragonFollowParent extends EntityAIBase {
+    public final ServerDragonEntity dragon;
     // assume any adult dragon nearby is a parent even if its not
     TameableDragonEntity adultDragon;
     double moveSpeed;
     private int delayCounter;
 
-    public EntityAIDragonFollowParent(TameableDragonEntity dragon, double speed) {
-        super(dragon);
+    public EntityAIDragonFollowParent(ServerDragonEntity dragon, double speed) {
+        this.dragon = dragon;
         this.moveSpeed = speed;
         setMutexBits(1);
     }
 
-    /**
-     * Returns whether the EntityAIBase should begin execution.
-     */
     public boolean shouldExecute() {
         if (!dragon.isChild()) {
             return false;
@@ -59,9 +58,6 @@ public class EntityAIDragonFollowParent extends EntityAIDragonBase {
         }
     }
 
-    /**
-     * Returns whether an in-progress EntityAIBase should continue executing
-     */
     public boolean shouldContinueExecuting() {
         if (this.dragon.getGrowingAge() >= 0) {
             return false;
@@ -73,23 +69,14 @@ public class EntityAIDragonFollowParent extends EntityAIDragonBase {
         }
     }
 
-    /**
-     * Execute a one shot task or start executing a continuous task
-     */
     public void startExecuting() {
         this.delayCounter = 0;
     }
 
-    /**
-     * Reset the task's internal state. Called when this task is interrupted by another one
-     */
     public void resetTask() {
         this.adultDragon = null;
     }
 
-    /**
-     * Keep ticking a continuous task that has already been started
-     */
     public void updateTask() {
         if (--this.delayCounter <= 0) {
             this.delayCounter = 10;

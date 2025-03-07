@@ -9,63 +9,68 @@
  */
 package net.dragonmounts.entity.ai.air;
 
-import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.ai.EntityAIDragonBase;
-import net.minecraft.util.math.BlockPos;
+import net.dragonmounts.entity.ServerDragonEntity;
+import net.dragonmounts.util.MutableBlockPosEx;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
+
+import java.util.Random;
 
 /**
  * Dragon AI for instant landing, if left unmounted in air.
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class EntityAIDragonFlight extends EntityAIDragonBase {
-
+public class EntityAIDragonFlight extends EntityAIBase {
     private final double speed;
-    private BlockPos landingPos;
+    public final ServerDragonEntity dragon;
+    private MutableBlockPosEx landingPos;
 
-    public EntityAIDragonFlight(TameableDragonEntity dragon, double speed) {
-        super(dragon);
+    public EntityAIDragonFlight(ServerDragonEntity dragon, double speed) {
+        this.dragon = dragon;
         this.speed = speed;
-        setMutexBits(1);
+        this.setMutexBits(0b01);
     }
 
-    public BlockPos findLandingArea() {
-        for (int Y = 1; Y <= 2; Y++) {
-            for (int Z = 1; Z <= 2; Z++) {
-                for (int X = 1; X <= 2; X++) {
-                    if (world.getBlockState(new BlockPos(X, Y, Z)).getMaterial().isSolid() || world.getBlockState(landingPos.down()).getMaterial().isLiquid()) {
-                        landingPos = landingPos.down();
+    private boolean findLandingBlock() {
+        ServerDragonEntity dragon = this.dragon;
+        World level = this.dragon.world;
+        // get current entity position and add some variance
+        Random random = dragon.getRNG();
+        int posX = MathHelper.floor(dragon.posX) - 16 + random.nextInt(16) * 2;
+        int posY = MathHelper.floor(dragon.posY + 0.5D);
+        int posZ = MathHelper.floor(dragon.posZ) - 16 + random.nextInt(16) * 2;
+        MutableBlockPosEx pos = this.landingPos = new MutableBlockPosEx(posX, posY, posZ);
+        // get ground block
+        for (int dY = 0; dY < 8; ++dY) {
+            pos.descent();
+            for (int dX = -3; dX <= 3; ++dX) {
+                pos.withX(posX + dX);
+                for (int dZ = -3; dZ <= 3; ++dZ) {
+                    pos.withX(posZ + dZ);
+                    Material material = level.getBlockState(pos).getMaterial();
+                    if (material.isSolid() || material.isLiquid()) {
+                        pos.climb();
+                        return true;
                     }
                 }
             }
         }
-        return landingPos;
-    }
-
-    private boolean findLandingBlock() {
-        // get current entity position
-        landingPos = dragon.getPosition();
-
-        // add some variance
-        int followRange = MathHelper.floor(dragon.getNavigator().getPathSearchRange());
-        int ox = followRange - random.nextInt(followRange) * 2;
-        int oz = followRange - random.nextInt(followRange) * 2;
-        landingPos = landingPos.add(ox, 0, oz);
-
-
-        // get ground block
-        landingPos = findLandingArea();
-        // make sure the block below is solid
-        return world.getBlockState(landingPos.down()).getMaterial().isSolid() || world.getBlockState(landingPos.down()).getMaterial().isLiquid();
-
-
+        return false;
     }
 
     @Override
     public boolean shouldExecute() {
-        return !dragon.isInWater() && !dragon.isInLava() && dragon.isFlying() && dragon.getControllingPlayer() == null
-                && findLandingBlock() && dragon.getAttackTarget() == null;
+        ServerDragonEntity dragon = this.dragon;
+        return !dragon.isInWater() &&
+                !dragon.isInLava() &&
+                dragon.isFlying() &&
+                dragon.getControllingPlayer() == null &&
+                dragon.getAttackTarget() == null &&
+                this.findLandingBlock();
     }
 
     @Override
@@ -76,13 +81,13 @@ public class EntityAIDragonFlight extends EntityAIDragonBase {
     @Override
     public void startExecuting() {
         // try to fly to ground block position
-        if (!tryMoveToBlockPos(landingPos, speed)) {
+        if (!tryMoveToBlockPos(landingPos)) {
             // probably too high, so simply descend vertically
-            tryMoveToBlockPos(dragon.getPosition().down(4), speed);
+            tryMoveToBlockPos(dragon.getPosition().down(4));
         }
     }
 
-    protected boolean tryMoveToBlockPos(BlockPos pos, double speed) {
+    protected boolean tryMoveToBlockPos(Vec3i pos) {
         return dragon.getNavigator().tryMoveToXYZ(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, speed);
     }
 }

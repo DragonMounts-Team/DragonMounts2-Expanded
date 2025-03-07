@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 
 public interface IHardShears {
     /**
-     * @return cooldown for next shear
+     * @return cooldown for next shear, 0 means failure
      */
     int onShear(ItemStack stack, EntityPlayer player, ServerDragonEntity dragon);
 

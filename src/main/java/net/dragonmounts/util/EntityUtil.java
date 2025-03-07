@@ -1,5 +1,6 @@
 package net.dragonmounts.util;
 
+import com.google.common.base.Predicate;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.dragonmounts.util.math.MathX;
 import net.dragonmounts.util.math.Pair;
@@ -104,6 +105,28 @@ public class EntityUtil {
         entity.prevRotationYaw += limited - delta;
         entity.rotationYaw += limited - delta;
         entity.setRotationYawHead(entity.rotationYaw);
+    }
+
+    @Nullable
+    public static <T extends Entity> T findNearestEntityWithinAABB(
+            Entity self,
+            Class<? extends T> target,
+            AxisAlignedBB aabb,
+            @Nullable Predicate<? super T> filter
+    ) {
+        List<T> list = self.world.getEntitiesWithinAABB(target, aabb, filter);
+        T result = null;
+        double min = Double.MAX_VALUE;
+        for (T candidate : list) {
+            if (candidate != self) {
+                double dist = self.getDistanceSq(candidate);
+                if (dist <= min) {
+                    result = candidate;
+                    min = dist;
+                }
+            }
+        }
+        return result;
     }
 
     /**

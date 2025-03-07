@@ -56,8 +56,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -65,7 +63,6 @@ import java.util.List;
 import java.util.Random;
 
 import static net.dragonmounts.util.EntityUtil.replaceAttributeModifier;
-import static net.minecraft.entity.SharedMonsterAttributes.ATTACK_DAMAGE;
 
 public abstract class TameableDragonEntity extends EntityTameable implements IEntityAdditionalSpawnData {
     public static TameableDragonEntity construct(World level) {
@@ -73,16 +70,11 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     }
 
     // base attributes
-    public static final double BASE_GROUND_SPEED = 0.4;
-    public static final double BASE_TOUGHNESS = 30.0D;
-    public static final float RESISTANCE = 10.0F;
-    public static final double BASE_FOLLOW_RANGE = 70;
-    public static final double BASE_FOLLOW_RANGE_FLYING = BASE_FOLLOW_RANGE * 2;
     public static final int HOME_RADIUS = 64;
     public static final double IN_AIR_THRESH = 10;
+    // flags
     public static final byte DO_ATTACK = 66;
     public static final byte DO_ROAR = 67;
-    private static final Logger L = LogManager.getLogger();
 
     // data value IDs
     private static final DataParameter<Boolean> DATA_FLYING = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
@@ -95,17 +87,16 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     private static final DataParameter<Boolean> Y_LOCKED = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> FOLLOW_YAW = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<DragonVariant> DATA_VARIANT = EntityDataManager.createKey(TameableDragonEntity.class, DragonVariant.SERIALIZER);
-    private static final DataParameter<Integer> DATA_REPRODUCTION_COUNT = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> HUNGER = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> DATA_TICKS_SINCE_CREATION = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.VARINT);
-    protected static final DataParameter<Boolean> DATA_SHEARED = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Boolean> DATA_CAN_SHEAR = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Boolean> DATA_CAN_COLLECT_BREATH = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<ItemStack> DATA_ARMOR = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.ITEM_STACK);
     protected static final DataParameter<ItemStack> DATA_CHEST = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.ITEM_STACK);
     protected static final DataParameter<ItemStack> DATA_SADDLE = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.ITEM_STACK);
     public final DragonInventory inventory = new DragonInventory(this);
     public final DragonVariantHelper variantHelper = new DragonVariantHelper(this);
     public final DragonLifeStageHelper lifeStageHelper = new DragonLifeStageHelper(this, DATA_TICKS_SINCE_CREATION);
-    public final DragonReproductionHelper reproductionHelper = new DragonReproductionHelper(this);
     public final DragonBreathHelper<?> breathHelper = this.createBreathHelper();
     // public final DragonHungerHelper hungerHelper = new DragonHungerHelper(this);
     public EntityEnderCrystal healingEnderCrystal;
@@ -118,6 +109,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     private boolean armored;
     private boolean chested;
     private boolean saddled;
+    private Entity controllerCache;
 
     public TameableDragonEntity(World world) {
         super(world);
@@ -146,7 +138,8 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         manager.register(HOVER_CANCELLED, false);
         manager.register(ALLOW_OTHERPLAYERS, false);
         manager.register(BOOSTING, false);
-        manager.register(DATA_SHEARED, false);
+        manager.register(DATA_CAN_SHEAR, true);
+        manager.register(DATA_CAN_COLLECT_BREATH, true);
         manager.register(FOLLOW_YAW, true);
         manager.register(HUNGER, 100);
         manager.register(DATA_ARMOR, ItemStack.EMPTY);
@@ -154,7 +147,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         manager.register(DATA_SADDLE, ItemStack.EMPTY);
         manager.register(DATA_VARIANT, DragonVariants.ENDER_FEMALE);
         manager.register(DATA_TICKS_SINCE_CREATION, 0);
-        manager.register(DATA_REPRODUCTION_COUNT, 0);
     }
 
     @Override
@@ -162,16 +154,16 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         super.applyEntityAttributes();
         AbstractAttributeMap attributes = this.getAttributeMap();
         attributes.registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
-        attributes.registerAttribute(ATTACK_DAMAGE);
+        attributes.registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         attributes.getAttributeInstance(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(DMConfig.BASE_FLYING_SPEED.value);
-        attributes.getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(BASE_GROUND_SPEED);
+        attributes.getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(DMConfig.BASE_MOVEMENT_SPEED.value);
         attributes.getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(DMConfig.BASE_DAMAGE.value);
-        attributes.getAttributeInstance(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(BASE_FOLLOW_RANGE);
-        attributes.getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(RESISTANCE);
+        attributes.getAttributeInstance(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(DMConfig.BASE_FOLLOW_RANGE.value);
+        attributes.getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(DMConfig.BASE_KNOCKBACK_RESISTANCE.value);
         attributes.getAttributeInstance(SharedMonsterAttributes.ARMOR).setBaseValue(DMConfig.BASE_ARMOR.value);
-        attributes.getAttributeInstance(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(BASE_TOUGHNESS);
+        attributes.getAttributeInstance(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(DMConfig.BASE_ARMOR_TOUGHNESS.value);
         attributes.getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(DMConfig.BASE_HEALTH.value);
-        attributes.getAttributeInstance(SWIM_SPEED).setBaseValue(5.0);
+        attributes.getAttributeInstance(SWIM_SPEED).setBaseValue(DMConfig.BASE_SWIMMING_SPEED.value);
     }
 
     public boolean boosting() {
@@ -206,7 +198,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
      * f Set the flying flag of the entity.
      */
     public void setFlying(boolean flying) {
-        L.trace("setFlying({})", flying);
         dataManager.set(DATA_FLYING, flying);
     }
 
@@ -314,14 +305,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         }
     }
 
-    public int getReproductionCount() {
-        return this.dataManager.get(DATA_REPRODUCTION_COUNT);
-    }
-
-    public void setReproductionCount(int count) {
-        this.dataManager.set(DATA_REPRODUCTION_COUNT, count);
-    }
-
     /**
      * Called when the mob is falling. Calculates and applies fall damage.
      */
@@ -344,7 +327,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
      * Causes this entity to lift off if it can fly.
      */
     public void liftOff() {
-        L.trace("liftOff");
         if (canFly()) {
             boolean flag = isBeingRidden() || (isInWater() && isInLava());
             // stronger jump for an easier lift-off
@@ -600,7 +582,10 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
      * Called when an entity attacks
      */
     public boolean attackEntityAsMob(Entity entityIn) {
-        boolean attacked = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float) getEntityAttribute(ATTACK_DAMAGE).getAttributeValue());
+        boolean attacked = entityIn.attackEntityFrom(
+                DamageSource.causeMobDamage(this),
+                (float) getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()
+        );
 
         if (attacked) {
             applyEnchantments(this, entityIn);
@@ -617,32 +602,15 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     public boolean shouldAttackEntity(@Nonnull EntityLivingBase target, @Nullable EntityLivingBase owner) {
         if (target instanceof EntityTameable) {
             EntityTameable other = (EntityTameable) target;
-            return !other.isTamed() || other.getOwner() != owner || !(
+            return !(
                     other instanceof TameableDragonEntity && ((TameableDragonEntity) other).isEgg()
-            );
+            ) && (!other.isTamed() || other.getOwner() != owner);
         } else if (target instanceof EntityPlayer) {
             return !(owner instanceof EntityPlayer) || ((EntityPlayer) owner).canAttackPlayer((EntityPlayer) target);
         } else if (this.isTamed() && target instanceof AbstractHorse) {
             return !((AbstractHorse) target).isTame();
         }
         return true;
-    }
-
-    /**
-     * Returns true if the mob is currently able to mate with the specified mob.
-     */
-    @Override
-    public boolean canMateWith(EntityAnimal mate) {
-        return this.reproductionHelper.canMateWith(mate);
-    }
-
-    /**
-     * This function is used when two same-species animals in 'love mode' breed to
-     * generate the new baby animal.
-     */
-    @Override
-    public TameableDragonEntity createChild(EntityAgeable mate) {
-        return mate instanceof TameableDragonEntity ? this.reproductionHelper.createChild((TameableDragonEntity) mate) : null;
     }
 
     public void updateIntendedRideRotation(EntityPlayer rider) {
@@ -675,8 +643,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
 
     @Nullable
     public Entity getControllingPassenger() {
-        List<Entity> passengers = this.getPassengers();
-        return passengers.isEmpty() ? null : passengers.get(0);
+        return this.controllerCache;
     }
 
     /**
@@ -686,10 +653,21 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
      */
     @Nullable
     public EntityPlayer getControllingPlayer() {
+        return this.controllerCache instanceof EntityPlayer ? (EntityPlayer) this.controllerCache : null;
+    }
+
+    @Override
+    protected void addPassenger(@Nonnull Entity passenger) {
+        super.addPassenger(passenger);
         List<Entity> passengers = this.getPassengers();
-        if (passengers.isEmpty()) return null;
-        Entity entity = passengers.get(0);
-        return entity instanceof EntityPlayer ? (EntityPlayer) entity : null;
+        this.controllerCache = passengers.isEmpty() ? null : passengers.get(0);
+    }
+
+    @Override
+    protected void removePassenger(@Nonnull Entity passenger) {
+        super.removePassenger(passenger);
+        List<Entity> passengers = this.getPassengers();
+        this.controllerCache = passengers.isEmpty() ? null : passengers.get(0);
     }
 
     public boolean isPassengerBroadly(Entity entity) {
@@ -867,8 +845,12 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         return !isTamed() && !isEgg() || !isChild() ? this.getVariant().type.lootTable : null;
     }
 
-    public boolean isSheared() {
-        return this.dataManager.get(DATA_SHEARED);
+    public boolean canShare() {
+        return this.dataManager.get(DATA_CAN_SHEAR);
+    }
+
+    public boolean canCollectBreath() {
+        return this.dataManager.get(DATA_CAN_COLLECT_BREATH);
     }
 
     public void resetFeedTimer() {

@@ -9,10 +9,12 @@
  */
 package net.dragonmounts.entity.ai;
 
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.util.EntityUtil;
 import net.dragonmounts.util.math.MathX;
+import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.Vec3d;
@@ -22,18 +24,17 @@ import net.minecraft.util.math.Vec3d;
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class EntityAIDragonPlayerControl extends EntityAIDragonBase {
-    protected EntityPlayer rider;
+public class EntityAIDragonPlayerControl extends EntityAIBase {
+    public final ServerDragonEntity dragon;
 
-    public EntityAIDragonPlayerControl(TameableDragonEntity dragon) {
-        super(dragon);
+    public EntityAIDragonPlayerControl(ServerDragonEntity dragon) {
+        this.dragon = dragon;
         setMutexBits(0xffffffff);
     }
 
     @Override
     public boolean shouldExecute() {
-        rider = dragon.getControllingPlayer();
-        return rider != null;
+        return dragon.getControllingPlayer() != null;
     }
 
     @Override
@@ -46,14 +47,16 @@ public class EntityAIDragonPlayerControl extends EntityAIDragonBase {
     @Override
     public void updateTask() {
         TameableDragonEntity dragon = this.dragon;
+        EntityPlayer rider = dragon.getControllingPlayer();
+        assert rider != null;
         Vec3d wp = rider.getLook(1.0F);
 
         double x = dragon.posX;
         double y = dragon.posY;
         double z = dragon.posZ;
 
-        if (dragon.getVariant().type == DragonTypes.WATER && this.rider.isInWater()) {
-            EntityUtil.addOrResetEffect(this.rider, MobEffects.WATER_BREATHING, 200, 0, true, true, 21);
+        if (dragon.getVariant().type == DragonTypes.WATER && rider.isInWater()) {
+            EntityUtil.addOrResetEffect(rider, MobEffects.WATER_BREATHING, 200, 0, true, true, 21);
         }
 
         // if we're breathing at a target, look at it
@@ -70,36 +73,36 @@ public class EntityAIDragonPlayerControl extends EntityAIDragonBase {
         } else if (dragon.followYaw() && dragon.moveStrafing == 0) {
             dragon.updateIntendedRideRotation(rider);
         }
-
-        if (dragon.isServerWorld()) {
-            // control direction with movement keys
-            if (rider.moveStrafing != 0 || rider.moveForward != 0) {
-                if (rider.moveForward < 0) {
-                    wp = wp.rotateYaw(MathX.PI_F);
-                } else if (rider.moveStrafing > 0) {
-                    wp = wp.rotateYaw(MathX.PI_F * 0.5f);
-                } else if (rider.moveStrafing < 0) {
-                    wp = wp.rotateYaw(MathX.PI_F * -0.5f);
-                }
-
-                x += wp.x * 10;
-                if (!dragon.isYLocked()) y += wp.y * 10;
-                z += wp.z * 10;
+        // control direction with movement keys
+        if (rider.moveStrafing != 0 || rider.moveForward != 0) {
+            if (rider.moveForward < 0) {
+                wp = wp.rotateYaw(MathX.PI_F);
+            } else if (rider.moveStrafing > 0) {
+                wp = wp.rotateYaw(MathX.PI_F * 0.5f);
+            } else if (rider.moveStrafing < 0) {
+                wp = wp.rotateYaw(MathX.PI_F * -0.5f);
             }
 
-//         lift off from a jump
-            if (rider.isJumping) {
-                if (!dragon.isFlying()) {
-                    dragon.liftOff();
-                } else {
-                    y += 10;
-                }
-            } else if (dragon.isGoingDown()) {
-                y -= 10;
-            }
-
-            dragon.getMoveHelper().setMoveTo(x, y, z, 1.2);
+            x += wp.x * 10;
+            if (!dragon.isYLocked()) y += wp.y * 10;
+            z += wp.z * 10;
         }
+        // lift off from a jump
+        if (rider.isJumping) {
+            if (!dragon.isFlying()) {
+                dragon.liftOff();
+            } else {
+                y += 10;
+            }
+        } else if (dragon.isGoingDown()) {
+            y -= 10;
+        }
+        dragon.getMoveHelper().setMoveTo(x, y, z, 1.2);
+    }
+
+    @Override
+    public boolean isInterruptible() {
+        return false;
     }
 
     @Override

@@ -276,15 +276,9 @@ public class NodeLineSegment {
     /**
      * Given a ray which originated at xyzOrigin and terminated at xyzHit:
      * Find which face of the block at xyzHit was hit by the ray.
-     *
-     * @param xOrigin
-     * @param yOrigin
-     * @param zOrigin
-     * @param xHit
-     * @param yHit
-     * @param zHit
      * @return the face which was hit.  If none (was inside block), returns null
      */
+    @Nullable
     public static EnumFacing getIntersectedFace(double xOrigin, double yOrigin, double zOrigin, double xHit, double yHit, double zHit) {
         RayTraceResult mop = new AxisAlignedBB(
                 Math.floor(xHit),
@@ -296,7 +290,6 @@ public class NodeLineSegment {
         ).calculateIntercept(new Vec3d(xOrigin, yOrigin, zOrigin), new Vec3d(xHit, yHit, zHit));
         return mop == null ? null : mop.sideHit;
     }
-
 
     private static final int TABLE_POINTS=256;
     private static final float[] sinTable;
