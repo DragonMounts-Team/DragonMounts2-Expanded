@@ -30,7 +30,6 @@ dragon_type.dragonmounts.storm=Storm
 dragon_type.dragonmounts.zombie=Zombie
 dragon_type.dragonmounts.terra=Terra
 dragon_type.dragonmounts.dark=Dark
-dragon_type.dragonmounts.light=Light
 
 #Stage
 life_stage.dragon.egg=Egg
