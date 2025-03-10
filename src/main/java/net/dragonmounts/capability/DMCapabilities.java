@@ -12,4 +12,7 @@ public class DMCapabilities {
 
     @CapabilityInject(IHardShears.class)
     public static final Capability<IHardShears> HARD_SHEARS = null;
+
+    @CapabilityInject(IWhistleHolder.class)
+    public static final Capability<IWhistleHolder> WHISTLE_HOLDER = null;
 }

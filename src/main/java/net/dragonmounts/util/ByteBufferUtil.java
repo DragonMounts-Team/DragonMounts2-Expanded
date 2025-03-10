@@ -1,8 +1,14 @@
 package net.dragonmounts.util;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.handler.codec.DecoderException;
+import io.netty.handler.codec.EncoderException;
+import net.minecraft.network.PacketBuffer;
+
+import java.nio.charset.StandardCharsets;
 
 public class ByteBufferUtil {
+    /// @see PacketBuffer#readVarInt()
     public static int readVarInt(ByteBuf buffer) {
         int result = 0;
         int size = 0;
@@ -15,6 +21,7 @@ public class ByteBufferUtil {
         return result;
     }
 
+    /// @see PacketBuffer#writeVarInt(int)
     public static <T extends ByteBuf> T writeVarInt(T buffer, int value) {
         while ((value & -128) != 0) {
             buffer.writeByte(value & 127 | 128);
@@ -58,6 +65,29 @@ public class ByteBufferUtil {
             bit <<= 1;
         }
         buffer.writeByte(data);
+        return buffer;
+    }
+
+    /// @see PacketBuffer#readString(int)
+    public static <T extends ByteBuf> String readString(T buffer, int maxLength) {
+        int length = readVarInt(buffer);
+        if (length > maxLength * 4)
+            throw new DecoderException("The received encoded string buffer length is longer than maximum allowed (" + length + " > " + maxLength * 4 + ")");
+        if (length < 0)
+            throw new DecoderException("The received encoded string buffer length is less than zero! Weird string!");
+        String value = buffer.toString(buffer.readerIndex(), length, StandardCharsets.UTF_8);
+        buffer.readerIndex(buffer.readerIndex() + length);
+        if (value.length() > maxLength)
+            throw new DecoderException("The received string length is longer than maximum allowed (" + value + " > " + maxLength + ")");
+        return value;
+    }
+
+    /// @see PacketBuffer#writeString(String)
+    public static <T extends ByteBuf> T writeString(T buffer, String string) {
+        byte[] bytes = string.getBytes(StandardCharsets.UTF_8);
+        if (bytes.length > 32767)
+            throw new EncoderException("String too big (was " + bytes.length + " bytes encoded, max " + 32767 + ")");
+        writeVarInt(buffer, bytes.length).writeBytes(bytes);
         return buffer;
     }
 }

@@ -5,15 +5,12 @@ import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.client.gui.GuiDragonWhistle;
 import net.dragonmounts.compat.DragonTypeCompat;
-import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -47,13 +44,34 @@ public class DragonWhistleItem extends Item {
     public static final String DRAGON_UUID_KEY = "DragonUUID";
     public static final String DEPRECATED_UUID_KEY = "dragonmountsdragon";
 
+    public static void bindWhistle(ItemStack stack, TameableDragonEntity dragon, EntityPlayer player) {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setUniqueId(DRAGON_UUID_KEY, dragon.getUniqueID());
+        if (dragon.hasCustomName()) {
+            nbt.setString("Name", dragon.getCustomNameTag());
+        }
+        nbt.setString("Age", dragon.lifeStageHelper.getLifeStage().translationKey);
+        nbt.setString("OwnerName", player.getName());
+        nbt.setUniqueId("Owner", player.getUniqueID());
+        DragonType type = dragon.getVariant().type;
+        nbt.setInteger("Color", type.color);
+        nbt.setString("Type", type.identifier.toString());
+        stack.setTagCompound(nbt);
+    }
+
+    /// Open Dragon Whistle gui for dragon with given uuid
+    @SideOnly(Side.CLIENT)
+    public static void openDragonWhistleGui(@Nullable UUID uuid, World world, EnumHand hand) {
+        if (uuid == null || !world.isRemote) return;
+        Minecraft.getMinecraft().displayGuiScreen(new GuiDragonWhistle(world, uuid, hand));
+    }
+
+
     public DragonWhistleItem() {
         this.setMaxStackSize(1);
     }
 
-    /**
-     * compat
-     */
+    /// Compat
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
@@ -86,49 +104,6 @@ public class DragonWhistleItem extends Item {
     }
 
     /**
-     * Open Dragon Whistle gui for dragon with given uuid
-     */
-    @SideOnly(Side.CLIENT)
-    private void openDragonWhistleGui(@Nullable UUID uuid, World world, EnumHand hand) {
-        if (uuid == null || !world.isRemote) return;
-        Minecraft.getMinecraft().displayGuiScreen(new GuiDragonWhistle(world, uuid, hand));
-    }
-
-    @Override
-    public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity target) {
-        if (target.world.isRemote) return false;
-        if (target instanceof TameableDragonEntity) {
-            TameableDragonEntity dragon = (TameableDragonEntity) target;
-            EntityLivingBase owner = dragon.getOwner();
-            if (owner != null) {
-                if (Relation.checkRelation(dragon, player) == Relation.STRANGER) {
-                    Relation.STRANGER.onDeny(player);
-                    return false;
-                }
-                if (stack.hasTagCompound() && stack.getTagCompound().hasUniqueId(DRAGON_UUID_KEY)) {
-                    player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.whistle.existing"), true);
-                    return true;
-                }
-                NBTTagCompound nbt = new NBTTagCompound();
-                nbt.setUniqueId(DRAGON_UUID_KEY, dragon.getUniqueID());
-                if (dragon.hasCustomName()) {
-                    nbt.setString("Name", dragon.getCustomNameTag());
-                }
-                nbt.setString("Age", dragon.lifeStageHelper.getLifeStage().translationKey);
-                nbt.setString("OwnerName", owner.getName());
-                nbt.setUniqueId("Owner", owner.getUniqueID());
-                DragonType type = dragon.getVariant().type;
-                nbt.setInteger("Color", type.color);
-                nbt.setString("Type", type.identifier.toString());
-                stack.setTagCompound(nbt);
-                player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.whistle.success"), true);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Called when the ItemStack is right clicked by the player
      * <p> If player is sneaking, clear the tag compound. else, open the whistle gui with given id
      */
@@ -145,7 +120,7 @@ public class DragonWhistleItem extends Item {
                 player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.dragon.notOwner"), true);
                 return new ActionResult<>(EnumActionResult.FAIL, stack);
             }
-            this.openDragonWhistleGui(nbt.getUniqueId(DRAGON_UUID_KEY), world, hand);
+            openDragonWhistleGui(nbt.getUniqueId(DRAGON_UUID_KEY), world, hand);
             return new ActionResult<>(EnumActionResult.SUCCESS, stack);
         }
         if (!stack.hasTagCompound() || !(nbt = stack.getTagCompound()).hasUniqueId(DRAGON_UUID_KEY) || (

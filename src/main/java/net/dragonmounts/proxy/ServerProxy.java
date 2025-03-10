@@ -10,7 +10,6 @@
 package net.dragonmounts.proxy;
 
 import net.dragonmounts.DragonMounts;
-import net.dragonmounts.capability.ArmorEffectManager;
 import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.event.CommonMisc;
 import net.dragonmounts.init.DMArmorEffects;
@@ -56,11 +55,11 @@ public class ServerProxy {
         DragonMounts.NETWORK_WRAPPER.registerMessage(CTeleportOrderPacket.Handler.class, CTeleportOrderPacket.class, ++discriminator, Side.SERVER);
         DragonMounts.NETWORK_WRAPPER.registerMessage(CSitOrderPacket.Handler.class, CSitOrderPacket.class, ++discriminator, Side.SERVER);
         DragonMounts.NETWORK_WRAPPER.registerMessage(CFollowOrderPacket.Handler.class, CFollowOrderPacket.class, ++discriminator, Side.SERVER);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(CRenameWhistlePacket.Handler.class, CRenameWhistlePacket.class, ++discriminator, Side.SERVER);
     }
 
     public void PostInitialization(FMLPostInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(DMArmorEffects.class);
-        MinecraftForge.EVENT_BUS.register(ArmorEffectManager.Events.class);
     }
 
     public Function<String, VariantAppearance> getBuiltinAppearances() {

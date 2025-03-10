@@ -207,17 +207,13 @@ public class ClientDragonEntity extends TameableDragonEntity {
         this.world.spawnParticle(type, x, y, z, ox, oy, oz);
     }
 
-    /**
-     * Unsupported Operation
-     */
+    /// Unsupported Operation
     @Override
     public boolean canMateWith(EntityAnimal mate) {
         return false;
     }
 
-    /**
-     * Unsupported Operation
-     */
+    /// Unsupported Operation
     @Override
     public TameableDragonEntity createChild(EntityAgeable mate) {
         return null;

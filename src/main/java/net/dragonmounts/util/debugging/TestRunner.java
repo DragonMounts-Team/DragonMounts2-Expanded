@@ -159,10 +159,10 @@ public class TestRunner {
             System.out.println("Final stage was:" + lastStage);
             return true;
         });
-        registry.register(Side.SERVER, 3, TestRunner::getTps);
+        registry.register(Side.SERVER, 3, TestRunner::inquireTps);
     }
 
-    private static boolean getTps(World world, EntityPlayer player, ItemStack stack) {
+    private static boolean inquireTps(World world, EntityPlayer player, ItemStack stack) {
         if (player instanceof EntityPlayerMP) {
             ((EntityPlayerMP) player).server.commandManager.executeCommand(player, "/forge tps");
         }
@@ -173,10 +173,6 @@ public class TestRunner {
 
     /**
      * Teleport the player to the test region (so you can see the results of the test)
-     *
-     * @param playerIn
-     * @param location
-     * @return
      */
     public static boolean teleportPlayerToTestRegion(EntityPlayer playerIn, BlockPos location) {
         if (!(playerIn instanceof EntityPlayerMP)) {
@@ -200,7 +196,6 @@ public class TestRunner {
      * Copy a cuboid Test Region from one part of the world to another
      * The cuboid is x blocks wide, by y blocks high, by z blocks long
      *
-     * @param entityPlayer
      * @param sourceOrigin origin of the source region
      * @param destOrigin   origin of the destination region
      * @param xCount       >=1

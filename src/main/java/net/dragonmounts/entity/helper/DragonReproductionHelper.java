@@ -24,9 +24,7 @@ import java.util.Random;
 public class DragonReproductionHelper {
     private static final Logger L = LogManager.getLogger();
     public static final String NBT_REPRODUCTION_COUNT = "ReproductionCount";
-    /**
-     * old NBT key
-     */
+    /// old NBT key
     public static final String NBT_REPRODUCED = "HasReproduced";
     public final ServerDragonEntity dragon;
     private int reproduced = 0;

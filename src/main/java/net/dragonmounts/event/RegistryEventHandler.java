@@ -5,20 +5,19 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.block.entity.DragonHeadBlockEntity;
-import net.dragonmounts.capability.ArmorEffectManager;
-import net.dragonmounts.capability.IArmorEffectManager;
-import net.dragonmounts.capability.IDragonFood;
-import net.dragonmounts.capability.IHardShears;
+import net.dragonmounts.capability.*;
 import net.dragonmounts.compat.DragonMountsCompat;
 import net.dragonmounts.compat.DragonTypeCompat;
 import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.food.CommonFood;
 import net.dragonmounts.init.*;
+import net.dragonmounts.inventory.WhistleHolder;
 import net.dragonmounts.registry.CarriageType;
 import net.dragonmounts.registry.CooldownCategory;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.DummyStorage;
+import net.dragonmounts.util.SerializableProvider;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -58,6 +57,7 @@ import static net.dragonmounts.DragonMountsTags.MOD_ID;
 public class RegistryEventHandler {
     public static final ResourceLocation ARMOR_EFFECT_MANAGER_ID = makeId("armor_effect_manager");
     public static final ResourceLocation DRAGON_FOOD_ID = makeId("dragon_food");
+    public static final ResourceLocation WHISTLE_HOLDER_ID = makeId("whistle_holder");
 
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -208,13 +208,21 @@ public class RegistryEventHandler {
         CapabilityManager.INSTANCE.register(IArmorEffectManager.class, new ArmorEffectManager.Storage(), () -> null);
         CapabilityManager.INSTANCE.register(IDragonFood.class, new DragonFoods.Storage(), () -> IDragonFood.EMPTY);
         CapabilityManager.INSTANCE.register(IHardShears.class, new DummyStorage<>(), () -> null);
+        CapabilityManager.INSTANCE.register(IWhistleHolder.class, new WhistleHolder.Storage(), WhistleHolder::new);
     }
 
     @SubscribeEvent
     public static void attachEntityCapabilities(AttachCapabilitiesEvent<Entity> event) {
         Entity entity = event.getObject();
         if (entity instanceof EntityPlayer) {
-            event.addCapability(ARMOR_EFFECT_MANAGER_ID, new ArmorEffectManager.LazyProvider((EntityPlayer) entity));
+            event.addCapability(
+                    ARMOR_EFFECT_MANAGER_ID,
+                    new SerializableProvider<>(DMCapabilities.ARMOR_EFFECT_MANAGER, new ArmorEffectManager((EntityPlayer) entity))
+            );
+            event.addCapability(
+                    WHISTLE_HOLDER_ID,
+                    new SerializableProvider<>(DMCapabilities.WHISTLE_HOLDER, new WhistleHolder())
+            );
         }
     }
 
@@ -222,10 +230,13 @@ public class RegistryEventHandler {
     public static void attachItemCapabilities(AttachCapabilitiesEvent<ItemStack> event) {
         ItemStack stack = event.getObject();
         Item item = stack.getItem();
-        if (item == Items.FISH && stack.getMetadata() == ItemFishFood.FishType.PUFFERFISH.getMetadata()) return;
+        if (stack.isEmpty() || item == Items.FISH && stack.getMetadata() == ItemFishFood.FishType.PUFFERFISH.getMetadata())
+            return;
         ICapabilityProvider provider = DragonFoods.getProvider(item);
         if (provider == null) {
-            if (item instanceof ItemFood) {
+            if (ArrayUtils.contains(OreDictionary.getOreIDs(stack), OreDictionary.getOreID("listAllfishraw"))) {
+                event.addCapability(DRAGON_FOOD_ID, DragonFoods.RAW_FISH);
+            } else if (item instanceof ItemFood) {
                 ItemFood food = (ItemFood) item;
                 if (food.isWolfsFavoriteMeat()) {
                     int level = food.getHealAmount(stack) * 2;
@@ -233,11 +244,7 @@ public class RegistryEventHandler {
                             ? new CommonFood(level, 1500, 0.125F * level + 0.5F, 0.25F)
                             : new CommonFood(level, 2500, 0.125F * level + 0.5F, 0.375F)
                     );
-                    return;
                 }
-            }
-            if (!stack.isEmpty() && ArrayUtils.contains(OreDictionary.getOreIDs(stack), OreDictionary.getOreID("listAllfishraw"))) {
-                event.addCapability(DRAGON_FOOD_ID, DragonFoods.RAW_FISH);
             }
         } else {
             event.addCapability(DRAGON_FOOD_ID, provider);

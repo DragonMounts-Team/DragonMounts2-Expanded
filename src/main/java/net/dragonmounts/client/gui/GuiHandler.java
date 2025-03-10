@@ -23,7 +23,7 @@ public enum GuiHandler implements IGuiHandler {
             case GUI_DRAGON:
                 entity = world.getEntityByID(x);
                 if (entity instanceof TameableDragonEntity) {
-                    return new DragonContainer((TameableDragonEntity) entity, player);
+                    return new DragonContainer<>((TameableDragonEntity) entity, player);
                 }
                 break;
             case GUI_DRAGON_CORE:
@@ -42,7 +42,7 @@ public enum GuiHandler implements IGuiHandler {
             case GUI_DRAGON:
                 entity = world.getEntityByID(x);
                 if (entity instanceof ClientDragonEntity) {
-                    return new DragonInventoryGui(player, (ClientDragonEntity) entity);
+                    return new DragonInventoryGui(player, new DragonContainer<>((ClientDragonEntity) entity, player));
                 }
                 break;
             case GUI_DRAGON_CORE:
