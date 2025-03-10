@@ -152,12 +152,6 @@
     ],
     "subtitle": "subtitles.entity.dragonmounts.dragon.breath_start"
   },
-  "entity.dragon.breath_start.forest": {
-    "sounds": [
-      "dragonmounts:entity/dragon/breath_start/fire"
-    ],
-    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_start"
-  },
   "entity.dragon.breath_start.airflow": {
     "sounds": [
       "dragonmounts:entity/dragon/breath_start/airflow"
@@ -191,12 +185,6 @@
   "entity.dragon.breath_loop.ice": {
     "sounds": [
       "dragonmounts:entity/dragon/breath_loop/ice"
-    ],
-    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_loop"
-  },
-  "entity.dragon.breath_loop.forest": {
-    "sounds": [
-      "dragonmounts:entity/dragon/breath_loop/fire"
     ],
     "subtitle": "subtitles.entity.dragonmounts.dragon.breath_loop"
   },
@@ -236,12 +224,6 @@
     ],
     "subtitle": "subtitles.entity.dragonmounts.dragon.breath_stop"
   },
-  "entity.dragon.breath_stop.forest": {
-    "sounds": [
-      "dragonmounts:entity/dragon/breath_stop/fire"
-    ],
-    "subtitle": "subtitles.entity.dragonmounts.dragon.breath_stop"
-  },
   "entity.dragon.breath_stop.airflow": {
     "sounds": [
       "dragonmounts:entity/dragon/breath_stop/airflow"
@@ -260,7 +242,7 @@
     ],
     "subtitle": "subtitles.entity.dragonmounts.dragon_egg.shatter"
   },
-  "entity.dragon_egg.hatching": {
+  "entity.dragon_egg.crack": {
     "sounds": [
       "dragonmounts:entity/dragon_egg/crack1",
       "dragonmounts:entity/dragon_egg/crack2"
