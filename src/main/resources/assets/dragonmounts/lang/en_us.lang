@@ -174,8 +174,6 @@ subtitles.item.dragonmounts.variation_orb.activate=Orb of Variation activates
 argument.player.toomany=Only one player is allowed, but the provided selector allows more than one
 
 commands.dragonmounts.usage=/dragonmounts <subcommand>
-commands.dragonmounts.gender.usage=/dragonmounts gender [dragon]
-commands.dragonmounts.gender.success=The gender of %s has been set to: %s
 commands.dragonmounts.tame.usage=/dragonmounts tame [dragon]
 commands.dragonmounts.tame.success=Dragon %s is tamed by %s now
 commands.dragonmounts.unlock.usage=/dragonmounts unlock [dragon]
