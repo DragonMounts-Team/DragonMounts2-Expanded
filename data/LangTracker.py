@@ -74,7 +74,7 @@ for locale in list(untranslated):
 # save output
 with open(output, 'w', encoding='utf-8') as file:
   json.dump({
-    **({'modified': modified} if modified else {}),
+    'modified': modified,
     'redundant': redundant,
     'untranslated': untranslated,
     'translations': translations

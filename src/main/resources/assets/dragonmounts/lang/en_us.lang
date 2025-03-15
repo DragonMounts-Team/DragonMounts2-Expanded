@@ -186,6 +186,7 @@ commands.dragonmounts.type.invalid='%s' is not a valid type
 commands.dragonmounts.type.success=The type of %s has been set to: %s
 commands.dragonmounts.notFound=Could not find dragon based on '%s'
 commands.dragonmounts.unspecified=You must specify which dragon you wish to perform this action on
+
 config.dragonmounts.category.attributes=Attributes
 config.dragonmounts.category.attributes.tooltip=Settings that about entity attributes
 config.dragonmounts.category.gameplay=Gameplay
