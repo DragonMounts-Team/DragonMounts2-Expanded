@@ -1,5 +1,8 @@
 ![LOGO](src/main/resources/logo.png)
 
+[![CurseForge Downloads](https://img.shields.io/curseforge/dt/1123549?logo=curseforge&label=CurseForge)](https://www.curseforge.com/minecraft/mc-mods/dragon-mounts-2)
+[![Modrinth Downloads](https://img.shields.io/modrinth/dt/PTfOH4IO?logo=modrinth&label=Modrinth)](https://modrinth.com/mod/dragon-mounts-2)
+
 # [Dragon Mounts 2: Expanded](https://www.curseforge.com/minecraft/mc-mods/dragon-mounts-2-expanded)
 Dragon Mounts 2: Expanded is a remaster of the infamous Dragon Mounts 2. It polishes the mod with several bug fixes and overhauling it's outdated code and textures.
 
