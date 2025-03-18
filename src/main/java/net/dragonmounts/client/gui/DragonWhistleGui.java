@@ -5,29 +5,20 @@ import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.network.CFollowOrderPacket;
 import net.dragonmounts.network.CSitOrderPacket;
 import net.dragonmounts.network.CTeleportOrderPacket;
-import net.dragonmounts.network.CUnbindWhistlePacket;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumHand;
-import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 
 import java.util.UUID;
 
-public class GuiDragonWhistle extends GuiScreen {
-    World world;
-    UUID uuid;
-    EnumHand hand;
-    GuiButton unbind;
-    String tooltip;
+public class DragonWhistleGui extends GuiScreen {
+    public final UUID uuid;
 
-    public GuiDragonWhistle(World world, UUID uuid, EnumHand hand) {
+    public DragonWhistleGui(UUID uuid) {
         super();
-        this.world = world;
         this.uuid = uuid;
-        this.hand = hand;
     }
 
     @Override
@@ -35,24 +26,20 @@ public class GuiDragonWhistle extends GuiScreen {
         super.initGui();
         buttonList.clear();
         Keyboard.enableRepeatEvents(true);
-        String unbindText = ClientUtil.translateToLocal("gui.dragonmounts.unbindWhistle");
         String tpText = ClientUtil.translateToLocal("gui.dragonmounts.teleportToPlayer");
         String sitText = ClientUtil.translateToLocal("gui.dragonmounts.toggleSit");
         String followText = ClientUtil.translateToLocal("gui.dragonmounts.toggleFollow");
-        this.tooltip = ClientUtil.translateToLocal("gui.dragonmounts.unbindWhistle.tooltip");
-        int buttonWidth = maxTextWidth(
+        int buttonWidth = 25 + maxTextWidth(
                 this.fontRenderer,
                 sitText,
                 tpText,
-                unbindText,
                 followText
-        ) + 25;
+        );
         int buttonStart = (width - buttonWidth) / 2;
         int center = height / 2;
-        buttonList.add(this.unbind = new GuiButton(1, buttonStart, center - 50, buttonWidth, 20, unbindText));
-        buttonList.add(new GuiButton(2, buttonStart, center - 25, buttonWidth, 20, tpText));
-        buttonList.add(new GuiButton(3, buttonStart, center + 5, buttonWidth, 20, sitText));
-        buttonList.add(new GuiButton(4, buttonStart, center + 30, buttonWidth, 20, followText));
+        buttonList.add(new GuiButton(1, buttonStart, center - 25, buttonWidth, 20, tpText));
+        buttonList.add(new GuiButton(2, buttonStart, center + 5, buttonWidth, 20, sitText));
+        buttonList.add(new GuiButton(3, buttonStart, center + 30, buttonWidth, 20, followText));
     }
 
     @Override
@@ -60,32 +47,19 @@ public class GuiDragonWhistle extends GuiScreen {
         if (uuid != null) {
             switch (button.id) {
                 case 1:
-                    DragonMounts.NETWORK_WRAPPER.sendToServer(new CUnbindWhistlePacket(this.hand));
-                    break;
-                case 2:
                     EntityPlayer player = this.mc.player;
                     DragonMounts.NETWORK_WRAPPER.sendToServer(new CTeleportOrderPacket(uuid, player.rotationPitch, player.rotationYawHead));
                     break;
-                case 3:
+                case 2:
                     DragonMounts.NETWORK_WRAPPER.sendToServer(new CSitOrderPacket(uuid));
                     break;
-                case 4:
+                case 3:
                     DragonMounts.NETWORK_WRAPPER.sendToServer(new CFollowOrderPacket(uuid));
                     break;
             }
-
-            //Close GUI when option is selected
-            this.mc.displayGuiScreen(null);
         }
-    }
-
-    @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        this.unbind.enabled = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
-        super.drawScreen(mouseX, mouseY, partialTicks);
-        if (!this.unbind.enabled && this.unbind.isMouseOver()) {
-            this.drawHoveringText(this.tooltip, mouseX, mouseY);
-        }
+        //Close GUI when option is selected
+        this.mc.displayGuiScreen(null);
     }
 
     private static int maxTextWidth(FontRenderer font, String... text) {

@@ -61,11 +61,10 @@ public class EntityAIDragonPlayerControl extends EntityAIBase {
 
         // if we're breathing at a target, look at it
         if (dragon.isUsingBreathWeapon() && dragon.breathHelper.canBreathe()) {
-            Vec3d lookDirection = rider.getLook(1.0F);
             Vec3d endOfLook = dragon.getPositionVector().add(
-                    lookDirection.x,
-                    lookDirection.y + dragon.getEyeHeight(),
-                    lookDirection.z
+                    wp.x,
+                    wp.y + dragon.getEyeHeight(),
+                    wp.z
             );
             dragon.getLookHelper().setLookPosition(endOfLook.x, endOfLook.y, endOfLook.z,
                     90, 120);
@@ -83,9 +82,9 @@ public class EntityAIDragonPlayerControl extends EntityAIBase {
                 wp = wp.rotateYaw(MathX.PI_F * -0.5f);
             }
 
-            x += wp.x * 10;
+            x += wp.x * 20;
             if (!dragon.isYLocked()) y += wp.y * 10;
-            z += wp.z * 10;
+            z += wp.z * 20;
         }
         // lift off from a jump
         if (rider.isJumping) {

@@ -51,7 +51,6 @@ public class ServerProxy {
         DragonMounts.NETWORK_WRAPPER.registerMessage(CDragonBreathPacket.Handler.class, CDragonBreathPacket.class, ++discriminator, Side.SERVER);
         DragonMounts.NETWORK_WRAPPER.registerMessage(CDragonControlPacket.Handler.class, CDragonControlPacket.class, ++discriminator, Side.SERVER);
         DragonMounts.NETWORK_WRAPPER.registerMessage(CDragonConfigPacket.Handler.class, CDragonConfigPacket.class, ++discriminator, Side.SERVER);
-        DragonMounts.NETWORK_WRAPPER.registerMessage(CUnbindWhistlePacket.Handler.class, CUnbindWhistlePacket.class, ++discriminator, Side.SERVER);
         DragonMounts.NETWORK_WRAPPER.registerMessage(CTeleportOrderPacket.Handler.class, CTeleportOrderPacket.class, ++discriminator, Side.SERVER);
         DragonMounts.NETWORK_WRAPPER.registerMessage(CSitOrderPacket.Handler.class, CSitOrderPacket.class, ++discriminator, Side.SERVER);
         DragonMounts.NETWORK_WRAPPER.registerMessage(CFollowOrderPacket.Handler.class, CFollowOrderPacket.class, ++discriminator, Side.SERVER);

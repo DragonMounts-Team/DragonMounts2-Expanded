@@ -31,6 +31,7 @@ import net.dragonmounts.init.DMItems;
 import net.dragonmounts.init.DMKeyBindings;
 import net.dragonmounts.init.DragonVariants;
 import net.dragonmounts.registry.DragonVariant;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -123,6 +124,11 @@ public class ClientProxy extends ServerProxy {
     public void PostInitialization(FMLPostInitializationEvent event) {
         super.PostInitialization(event);
         if (DMConfig.DEBUG_MODE.value) {
+            // defer the task to be executed after initialization.
+            new Thread(() -> Minecraft.getMinecraft().addScheduledTask(() -> {
+                Minecraft.getMinecraft().debugRenderer.pathfindingEnabled = true;
+            })).start();
+
             MinecraftForge.EVENT_BUS.register(DebugOverlay.class);
             DragonOrbControl.createSingleton();
             DragonOrbControl.initialiseInterceptors();

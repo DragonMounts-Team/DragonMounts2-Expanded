@@ -37,6 +37,7 @@ public class EntityAIDragonFlight extends EntityAIBase {
 
     private boolean findLandingBlock() {
         ServerDragonEntity dragon = this.dragon;
+        if (this.landingPos != null && !dragon.getNavigator().noPath()) return true;
         World level = this.dragon.world;
         // get current entity position and add some variance
         Random random = dragon.getRNG();
@@ -85,6 +86,10 @@ public class EntityAIDragonFlight extends EntityAIBase {
             // probably too high, so simply descend vertically
             tryMoveToBlockPos(dragon.getPosition().down(4));
         }
+    }
+
+    public void resetTask() {
+        this.landingPos = null;
     }
 
     protected boolean tryMoveToBlockPos(Vec3i pos) {

@@ -48,7 +48,7 @@ public enum GuiHandler implements IGuiHandler {
             case GUI_DRAGON_CORE:
                 entity = world.getTileEntity(new BlockPos(x, y, z));
                 if (entity instanceof DragonCoreBlockEntity) {
-                    return new GuiDragonCore(player.inventory, (DragonCoreBlockEntity) entity, player);
+                    return new DragonCoreGui(player.inventory, (DragonCoreBlockEntity) entity, player);
                 }
         }
         return null;

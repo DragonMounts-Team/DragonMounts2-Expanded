@@ -3,7 +3,7 @@ package net.dragonmounts.item;
 import com.mojang.authlib.GameProfile;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.client.ClientUtil;
-import net.dragonmounts.client.gui.GuiDragonWhistle;
+import net.dragonmounts.client.gui.DragonWhistleGui;
 import net.dragonmounts.compat.DragonTypeCompat;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DragonTypes;
@@ -63,7 +63,7 @@ public class DragonWhistleItem extends Item {
     @SideOnly(Side.CLIENT)
     public static void openDragonWhistleGui(@Nullable UUID uuid, World world, EnumHand hand) {
         if (uuid == null || !world.isRemote) return;
-        Minecraft.getMinecraft().displayGuiScreen(new GuiDragonWhistle(world, uuid, hand));
+        Minecraft.getMinecraft().displayGuiScreen(new DragonWhistleGui(uuid));
     }
 
 

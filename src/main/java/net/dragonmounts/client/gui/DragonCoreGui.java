@@ -9,14 +9,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiDragonCore extends GuiContainer {
-    private static final ResourceLocation BACKGROUND = new ResourceLocation(DragonMountsTags.MOD_ID + ":textures/gui/dragon_core.png");
-    private final InventoryPlayer playerInventory;
+public class DragonCoreGui extends GuiContainer {
+    private static final ResourceLocation BACKGROUND = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/dragon_core.png");
+    private final InventoryPlayer inventory;
     private final DragonCoreBlockEntity core;
 
-    public GuiDragonCore(InventoryPlayer playerInventory, DragonCoreBlockEntity core, EntityPlayer player) {
-        super(new DragonCoreContainer(playerInventory, core, player));
-        this.playerInventory=playerInventory;
+    public DragonCoreGui(InventoryPlayer inventory, DragonCoreBlockEntity core, EntityPlayer player) {
+        super(new DragonCoreContainer(inventory, core, player));
+        this.inventory = inventory;
         this.core = core;
 
         this.xSize=175;
@@ -33,7 +33,7 @@ public class GuiDragonCore extends GuiContainer {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         this.fontRenderer.drawString(this.core.getDisplayName().getUnformattedText(), 8, 6, 4210752);
-        this.fontRenderer.drawString(this.playerInventory.getDisplayName().getUnformattedText(), 8, this.ySize - 96, 4210742);
+        this.fontRenderer.drawString(this.inventory.getDisplayName().getUnformattedText(), 8, this.ySize - 96, 4210742);
     }
 
     @Override

@@ -29,6 +29,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAITasks;
+import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
@@ -168,6 +169,9 @@ public class DebugOverlay {
         String my = dfShort.format(dragon.motionY);
         String mz = dfShort.format(dragon.motionZ);
         text.printf("Position: (%s, %s, %s)\nMotion: (%s, %s, %s)\n", px, py, pz, mx, my, mz);
+
+        EntityMoveHelper move = dragon.getMoveHelper();
+        text.printf("Movement [%s]: (%s, %s, %s)\n", move.action, dfShort.format(move.getX()), dfShort.format(move.getY()), dfShort.format(move.getZ()));
 
         // rotation
         String pitch = dfShort.format(dragon.rotationPitch);

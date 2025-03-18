@@ -7,6 +7,7 @@ import net.dragonmounts.capability.DMCapabilities;
 import net.dragonmounts.capability.IDragonFood;
 import net.dragonmounts.capability.IHardShears;
 import net.dragonmounts.client.gui.GuiHandler;
+import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.ai.*;
 import net.dragonmounts.entity.ai.air.EntityAIDragonFlight;
 import net.dragonmounts.entity.ai.air.EntityAIDragonFollowOwnerElytraFlying;
@@ -22,6 +23,7 @@ import net.dragonmounts.entity.helper.DragonReproductionHelper;
 import net.dragonmounts.init.*;
 import net.dragonmounts.item.DragonEssenceItem;
 import net.dragonmounts.item.DragonSpawnEggItem;
+import net.dragonmounts.network.SPathDebugPacket;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.ClassPredicate;
@@ -53,6 +55,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.util.Constants;
 
@@ -252,7 +255,6 @@ public class ServerDragonEntity extends TameableDragonEntity {
         }
         this.roar(0.001F);
 
-
         if (this.getRidingEntity() instanceof EntityLivingBase && ((EntityLivingBase) this.getRidingEntity()).isElytraFlying()) {
             this.setUnHovered(true);
         }
@@ -297,6 +299,9 @@ public class ServerDragonEntity extends TameableDragonEntity {
         super.onLivingUpdate();
         if (this.getControllingPlayer() == null && !this.isFlying() && this.isSitting()) {
             this.removePassengers();
+        }
+        if (DMConfig.DEBUG_MODE.value) {
+            SPathDebugPacket.broadcast((WorldServer) this.world, this, this.getNavigator().getPath(), 0.5F);
         }
     }
 
