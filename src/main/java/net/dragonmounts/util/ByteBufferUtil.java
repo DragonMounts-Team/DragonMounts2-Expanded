@@ -58,14 +58,13 @@ public class ByteBufferUtil {
     /**
      * @param flags 8 booleans at most.
      */
-    public static <T extends ByteBuf> T writeFlags(T buffer, boolean... flags) {
+    public static int compressFlags(boolean... flags) {
         int data = 0, bit = 1;
         for (boolean flag : flags) {
             data |= flag ? bit : 0;
             bit <<= 1;
         }
-        buffer.writeByte(data);
-        return buffer;
+        return data;
     }
 
     /// @see PacketBuffer#readString(int)

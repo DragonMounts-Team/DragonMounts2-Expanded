@@ -30,6 +30,7 @@ import net.minecraft.world.World;
 public class ClientDragonEntity extends TameableDragonEntity {
     public final DragonAnimator animator = new DragonAnimator(this);
     public boolean isInGui = false;
+    public int controlFlags = -1;
 
     public ClientDragonEntity(World level) {
         super(level);
@@ -49,6 +50,7 @@ public class ClientDragonEntity extends TameableDragonEntity {
     public void onLivingUpdate() {
         EntityPlayer player = Minecraft.getMinecraft().player;
         if (player != null && player == this.getRidingEntity()) {
+            // sent when dragon is riding on a player
             DragonMounts.NETWORK_WRAPPER.sendToServer(new CDragonBreathPacket(
                     this.getEntityId(),
                     DMKeyBindings.KEY_BREATH.isKeyDown()

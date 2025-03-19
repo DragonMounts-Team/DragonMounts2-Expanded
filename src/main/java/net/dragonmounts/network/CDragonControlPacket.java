@@ -9,19 +9,21 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-import static net.dragonmounts.util.ByteBufferUtil.*;
+import static net.dragonmounts.util.ByteBufferUtil.compressFlags;
+import static net.dragonmounts.util.ByteBufferUtil.readFlags;
 
-public class CDragonControlPacket extends CDragonBreathPacket {
-    public boolean boosting;
-    public boolean descent;
-    public boolean toggleHovering;
-    public boolean toggleYawAlignment;
-    public boolean togglePitchAlignment;
+public class CDragonControlPacket implements IMessage {
+    private boolean breathing;
+    private boolean boosting;
+    private boolean descent;
+    private boolean toggleHovering;
+    private boolean toggleYawAlignment;
+    private boolean togglePitchAlignment;
+    private int flags = -1;
 
     public CDragonControlPacket() {}
 
     public CDragonControlPacket(
-            int id,
             boolean breathing,
             boolean boosting,
             boolean descent,
@@ -29,7 +31,7 @@ public class CDragonControlPacket extends CDragonBreathPacket {
             boolean toggleYawAlignment,
             boolean togglePitchAlignment
     ) {
-        super(id, breathing);
+        this.breathing = breathing;
         this.boosting = boosting;
         this.descent = descent;
         this.toggleHovering = toggleHovering;
@@ -39,7 +41,6 @@ public class CDragonControlPacket extends CDragonBreathPacket {
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        this.id = readVarInt(buf);
         boolean[] flags = readFlags(buf);
         this.breathing = flags[0];
         this.boosting = flags[1];
@@ -49,25 +50,30 @@ public class CDragonControlPacket extends CDragonBreathPacket {
         this.togglePitchAlignment = flags[5];
     }
 
+    public int getFlags() {
+        if (this.flags == -1) {
+            this.flags = compressFlags(
+                    this.breathing,
+                    this.boosting,
+                    this.descent,
+                    this.toggleHovering,
+                    this.toggleYawAlignment,
+                    this.togglePitchAlignment
+            );
+        }
+        return this.flags;
+    }
+
     @Override
     public void toBytes(ByteBuf buf) {
-        writeVarInt(buf, this.id);
-        writeFlags(
-                buf,
-                this.breathing,
-                this.boosting,
-                this.descent,
-                this.toggleHovering,
-                this.toggleYawAlignment,
-                this.togglePitchAlignment
-        );
+        buf.writeByte(this.getFlags());
     }
 
     public static class Handler implements IMessageHandler<CDragonControlPacket, IMessage> {
         @Override
         public IMessage onMessage(CDragonControlPacket message, MessageContext ctx) {
             EntityPlayer player = ctx.getServerHandler().player;
-            Entity entity = player.world.getEntityByID(message.id);
+            Entity entity = player.getRidingEntity();
             if (entity instanceof TameableDragonEntity) {
                 TameableDragonEntity dragon = (TameableDragonEntity) entity;
                 dragon.setUsingBreathWeapon(message.breathing);

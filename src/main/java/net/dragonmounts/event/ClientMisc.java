@@ -2,8 +2,8 @@ package net.dragonmounts.event;
 
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
+import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.config.DMConfig;
-import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMItems;
 import net.dragonmounts.init.DMKeyBindings;
 import net.dragonmounts.item.DragonSpawnEggItem;
@@ -35,21 +35,23 @@ public class ClientMisc {
         EntityPlayer player = mc.player;
         if (player == null) return;
         Entity vehicle = player.getRidingEntity();
-        if (vehicle instanceof TameableDragonEntity) {
+        if (vehicle instanceof ClientDragonEntity) {
             if (DMKeyBindings.TOGGLE_CAMERA_POS.isPressed()) {
                 CameraHandler.toggleCamera();
             }
-            if (player == vehicle.getControllingPassenger()) {
-                DragonMounts.NETWORK_WRAPPER.sendToServer(new CDragonControlPacket(
-                        vehicle.getEntityId(),
-                        DMKeyBindings.KEY_BREATH.isKeyDown(),
-                        mc.gameSettings.keyBindSprint.isKeyDown(),
-                        DMKeyBindings.KEY_DESCENT.isKeyDown(),
-                        DMKeyBindings.TOGGLE_HOVERING.isPressed(),
-                        DMKeyBindings.TOGGLE_YAW_ALIGNMENT.isPressed(),
-                        DMKeyBindings.TOGGLE_PITCH_ALIGNMENT.isPressed()
-                ));
-            }
+            if (player != vehicle.getControllingPassenger()) return;
+            ClientDragonEntity dragon = (ClientDragonEntity) vehicle;
+            CDragonControlPacket packet = new CDragonControlPacket(
+                    DMKeyBindings.KEY_BREATH.isKeyDown(),
+                    mc.gameSettings.keyBindSprint.isKeyDown(),
+                    DMKeyBindings.KEY_DESCENT.isKeyDown(),
+                    DMKeyBindings.TOGGLE_HOVERING.isPressed(),
+                    DMKeyBindings.TOGGLE_YAW_ALIGNMENT.isPressed(),
+                    DMKeyBindings.TOGGLE_PITCH_ALIGNMENT.isPressed()
+            );
+            if (dragon.controlFlags == packet.getFlags()) return;
+            dragon.controlFlags = packet.getFlags();
+            DragonMounts.NETWORK_WRAPPER.sendToServer(packet);
         }
     }
 
