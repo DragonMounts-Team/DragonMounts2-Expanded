@@ -12,6 +12,7 @@ package net.dragonmounts.client.model.dragon;
 import net.dragonmounts.util.Segment;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
@@ -29,18 +30,11 @@ public class ModelPart extends ModelRenderer {
     public float renderScaleX = 1;
     public float renderScaleY = 1;
     public float renderScaleZ = 1;
-
-    public float preRotateAngleX;
-    public float preRotateAngleY;
-    public float preRotateAngleZ;
-
-    private final ModelBase base;
     protected boolean compiled;
     protected int displayList;
 
     public ModelPart(ModelBase base, String name) {
         super(base, name);
-        this.base = base;
     }
 
     public ModelPart(ModelBase base) {
@@ -49,26 +43,15 @@ public class ModelPart extends ModelRenderer {
 
     public ModelPart(ModelBase modelbase, int i, int j) {
         super(modelbase, i, j);
-        base = modelbase;
-    }
-
-    public ModelPart setRenderScale(float scaleX, float scaleY, float scaleZ) {
-        this.renderScaleX = scaleX;
-        this.renderScaleY = scaleY;
-        this.renderScaleZ = scaleZ;
-
-        return this;
-    }
-
-    public ModelPart setRenderScale(float scale) {
-        return setRenderScale(scale, scale, scale);
     }
 
     protected void compileDisplayList(float scale) {
         BufferBuilder vb = Tessellator.getInstance().getBuffer();
         displayList = GLAllocation.generateDisplayLists(1);
         glNewList(displayList, GL_COMPILE);
-        cubeList.forEach(cube -> cube.render(vb, scale));
+        for (ModelBox cube : this.cubeList) {
+            cube.render(vb, scale);
+        }
         glEndList();
         compiled = true;
     }
@@ -99,7 +82,9 @@ public class ModelPart extends ModelRenderer {
 
         // render child models
         if (childModels != null) {
-            childModels.forEach(obj -> obj.render(scale));
+            for (ModelRenderer child : this.childModels) {
+                child.render(scale);
+            }
         }
 
         GlStateManager.popMatrix();
@@ -111,21 +96,10 @@ public class ModelPart extends ModelRenderer {
         if (isHidden || !showModel) {
             return;
         }
-
         // translate
         GlStateManager.translate(rotationPointX * scale, rotationPointY * scale, rotationPointZ * scale);
 
         // rotate
-        if (preRotateAngleZ != 0) {
-            GlStateManager.rotate(MathX.toDegrees(preRotateAngleZ), 0, 0, 1);
-        }
-        if (preRotateAngleY != 0) {
-            GlStateManager.rotate(MathX.toDegrees(preRotateAngleY), 0, 1, 0);
-        }
-        if (preRotateAngleX != 0) {
-            GlStateManager.rotate(MathX.toDegrees(preRotateAngleX), 1, 0, 0);
-        }
-
         if (rotateAngleZ != 0) {
             GlStateManager.rotate(MathX.toDegrees(rotateAngleZ), 0, 0, 1);
         }
@@ -137,7 +111,7 @@ public class ModelPart extends ModelRenderer {
         }
 
         // scale
-        if (renderScaleX != 0 || renderScaleY != 0 || renderScaleZ != 0) {
+        if (renderScaleX != 1 || renderScaleY != 1 || renderScaleZ != 1) {
             GlStateManager.scale(renderScaleX, renderScaleY, renderScaleZ);
         }
     }

@@ -1,4 +1,4 @@
-package net.dragonmounts.entity.ai;
+package net.dragonmounts.entity.goal;
 
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
@@ -7,30 +7,37 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.util.math.BlockPos;
 
-public class EntityAIDragonAttack extends EntityAIBase {
+/**
+ * @see net.minecraft.entity.ai.EntityAIAttackMelee
+ */
+public class DragonAttackGoal extends EntityAIBase {
     public final ServerDragonEntity dragon;
+    public final double speedModifier;
     protected int attackTick;
-    double speedTowardsTarget;
     private Path path;
     private int delayCounter;
     private double targetX;
     private double targetY;
     private double targetZ;
+    private int lastCheck = -20;
 
-    public EntityAIDragonAttack(ServerDragonEntity dragon, double speed) {
+    public DragonAttackGoal(ServerDragonEntity dragon, double speed) {
         this.dragon = dragon;
-        this.speedTowardsTarget = speed;
+        this.speedModifier = speed;
         this.setMutexBits(0b11);
     }
 
     @Override
     public boolean shouldExecute() {
-        EntityLivingBase target = this.dragon.getAttackTarget();
+        ServerDragonEntity dragon = this.dragon;
+        int life = dragon.getTicksSinceSpawned();
+        if (this.lastCheck + 20 > life) return false;
+        this.lastCheck = life;
+        EntityLivingBase target = dragon.getAttackTarget();
         if (target == null || !target.isEntityAlive()) return false;
-        this.path = this.dragon.getNavigator().getPathToEntityLiving(target);
-        return this.path != null || this.getAttackReachSqr(target) >= this.dragon.getDistanceSq(
+        this.path = dragon.getNavigator().getPathToEntityLiving(target);
+        return this.path != null || this.getAttackReachSqr(target) >= dragon.getDistanceSq(
                 target.posX,
                 target.getEntityBoundingBox().minY,
                 target.posZ
@@ -40,21 +47,19 @@ public class EntityAIDragonAttack extends EntityAIBase {
     @Override
     public boolean shouldContinueExecuting() {
         TameableDragonEntity dragon = this.dragon;
-        EntityLivingBase target = this.dragon.getAttackTarget();
+        EntityLivingBase target = dragon.getAttackTarget();
         if (target instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) target;
             if (player.isSpectator() || player.isCreative()) return false;
         }
-        return target != null &&
-                target.isEntityAlive() &&
-                dragon.getControllingPassenger() == null &&
-                this.dragon.isWithinHomeDistanceFromPosition(new BlockPos(target));
+        return target != null && target.isEntityAlive() && dragon.getControllingPassenger() == null;
     }
 
     @Override
     public void startExecuting() {
-        this.dragon.getNavigator().setPath(this.path, this.speedTowardsTarget);
+        this.dragon.getNavigator().setPath(this.path, this.speedModifier);
         this.delayCounter = 0;
+        this.attackTick = 0;
     }
 
     @Override
@@ -93,11 +98,9 @@ public class EntityAIDragonAttack extends EntityAIBase {
             } else if (targetDistSq > 256.0D) {
                 this.delayCounter += 5;
             }
-
-            if (!dragon.getNavigator().tryMoveToEntityLiving(target, this.speedTowardsTarget)) {
+            if (!dragon.getNavigator().tryMoveToEntityLiving(target, this.speedModifier)) {
                 this.delayCounter += 15;
             }
-
         }
         if (--this.attackTick < 0) {
             this.checkAndPerformAttack(target, targetDistSq);

@@ -7,7 +7,7 @@
  **    May you find forgiveness for yourself and forgive others.
  **    May you share freely, never taking more than you give.
  */
-package net.dragonmounts.entity.ai;
+package net.dragonmounts.entity.goal;
 
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
@@ -83,7 +83,7 @@ public class EntityAIDragonPlayerControl extends EntityAIBase {
             }
 
             x += wp.x * 20;
-            if (!dragon.isYLocked()) y += wp.y * 10;
+            if (!dragon.isYLocked()) y += wp.y * 20;
             z += wp.z * 20;
         }
         // lift off from a jump

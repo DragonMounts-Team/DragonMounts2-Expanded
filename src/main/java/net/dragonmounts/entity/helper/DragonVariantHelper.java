@@ -38,12 +38,10 @@ public class DragonVariantHelper implements ITickable {
     private static final int TICK_RATE_BLOCK = 20;
     private final Reference2IntOpenHashMap<DragonType> points = new Reference2IntOpenHashMap<>();
     public final TameableDragonEntity dragon;
-    protected final Random rand;
     private DragonType lastType;
 
     public DragonVariantHelper(TameableDragonEntity dragon) {
         this.dragon = dragon;
-        this.rand = dragon.getRNG();
     }
 
     public Reference2IntMap<DragonType> getBreedPoints() {
@@ -73,10 +71,11 @@ public class DragonVariantHelper implements ITickable {
         World level = dragon.world;
         // spawn breed-specific particles every other tick
         if (level.isRemote) {
+            Random random = dragon.getRNG();
             if (current != DragonTypes.ENDER && dragon.ticksExisted % TICK_RATE_PARTICLES == 0) {
-                double px = dragon.posX + (rand.nextDouble() - 0.5);
-                double py = dragon.posY + (rand.nextDouble() - 0.5);
-                double pz = dragon.posZ + (rand.nextDouble() - 0.5);
+                double px = dragon.posX + (random.nextDouble() - 0.5);
+                double py = dragon.posY + (random.nextDouble() - 0.5);
+                double pz = dragon.posZ + (random.nextDouble() - 0.5);
                 int color = current.color;
                 level.spawnParticle(EnumParticleTypes.REDSTONE, px, py + 1, pz,
                         parseColor(color, 2), parseColor(color, 1), parseColor(color, 0));
@@ -124,13 +123,14 @@ public class DragonVariantHelper implements ITickable {
             }
         }
         if (neo != current) {
-            dragon.setVariant(neo.variants.draw(this.rand, null));
+            dragon.setVariant(neo.variants.draw(dragon.getRNG(), null));
         }
     }
 
     public void inheritBreed(TameableDragonEntity parent1, TameableDragonEntity parent2) {
-        this.points.addTo(parent1.getVariant().type, POINTS_INHERIT + rand.nextInt(POINTS_INHERIT));
-        this.points.addTo(parent2.getVariant().type, POINTS_INHERIT + rand.nextInt(POINTS_INHERIT));
+        Random random = this.dragon.getRNG();
+        this.points.addTo(parent1.getVariant().type, POINTS_INHERIT + random.nextInt(POINTS_INHERIT));
+        this.points.addTo(parent2.getVariant().type, POINTS_INHERIT + random.nextInt(POINTS_INHERIT));
         this.applyPoints(this.dragon.getVariant().type);
     }
 

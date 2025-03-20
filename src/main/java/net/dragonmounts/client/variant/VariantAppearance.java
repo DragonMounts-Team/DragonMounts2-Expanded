@@ -3,7 +3,8 @@ package net.dragonmounts.client.variant;
 import com.google.common.collect.ImmutableList;
 import net.dragonmounts.client.model.dragon.DragonModel;
 import net.dragonmounts.client.model.dragon.IModelFactory;
-import net.dragonmounts.client.render.dragon.layer.*;
+import net.dragonmounts.client.render.dragon.BuiltinDragonLayer;
+import net.dragonmounts.client.render.dragon.IDragonLayer;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.util.ResourceLocation;
 
@@ -16,27 +17,18 @@ public abstract class VariantAppearance {
     public final static ResourceLocation DEFAULT_CHEST = makeId(TEXTURES_ROOT + "chest.png");
     public final static ResourceLocation DEFAULT_SADDLE = makeId(TEXTURES_ROOT + "saddle.png");
     public final static ResourceLocation DEFAULT_DISSOLVE = makeId(TEXTURES_ROOT + "dissolve.png");
-    public final float positionScale;
     public final float renderScale;
     public final DragonModel model;
-    public final ImmutableList<DragonLayerRenderer> layers;
+    public final ImmutableList<IDragonLayer> layers;
 
     public VariantAppearance(float modelScale, IModelFactory factory) {
         this.renderScale = modelScale;
-        this.positionScale = modelScale / 16.0F;
         this.model = new DragonModel(this, factory);
         this.layers = this.getLayers();
     }
 
-    protected ImmutableList<DragonLayerRenderer> getLayers() {
-        return ImmutableList.of(
-                // standard layers
-                new LayerRendererDragonGlow(),
-                new LayerRendererDragonSaddle(),
-                new LayerRendererDragonArmor(),
-                new LayerRendererDragonChest(),
-                new LayerRendererDragonBanner()
-        );
+    protected ImmutableList<IDragonLayer> getLayers() {
+        return BuiltinDragonLayer.DEFAULT_LAYERS;
     }
 
     public abstract boolean hasTailHorns(TameableDragonEntity dragon);

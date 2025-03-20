@@ -7,7 +7,7 @@
  **    May you find forgiveness for yourself and forgive others.
  **    May you share freely, never taking more than you give.
  */
-package net.dragonmounts.entity.ai.air;
+package net.dragonmounts.entity.goal.air;
 
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;

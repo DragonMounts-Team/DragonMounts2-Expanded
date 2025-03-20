@@ -24,6 +24,7 @@ import net.dragonmounts.item.DragonArmorItem;
 import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.EntityUtil;
 import net.dragonmounts.util.MutableBlockPosEx;
+import net.dragonmounts.util.math.MathX;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -698,7 +699,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
             boolean flying = player.isElytraFlying();
             float radius = (index == 2 ? 0F : 0.4F) + (flying ? 2 : 0);
             float angle = (0.01745329251F * player.renderYawOffset) + (index == 1 ? -90 : index == 0 ? 90 : 0);
-            double extraX = radius * MathHelper.sin(angle + (float) Math.PI);
+            double extraX = radius * MathHelper.sin(angle + MathX.PI_F);
             double extraZ = radius * MathHelper.cos(angle);
             double extraY = (player.isSneaking() ? 1.1D : 1.4D) + (index == 2 ? 0.4D : 0D);
             this.rotationYaw = player.rotationYaw;
@@ -737,7 +738,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         if (index == -1) return;
         //getBreed().getAdultModelRenderScaleFactor() * getScale();
         Vec3d position = this.getVariant().type.locatePassenger(index, this.isSitting(), this.getScale())
-                .rotateYaw((float) Math.toRadians(-renderYawOffset))
+                .rotateYaw(MathX.toRadians(-renderYawOffset))
                 .add(this.posX, this.posY + passenger.getYOffset(), this.posZ);
         passenger.setPosition(position.x, position.y, position.z);
 
@@ -808,12 +809,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         return this.lifeStageHelper.getScale();
     }
 
-    @Nonnull
-    @Override
-    public AxisAlignedBB getRenderBoundingBox() {
-        return this.getEntityBoundingBox().grow(2.0, 0.0, 2.0);
-    }
-
     public boolean isEgg() {
         return this.lifeStageHelper.isEgg();
     }
@@ -881,6 +876,24 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
                     Item.getIdFromItem(stack.getItem()),
                     stack.getMetadata()
             );
+        }
+    }
+
+    protected void findCrystal() {
+        if (this.motionX < 0.6F && this.motionZ < 0.6F && this.rand.nextInt(10) == 0) {
+            EntityEnderCrystal target = null;
+            double min = Double.MAX_VALUE;
+            for (EntityEnderCrystal crystal : this.world.getEntitiesWithinAABB(
+                    EntityEnderCrystal.class,
+                    this.getEntityBoundingBox().grow(32.0D)
+            )) {
+                double distance = crystal.getDistanceSq(this);
+                if (distance < min) {
+                    min = distance;
+                    target = crystal;
+                }
+            }
+            this.healingEnderCrystal = target;
         }
     }
 

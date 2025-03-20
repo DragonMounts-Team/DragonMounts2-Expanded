@@ -7,7 +7,7 @@
  **    May you find forgiveness for yourself and forgive others.
  **    May you share freely, never taking more than you give.
  */
-package net.dragonmounts.entity.ai.ground;
+package net.dragonmounts.entity.goal.target;
 
 import com.google.common.base.Predicate;
 import net.dragonmounts.entity.TameableDragonEntity;
@@ -16,13 +16,12 @@ import net.minecraft.entity.ai.EntityAITargetNonTamed;
 import net.minecraft.entity.passive.EntityAnimal;
 
 /**
- *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class EntityAIDragonHunt extends EntityAITargetNonTamed<EntityAnimal> {
+public class DragonHuntTargetGoal extends EntityAITargetNonTamed<EntityAnimal> {
     private final TameableDragonEntity dragon;
 
-    public EntityAIDragonHunt(TameableDragonEntity dragon, boolean mustSee, Predicate<? super EntityAnimal> filter) {
+    public DragonHuntTargetGoal(TameableDragonEntity dragon, boolean mustSee, Predicate<? super EntityAnimal> filter) {
         super(dragon, EntityAnimal.class, mustSee, filter);
         this.dragon = dragon;
     }

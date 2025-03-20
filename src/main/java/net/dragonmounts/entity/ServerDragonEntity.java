@@ -8,18 +8,17 @@ import net.dragonmounts.capability.IDragonFood;
 import net.dragonmounts.capability.IHardShears;
 import net.dragonmounts.client.gui.GuiHandler;
 import net.dragonmounts.config.DMConfig;
-import net.dragonmounts.entity.ai.*;
-import net.dragonmounts.entity.ai.air.EntityAIDragonFlight;
-import net.dragonmounts.entity.ai.air.EntityAIDragonFollowOwnerElytraFlying;
-import net.dragonmounts.entity.ai.ground.EntityAIDragonFollowOwner;
-import net.dragonmounts.entity.ai.ground.EntityAIDragonHunt;
-import net.dragonmounts.entity.ai.ground.EntityAIDragonSit;
-import net.dragonmounts.entity.ai.ground.EntityAIDragonWatchIdle;
-import net.dragonmounts.entity.ai.path.PathNavigateFlying;
 import net.dragonmounts.entity.breath.impl.ServerBreathHelper;
+import net.dragonmounts.entity.goal.*;
+import net.dragonmounts.entity.goal.air.EntityAIDragonFlight;
+import net.dragonmounts.entity.goal.air.EntityAIDragonFollowOwnerElytraFlying;
+import net.dragonmounts.entity.goal.target.ControlledTargetGoal;
+import net.dragonmounts.entity.goal.target.DragonHuntTargetGoal;
+import net.dragonmounts.entity.goal.target.DragonHurtByTargetGoal;
 import net.dragonmounts.entity.helper.DragonHeadLocator;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.entity.helper.DragonReproductionHelper;
+import net.dragonmounts.entity.navigation.PathNavigateFlying;
 import net.dragonmounts.init.*;
 import net.dragonmounts.item.DragonEssenceItem;
 import net.dragonmounts.item.DragonSpawnEggItem;
@@ -33,7 +32,6 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -74,6 +72,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
     public final DragonHeadLocator<ServerDragonEntity> headLocator = new DragonHeadLocator<>(this);
     public final DragonReproductionHelper reproductionHelper = new DragonReproductionHelper(this);
     public boolean followOwner = true;
+    private int ticksSinceSpawned;
     protected int shearCooldown;
     protected int collectBreathCooldown;
 
@@ -91,16 +90,21 @@ public class ServerDragonEntity extends TameableDragonEntity {
         return this.headLocator.getThroatPosition();
     }
 
+    public int getTicksSinceSpawned() {
+        return this.ticksSinceSpawned;
+    }
+
     @Override
     protected void initEntityAI() {
-        this.aiSit = new EntityAIDragonSit(this);
+        this.aiSit = new DragonSitGoal(this);
         // mutex 1: generic targeting
         EntityAITasks targets = this.targetTasks;
+        targets.addTask(0, new ControlledTargetGoal(this));
         targets.addTask(2, new EntityAIOwnerHurtByTarget(this)); // mutex 1
         targets.addTask(3, new EntityAIOwnerHurtTarget(this)); // mutex 1
-        targets.addTask(4, new EntityAIDragonHurtByTarget(this)); // mutex 1
+        targets.addTask(4, new DragonHurtByTargetGoal(this)); // mutex 1
         targets.addTask(5, new EntityAINearestAttackableTarget<>(this, EntityLiving.class, 10, false, true, IMob.VISIBLE_MOB_SELECTOR));
-        targets.addTask(6, new EntityAIDragonHunt(this, false, new ClassPredicate<>(
+        targets.addTask(6, new DragonHuntTargetGoal(this, false, new ClassPredicate<>(
                 EntitySheep.class,
                 EntityPig.class,
                 EntityChicken.class,
@@ -138,17 +142,17 @@ public class ServerDragonEntity extends TameableDragonEntity {
         tasks.addTask(2, this.getAISit()); // mutex 4+1
         tasks.addTask(2, new EntityAISwimming(this)); // mutex 4
         tasks.addTask(3, new EntityAIDragonFlight(this, 1)); // mutex 1
-        tasks.addTask(5, new EntityAIDragonAttack(this, 1)); // mutex 2+1
+        tasks.addTask(5, new DragonAttackGoal(this, 1)); // mutex 2+1
         tasks.addTask(6, new EntityAIDragonFollowOwnerElytraFlying(this)); // mutex 2+1
-        tasks.addTask(7, new EntityAIDragonFollowOwner(this, 1.25, 20, 16)); // mutex 2+1
+        tasks.addTask(7, new DragonFollowOwnerGoal(this, 1, 18, 14)); // mutex 2+1
         tasks.addTask(9, new EntityAIMoveTowardsRestriction(this, 1)); // mutex 1
         tasks.addTask(11, new EntityAIWander(this, 1)); // mutex 1
-        tasks.addTask(12, new EntityAIDragonWatchIdle(this)); // mutex 2
+        tasks.addTask(12, new EntityAILookIdle(this)); // mutex 2
         tasks.addTask(12, new LookAtOtherGoal(this, 16, 0.05f)); // mutex 2
         if (stage.isBaby()) {
             tasks.addTask(4, new EntityAILeapAtTarget(this, 0.7F)); // mutex 1
             tasks.addTask(7, new DragonTemptGoal(this, 0.75)); // mutex 2+1
-            tasks.addTask(8, new EntityAIDragonFollowParent(this, 1.4f));
+            tasks.addTask(8, new DragonFollowParentGoal(this, 1.4f));
         } else if (DragonLifeStage.ADULT == stage) {
             tasks.addTask(6, new BreedGoal(this, 0.6)); // mutex 2+1
         }
@@ -176,6 +180,8 @@ public class ServerDragonEntity extends TameableDragonEntity {
 
     @Override
     public void readEntityFromNBT(NBTTagCompound nbt) {
+        this.lifeStageHelper.readFromNBT(nbt);
+        this.variantHelper.readFromNBT(nbt);
         super.readEntityFromNBT(nbt);
         this.setSheared(nbt.getInteger("Sheared"));
         this.setBreatheCollected(nbt.getInteger("BreathCollected"));
@@ -201,30 +207,28 @@ public class ServerDragonEntity extends TameableDragonEntity {
         } else if (nbt.hasKey(DragonVariant.DATA_PARAMETER_KEY)) {
             this.setVariant(DragonVariant.byName(nbt.getString(DragonVariant.DATA_PARAMETER_KEY)));
         }
-        this.variantHelper.readFromNBT(nbt);
-        this.lifeStageHelper.readFromNBT(nbt);
         this.reproductionHelper.readFromNBT(nbt);
+        if (this.firstUpdate) {
+            this.variantHelper.onVariantChanged(this.getVariant());
+        }
     }
 
     @Override
     public void onLivingUpdate() {
+        ++this.ticksSinceSpawned;
         this.variantHelper.update();
         this.lifeStageHelper.ageUp(1);
         this.breathHelper.update();
         this.getVariant().type.tick(this);
+        if (this.isEgg()) {
+            super.onLivingUpdate();
+            return;
+        }
         this.headLocator.setLook(
                 this.rotationYawHead - this.renderYawOffset, // netYawHead
                 this.rotationPitch
         );
         this.headLocator.update();
-
-        // set home position near owner when tamed
-        if (isTamed()) {
-            Entity owner = getOwner();
-            if (owner != null) {
-                setHomePosAndDistance(owner.getPosition(), HOME_RADIUS);
-            }
-        }
 
         // delay flying state for 10 ticks (0.5s)
         if (onSolidGround()) {
@@ -253,7 +257,6 @@ public class ServerDragonEntity extends TameableDragonEntity {
                 navigator.setEnterDoors(this.isChild());
             }
         }
-        this.roar(0.001F);
 
         if (this.getRidingEntity() instanceof EntityLivingBase && ((EntityLivingBase) this.getRidingEntity()).isElytraFlying()) {
             this.setUnHovered(true);
@@ -271,6 +274,9 @@ public class ServerDragonEntity extends TameableDragonEntity {
             this.setBreatheCollected(0);
         }
         if (!this.isDead) {
+            if (!this.isUsingBreathWeapon() && this.rand.nextFloat() < 0.001F) {
+                this.world.setEntityState(this, DO_ROAR);
+            }
             if (this.healingEnderCrystal != null) {
                 if (this.healingEnderCrystal.isDead) {
                     this.healingEnderCrystal = null;
@@ -279,22 +285,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
                     EntityUtil.addOrResetEffect(this, MobEffects.STRENGTH, 300, 0, false, false, 201);
                 }
             }
-
-            if (this.rand.nextInt(10) == 0) {
-                EntityEnderCrystal target = null;
-                double min = Double.MAX_VALUE;
-                for (EntityEnderCrystal crystal : this.world.getEntitiesWithinAABB(
-                        EntityEnderCrystal.class,
-                        this.getEntityBoundingBox().grow(32.0D)
-                )) {
-                    double distance = crystal.getDistanceSq(this);
-                    if (distance < min) {
-                        min = distance;
-                        target = crystal;
-                    }
-                }
-                this.healingEnderCrystal = target;
-            }
+            this.findCrystal();
         }
         super.onLivingUpdate();
         if (this.getControllingPlayer() == null && !this.isFlying() && this.isSitting()) {
@@ -469,7 +460,9 @@ public class ServerDragonEntity extends TameableDragonEntity {
             this.getAISit().setSitting(false);
         }
         if (super.attackEntityFrom(source, damage)) {
-            this.roar(0.25F);
+            if (!this.isEgg() && !this.isUsingBreathWeapon() && this.rand.nextFloat() < 0.25F) {
+                this.world.setEntityState(this, DO_ROAR);
+            }
             return true;
         }
         return false;
@@ -527,11 +520,5 @@ public class ServerDragonEntity extends TameableDragonEntity {
         super.onInitialSpawn(difficulty, data);
         this.variantHelper.onVariantChanged(this.getVariant());
         return data;
-    }
-
-    public void roar(float chance) {
-        if (!this.isDead && this.rand.nextFloat() < chance && !this.isEgg() && !this.isUsingBreathWeapon()) {
-            this.world.setEntityState(this, DO_ROAR);
-        }
     }
 }

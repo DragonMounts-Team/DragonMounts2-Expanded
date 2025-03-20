@@ -10,10 +10,10 @@
 package net.dragonmounts.client.model.dragon;
 
 import net.dragonmounts.client.ClientDragonEntity;
-import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.entity.breath.DragonBreathHelper;
 import net.dragonmounts.entity.helper.DragonHeadLocator;
 import net.dragonmounts.util.CircularBuffer;
+import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.LogUtil;
 import net.dragonmounts.util.Segment;
 import net.dragonmounts.util.math.LinearInterpolation;
@@ -29,7 +29,7 @@ import org.apache.logging.log4j.Level;
 public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
     public static final int JAW_OPENING_TIME_FOR_ATTACK = 5;
     public static final int JAW_OPENING_TIME_FOR_ROAR = 20;
-    public final Segment[] tailSegments = Segment.makeArray(TAIL_SEGMENTS);
+    public final Segment[] tailSegments = DMUtils.makeArray(new Segment[TAIL_SEGMENTS], Segment::new);
 
     // entity parameters
     private float partialTicks;
@@ -58,14 +58,11 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
     private final LinearInterpolation.Clamped roarTimer = new LinearInterpolation.Clamped(0.0F, 0.0F, 1.0F);
 
     // trails
-    private boolean initTrails = true;
-    public final CircularBuffer yTrail = new CircularBuffer(8);
     public final CircularBuffer yawTrail = new CircularBuffer(16);
     public final CircularBuffer pitchTrail = new CircularBuffer(16);
 
     // model flags
     private boolean onGround;
-    private boolean openJaw;
 
     private float jawRotateAngleX;
     private final float[] wingFingerRotateX;
@@ -84,7 +81,6 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
     private float wingArmRotateAngleX;
     private float wingArmRotateAngleY;
     private float wingArmRotateAngleZ;
-    private float wingArmPreRotateAngleX;
     private float wingForearmRotateAngleX;
     private float wingForearmRotateAngleY;
     private float wingForearmRotateAngleZ;
@@ -94,10 +90,10 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
 
     public DragonAnimator(ClientDragonEntity dragon) {
         super(dragon);
-        VariantAppearance appearance = dragon.getVariant().appearance;
-
         wingFingerRotateX = new float[WING_FINGERS];
         wingFingerRotateY = new float[WING_FINGERS];
+        yawTrail.fill(0.0F);
+        pitchTrail.fill(0.0F);
     }
 
     public void setMovement(float moveTime, float moveSpeed) {
@@ -141,13 +137,6 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
         ClientDragonEntity dragon = this.dragon;
         if (!dragon.isEgg()) {
             setOnGround(!dragon.isFlying());
-        }
-
-        // init trails
-        if (initTrails) {
-            yawTrail.fill(dragon.renderYawOffset);
-            pitchTrail.fill(getBodyPitch(0.0F));
-            initTrails = false;
         }
 
         // don't move anything during death sequence
@@ -196,7 +185,7 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
         float walkVal = 0.1f;
         walkTimer.add(walkFlag ? walkVal : -walkVal);
 
-        // update sitting transisiton
+        // update sitting transition
         float sitVal = sitTimer.get();
         sitVal += dragon.isSitting() ? 0.1f : -0.1f;
         sitVal *= 0.95f;
@@ -331,9 +320,8 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
 
         // apply angles
         wingArmRotateAngleX = wingArm[0];
-        wingArmRotateAngleY = wingArm[1];
+        wingArmRotateAngleY = wingArm[1] * MathHelper.cos(1 - speed);
         wingArmRotateAngleZ = wingArm[2];
-        wingArmPreRotateAngleX = 1 - speed;
         wingForearmRotateAngleX = wingForearm[0];
         wingForearmRotateAngleY = wingForearm[1];
         wingForearmRotateAngleZ = wingForearm[2];
@@ -442,14 +430,6 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
         this.onGround = onGround;
     }
 
-    public boolean isOpenJaw() {
-        return openJaw;
-    }
-
-    public void setOpenJaw(boolean openJaw) {
-        this.openJaw = openJaw;
-    }
-
     public float getJawRotateAngleX() {
         return jawRotateAngleX;
     }
@@ -498,10 +478,6 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
         return wingArmRotateAngleZ;
     }
 
-    public float getWingArmPreRotateAngleX() {
-        return wingArmPreRotateAngleX;
-    }
-
     public float getWingForearmRotateAngleX() {
         return wingForearmRotateAngleX;
     }
@@ -512,9 +488,5 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
 
     public float getWingForearmRotateAngleZ() {
         return wingForearmRotateAngleZ;
-    }
-
-    public float getLookYaw() {
-        return lookYaw;
     }
 }

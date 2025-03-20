@@ -1,4 +1,4 @@
-package net.dragonmounts.entity.ai;
+package net.dragonmounts.entity.goal;
 
 import net.dragonmounts.capability.DMCapabilities;
 import net.dragonmounts.entity.TameableDragonEntity;

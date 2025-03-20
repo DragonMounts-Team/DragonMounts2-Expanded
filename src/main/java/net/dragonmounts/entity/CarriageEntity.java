@@ -160,9 +160,7 @@ public class CarriageEntity extends Entity {
             this.setTimeSinceHit(this.getTimeSinceHit() - 1);
         }
 
-        if (world.isRemote) {
-
-        } else {
+        if (!world.isRemote) {
             if (!this.hasNoGravity()) {
                 this.motionY -= 0.03999999910593033D;
             }

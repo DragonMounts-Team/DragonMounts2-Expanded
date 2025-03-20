@@ -7,7 +7,7 @@
  **    May you find forgiveness for yourself and forgive others.
  **    May you share freely, never taking more than you give.
  */
-package net.dragonmounts.entity.ai.ground;
+package net.dragonmounts.entity.goal;
 
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.util.MutableBlockPosEx;
@@ -27,31 +27,30 @@ import net.minecraft.world.World;
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  * @see net.minecraft.entity.ai.EntityAIFollowOwner
  */
-public class EntityAIDragonFollowOwner extends EntityAIBase {
+public class DragonFollowOwnerGoal extends EntityAIBase {
     public final ServerDragonEntity dragon;
     private EntityLivingBase owner;
     private final double speed;
-    private final float stopDist;
-    private final float startDist;
-    private int timeToRecalcPath;
-    private boolean avoidWater;
+    private final float squaredStop;
+    private final float squaredStart;
+    private int pathValidity;
 
-    public EntityAIDragonFollowOwner(ServerDragonEntity dragon, double speed, float startDist, float stopDist) {
+    public DragonFollowOwnerGoal(ServerDragonEntity dragon, double speed, float startDist, float stopDist) {
         this.dragon = dragon;
         this.speed = speed;
-        this.startDist = startDist;
-        this.stopDist = stopDist;
-        this.setMutexBits(3);
+        this.squaredStart = startDist * startDist;
+        this.squaredStop = stopDist * stopDist;
+        this.setMutexBits(0b11);
     }
 
     @Override
     public boolean shouldExecute() {
         ServerDragonEntity dragon = this.dragon;
-        if (!dragon.followOwner || dragon.isSitting() || dragon.getControllingPlayer() != null) return false;
+        if (!dragon.followOwner || dragon.isSitting()) return false;
         EntityLivingBase owner = dragon.getOwner();
         if (owner == null || (
                 owner instanceof EntityPlayer && ((EntityPlayer) owner).isSpectator()
-        ) || dragon.getDistanceSq(owner) < this.startDist * this.startDist) return false;
+        ) || dragon.getDistanceSq(owner) < this.squaredStart) return false;
         this.owner = owner;
         return true;
     }
@@ -59,12 +58,14 @@ public class EntityAIDragonFollowOwner extends EntityAIBase {
     @Override
     public boolean shouldContinueExecuting() {
         ServerDragonEntity dragon = this.dragon;
-        return dragon.followOwner && !dragon.getNavigator().noPath() && !dragon.isSitting() && dragon.getDistanceSq(this.owner) > (this.stopDist * this.stopDist);
+        return dragon.followOwner && !dragon.getNavigator().noPath() && (
+                !(this.owner instanceof EntityPlayer) || !((EntityPlayer) this.owner).isSpectator()
+        ) && dragon.getDistanceSq(this.owner) > this.squaredStop;
     }
 
     @Override
     public void startExecuting() {
-        this.timeToRecalcPath = 0;
+        this.pathValidity = 0;
     }
 
     @Override
@@ -76,20 +77,17 @@ public class EntityAIDragonFollowOwner extends EntityAIBase {
     @Override
     public void updateTask() {
         ServerDragonEntity dragon = this.dragon;
-        if (dragon.getControllingPlayer() != null) return;
         EntityLivingBase owner = this.owner;
         // look towards owner
         dragon.getLookHelper().setLookPositionWithEntity(owner, 120, 90);
-        // don't move when sitting
-        if (dragon.isSitting()) return;
-        // update every 10 ticks only from here
-        if (--this.timeToRecalcPath > 0) return;
-        this.timeToRecalcPath = 10;
+        // update every 25 ticks only from here
+        if (--this.pathValidity > 0) return;
+        this.pathValidity = 25;
         PathNavigate navigator = dragon.getNavigator();
         // finish task if it can move to the owner
         if (navigator.tryMoveToEntityLiving(owner, this.speed)) return;
         // move only but don't teleport if leashed
-        if (dragon.getLeashed() || dragon.isRiding() || dragon.getDistanceSq(owner) < 144.0D) return;
+        if (dragon.getLeashed() || dragon.isRiding() || dragon.getDistanceSq(owner) < 256.0) return;
         int x = MathHelper.floor(owner.posX) - 2;
         int y = MathHelper.floor(owner.getEntityBoundingBox().minY);
         int z = MathHelper.floor(owner.posZ) - 2;
@@ -107,9 +105,13 @@ public class EntityAIDragonFollowOwner extends EntityAIBase {
 
     protected boolean isTeleportFriendlyBlock(World level, MutableBlockPosEx pos) {
         IBlockState state = level.getBlockState(pos);
+        ServerDragonEntity dragon = this.dragon;
         return state.getBlockFaceShape(level, pos, EnumFacing.DOWN) == BlockFaceShape.SOLID &&
-                state.canEntitySpawn(this.dragon) &&
-                level.isAirBlock(pos.climb()) &&
-                level.isAirBlock(pos.climb());
+                state.canEntitySpawn(dragon) &&
+                !dragon.world.collidesWithAnyBlock(dragon.getEntityBoundingBox().grow(-1).offset(
+                        pos.getX() - dragon.posX + 0.5,
+                        pos.getY() - dragon.posY + 0.25,
+                        pos.getZ() - dragon.posZ + 0.5
+                ));
     }
 }

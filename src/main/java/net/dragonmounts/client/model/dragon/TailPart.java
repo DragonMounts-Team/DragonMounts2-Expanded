@@ -1,5 +1,6 @@
 package net.dragonmounts.client.model.dragon;
 
+import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -10,7 +11,7 @@ import static net.dragonmounts.client.model.dragon.DragonModel.VERTS_TAIL;
 public class TailPart extends ModelPart {
     public static final int HORN_THICK = 3;
     public static final int HORN_LENGTH = 32;
-    protected final Snapshot[] snapshots;
+    protected final Snapshot[] snapshots = DMUtils.makeArray(new Snapshot[VERTS_TAIL], Snapshot::new);
     public final ModelRenderer middleScale;
     public final ModelRenderer leftScale;
     public final ModelRenderer rightScale;
@@ -28,11 +29,6 @@ public class TailPart extends ModelPart {
         float scaleRotZ = MathX.toRadians(45);
         this.leftScale.rotateAngleZ = scaleRotZ;
         this.rightScale.rotateAngleZ = -scaleRotZ;
-        Snapshot[] snapshots = new Snapshot[VERTS_TAIL];
-        for (int i = 0; i < snapshots.length; ++i) {
-            snapshots[i] = new Snapshot();
-        }
-        this.snapshots = snapshots;
     }
 
     private ModelRenderer makeHorn(ModelRenderer horn, boolean mirror) {
@@ -64,10 +60,16 @@ public class TailPart extends ModelPart {
         public boolean rightScaleVisible;
         public boolean leftHornVisible;
         public boolean rightHornVisible;
+        public float renderScaleX = 1;
+        public float renderScaleY = 1;
+        public float renderScaleZ = 1;
 
         @Override
         public void save(TailPart part) {
             super.save(part);
+            this.renderScaleX = part.renderScaleX;
+            this.renderScaleY = part.renderScaleY;
+            this.renderScaleZ = part.renderScaleZ;
             this.middleScaleVisible = part.middleScale.showModel;
             this.leftScaleVisible = part.leftScale.showModel;
             this.rightScaleVisible = part.rightScale.showModel;
@@ -78,6 +80,9 @@ public class TailPart extends ModelPart {
         @Override
         public void apply(TailPart part) {
             super.apply(part);
+            part.renderScaleX = this.renderScaleX;
+            part.renderScaleY = this.renderScaleY;
+            part.renderScaleZ = this.renderScaleZ;
             part.middleScale.showModel = this.middleScaleVisible;
             part.leftScale.showModel = this.leftScaleVisible;
             part.rightScale.showModel = this.rightScaleVisible;

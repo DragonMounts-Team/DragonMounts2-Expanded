@@ -32,9 +32,7 @@ public class EntityContainerItemEntity extends EntityItem {
         }
     }
 
-    /**
-     * Spawn the content when the item gets destroyed
-     */
+    /// Spawn the content when the item gets destroyed
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
         boolean isDead = this.isDead;

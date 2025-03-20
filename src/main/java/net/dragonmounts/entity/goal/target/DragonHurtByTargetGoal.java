@@ -1,4 +1,4 @@
-package net.dragonmounts.entity.ai;
+package net.dragonmounts.entity.goal.target;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.entity.EntityLivingBase;
@@ -7,11 +7,11 @@ import net.minecraft.entity.ai.EntityAITarget;
 /**
  * @see net.minecraft.entity.ai.EntityAIHurtByTarget
  */
-public class EntityAIDragonHurtByTarget extends EntityAITarget {
+public class DragonHurtByTargetGoal extends EntityAITarget {
     private int revengeTimerOld;
     private final TameableDragonEntity dragon;
 
-    public EntityAIDragonHurtByTarget(TameableDragonEntity dragon) {
+    public DragonHurtByTargetGoal(TameableDragonEntity dragon) {
         super(dragon, true, true);
         this.dragon = dragon;
         this.setMutexBits(1);

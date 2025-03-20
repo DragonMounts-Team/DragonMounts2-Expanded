@@ -2,6 +2,7 @@ package net.dragonmounts.entity.helper;
 
 import net.dragonmounts.client.model.dragon.DragonModel;
 import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.Segment;
 import net.dragonmounts.util.math.Interpolation;
 import net.dragonmounts.util.math.MathX;
@@ -12,7 +13,7 @@ import net.minecraft.util.math.Vec3d;
 public class DragonHeadLocator<T extends TameableDragonEntity> implements ITickable {
     public static final int NECK_SEGMENTS = 7;
     public final T dragon;
-    public final Segment[] neckSegments = Segment.makeArray(NECK_SEGMENTS);
+    public final Segment[] neckSegments = DMUtils.makeArray(new Segment[NECK_SEGMENTS], Segment::new);
     public final Segment head = new Segment();
     // entity parameters
     protected float lookYaw;
@@ -170,9 +171,9 @@ public class DragonHeadLocator<T extends TameableDragonEntity> implements ITicka
                         head.posX * BODY_X_SCALE,
                         head.posY * BODY_Y_SCALE + centerY,
                         (head.posZ + -15) * BODY_Z_SCALE + centerZ
-                ).rotatePitch(-(float) Math.toRadians(this.getPitch()))//rotate body
+                ).rotatePitch(-MathX.toRadians(this.getPitch()))//rotate body
                 .subtract(0, centerY, centerZ)
-                .rotateYaw(MathX.PI_F + (float) Math.toRadians(-dragon.renderYawOffset))
+                .rotateYaw(MathX.PI_F + MathX.toRadians(-dragon.renderYawOffset))
                 .add(dragon.posX, dragon.posY + dragon.getEyeHeight(), dragon.posZ);
     }
 

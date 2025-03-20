@@ -3,6 +3,7 @@ package net.dragonmounts.network;
 import io.netty.buffer.ByteBuf;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMSounds;
+import net.dragonmounts.util.math.MathX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.NetHandlerPlayServer;
@@ -60,7 +61,7 @@ public class CTeleportOrderPacket extends CUUIDPacket {
                 //Get block pos by raytracing from player for dragon teleport
                 Vec3d start = new Vec3d(player.posX, player.posY + player.getEyeHeight(), player.posZ);
                 float pitch = message.pitch * -0.017453292F;
-                float yaw = message.yaw * -0.017453292F - (float) Math.PI;
+                float yaw = message.yaw * -0.017453292F - MathX.PI_F;
                 float forward = -MathHelper.cos(pitch);
                 Vec3d end = start.add(
                         MathHelper.sin(yaw) * forward * 5.0,

@@ -16,16 +16,18 @@ import net.dragonmounts.util.ItemUtil;
 import net.dragonmounts.util.MutableBlockPosEx;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import javax.annotation.Nonnull;
 
 public class ClientDragonEntity extends TameableDragonEntity {
     public final DragonAnimator animator = new DragonAnimator(this);
@@ -60,26 +62,16 @@ public class ClientDragonEntity extends TameableDragonEntity {
         this.lifeStageHelper.ageUp(1);
         this.breathHelper.update();
         this.getVariant().type.tick(this);
+        if (this.isEgg()) {
+            super.onLivingUpdate();
+            return;
+        }
         this.animator.update();
         if (!this.isDead) {
             if (this.healingEnderCrystal != null && this.healingEnderCrystal.isDead) {
                 this.healingEnderCrystal = null;
             }
-            if (this.rand.nextInt(10) == 0) {
-                EntityEnderCrystal target = null;
-                double min = Double.MAX_VALUE;
-                for (EntityEnderCrystal crystal : this.world.getEntitiesWithinAABB(
-                        EntityEnderCrystal.class,
-                        this.getEntityBoundingBox().grow(32.0D)
-                )) {
-                    double distance = crystal.getDistanceSq(this);
-                    if (distance < min) {
-                        min = distance;
-                        target = crystal;
-                    }
-                }
-                this.healingEnderCrystal = target;
-            }
+            this.findCrystal();
         }
         EnumParticleTypes sneeze = this.getVariant().type.sneezeParticle;
         if (sneeze != null && rand.nextInt(700) == 0 && !this.isUsingBreathWeapon() && this.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {
@@ -207,6 +199,12 @@ public class ClientDragonEntity extends TameableDragonEntity {
         double z = this.posZ + (rand.nextDouble() - 0.5) * this.width * s;
 
         this.world.spawnParticle(type, x, y, z, ox, oy, oz);
+    }
+
+    @Nonnull
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+        return this.getEntityBoundingBox().grow(2.0, 1.0, 2.0);
     }
 
     /// Unsupported Operation

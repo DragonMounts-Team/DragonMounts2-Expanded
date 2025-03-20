@@ -14,12 +14,4 @@ public class Segment {
     public float scaleX = Float.NaN;
     public float scaleY = Float.NaN;
     public float scaleZ = Float.NaN;
-
-    public static Segment[] makeArray(int size) {
-        Segment[] array = new Segment[size];
-        for (int i = 0; i < size; ++i) {
-            array[i] = new Segment();
-        }
-        return array;
-    }
 }

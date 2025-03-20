@@ -7,7 +7,7 @@
 **    May you find forgiveness for yourself and forgive others.
 **    May you share freely, never taking more than you give.
  */
-package net.dragonmounts.entity.ai.path;
+package net.dragonmounts.entity.navigation;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.pathfinding.PathFinder;

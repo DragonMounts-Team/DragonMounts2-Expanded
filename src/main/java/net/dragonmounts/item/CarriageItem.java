@@ -4,6 +4,7 @@ import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.entity.CarriageEntity;
 import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.registry.CarriageType;
+import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -44,8 +45,8 @@ public class CarriageItem extends Item {
                 player.prevPosY + (player.posY - player.prevPosY) + player.getEyeHeight(),
                 player.prevPosZ + (player.posZ - player.prevPosZ)
         );
-        float f3 = MathHelper.cos(-f2 * f9 - (float) Math.PI);
-        float f4 = MathHelper.sin(-f2 * f9 - (float) Math.PI);
+        float f3 = MathHelper.cos(-f2 * f9 - MathX.PI_F);
+        float f4 = MathHelper.sin(-f2 * f9 - MathX.PI_F);
         float f5 = -MathHelper.cos(-f1 * f9);
         RayTraceResult hit = level.rayTraceBlocks(pos, pos.add(f4 * f5 * 5, MathHelper.sin(-f1 * f9) * 5, f3 * f5 * 5), true);
         if (hit == null) return new ActionResult<>(EnumActionResult.PASS, stack);

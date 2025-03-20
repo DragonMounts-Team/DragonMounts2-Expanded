@@ -4,6 +4,7 @@ import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityMoveHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 import static net.minecraft.entity.SharedMonsterAttributes.MOVEMENT_SPEED;
@@ -50,14 +51,14 @@ public class DragonMoveHelper extends EntityMoveHelper {
                 dragon.motionY *= 0.8;
                 dragon.motionZ *= 0.8;
 
-                dragon.motionY += Math.sin(dragon.ticksExisted / 5.0) * 0.03;
+                dragon.motionY += MathHelper.sin(dragon.ticksExisted / 5.0F) * 0.03F;
             }
 
             // face entity towards target
             if (dist > 2.5E-7) {
                 float YAW_SPEED = dragon.getControllingPlayer() != null ? 5 : 15;
-                float newYaw = (float) Math.toDegrees(Math.PI * 2 - Math.atan2(dir.x, dir.z));
-                dragon.rotationYaw = limitAngle(dragon.rotationYaw, newYaw, YAW_SPEED);
+                float newYaw = (float) Math.toDegrees(Math.PI * 2 - MathHelper.atan2(dir.x, dir.z));
+                dragon.rotationYaw = this.limitAngle(dragon.rotationYaw, newYaw, YAW_SPEED);
                 entity.setAIMoveSpeed((float) (speed * entity.getEntityAttribute(MOVEMENT_SPEED).getAttributeValue()));
             }
 

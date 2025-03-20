@@ -49,7 +49,7 @@ public class DragonModel extends ModelBase {
     public ModelRenderer back;
     public ModelRenderer chest;
     public ModelRenderer saddle;
-    public ModelPart wingArm;
+    public ModelRenderer wingArm;
     public ModelRenderer wingForearm;
     public final ModelRenderer[] wingFinger = new ModelRenderer[4];
 
@@ -138,9 +138,9 @@ public class DragonModel extends ModelBase {
         setTextureOffset("wingforearm.bone", 0, 164);
 
         buildBody();
-        this.neck = new NeckPart(this, "neck");
+        this.neck = factory.makeNeck(this);
         buildHead();
-        this.tail = new TailPart(this, "tail");
+        this.tail = factory.makeTail(this);
         buildWing();
         this.foreLeg = factory.makeForeLeg(this);
         this.hindLeg = factory.makeHindLeg(this);
@@ -219,7 +219,6 @@ public class DragonModel extends ModelBase {
     private void buildWing() {
         wingArm=new ModelPart(this, "wingarm");
         wingArm.setRotationPoint(-10, 5, 4);
-        wingArm.setRenderScale(1.1f); //1.1f
         wingArm.addBox("bone", -28, -3, -3, 28, 6, 6);
         wingArm.addBox("skin", -28, 0, 2, 28, 0, 24);
 
@@ -285,7 +284,6 @@ public class DragonModel extends ModelBase {
         wingArm.rotateAngleX = animator.getWingArmRotateAngleX();
         wingArm.rotateAngleY = animator.getWingArmRotateAngleY();
         wingArm.rotateAngleZ = animator.getWingArmRotateAngleZ();
-        wingArm.preRotateAngleX = animator.getWingArmPreRotateAngleX();
         wingForearm.rotateAngleX = animator.getWingForearmRotateAngleX();
         wingForearm.rotateAngleY = animator.getWingForearmRotateAngleY();
         wingForearm.rotateAngleZ = animator.getWingForearmRotateAngleZ();
@@ -401,7 +399,7 @@ public class DragonModel extends ModelBase {
      */
     @Override
     public void render(Entity entity, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
-        this.render(DragonRenderMode.FULL, (ClientDragonEntity) entity, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
+        this.render(DragonRenderMode.DRAGON, (ClientDragonEntity) entity, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
     }
 
     public void render(DragonRenderMode mode, ClientDragonEntity dragon, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
@@ -413,7 +411,6 @@ public class DragonModel extends ModelBase {
         tail.leftScale.showModel = tail.rightScale.showModel = flag;
         tail.leftHorn.showModel = tail.rightHorn.showModel = this.appearance.hasTailHorns(dragon);
         this.updateFromAnimator(dragon.animator);
-
         GlStateManager.pushMatrix();
         GlStateManager.translate(offsetX, offsetY, offsetZ);
         GlStateManager.rotate(-pitch, 1, 0, 0);
@@ -422,6 +419,7 @@ public class DragonModel extends ModelBase {
     }
 
     public void renderWings(float scale) {
+        scale *= 1.1F;
         GlStateManager.pushMatrix();
         GlStateManager.enableCull();
         GlStateManager.cullFace(GlStateManager.CullFace.FRONT);

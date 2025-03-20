@@ -3,7 +3,7 @@ package net.dragonmounts.client.model.dragon;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
-public class LegPart extends ModelPart {
+public class LegPart extends ModelRenderer {
     public final ModelRenderer shank;
     public final ModelRenderer foot;
     public final ModelRenderer toe;

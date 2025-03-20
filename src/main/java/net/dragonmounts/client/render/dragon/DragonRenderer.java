@@ -12,7 +12,6 @@ package net.dragonmounts.client.render.dragon;
 import net.dragonmounts.block.HatchableDragonEggBlock;
 import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.model.dragon.DragonModel;
-import net.dragonmounts.client.render.dragon.layer.DragonLayerRenderer;
 import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.entity.helper.DragonLifeStageHelper;
 import net.dragonmounts.init.DMBlocks;
@@ -47,7 +46,6 @@ public class DragonRenderer extends RenderLiving<ClientDragonEntity> {
 
     @Override
     public void doRender(ClientDragonEntity dragon, double x, double y, double z, float yaw, float partialTicks) {
-        renderName(dragon, x, y, z);
         if (dragon.isEgg()) {
             renderEgg(dragon, x, y, z, yaw, partialTicks);
             return;
@@ -69,10 +67,9 @@ public class DragonRenderer extends RenderLiving<ClientDragonEntity> {
         VariantAppearance appearance = dragon.getVariant().appearance;
         TextureManager manager = this.renderManager.renderEngine;
         DragonModel model = appearance.model;
-        for (DragonLayerRenderer layer : appearance.layers) {
-            layer.bind(manager, model);
+        for (IDragonLayer layer : appearance.layers) {
             boolean changed = setBrightness(dragon, partialTicks, layer.shouldCombineTextures());
-            layer.doRenderLayer(dragon, moveTime, moveSpeed, partialTicks, ticksExisted, lookYaw, lookPitch, scale);
+            layer.renderLayer(manager, model, dragon, moveTime, moveSpeed, partialTicks, ticksExisted, lookYaw, lookPitch, scale);
             if (changed) {
                 unsetBrightness();
             }
@@ -111,14 +108,19 @@ public class DragonRenderer extends RenderLiving<ClientDragonEntity> {
     protected void renderEgg(ClientDragonEntity dragon, double x, double y, double z, float pitch, float partialTicks) {
         // apply egg wiggle
         DragonLifeStageHelper lifeStage = dragon.lifeStageHelper;
+        this.renderName(dragon, x, y, z);
         float tickX = lifeStage.getEggWiggleX();
         float tickZ = lifeStage.getEggWiggleZ();
 
         // prepare GL states
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y /*+ (lev ? l : 0)*/, z);
-        GlStateManager.rotate(tickX > 0 ? MathHelper.sin(tickX - partialTicks) * 8 : 0, 1, 0, 0);
-        GlStateManager.rotate(tickZ > 0 ? MathHelper.sin(tickZ - partialTicks) * 8 : 0, 0, 0, 1);
+        if (tickX > 0.0F) {
+            GlStateManager.rotate(MathHelper.sin(tickX - partialTicks) * 8, 1, 0, 0);
+        }
+        if (tickZ > 0.0F) {
+            GlStateManager.rotate(MathHelper.sin(tickZ - partialTicks) * 8, 0, 0, 1);
+        }
         GlStateManager.disableLighting();
 
         this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
@@ -146,8 +148,8 @@ public class DragonRenderer extends RenderLiving<ClientDragonEntity> {
     }
 
     @Override
-    protected void applyRotations(ClientDragonEntity dragon, float par2, float par3, float par4) {
-        GlStateManager.rotate(180 - par3, 0, 1, 0);
+    protected void applyRotations(ClientDragonEntity dragon, float ageInTicks, float rotationYaw, float partialTicks) {
+        GlStateManager.rotate(180.0F - rotationYaw, 0.0F, 1.0F, 0.0F);
     }
 
     /**

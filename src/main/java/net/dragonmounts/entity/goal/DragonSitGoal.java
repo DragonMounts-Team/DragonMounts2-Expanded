@@ -1,14 +1,14 @@
-package net.dragonmounts.entity.ai.ground;
+package net.dragonmounts.entity.goal;
 
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAISit;
 
-public class EntityAIDragonSit extends EntityAISit {
+public class DragonSitGoal extends EntityAISit {
     public final TameableDragonEntity dragon;
     private boolean isSitting;
 
-    public EntityAIDragonSit(TameableDragonEntity dragon) {
+    public DragonSitGoal(TameableDragonEntity dragon) {
         super(dragon);
         this.dragon = dragon;
     }
@@ -18,11 +18,15 @@ public class EntityAIDragonSit extends EntityAISit {
         if (!this.isSitting ||
                 !dragon.isTamed() ||
                 dragon.isInWater() ||
-                !dragon.onGround ||
-                dragon.getControllingPlayer() != null
+                !dragon.onGround
         ) return false;
         EntityLivingBase owner = dragon.getOwner();
-        return owner == null || dragon.getDistanceSq(owner) >= 144.0D || owner.getRevengeTarget() == null;
+        return owner == null || dragon.getDistanceSq(owner) >= 256.0 || owner.getRevengeTarget() == null;
+    }
+
+    @Override
+    public boolean shouldContinueExecuting() {
+        return this.isSitting;
     }
 
     @Override

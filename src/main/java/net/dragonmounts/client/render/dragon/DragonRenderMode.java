@@ -4,7 +4,7 @@ import net.dragonmounts.client.model.dragon.DragonModel;
 import net.minecraft.client.renderer.GlStateManager;
 
 public enum DragonRenderMode {
-    FULL {
+    DRAGON {
         @Override
         public void render(DragonModel model, float scale) {
             model.head.render(scale * 0.92F);
