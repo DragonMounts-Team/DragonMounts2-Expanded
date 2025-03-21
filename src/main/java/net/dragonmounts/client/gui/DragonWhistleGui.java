@@ -17,7 +17,6 @@ public class DragonWhistleGui extends GuiScreen {
     public final UUID uuid;
 
     public DragonWhistleGui(UUID uuid) {
-        super();
         this.uuid = uuid;
     }
 

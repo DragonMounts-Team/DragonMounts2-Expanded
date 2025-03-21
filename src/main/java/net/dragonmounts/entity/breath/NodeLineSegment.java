@@ -1,8 +1,8 @@
 package net.dragonmounts.entity.breath;
 
 import net.dragonmounts.util.MutableBlockPosEx;
+import net.dragonmounts.util.Pair;
 import net.dragonmounts.util.math.MathX;
-import net.dragonmounts.util.math.Pair;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.*;
 
@@ -157,8 +157,9 @@ public class NodeLineSegment {
         } else if (dotProduct >= deltaAxisLengthSq) {
             closestPoint=deltaAxis;
         } else {
-            double projectionFraction=dotProduct / deltaAxisLengthSq;
-            closestPoint=MathX.multiply(deltaAxis, projectionFraction);
+            closestPoint = deltaAxis.scale(
+                    dotProduct / deltaAxisLengthSq // projectionFraction
+            );
         }
         return closestPoint.squareDistanceTo(deltaPointToCheck) <= radius * radius;
     }

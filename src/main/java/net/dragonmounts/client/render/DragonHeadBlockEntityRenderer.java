@@ -3,12 +3,12 @@ package net.dragonmounts.client.render;
 import net.dragonmounts.block.DragonHeadBlock;
 import net.dragonmounts.block.entity.DragonHeadBlockEntity;
 import net.dragonmounts.client.model.dragon.DragonModel;
-import net.dragonmounts.client.model.dragon.ModelPart;
 import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.item.DragonHeadItem;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
@@ -31,8 +31,8 @@ public class DragonHeadBlockEntityRenderer extends TileEntitySpecialRenderer<Dra
             int destroyStage,
             float animateTicks
     ) {
-        DragonModel model = appearance.model;
-        ModelPart head = model.head;
+        DragonModel model = appearance.getModel(null);
+        ModelRenderer head = model.head;
         boolean normal = destroyStage < 0;
         if (normal) {
             manager.bindTexture(appearance.getBody(null));
@@ -50,7 +50,7 @@ public class DragonHeadBlockEntityRenderer extends TileEntitySpecialRenderer<Dra
         GlStateManager.enableRescaleNormal();
         GlStateManager.scale(-1.0F, -1.0F, 1.0F);
         GlStateManager.enableAlpha();
-        model.jaw.rotateAngleX = 0.2F * (MathHelper.sin(animateTicks * MathX.PI_F * 0.2F) + 1.0F);
+        model.head.jaw.rotateAngleX = 0.2F * (MathHelper.sin(animateTicks * MathX.PI_F * 0.2F) + 1.0F);
         head.rotateAngleY = yRot * 0.017453292F;
         head.rotationPointX = head.rotationPointY = head.rotationPointZ = head.rotateAngleX = 0.0F;
         GlStateManager.translate(0.0F, -0.374375F, 0.0F);

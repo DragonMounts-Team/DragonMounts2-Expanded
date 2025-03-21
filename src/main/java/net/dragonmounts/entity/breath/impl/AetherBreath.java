@@ -10,7 +10,6 @@ import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.effects.AetherBreathFX;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.init.DMSounds;
-import net.dragonmounts.util.math.MathX;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -82,8 +81,8 @@ public class AetherBreath extends DragonBreath {
         final double FORCE_MULTIPLIER = 0.05;
         final double VERTICAL_FORCE_MULTIPLIER = 0.05;
         float density = hit.getHitDensity();
-        Vec3d airForceDirection = hit.getHitDensityDirection();
-        Vec3d airMotion = MathX.multiply(airForceDirection, FORCE_MULTIPLIER);
+//        Vec3d airForceDirection = hit.getHitDensityDirection();
+//        Vec3d airMotion = MathX.multiply(airForceDirection, FORCE_MULTIPLIER);
 
         final double WT_ENTITY = 0.05;
         final double WT_AIR = 1 - WT_ENTITY;
@@ -91,10 +90,8 @@ public class AetherBreath extends DragonBreath {
         target.knockBack(target, 0.8F, dragon.posX - target.posX, dragon.posZ - target.posZ);
         if (density > 1.0) {
             final double GRAVITY_OFFSET = -0.08;
-            Vec3d up = new Vec3d(0, 1, 0);
-            Vec3d upMotion = MathX.multiply(up, VERTICAL_FORCE_MULTIPLIER * density);
             //      System.out.format("upMotion:%s\n", upMotion);
-            target.motionY = WT_ENTITY * (target.motionY - GRAVITY_OFFSET) + WT_AIR * upMotion.y;
+            target.motionY = WT_ENTITY * (target.motionY - GRAVITY_OFFSET) + WT_AIR * VERTICAL_FORCE_MULTIPLIER * density;
         }
 
         //    System.out.format("airMotion:%s\n", airMotion);

@@ -37,7 +37,7 @@ public class GuiTextPrinter {
         x = xOrigin;
         y += yLineSpace;
     }
-    
+
     public void print(String text) {
         if (fr == null) return;  //  just in case...
         String[] lines = text.split("\n", -1);

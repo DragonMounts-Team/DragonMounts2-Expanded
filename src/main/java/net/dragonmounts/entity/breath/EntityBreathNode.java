@@ -2,7 +2,7 @@ package net.dragonmounts.entity.breath;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.dragonmounts.util.EntityUtil;
-import net.dragonmounts.util.math.Pair;
+import net.dragonmounts.util.Pair;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;

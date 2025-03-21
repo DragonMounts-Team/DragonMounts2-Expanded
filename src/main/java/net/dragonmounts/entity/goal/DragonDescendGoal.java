@@ -7,14 +7,16 @@
  **    May you find forgiveness for yourself and forgive others.
  **    May you share freely, never taking more than you give.
  */
-package net.dragonmounts.entity.goal.air;
+package net.dragonmounts.entity.goal;
 
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.util.MutableBlockPosEx;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -24,12 +26,13 @@ import java.util.Random;
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class EntityAIDragonFlight extends EntityAIBase {
+public class DragonDescendGoal extends EntityAIBase {
     private final double speed;
     public final ServerDragonEntity dragon;
     private MutableBlockPosEx landingPos;
+    private boolean canHover;
 
-    public EntityAIDragonFlight(ServerDragonEntity dragon, double speed) {
+    public DragonDescendGoal(ServerDragonEntity dragon, double speed) {
         this.dragon = dragon;
         this.speed = speed;
         this.setMutexBits(0b01);
@@ -41,24 +44,25 @@ public class EntityAIDragonFlight extends EntityAIBase {
         World level = this.dragon.world;
         // get current entity position and add some variance
         Random random = dragon.getRNG();
-        int posX = MathHelper.floor(dragon.posX) - 16 + random.nextInt(16) * 2;
-        int posY = MathHelper.floor(dragon.posY + 0.5D);
-        int posZ = MathHelper.floor(dragon.posZ) - 16 + random.nextInt(16) * 2;
-        MutableBlockPosEx pos = this.landingPos = new MutableBlockPosEx(posX, posY, posZ);
+        Vec3d view = dragon.getLookVec();
+        int posX = MathHelper.floor(dragon.posX + view.x * 8);
+        int posZ = MathHelper.floor(dragon.posZ + view.z * 8);
+        int posY = level.getHeight(posX, posZ);
+        MutableBlockPosEx pos = new MutableBlockPosEx(posX, posY, posZ);
         // get ground block
-        for (int dY = 0; dY < 8; ++dY) {
-            pos.descent();
+        for (int dY = 0; dY < 4; ++dY) {
             for (int dX = -3; dX <= 3; ++dX) {
                 pos.withX(posX + dX);
                 for (int dZ = -3; dZ <= 3; ++dZ) {
                     pos.withX(posZ + dZ);
                     Material material = level.getBlockState(pos).getMaterial();
                     if (material.isSolid() || material.isLiquid()) {
-                        pos.climb();
+                        this.landingPos = pos.climb();
                         return true;
                     }
                 }
             }
+            pos.climb();
         }
         return false;
     }
@@ -69,30 +73,40 @@ public class EntityAIDragonFlight extends EntityAIBase {
         return !dragon.isInWater() &&
                 !dragon.isInLava() &&
                 dragon.isFlying() &&
-                dragon.getControllingPlayer() == null &&
                 dragon.getAttackTarget() == null &&
                 this.findLandingBlock();
     }
 
     @Override
     public boolean shouldContinueExecuting() {
-        return dragon.isFlying() && dragon.getControllingPlayer() == null && !dragon.getNavigator().noPath();
+        return dragon.isFlying() && !dragon.getNavigator().noPath();
     }
 
     @Override
     public void startExecuting() {
+        ServerDragonEntity dragon = this.dragon;
+        this.canHover = this.dragon.isUnHovered();
+        this.dragon.setUnHovered(true);
         // try to fly to ground block position
         if (!tryMoveToBlockPos(landingPos)) {
             // probably too high, so simply descend vertically
-            tryMoveToBlockPos(dragon.getPosition().down(4));
+            Vec3d view = dragon.getLookVec();
+            tryMoveToBlockPos(new BlockPos(
+                    view.x * 2 + dragon.posX,
+                    dragon.posY - 4,
+                    view.z * 2 + dragon.posZ
+            ));
         }
     }
 
     public void resetTask() {
         this.landingPos = null;
+        this.dragon.setUnHovered(this.canHover);
     }
 
-    protected boolean tryMoveToBlockPos(Vec3i pos) {
-        return dragon.getNavigator().tryMoveToXYZ(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, speed);
+    protected boolean tryMoveToBlockPos(BlockPos pos) {
+        ServerDragonEntity dragon = this.dragon;
+        PathNavigate navigator = dragon.getNavigator();
+        return navigator.setPath(navigator.getPathToPos(pos), this.speed);
     }
 }

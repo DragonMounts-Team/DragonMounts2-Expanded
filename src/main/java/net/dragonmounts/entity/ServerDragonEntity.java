@@ -10,8 +10,6 @@ import net.dragonmounts.client.gui.GuiHandler;
 import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.breath.impl.ServerBreathHelper;
 import net.dragonmounts.entity.goal.*;
-import net.dragonmounts.entity.goal.air.EntityAIDragonFlight;
-import net.dragonmounts.entity.goal.air.EntityAIDragonFollowOwnerElytraFlying;
 import net.dragonmounts.entity.goal.target.ControlledTargetGoal;
 import net.dragonmounts.entity.goal.target.DragonHuntTargetGoal;
 import net.dragonmounts.entity.goal.target.DragonHurtByTargetGoal;
@@ -72,7 +70,6 @@ public class ServerDragonEntity extends TameableDragonEntity {
     public final DragonHeadLocator<ServerDragonEntity> headLocator = new DragonHeadLocator<>(this);
     public final DragonReproductionHelper reproductionHelper = new DragonReproductionHelper(this);
     public boolean followOwner = true;
-    private int ticksSinceSpawned;
     protected int shearCooldown;
     protected int collectBreathCooldown;
 
@@ -88,10 +85,6 @@ public class ServerDragonEntity extends TameableDragonEntity {
     @Override
     public Vec3d getThroatPosition() {
         return this.headLocator.getThroatPosition();
-    }
-
-    public int getTicksSinceSpawned() {
-        return this.ticksSinceSpawned;
     }
 
     @Override
@@ -141,7 +134,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
         tasks.addTask(1, new EntityAIDragonPlayerControl(this)); // mutex all
         tasks.addTask(2, this.getAISit()); // mutex 4+1
         tasks.addTask(2, new EntityAISwimming(this)); // mutex 4
-        tasks.addTask(3, new EntityAIDragonFlight(this, 1)); // mutex 1
+        tasks.addTask(3, new DragonDescendGoal(this, 0.25)); // mutex 1
         tasks.addTask(5, new DragonAttackGoal(this, 1)); // mutex 2+1
         tasks.addTask(6, new EntityAIDragonFollowOwnerElytraFlying(this)); // mutex 2+1
         tasks.addTask(7, new DragonFollowOwnerGoal(this, 1, 18, 14)); // mutex 2+1
@@ -215,7 +208,6 @@ public class ServerDragonEntity extends TameableDragonEntity {
 
     @Override
     public void onLivingUpdate() {
-        ++this.ticksSinceSpawned;
         this.variantHelper.update();
         this.lifeStageHelper.ageUp(1);
         this.breathHelper.update();
@@ -262,10 +254,8 @@ public class ServerDragonEntity extends TameableDragonEntity {
             this.setUnHovered(true);
         }
         // TODO: config
-        if (this.ticksExisted % 6000 == 1) {
-            if (this.getHunger() > 0) {
-                this.setHunger(this.getHunger() - 1);
-            }
+        if (this.ticksExisted % 6000 == 0 && !this.firstUpdate && this.getHunger() > 0) {
+            this.setHunger(this.getHunger() - 1);
         }
         if (this.shearCooldown > 0 && --this.shearCooldown == 0) {
             this.setSheared(0);

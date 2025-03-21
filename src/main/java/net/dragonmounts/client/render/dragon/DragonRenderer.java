@@ -50,7 +50,7 @@ public class DragonRenderer extends RenderLiving<ClientDragonEntity> {
             renderEgg(dragon, x, y, z, yaw, partialTicks);
             return;
         }
-        this.mainModel = dragon.getVariant().appearance.model;
+        this.mainModel = dragon.getVariant().appearance.getModel(dragon);
         super.doRender(dragon, x, y, z, yaw, partialTicks);
         if (dragon.isInGui) return;
         EntityEnderCrystal crystal = dragon.healingEnderCrystal;
@@ -66,7 +66,7 @@ public class DragonRenderer extends RenderLiving<ClientDragonEntity> {
     protected void renderLayers(ClientDragonEntity dragon, float moveTime, float moveSpeed, float partialTicks, float ticksExisted, float lookYaw, float lookPitch, float scale) {
         VariantAppearance appearance = dragon.getVariant().appearance;
         TextureManager manager = this.renderManager.renderEngine;
-        DragonModel model = appearance.model;
+        DragonModel model = appearance.getModel(dragon);
         for (IDragonLayer layer : appearance.layers) {
             boolean changed = setBrightness(dragon, partialTicks, layer.shouldCombineTextures());
             layer.renderLayer(manager, model, dragon, moveTime, moveSpeed, partialTicks, ticksExisted, lookYaw, lookPitch, scale);

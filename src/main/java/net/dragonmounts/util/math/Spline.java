@@ -43,7 +43,7 @@ public class Spline {
                     + " Spline has too few knots");
             return;
         }
-        x = MathHelper.clamp(x, (float) 0, 0.9999f) * nspans;
+        x = MathHelper.clamp(x, 0.0F, 0.9999F) * nspans;
         // println("clamped x: " + x);
         int span = (int) x;
         // println("span before: " + span);

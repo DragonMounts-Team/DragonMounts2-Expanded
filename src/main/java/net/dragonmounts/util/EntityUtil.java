@@ -3,7 +3,6 @@ package net.dragonmounts.util;
 import com.google.common.base.Predicate;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.dragonmounts.util.math.MathX;
-import net.dragonmounts.util.math.Pair;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;

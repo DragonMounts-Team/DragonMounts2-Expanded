@@ -13,7 +13,6 @@ package net.dragonmounts.client.model.dragon;
 import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.render.dragon.DragonRenderMode;
 import net.dragonmounts.client.variant.VariantAppearance;
-import net.dragonmounts.util.Segment;
 import net.dragonmounts.util.math.Interpolation;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.model.ModelBase;
@@ -21,8 +20,6 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-
-import static net.dragonmounts.client.ClientUtil.withRotation;
 
 /**
  * Generic model for all winged tetrapod dragons.
@@ -39,12 +36,11 @@ public class DragonModel extends ModelBase {
     public static final int HEAD_OFS=-16;
 
     // model parts
-    public ModelPart head;
+    public final HeadPart head;
     public final NeckPart neck;
     public final TailPart tail;
     public final LegPart foreLeg;
     public final LegPart hindLeg;
-    public ModelRenderer jaw;
     public ModelRenderer body;
     public ModelRenderer back;
     public ModelRenderer chest;
@@ -100,94 +96,16 @@ public class DragonModel extends ModelBase {
     public DragonModel(VariantAppearance appearance, IModelFactory factory) {
         textureWidth=256;
         textureHeight=256;
-
         this.appearance = appearance;
-
-        setTextureOffset("body.body", 0, 0);
-        setTextureOffset("body.scale", 0, 32);
-        setTextureOffset("saddle.cushion", 184, 98);
-        setTextureOffset("saddle.front", 214, 120);
-        setTextureOffset("saddle.back", 214, 120);
-        setTextureOffset("saddle.tie", 220, 100);
-        setTextureOffset("saddle.metal", 224, 132);
-        setTextureOffset("chest.left", 192, 132);
-        setTextureOffset("chest.right", 224, 132);
-        setTextureOffset("head.nostril", 48, 0);
-        setTextureOffset("head.mainhead", 0, 0);
-        setTextureOffset("head.upperjaw", 56, 88);
-        setTextureOffset("head.lowerjaw", 0, 88);
-        setTextureOffset("head.horn", 28, 32);
-        setTextureOffset("foreLeg.thigh", 112, 0);
-        setTextureOffset("foreLeg.shank", 148, 0);
-        setTextureOffset("foreLeg.foot", 210, 0);
-        setTextureOffset("foreLeg.toe", 176, 0);
-        setTextureOffset("hindLeg.thigh", 112, 29);
-        setTextureOffset("hindLeg.shank", 152, 29);
-        setTextureOffset("hindLeg.foot", 180, 29);
-        setTextureOffset("hindLeg.toe", 215, 29);
-        setTextureOffset("neck.box", 112, 88);
-        setTextureOffset("neck.scale", 0, 0);
-        setTextureOffset("tail.box", 152, 88);
-        setTextureOffset("tail.scale", 0, 0);
-        setTextureOffset("tail.horn", 0, 117);
-        setTextureOffset("wingarm.bone", 0, 152);
-        setTextureOffset("wingarm.skin", 116, 232);
-        setTextureOffset("wingfinger.bone", 0, 172);
-        setTextureOffset("wingfinger.shortskin", -32, 224);
-        setTextureOffset("wingfinger.skin", -49, 176);
-        setTextureOffset("wingforearm.bone", 0, 164);
+        factory.defineTextures(this::setTextureOffset);
 
         buildBody();
         this.neck = factory.makeNeck(this);
-        buildHead();
+        this.head = factory.makeHead(this);
         this.tail = factory.makeTail(this);
         buildWing();
         this.foreLeg = factory.makeForeLeg(this);
         this.hindLeg = factory.makeHindLeg(this);
-    }
-
-    private void buildHead() {
-        head = new ModelPart(this, "head");
-        head.addBox("upperjaw",  -6, -1,   -8 + HEAD_OFS, 12,  5, 16);
-        head.addBox("mainhead", -8, -8,    6 + HEAD_OFS, 16, 16, 16); // 6
-        head.addBox("nostril",   -5, -3,   -6 + HEAD_OFS,  2,  2,  4);
-        head.mirror = true;
-        head.addBox("nostril",    3,  -3,  -6 + HEAD_OFS,  2,  2,  4);
-
-        buildHorn(false);
-        buildHorn(true);
-
-        this.head.addChild(this.jaw = new ModelRenderer(this, "head")
-                .addBox("lowerjaw", -6, 0, -16, 12, 4, 16)
-        );
-        this.jaw.setRotationPoint(0, 4, 8 + HEAD_OFS);
-    }
-
-    private void buildHorn(boolean mirror) {
-        int hornThick=3;
-        int hornLength=12;
-
-        float hornOfs=-(hornThick / 2f);
-
-        float hornPosX = -5;
-        float hornPosY = -8;
-        float hornPosZ = 0;
-
-        float hornRotX=MathX.toRadians(30);
-        float hornRotY=MathX.toRadians(-30);
-        float hornRotZ=0;
-
-        if (mirror) {
-            hornPosX*=-1;
-            hornRotY*=-1;
-        }
-
-        head.mirror=mirror;
-        ModelRenderer horn;
-        this.head.addChild(horn = new ModelRenderer(this, "head")
-                .addBox("horn", hornOfs, hornOfs, hornOfs, hornThick, hornThick, hornLength)
-        );
-        withRotation(horn, hornRotX, hornRotY, hornRotZ).setRotationPoint(hornPosX, hornPosY, hornPosZ);
     }
 
     private void buildBody() {
@@ -217,7 +135,7 @@ public class DragonModel extends ModelBase {
     }
 
     private void buildWing() {
-        wingArm=new ModelPart(this, "wingarm");
+        wingArm = new ModelRenderer(this, "wingarm");
         wingArm.setRotationPoint(-10, 5, 4);
         wingArm.addBox("bone", -28, -3, -3, 28, 6, 6);
         wingArm.addBox("skin", -28, 0, 2, 28, 0, 24);
@@ -246,39 +164,6 @@ public class DragonModel extends ModelBase {
         return finger;
     }
 
-    /**
-     * Applies the animations on the model. Called every frame before the model
-     * is rendered.
-     */
-    private void updateFromAnimator(DragonAnimator animator) {
-        // update offsets
-        offsetX = animator.getModelOffsetX();
-        offsetY = animator.getModelOffsetY();
-        offsetZ = animator.getModelOffsetZ();
-
-        // update pitch
-        pitch = animator.getBodyPitch(this.partialTicks);
-
-        // updateFromAnimator body parts
-        animHeadAndNeck(animator);
-        animTail(animator);
-        animWings(animator);
-        animLegs(animator);
-    }
-
-    protected void animHeadAndNeck(DragonAnimator animator) {
-        Segment[] segments = animator.neckSegments;
-        NeckPart neck = this.neck;
-        for (int i = 0; i < segments.length; ++i) {
-            neck.applySegment(segments[i]);
-            // hide the first and every second scale
-            neck.scale.isHidden = (i & 1) == 1 || i == 0;
-            neck.save(i);
-        }
-        this.head.applySegment(animator.head);
-        jaw.rotateAngleX = animator.getJawRotateAngleX();
-    }
-
     protected void animWings(DragonAnimator animator) {
         // apply angles
         wingArm.rotateAngleX = animator.getWingArmRotateAngleX();
@@ -294,18 +179,6 @@ public class DragonModel extends ModelBase {
             wingFinger[i].rotateAngleY = animator.getWingFingerRotateY(i);
         }
 
-    }
-
-    protected void animTail(DragonAnimator animator) {
-        Segment[] segments = animator.tailSegments;
-        final int TAIL_SEGMENTS = segments.length;
-        TailPart tail = this.tail;
-        for (int i = 0; i < segments.length; ++i) {
-            // display horns near the tip
-            tail.leftHorn.isHidden = tail.rightHorn.isHidden = !(i > TAIL_SEGMENTS - 7 && i < TAIL_SEGMENTS - 3);
-            tail.applySegment(segments[i]);
-            tail.save(i);
-        }
     }
 
     // left this in DragonModel because it isn't really needed by the server and is difficult to move.
@@ -387,10 +260,32 @@ public class DragonModel extends ModelBase {
     @Override
     public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entity) {
         if (entity instanceof ClientDragonEntity) {
-            DragonAnimator animator = ((ClientDragonEntity) entity).animator;
+            ClientDragonEntity dragon = (ClientDragonEntity) entity;
+            this.back.isHidden = dragon.isSaddled();
+            boolean flag = this.appearance.hasSideTailScale(dragon);
+            TailPart tail = this.tail;
+            tail.middleScale.showModel = !flag;
+            tail.leftScale.showModel = tail.rightScale.showModel = flag;
+            tail.leftHorn.showModel = tail.rightHorn.showModel = this.appearance.hasTailHorns(dragon);
+            DragonAnimator animator = dragon.animator;
             animator.setMovement(limbSwing, limbSwingAmount);
             animator.setLook(netHeadYaw, headPitch);
             animator.animate(this.partialTicks);
+
+            // update offsets
+            this.offsetX = animator.getModelOffsetX();
+            this.offsetY = animator.getModelOffsetY();
+            this.offsetZ = animator.getModelOffsetZ();
+
+            // update pitch
+            this.pitch = animator.getPitch();
+
+            // updateFromAnimator body parts
+            this.head.setupAnim(animator);
+            this.neck.setupAnim(animator);
+            this.tail.setupAnim(animator);
+            animWings(animator);
+            animLegs(animator);
         }
     }
 
@@ -399,18 +294,10 @@ public class DragonModel extends ModelBase {
      */
     @Override
     public void render(Entity entity, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
-        this.render(DragonRenderMode.DRAGON, (ClientDragonEntity) entity, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
+        this.render(DragonRenderMode.DRAGON, entity, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
     }
 
-    public void render(DragonRenderMode mode, ClientDragonEntity dragon, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
-        // update flags
-        back.isHidden = dragon.isSaddled();
-        boolean flag = this.appearance.hasSideTailScale(dragon);
-        TailPart tail = this.tail;
-        tail.middleScale.showModel = !flag;
-        tail.leftScale.showModel = tail.rightScale.showModel = flag;
-        tail.leftHorn.showModel = tail.rightHorn.showModel = this.appearance.hasTailHorns(dragon);
-        this.updateFromAnimator(dragon.animator);
+    public void render(DragonRenderMode mode, Entity dragon, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
         GlStateManager.pushMatrix();
         GlStateManager.translate(offsetX, offsetY, offsetZ);
         GlStateManager.rotate(-pitch, 1, 0, 0);

@@ -30,7 +30,7 @@ public class DMConfig {
     public static final DoubleEntry BASE_KNOCKBACK_RESISTANCE = new DoubleEntry("baseKnockbackResistance", 10.0);
     public static final DoubleEntry BASE_FOLLOW_RANGE = new DoubleEntry("baseFollowRange", 70.0);
     public static final DoubleEntry BASE_MOVEMENT_SPEED = new DoubleEntry("baseMovementSpeed", 0.4);
-    public static final DoubleEntry BASE_FLYING_SPEED = new DoubleEntry("baseFlyingSpeed", 0.9);
+    public static final DoubleEntry BASE_FLYING_SPEED = new DoubleEntry("baseFlyingSpeed", 0.75);
     public static final DoubleEntry BASE_SWIMMING_SPEED = new DoubleEntry("baseSwimmingSpeed", 5.0);
     public static final DoubleEntry BASE_STEP_HEIGHT = new DoubleEntry("baseStepHeight", 1.25);
     // GAMEPLAY:

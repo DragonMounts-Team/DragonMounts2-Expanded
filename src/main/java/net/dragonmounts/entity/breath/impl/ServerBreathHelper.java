@@ -17,7 +17,7 @@ public class ServerBreathHelper extends DragonBreathHelper<ServerDragonEntity> {
         this.updateBreathState(dragon.isUsingBreathWeapon());
         if (BreathState.SUSTAIN == this.currentBreathState) {
             Vec3d origin = dragon.getThroatPosition();
-            Vec3d lookDirection = dragon.getLook(1.0F);
+            Vec3d lookDirection = dragon.getLookVec();
             Vec3d endOfLook = origin.add(lookDirection.x, lookDirection.y, lookDirection.z);
             this.breathAffectedArea.continueBreathing(dragon.world, origin, endOfLook, dragon.lifeStageHelper.getLifeStage().power);
         }

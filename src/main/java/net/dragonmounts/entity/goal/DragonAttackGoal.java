@@ -31,9 +31,8 @@ public class DragonAttackGoal extends EntityAIBase {
     @Override
     public boolean shouldExecute() {
         ServerDragonEntity dragon = this.dragon;
-        int life = dragon.getTicksSinceSpawned();
-        if (this.lastCheck + 20 > life) return false;
-        this.lastCheck = life;
+        if (this.lastCheck + 20 > dragon.ticksExisted) return false;
+        this.lastCheck = dragon.ticksExisted;
         EntityLivingBase target = dragon.getAttackTarget();
         if (target == null || !target.isEntityAlive()) return false;
         this.path = dragon.getNavigator().getPathToEntityLiving(target);

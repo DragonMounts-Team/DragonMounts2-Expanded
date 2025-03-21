@@ -45,7 +45,7 @@ public class ClientBreathHelper extends DragonBreathHelper<ClientDragonEntity> {
             World level = dragon.world;
             BreathPower power = context.lifeStage.power;
             Vec3d origin = context.dragonHeadLocation;
-            Vec3d direction = dragon.getLook(1.0F);
+            Vec3d direction = dragon.getLookVec();
             if (this.tickCounter != previousTickCount + 1) {
                 previousDirection = direction;
                 previousOrigin = origin;

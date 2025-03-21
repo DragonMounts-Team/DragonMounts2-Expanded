@@ -1,6 +1,5 @@
 package net.dragonmounts.entity.breath;
 
-import net.dragonmounts.util.math.MathX;
 import net.minecraft.util.math.Vec3d;
 
 /**
@@ -39,11 +38,9 @@ public class BreathAffectedEntity implements IBreathEffectHandler {
    * @param increase the amount to increase the hit density by
    */
   public void addHitDensity(Vec3d beamDirection, float increase) {
-    Vec3d oldWeightedDirection = MathX.multiply(averageDirection.normalize(), hitDensity);
-    Vec3d addedWeightedDirection = MathX.multiply(beamDirection.normalize(), increase);
-    Vec3d newAverageDirection = oldWeightedDirection.add(addedWeightedDirection);
-    averageDirection = newAverageDirection;
-
+    averageDirection = averageDirection.normalize()
+            .scale(hitDensity)
+            .add(beamDirection.normalize().scale(increase));
     hitDensity += increase;
     timeSinceLastHit = 0;
   }

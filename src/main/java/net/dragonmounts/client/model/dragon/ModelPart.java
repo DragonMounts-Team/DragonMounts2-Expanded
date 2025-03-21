@@ -37,14 +37,6 @@ public class ModelPart extends ModelRenderer {
         super(base, name);
     }
 
-    public ModelPart(ModelBase base) {
-        this(base, null);
-    }
-
-    public ModelPart(ModelBase modelbase, int i, int j) {
-        super(modelbase, i, j);
-    }
-
     protected void compileDisplayList(float scale) {
         BufferBuilder vb = Tessellator.getInstance().getBuffer();
         displayList = GLAllocation.generateDisplayLists(1);
@@ -117,21 +109,21 @@ public class ModelPart extends ModelRenderer {
     }
 
     public void applySegment(Segment segment) {
-        this.rotateAngleX = takeInValid(segment.rotX, this.rotateAngleX);
-        this.rotateAngleY = takeInValid(segment.rotY, this.rotateAngleY);
-        this.rotateAngleZ = takeInValid(segment.rotZ, this.rotateAngleZ);
-        this.renderScaleX = takeInValid(segment.scaleX, this.renderScaleX);
-        this.renderScaleY = takeInValid(segment.scaleY, this.renderScaleY);
-        this.renderScaleZ = takeInValid(segment.scaleZ, this.renderScaleZ);
-        this.rotationPointX = takeInValid(segment.posX, this.rotationPointX);
-        this.rotationPointY = takeInValid(segment.posY, this.rotationPointY);
-        this.rotationPointZ = takeInValid(segment.posZ, this.rotationPointZ);
+        this.rotateAngleX = takeIfValid(segment.rotX, this.rotateAngleX);
+        this.rotateAngleY = takeIfValid(segment.rotY, this.rotateAngleY);
+        this.rotateAngleZ = takeIfValid(segment.rotZ, this.rotateAngleZ);
+        this.renderScaleX = takeIfValid(segment.scaleX, this.renderScaleX);
+        this.renderScaleY = takeIfValid(segment.scaleY, this.renderScaleY);
+        this.renderScaleZ = takeIfValid(segment.scaleZ, this.renderScaleZ);
+        this.rotationPointX = takeIfValid(segment.posX, this.rotationPointX);
+        this.rotationPointY = takeIfValid(segment.posY, this.rotationPointY);
+        this.rotationPointZ = takeIfValid(segment.posZ, this.rotationPointZ);
     }
 
     /**
      * @return neo if valid (not NaN), old otherwise
      */
-    public static float takeInValid(float neo, float old) {
+    public static float takeIfValid(float neo, float old) {
         return Float.isNaN(neo) ? old : neo;
     }
 }

@@ -222,8 +222,11 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
         }
 
         // update speed transition
-        boolean nearGround = dragon.getAltitude() < dragon.height * 2;
-        boolean speedFlag = speedEnt > speedMax || onGround || nearGround || dragon.getPassengers().size() > 1 || dragon.isUnHovered();
+        boolean speedFlag = speedEnt > speedMax ||
+                onGround ||
+                dragon.getAltitude() < dragon.height * 2 ||
+                dragon.getPassengers().size() > 1 ||
+                dragon.isUnHovered();
         float speedValue = 0.05f;
         speedTimer.add(speedFlag ? speedValue : -speedValue);
 
@@ -257,7 +260,6 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
     }
 
     protected void animHeadAndNeck() {
-        this.setLook(lookYaw, lookPitch);
         this.calculateHeadAndNeck();
         final float BITE_ANGLE = 0.72F;
         final float ROAR_ANGLE = 0.58F;
@@ -269,30 +271,30 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
     protected void animWings() {
         // move wings slower while sitting
         float aSpeed = sit > 0 ? 0.6f : 1;
-
+        float base = animBase;
         // animation speeds
-        float a1 = animBase * aSpeed * 0.35f;
-        float a2 = animBase * aSpeed * 0.5f;
-        float a3 = animBase * aSpeed * 0.75f;
+        float a1 = base * aSpeed * 0.35f;
+        float a2 = base * aSpeed * 0.5f;
+        float a3 = base * aSpeed * 0.75f;
 
         if (ground < 1) {
             // Hovering
-            wingArmFlutter[0] = 0.125f - MathHelper.cos(animBase) * 0.2f;
+            wingArmFlutter[0] = 0.125f - MathHelper.cos(base) * 0.2f;
             wingArmFlutter[1] = 0.25f;
-            wingArmFlutter[2] = (MathHelper.sin(animBase) + 0.125f) * 0.8f;
+            wingArmFlutter[2] = (MathHelper.sin(base) + 0.125f) * 0.8f;
 
             wingForearmFlutter[0] = 0;
             wingForearmFlutter[1] = -wingArmFlutter[1] * 2;
-            wingForearmFlutter[2] = -(MathHelper.sin(animBase + 2) + 0.5f) * 0.75f;
+            wingForearmFlutter[2] = -(MathHelper.sin(base + 2) + 0.5f) * 0.75f;
 
             // gliding
-            wingArmGlide[0] = -0.25f - MathHelper.cos(animBase * 2) * MathHelper.cos(animBase * 1.5f) * 0.04f;
+            wingArmGlide[0] = -0.25f - MathHelper.cos(base * 2) * MathHelper.cos(base * 1.5f) * 0.04f;
             wingArmGlide[1] = 0.25f;
-            wingArmGlide[2] = 0.35f + MathHelper.sin(animBase) * 0.05f;
+            wingArmGlide[2] = 0.35f + MathHelper.sin(base) * 0.05f;
 
             wingForearmGlide[0] = 0;
             wingForearmGlide[1] = -wingArmGlide[1] * 2;
-            wingForearmGlide[2] = -0.25f + (MathHelper.sin(animBase + 2) + 0.5f) * 0.05f;
+            wingForearmGlide[2] = -0.25f + (MathHelper.sin(base + 2) + 0.5f) * 0.05f;
         }
 
         if (ground > 0) {

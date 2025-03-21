@@ -40,7 +40,7 @@ public class LookAtOtherGoal extends EntityAIBase implements Predicate<EntityLiv
     @Override
     public boolean shouldExecute() {
         TameableDragonEntity dragon = this.dragon;
-        if (dragon.getRNG().nextFloat() >= this.probability) return false;
+        if (!dragon.onGround || dragon.getRNG().nextFloat() >= this.probability) return false;
         this.lookAt = dragon.getAttackTarget();
         if (this.lookAt != null) return true;
         this.lookAt = EntityUtil.findNearestEntityWithinAABB(

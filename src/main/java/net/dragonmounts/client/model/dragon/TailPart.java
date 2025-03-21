@@ -1,6 +1,7 @@
 package net.dragonmounts.client.model.dragon;
 
 import net.dragonmounts.util.DMUtils;
+import net.dragonmounts.util.Segment;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -41,9 +42,16 @@ public class TailPart extends ModelPart {
         return horn.addBox("horn", hornOfs, hornOfs, hornOfs, HORN_THICK, HORN_THICK, HORN_LENGTH);
     }
 
-    public void save(int index) {
-        if (index < 0 || index >= this.snapshots.length) throw new IndexOutOfBoundsException();
-        this.snapshots[index].save(this);
+    public void setupAnim(DragonAnimator animator) {
+        Segment[] segments = animator.tailSegments;
+        Snapshot[] snapshots = this.snapshots;
+        final int len = Math.min(snapshots.length, segments.length);
+        for (int i = 0; i < len; ++i) {
+            this.applySegment(segments[i]);
+            // display horns near the tip
+            this.leftHorn.isHidden = this.rightHorn.isHidden = !(i > len - 7 && i < len - 3);
+            snapshots[i].save(this);
+        }
     }
 
     @Override

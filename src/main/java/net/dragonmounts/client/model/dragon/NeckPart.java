@@ -1,6 +1,7 @@
 package net.dragonmounts.client.model.dragon;
 
 import net.dragonmounts.util.DMUtils;
+import net.dragonmounts.util.Segment;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
@@ -19,9 +20,16 @@ public class NeckPart extends ModelPart {
         this.addChild(this.scale = new ModelRenderer(base, name).addBox("scale", -1, -7, -3, 2, 4, 6));
     }
 
-    public void save(int index) {
-        if (index < 0 || index >= this.snapshots.length) throw new IndexOutOfBoundsException();
-        this.snapshots[index].save(this);
+    public void setupAnim(DragonAnimator animator) {
+        Segment[] segments = animator.neckSegments;
+        Snapshot[] snapshots = this.snapshots;
+        final int len = Math.min(snapshots.length, segments.length);
+        for (int i = 0; i < len; ++i) {
+            this.applySegment(segments[i]);
+            // hide the first and every second scale
+            this.scale.isHidden = (i & 1) == 1 || i == 0;
+            snapshots[i].save(this);
+        }
     }
 
     @Override

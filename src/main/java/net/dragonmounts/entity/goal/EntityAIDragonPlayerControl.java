@@ -49,7 +49,7 @@ public class EntityAIDragonPlayerControl extends EntityAIBase {
         TameableDragonEntity dragon = this.dragon;
         EntityPlayer rider = dragon.getControllingPlayer();
         assert rider != null;
-        Vec3d wp = rider.getLook(1.0F);
+        Vec3d wp = rider.getLookVec();
 
         double x = dragon.posX;
         double y = dragon.posY;

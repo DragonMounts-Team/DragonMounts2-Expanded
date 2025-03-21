@@ -12,6 +12,7 @@ package net.dragonmounts.entity.navigation;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -20,11 +21,6 @@ import net.minecraft.world.World;
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public class PathNavigateFlying extends PathNavigateSwimmer {
-	
-	public double posX;
-    public double posY;
-    public double posZ;
-
     public PathNavigateFlying(EntityLiving entitylivingIn, World worldIn) {
         super(entitylivingIn, worldIn);
     }
@@ -36,6 +32,11 @@ public class PathNavigateFlying extends PathNavigateSwimmer {
 
     @Override
     protected boolean canNavigate() {
-        return !isInLiquid();
+        return true;
+    }
+
+    @Override
+    public boolean canEntityStandOnPos(BlockPos pos) {
+        return true;
     }
 }

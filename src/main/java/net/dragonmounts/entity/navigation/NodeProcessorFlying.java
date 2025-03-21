@@ -9,14 +9,16 @@
  */
 package net.dragonmounts.entity.navigation;
 
+import net.dragonmounts.util.MutableBlockPosEx;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.pathfinding.SwimNodeProcessor;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IBlockAccess;
+
+import javax.annotation.Nullable;
 
 /**
  * Based on SwimNodeProcessor but for air blocks.
@@ -24,51 +26,46 @@ import net.minecraft.util.math.MathHelper;
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public class NodeProcessorFlying extends SwimNodeProcessor {
-
-    /**
-     * Returns PathPoint for given coordinates
-     */
-    @Override
-    public PathPoint getPathPointToCoords(double x, double y, double target) {
-        return openPoint(MathHelper.floor(x - (entity.width / 2.0)),MathHelper.floor(y + 0.5),MathHelper.floor(target - (entity.width / 2.0)));
-    }
-
-    @Override
-    public int findPathOptions(PathPoint[] pathOptions, PathPoint currentPoint, PathPoint targetPoint, float maxDistance) {
-        int i = 0;
-
+    public int findPathOptions(PathPoint[] options, PathPoint start, PathPoint dest, float maxDistance) {
+        int len = 0;
         for (EnumFacing facing : EnumFacing.values()) {
-            PathPoint point = getSafePoint(entity,currentPoint.x + facing.getXOffset(),currentPoint.y + facing.getYOffset(),currentPoint.z + facing.getZOffset());
-
-            if (point != null && !point.visited && point.distanceTo(targetPoint) < maxDistance) {
-                pathOptions[i++] = point;
+            PathPoint node = this.getAirNode(
+                    start.x + facing.getXOffset(),
+                    start.y + facing.getYOffset(),
+                    start.z + facing.getZOffset()
+            );
+            if (node != null && !node.visited && node.distanceTo(dest) < maxDistance) {
+                options[len++] = node;
             }
         }
-
-        return i;
+        return len;
     }
 
-    /**
-     * Returns a point that the entity can safely move to
-     */
-    private PathPoint getSafePoint(Entity entityIn, int x, int y, int z) {
-        BlockPos pos = new BlockPos(x, y, z);
+    @Nullable
+    private PathPoint getAirNode(int x, int y, int z) {
+        return this.getType(x, y, z) == PathNodeType.WALKABLE ? this.openPoint(x, y, z) : null;
+    }
 
-        entitySizeX = MathHelper.floor(entityIn.width + 1);
-        entitySizeY = MathHelper.floor(entityIn.height + 1);
-        entitySizeZ = MathHelper.floor(entityIn.width + 1);
-
-        for (int ix = 0; ix < entitySizeX; ++ix) {
-            for (int iy = 0; iy < entitySizeY; ++iy) {
-                for (int iz = 0; iz < entitySizeZ; ++iz) {
-                    IBlockState blockState = blockaccess.getBlockState(pos.add(ix, iy, iz));
-                    if (blockState.getMaterial() != Material.AIR) {
-                        return null;
-                    }
+    private PathNodeType getType(int x, int y, int z) {
+        MutableBlockPosEx pos = new MutableBlockPosEx(x, y, z);
+        for (int i = 0; i < this.entitySizeX; ++i) {
+            for (int j = 0; j < this.entitySizeY; ++j) {
+                for (int k = 0; k < this.entitySizeZ; ++k) {
+                    Material material = this.blockaccess.getBlockState(pos.with(x + i, y + j, z + k)).getMaterial();
+                    if (material.isSolid() || material.isLiquid()) return PathNodeType.BLOCKED;
                 }
             }
         }
+        return PathNodeType.WALKABLE;
+    }
 
-        return openPoint(x, y, z);
+    @Override
+    public PathNodeType getPathNodeType(IBlockAccess level, int x, int y, int z, EntityLiving entity, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
+        return PathNodeType.WALKABLE;
+    }
+
+    @Override
+    public PathNodeType getPathNodeType(IBlockAccess level, int x, int y, int z) {
+        return PathNodeType.WALKABLE;
     }
 }

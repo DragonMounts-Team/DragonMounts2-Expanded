@@ -264,14 +264,14 @@ public class DebugOverlay {
         text.setColor(WHITE);
 
         PathNavigate nav = dragon.getNavigator();
-        PathNavigateGround pathNavigateGround = null;
+        PathNavigateGround ground = null;
         if (nav instanceof PathNavigateGround) {
-            pathNavigateGround = (PathNavigateGround) nav;
+            ground = (PathNavigateGround) nav;
         }
 
         text.println("Search range: " + nav.getPathSearchRange());
-        text.println("Can swim: " + (pathNavigateGround == null ? "N/A" : pathNavigateGround.getCanSwim()));
-        text.println("Break doors: " + (pathNavigateGround == null ? "N/A" : pathNavigateGround.getEnterDoors()));
+        text.println("Can swim: " + (ground == null ? "N/A" : ground.getCanSwim()));
+        text.println("Break doors: " + (ground == null ? "N/A" : ground.getEnterDoors()));
         text.println("No path: " + nav.noPath());
 
         Path path = nav.getPath();

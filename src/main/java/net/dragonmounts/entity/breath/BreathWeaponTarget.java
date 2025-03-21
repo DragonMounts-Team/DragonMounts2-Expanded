@@ -127,7 +127,7 @@ public class BreathWeaponTarget
   public static BreathWeaponTarget fromMovingObjectPosition(RayTraceResult movingObjectPosition, EntityPlayer entityPlayer)
   {
     if (movingObjectPosition == null) {
-      return (entityPlayer == null) ? null : targetDirection(entityPlayer.getLook(1.0F));
+      return (entityPlayer == null) ? null : targetDirection(entityPlayer.getLookVec());
     }
     switch (movingObjectPosition.typeOfHit) {
       case BLOCK: {
@@ -149,7 +149,7 @@ public class BreathWeaponTarget
         return targetEntity(movingObjectPosition.entityHit);
       }
       case MISS: {
-        return (entityPlayer == null) ? null : targetDirection(entityPlayer.getLook(1.0F));
+        return (entityPlayer == null) ? null : targetDirection(entityPlayer.getLookVec());
       }
       default: {
         LogUtil.once(Level.ERROR, "Unknown typeOfHit:" + movingObjectPosition.typeOfHit);

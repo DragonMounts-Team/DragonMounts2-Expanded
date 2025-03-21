@@ -50,7 +50,7 @@ public class CarriageItem extends Item {
         float f5 = -MathHelper.cos(-f1 * f9);
         RayTraceResult hit = level.rayTraceBlocks(pos, pos.add(f4 * f5 * 5, MathHelper.sin(-f1 * f9) * 5, f3 * f5 * 5), true);
         if (hit == null) return new ActionResult<>(EnumActionResult.PASS, stack);
-        Vec3d look = player.getLook(1.0F);
+        Vec3d look = player.getLookVec();
         boolean flag = false;
         for (Entity entity : level.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().expand(look.x * 5, look.y * 5, look.z * 5).grow(1.0D))) {
             if (entity.canBeCollidedWith() && entity.getEntityBoundingBox().grow(entity.getCollisionBorderSize()).contains(pos)) {

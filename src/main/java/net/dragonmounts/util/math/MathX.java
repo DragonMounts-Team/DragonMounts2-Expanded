@@ -144,13 +144,6 @@ public abstract class MathX {
         return a * (1 - mu2) + b * mu2;
     }
 
-    /**
-     * Calculate a Vec3d with a given multiplier
-     */
-    public static Vec3d multiply(Vec3d source, double multiplier) {
-        return new Vec3d(source.x * multiplier, source.y * multiplier, source.z * multiplier);
-    }
-
     public final static double MINIMUM_SIGNIFICANT_DIFFERENCE = 1e-3;
 
     public static boolean isApproximatelyEqual(double x1, double x2) {
@@ -176,10 +169,12 @@ public abstract class MathX {
      * @return interpolated vector
      */
     public static Vec3d interpolateVec(Vec3d start, Vec3d end, float fraction) {
-        return start == end ? end : new Vec3d(
-                start.x * (1 - fraction) + end.x * fraction,
-                start.y * (1 - fraction) + end.y * fraction,
-                start.z * (1 - fraction) + end.z * fraction
+        if (start == end) return end;
+        final float factor = 1.0F - fraction;
+        return new Vec3d(
+                start.x * factor + end.x * fraction,
+                start.y * factor + end.y * fraction,
+                start.z * factor + end.z * fraction
         );
     }
 
