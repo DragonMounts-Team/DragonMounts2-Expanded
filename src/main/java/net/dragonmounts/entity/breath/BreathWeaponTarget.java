@@ -344,7 +344,7 @@ public class BreathWeaponTarget
         if (entity == null) {
           destination = null;
         } else {
-          destination = entity.getPositionVector().add(0, entity.getEyeHeight() / 2.0, 0);
+          destination = entity.getPositionVector().add(0, entity.getEyeHeight() * 0.5, 0);
         }
         break;
       }

@@ -131,7 +131,7 @@ public class NodeLineSegment {
         cornersInside+=isPointWithinNodeLineSegment(aabb.maxX, aabb.minY, aabb.maxZ) ? 1 : 0;
         cornersInside+=isPointWithinNodeLineSegment(aabb.maxX, aabb.maxY, aabb.minZ) ? 1 : 0;
         cornersInside+=isPointWithinNodeLineSegment(aabb.maxX, aabb.maxY, aabb.maxZ) ? 1 : 0;
-        return cornersInside * totalDensity / 8.0F;
+        return cornersInside * totalDensity * 0.125F;
     }
 
     /**

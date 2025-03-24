@@ -3,6 +3,7 @@ package net.dragonmounts.util;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
+import java.util.function.IntFunction;
 import java.util.function.Supplier;
 
 public class DMUtils {
@@ -16,9 +17,16 @@ public class DMUtils {
         return id == null ? type + ".unregistered_sadface" : type + '.' + id.getNamespace() + '.' + id.getPath().replace('/', '.');
     }
 
-    public static <T> T[] makeArray(T[] array, Supplier<T> factory) {
+    public static <T> T[] makeArray(T[] array, Supplier<? extends T> factory) {
         for (int i = 0; i < array.length; ++i) {
             array[i] = factory.get();
+        }
+        return array;
+    }
+
+    public static <T> T[] makeArray(T[] array, IntFunction<? extends T> factory) {
+        for (int i = 0; i < array.length; ++i) {
+            array[i] = factory.apply(i);
         }
         return array;
     }

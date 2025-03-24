@@ -28,9 +28,13 @@ public class LegPart extends ModelRenderer {
         public float footRotX;
         public float toeRotX;
 
-        @Override
         public void save(LegPart part) {
-            super.save(part);
+            this.rotationPointX = takeIfValid(part.rotationPointX, this.rotationPointX);
+            this.rotationPointY = takeIfValid(part.rotationPointY, this.rotationPointY);
+            this.rotationPointZ = takeIfValid(part.rotationPointZ, this.rotationPointZ);
+            this.rotateAngleX = takeIfValid(part.rotateAngleX, this.rotateAngleX);
+            this.rotateAngleY = takeIfValid(part.rotateAngleY, this.rotateAngleY);
+            this.rotateAngleZ = takeIfValid(part.rotateAngleZ, this.rotateAngleZ);
             this.shankRotX = part.shank.rotateAngleX;
             this.footRotX = part.foot.rotateAngleX;
             this.toeRotX = part.toe.rotateAngleX;

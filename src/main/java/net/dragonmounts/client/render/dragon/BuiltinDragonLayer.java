@@ -65,7 +65,7 @@ public enum BuiltinDragonLayer implements IDragonLayer {
                 //lower x++ higher x--
                 GlStateManager.translate(0.7F, 0.0, Interpolation.smoothStep(-2.6F, -0.6F, animator.getSpeed())); // all of it is get speed or one was pitch?
                 // higher y-- lower y++
-                GlStateManager.translate(0, Interpolation.smoothStep(0.2F, animator.getModelOffsetY() + 1.2F, animator.getSpeed()), 0);
+                GlStateManager.translate(0, Interpolation.smoothStep(0.2F, model.offsetY + 1.2F, animator.getSpeed()), 0);
                 GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
                 GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
                 GlStateManager.rotate(-pitch, 0.0F, 0.0F, 1.0F);
@@ -78,7 +78,7 @@ public enum BuiltinDragonLayer implements IDragonLayer {
                 //lower x++ higher x--
                 GlStateManager.translate(-0.7F, 0.0, Interpolation.smoothStep(-2.6F, -0.6F, animator.getSpeed()));
                 // higher y-- lower y++
-                GlStateManager.translate(0, Interpolation.smoothStep(0.2F, animator.getModelOffsetY() + 1.2F, animator.getSpeed()), 0);
+                GlStateManager.translate(0, Interpolation.smoothStep(0.2F, model.offsetY + 1.2F, animator.getSpeed()), 0);
                 GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
                 GlStateManager.rotate(-180.0F, 0.0F, 0.0F, 1.0F);
                 GlStateManager.rotate(pitch, 0.0F, 0.0F, 1.0F);
@@ -89,8 +89,8 @@ public enum BuiltinDragonLayer implements IDragonLayer {
                 GlStateManager.pushMatrix();
                 model.body.postRender(0.0625F);
                 GlStateManager.translate(-0.4F, -1.7F, 1.7F);
-                GlStateManager.translate(0, Interpolation.smoothStep(2.9F, animator.getModelOffsetY() + 1.7F, animator.getSpeed()), 0);
-                GlStateManager.translate(0, 0, Interpolation.smoothStep(-2.3F, animator.getModelOffsetZ() + 1.0F, animator.getSpeed()));
+                GlStateManager.translate(0, Interpolation.smoothStep(2.9F, model.offsetY + 1.7F, animator.getSpeed()), 0);
+                GlStateManager.translate(0, 0, Interpolation.smoothStep(-2.3F, model.offsetZ + 1.0F, animator.getSpeed()));
                 GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
                 GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
                 GlStateManager.rotate(pitch, 1.0F, 0.0F, 0.0F);
@@ -101,8 +101,8 @@ public enum BuiltinDragonLayer implements IDragonLayer {
                 GlStateManager.pushMatrix();
                 model.body.postRender(0.0625F);
                 GlStateManager.translate(0.4F, -1.7F, 1.7F);
-                GlStateManager.translate(0, Interpolation.smoothStep(2.9F, animator.getModelOffsetY() + 1.7F, animator.getSpeed()), 0);
-                GlStateManager.translate(0, 0, Interpolation.smoothStep(-2.3F, animator.getModelOffsetZ() + 1.0F, animator.getSpeed()));
+                GlStateManager.translate(0, Interpolation.smoothStep(2.9F, model.offsetY + 1.7F, animator.getSpeed()), 0);
+                GlStateManager.translate(0, 0, Interpolation.smoothStep(-2.3F, model.offsetZ + 1.0F, animator.getSpeed()));
                 GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
                 GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
                 GlStateManager.rotate(pitch, 1.0F, 0.0F, 0.0F);

@@ -184,8 +184,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     }
 
     public boolean canFly() {
-        // eggs can't fly
-        return !isEgg() && !isChild();
+        return this.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE);
     }
 
     /**
@@ -837,7 +836,9 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
 
     @Override
     protected ResourceLocation getLootTable() {
-        return !isTamed() && !isEgg() || !isChild() ? this.getVariant().type.lootTable : null;
+        return this.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)
+                ? this.getVariant().type.lootTable
+                : null;
     }
 
     public boolean canShare() {

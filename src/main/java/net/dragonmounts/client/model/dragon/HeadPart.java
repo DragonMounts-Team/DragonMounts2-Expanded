@@ -4,7 +4,7 @@ import net.dragonmounts.util.Segment;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
-import static net.dragonmounts.client.model.dragon.ModelPart.takeIfValid;
+import static net.dragonmounts.client.model.dragon.PartSnapshot.takeIfValid;
 
 public class HeadPart extends ModelRenderer {
     public final ModelRenderer jaw;

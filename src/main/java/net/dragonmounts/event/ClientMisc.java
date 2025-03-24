@@ -85,7 +85,7 @@ public class ClientMisc {
             final long NANO_SEC_PER_SEC = 1000L * 1000L * 1000L;
             long cyclePosition = System.nanoTime() % (GLOW_CYCLE_PERIOD_SECONDS * NANO_SEC_PER_SEC);
             double cyclePosRadians = 2 * Math.PI * cyclePosition / (GLOW_CYCLE_PERIOD_SECONDS * NANO_SEC_PER_SEC);
-            final float BRIGHTNESS_MIDPOINT = (MIN_GLOW_BRIGHTNESS + MAX_GLOW_BRIGHTNESS) / 2.0F;
+            final float BRIGHTNESS_MIDPOINT = (MIN_GLOW_BRIGHTNESS + MAX_GLOW_BRIGHTNESS) * 0.5F;
             final float BRIGHTNESS_AMPLITUDE = (MAX_GLOW_BRIGHTNESS - BRIGHTNESS_MIDPOINT);
             int brightness = MathHelper.clamp((int) (255 * (BRIGHTNESS_MIDPOINT + BRIGHTNESS_AMPLITUDE * MathHelper.sin((float) cyclePosRadians))), 0, 255);
             return ((brightness & 0xFF) << 16) | ((brightness & 0xFF) << 8) | (brightness & 0xFF);

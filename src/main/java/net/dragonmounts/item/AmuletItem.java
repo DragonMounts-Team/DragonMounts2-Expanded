@@ -119,7 +119,6 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
         if (data.hasKey("OwnerName")) {
             tooltips.add(I18n.format("tooltip.dragonmounts.owner", TextFormatting.GOLD + data.getString("OwnerName")));
         }
-        tooltips.add(ClientUtil.translateToLocal("tooltip.dragonmounts.amulet.usage"));
     }
 
     @Nonnull

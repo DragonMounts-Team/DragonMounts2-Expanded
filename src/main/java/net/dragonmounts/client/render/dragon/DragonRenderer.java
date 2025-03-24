@@ -56,7 +56,7 @@ public class DragonRenderer extends RenderLiving<ClientDragonEntity> {
         EntityEnderCrystal crystal = dragon.healingEnderCrystal;
         if (crystal != null) {
             this.bindTexture(RenderDragon.ENDERCRYSTAL_BEAM_TEXTURES);
-            float f = MathHelper.sin((crystal.ticksExisted + partialTicks) * 0.2F) / 2.0F + 0.5F;
+            float f = MathHelper.sin((crystal.ticksExisted + partialTicks) * 0.2F) * 0.5F + 0.5F;
             float l = 1.0F - partialTicks;
             RenderDragon.renderCrystalBeams(x, y, z, partialTicks, dragon.posX + (dragon.prevPosX - dragon.posX) * l, dragon.posY + (dragon.prevPosY - dragon.posY) * l, dragon.posZ + (dragon.prevPosZ - dragon.posZ) * l, dragon.ticksExisted, crystal.posX, (f * f + f) * 0.2F + crystal.posY, crystal.posZ);
         }

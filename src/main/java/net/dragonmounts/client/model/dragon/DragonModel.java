@@ -37,17 +37,14 @@ public class DragonModel extends ModelBase {
 
     // model parts
     public final HeadPart head;
-    public final NeckPart neck;
-    public final TailPart tail;
+    public final ICachedPart neck;
+    public final ICachedPart tail;
     public final LegPart foreLeg;
     public final LegPart hindLeg;
-    public ModelRenderer body;
-    public ModelRenderer back;
-    public ModelRenderer chest;
-    public ModelRenderer saddle;
-    public ModelRenderer wingArm;
-    public ModelRenderer wingForearm;
-    public final ModelRenderer[] wingFinger = new ModelRenderer[4];
+    public final BodyPart body;
+    public final WingPart wing;
+    public final ModelRenderer chest;
+    public final ModelRenderer saddle;
 
     public float offsetX;
     public float offsetY;
@@ -98,87 +95,17 @@ public class DragonModel extends ModelBase {
         textureHeight=256;
         this.appearance = appearance;
         factory.defineTextures(this::setTextureOffset);
-
-        buildBody();
-        this.neck = factory.makeNeck(this);
         this.head = factory.makeHead(this);
+        this.neck = factory.makeNeck(this);
+        this.body = factory.makeBody(this);
+        this.body.addChild(this.chest = factory.makeChest(this));
+        this.chest.showModel = false;
+        this.body.addChild(this.saddle = factory.makeSaddle(this));
+        this.saddle.showModel = false;
+        this.wing = factory.makeWing(this);
         this.tail = factory.makeTail(this);
-        buildWing();
         this.foreLeg = factory.makeForeLeg(this);
         this.hindLeg = factory.makeHindLeg(this);
-    }
-
-    private void buildBody() {
-        this.body = new ModelRenderer(this, "body");
-        this.body.addBox("body", -12, 0, -16, 24, 24, 64)
-                .addBox("scale", -1, -6, 10, 2, 6, 12)
-                .addBox("scale", -1, -6, 30, 2, 6, 12)
-                .setRotationPoint(0, 4, 8);
-        this.body.addChild(this.back = new ModelRenderer(this, "body")
-                .addBox("scale", -1, -6, -10, 2, 6, 12)
-        );
-        this.body.addChild(this.saddle = new ModelRenderer(this, "saddle")
-                .addBox("cushion", -7, -2, -15, 15, 3, 20)
-                .addBox("tie", 12, 0, -14, 1, 14, 2) // left
-                .addBox("tie", -13, 0, -14, 1, 10, 2) // right
-                .addBox("metal", 12, 14, -15, 1, 5, 4) // left
-                .addBox("metal", -13, 10, -15, 1, 5, 4) // right
-                .addBox("front", -3, -3, -14, 6, 1, 2)
-                .addBox("back", -6, -4, 2, 13, 2, 2)
-        );
-        this.saddle.showModel = false;
-        this.body.addChild(this.chest = new ModelRenderer(this, "chest")
-                .addBox("left", 12, 0, 21, 4, 12, 12)
-                .addBox("right", -16, 0, 21, 4, 12, 12)
-        );
-        this.chest.showModel = false;
-    }
-
-    private void buildWing() {
-        wingArm = new ModelRenderer(this, "wingarm");
-        wingArm.setRotationPoint(-10, 5, 4);
-        wingArm.addBox("bone", -28, -3, -3, 28, 6, 6);
-        wingArm.addBox("skin", -28, 0, 2, 28, 0, 24);
-
-        wingForearm = new ModelRenderer(this, "wingforearm");
-        wingForearm.setRotationPoint(-28, 0, 0);
-        wingForearm.addBox("bone", -48, -2, -2, 48, 4, 4);
-        wingArm.addChild(wingForearm);
-
-        wingFinger[0]=buildWingFinger(false);
-        wingFinger[1]=buildWingFinger(false);
-        wingFinger[2]=buildWingFinger(false);
-        wingFinger[3]=buildWingFinger(true);
-    }
-
-    private ModelRenderer buildWingFinger(boolean small) {
-        ModelRenderer finger = new ModelRenderer(this, "wingfinger");
-        finger.setRotationPoint(-47, 0, 0);
-        finger.addBox("bone", -70, -1, -1, 70, 2, 2);
-        if (small) {
-            finger.addBox("shortskin", -70, 0, 1, 70, 0, 32);
-        } else {
-            finger.addBox("skin", -70, 0, 1, 70, 0, 48);
-        }
-        wingForearm.addChild(finger);
-        return finger;
-    }
-
-    protected void animWings(DragonAnimator animator) {
-        // apply angles
-        wingArm.rotateAngleX = animator.getWingArmRotateAngleX();
-        wingArm.rotateAngleY = animator.getWingArmRotateAngleY();
-        wingArm.rotateAngleZ = animator.getWingArmRotateAngleZ();
-        wingForearm.rotateAngleX = animator.getWingForearmRotateAngleX();
-        wingForearm.rotateAngleY = animator.getWingForearmRotateAngleY();
-        wingForearm.rotateAngleZ = animator.getWingForearmRotateAngleZ();
-
-        // set wing finger angles
-        for (int i=0; i < wingFinger.length; i++) {
-            wingFinger[i].rotateAngleX = animator.getWingFingerRotateX(i);
-            wingFinger[i].rotateAngleY = animator.getWingFingerRotateY(i);
-        }
-
     }
 
     // left this in DragonModel because it isn't really needed by the server and is difficult to move.
@@ -261,30 +188,16 @@ public class DragonModel extends ModelBase {
     public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entity) {
         if (entity instanceof ClientDragonEntity) {
             ClientDragonEntity dragon = (ClientDragonEntity) entity;
-            this.back.isHidden = dragon.isSaddled();
-            boolean flag = this.appearance.hasSideTailScale(dragon);
-            TailPart tail = this.tail;
-            tail.middleScale.showModel = !flag;
-            tail.leftScale.showModel = tail.rightScale.showModel = flag;
-            tail.leftHorn.showModel = tail.rightHorn.showModel = this.appearance.hasTailHorns(dragon);
             DragonAnimator animator = dragon.animator;
             animator.setMovement(limbSwing, limbSwingAmount);
             animator.setLook(netHeadYaw, headPitch);
-            animator.animate(this.partialTicks);
-
-            // update offsets
-            this.offsetX = animator.getModelOffsetX();
-            this.offsetY = animator.getModelOffsetY();
-            this.offsetZ = animator.getModelOffsetZ();
-
-            // update pitch
-            this.pitch = animator.getPitch();
-
+            animator.animate(this);
             // updateFromAnimator body parts
             this.head.setupAnim(animator);
             this.neck.setupAnim(animator);
+            this.body.setupAnim(animator);
+            this.wing.setupAnim(animator);
             this.tail.setupAnim(animator);
-            animWings(animator);
             animLegs(animator);
         }
     }
@@ -310,12 +223,12 @@ public class DragonModel extends ModelBase {
         GlStateManager.pushMatrix();
         GlStateManager.enableCull();
         GlStateManager.cullFace(GlStateManager.CullFace.FRONT);
-        wingArm.render(scale);
+        this.wing.render(scale);
         // mirror following wing
         GlStateManager.scale(-1, 1, 1);
         // switch to back face culling
         GlStateManager.cullFace(GlStateManager.CullFace.BACK);
-        wingArm.render(scale);
+        this.wing.render(scale);
         GlStateManager.disableCull();
         GlStateManager.popMatrix();
     }

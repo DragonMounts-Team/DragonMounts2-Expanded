@@ -31,12 +31,6 @@ public abstract class VariantAppearance {
 
     public abstract DragonModel getModel(@Nullable ClientDragonEntity dragon);
 
-    @Deprecated
-    public abstract boolean hasTailHorns(TameableDragonEntity dragon);
-
-    @Deprecated
-    public abstract boolean hasSideTailScale(TameableDragonEntity dragon);
-
     public abstract ResourceLocation getBody(@Nullable ClientDragonEntity dragon);
 
     public abstract ResourceLocation getGlow(@Nullable ClientDragonEntity dragon);

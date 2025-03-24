@@ -147,9 +147,9 @@ public class EntityUtil {
     public static ObjectArrayList<Pair<EnumFacing, AxisAlignedBB>> moveAndResize(Entity entity, double dx, double dy, double dz, float newWidth, float newHeight) {
         entity.world.profiler.startSection("move and resize (dm)");
         AxisAlignedBB entityAABB = entity.getEntityBoundingBox();
-        double wDXplus = (newWidth - entity.width) / 2.0;
-        double wDYplus = (newHeight - entity.height) / 2.0;
-        double wDZplus = (newWidth - entity.width) / 2.0;
+        double wDXplus = (newWidth - entity.width) * 0.5;
+        double wDYplus = (newHeight - entity.height) * 0.5;
+        double wDZplus = (newWidth - entity.width) * 0.5;
         double wDXneg = -wDXplus;
         double wDYneg = -wDYplus;
         double wDZneg = -wDZplus;
@@ -207,9 +207,9 @@ public class EntityUtil {
         entityAABB = entityAABB.offset(0, 0, dz);
         entity.setEntityBoundingBox(entityAABB);
 
-        entity.posX = (entityAABB.minX + entityAABB.maxX) / 2.0;
+        entity.posX = (entityAABB.minX + entityAABB.maxX) * 0.5;
         entity.posY = entityAABB.minY;
-        entity.posZ = (entityAABB.minZ + entityAABB.maxZ) / 2.0;
+        entity.posZ = (entityAABB.minZ + entityAABB.maxZ) * 0.5;
 
         entity.collidedHorizontally = desiredDX != dx || desiredDZ != dz;
         entity.collidedVertically = desiredDY != dy;

@@ -35,26 +35,14 @@ public abstract class MathX {
      */
     private static final float RADIANS_TO_DEGREES = 180.F / PI_F;
 
-    // float degrees to radians conversion
+    /// convert degrees to radians
     public static float toRadians(float angdeg) {
         return angdeg * DEGREES_TO_RADIANS;
     }
 
-    // float radians to degrees conversion
+    /// convert radians to degrees
     public static float toDegrees(float angrad) {
         return angrad * RADIANS_TO_DEGREES;
-    }
-
-    // normalizes a float degrees angle to between +180 and -180
-    public static float normDeg(float a) {
-        a %= 360;
-        if (a >= 180) {
-            a -= 360;
-        }
-        if (a < -180) {
-            a += 360;
-        }
-        return a;
     }
 
     /**
@@ -66,9 +54,11 @@ public abstract class MathX {
      * @param threeSigma three times the standard deviation of the distribution
      */
     public static double getTruncatedGaussian(Random rand, double mean, double threeSigma) {
-        double rawValue = rand.nextGaussian();
-        rawValue = MathHelper.clamp(rawValue, -3.0, +3.0);
-        return mean + rawValue * threeSigma / 3.0;
+        return mean + MathHelper.clamp(
+                rand.nextGaussian(),
+                -3.0,
+                +3.0
+        ) * threeSigma / 3.0;
     }
 
     @SuppressWarnings("ManualMinMaxCalculation")
@@ -77,7 +67,7 @@ public abstract class MathX {
     }
 
     public static float clampedRotate(float target, float center, float range) {
-        return center + MathHelper.clamp(normDeg(target - center), -range, range);
+        return center + MathHelper.clamp(MathHelper.wrapDegrees(target - center), -range, range);
     }
 
     /**
@@ -85,7 +75,7 @@ public abstract class MathX {
      * @return a + (b - a) * x
      */
     public static float lerp(float a, float b, float x) {
-        return a * (1 - x) + b * x;
+        return a + (b - a) * x;
     }
 
     /**
@@ -93,7 +83,7 @@ public abstract class MathX {
      * @return a + (b - a) * x
      */
     public static double lerp(double a, double b, double x) {
-        return a * (1 - x) + b * x;
+        return a + (b - a) * x;
     }
 
     /**
@@ -116,16 +106,18 @@ public abstract class MathX {
         }
 
         if (x <= 0) {
-            System.arraycopy(a, 0, c, 0, a.length);
-            return;
-        }
-        if (x >= 1) {
-            System.arraycopy(b, 0, c, 0, a.length);
+            System.arraycopy(a, 0, c, 0, c.length);
             return;
         }
 
-        for (int i = 0; i < c.length; i++) {
-            c[i] = slerp(a[i], b[i], x);
+        if (x >= 1) {
+            System.arraycopy(b, 0, c, 0, c.length);
+            return;
+        }
+
+        x = x * x * (3.0F - 2.0F * x);
+        for (int i = 0; i < c.length; ++i) {
+            c[i] = lerp(a[i], b[i], x);
         }
     }
 
@@ -140,7 +132,7 @@ public abstract class MathX {
             return b;
         }
 
-        double mu2 = (1 - Math.cos(x * Math.PI)) / 2.0;
+        double mu2 = 0.5 * (1 - Math.cos(x * Math.PI));
         return a * (1 - mu2) + b * mu2;
     }
 

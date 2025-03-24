@@ -8,13 +8,21 @@ public interface IModelFactory {
 
     HeadPart makeHead(ModelBase base);
 
-    NeckPart makeNeck(ModelBase base);
+    ICachedPart makeNeck(ModelBase base);
 
-    TailPart makeTail(ModelBase base);
+    BodyPart makeBody(ModelBase base);
+
+    WingPart makeWing(ModelBase base);
+
+    ICachedPart makeTail(ModelBase base);
 
     LegPart makeForeLeg(ModelBase base);
 
     LegPart makeHindLeg(ModelBase base);
 
     ModelRenderer makeHorn(ModelBase base, HeadPart head, boolean mirror);
+
+    ModelRenderer makeChest(ModelBase base);
+
+    ModelRenderer makeSaddle(ModelBase base);
 }

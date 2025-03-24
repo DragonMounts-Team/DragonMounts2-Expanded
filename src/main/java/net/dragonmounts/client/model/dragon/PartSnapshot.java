@@ -1,5 +1,6 @@
 package net.dragonmounts.client.model.dragon;
 
+import net.dragonmounts.util.Segment;
 import net.minecraft.client.model.ModelRenderer;
 
 public class PartSnapshot<T extends ModelRenderer> {
@@ -12,21 +13,6 @@ public class PartSnapshot<T extends ModelRenderer> {
     public float rotateAngleY;
     public float rotateAngleZ;
 
-    // misc meta data
-    public boolean hidden;
-    public boolean showModel;
-
-    public void save(T part) {
-        this.rotationPointX = part.rotationPointX;
-        this.rotationPointY = part.rotationPointY;
-        this.rotationPointZ = part.rotationPointZ;
-        this.rotateAngleX = part.rotateAngleX;
-        this.rotateAngleY = part.rotateAngleY;
-        this.rotateAngleZ = part.rotateAngleZ;
-        this.hidden = part.isHidden;
-        this.showModel = part.showModel;
-    }
-
     public void apply(T part) {
         part.rotationPointX = rotationPointX;
         part.rotationPointY = rotationPointY;
@@ -34,7 +20,21 @@ public class PartSnapshot<T extends ModelRenderer> {
         part.rotateAngleX = rotateAngleX;
         part.rotateAngleY = rotateAngleY;
         part.rotateAngleZ = rotateAngleZ;
-        part.isHidden = hidden;
-        part.showModel = showModel;
+    }
+
+    /**
+     * @return neo if valid (not NaN), old otherwise
+     */
+    public static float takeIfValid(float neo, float old) {
+        return Float.isNaN(neo) ? old : neo;
+    }
+
+    public static void save(Segment segment, PartSnapshot<?> snapshot) {
+        snapshot.rotationPointX = takeIfValid(segment.posX, snapshot.rotationPointX);
+        snapshot.rotationPointY = takeIfValid(segment.posY, snapshot.rotationPointY);
+        snapshot.rotationPointZ = takeIfValid(segment.posZ, snapshot.rotationPointZ);
+        snapshot.rotateAngleX = takeIfValid(segment.rotX, snapshot.rotateAngleX);
+        snapshot.rotateAngleY = takeIfValid(segment.rotY, snapshot.rotateAngleY);
+        snapshot.rotateAngleZ = takeIfValid(segment.rotZ, snapshot.rotateAngleZ);
     }
 }

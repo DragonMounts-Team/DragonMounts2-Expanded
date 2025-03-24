@@ -137,18 +137,14 @@ tooltip.dragonmounts.armor_effect_cooldown=CD: %ss
 tooltip.dragonmounts.armor_effect_fishing_luck=When the wearer is fishing, apply Luck I effect for 10s without cooldown
 tooltip.dragonmounts.armor_effect_piece_4=4-Piece Set:
 tooltip.dragonmounts.armor_effect_remaining_cooldown=Remaining CD: %ss
-# actually it is related to key binding
-tooltip.dragonmounts.whistle=Right Click an owned and tamed dragon to control it
-tooltip.dragonmounts.variation_orb=Used to change dragon's variant randomly
+tooltip.dragonmounts.whistle=Can direct the dragon bound to it
+tooltip.dragonmounts.variation_orb=Can change the variant of dragon randomly
 tooltip.dragonmounts.age=Age: %s
 tooltip.dragonmounts.name=Name: %s
 tooltip.dragonmounts.health=Health: %s
 tooltip.dragonmounts.owner=Owner: %s
-tooltip.dragonmounts.hard_shears=Used to get scales from dragons
-# actually it is related to key binding
-tooltip.dragonmounts.amulet.empty=Right Click to store a dragon and carry it
-# actually it is related to key binding
-tooltip.dragonmounts.amulet.usage=Right click on ground to summon
+tooltip.dragonmounts.hard_shears=Can shear scales from dragons
+tooltip.dragonmounts.amulet.empty=Can store a dragon
 tooltip.dragonmounts.carriage=Used to make dragons carry multiple passengers like a boat
 
 item.modifiers.equipped=When equipped:

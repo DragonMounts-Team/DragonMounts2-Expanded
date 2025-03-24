@@ -108,22 +108,24 @@ public class ModelPart extends ModelRenderer {
         }
     }
 
-    public void applySegment(Segment segment) {
-        this.rotateAngleX = takeIfValid(segment.rotX, this.rotateAngleX);
-        this.rotateAngleY = takeIfValid(segment.rotY, this.rotateAngleY);
-        this.rotateAngleZ = takeIfValid(segment.rotZ, this.rotateAngleZ);
-        this.renderScaleX = takeIfValid(segment.scaleX, this.renderScaleX);
-        this.renderScaleY = takeIfValid(segment.scaleY, this.renderScaleY);
-        this.renderScaleZ = takeIfValid(segment.scaleZ, this.renderScaleZ);
-        this.rotationPointX = takeIfValid(segment.posX, this.rotationPointX);
-        this.rotationPointY = takeIfValid(segment.posY, this.rotationPointY);
-        this.rotationPointZ = takeIfValid(segment.posZ, this.rotationPointZ);
-    }
+    public static class ScalableSnapshot extends PartSnapshot<ModelPart> {
+        public float renderScaleX = 1;
+        public float renderScaleY = 1;
+        public float renderScaleZ = 1;
 
-    /**
-     * @return neo if valid (not NaN), old otherwise
-     */
-    public static float takeIfValid(float neo, float old) {
-        return Float.isNaN(neo) ? old : neo;
+        @Override
+        public void apply(ModelPart part) {
+            super.apply(part);
+            part.renderScaleX = this.renderScaleX;
+            part.renderScaleY = this.renderScaleY;
+            part.renderScaleZ = this.renderScaleZ;
+        }
+
+        public static void saveScalable(Segment segment, ScalableSnapshot snapshot) {
+            save(segment, snapshot);
+            snapshot.renderScaleX = takeIfValid(segment.scaleX, snapshot.renderScaleX);
+            snapshot.renderScaleY = takeIfValid(segment.scaleY, snapshot.renderScaleY);
+            snapshot.renderScaleZ = takeIfValid(segment.scaleZ, snapshot.renderScaleZ);
+        }
     }
 }

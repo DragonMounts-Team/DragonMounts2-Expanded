@@ -92,7 +92,7 @@ class EntityBreathNode extends Entity {
     }
 
     public float getCurrentRadius() {
-        return breathNode.getCurrentDiameterOfEffect() / 2.0F;
+        return breathNode.getCurrentDiameterOfEffect() * 0.5F;
     }
 
     public float getCurrentIntensity() {
