@@ -79,6 +79,9 @@ public class HornedTailPart extends ModelPart implements ICachedPart {
         @Override
         public void apply(HornedTailPart part) {
             super.apply(part);
+            part.renderScaleX = this.renderScaleX;
+            part.renderScaleY = this.renderScaleY;
+            part.renderScaleZ = this.renderScaleZ;
             part.leftHorn.showModel = this.leftHornVisible;
             part.rightHorn.showModel = this.rightHornVisible;
         }
