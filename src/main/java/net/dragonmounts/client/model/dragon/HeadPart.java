@@ -6,7 +6,7 @@ import net.minecraft.client.model.ModelRenderer;
 
 import static net.dragonmounts.client.model.dragon.PartSnapshot.takeIfValid;
 
-public class HeadPart extends ModelRenderer {
+public class HeadPart extends ModelRenderer implements IModelPart {
     public final ModelRenderer jaw;
 
     public HeadPart(ModelBase base, String name, ModelRenderer jaw) {
@@ -14,6 +14,7 @@ public class HeadPart extends ModelRenderer {
         this.addChild(this.jaw = jaw);
     }
 
+    @Override
     public void setupAnim(DragonAnimator animator) {
         Segment segment = animator.head;
         this.rotateAngleX = takeIfValid(segment.rotX, this.rotateAngleX);

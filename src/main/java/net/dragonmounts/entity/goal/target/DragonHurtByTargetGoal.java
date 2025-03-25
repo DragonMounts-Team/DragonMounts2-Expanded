@@ -12,7 +12,7 @@ public class DragonHurtByTargetGoal extends EntityAITarget {
     private final TameableDragonEntity dragon;
 
     public DragonHurtByTargetGoal(TameableDragonEntity dragon) {
-        super(dragon, true, true);
+        super(dragon, true, false);
         this.dragon = dragon;
         this.setMutexBits(1);
     }

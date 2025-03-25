@@ -26,14 +26,14 @@ import static org.lwjgl.opengl.GL11.*;
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class ModelPart extends ModelRenderer {
+public class ScalablePart extends ModelRenderer {
     public float renderScaleX = 1;
     public float renderScaleY = 1;
     public float renderScaleZ = 1;
     protected boolean compiled;
     protected int displayList;
 
-    public ModelPart(ModelBase base, String name) {
+    public ScalablePart(ModelBase base, String name) {
         super(base, name);
     }
 
@@ -108,13 +108,13 @@ public class ModelPart extends ModelRenderer {
         }
     }
 
-    public static class ScalableSnapshot extends PartSnapshot<ModelPart> {
+    public static class ScalableSnapshot extends PartSnapshot<ScalablePart> {
         public float renderScaleX = 1;
         public float renderScaleY = 1;
         public float renderScaleZ = 1;
 
         @Override
-        public void apply(ModelPart part) {
+        public void apply(ScalablePart part) {
             super.apply(part);
             part.renderScaleX = this.renderScaleX;
             part.renderScaleY = this.renderScaleY;

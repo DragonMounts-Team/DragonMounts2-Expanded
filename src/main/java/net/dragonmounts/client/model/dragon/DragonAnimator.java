@@ -16,6 +16,7 @@ import net.dragonmounts.util.CircularBuffer;
 import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.LogUtil;
 import net.dragonmounts.util.Segment;
+import net.dragonmounts.util.math.Interpolation;
 import net.dragonmounts.util.math.LinearInterpolation;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.util.math.MathHelper;
@@ -66,19 +67,51 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
     private boolean onGround;
     public boolean saddled;
 
-    private float jawRotateAngleX;
-    private final float[] wingFingerRotateX;
     private final float[] wingFingerRotateY;
 
     // animation parameters
-    private final float[] wingArm = new float[3];
-    private final float[] wingForearm = new float[3];
     private final float[] wingArmFlutter = new float[3];
     private final float[] wingForearmFlutter = new float[3];
     private final float[] wingArmGlide = new float[3];
     private final float[] wingForearmGlide = new float[3];
     private final float[] wingArmGround = new float[3];
     private final float[] wingForearmGround = new float[3];
+
+    // X rotation angles for ground
+    // 1st dim - front, hind
+    // 2nd dim - thigh, crus, foot, toe
+    private static final float[][] xGroundStand = {{0.8f, -1.5f, 1.3f, 0}, {-0.3f, 1.5f, -0.2f, 0},};
+    private static final float[][] xGroundSit = {{0.3f, -1.8f, 1.8f, 0}, {-0.8f, 1.8f, -0.9f, 0},};
+
+    // X rotation angles for walking
+    // 1st dim - front, hind
+    // 2nd dim - animation keyframe
+    // 3rd dim - thigh, crus, foot, toe
+    private static final float[][][] GROUND_WALKING_FRAMES = {{
+            {0.4f, -1.4f, 1.3f, 0}, // move down and forward
+            {1.2f, -1.6f, 1.3f, 0}, // move back
+            {0.9f, -2.1f, 1.8f, 0.6f} // move up and forward
+    }, {
+            {0.1f, 1.2f, -0.5f, 0}, // move back
+            {-0.3f, 2.1f, -0.9f, 0.6f}, // move up and forward
+            {-0.7f, 1.4f, -0.2f, 0} // move down and forward
+    }};
+
+    // final X rotation angles for walking
+    private final float[] xGroundWalk2 = {0, 0, 0, 0};
+
+    // Y rotation angles for ground, thigh only
+    private static final float[] yGroundStand = {-0.25f, 0.25f};
+    private static final float[] yGroundSit = {0.1f, 0.35f};
+    private static final float[] yGroundWalk = {-0.1f, 0.1f};
+
+    // Y rotation angles for air, thigh only
+    private static final float[] yAirAll = {-0.1f, 0.1f};
+
+    // X rotation angles for air
+    // 1st dim - front, hind
+    // 2nd dim - thigh, crus, foot, toe
+    private final float[][] xAirAll = {{0, 0, 0, 0}, {0, 0, 0, 0}};
 
     private float wingArmRotateAngleX;
     private float wingArmRotateAngleY;
@@ -94,7 +127,6 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
 
     public DragonAnimator(ClientDragonEntity dragon) {
         super(dragon);
-        wingFingerRotateX = new float[WING_FINGERS];
         wingFingerRotateY = new float[WING_FINGERS];
         yawTrail.fill(0.0F);
         pitchTrail.fill(0.0F);
@@ -122,16 +154,21 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
         roar = roarTimer.get(partialTicks);
 
         animBase = anim * MathX.PI_F * 2;
-        cycleOfs = MathHelper.sin(animBase - 1) + 1;
-        cycleOfs = (cycleOfs * cycleOfs + cycleOfs * 2) * 0.05F;
+        float baseOffset = MathHelper.sin(animBase - 1) + 1;
+        cycleOfs = (baseOffset * baseOffset + baseOffset * 2) * 0.05F
+                // reduce up/down amplitude
+                * MathX.lerp(0.5f, 1, flutter) * MathX.lerp(1, 0.5f, ground);
 
-        // reduce up/down amplitude
-        cycleOfs *= MathX.lerp(0.5f, 1, flutter) * MathX.lerp(1, 0.5f, ground);
+        // animate head and neck
+        this.calculateHeadAndNeck();
+        model.head.setupAnim(this);
+        model.neck.setupAnim(this);
 
-        // updateFromAnimator body parts
-        animHeadAndNeck();
-        animTail(partialTicks);
-        animWings();
+        // animate tail
+        this.animTail(partialTicks);
+
+        this.animWings();
+        this.animLegs(model);
 
         // update offsets
         model.offsetX = 0.0F;
@@ -271,15 +308,6 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
         return walk;
     }
 
-    protected void animHeadAndNeck() {
-        this.calculateHeadAndNeck();
-        final float BITE_ANGLE = 0.72F;
-        final float ROAR_ANGLE = 0.58F;
-        final float BREATH_ANGLE = 0.67F;
-        jawRotateAngleX = (bite * BITE_ANGLE + breath * BREATH_ANGLE + roar * ROAR_ANGLE);
-        jawRotateAngleX += (1 - MathHelper.sin(animBase)) * 0.1f * flutter;
-    }
-
     protected void animWings() {
         // move wings slower while sitting
         float aSpeed = sit > 0 ? 0.6f : 1;
@@ -324,29 +352,29 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
             wingForearmGround[2] = 0;
         }
 
+        float[] wingRot = new float[3];
+        float[] armRot = new float[3];
         // interpolate between Fluttering and gliding
-        MathX.slerpArrays(wingArmGlide, wingArmFlutter, wingArm, flutter);
-        MathX.slerpArrays(wingForearmGlide, wingForearmFlutter, wingForearm, flutter);
+        MathX.slerpArrays(wingArmGlide, wingArmFlutter, wingRot, flutter);
+        MathX.slerpArrays(wingForearmGlide, wingForearmFlutter, armRot, flutter);
 
         // interpolate between flying and grounded
-        MathX.slerpArrays(wingArm, wingArmGround, wingArm, ground);
-        MathX.slerpArrays(wingForearm, wingForearmGround, wingForearm, ground);
+        MathX.slerpArrays(wingRot, wingArmGround, wingRot, ground);
+        MathX.slerpArrays(armRot, wingForearmGround, armRot, ground);
 
         // apply angles
-        wingArmRotateAngleX = wingArm[0];
-        wingArmRotateAngleY = wingArm[1] * MathHelper.cos(1 - speed);
-        wingArmRotateAngleZ = wingArm[2];
-        wingForearmRotateAngleX = wingForearm[0];
-        wingForearmRotateAngleY = wingForearm[1];
-        wingForearmRotateAngleZ = wingForearm[2];
+        wingArmRotateAngleX = wingRot[0];
+        wingArmRotateAngleY = wingRot[1] * MathHelper.cos(1 - speed);
+        wingArmRotateAngleZ = wingRot[2];
+        wingForearmRotateAngleX = armRot[0];
+        wingForearmRotateAngleY = armRot[1];
+        wingForearmRotateAngleZ = armRot[2];
 
         // set wing finger angles
-        float rotX = 0;
         float rotYOfs = MathHelper.sin(a1) * MathHelper.sin(a2) * 0.03f;
         float rotYMulti = 1;
 
         for (int i = 0; i < WING_FINGERS; ++i) {
-            wingFingerRotateX[i] = rotX += 0.005f; // reduce Z-fighting
             wingFingerRotateY[i] = MathX.slerp(UNFOLD_FINGER_ROT[i], FOLD_FINGER_ROT[i] + rotYOfs * rotYMulti, ground);
             rotYMulti -= 0.2f;
         }
@@ -409,6 +437,73 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
         }
     }
 
+    protected void animLegs(DragonModel model) {
+        // dangling legs for flying
+        float move = this.moveTime * 0.2F;
+        if (ground < 1) {
+            float footAirOfs = cycleOfs * 0.1f;
+            float footAirX = 0.75f + footAirOfs;
+
+            xAirAll[0][0] = 1.3f + footAirOfs;
+            xAirAll[0][1] = -(0.7f * speed + 0.1f + footAirOfs);
+            xAirAll[0][2] = footAirX;
+            xAirAll[0][3] = footAirX * 0.5f;
+
+            xAirAll[1][0] = footAirOfs + 0.6f;
+            xAirAll[1][1] = footAirOfs + 0.8f;
+            xAirAll[1][2] = footAirX;
+            xAirAll[1][3] = footAirX * 0.5f;
+        }
+
+        this.animLeg(model.foreLeg, move, 0, false);
+        this.animLeg(model.hindLeg, move, 1, false);
+        this.animLeg(model.foreLeg, move, 0, true);
+        this.animLeg(model.hindLeg, move, 1, true);
+    }
+
+    /**
+     * @param index fore: 0, hind: 1
+     */
+    protected void animLeg(LegPart leg, float move, int index, boolean left) {
+        // final X rotation angles for air
+        float[] xAir = xAirAll[index];
+        // interpolate between sitting and standing
+        float[] rot = new float[4];
+        MathX.slerpArrays(xGroundStand[index], xGroundSit[index], rot, this.sit);
+
+        // align the toes so they're always horizontal on the ground
+        rot[3] = -(rot[0] + rot[1] + rot[2]);
+
+        // apply walking cycle
+        float walk = this.walk;
+        if (walk > 0) {
+            // interpolate between the keyframes, based on the cycle
+            Interpolation.splineArrays(move, left, xGroundWalk2, GROUND_WALKING_FRAMES[index]);
+            // align the toes so they're always horizontal on the ground
+            xGroundWalk2[3] -= xGroundWalk2[0] + xGroundWalk2[1] + xGroundWalk2[2];
+
+            MathX.slerpArrays(rot, xGroundWalk2, rot, walk);
+        }
+
+        float yAir = yAirAll[index];
+        float yGround;
+
+        // interpolate between sitting and standing
+        yGround = MathX.slerp(yGroundStand[index], yGroundSit[index], this.sit);
+
+        // interpolate between standing and walking
+        yGround = MathX.slerp(yGround, yGroundWalk[index], walk);
+
+        // interpolate between flying and grounded
+        float ground = this.ground;
+        leg.rotateAngleY = MathX.slerp(yAir, yGround, ground);
+        leg.rotateAngleX = MathX.slerp(xAir[0], rot[0], ground);
+        leg.shank.rotateAngleX = MathX.slerp(xAir[1], rot[1], ground);
+        leg.foot.rotateAngleX = MathX.slerp(xAir[2], rot[2], ground);
+        leg.toe.rotateAngleX = MathX.slerp(xAir[3], rot[3], ground);
+        (left ? leg.left : leg.right).save(leg);
+    }
+
     @Deprecated
     public float getBodyPitch(float pt) {
         return this.getPitch();
@@ -421,35 +516,14 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
     }
 
     public float getJawRotateAngleX() {
-        return jawRotateAngleX;
-    }
-
-    public float getMoveTime() {
-        return moveTime;
+        final float BITE_ANGLE = 0.72F;
+        final float ROAR_ANGLE = 0.58F;
+        final float BREATH_ANGLE = 0.67F;
+        return (bite * BITE_ANGLE + breath * BREATH_ANGLE + roar * ROAR_ANGLE) + (1 - MathHelper.sin(animBase)) * 0.1f * flutter;
     }
 
     public float getSpeed() {
         return speed;
-    }
-
-    public float getAnimTime() {
-        return anim;
-    }
-
-    public float getGroundTime() {
-        return ground;
-    }
-
-    public float getSitTime() {
-        return sit;
-    }
-
-    public float getCycleOfs() {
-        return cycleOfs;
-    }
-
-    public float getWingFingerRotateX(int index) {
-        return wingFingerRotateX[index];
     }
 
     public float getWingFingerRotateY(int index) {

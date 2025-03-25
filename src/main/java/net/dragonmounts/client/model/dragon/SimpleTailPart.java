@@ -5,9 +5,9 @@ import net.dragonmounts.util.Segment;
 import net.minecraft.client.model.ModelBase;
 
 import static net.dragonmounts.client.model.dragon.DragonModel.VERTS_TAIL;
-import static net.dragonmounts.client.model.dragon.ModelPart.ScalableSnapshot.saveScalable;
+import static net.dragonmounts.client.model.dragon.ScalablePart.ScalableSnapshot.saveScalable;
 
-public class SimpleTailPart extends ModelPart implements ICachedPart {
+public class SimpleTailPart extends ScalablePart implements IModelPart {
     protected final ScalableSnapshot[] snapshots;
 
     public SimpleTailPart(ModelBase base, String name) {

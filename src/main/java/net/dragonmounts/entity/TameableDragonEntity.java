@@ -218,7 +218,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
      * Set the breathing flag of the entity.
      */
     public void setUsingBreathWeapon(boolean usingBreathWeapon) {
-        if (!this.isOldEnoughToBreathe()) {
+        if (!this.isOldEnoughToBreathe() || !this.breathHelper.canBreathe()) {
             usingBreathWeapon = false;
         }
         this.dataManager.set(DATA_BREATHING, usingBreathWeapon);

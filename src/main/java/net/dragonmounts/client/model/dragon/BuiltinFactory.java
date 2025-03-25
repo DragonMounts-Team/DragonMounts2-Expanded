@@ -1,5 +1,6 @@
 package net.dragonmounts.client.model.dragon;
 
+import net.dragonmounts.util.ITextureOffsetDefiner;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -11,7 +12,7 @@ public enum BuiltinFactory implements IModelFactory {
     DEFAULT,
     TAIL_HORNED {
         @Override
-        public ICachedPart makeTail(ModelBase base) {
+        public IModelPart makeTail(ModelBase base) {
             HornedTailPart tail = new HornedTailPart(base, "tail", HornedTailPart::makeDefaultedSnapshot);
             tail.addBox("box", -5, -5, -5, TAIL_SIZE, TAIL_SIZE, TAIL_SIZE);
             return tail;
@@ -19,7 +20,7 @@ public enum BuiltinFactory implements IModelFactory {
     },
     TAIL_SCALE_INCLINED {
         @Override
-        public ICachedPart makeTail(ModelBase base) {
+        public IModelPart makeTail(ModelBase base) {
             SimpleTailPart tail = new SimpleTailPart(base, "tail");
             float rot = MathX.toRadians(45);
             ModelRenderer scale = new ModelRenderer(base, "tail")
@@ -35,7 +36,7 @@ public enum BuiltinFactory implements IModelFactory {
     },
     SKELETON {
         @Override
-        public ICachedPart makeTail(ModelBase base) {
+        public IModelPart makeTail(ModelBase base) {
             HornedTailPart tail = new HornedTailPart(base, "tail", HornedTailPart::makeDefaultedSnapshot);
             tail.addBox("box", -5, -5, -5, TAIL_SIZE, TAIL_SIZE, TAIL_SIZE);
             return tail;
@@ -132,10 +133,10 @@ public enum BuiltinFactory implements IModelFactory {
     }
 
     @Override
-    public ICachedPart makeNeck(ModelBase base) {
+    public IModelPart makeNeck(ModelBase base) {
         NeckPart neck = new NeckPart(
-                new ModelPart(base, "neck"),
-                new ModelPart(base, "neck"),
+                new ScalablePart(base, "neck"),
+                new ScalablePart(base, "neck"),
                 // hide the first and every second scale
                 index -> (index & 1) == 0 || index != 0
         );
@@ -177,7 +178,7 @@ public enum BuiltinFactory implements IModelFactory {
     }
 
     @Override
-    public ICachedPart makeTail(ModelBase base) {
+    public IModelPart makeTail(ModelBase base) {
         SimpleTailPart tail = new SimpleTailPart(base, "tail");
         tail.addBox("box", -5, -5, -5, TAIL_SIZE, TAIL_SIZE, TAIL_SIZE)
                 .addBox("scale", -1, -8, -3, 2, 4, 6);

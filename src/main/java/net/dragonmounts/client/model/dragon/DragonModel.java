@@ -13,8 +13,6 @@ package net.dragonmounts.client.model.dragon;
 import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.render.dragon.DragonRenderMode;
 import net.dragonmounts.client.variant.VariantAppearance;
-import net.dragonmounts.util.math.Interpolation;
-import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -37,8 +35,8 @@ public class DragonModel extends ModelBase {
 
     // model parts
     public final HeadPart head;
-    public final ICachedPart neck;
-    public final ICachedPart tail;
+    public final IModelPart neck;
+    public final IModelPart tail;
     public final LegPart foreLeg;
     public final LegPart hindLeg;
     public final BodyPart body;
@@ -52,43 +50,6 @@ public class DragonModel extends ModelBase {
     public float pitch;
     public float partialTicks;
     public final VariantAppearance appearance;
-
-    // final X rotation angles for ground
-    private final float[] xGround = {0, 0, 0, 0};
-
-    // X rotation angles for ground
-    // 1st dim - front, hind
-    // 2nd dim - thigh, crus, foot, toe
-    private final float[][] xGroundStand = {{0.8f, -1.5f, 1.3f, 0}, {-0.3f, 1.5f, -0.2f, 0},};
-    private final float[][] xGroundSit = {{0.3f, -1.8f, 1.8f, 0}, {-0.8f, 1.8f, -0.9f, 0},};
-
-    // X rotation angles for walking
-    // 1st dim - animation keyframe
-    // 2nd dim - front, hind
-    // 3rd dim - thigh, crus, foot, toe
-    private final float[][][] xGroundWalk = {{{0.4f, -1.4f, 1.3f, 0}, // move down and forward
-            {0.1f, 1.2f, -0.5f, 0} // move back
-    }, {{1.2f, -1.6f, 1.3f, 0}, // move back
-            {-0.3f, 2.1f, -0.9f, 0.6f} // move up and forward
-    }, {{0.9f, -2.1f, 1.8f, 0.6f}, // move up and forward
-            {-0.7f, 1.4f, -0.2f, 0} // move down and forward
-    }};
-
-    // final X rotation angles for walking
-    private final float[] xGroundWalk2 = {0, 0, 0, 0};
-
-    // Y rotation angles for ground, thigh only
-    private final float[] yGroundStand = {-0.25f, 0.25f};
-    private final float[] yGroundSit = {0.1f, 0.35f};
-    private final float[] yGroundWalk = {-0.1f, 0.1f};
-
-    // X rotation angles for air
-    // 1st dim - front, hind
-    // 2nd dim - thigh, crus, foot, toe
-    private final float[][] xAirAll = {{0, 0, 0, 0}, {0, 0, 0, 0}};
-
-    // Y rotation angles for air, thigh only
-    private final float[] yAirAll = {-0.1f, 0.1f};
 
     public DragonModel(VariantAppearance appearance, IModelFactory factory) {
         textureWidth=256;
@@ -108,77 +69,6 @@ public class DragonModel extends ModelBase {
         this.hindLeg = factory.makeHindLeg(this);
     }
 
-    // left this in DragonModel because it isn't really needed by the server and is difficult to move.
-    protected void animLegs(DragonAnimator animator) {
-        // dangling legs for flying
-        float ground = animator.getGroundTime();
-        float speed = animator.getSpeed();
-        float walk = animator.getWalkTime();
-        float sit = animator.getSitTime();
-        float cycleOfs = animator.getCycleOfs();
-        float move = animator.getMoveTime() * 0.2F;
-        if (ground < 1) {
-            float footAirOfs=cycleOfs * 0.1f;
-            float footAirX=0.75f + cycleOfs * 0.1f;
-
-            xAirAll[0][0]=1.3f + footAirOfs;
-            xAirAll[0][1]=-(0.7f * speed + 0.1f + footAirOfs);
-            xAirAll[0][2]=footAirX;
-            xAirAll[0][3]=footAirX * 0.5f;
-
-            xAirAll[1][0]=footAirOfs + 0.6f;
-            xAirAll[1][1]=footAirOfs + 0.8f;
-            xAirAll[1][2]=footAirX;
-            xAirAll[1][3]=footAirX * 0.5f;
-        }
-
-        this.animLeg(this.foreLeg, ground, walk, sit, move, 0, false);
-        this.animLeg(this.hindLeg, ground, walk, sit, move, 1, false);
-        this.animLeg(this.foreLeg, ground, walk, sit, move, 0, true);
-        this.animLeg(this.hindLeg, ground, walk, sit, move, 1, true);
-    }
-
-    /**
-     * @param index fore: 0, hind: 1
-     */
-    protected void animLeg(LegPart leg, float ground, float walk, float sit, float move, int index, boolean left) {
-        //leg.rotationPointZ = index == 0 ? 4 : 46;
-        // final X rotation angles for air
-        float[] xAir = xAirAll[index];
-        // interpolate between sitting and standing
-        MathX.slerpArrays(xGroundStand[index], xGroundSit[index], xGround, sit);
-
-        // align the toes so they're always horizontal on the ground
-        xGround[3] = -(xGround[0] + xGround[1] + xGround[2]);
-
-        // apply walking cycle
-        if (walk > 0) {
-            // interpolate between the keyframes, based on the cycle
-            Interpolation.splineArrays(move, left, xGroundWalk2, xGroundWalk[0][index], xGroundWalk[1][index], xGroundWalk[2][index]);
-            // align the toes so they're always horizontal on the ground
-            xGroundWalk2[3] -= xGroundWalk2[0] + xGroundWalk2[1] + xGroundWalk2[2];
-
-            MathX.slerpArrays(xGround, xGroundWalk2, xGround, walk);
-        }
-
-        float yAir = yAirAll[index];
-        float yGround;
-
-        // interpolate between sitting and standing
-        yGround = MathX.slerp(yGroundStand[index], yGroundSit[index], sit);
-
-        // interpolate between standing and walking
-        yGround = MathX.slerp(yGround, yGroundWalk[index], walk);
-
-        // interpolate between flying and grounded
-        leg.rotateAngleY = MathX.slerp(yAir, yGround, ground);
-        leg.rotateAngleX = MathX.slerp(xAir[0], xGround[0], ground);
-        leg.shank.rotateAngleX = MathX.slerp(xAir[1], xGround[1], ground);
-        leg.foot.rotateAngleX = MathX.slerp(xAir[2], xGround[2], ground);
-        leg.toe.rotateAngleX = MathX.slerp(xAir[3], xGround[3], ground);
-        (left ? leg.left : leg.right).save(leg);
-    }
-
     @Override
     public void setLivingAnimations(EntityLivingBase entity, float moveTime, float moveSpeed, float partialTicks) {
         this.partialTicks = partialTicks;
@@ -193,12 +83,9 @@ public class DragonModel extends ModelBase {
             animator.setLook(netHeadYaw, headPitch);
             animator.animate(this);
             // updateFromAnimator body parts
-            this.head.setupAnim(animator);
-            this.neck.setupAnim(animator);
             this.body.setupAnim(animator);
             this.wing.setupAnim(animator);
             this.tail.setupAnim(animator);
-            animLegs(animator);
         }
     }
 

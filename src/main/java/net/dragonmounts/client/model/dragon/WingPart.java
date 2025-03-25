@@ -3,7 +3,7 @@ package net.dragonmounts.client.model.dragon;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
-public class WingPart extends ModelRenderer {
+public class WingPart extends ModelRenderer implements IModelPart {
     public static final int WING_FINGERS = 4;
     public final ModelRenderer forearm;
     protected final ModelRenderer[] fingers;
@@ -12,11 +12,15 @@ public class WingPart extends ModelRenderer {
         super(base, name);
         if (fingers.length != WING_FINGERS) throw new IllegalArgumentException();
         this.addChild(this.forearm = forearm);
-        for (ModelRenderer finger : this.fingers = fingers) {
+        this.fingers = fingers;
+        for (int i = 0; i < fingers.length; ++i) {
+            ModelRenderer finger = fingers[i];
+            finger.rotateAngleX = i * 0.005F; // reduce Z-fighting
             forearm.addChild(finger);
         }
     }
 
+    @Override
     public void setupAnim(DragonAnimator animator) {
         // apply angles
         this.rotateAngleX = animator.getWingArmRotateAngleX();
@@ -29,7 +33,6 @@ public class WingPart extends ModelRenderer {
         // set wing finger angles
         ModelRenderer[] fingers = this.fingers;
         for (int i = 0; i < fingers.length; ++i) {
-            fingers[i].rotateAngleX = animator.getWingFingerRotateX(i);
             fingers[i].rotateAngleY = animator.getWingFingerRotateY(i);
         }
     }

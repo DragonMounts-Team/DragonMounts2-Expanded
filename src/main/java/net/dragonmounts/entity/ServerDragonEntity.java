@@ -66,7 +66,7 @@ import static net.minecraft.entity.SharedMonsterAttributes.FOLLOW_RANGE;
 
 public class ServerDragonEntity extends TameableDragonEntity {
     public static final UUID FLYING_RANGE_UUID = UUID.fromString("26C6E399-2FB2-534B-8A0D-843015DA2C1F");
-    public static final AttributeModifier FLYING_RANGE_MODIFIER = new AttributeModifier(FLYING_RANGE_UUID, "Flying range bonus", 2.0D, Constants.AttributeModifierOperation.MULTIPLY).setSaved(false);
+    public static final AttributeModifier FLYING_RANGE_MODIFIER = new AttributeModifier(FLYING_RANGE_UUID, "Flying range bonus", 1.25, Constants.AttributeModifierOperation.MULTIPLY).setSaved(false);
     public final DragonHeadLocator<ServerDragonEntity> headLocator = new DragonHeadLocator<>(this);
     public final DragonReproductionHelper reproductionHelper = new DragonReproductionHelper(this);
     public boolean followOwner = true;
@@ -96,7 +96,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
         targets.addTask(2, new EntityAIOwnerHurtByTarget(this)); // mutex 1
         targets.addTask(3, new EntityAIOwnerHurtTarget(this)); // mutex 1
         targets.addTask(4, new DragonHurtByTargetGoal(this)); // mutex 1
-        targets.addTask(5, new EntityAINearestAttackableTarget<>(this, EntityLiving.class, 10, false, true, IMob.VISIBLE_MOB_SELECTOR));
+        targets.addTask(5, new EntityAINearestAttackableTarget<>(this, EntityLiving.class, 10, false, false, IMob.VISIBLE_MOB_SELECTOR));
         targets.addTask(6, new DragonHuntTargetGoal(this, false, new ClassPredicate<>(
                 EntitySheep.class,
                 EntityPig.class,
@@ -134,8 +134,8 @@ public class ServerDragonEntity extends TameableDragonEntity {
         tasks.addTask(1, new EntityAIDragonPlayerControl(this)); // mutex all
         tasks.addTask(2, this.getAISit()); // mutex 4+1
         tasks.addTask(2, new EntityAISwimming(this)); // mutex 4
-        tasks.addTask(3, new DragonDescendGoal(this, 0.25)); // mutex 1
-        tasks.addTask(5, new DragonAttackGoal(this, 1)); // mutex 2+1
+        tasks.addTask(3, new DragonAttackGoal(this, 1)); // mutex 2+1
+        tasks.addTask(4, new DragonDescendGoal(this, 0.25)); // mutex 1
         tasks.addTask(6, new EntityAIDragonFollowOwnerElytraFlying(this)); // mutex 2+1
         tasks.addTask(7, new DragonFollowOwnerGoal(this, 1, 18, 14)); // mutex 2+1
         tasks.addTask(9, new EntityAIMoveTowardsRestriction(this, 1)); // mutex 1
