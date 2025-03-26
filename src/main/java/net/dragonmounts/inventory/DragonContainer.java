@@ -29,9 +29,9 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 		} else {
 			whistle.openInventory(player);
 		}
-		this.addSlotToContainer(this.whistle = new WhistleSlot(whistle, this, 160, -16));
+		this.addSlotToContainer(this.whistle = new WhistleSlot(whistle, this, 8, 8));
 		// location of the slot for the saddle in the dragon inventory
-		this.addSlotToContainer(new Slot(inventory, 33, 8, 18) {
+		this.addSlotToContainer(new Slot(inventory, 33, 156, 18) {
 			public boolean isItemValid(ItemStack stack) {
 				return !stack.isEmpty() && stack.getItem() == Items.SADDLE && !this.getHasStack();
 			}
@@ -53,7 +53,7 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 		});
 
 		// location of the slot for chest in the dragon inventory
-		this.addSlotToContainer(new Slot(inventory, 31, 8, 36) {
+		this.addSlotToContainer(new Slot(inventory, 31, 156, 36) {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
 				return DragonInventory.isValidChest(stack) && !this.getHasStack();
@@ -71,7 +71,7 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 		});
 
 		// location of the slot for armor in the dragon inventory
-		this.addSlotToContainer(new Slot(inventory, 32, 8, 54) {
+		this.addSlotToContainer(new Slot(inventory, 32, 156, 54) {
 			public boolean isItemValid(ItemStack stack) {
 				return !stack.isEmpty() && stack.getItem() instanceof DragonArmorItem && dragon.isOldEnoughToBreathe();
 			}
@@ -79,7 +79,7 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 
 		// Build Banner Slots
 		for (int b = 0; b < 4; ++b) {
-			this.addSlotToContainer(new Slot(inventory, 27 + b, b == 1 || b == 2 ? 134 : 152, b < 2 ? 36 : 18) {
+			this.addSlotToContainer(new Slot(inventory, 27 + b, b == 1 || b == 2 ? 282 : 300, b < 2 ? 36 : 18) {
 				public boolean isItemValid(ItemStack stack) {
 					return !stack.isEmpty() && stack.getItem() == Items.BANNER && !this.getHasStack();
 				}
@@ -94,7 +94,7 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 		// Build Chest Inventory Slots
 		for (int k = 0; k < 3; ++k) {
 			for (int l = 0; l < 9; ++l) {
-				this.addSlotToContainer(new Slot(inventory, l + k * 9, 8 + l * 18, 75 + k * 18) {
+				this.addSlotToContainer(new Slot(inventory, l + k * 9, 156 + l * 18, 75 + k * 18) {
 
 					@SideOnly(Side.CLIENT)
 					public boolean isEnabled() {
@@ -109,16 +109,16 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 		 * Player Inventory Slots within Dragon GUI
 		 */
 		// Offhand
-		this.addSlotToContainer(new Slot(player.inventory, 40, -14, 190));
+		this.addSlotToContainer(new Slot(player.inventory, 40, 134, 190));
 		// Build Inventory Slots
 		for (int j = 0; j < 3; ++j) {
 			for (int k = 0; k < 9; ++k) {
-				this.addSlotToContainer(new Slot(player.inventory, k + j * 9 + 9, 8 + k * 18, 150 + j * 18 - 18));
+				this.addSlotToContainer(new Slot(player.inventory, k + j * 9 + 9, 156 + k * 18, 150 + j * 18 - 18));
 			}
 		}
 		// Build hotbar slots
 		for (int j = 0; j < 9; ++j) {
-			this.addSlotToContainer(new Slot(player.inventory, j, 8 + j * 18, 190));
+			this.addSlotToContainer(new Slot(player.inventory, j, 156 + j * 18, 190));
 		}
 	}
 

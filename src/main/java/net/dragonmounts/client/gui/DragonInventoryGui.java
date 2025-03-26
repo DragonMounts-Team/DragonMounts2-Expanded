@@ -19,6 +19,7 @@ import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -38,7 +39,10 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Wh
     public static final ResourceLocation LOCK_OPEN = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/lock_open.png");
     public static final ResourceLocation LOCK_LOCKED = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/lock_locked.png");
     public static final ResourceLocation LOCK_DISABLED = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/lock_disabled.png");
-    private static final ResourceLocation INVENTORY = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/dragon.png");
+    /// 176 x 214
+    private static final ResourceLocation INVENTORY = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/dragon_inventory.png");
+    /// 147 x 214
+    private static final ResourceLocation PANEL = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/dragon_panel.png");
     private static final ResourceLocation HUNGER_FULL = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/hunger_full.png");
     private final DragonContainer<ClientDragonEntity> container;
     private final ClientDragonEntity dragon;
@@ -62,23 +66,23 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Wh
         this.container = container;
         this.allowUserInput = true;
         this.ySize = 214;
-        this.xSize = 176;
+        this.xSize = 324;
     }
 
     @Override
     public void initGui() {
         super.initGui();
         Keyboard.enableRepeatEvents(true);
-        this.nameField = new GuiTextField(31, this.fontRenderer, this.guiLeft, this.guiTop - 12, 103, 12);
+        int x = this.guiLeft + 9, y = this.guiTop;
+        this.nameField = new GuiTextField(31, this.fontRenderer, x + 23, y + 12, 104, 12);
         this.nameField.setTextColor(-1);
         this.nameField.setDisabledTextColour(-1);
         this.nameField.setEnableBackgroundDrawing(false);
         this.nameField.setMaxStringLength(35);
         this.buttonList.clear();
-        int x = this.width / 2 + 45, y = this.height / 2 - 54;
         this.stand = ClientUtil.translateToLocal("gui.dragonmounts.stand");
-        this.buttonList.add(this.order = new GuiButton(DragonStates.SITTING_STATE, x, y, 18, 20, this.sit = ClientUtil.translateToLocal("gui.dragonmounts.sit")));
-        this.buttonList.add(this.lock = new LockButton(DragonStates.LOCKED_STATE, x + 18, y, 18, 20));
+        this.buttonList.add(this.order = new GuiButton(DragonStates.SITTING_STATE, x, y + 164, 18, 20, this.sit = ClientUtil.translateToLocal("gui.dragonmounts.sit")));
+        this.buttonList.add(this.lock = new LockButton(DragonStates.LOCKED_STATE, x, y + 185, 18, 20));
         this.updateScreen();
         this.container.whistle.listener = this;
     }
@@ -131,33 +135,33 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Wh
         DragonMounts.NETWORK_WRAPPER.sendToServer(new CRenameWhistlePacket(text));
     }
 
-    /**
-     * Draw the foreground layer for the GuiContainer (everything in front of the
-     * items)
-     */
+    @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        this.fontRenderer.drawString(this.name, 8, 6, this.color);
-        GlStateManager.pushMatrix();
-        GlStateManager.scale(0.6, 0.6, 0.6);
-        this.fontRenderer.drawString(this.hunger, 60, 106, 0Xe99e0c);
-        GlStateManager.popMatrix();
+        this.fontRenderer.drawString(this.name, 156, 6, this.color);
+        this.fontRenderer.drawString(this.hunger, 20, 33, 0xE99E0C);
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(INVENTORY);
+        TextureManager manager = this.mc.getTextureManager();
+        manager.bindTexture(INVENTORY);
         int x = this.guiLeft, y = this.guiTop;
-        this.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize);
-        this.drawTexturedModalRect(x - 22, y + 184, 0, this.ySize, 25, 30);
+        int invStart = x + 148;
+        this.drawTexturedModalRect(invStart, y, 0, 0, 176, this.ySize);
         if (this.chested) {
-            this.drawTexturedModalRect(x, y + 73, 0, 130, 170, 55);
+            this.drawTexturedModalRect(invStart, y + 73, 0, 130, 170, 55);
         }
-        this.mc.getTextureManager().bindTexture(HUNGER_FULL);
-        drawModalRectWithCustomSizedTexture(x + 26, y + 60, 0.0F, 0.0F, 9, 9, 9, 9);
+        manager.bindTexture(PANEL);
+        this.drawTexturedModalRect(x, y, 0, 0, 151, this.ySize);
+        if (this.container.whistle.getHasStack()) {
+            this.drawTexturedModalRect(x + 29, y + 8, 0, this.ySize, 111, 16);
+        }
+        manager.bindTexture(HUNGER_FULL);
+        drawModalRectWithCustomSizedTexture(x + 10, y + 32, 0.0F, 0.0F, 9, 9, 9, 9);
         //draw dragon entity
         this.dragon.isInGui = true;
-        GuiInventory.drawEntityOnScreen(x + 90, y + 60, this.size, x + 125 - mouseX, y + 28 - mouseY, this.dragon);
+        GuiInventory.drawEntityOnScreen(invStart + 80, y + 60, this.size, invStart + 80 - mouseX, y + 28 - mouseY, this.dragon);
         this.dragon.isInGui = false;
     }
 
@@ -166,7 +170,7 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Wh
         int id = button.id;
         switch (button.id) {
             case DragonStates.SITTING_STATE:
-            case DragonStates.FOLLOWING_STATE:
+            case DragonStates.LOCKED_STATE:
                 DragonMounts.NETWORK_WRAPPER.sendToServer(new CDragonConfigPacket(this.dragon.getEntityId(), button.id));
                 break;
         }
@@ -193,12 +197,12 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Wh
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         super.drawScreen(mouseX, mouseY, partialTicks);
-        this.renderHoveredToolTip(mouseX, mouseY);
         if (this.container.whistle.getHasStack()) {
             GlStateManager.disableLighting();
             GlStateManager.disableBlend();
             this.nameField.drawTextBox();
         }
+        this.renderHoveredToolTip(mouseX, mouseY);
     }
 
     @Override
