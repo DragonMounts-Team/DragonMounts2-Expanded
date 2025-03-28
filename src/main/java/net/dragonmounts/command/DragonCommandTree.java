@@ -24,6 +24,7 @@ import java.util.List;
 public class DragonCommandTree extends CommandTreeBase {
     public DragonCommandTree() {
         super.addSubcommand(new TypeCommand());
+        super.addSubcommand(new SizeCommand());
         super.addSubcommand(new StageCommand());
         super.addSubcommand(new TameCommand());
         super.addSubcommand(new UnlockCommand());

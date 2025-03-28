@@ -108,8 +108,6 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 		/*
 		 * Player Inventory Slots within Dragon GUI
 		 */
-		// Offhand
-		this.addSlotToContainer(new Slot(player.inventory, 40, 134, 190));
 		// Build Inventory Slots
 		for (int j = 0; j < 3; ++j) {
 			for (int k = 0; k < 9; ++k) {

@@ -83,7 +83,7 @@ public class CameraHandler {
                 applyZoom(
                         entity,
                         true,
-                        ((TameableDragonEntity) vehicle).getScale(),
+                        ((TameableDragonEntity) vehicle).getAdjustedSize(),
                         event.getYaw(),
                         event.getPitch(),
                         event.getRenderPartialTicks()
@@ -94,7 +94,7 @@ public class CameraHandler {
                     applyZoom(
                             entity,
                             false,
-                            ((TameableDragonEntity) vehicle).getScale(),
+                            ((TameableDragonEntity) vehicle).getAdjustedSize(),
                             event.getYaw(),
                             event.getPitch(),
                             event.getRenderPartialTicks()

@@ -95,6 +95,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     protected static final DataParameter<ItemStack> DATA_ARMOR = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.ITEM_STACK);
     protected static final DataParameter<ItemStack> DATA_CHEST = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.ITEM_STACK);
     protected static final DataParameter<ItemStack> DATA_SADDLE = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.ITEM_STACK);
+    protected static final DataParameter<Float> DATA_BODY_SIZE = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.FLOAT);
     public final DragonInventory inventory = new DragonInventory(this);
     public final DragonVariantHelper variantHelper = new DragonVariantHelper(this);
     public final DragonLifeStageHelper lifeStageHelper = new DragonLifeStageHelper(this, DATA_TICKS_SINCE_CREATION);
@@ -146,6 +147,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         manager.register(DATA_ARMOR, ItemStack.EMPTY);
         manager.register(DATA_CHEST, ItemStack.EMPTY);
         manager.register(DATA_SADDLE, ItemStack.EMPTY);
+        manager.register(DATA_BODY_SIZE, 1.0F);
         manager.register(DATA_VARIANT, DragonVariants.ENDER_FEMALE);
         manager.register(DATA_TICKS_SINCE_CREATION, 0);
     }
@@ -452,7 +454,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
      * Returns the volume for a sound to play.
      */
     public float getVolume(SoundEvent sound) {
-        return MathHelper.clamp(getScale(), 0.8F, 1.4F);
+        return MathHelper.clamp(this.lifeStageHelper.getScale(), 0.8F, 1.4F);
     }
 
     /**
@@ -534,7 +536,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
      */
     @Override
     public float getRenderSizeModifier() {
-        return this.isChild() ? 2.0F * this.getScale() : this.getScale();
+        return this.isChild() ? 2.0F * this.getAdjustedSize() : this.getAdjustedSize();
     }
 
     /**
@@ -732,14 +734,11 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
      */
     @Override
     public void updatePassenger(Entity passenger) {
-        List<Entity> passengers = getPassengers();
-        int index = passengers.indexOf(passenger);
+        int index = this.getPassengers().indexOf(passenger);
         if (index == -1) return;
-        //getBreed().getAdultModelRenderScaleFactor() * getScale();
-        Vec3d position = this.getVariant().type.locatePassenger(index, this.isSitting(), this.getScale())
-                .rotateYaw(MathX.toRadians(-renderYawOffset))
-                .add(this.posX, this.posY + passenger.getYOffset(), this.posZ);
-        passenger.setPosition(position.x, position.y, position.z);
+        Vec3d position = this.getVariant().type.locatePassenger(index, this.isSitting(), this.getAdjustedSize())
+                .rotateYaw(MathX.toRadians(-renderYawOffset));
+        passenger.setPosition(position.x + this.posX, position.y + this.posY, position.z + this.posZ);
 
         // fix rider rotation
         if (index == 0 && passenger instanceof EntityPlayer) {
@@ -754,12 +753,13 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     /**
      * Public wrapper for protected final setScale(), used by DragonLifeStageHelper.
      */
-    public void applyScale(float scale) {
+    public void updateScale() {
         boolean onGround = this.onGround;
+        float scale = this.lifeStageHelper.getScale();
         this.stepHeight = 0.5F + scale * (float) DMConfig.BASE_STEP_HEIGHT.value;
         float width = this.width;
-        this.setScale(scale);
-        // workaround for a vanilla bug; the position is apparently not set correcty
+        this.setScale(MathHelper.clamp(scale * this.dataManager.get(DATA_BODY_SIZE), 0.04F, 1.25F));
+        // workaround for a vanilla bug; the position is apparently not set correctly
         // after changing the entity size, causing asynchronous server/client
         // positioning
         if (this.world.isRemote && this.width > width && !this.firstUpdate) {
@@ -769,8 +769,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     }
 
     /**
-     * The age value may be negative or positive or zero. If it's negative, it get's
-     * incremented on each tick, if it's positive, it get's decremented each tick.
+     * The age value may be negative or positive or zero.
      * Don't confuse this with EntityLiving.getAge. With a negative value the Entity
      * is considered a child.
      */
@@ -780,32 +779,21 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         return DragonLifeStage.ADULT == this.lifeStageHelper.getLifeStage() ? 0 : -1;
     }
 
-    /**
-     * The age value may be negative or positive or zero. If it's negative, it get's
-     * incremented on each tick, if it's positive, it get's decremented each tick.
-     * With a negative value the Entity is considered a child.
-     */
+    /// @see DragonLifeStageHelper
     @Override
-    public void setGrowingAge(int age) {
-        // managed by DragonLifeStageHelper, so this is a no-op
-    }
+    public void setGrowingAge(int age) {}
+
+    /// @see #updateScale()
+    @Override
+    public void setScaleForAge(boolean child) {}
 
     /**
-     * Sets the scale for an ageable entity according to the boolean parameter,
-     * which says if it's a child.
-     */
-    @Override
-    public void setScaleForAge(boolean child) {
-        // managed by DragonLifeStageHelper, so this is a no-op
-    }
-
-    /**
-     * Returns the size multiplier for the current age.
+     * Returns the body size multiplier for the current age.
      *
-     * @return scale
+     * @return body size
      */
-    public float getScale() {
-        return this.lifeStageHelper.getScale();
+    public float getAdjustedSize() {
+        return MathHelper.clamp(this.lifeStageHelper.getScale() * this.dataManager.get(DATA_BODY_SIZE), 0.04F, 1.25F);
     }
 
     public boolean isEgg() {
@@ -933,7 +921,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
             if (!this.firstUpdate && this.world.isRemote) {
                 Random random = this.rand;
                 World level = this.world;
-                for (int i = 0, count = 2 + (int) (this.getScale() * 18); i < count; ++i) {
+                for (int i = 0, count = 2 + (int) (this.lifeStageHelper.getScale() * 18); i < count; ++i) {
                     level.spawnParticle(
                             EnumParticleTypes.CLOUD,
                             this.posX + (random.nextDouble() - 0.5D) * this.width,
@@ -981,6 +969,8 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
                 this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_HORSE_SADDLE, SoundCategory.PLAYERS, 1F, 1F, false);
             }
             this.saddled = saddled;
+        } else if (DATA_BODY_SIZE.equals(key)) {
+            this.updateScale();
         }
     }
 

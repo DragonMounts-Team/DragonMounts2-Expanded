@@ -39,7 +39,7 @@ public class DragonBodyHelper extends EntityBodyHelper {
         float maximumHeadBodyAngleDifference = 90;
 
         // rotate instantly if flying, sitting or moving
-        if (dragon.isFlying() || dragon.isSitting() || dist > 0.0001) {
+        if (dragon.isUsingBreathWeapon() || dragon.isFlying() || dragon.isSitting() || dist > 0.0001) {
             dragon.renderYawOffset = dragon.rotationYaw;
             dragon.rotationYawHead = MathX.clampedRotate(dragon.rotationYawHead, dragon.renderYawOffset, maximumHeadBodyAngleDifference);
             prevRotationYawHead = dragon.rotationYawHead;

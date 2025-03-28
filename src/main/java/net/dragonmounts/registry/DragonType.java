@@ -112,7 +112,7 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
             default:
                 return new Vec3d(
                         0,
-                        sitting ? 3.4 * scale : 4.4 * scale,
+                        sitting ? 3.4 * scale : 4.5625 * scale - 0.5,
                         2.2 * scale
                 );
         }

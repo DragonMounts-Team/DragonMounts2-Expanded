@@ -20,7 +20,7 @@ public class TerraType extends DragonType {
         World level = dragon.world;
         if (BiomeDictionary.hasType(level.getBiome(dragon.getPosition()), BiomeDictionary.Type.MESA) && dragon.posY > level.getHeight() + 8 && dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {
             Random random = level.rand;
-            float s = dragon.getScale() * 1.2f;
+            float s = dragon.getAdjustedSize() * 1.2f;
             float h = dragon.height * s;
             float f = (dragon.width - 0.65F) * s;
             for (int i = 0; i < s; ++i) {

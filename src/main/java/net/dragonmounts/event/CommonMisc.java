@@ -33,7 +33,7 @@ public class CommonMisc {
             if (vehicle instanceof TameableDragonEntity) {
                 passenger.setPositionAndUpdate(
                         vehicle.posX,
-                        vehicle.posY - ((TameableDragonEntity) vehicle).getScale() * 0.2,
+                        vehicle.posY - ((TameableDragonEntity) vehicle).getAdjustedSize() * 0.2,
                         vehicle.posZ
                 );
             }

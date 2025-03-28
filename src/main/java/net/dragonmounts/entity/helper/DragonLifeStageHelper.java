@@ -65,12 +65,15 @@ public class DragonLifeStageHelper {
     }
 
     public void applyEntityAttributes() {
-        AbstractAttributeMap attributes = this.dragon.getAttributeMap();
+        TameableDragonEntity dragon = this.dragon;
+        AbstractAttributeMap attributes = dragon.getAttributeMap();
+        float health = dragon.getHealth() / dragon.getMaxHealth();
         double scale = this.getScale();
         double factor = MathHelper.clamp(scale, 0.1, 1);
         replaceAttributeModifier(attributes.getAttributeInstance(MAX_HEALTH), DRAGON_AEG_MODIFIER_ID, "Dragon size modifier", factor, 1, false);
         replaceAttributeModifier(attributes.getAttributeInstance(ATTACK_DAMAGE), DRAGON_AEG_MODIFIER_ID, "Dragon size modifier", factor, 1, false);
         replaceAttributeModifier(attributes.getAttributeInstance(ARMOR), DRAGON_AEG_MODIFIER_ID, "Dragon size modifier", MathHelper.clamp(scale, 0.1, 1.2), 1, false);
+        dragon.setHealth(health * dragon.getMaxHealth());
     }
 
     public void playEggCrackEffect() {
@@ -159,10 +162,8 @@ public class DragonLifeStageHelper {
             dragon.getNavigator().clearPath();
             // update AI
             ((ServerDragonEntity) dragon).setupTasks();
-            float factor = dragon.getHealth() / dragon.getMaxHealth();
             // update attribute modifier
-            applyEntityAttributes();
-            dragon.setHealth(factor * dragon.getMaxHealth());
+            this.applyEntityAttributes();
             if (DragonLifeStage.EGG == lifeStage) {
                 dragon.variantHelper.resetPoints(null);
             }
@@ -258,7 +259,7 @@ public class DragonLifeStageHelper {
         if (this.isEgg()) {
             updateEgg();
         }
-        dragon.applyScale(getScale());
+        dragon.updateScale();
     }
 
     public void sync() {

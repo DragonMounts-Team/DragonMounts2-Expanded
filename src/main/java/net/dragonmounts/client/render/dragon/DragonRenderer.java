@@ -159,7 +159,7 @@ public class DragonRenderer extends RenderLiving<ClientDragonEntity> {
     @Override
     protected void preRenderCallback(ClientDragonEntity dragon, float partialTicks) {
         // a fully grown dragon is larger than the model by this amount
-        float scale = dragon.getScale() * dragon.getVariant().appearance.renderScale;
+        float scale = dragon.getAdjustedSize() * dragon.getVariant().appearance.renderScale;
         GlStateManager.scale(scale, scale, scale);
     }
 

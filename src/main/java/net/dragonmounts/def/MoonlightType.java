@@ -21,7 +21,7 @@ public class MoonlightType extends DragonType {
         World level = dragon.world;
         if (dragon.posY > level.getHeight() && !level.isDaytime() && dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {
             Random random = level.rand;
-            float s = dragon.getScale() * 1.2f;
+            float s = dragon.getAdjustedSize() * 1.2f;
             float f = (dragon.width - 0.65F) * s;
             level.spawnParticle(
                     EnumParticleTypes.FIREWORKS_SPARK,

@@ -158,7 +158,8 @@ public class ServerDragonEntity extends TameableDragonEntity {
         nbt.setInteger("BreathCollected", this.collectBreathCooldown);
         nbt.setBoolean("unhovered", this.isUnHovered());
         nbt.setBoolean("followyaw", this.followYaw());
-        nbt.setInteger("hunger", this.getHunger());
+        nbt.setInteger("Hunger", this.getHunger());
+        nbt.setFloat("Size", this.dataManager.get(DATA_BODY_SIZE));
         nbt.setBoolean("ylocked", this.isYLocked());
         nbt.setBoolean("growthpause", this.isGrowthPaused());
         nbt.setBoolean("AllowOtherPlayers", this.allowedOtherPlayers());
@@ -178,7 +179,8 @@ public class ServerDragonEntity extends TameableDragonEntity {
         super.readEntityFromNBT(nbt);
         this.setSheared(nbt.getInteger("Sheared"));
         this.setBreatheCollected(nbt.getInteger("BreathCollected"));
-        this.setHunger(nbt.getInteger("hunger"));
+        this.setHunger(nbt.getInteger("Hunger"));
+        this.setBodySize(nbt.getFloat("Size"));
         this.setGrowthPaused(nbt.getBoolean("growthpause"));
         this.setUnHovered(nbt.getBoolean("unhovered"));
         this.setYLocked(nbt.getBoolean("ylocked"));
@@ -478,6 +480,10 @@ public class ServerDragonEntity extends TameableDragonEntity {
     public void setSheared(int cooldown) {
         this.shearCooldown = cooldown;
         this.dataManager.set(DATA_CAN_SHEAR, cooldown <= 0);
+    }
+
+    public void setBodySize(float size) {
+        this.dataManager.set(DATA_BODY_SIZE, size == 0.0F ? 1.0F : size);
     }
 
     public void setBreatheCollected(int cooldown) {

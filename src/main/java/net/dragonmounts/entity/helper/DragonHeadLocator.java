@@ -79,7 +79,7 @@ public class DragonHeadLocator<T extends TameableDragonEntity> implements ITicka
         boolean wingsDown = MathHelper.sin(this.animBase - 1.0F) > 0.0F;
         if (flying && wingsDown && !this.wingsDown && this.flutter != 0 && !dragon.isInWater()) {
             // play wing sounds
-            dragon.playSound(dragon.getWingsSound(), 0.8F + (dragon.getScale() - this.speed), 1, false);
+            dragon.playSound(dragon.getWingsSound(), 0.8F + (dragon.lifeStageHelper.getScale() - this.speed), 1, false);
         }
         this.wingsDown = wingsDown;
         this.calculateHeadAndNeck();
@@ -145,7 +145,7 @@ public class DragonHeadLocator<T extends TameableDragonEntity> implements ITicka
     public Vec3d getThroatPosition() {
         TameableDragonEntity dragon = this.dragon;
         Segment head = this.head;
-        float scale = dragon.getScale();
+        float scale = dragon.getAdjustedSize();
         final float ADULT_SCALE_FACTOR = 0.1F;//TODO: use DragonType or something else
         final float BODY_X_SCALE = -ADULT_SCALE_FACTOR * scale;
         final float BODY_Y_SCALE = -ADULT_SCALE_FACTOR * scale;

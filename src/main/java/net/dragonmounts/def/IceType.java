@@ -32,7 +32,7 @@ public class IceType extends DragonType {
         }
         Random random = level.rand;
         if (!dragon.isDead && dragon.posY > level.getHeight() * 1.25 && stage.isOldEnough(DragonLifeStage.PREJUVENILE) && BiomeDictionary.hasType(level.getBiome(dragon.getPosition()), BiomeDictionary.Type.SNOWY)) {
-            float s = dragon.getScale() * 1.2f;
+            float s = dragon.getAdjustedSize() * 1.2f;
             float f = (dragon.width - 0.65F) * s;
             level.spawnParticle(
                     EnumParticleTypes.FIREWORKS_SPARK,

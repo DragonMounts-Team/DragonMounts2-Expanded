@@ -20,7 +20,7 @@ public class FireType extends DragonType {
         World level = dragon.world;
         if (dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE) && (dragon.isInLava() || level.isMaterialInBB(dragon.getEntityBoundingBox().grow(-0.10000000149011612D, -0.4000000059604645D, -0.10000000149011612D), Material.FIRE))) {
             Random random = level.rand;
-            float s = dragon.getScale() * 1.2f;
+            float s = dragon.getAdjustedSize() * 1.2f;
             float h = dragon.height * s;
             float f = (dragon.width - 0.65F) * s;
             for (int i = -2; i < s; ++i) {

@@ -31,7 +31,7 @@ public class ClientBreathHelper extends DragonBreathHelper<ClientDragonEntity> {
         this.updateBreathState(dragon.isUsingBreathWeapon());
         SoundEffectBreathWeapon.SoundContext context = new SoundEffectBreathWeapon.SoundContext(); // TODO: reuse
         context.dragonHeadLocation = dragon.getThroatPosition();
-        context.relativeVolume = dragon.getScale();
+        context.relativeVolume = dragon.lifeStageHelper.getScale();
         context.lifeStage = dragon.lifeStageHelper.getLifeStage();
         context.breath = this.breath;
         if (this.currentBreathState == BreathState.SUSTAIN) {

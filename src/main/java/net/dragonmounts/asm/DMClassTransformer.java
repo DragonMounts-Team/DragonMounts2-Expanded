@@ -8,7 +8,7 @@ import java.util.function.Function;
 import static net.dragonmounts.asm.DragonMountsPlugin.PLUGIN_LOGGER;
 
 public class DMClassTransformer implements IClassTransformer {
-    public static final Object2ObjectOpenHashMap<String, Function<byte[], byte[]>> TRANSFORMERS;
+    private static final Object2ObjectOpenHashMap<String, Function<byte[], byte[]>> TRANSFORMERS;
 
     static {
         Object2ObjectOpenHashMap<String, Function<byte[], byte[]>> transformers = new Object2ObjectOpenHashMap<>();
@@ -19,8 +19,10 @@ public class DMClassTransformer implements IClassTransformer {
     @Override
     public byte[] transform(String raw, String clazz, byte[] bytecodes) {
         Function<byte[], byte[]> transformer = TRANSFORMERS.get(clazz);
+        if (transformer == null) return bytecodes;
+        PLUGIN_LOGGER.info("Transforming class: {}", clazz);
         try {
-            return transformer == null ? bytecodes : transformer.apply(bytecodes);
+            return transformer.apply(bytecodes);
         } catch (Exception e) {
             PLUGIN_LOGGER.error("Failed to transform class: {}", clazz, e);
             return bytecodes;

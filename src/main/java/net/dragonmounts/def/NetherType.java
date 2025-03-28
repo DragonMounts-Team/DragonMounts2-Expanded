@@ -24,7 +24,7 @@ public class NetherType extends DragonType {
         if (level.isRemote || dragon.isDead || !dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE))
             return;
         Random random = level.rand;
-        float s = dragon.getScale();
+        float s = dragon.getAdjustedSize();
         float h = dragon.height * s;
         float f = (dragon.width - 0.65F) * s;
         boolean isWet = dragon.isWet();

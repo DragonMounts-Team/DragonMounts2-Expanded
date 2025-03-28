@@ -28,7 +28,7 @@ public class WaterType extends DragonType {
         if (dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {
             World level = dragon.world;
             Random random = level.rand;
-            float s = dragon.getScale() * 1.2f;
+            float s = dragon.getAdjustedSize() * 1.2f;
             float h = dragon.height * s;
             float f = (dragon.width - 0.65F) * s;
             for (int i = -2; i < s; ++i) {

@@ -159,11 +159,13 @@ public class DragonVariantHelper implements ITickable {
             this.resetPoints(type);
         }
 
+        float factor = dragon.getHealth() / dragon.getMaxHealth();
         AbstractAttributeMap attributes = this.dragon.getAttributeMap();
         if (this.lastType != null) {
             attributes.removeAttributeModifiers(this.lastType.attributes);
         }
         attributes.applyAttributeModifiers(type.attributes);
+        dragon.setHealth(factor * dragon.getMaxHealth());
         this.lastType = type;
     }
 

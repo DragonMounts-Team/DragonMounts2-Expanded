@@ -128,7 +128,7 @@ public class ClientDragonEntity extends TameableDragonEntity {
         if (isEgg() || ++deathTime > getMaxDeathTime()) setDead();// actually delete entity after the time is up
 
         if (deathTime < getMaxDeathTime() - 20) {
-            int amount = (int) (4 * this.getScale());
+            int amount = (int) (4 * this.lifeStageHelper.getScale());
             for (int i = 0; i < amount; i++) {
                 spawnBodyParticle(EnumParticleTypes.CLOUD);
             }
@@ -154,8 +154,7 @@ public class ClientDragonEntity extends TameableDragonEntity {
             case DO_ROAR:
                 SoundEvent sound = this.getVariant().type.getRoarSound(this);
                 if (sound == null) break;
-                float value = getScale();
-                this.world.playSound(posX, posY, posZ, sound, SoundCategory.NEUTRAL, MathHelper.clamp(value, 0.3F, 0.6F), getSoundPitch(), true);
+                this.world.playSound(posX, posY, posZ, sound, SoundCategory.NEUTRAL, MathHelper.clamp(this.lifeStageHelper.getScale(), 0.3F, 0.6F), getSoundPitch(), true);
                 this.animator.ticksSinceLastRoar = 0;
                 break;
 
@@ -166,7 +165,7 @@ public class ClientDragonEntity extends TameableDragonEntity {
 
     public void spawnBodyParticle(EnumParticleTypes type) {
         double ox, oy, oz;
-        float s = this.getScale() * 1.2f;
+        float s = this.getAdjustedSize() * 1.2f;
 
         switch (type) {
             case EXPLOSION_NORMAL:
