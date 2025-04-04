@@ -100,7 +100,7 @@ public class DragonHeadLocator<T extends TameableDragonEntity> implements ITicka
                 // basic up/down movement
                 * MathX.lerp(1.0F, 0.2F, this.sit)
                 // reduce rotation when on ground
-                * MathX.slerp(1.0F, 0.5F, this.walk);
+                * Interpolation.smoothLinear(1.0F, 0.5F, this.walk);
         if (dragon.isUsingBreathWeapon()) {
             rotXFactor *= MathX.lerp(0.2F, 1.0F, this.flutter);
         }
@@ -185,6 +185,6 @@ public class DragonHeadLocator<T extends TameableDragonEntity> implements ITicka
     }
 
     public float getPitch() {
-        return Interpolation.smoothStep(60, 0, this.speed);
+        return Interpolation.smoothLinear(60, 0, this.speed);
     }
 }

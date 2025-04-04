@@ -79,7 +79,6 @@ public class ClientProxy extends ServerProxy {
 
         //Override mcmod.info - This looks cooler :)
         ModMetadata metadata = event.getModMetadata();
-        metadata.name = TextFormatting.DARK_AQUA.toString() + TextFormatting.BOLD + metadata.name;
         StringBuilder credits = new StringBuilder(2048).append('\n');
         addCredit(credits, "BarracudaATA", "The Original Owner of Dragon Mounts.");
         addCredit(credits, "TheRPGAdventurer", "Former author of Dragon Mounts 2.");

@@ -86,20 +86,6 @@ public abstract class MathX {
         return a + (b - a) * x;
     }
 
-    /**
-     * Smoothed float linear interpolation, similar to terp() but faster
-     */
-    public static float slerp(float a, float b, float x) {
-        if (x <= 0) {
-            return a;
-        }
-        if (x >= 1) {
-            return b;
-        }
-
-        return lerp(a, b, x * x * (3 - 2 * x));
-    }
-
     public static void slerpArrays(float[] a, float[] b, float[] c, float x) {
         if (a.length != b.length || b.length != c.length) {
             throw new IllegalArgumentException();

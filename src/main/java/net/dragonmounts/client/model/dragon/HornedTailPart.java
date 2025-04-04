@@ -8,14 +8,14 @@ import net.minecraft.client.model.ModelRenderer;
 
 import java.util.function.IntFunction;
 
+import static net.dragonmounts.client.model.dragon.DragonModel.TAIL_SEGMENTS;
 import static net.dragonmounts.client.model.dragon.DragonModel.TAIL_SIZE;
-import static net.dragonmounts.client.model.dragon.DragonModel.VERTS_TAIL;
 import static net.dragonmounts.client.model.dragon.HornedTailPart.Snapshot.saveScalable;
 
 public class HornedTailPart extends ScalablePart implements IModelPart {
     /// display horns near the tip
     public static Snapshot makeDefaultedSnapshot(int index) {
-        return new HornedTailPart.Snapshot(index + 7 > VERTS_TAIL && index + 3 < VERTS_TAIL);
+        return new HornedTailPart.Snapshot(index + 7 > TAIL_SEGMENTS && index + 3 < TAIL_SEGMENTS);
     }
 
     public static final int HORN_THICK = 3;
@@ -32,7 +32,7 @@ public class HornedTailPart extends ScalablePart implements IModelPart {
         super(base, name);
         this.addChild(this.leftHorn = this.makeHorn(new ModelRenderer(base, name), true));
         this.addChild(this.rightHorn = this.makeHorn(new ModelRenderer(base, name), false));
-        this.snapshots = DMUtils.makeArray(new Snapshot[VERTS_TAIL], factory);
+        this.snapshots = DMUtils.makeArray(new Snapshot[TAIL_SEGMENTS], factory);
     }
 
     /**

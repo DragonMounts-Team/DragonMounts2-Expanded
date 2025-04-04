@@ -375,7 +375,7 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
         float rotYMulti = 1;
 
         for (int i = 0; i < WING_FINGERS; ++i) {
-            wingFingerRotateY[i] = MathX.slerp(UNFOLD_FINGER_ROT[i], FOLD_FINGER_ROT[i] + rotYOfs * rotYMulti, ground);
+            wingFingerRotateY[i] = Interpolation.smoothLinear(UNFOLD_FINGER_ROT[i], FOLD_FINGER_ROT[i] + rotYOfs * rotYMulti, ground);
             rotYMulti -= 0.2f;
         }
     }
@@ -489,18 +489,18 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
         float yGround;
 
         // interpolate between sitting and standing
-        yGround = MathX.slerp(yGroundStand[index], yGroundSit[index], this.sit);
+        yGround = Interpolation.smoothLinear(yGroundStand[index], yGroundSit[index], this.sit);
 
         // interpolate between standing and walking
-        yGround = MathX.slerp(yGround, yGroundWalk[index], walk);
+        yGround = Interpolation.smoothLinear(yGround, yGroundWalk[index], walk);
 
         // interpolate between flying and grounded
         float ground = this.ground;
-        leg.rotateAngleY = MathX.slerp(yAir, yGround, ground);
-        leg.rotateAngleX = MathX.slerp(xAir[0], rot[0], ground);
-        leg.shank.rotateAngleX = MathX.slerp(xAir[1], rot[1], ground);
-        leg.foot.rotateAngleX = MathX.slerp(xAir[2], rot[2], ground);
-        leg.toe.rotateAngleX = MathX.slerp(xAir[3], rot[3], ground);
+        leg.rotateAngleY = Interpolation.smoothLinear(yAir, yGround, ground);
+        leg.rotateAngleX = Interpolation.smoothLinear(xAir[0], rot[0], ground);
+        leg.shank.rotateAngleX = Interpolation.smoothLinear(xAir[1], rot[1], ground);
+        leg.foot.rotateAngleX = Interpolation.smoothLinear(xAir[2], rot[2], ground);
+        leg.toe.rotateAngleX = Interpolation.smoothLinear(xAir[3], rot[3], ground);
         (left ? leg.left : leg.right).save(leg);
     }
 

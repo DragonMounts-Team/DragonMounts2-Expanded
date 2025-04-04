@@ -4,11 +4,10 @@ import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
-import static net.dragonmounts.client.ClientUtil.withRotation;
 import static net.dragonmounts.client.model.dragon.DragonModel.TAIL_SIZE;
 
 public enum BuiltinFactory implements IModelFactory {
-    DEFAULT,
+    NORMAL,
     TAIL_HORNED {
         @Override
         public IModelPart makeTail(ModelBase base) {
@@ -46,12 +45,12 @@ public enum BuiltinFactory implements IModelFactory {
             LegPart leg = makeLeg(
                     base,
                     "foreLeg",
-                    SKELETON_LEG_BASE_WIDTH,
-                    SKELETON_LEG_BASE_WIDTH,
-                    (int) (LEG_BASE_LENGTH * 0.77F),
-                    (int) (LEG_BASE_LENGTH * 0.80F),
-                    (int) (LEG_BASE_LENGTH * 0.34F),
-                    (int) (LEG_BASE_LENGTH * 0.33F)
+                    SKELETON_LEG_WIDTH,
+                    SKELETON_LEG_WIDTH,
+                    (int) (LEG_LENGTH * 0.77F),
+                    (int) (LEG_LENGTH * 0.80F),
+                    (int) (LEG_LENGTH * 0.34F),
+                    (int) (LEG_LENGTH * 0.33F)
             );
             leg.setRotationPoint(-11, 18, 4);
             return leg;
@@ -62,20 +61,20 @@ public enum BuiltinFactory implements IModelFactory {
             LegPart leg = makeLeg(
                     base,
                     "hindLeg",
-                    SKELETON_LEG_BASE_WIDTH,
-                    SKELETON_LEG_BASE_WIDTH + 1,
-                    (int) (LEG_BASE_LENGTH * 0.90F),
-                    (int) (LEG_BASE_LENGTH * 0.70F) - 2,
-                    (int) (LEG_BASE_LENGTH * 0.67F),
-                    (int) (LEG_BASE_LENGTH * 0.27F)
+                    SKELETON_LEG_WIDTH,
+                    SKELETON_LEG_WIDTH + 1,
+                    (int) (LEG_LENGTH * 0.90F),
+                    (int) (LEG_LENGTH * 0.70F) - 2,
+                    (int) (LEG_LENGTH * 0.67F),
+                    (int) (LEG_LENGTH * 0.27F)
             );
             leg.setRotationPoint(-11, 13, 46);
             return leg;
         }
     };
-    public static final int DEFAULT_LEG_BASE_WIDTH = 9;
-    public static final int SKELETON_LEG_BASE_WIDTH = 7;
-    public static final int LEG_BASE_LENGTH = 26;
+    public static final int NORMAL_LEG_WIDTH = 9;
+    public static final int SKELETON_LEG_WIDTH = 7;
+    public static final int LEG_LENGTH = 26;
     public static final int FOOT_HEIGHT = 4;
 
     public static LegPart makeLeg(
@@ -147,7 +146,10 @@ public enum BuiltinFactory implements IModelFactory {
         ModelRenderer horn = new ModelRenderer(base, "head")
                 .addBox("horn", hornOfs, hornOfs, hornOfs, hornThick, hornThick, hornLength);
         horn.setRotationPoint(mirror ? 5 : -5, -8, 0);
-        return withRotation(horn, rad30, mirror ? rad30 : -rad30, 0);
+        horn.rotateAngleX = rad30;
+        horn.rotateAngleY = mirror ? rad30 : -rad30;
+        horn.rotateAngleZ = 0.0F;
+        return horn;
     }
 
     public static ModelRenderer makeFinger(ModelBase base, boolean small) {

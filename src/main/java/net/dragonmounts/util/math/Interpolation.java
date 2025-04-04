@@ -16,24 +16,15 @@ package net.dragonmounts.util.math;
  */
 public class Interpolation {
     public static float linear(float a, float b, float x) {
-        if (x <= 0) {
-            return a;
-        }
-        if (x >= 1) {
-            return b;
-        }
-        return a * (1 - x) + b * x;
+        if (x <= 0) return a;
+        if (x >= 1) return b;
+        return a + (b - a) * x;
     }
-    
-    public static float smoothStep(float a, float b, float x) {
-        if (x <= 0) {
-            return a;
-        }
-        if (x >= 1) {
-            return b;
-        }
-        x = x * x * (3 - 2 * x);
-        return a * (1 - x) + b * x;
+
+    public static float smoothLinear(float a, float b, float x) {
+        if (x <= 0) return a;
+        if (x >= 1) return b;
+        return a + (b - a) * x * x * (3 - 2 * x);
     }
 
     // http://www.java-gaming.org/index.php?topic=24122.0

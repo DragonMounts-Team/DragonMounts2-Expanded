@@ -2,26 +2,16 @@ package net.dragonmounts.client;
 
 import net.dragonmounts.util.DMUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * to avoid {@link ClassNotFoundException}
- */
 @SideOnly(Side.CLIENT)
 public abstract class ClientUtil {
+    /// to avoid {@link ClassNotFoundException}
     public static EntityPlayer getLocalPlayer() {
         return Minecraft.getMinecraft().player;
-    }
-
-    public static ModelRenderer withRotation(ModelRenderer model, float x, float y, float z) {
-        model.rotateAngleX = x;
-        model.rotateAngleY = y;
-        model.rotateAngleZ = z;
-        return model;
     }
 
     public static String translateToLocal(String key) {

@@ -64,7 +64,7 @@ public interface IModelFactory {
                 new ScalablePart(base, "neck"),
                 new ScalablePart(base, "neck"),
                 // hide the first and every second scale
-                index -> (index & 1) == 0 || index != 0
+                index -> (index & 1) == 0 && index != 0
         );
         neck.normal.addBox("box", -5, -5, -5, NECK_SIZE, NECK_SIZE, NECK_SIZE);
         neck.scaled.addBox("box", -5, -5, -5, NECK_SIZE, NECK_SIZE, NECK_SIZE)
@@ -112,12 +112,12 @@ public interface IModelFactory {
         LegPart leg = makeLeg(
                 base,
                 "foreLeg",
-                DEFAULT_LEG_BASE_WIDTH,
-                DEFAULT_LEG_BASE_WIDTH,
-                (int) (LEG_BASE_LENGTH * 0.77F),
-                (int) (LEG_BASE_LENGTH * 0.80F),
-                (int) (LEG_BASE_LENGTH * 0.34F),
-                (int) (LEG_BASE_LENGTH * 0.33F)
+                NORMAL_LEG_WIDTH,
+                NORMAL_LEG_WIDTH,
+                (int) (LEG_LENGTH * 0.77F),
+                (int) (LEG_LENGTH * 0.80F),
+                (int) (LEG_LENGTH * 0.34F),
+                (int) (LEG_LENGTH * 0.33F)
         );
         leg.setRotationPoint(-11, 18, 4);
         return leg;
@@ -127,12 +127,12 @@ public interface IModelFactory {
         LegPart leg = makeLeg(
                 base,
                 "hindLeg",
-                DEFAULT_LEG_BASE_WIDTH,
-                DEFAULT_LEG_BASE_WIDTH + 1,
-                (int) (LEG_BASE_LENGTH * 0.90F),
-                (int) (LEG_BASE_LENGTH * 0.70F) - 2,
-                (int) (LEG_BASE_LENGTH * 0.67F),
-                (int) (LEG_BASE_LENGTH * 0.27F)
+                NORMAL_LEG_WIDTH,
+                NORMAL_LEG_WIDTH + 1,
+                (int) (LEG_LENGTH * 0.90F),
+                (int) (LEG_LENGTH * 0.70F) - 2,
+                (int) (LEG_LENGTH * 0.67F),
+                (int) (LEG_LENGTH * 0.27F)
         );
         leg.setRotationPoint(-11, 13, 46);
         return leg;

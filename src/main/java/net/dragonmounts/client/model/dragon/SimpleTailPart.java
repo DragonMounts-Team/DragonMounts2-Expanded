@@ -4,7 +4,7 @@ import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.Segment;
 import net.minecraft.client.model.ModelBase;
 
-import static net.dragonmounts.client.model.dragon.DragonModel.VERTS_TAIL;
+import static net.dragonmounts.client.model.dragon.DragonModel.TAIL_SEGMENTS;
 import static net.dragonmounts.client.model.dragon.ScalablePart.ScalableSnapshot.saveScalable;
 
 public class SimpleTailPart extends ScalablePart implements IModelPart {
@@ -12,7 +12,7 @@ public class SimpleTailPart extends ScalablePart implements IModelPart {
 
     public SimpleTailPart(ModelBase base, String name) {
         super(base, name);
-        this.snapshots = DMUtils.makeArray(new ScalableSnapshot[VERTS_TAIL], ScalableSnapshot::new);
+        this.snapshots = DMUtils.makeArray(new ScalableSnapshot[TAIL_SEGMENTS], ScalableSnapshot::new);
     }
 
     @Override
