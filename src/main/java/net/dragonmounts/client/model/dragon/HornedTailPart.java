@@ -12,7 +12,7 @@ import static net.dragonmounts.client.model.dragon.DragonModel.TAIL_SEGMENTS;
 import static net.dragonmounts.client.model.dragon.DragonModel.TAIL_SIZE;
 import static net.dragonmounts.client.model.dragon.HornedTailPart.Snapshot.saveScalable;
 
-public class HornedTailPart extends ScalablePart implements IModelPart {
+public class HornedTailPart extends TailPart {
     /// display horns near the tip
     public static Snapshot makeDefaultedSnapshot(int index) {
         return new HornedTailPart.Snapshot(index + 7 > TAIL_SEGMENTS && index + 3 < TAIL_SEGMENTS);

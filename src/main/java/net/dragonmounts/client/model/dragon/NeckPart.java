@@ -36,7 +36,6 @@ public class NeckPart implements IModelPart {
         }
     }
 
-    @Override
     public void render(float scale) {
         ScalablePart[] parts = this.parts;
         ScalablePart.ScalableSnapshot[] snapshots = this.snapshots;

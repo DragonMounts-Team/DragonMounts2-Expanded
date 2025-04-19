@@ -59,7 +59,7 @@ public interface IModelFactory {
         return head;
     }
 
-    default IModelPart makeNeck(ModelBase base) {
+    default NeckPart makeNeck(ModelBase base) {
         NeckPart neck = new NeckPart(
                 new ScalablePart(base, "neck"),
                 new ScalablePart(base, "neck"),
@@ -101,7 +101,7 @@ public interface IModelFactory {
         return wing;
     }
 
-    default IModelPart makeTail(ModelBase base) {
+    default TailPart makeTail(ModelBase base) {
         SimpleTailPart tail = new SimpleTailPart(base, "tail");
         tail.addBox("box", -5, -5, -5, TAIL_SIZE, TAIL_SIZE, TAIL_SIZE)
                 .addBox("scale", -1, -8, -3, 2, 4, 6);

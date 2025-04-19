@@ -35,8 +35,8 @@ public class DragonModel extends ModelBase {
 
     // model parts
     public final HeadPart head;
-    public final IModelPart neck;
-    public final IModelPart tail;
+    public final NeckPart neck;
+    public final TailPart tail;
     public final LegPart foreLeg;
     public final LegPart hindLeg;
     public final BodyPart body;

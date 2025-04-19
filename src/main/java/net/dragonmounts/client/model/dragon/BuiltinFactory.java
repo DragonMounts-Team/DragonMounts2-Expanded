@@ -10,7 +10,7 @@ public enum BuiltinFactory implements IModelFactory {
     NORMAL,
     TAIL_HORNED {
         @Override
-        public IModelPart makeTail(ModelBase base) {
+        public TailPart makeTail(ModelBase base) {
             HornedTailPart tail = new HornedTailPart(base, "tail", HornedTailPart::makeDefaultedSnapshot);
             tail.addBox("box", -5, -5, -5, TAIL_SIZE, TAIL_SIZE, TAIL_SIZE);
             return tail;
@@ -18,7 +18,7 @@ public enum BuiltinFactory implements IModelFactory {
     },
     TAIL_SCALE_INCLINED {
         @Override
-        public IModelPart makeTail(ModelBase base) {
+        public TailPart makeTail(ModelBase base) {
             SimpleTailPart tail = new SimpleTailPart(base, "tail");
             float rot = MathX.toRadians(45);
             ModelRenderer scale = new ModelRenderer(base, "tail")
@@ -34,7 +34,7 @@ public enum BuiltinFactory implements IModelFactory {
     },
     SKELETON {
         @Override
-        public IModelPart makeTail(ModelBase base) {
+        public TailPart makeTail(ModelBase base) {
             HornedTailPart tail = new HornedTailPart(base, "tail", HornedTailPart::makeDefaultedSnapshot);
             tail.addBox("box", -5, -5, -5, TAIL_SIZE, TAIL_SIZE, TAIL_SIZE);
             return tail;
