@@ -1,8 +1,8 @@
 package net.dragonmounts.item;
 
-import net.dragonmounts.def.EnchantType;
 import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.type.EnchantType;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;

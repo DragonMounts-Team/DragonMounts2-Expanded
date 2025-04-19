@@ -98,7 +98,7 @@ public class DMBlocks {
         ZOMBIE_DRAGON_EGG = registerDragonEgg("zombie_dragon_egg", DragonTypes.ZOMBIE, props);
         DARK_DRAGON_EGG = registerDragonEgg("dark_dragon_egg", DragonTypes.DARK, props);
         props = new BlockProperties()
-                .setSoundType(SoundType.WOOD)
+                .setSoundType(SoundType.METAL)
                 .setHardness(4)
                 .setResistance(20)
                 .setCreativeTab(DMItemGroups.BLOCKS);

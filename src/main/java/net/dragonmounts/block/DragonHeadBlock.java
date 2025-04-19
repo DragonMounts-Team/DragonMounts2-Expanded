@@ -31,7 +31,7 @@ public abstract class DragonHeadBlock extends BlockContainer {
 
     protected DragonHeadBlock(Material material, DragonVariant variant, boolean isOnWall) {
         super(material);
-        this.setSoundType(SoundType.STONE);
+        this.setSoundType(SoundType.STONE).setHardness(1.0F);
         this.variant = variant;
         this.isOnWall = isOnWall;
     }

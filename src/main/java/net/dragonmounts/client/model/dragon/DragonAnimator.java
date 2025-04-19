@@ -10,7 +10,7 @@
 package net.dragonmounts.client.model.dragon;
 
 import net.dragonmounts.client.ClientDragonEntity;
-import net.dragonmounts.entity.breath.DragonBreathHelper;
+import net.dragonmounts.entity.breath.BreathState;
 import net.dragonmounts.entity.helper.DragonHeadLocator;
 import net.dragonmounts.util.CircularBuffer;
 import net.dragonmounts.util.DMUtils;
@@ -242,7 +242,7 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
 
 
         // update bite opening transition and breath transitions
-        DragonBreathHelper.BreathState breathState = dragon.breathHelper.getCurrentBreathState();
+        BreathState breathState = dragon.breathHelper.getCurrentBreathState();
         switch (breathState) {
             case IDLE: {  // breath is idle, handle bite attack
                 biteTimer.add(this.ticksSinceLastAttack < JAW_OPENING_TIME_FOR_ATTACK ? 0.2F : -0.2F);

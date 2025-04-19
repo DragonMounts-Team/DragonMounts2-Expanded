@@ -46,8 +46,6 @@ public abstract class DragonBreathHelper<T extends TameableDragonEntity> impleme
         this.dragon = dragon;
     }
 
-    public enum BreathState {IDLE, STARTING, SUSTAIN, STOPPING}
-
     public BreathState getCurrentBreathState() {
         return currentBreathState;
     }
@@ -90,10 +88,15 @@ public abstract class DragonBreathHelper<T extends TameableDragonEntity> impleme
                 break;
             }
             case STARTING: {
-                int ticksSpentStarting=tickCounter - transitionStartTick;
-                if (ticksSpentStarting >= BREATH_START_DURATION) {
+                if (tickCounter - transitionStartTick >= BREATH_START_DURATION) {
                     transitionStartTick=tickCounter;
-                    currentBreathState = isBreathing ? BreathState.SUSTAIN : BreathState.STOPPING;
+                    if (isBreathing) {
+                        currentBreathState = BreathState.SUSTAIN;
+                        this.onBreathStart();
+                    } else {
+                        currentBreathState = BreathState.STOPPING;
+                        this.onBreathStop();
+                    }
                 }
                 break;
             }
@@ -101,12 +104,12 @@ public abstract class DragonBreathHelper<T extends TameableDragonEntity> impleme
                 if (!isBreathing) {
                     transitionStartTick=tickCounter;
                     currentBreathState=BreathState.STOPPING;
+                    this.onBreathStop();
                 }
                 break;
             }
             case STOPPING: {
-                int ticksSpentStopping=tickCounter - transitionStartTick;
-                if (ticksSpentStopping >= BREATH_STOP_DURATION) {
+                if (tickCounter - transitionStartTick >= BREATH_STOP_DURATION) {
                     currentBreathState=BreathState.IDLE;
                 }
                 break;
@@ -116,4 +119,8 @@ public abstract class DragonBreathHelper<T extends TameableDragonEntity> impleme
             }
         }
     }
+
+    protected void onBreathStart() {}
+
+    protected void onBreathStop() {}
 }

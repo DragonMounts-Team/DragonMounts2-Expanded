@@ -3,7 +3,6 @@ package net.dragonmounts.block;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.BlockProperties;
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
@@ -24,7 +23,7 @@ public class DragonScaleBlock extends Block {
 	public DragonScaleBlock(DragonType type, Material material, MapColor color, BlockProperties props) {
 		super(material, color);
 		this.type = type;
-		this.setSoundType(SoundType.METAL)
+		this.setSoundType(props.sound)
 				.setHardness(props.hardness)
 				.setResistance(props.resistance)
 				.setLightLevel(props.light);

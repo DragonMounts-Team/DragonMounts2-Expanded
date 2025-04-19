@@ -1,6 +1,7 @@
 package net.dragonmounts.entity.breath.impl;
 
 import net.dragonmounts.entity.ServerDragonEntity;
+import net.dragonmounts.entity.breath.BreathState;
 import net.dragonmounts.entity.breath.DragonBreathHelper;
 import net.minecraft.util.math.Vec3d;
 

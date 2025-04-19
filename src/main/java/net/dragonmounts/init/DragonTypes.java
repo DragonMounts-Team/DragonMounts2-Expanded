@@ -1,7 +1,7 @@
 package net.dragonmounts.init;
 
-import net.dragonmounts.def.*;
 import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.type.*;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;

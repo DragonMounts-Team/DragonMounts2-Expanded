@@ -1,11 +1,11 @@
 package net.dragonmounts.entity.breath.impl;
 
+import net.dragonmounts.client.breath.impl.NetherBreathFX;
 import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathAffectedBlock;
 import net.dragonmounts.entity.breath.BreathAffectedEntity;
 import net.dragonmounts.entity.breath.BreathPower;
-import net.dragonmounts.entity.breath.effects.NetherBreathFX;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
