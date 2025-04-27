@@ -23,6 +23,7 @@ public class WhistleSlot extends Slot {
         ) : holder, 0, x, y);
         this.holder = holder;
         this.container = container;
+        this.setBackgroundName("dragonmounts:items/slot/empty_whistle");
     }
 
     @Override

@@ -24,8 +24,6 @@ public class ClientBreathNodeRenderer extends Render<ClientBreathNodeEntity> {
         GlStateManager.enableRescaleNormal();
         float scale = entity.getRenderScale();
         GlStateManager.scale(scale, scale, scale);
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
         GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
         if (entity.extraRotation) {
             if (entity.getRandom().nextInt(4) == 0) {
@@ -40,6 +38,8 @@ public class ClientBreathNodeRenderer extends Render<ClientBreathNodeEntity> {
             GlStateManager.enableColorMaterial();
             GlStateManager.enableOutlineMode(this.getTeamColor(entity));
         }
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
         bufferbuilder.pos(-0.5D, -0.25D, 0.0D).tex(0.0D, 1.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
         bufferbuilder.pos(0.5D, -0.25D, 0.0D).tex(1.0D, 1.0D).normal(0.0F, 1.0F, 0.0F).endVertex();

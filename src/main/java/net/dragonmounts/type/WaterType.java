@@ -1,5 +1,7 @@
 package net.dragonmounts.type;
 
+import net.dragonmounts.client.ClientDragonEntity;
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.WaterBreath;
@@ -21,10 +23,14 @@ public class WaterType extends DragonType {
     }
 
     @Override
-    public void tick(TameableDragonEntity dragon) {
-        if (!dragon.world.isRemote && dragon.isInWater()) {
+    public void tickServer(ServerDragonEntity dragon) {
+        if (dragon.isInWater()) {
             EntityUtil.addOrResetEffect(dragon, MobEffects.WATER_BREATHING, 200, 0, false, false, 21);
         }
+    }
+
+    @Override
+    public void tickClient(ClientDragonEntity dragon) {
         if (dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {
             World level = dragon.world;
             Random random = level.rand;

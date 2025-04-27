@@ -32,7 +32,7 @@ public class HornedTailPart extends TailPart {
         super(base, name);
         this.addChild(this.leftHorn = this.makeHorn(new ModelRenderer(base, name), true));
         this.addChild(this.rightHorn = this.makeHorn(new ModelRenderer(base, name), false));
-        this.snapshots = DMUtils.makeArray(new Snapshot[TAIL_SEGMENTS], factory);
+        this.snapshots = DMUtils.fillArray(new Snapshot[TAIL_SEGMENTS], factory);
     }
 
     /**

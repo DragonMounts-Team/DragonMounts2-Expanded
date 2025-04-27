@@ -93,7 +93,7 @@ gui.dragonmounts.unbindWhistle=解绑龙哨
 gui.dragonmounts.unbindWhistle.tooltip=按下左Shift键以解锁
 gui.dragonmounts.lock.tooltip=信任陌生人：%s
 
-key.categories.dragon=龙骑士
+key.categories.dragon=龙骑2
 key.dragonmounts.breath=吐息
 key.dragonmounts.descent=降落
 key.dragonmounts.toggleCameraPos=切换骑乘视角
@@ -219,3 +219,7 @@ config.dragonmounts.toggleDimensionLimitation=仅生成于限定维度
 config.dragonmounts.toggleDimensionLimitation.tooltip=若开启此选项，龙巢仅在声明的维度生成；若关闭此选项，则龙巢不会在声明的维度生成
 config.dragonmounts.limitedDimensions=限定维度
 config.dragonmounts.limitedDimensions.tooltip=维度数字标识符的列表
+
+book.dragonmounts.guide_book.name=书
+book.dragonmounts.guide_book.desc=描述
+book.dragonmounts.guide_book.landing=测试

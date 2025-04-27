@@ -1,5 +1,6 @@
 package net.dragonmounts.type;
 
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.StormBreath;
@@ -14,8 +15,8 @@ public class StormType extends WaterType {
     }
 
     @Override
-    public void tick(TameableDragonEntity dragon) {
-        super.tick(dragon);
+    public void tickServer(ServerDragonEntity dragon) {
+        super.tickServer(dragon);
         EntityLivingBase target = dragon.getAttackTarget();
         if (target != null && target.isEntityAlive() && (!(target instanceof EntityPlayer) || !((EntityPlayer) target).capabilities.isCreativeMode) && target.world.isRaining() && target.world.rand.nextInt(70) == 0) {
             target.world.addWeatherEffect(new EntityLightningBolt(target.world, target.posX, target.posY, target.posZ, false));

@@ -1,6 +1,6 @@
 package net.dragonmounts.type;
 
-import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.util.EnumParticleTypes;
@@ -16,9 +16,9 @@ public class TerraType extends DragonType {
     }
 
     @Override
-    public void tick(TameableDragonEntity dragon) {
+    public void tickClient(ClientDragonEntity dragon) {
         World level = dragon.world;
-        if (BiomeDictionary.hasType(level.getBiome(dragon.getPosition()), BiomeDictionary.Type.MESA) && dragon.posY > level.getHeight() + 8 && dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {
+        if (dragon.posY > level.getHeight() + 8 && dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE) && BiomeDictionary.hasType(level.getBiome(dragon.getPosition()), BiomeDictionary.Type.MESA)) {
             Random random = level.rand;
             float s = dragon.getAdjustedSize() * 1.2f;
             float h = dragon.height * s;

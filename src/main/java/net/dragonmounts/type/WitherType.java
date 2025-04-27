@@ -1,5 +1,6 @@
 package net.dragonmounts.type;
 
+import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.WitherBreath;
@@ -8,8 +9,8 @@ import net.dragonmounts.registry.DragonType;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+
+import java.util.Random;
 
 public class WitherType extends DragonType {
     public WitherType(ResourceLocation identifier, Properties props) {
@@ -17,18 +18,16 @@ public class WitherType extends DragonType {
     }
 
     @Override
-    public void tick(TameableDragonEntity dragon) {
-        World level = dragon.world;
-        if (level instanceof WorldServer && !dragon.isDead && dragon.isUsingBreathWeapon() && !dragon.isEgg()) {
-            ((WorldServer) level).spawnParticle(
+    public void tickClient(ClientDragonEntity dragon) {
+        if (!dragon.isDead && dragon.isUsingBreathWeapon() && !dragon.isEgg()) {
+            Random random = dragon.world.rand;
+            dragon.world.spawnParticle(
                     EnumParticleTypes.SMOKE_NORMAL,
-                    dragon.posX,
-                    dragon.posY + dragon.getEyeHeight(),
-                    dragon.posZ,
-                    1,
-                    0.5,
-                    0.25,
-                    0.5,
+                    dragon.posX + random.nextGaussian() * 0.5,
+                    dragon.posY + dragon.getEyeHeight() + random.nextGaussian() * 0.25,
+                    dragon.posZ + random.nextGaussian() * 0.5,
+                    0.0,
+                    0.0,
                     0.0
             );
         }

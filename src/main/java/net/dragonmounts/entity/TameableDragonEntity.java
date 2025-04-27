@@ -26,7 +26,6 @@ import net.dragonmounts.util.EntityUtil;
 import net.dragonmounts.util.MutableBlockPosEx;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
@@ -405,6 +404,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     /**
      * Get number of ticks, at least during which the living entity will be silent.
      */
+    @Override
     public int getTalkInterval() {
         return 240;
     }
@@ -412,20 +412,19 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     /**
      * Plays step sound at given x, y, z for the entity
      */
-    public void playStepSound(BlockPos entityPos, Block block) {
+    @Override
+    public void playStepSound(BlockPos pos, Block block) {
         // no sounds for eggs or underwater action
         if (isEgg() || isInWater() || isOverWater() || isFlying() || isSitting()) return;
 
         SoundEvent stepSound;
         // baby has quiet steps, larger have stomping sound
         if (isChild()) {
-            SoundType soundType;
             // override sound type if the top block is snowy
-            if (world.getBlockState(entityPos.up()).getBlock() == Blocks.SNOW_LAYER)
-                soundType = Blocks.SNOW_LAYER.getSoundType();
-            else
-                soundType = block.getSoundType();
-            stepSound = soundType.getStepSound();
+            stepSound = (world.getBlockState(pos.up()).getBlock() == Blocks.SNOW_LAYER
+                    ? Blocks.SNOW_LAYER
+                    : block
+            ).getSoundType().getStepSound();
         } else {
             stepSound = getStepSound();
         }

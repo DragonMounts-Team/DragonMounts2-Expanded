@@ -1,5 +1,6 @@
 package net.dragonmounts.type;
 
+import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.NetherBreath;
@@ -19,18 +20,25 @@ public class NetherType extends DragonType {
     }
 
     @Override
-    public void tick(TameableDragonEntity dragon) {
+    public void tickClient(ClientDragonEntity dragon) {
+        if (dragon.isDead || !dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) return;
         World level = dragon.world;
-        if (level.isRemote || dragon.isDead || !dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE))
-            return;
         Random random = level.rand;
         float s = dragon.getAdjustedSize();
         float h = dragon.height * s;
         float f = (dragon.width - 0.65F) * s;
-        boolean isWet = dragon.isWet();
-        for (int i = -1; i < s; ++i) {
+        level.spawnParticle(
+                EnumParticleTypes.DRIP_LAVA,
+                dragon.posX + (random.nextDouble() - 0.5) * f,
+                dragon.posY + (random.nextDouble() - 0.5) * h,
+                dragon.posZ + (random.nextDouble() - 0.5) * f,
+                0,
+                0,
+                0
+        );
+        if (dragon.isWet()) {
             level.spawnParticle(
-                    EnumParticleTypes.DRIP_LAVA,
+                    EnumParticleTypes.SMOKE_NORMAL,
                     dragon.posX + (random.nextDouble() - 0.5) * f,
                     dragon.posY + (random.nextDouble() - 0.5) * h,
                     dragon.posZ + (random.nextDouble() - 0.5) * f,
@@ -38,17 +46,6 @@ public class NetherType extends DragonType {
                     0,
                     0
             );
-            if (isWet) {
-                level.spawnParticle(
-                        EnumParticleTypes.SMOKE_NORMAL,
-                        dragon.posX + (random.nextDouble() - 0.5) * f,
-                        dragon.posY + (random.nextDouble() - 0.5) * h,
-                        dragon.posZ + (random.nextDouble() - 0.5) * f,
-                        0,
-                        0,
-                        0
-                );
-            }
         }
     }
 

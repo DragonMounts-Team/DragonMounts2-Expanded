@@ -1,0 +1,9 @@
+{
+  "model": "minecraft:knowledge_book",
+  "creative_tab": "dragonmounts.items",
+  "name": "book.dragonmounts.guide_book.name",
+  "subtitle": "book.dragonmounts.guide_book.desc",
+  "landing_text": "book.dragonmounts.guide_book.landing",
+  "show_progress": false,
+  "macros": {}
+}

@@ -23,6 +23,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod.EventBusSubscriber
 public abstract class DragonMountsCompat {
+    public static final String BAUBLES = "baubles";
+    public static final String PATCHOULI = "patchouli";
+
     public static final int VERSION = 1;
     public static final Object2ObjectOpenHashMap<String, Item> ITEM_MAPPINGS;
     public static final DragonEntityCompat DRAGON_ENTITY_FIX = new DragonEntityCompat();

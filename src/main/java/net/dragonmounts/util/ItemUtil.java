@@ -37,7 +37,7 @@ public class ItemUtil {
         for (int i = 0, size = list.tagCount(); i < size; ++i) {
             NBTTagCompound stack = list.getCompoundTagAt(i);
             int slot = stack.getByte("Slot");
-            if (slot < 0 || slot >= size) continue;
+            if (slot < 0 || slot >= stacks.length) continue;
             stacks[slot] = new ItemStack(stack);
         }
     }

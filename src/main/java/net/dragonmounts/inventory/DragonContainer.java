@@ -13,6 +13,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import static net.dragonmounts.util.DMUtils.applyBackground;
+
 public class DragonContainer<T extends TameableDragonEntity> extends Container {
 	public final DragonInventory inventory;
 	public final WhistleSlot whistle;
@@ -31,7 +33,7 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 		}
 		this.addSlotToContainer(this.whistle = new WhistleSlot(whistle, this, 8, 8));
 		// location of the slot for the saddle in the dragon inventory
-		this.addSlotToContainer(new Slot(inventory, 33, 156, 18) {
+		this.addSlotToContainer(applyBackground(new Slot(inventory, 33, 156, 18) {
 			public boolean isItemValid(ItemStack stack) {
 				return !stack.isEmpty() && stack.getItem() == Items.SADDLE && !this.getHasStack();
 			}
@@ -50,10 +52,10 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 			public int getSlotStackLimit() {
 				return 1;
 			}
-		});
+		}, "dragonmounts:items/slot/empty_saddle"));
 
 		// location of the slot for chest in the dragon inventory
-		this.addSlotToContainer(new Slot(inventory, 31, 156, 36) {
+		this.addSlotToContainer(applyBackground(new Slot(inventory, 31, 156, 36) {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
 				return DragonInventory.isValidChest(stack) && !this.getHasStack();
@@ -68,18 +70,18 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 			public int getSlotStackLimit() {
 				return 1;
 			}
-		});
+		}, "dragonmounts:items/slot/empty_chest"));
 
 		// location of the slot for armor in the dragon inventory
-		this.addSlotToContainer(new Slot(inventory, 32, 156, 54) {
+		this.addSlotToContainer(applyBackground(new Slot(inventory, 32, 156, 54) {
 			public boolean isItemValid(ItemStack stack) {
 				return !stack.isEmpty() && stack.getItem() instanceof DragonArmorItem && dragon.isOldEnoughToBreathe();
 			}
-		});
+		}, "dragonmounts:items/slot/empty_dragon_armor"));
 
 		// Build Banner Slots
 		for (int b = 0; b < 4; ++b) {
-			this.addSlotToContainer(new Slot(inventory, 27 + b, b == 1 || b == 2 ? 282 : 300, b < 2 ? 36 : 18) {
+			this.addSlotToContainer(applyBackground(new Slot(inventory, 27 + b, b == 1 || b == 2 ? 282 : 300, b < 2 ? 36 : 18) {
 				public boolean isItemValid(ItemStack stack) {
 					return !stack.isEmpty() && stack.getItem() == Items.BANNER && !this.getHasStack();
 				}
@@ -88,7 +90,7 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 				public boolean isEnabled() {
 					return dragon.isOldEnoughToBreathe();
 				}
-			});
+			}, "dragonmounts:items/slot/empty_banner"));
 		}
 
 		// Build Chest Inventory Slots

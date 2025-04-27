@@ -6,7 +6,9 @@ import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ReferenceSet;
 import it.unimi.dsi.fastutil.objects.ReferenceSets;
+import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.ClientUtil;
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.FireBreath;
@@ -74,7 +76,10 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
         this.translationKey = DMUtils.makeDescriptionId("dragon_type", identifier);
     }
 
-    public void tick(TameableDragonEntity dragon) {}
+    public void tickServer(ServerDragonEntity dragon) {}
+
+    /// Do **NOT** directly access client only class here!
+    public void tickClient(ClientDragonEntity dragon) {}
 
     public boolean isHabitatEnvironment(Entity egg) {
         return false;

@@ -237,3 +237,7 @@ config.dragonmounts.toggleDimensionLimitation=Allow Declared Dimensions Only
 config.dragonmounts.toggleDimensionLimitation.tooltip=If enabled, Dragon Nests will only be generated in declared dimensions; otherwise they will not be generated in the declared dimensions
 config.dragonmounts.limitedDimensions=Limited Dimensions
 config.dragonmounts.limitedDimensions.tooltip=A list of limited dimensions' numeric id
+
+book.dragonmounts.guide_book.name=Guide Book
+book.dragonmounts.guide_book.desc=Description
+book.dragonmounts.guide_book.landing=Landing

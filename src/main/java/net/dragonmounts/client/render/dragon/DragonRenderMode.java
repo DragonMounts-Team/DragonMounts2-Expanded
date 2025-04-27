@@ -29,12 +29,9 @@ public enum DragonRenderMode {
     SADDLE {
         @Override
         public void render(DragonModel model, float scale) {
-            model.neck.render(scale);
             model.saddle.showModel = true;
             model.body.render(scale);
             model.saddle.showModel = false;
-            GlStateManager.scale(-1, 1, 1);
-            model.renderWings(scale);
         }
     };
 

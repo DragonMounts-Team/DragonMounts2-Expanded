@@ -3,6 +3,8 @@ package net.dragonmounts.event;
 import net.dragonmounts.block.HatchableDragonEggBlock;
 import net.dragonmounts.capability.ArmorEffectManager;
 import net.dragonmounts.capability.IArmorEffectManager;
+import net.dragonmounts.compat.DragonMountsCompat;
+import net.dragonmounts.compat.PatchouliCompat;
 import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DragonTypes;
@@ -18,7 +20,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import static net.dragonmounts.capability.DMCapabilities.ARMOR_EFFECT_MANAGER;
@@ -77,7 +81,10 @@ public class CommonMisc {
     }
 
     @SubscribeEvent
-    public static void onPlayerJoin(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent event) {
+    public static void onPlayerJoin(PlayerLoggedInEvent event) {
+        if (Loader.isModLoaded(DragonMountsCompat.PATCHOULI)) {
+            PatchouliCompat.grantGuideBook(event.player);
+        }
         IArmorEffectManager manager = event.player.getCapability(ARMOR_EFFECT_MANAGER, null);
         if (manager != null) {
             manager.sendInitPacket();

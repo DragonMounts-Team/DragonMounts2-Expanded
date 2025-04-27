@@ -12,7 +12,7 @@ public class SimpleTailPart extends TailPart {
 
     public SimpleTailPart(ModelBase base, String name) {
         super(base, name);
-        this.snapshots = DMUtils.makeArray(new ScalableSnapshot[TAIL_SEGMENTS], ScalableSnapshot::new);
+        this.snapshots = DMUtils.fillArray(new ScalableSnapshot[TAIL_SEGMENTS], ScalableSnapshot::new);
     }
 
     @Override

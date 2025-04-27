@@ -1,10 +1,13 @@
 package net.dragonmounts.type;
 
+import net.dragonmounts.client.ClientDragonEntity;
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.IceBreath;
 import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.util.MutableBlockPosEx;
 import net.minecraft.enchantment.EnchantmentFrostWalker;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumParticleTypes;
@@ -23,15 +26,14 @@ public class IceType extends DragonType {
     }
 
     @Override
-    public void tick(TameableDragonEntity dragon) {
+    public void tickClient(ClientDragonEntity dragon) {
         World level = dragon.world;
-        if (level.isRemote) return;
-        DragonLifeStage stage = dragon.lifeStageHelper.getLifeStage();
-        if (dragon.isOverWater()) {
-            EnchantmentFrostWalker.freezeNearby(dragon, level, new BlockPos(dragon), DragonLifeStage.EGG == stage ? 0 : 1);
-        }
-        Random random = level.rand;
-        if (!dragon.isDead && dragon.posY > level.getHeight() * 1.25 && stage.isOldEnough(DragonLifeStage.PREJUVENILE) && BiomeDictionary.hasType(level.getBiome(dragon.getPosition()), BiomeDictionary.Type.SNOWY)) {
+        if (!dragon.isDead &&
+                dragon.posY > level.getWorldType().getCloudHeight() &&
+                dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE) &&
+                BiomeDictionary.hasType(level.getBiome(dragon.getPosition()), BiomeDictionary.Type.SNOWY)
+        ) {
+            Random random = level.rand;
             float s = dragon.getAdjustedSize() * 1.2f;
             float f = (dragon.width - 0.65F) * s;
             level.spawnParticle(
@@ -44,22 +46,29 @@ public class IceType extends DragonType {
                     0
             );
         }
-        // only apply on server adult dragons that isn't flying
-        if (DragonLifeStage.ADULT != stage || dragon.isFlying()) return;
+    }
 
-        // footprint loop, from EntitySnowman.onLivingUpdate with slight tweaks
+    /// @see net.minecraft.entity.monster.EntitySnowman#onLivingUpdate()
+    @Override
+    public void tickServer(ServerDragonEntity dragon) {
+        DragonLifeStage stage = dragon.lifeStageHelper.getLifeStage();
+        if (dragon.isOverWater()) {
+            EnchantmentFrostWalker.freezeNearby(dragon, dragon.world, new BlockPos(dragon), DragonLifeStage.EGG == stage ? 0 : 1);
+        }
+        // only apply on adult dragons that isn't flying
+        if (DragonLifeStage.ADULT != stage || dragon.isFlying()) return;
+        World level = dragon.world;
+        Random random = level.rand;
+        MutableBlockPosEx pos = new MutableBlockPosEx(0, 0, 0);
         for (int i = 0; i < 4; ++i) {
             // place only if randomly selected
             if (random.nextFloat() > FOOTPRINT_CHANCE) continue;
-
-            // get footprint position
-            double bx = dragon.posX + (i & 1) * 0.5 - 0.25;
-            double by = dragon.posY + 0.5;
-            double bz = dragon.posZ + (i / 2 % 2 * 2 - 1) * 0.25;
-            BlockPos pos = new BlockPos(bx, by, bz);
-
             // footprints can only be placed on empty space
-            if (level.isAirBlock(pos) && level.getBiomeForCoordsBody(pos).getTemperature(pos) < 0.1F && Blocks.SNOW_LAYER.canPlaceBlockAt(level, pos)) {
+            if (level.isAirBlock(pos.with(
+                    (i & 1) == 0 ? dragon.posX - 0.25 : dragon.posX + 0.25,
+                    dragon.posY + 0.5,
+                    i < 2 ? dragon.posZ - 0.25 : dragon.posX + 0.25
+            )) && level.getBiomeForCoordsBody(pos).getTemperature(pos) < 0.1F && Blocks.SNOW_LAYER.canPlaceBlockAt(level, pos)) {
                 level.setBlockState(pos, Blocks.SNOW_LAYER.getDefaultState());
             }
         }

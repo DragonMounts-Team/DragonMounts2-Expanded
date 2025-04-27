@@ -61,7 +61,7 @@ public class ClientDragonEntity extends TameableDragonEntity {
         this.variantHelper.update();
         this.lifeStageHelper.ageUp(1);
         this.breathHelper.update();
-        this.getVariant().type.tick(this);
+        this.getVariant().type.tickClient(this);
         if (this.isEgg()) {
             super.onLivingUpdate();
             return;

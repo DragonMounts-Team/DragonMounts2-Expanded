@@ -1,7 +1,6 @@
 package net.dragonmounts.event;
 
 import net.dragonmounts.DragonMounts;
-import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.init.DMItems;
@@ -10,20 +9,25 @@ import net.dragonmounts.item.DragonSpawnEggItem;
 import net.dragonmounts.network.CDragonControlPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.ItemColors;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import static net.dragonmounts.DragonMountsTags.MOD_ID;
+
 public class ClientMisc {
     @SubscribeEvent
     public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.getModID().equals(DragonMountsTags.MOD_ID)) {
+        if (event.getModID().equals(MOD_ID)) {
             DMConfig.load();
         }
     }
@@ -90,5 +94,16 @@ public class ClientMisc {
             int brightness = MathHelper.clamp((int) (255 * (BRIGHTNESS_MIDPOINT + BRIGHTNESS_AMPLITUDE * MathHelper.sin((float) cyclePosRadians))), 0, 255);
             return ((brightness & 0xFF) << 16) | ((brightness & 0xFF) << 8) | (brightness & 0xFF);
         }, DMItems.DRAGON_ORB);
+    }
+
+    @SubscribeEvent
+    public static void registerSprites(TextureStitchEvent.Pre event) {
+        TextureMap map = event.getMap();
+        map.registerSprite(new ResourceLocation(MOD_ID, "items/slot/empty_banner"));
+        map.registerSprite(new ResourceLocation(MOD_ID, "items/slot/empty_chest"));
+        map.registerSprite(new ResourceLocation(MOD_ID, "items/slot/empty_dragon_armor"));
+        map.registerSprite(new ResourceLocation(MOD_ID, "items/slot/empty_essence"));
+        map.registerSprite(new ResourceLocation(MOD_ID, "items/slot/empty_saddle"));
+        map.registerSprite(new ResourceLocation(MOD_ID, "items/slot/empty_whistle"));
     }
 }

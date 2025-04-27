@@ -71,7 +71,9 @@ public class DragonMounts {
         NetworkRegistry.INSTANCE.registerGuiHandler(this, GuiHandler.INSTANCE);
         RegistryEventHandler.registerCapabilities();
         // Mod Compat Initialization
-        if (Loader.isModLoaded("baubles")) BaublesCompat.load();
+        if (Loader.isModLoaded(DragonMountsCompat.BAUBLES)) {
+            BaublesCompat.load();
+        }
     }
 
     @EventHandler

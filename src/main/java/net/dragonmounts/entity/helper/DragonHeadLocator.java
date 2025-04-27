@@ -13,7 +13,7 @@ import net.minecraft.util.math.Vec3d;
 public class DragonHeadLocator<T extends TameableDragonEntity> implements ITickable {
     public static final int NECK_SEGMENTS = 7;
     public final T dragon;
-    public final Segment[] neckSegments = DMUtils.makeArray(new Segment[NECK_SEGMENTS], Segment::new);
+    public final Segment[] neckSegments = DMUtils.fillArray(new Segment[NECK_SEGMENTS], Segment::new);
     public final Segment head = new Segment();
     // entity parameters
     protected float lookYaw;
@@ -173,7 +173,7 @@ public class DragonHeadLocator<T extends TameableDragonEntity> implements ITicka
                         (head.posZ + -15) * BODY_Z_SCALE + centerZ
                 ).rotatePitch(-MathX.toRadians(this.getPitch()))//rotate body
                 .subtract(0, centerY, centerZ)
-                .rotateYaw(MathX.PI_F + MathX.toRadians(-dragon.renderYawOffset))
+                .rotateYaw(MathX.PI_F - MathX.toRadians(dragon.renderYawOffset))
                 .add(dragon.posX, dragon.posY + dragon.getEyeHeight(), dragon.posZ);
     }
 

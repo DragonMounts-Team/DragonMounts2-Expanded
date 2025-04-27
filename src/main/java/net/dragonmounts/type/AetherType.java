@@ -1,5 +1,6 @@
 package net.dragonmounts.type;
 
+import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.AetherBreath;
@@ -18,7 +19,7 @@ public class AetherType extends DragonType {
     }
 
     @Override
-    public void tick(TameableDragonEntity dragon) {
+    public void tickClient(ClientDragonEntity dragon) {
         World level = dragon.world;
         if (dragon.posY > level.getHeight() * 1.2 && level.isDaytime() && dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {
             Random random = level.rand;

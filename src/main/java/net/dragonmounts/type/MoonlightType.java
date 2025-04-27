@@ -1,5 +1,6 @@
 package net.dragonmounts.type;
 
+import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.MoonlightBreath;
@@ -17,11 +18,11 @@ public class MoonlightType extends DragonType {
     }
 
     @Override
-    public void tick(TameableDragonEntity dragon) {
+    public void tickClient(ClientDragonEntity dragon) {
         World level = dragon.world;
         if (dragon.posY > level.getHeight() && !level.isDaytime() && dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {
             Random random = level.rand;
-            float s = dragon.getAdjustedSize() * 1.2f;
+            float s = dragon.getAdjustedSize() * 1.2F;
             float f = (dragon.width - 0.65F) * s;
             level.spawnParticle(
                     EnumParticleTypes.FIREWORKS_SPARK,

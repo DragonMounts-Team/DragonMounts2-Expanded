@@ -32,7 +32,7 @@ import static net.dragonmounts.client.model.dragon.WingPart.WING_FINGERS;
 public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
     public static final int JAW_OPENING_TIME_FOR_ATTACK = 5;
     public static final int JAW_OPENING_TIME_FOR_ROAR = 20;
-    public final Segment[] tailSegments = DMUtils.makeArray(new Segment[TAIL_SEGMENTS], Segment::new);
+    public final Segment[] tailSegments = DMUtils.fillArray(new Segment[TAIL_SEGMENTS], Segment::new);
 
     // entity parameters
     private float moveTime;

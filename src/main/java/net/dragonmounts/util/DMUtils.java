@@ -1,5 +1,6 @@
 package net.dragonmounts.util;
 
+import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
@@ -17,17 +18,22 @@ public class DMUtils {
         return id == null ? type + ".unregistered_sadface" : type + '.' + id.getNamespace() + '.' + id.getPath().replace('/', '.');
     }
 
-    public static <T> T[] makeArray(T[] array, Supplier<? extends T> factory) {
+    public static <T> T[] fillArray(T[] array, Supplier<? extends T> factory) {
         for (int i = 0; i < array.length; ++i) {
             array[i] = factory.get();
         }
         return array;
     }
 
-    public static <T> T[] makeArray(T[] array, IntFunction<? extends T> factory) {
+    public static <T> T[] fillArray(T[] array, IntFunction<? extends T> factory) {
         for (int i = 0; i < array.length; ++i) {
             array[i] = factory.apply(i);
         }
         return array;
+    }
+
+    public static <T extends Slot> T applyBackground(T slot, String name) {
+        slot.setBackgroundName(name);
+        return slot;
     }
 }
