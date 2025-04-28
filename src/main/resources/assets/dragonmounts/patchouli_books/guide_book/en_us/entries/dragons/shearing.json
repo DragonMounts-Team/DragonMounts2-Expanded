@@ -1,0 +1,11 @@
+{
+  "name": "Shearing",
+  "icon": "dragonmounts:diamond_shears",
+  "category": "dragonmounts:dragons",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Dragons that have $(l:items/dragon_scales)scales$(/l) and are grown to the $(l:dragons/life_stage)Fledgling stage$(/l) can be sheared with $(l:items/hard_shears)Hard Shears$(/l).$(br2)The cooldown is depend on the type of the shears you used. For example, it will be 2.5 mins when using Diamond Shears.$(br2)$(o)$(t:It will start attacking you if you are untrusted.)Actually shearing is not such comfortable to a dragon.$(/t)$()"
+    }
+  ]
+}

@@ -1,10 +1,10 @@
 package net.dragonmounts.type;
 
 import net.dragonmounts.client.ClientDragonEntity;
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.DarkBreath;
-import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumParticleTypes;
@@ -21,7 +21,7 @@ public class DarkType extends DragonType {
     @Override
     public void tickClient(ClientDragonEntity dragon) {
         World level = dragon.world;
-        if (dragon.posY > level.getHeight() * 1.2 && level.isDaytime() && dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {
+        if (dragon.posY > level.getHeight() * 1.2 && level.isDaytime() && dragon.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING)) {
             Random random = level.rand;
             float s = dragon.getAdjustedSize() * 1.2f;
             float h = dragon.height * s;

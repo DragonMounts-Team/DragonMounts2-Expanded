@@ -1,7 +1,7 @@
 package net.dragonmounts.type;
 
 import net.dragonmounts.client.ClientDragonEntity;
-import net.dragonmounts.entity.helper.DragonLifeStage;
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
@@ -17,7 +17,7 @@ public class SunlightType extends DragonType {
     @Override
     public void tickClient(ClientDragonEntity dragon) {
         World level = dragon.world;
-        if (dragon.posY > level.getHeight() + 8 && level.isDaytime() && dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {
+        if (dragon.posY > level.getHeight() + 8 && level.isDaytime() && dragon.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING)) {
             Random random = level.rand;
             float s = dragon.getAdjustedSize() * 1.2f;
             float h = dragon.height * s;

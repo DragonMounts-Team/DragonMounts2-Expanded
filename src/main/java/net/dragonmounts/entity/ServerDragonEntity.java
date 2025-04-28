@@ -14,7 +14,6 @@ import net.dragonmounts.entity.goal.target.ControlledTargetGoal;
 import net.dragonmounts.entity.goal.target.DragonHuntTargetGoal;
 import net.dragonmounts.entity.goal.target.DragonHurtByTargetGoal;
 import net.dragonmounts.entity.helper.DragonHeadLocator;
-import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.entity.helper.DragonReproductionHelper;
 import net.dragonmounts.entity.navigation.PathNavigateFlying;
 import net.dragonmounts.init.*;
@@ -288,7 +287,6 @@ public class ServerDragonEntity extends TameableDragonEntity {
         }
     }
 
-
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         DragonLifeStage stage = this.lifeStageHelper.getLifeStage();
@@ -465,7 +463,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
         if (other instanceof CarriageEntity &&
                 this.isSaddled() &&
                 !other.isRiding() &&
-                this.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE) &&
+                this.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING) &&
                 !other.isPassenger(this)
         ) {
             List<Entity> passengers = this.getPassengers();

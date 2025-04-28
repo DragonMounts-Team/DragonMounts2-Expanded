@@ -9,14 +9,19 @@ import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.inventory.WhistleHolder;
+import net.dragonmounts.item.IEntityContainer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -83,11 +88,27 @@ public class CommonMisc {
     @SubscribeEvent
     public static void onPlayerJoin(PlayerLoggedInEvent event) {
         if (Loader.isModLoaded(DragonMountsCompat.PATCHOULI)) {
-            PatchouliCompat.grantGuideBook(event.player);
+            PatchouliCompat.checkAndGrantGuideBook(event.player);
         }
         IArmorEffectManager manager = event.player.getCapability(ARMOR_EFFECT_MANAGER, null);
         if (manager != null) {
             manager.sendInitPacket();
+        }
+    }
+
+    @SubscribeEvent
+    public static void onEntitySpawn(EntityJoinWorldEvent event) {
+        if (event.getWorld().isRemote) return;
+        Entity entity = event.getEntity();
+        if (entity instanceof EntityItem) {
+            EntityItem item = (EntityItem) entity;
+            ItemStack stack = item.getItem();
+            Item type = stack.getItem();
+            if (type instanceof IEntityContainer<?> && !(
+                    (IEntityContainer<?>) type
+            ).isEmpty(stack.getTagCompound())) {
+                item.age = -32768;
+            }
         }
     }
 }

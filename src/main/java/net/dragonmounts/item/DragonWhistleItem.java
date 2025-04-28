@@ -78,12 +78,17 @@ public class DragonWhistleItem extends Item {
         NBTTagCompound root = stack.getTagCompound();
         if (root == null) return null;
         if (root.hasKey("Breed")) {
-            root.setString("Type", DragonTypeCompat.MAPPING.getOrDefault(root.getString("Breed"), DragonTypes.ENDER).identifier.toString());
+            root.setString("Type", DragonTypeCompat.MAPPING.getOrDefault(
+                    root.getString("Breed"),
+                    DragonTypes.ENDER
+            ).identifier.toString());
             root.removeTag("Breed");
         }
         if (root.hasKey("Age", 8)) {
             String name = root.getString("Age");
-            if (name.startsWith("dragon.")) {
+            if ("life_stage.dragon.prejuvenile".equals(name)) {
+                root.setString("Age", "life_stage.dragon.fledgling");
+            } else if (name.startsWith("dragon.")) {
                 root.setString("Age", "life_stage." + name);
             }
         }

@@ -1,7 +1,7 @@
 package net.dragonmounts.client.breath;
 
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.breath.DragonBreath;
-import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ITickableSound;

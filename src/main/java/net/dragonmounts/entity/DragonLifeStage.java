@@ -7,7 +7,7 @@
  **    May you find forgiveness for yourself and forgive others.
  **    May you share freely, never taking more than you give.
  */
-package net.dragonmounts.entity.helper;
+package net.dragonmounts.entity;
 
 import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.util.math.MathX;
@@ -24,18 +24,17 @@ public enum DragonLifeStage {
     EGG(null, 36, 0.25F, 0.25F, BreathPower.SMALL),
     HATCHLING(EGG, 48, 0.04F, 0.09F, BreathPower.SMALL),
     INFANT(HATCHLING, 24, 0.10f, 0.18F, BreathPower.SMALL),
-    PREJUVENILE(INFANT, 32, 0.19F, 0.60F, BreathPower.SMALL),
-    JUVENILE(PREJUVENILE, 60, 0.61F, 0.99F, BreathPower.MEDIUM),
+    FLEDGLING(INFANT, 32, 0.19F, 0.60F, BreathPower.SMALL),
+    JUVENILE(FLEDGLING, 60, 0.61F, 0.99F, BreathPower.MEDIUM),
     // scale of the final stage should be 1.00F to avoid breaking other code
     ADULT(JUVENILE, 0, 1.00F, 1.00f, BreathPower.LARGE);
 
-//  desired durations (30 Jun 2019)
+//  durations (28 April 2025)
 //  egg = 30 minutes
-//  hatchling = 45 minutes
-//          infant = 14 minutes (just filler)
-//  prejuvenile = 22 minutes (just filler)
+//  hatchling = 40 minutes
+//  infant = 20 minutes (just filler)
+//  fledgling = 26.67 minutes (just filler)
 //  juvenile = 50 minutes
-//          adult = 1 hour
 
     public final String identifier;
     public final String translationKey;
@@ -60,10 +59,6 @@ public enum DragonLifeStage {
      */
     public boolean isBaby() {
         return this == HATCHLING || this == INFANT;
-    }
-
-    public boolean isJuvenile() {
-        return this == JUVENILE || this == PREJUVENILE;
     }
 
     public boolean isOldEnough(DragonLifeStage stage) {

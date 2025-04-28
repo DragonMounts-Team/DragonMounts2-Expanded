@@ -1,8 +1,8 @@
 package net.dragonmounts.capability;
 
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;

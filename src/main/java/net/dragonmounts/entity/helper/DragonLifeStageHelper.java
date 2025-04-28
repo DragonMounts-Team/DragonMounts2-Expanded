@@ -10,6 +10,7 @@
 package net.dragonmounts.entity.helper;
 
 import net.dragonmounts.block.HatchableDragonEggBlock;
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMBlocks;
@@ -27,7 +28,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Random;
 import java.util.UUID;
 
-import static net.dragonmounts.entity.helper.DragonLifeStage.getLifeStageFromTickCount;
+import static net.dragonmounts.entity.DragonLifeStage.getLifeStageFromTickCount;
 import static net.dragonmounts.util.EntityUtil.replaceAttributeModifier;
 import static net.minecraft.entity.SharedMonsterAttributes.*;
 
@@ -229,11 +230,8 @@ public class DragonLifeStageHelper {
      * @return whether this life stage act like a vanilla baby
      */
     public boolean isBaby() {
-        return getLifeStage().isBaby();
-    }
-
-    public boolean isJuvenile() {
-        return getLifeStage().isJuvenile();
+        int age = this.getTicksSinceCreation();
+        return age >= DragonLifeStage.EGG.boundaryTick && age < DragonLifeStage.INFANT.boundaryTick;
     }
 
     public boolean isOldEnough(DragonLifeStage stage) {

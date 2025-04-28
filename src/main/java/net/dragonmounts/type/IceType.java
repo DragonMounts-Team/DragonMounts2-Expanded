@@ -1,11 +1,11 @@
 package net.dragonmounts.type;
 
 import net.dragonmounts.client.ClientDragonEntity;
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.IceBreath;
-import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.MutableBlockPosEx;
 import net.minecraft.enchantment.EnchantmentFrostWalker;
@@ -30,7 +30,7 @@ public class IceType extends DragonType {
         World level = dragon.world;
         if (!dragon.isDead &&
                 dragon.posY > level.getWorldType().getCloudHeight() &&
-                dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE) &&
+                dragon.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING) &&
                 BiomeDictionary.hasType(level.getBiome(dragon.getPosition()), BiomeDictionary.Type.SNOWY)
         ) {
             Random random = level.rand;

@@ -1,0 +1,11 @@
+{
+  "name": "Dragon Whistle",
+  "icon": "dragonmounts:dragon_whistle",
+  "category": "dragonmounts:items",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Bind it in the inventory of a tamed dragon."
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 package net.dragonmounts.util.debugging;
 
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.breath.BreathPower;
-import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.item.TestRunnerItem;
 import net.dragonmounts.util.LogUtil;
 import net.minecraft.command.CommandClone;

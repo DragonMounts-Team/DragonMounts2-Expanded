@@ -24,6 +24,11 @@ public class TypeCommand extends DragonHandlerCommand {
     }
 
     @Override
+    public int getRequiredPermissionLevel() {
+        return 3;
+    }
+
+    @Override
     public String getName() {
         return "type";
     }

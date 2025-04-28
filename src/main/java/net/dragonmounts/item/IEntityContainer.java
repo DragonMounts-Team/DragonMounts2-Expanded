@@ -2,9 +2,13 @@ package net.dragonmounts.item;
 
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 
@@ -37,10 +41,6 @@ public interface IEntityContainer<T extends Entity> {
 
     ItemStack saveEntity(T entity);
 
-    /**
-     * null: denied
-     * empty: failed
-     */
     @Nullable
     Entity loadEntity(
             WorldServer level,
@@ -54,4 +54,20 @@ public interface IEntityContainer<T extends Entity> {
     Class<T> getContentType();
 
     boolean isEmpty(@Nullable NBTTagCompound tag);
+
+    default void onItemDestroy(EntityItem entity, ItemStack stack) {
+        if (!this.isEmpty(stack.getTagCompound())) {
+            Entity content = this.loadEntity((WorldServer) entity.world, stack, null, entity.getPosition(), false, null);
+        }
+        entity.world.playSound(entity.posX, entity.posY, entity.posZ, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.NEUTRAL, 1F, 1F, false);
+    }
+
+    static void onItemDestroy(EntityItem entity) {
+        if (!(entity.world instanceof WorldServer)) return;
+        ItemStack stack = entity.getItem();
+        Item item = stack.getItem();
+        if (item instanceof IEntityContainer<?>) {
+            ((IEntityContainer<?>) item).onItemDestroy(entity, stack);
+        }
+    }
 }

@@ -1,7 +1,7 @@
 package net.dragonmounts.type;
 
 import net.dragonmounts.client.ClientDragonEntity;
-import net.dragonmounts.entity.helper.DragonLifeStage;
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
@@ -16,7 +16,7 @@ public class EnchantType extends DragonType {
 
     @Override
     public void tickClient(ClientDragonEntity dragon) {
-        if (dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {
+        if (dragon.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING)) {
             World level = dragon.world;
             Random random = level.rand;
             float s = dragon.getAdjustedSize() * 1.2f;

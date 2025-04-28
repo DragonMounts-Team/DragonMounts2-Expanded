@@ -1,7 +1,7 @@
 package net.dragonmounts.entity.breath.impl;
 
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.init.DMSounds;
 import net.minecraft.util.SoundEvent;
 

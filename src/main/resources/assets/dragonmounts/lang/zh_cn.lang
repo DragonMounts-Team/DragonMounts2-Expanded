@@ -26,10 +26,10 @@ dragon_type.dragonmounts.terra=土纹
 dragon_type.dragonmounts.dark=黑暝
 
 life_stage.dragon.egg=蛋
-life_stage.dragon.hatchling=孵化
+life_stage.dragon.hatchling=雏儿
 life_stage.dragon.infant=幼年
-life_stage.dragon.prejuvenile=青少年
-life_stage.dragon.juvenile=少年
+life_stage.dragon.fledgling=少年
+life_stage.dragon.juvenile=青年
 life_stage.dragon.adult=成年
 
 item.dragonmounts.diamond_shears.name=钻石剪刀

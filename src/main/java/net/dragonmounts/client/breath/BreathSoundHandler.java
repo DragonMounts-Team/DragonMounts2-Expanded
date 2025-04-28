@@ -1,8 +1,8 @@
 package net.dragonmounts.client.breath;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayFIFOQueue;
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.breath.DragonBreath;
-import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.Vec3d;
 

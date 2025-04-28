@@ -9,8 +9,10 @@
  */
 package net.dragonmounts.command;
 
+import net.dragonmounts.compat.DragonMountsCompat;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.server.command.CommandTreeBase;
 import net.minecraftforge.server.command.CommandTreeHelp;
 
@@ -28,6 +30,9 @@ public class DragonCommandTree extends CommandTreeBase {
         super.addSubcommand(new StageCommand());
         super.addSubcommand(new TameCommand());
         super.addSubcommand(new UnlockCommand());
+        if (Loader.isModLoaded(DragonMountsCompat.PATCHOULI)) {
+            super.addSubcommand(new BookCommand());
+        }
         super.addSubcommand(new CommandTreeHelp(this));
     }
 
@@ -43,7 +48,7 @@ public class DragonCommandTree extends CommandTreeBase {
 
     @Override
     public int getRequiredPermissionLevel() {
-        return 3;
+        return 0;
     }
 
     @Override

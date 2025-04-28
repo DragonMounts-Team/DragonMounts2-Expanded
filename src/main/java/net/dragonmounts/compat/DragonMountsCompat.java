@@ -14,12 +14,14 @@ import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.DragonScaleArmorSuit;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.datafix.FixTypes;
 import net.minecraftforge.common.util.ModFixs;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.EntityEntry;
 
 @Mod.EventBusSubscriber
 public abstract class DragonMountsCompat {
@@ -36,6 +38,15 @@ public abstract class DragonMountsCompat {
         fixer.registerFix(FixTypes.ENTITY, DRAGON_ENTITY_FIX);
         fixer.registerFix(FixTypes.BLOCK_ENTITY, new DMBlockEntityCompat());
         fixer.registerFix(FixTypes.STRUCTURE, new DragonNestCompat());
+    }
+
+    @SubscribeEvent
+    public static void remapEntity(RegistryEvent.MissingMappings<EntityEntry> event) {
+        for (RegistryEvent.MissingMappings.Mapping<EntityEntry> mapping : event.getMappings()) {
+            if (mapping.key.getPath().equals("indestructible")) {
+                mapping.remap(event.getRegistry().getValue(new ResourceLocation("item")));
+            }
+        }
     }
 
     @SubscribeEvent

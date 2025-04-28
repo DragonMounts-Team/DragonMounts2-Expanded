@@ -9,15 +9,36 @@ import org.objectweb.asm.tree.*;
 import java.util.Iterator;
 
 public abstract class DMClassTransformers {
+    static boolean notMethod(ClassNode clazz, MethodNode method, String forge, String searge) {
+        return !forge.equals(method.name) && !searge.equals(
+                FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(clazz.name, method.name, method.desc)
+        );
+    }
+
+    static boolean notMethod(MethodInsnNode method, String forge, String searge) {
+        return !forge.equals(method.name) && !searge.equals(
+                FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(method.owner, method.name, method.desc)
+        );
+    }
+
+    /**
+     * <pre>{@code
+     * // insertion start
+     * if (item instanceof DragonHeadItem) {
+     *     DragonHeadBlockEntityRenderer.renderLayer((DragonHeadItem) item, limbSwing, flag);
+     *     return;
+     * }
+     * // insertion end
+     * if (item == Items.SKULL) // before here
+     * }</pre>
+     */
     public static byte[] transformLayerCustomHead(byte[] bytecodes) {
         ClassReader reader = new ClassReader(bytecodes);
         ClassNode root = new ClassNode();
         reader.accept(root, 0);
-        for (MethodNode method : root.methods) {
-            if (!"doRenderLayer".equals(method.name) && !"func_177141_a".equals(
-                    FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(root.name, method.name, method.desc)
-            )) continue;
-            Iterator<AbstractInsnNode> iterator = method.instructions.iterator();
+        for (MethodNode entry : root.methods) {
+            if (notMethod(root, entry, "doRenderLayer", "func_177141_a")) continue;
+            Iterator<AbstractInsnNode> iterator = entry.instructions.iterator();
             while (iterator.hasNext()) {
                 AbstractInsnNode node = iterator.next();
                 if (node instanceof VarInsnNode && node.getOpcode() == Opcodes.ALOAD && iterator.hasNext()) {
@@ -33,7 +54,7 @@ public abstract class DMClassTransformers {
                             inject.add(new VarInsnNode(Opcodes.ALOAD, ref));
                             inject.add(new TypeInsnNode(Opcodes.CHECKCAST, "net/dragonmounts/item/DragonHeadItem"));
                             inject.add(new VarInsnNode(Opcodes.FLOAD, 2)); // limbSwing
-                            inject.add(new VarInsnNode(Opcodes.ILOAD, 12)); // isVillager
+                            inject.add(new VarInsnNode(Opcodes.ILOAD, 12)); // flag (isVillager)
                             inject.add(new MethodInsnNode(
                                     Opcodes.INVOKESTATIC,
                                     "net/dragonmounts/client/render/DragonHeadBlockEntityRenderer",
@@ -44,10 +65,49 @@ public abstract class DMClassTransformers {
                             inject.add(new InsnNode(Opcodes.RETURN));
                             inject.add(back);
                             inject.add(new VarInsnNode(Opcodes.ALOAD, ref));
-                            method.instructions.insertBefore(next, inject);
+                            entry.instructions.insertBefore(next, inject);
                             break;
                         }
                     }
+                }
+            }
+        }
+        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+        root.accept(writer);
+        return writer.toByteArray();
+    }
+
+    /**
+     * <pre>{@code
+     * this.setDead(); // after here
+     * // insertion start
+     * IEntityContainer.onItemDestroy(this);
+     * // insertion end
+     * }</pre>
+     */
+    public static byte[] transformEntityItem(byte[] bytecodes) {
+        ClassReader reader = new ClassReader(bytecodes);
+        ClassNode root = new ClassNode();
+        reader.accept(root, 0);
+        for (MethodNode entry : root.methods) {
+            if (notMethod(root, entry, "attackEntityFrom", "func_70097_a")) continue;
+            Iterator<AbstractInsnNode> iterator = entry.instructions.iterator();
+            while (iterator.hasNext()) {
+                AbstractInsnNode node = iterator.next();
+                if (node instanceof MethodInsnNode && node.getOpcode() == Opcodes.INVOKEVIRTUAL) {
+                    MethodInsnNode method = (MethodInsnNode) node;
+                    if (notMethod(method, "setDead", "func_70106_y")) continue;
+                    InsnList inject = new InsnList();
+                    inject.add(new VarInsnNode(Opcodes.ALOAD, 0)); // this
+                    inject.add(new MethodInsnNode(
+                            Opcodes.INVOKESTATIC,
+                            "net/dragonmounts/item/IEntityContainer",
+                            "onItemDestroy",
+                            "(Lnet/minecraft/entity/item/EntityItem;)V",
+                            true
+                    ));
+                    entry.instructions.insert(method, inject);
+                    break;
                 }
             }
         }

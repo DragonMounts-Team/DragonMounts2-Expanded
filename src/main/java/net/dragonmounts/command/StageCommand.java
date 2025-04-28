@@ -1,9 +1,9 @@
 package net.dragonmounts.command;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.EntityNotFoundException;
 import net.minecraft.command.ICommandSender;
@@ -25,6 +25,11 @@ public class StageCommand extends DragonHandlerCommand {
             stages.put(stage.name().toLowerCase(), stage);
         }
         this.stages = stages;
+    }
+
+    @Override
+    public int getRequiredPermissionLevel() {
+        return 3;
     }
 
     @Override

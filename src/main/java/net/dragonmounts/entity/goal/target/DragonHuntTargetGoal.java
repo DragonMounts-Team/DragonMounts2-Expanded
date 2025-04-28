@@ -10,8 +10,8 @@
 package net.dragonmounts.entity.goal.target;
 
 import com.google.common.base.Predicate;
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.minecraft.entity.ai.EntityAITargetNonTamed;
 import net.minecraft.entity.passive.EntityAnimal;
 
@@ -28,6 +28,6 @@ public class DragonHuntTargetGoal extends EntityAITargetNonTamed<EntityAnimal> {
 
     @Override
     public boolean shouldExecute() {
-        return this.dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE) && this.dragon.getHunger() < 50 && super.shouldExecute();
+        return this.dragon.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING) && this.dragon.getHunger() < 50 && super.shouldExecute();
     }
 }

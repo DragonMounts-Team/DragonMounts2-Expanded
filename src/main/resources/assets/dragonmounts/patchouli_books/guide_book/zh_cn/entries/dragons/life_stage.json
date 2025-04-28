@@ -1,0 +1,11 @@
+{
+  "name": "成长阶段",
+  "icon": "dragonmounts:ender_dragon_egg",
+  "category": "dragonmounts:dragons",
+  "pages": [
+    {
+      "type": "text",
+      "text": "一共有6个成长阶段：$(br)$(li)$(thing)蛋$()，孵化时间为30分钟。$(li)$(thing)雏儿$()，成长时间为40分钟。$(li2)视作幼崽。$(li)$(thing)幼年$()，成长时间为20分钟。$(li2)视作幼崽。$(li)$(thing)少年$()，成长时间约为26.67分钟。$(li)$(thing)青年$()，成长时间为50分钟。$(li)$(thing)成年$()。"
+    }
+  ]
+}

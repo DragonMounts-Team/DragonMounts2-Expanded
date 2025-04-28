@@ -150,7 +150,6 @@ public class RegistryEventHandler {
         IForgeRegistry<EntityEntry> registry = event.getRegistry();
         registry.register(DMEntities.DRAGON);
         registry.register(DMEntities.CARRIAGE);
-        registry.register(DMEntities.CONTAINER_ITEM);
     }
 
     @SubscribeEvent

@@ -6,9 +6,9 @@ import net.dragonmounts.capability.IDragonFood;
 import net.dragonmounts.capability.IHardShears;
 import net.dragonmounts.client.breath.impl.ClientBreathHelper;
 import net.dragonmounts.client.model.dragon.DragonAnimator;
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.init.DMKeyBindings;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.network.CDragonBreathPacket;
@@ -74,7 +74,7 @@ public class ClientDragonEntity extends TameableDragonEntity {
             this.findCrystal();
         }
         EnumParticleTypes sneeze = this.getVariant().type.sneezeParticle;
-        if (sneeze != null && rand.nextInt(700) == 0 && !this.isUsingBreathWeapon() && this.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {
+        if (sneeze != null && rand.nextInt(700) == 0 && !this.isUsingBreathWeapon() && this.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING)) {
             Vec3d throatPos = this.getThroatPosition();
             double throatPosX = throatPos.x;
             double throatPosY = throatPos.y;

@@ -15,7 +15,10 @@ import net.dragonmounts.capability.IDragonFood;
 import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.breath.DragonBreathHelper;
-import net.dragonmounts.entity.helper.*;
+import net.dragonmounts.entity.helper.DragonBodyHelper;
+import net.dragonmounts.entity.helper.DragonLifeStageHelper;
+import net.dragonmounts.entity.helper.DragonMoveHelper;
+import net.dragonmounts.entity.helper.DragonVariantHelper;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.init.DragonVariants;
@@ -185,7 +188,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     }
 
     public boolean canFly() {
-        return this.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE);
+        return this.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING);
     }
 
     /**
@@ -805,7 +808,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
 
     @Override
     public boolean isChild() {
-        return this.lifeStageHelper.getLifeStage().isBaby();
+        return this.lifeStageHelper.isBaby();
     }
 
     @Override
@@ -823,7 +826,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
 
     @Override
     protected ResourceLocation getLootTable() {
-        return this.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)
+        return this.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING)
                 ? this.getVariant().type.lootTable
                 : null;
     }

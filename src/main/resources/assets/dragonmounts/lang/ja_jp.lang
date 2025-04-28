@@ -35,7 +35,7 @@ dragon_type.dragonmounts.dark=ダーク
 life_stage.dragon.egg=卵
 life_stage.dragon.hatchling=幼生
 life_stage.dragon.infant=幼体
-life_stage.dragon.prejuvenile=Pre-亜成体
+life_stage.dragon.fledgling=Pre-亜成体
 life_stage.dragon.juvenile=未成体
 life_stage.dragon.adult=成体
 

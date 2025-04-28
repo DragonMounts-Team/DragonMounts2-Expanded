@@ -10,6 +10,7 @@
 package net.dragonmounts.entity.helper;
 
 import net.dragonmounts.config.DMConfig;
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.nbt.NBTTagCompound;

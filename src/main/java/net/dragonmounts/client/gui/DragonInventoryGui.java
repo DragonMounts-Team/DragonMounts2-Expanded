@@ -113,7 +113,7 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Wh
             case INFANT:
                 this.size = 45;
                 break;
-            case PREJUVENILE:
+            case FLEDGLING:
                 this.size = 18;
                 break;
             case JUVENILE:

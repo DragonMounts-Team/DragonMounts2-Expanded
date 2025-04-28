@@ -3,7 +3,6 @@ package net.dragonmounts.item;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.compat.DragonMountsCompat;
-import net.dragonmounts.entity.EntityContainerItemEntity;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMItems;
@@ -119,17 +118,6 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
         if (data.hasKey("OwnerName")) {
             tooltips.add(I18n.format("tooltip.dragonmounts.owner", TextFormatting.GOLD + data.getString("OwnerName")));
         }
-    }
-
-    @Nonnull
-    @Override
-    public Entity createEntity(World world, Entity location, ItemStack stack) {
-        return new EntityContainerItemEntity(world, location, stack);
-    }
-
-    @Override
-    public boolean hasCustomEntity(ItemStack stack) {
-        return true;
     }
 
     @Override

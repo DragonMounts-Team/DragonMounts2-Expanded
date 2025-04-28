@@ -1,8 +1,8 @@
 package net.dragonmounts.entity.breath;
 
 import net.dragonmounts.client.breath.impl.FlameBreathFX;
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.init.DMSounds;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;

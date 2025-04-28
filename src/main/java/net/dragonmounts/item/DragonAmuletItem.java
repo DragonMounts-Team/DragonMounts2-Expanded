@@ -54,7 +54,7 @@ public class DragonAmuletItem extends AmuletItem<TameableDragonEntity> {
 
     @Nullable
     @Override
-    public ServerDragonEntity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos, boolean yOffset, String feedback) {
+    public ServerDragonEntity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos, boolean yOffset, @Nullable String feedback) {
         ServerDragonEntity dragon = new ServerDragonEntity(level);
         NBTTagCompound root = stack.getTagCompound();
         boolean flag = root == null;

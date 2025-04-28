@@ -1,11 +1,11 @@
 package net.dragonmounts.type;
 
 import net.dragonmounts.client.ClientDragonEntity;
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.WaterBreath;
-import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.EntityUtil;
@@ -31,7 +31,7 @@ public class WaterType extends DragonType {
 
     @Override
     public void tickClient(ClientDragonEntity dragon) {
-        if (dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) {
+        if (dragon.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING)) {
             World level = dragon.world;
             Random random = level.rand;
             float s = dragon.getAdjustedSize() * 1.2f;

@@ -1,7 +1,7 @@
 package net.dragonmounts.item;
 
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.ServerDragonEntity;
-import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.init.DMEntities;
 import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.registry.DragonType;

@@ -1,10 +1,9 @@
 package net.dragonmounts.item;
 
 import net.dragonmounts.compat.DragonMountsCompat;
-import net.dragonmounts.entity.EntityContainerItemEntity;
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.EntityUtil;
@@ -115,17 +114,6 @@ public class DragonEssenceItem extends Item implements IEntityContainer<Tameable
     @Override
     public boolean isEmpty(@Nullable NBTTagCompound tag) {
         return false;
-    }
-
-    @Override
-    public boolean hasCustomEntity(ItemStack stack) {
-        return true;
-    }
-
-    @Nullable
-    @Override
-    public Entity createEntity(World world, Entity location, ItemStack stack) {
-        return new EntityContainerItemEntity(world, location, stack);
     }
 
     @Nullable

@@ -1,10 +1,10 @@
 package net.dragonmounts.type;
 
 import net.dragonmounts.client.ClientDragonEntity;
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.NetherBreath;
-import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.util.EnumParticleTypes;
@@ -21,7 +21,7 @@ public class NetherType extends DragonType {
 
     @Override
     public void tickClient(ClientDragonEntity dragon) {
-        if (dragon.isDead || !dragon.lifeStageHelper.isOldEnough(DragonLifeStage.PREJUVENILE)) return;
+        if (dragon.isDead || !dragon.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING)) return;
         World level = dragon.world;
         Random random = level.rand;
         float s = dragon.getAdjustedSize();

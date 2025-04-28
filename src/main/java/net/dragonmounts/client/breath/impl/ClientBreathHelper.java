@@ -3,11 +3,11 @@ package net.dragonmounts.client.breath.impl;
 import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.breath.BreathSound;
 import net.dragonmounts.client.breath.BreathSoundHandler;
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.BreathState;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.DragonBreathHelper;
-import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 

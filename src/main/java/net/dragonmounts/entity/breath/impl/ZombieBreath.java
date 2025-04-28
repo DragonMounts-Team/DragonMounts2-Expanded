@@ -1,12 +1,12 @@
 package net.dragonmounts.entity.breath.impl;
 
 import net.dragonmounts.client.breath.impl.PoisonBreathFX;
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathAffectedBlock;
 import net.dragonmounts.entity.breath.BreathAffectedEntity;
 import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.DragonBreath;
-import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.util.EntityUtil;
 import net.minecraft.block.Block;

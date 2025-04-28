@@ -1,5 +1,7 @@
 package net.dragonmounts.asm;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.launchwrapper.IClassTransformer;
 
@@ -8,12 +10,19 @@ import java.util.function.Function;
 import static net.dragonmounts.asm.DragonMountsPlugin.PLUGIN_LOGGER;
 
 public class DMClassTransformer implements IClassTransformer {
-    private static final Object2ObjectOpenHashMap<String, Function<byte[], byte[]>> TRANSFORMERS;
+    private static final Object2ObjectMap<String, Function<byte[], byte[]>> TRANSFORMERS;
 
     static {
         Object2ObjectOpenHashMap<String, Function<byte[], byte[]>> transformers = new Object2ObjectOpenHashMap<>();
-        transformers.put("net.minecraft.client.renderer.entity.layers.LayerCustomHead", DMClassTransformers::transformLayerCustomHead);
-        TRANSFORMERS = transformers;
+        transformers.put(
+                "net.minecraft.client.renderer.entity.layers.LayerCustomHead",
+                DMClassTransformers::transformLayerCustomHead
+        );
+        transformers.put(
+                "net.minecraft.entity.item.EntityItem",
+                DMClassTransformers::transformEntityItem
+        );
+        TRANSFORMERS = Object2ObjectMaps.unmodifiable(transformers);
     }
 
     @Override

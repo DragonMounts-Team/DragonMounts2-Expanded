@@ -2,7 +2,6 @@ package net.dragonmounts.init;
 
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.entity.CarriageEntity;
-import net.dragonmounts.entity.EntityContainerItemEntity;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.util.ResourceLocation;
@@ -26,12 +25,5 @@ public class DMEntities {
             .id(new ResourceLocation(DragonMountsTags.MOD_ID, "carriage"), 2)
             .tracker(32, 3, true)
             .name("carriage")
-            .build();
-    public static final EntityEntry CONTAINER_ITEM = EntityEntryBuilder.create()
-            .entity(EntityContainerItemEntity.class)
-            .factory(EntityContainerItemEntity::new)
-            .id(new ResourceLocation(DragonMountsTags.MOD_ID, "indestructible"), 3)
-            .tracker(64, 20, true)
-            .name("container_item")
             .build();
 }
