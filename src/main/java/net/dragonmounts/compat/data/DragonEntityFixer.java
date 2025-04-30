@@ -1,20 +1,17 @@
-package net.dragonmounts.compat.fixer;
+package net.dragonmounts.compat.data;
 
 import net.dragonmounts.entity.helper.DragonVariantHelper;
 import net.dragonmounts.init.DragonVariants;
+import net.dragonmounts.item.IEntityContainer;
 import net.dragonmounts.registry.DragonVariant;
+import net.dragonmounts.util.DMUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.datafix.IFixableData;
 
-public class DragonEntityCompat implements IFixableData {
-    @Override
-    public int getFixVersion() {
-        return 1;
-    }
+import javax.annotation.Nullable;
 
-    @Override
-    public NBTTagCompound fixTagCompound(NBTTagCompound tag) {
-        if (!tag.getString("id").equals("dragonmounts:dragon")) return tag;
+public class DragonEntityFixer implements IFixableData {
+    public static void fixDragonData(NBTTagCompound tag) {
         tag.setBoolean("FollowOwner", true);
         if (tag.hasKey("breedPoints")) {
             tag.setTag(DragonVariantHelper.NBT_VARIANT_POINTS, tag.getCompoundTag("breedPoints"));
@@ -59,6 +56,7 @@ public class DragonEntityCompat implements IFixableData {
                     variant = isMale ? DragonVariants.TERRA_MALE : DragonVariants.TERRA_FEMALE;
                     break;
                 case "water":
+                case "sylphid":
                     variant = isMale ? DragonVariants.WATER_MALE : DragonVariants.WATER_FEMALE;
                     break;
                 case "wither":
@@ -68,6 +66,7 @@ public class DragonEntityCompat implements IFixableData {
                     variant = DragonVariants.ZOMBIE;
                     break;
                 case "ender":
+                case "end":
                 default:
                     variant = isMale ? DragonVariants.ENDER_MALE : DragonVariants.ENDER_FEMALE;
                     break;
@@ -75,6 +74,31 @@ public class DragonEntityCompat implements IFixableData {
             tag.setString(DragonVariant.DATA_PARAMETER_KEY, variant.getSerializedName());
             tag.removeTag("Breed");
         }
+    }
+
+    public static NBTTagCompound fixContainerItem(NBTTagCompound root, @Nullable NBTTagCompound cap) {
+        NBTTagCompound result = DMUtils.putIfNeeded(new NBTTagCompound(), "ForgeCaps", cap);
+        if (root.hasKey("display")) {
+            result.setTag("display", root.getCompoundTag("display"));
+        }
+        root.removeTag("display");
+        root.removeTag("LocName");
+        NBTTagCompound entity = IEntityContainer.simplifyData(root).copy();
+        fixDragonData(entity);
+        entity.setString("id", "dragonmounts:dragon");
+        result.setTag("EntityTag", entity);
+        return result;
+    }
+
+    @Override
+    public int getFixVersion() {
+        return 1;
+    }
+
+    @Override
+    public NBTTagCompound fixTagCompound(NBTTagCompound tag) {
+        if (!"dragonmounts:dragon".equals(tag.getString("id"))) return tag;
+        fixDragonData(tag);
         return tag;
     }
 }

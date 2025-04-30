@@ -62,6 +62,11 @@ public class DeferredRegistry<V extends IForgeRegistryEntry<V>> implements IForg
     }
 
     @Nullable
+    public V getIfPresent(ResourceLocation key) {
+        return this.registry.containsKey(key) ? this.registry.getValue(key) : null;
+    }
+
+    @Nullable
     @Override
     public ResourceLocation getKey(V value) {
         return this.registry.getKey(value);

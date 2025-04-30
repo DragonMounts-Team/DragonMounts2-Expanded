@@ -2,7 +2,8 @@ package net.dragonmounts.item;
 
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.dragonmounts.client.ClientUtil;
-import net.dragonmounts.compat.DragonMountsCompat;
+import net.dragonmounts.compat.data.DragonEntityFixer;
+import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMItems;
@@ -22,7 +23,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -58,26 +58,23 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
         if (!this.isEmpty(stack.getTagCompound()) || !target.isEntityAlive()) return false;
         if (target instanceof TameableDragonEntity) {
             TameableDragonEntity dragon = (TameableDragonEntity) target;
-            if (dragon.isOwner(player)) {
-                DragonAmuletItem amulet = dragon.getVariant().type.getInstance(DragonAmuletItem.class, null);
-                if (amulet == null) return false;
-                if (dragon.world.isRemote) return true;
-                stack.shrink(1);
-                ItemStack result = amulet.saveEntity(dragon);
-                if (stack.isEmpty()) {
-                    stack.setCount(1); // prevent from clearing item
-                    ForgeEventFactory.onPlayerDestroyItem(player, stack.copy(), hand);
-                    player.setHeldItem(hand, result);
-                } else if (!player.addItemStackToInventory(result)) {
-                    player.dropItem(result, false);
-                }
-                if (dragon.getLeashed()) dragon.clearLeashed(true, true); // Fix Lead Dupe exploit
-                player.world.playSound(null, player.getPosition(), SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.NEUTRAL, 1, 1);
-                target.setDead();
-                return true;
-            } else {
-                player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.dragon.notOwner"), true);
+            if (Relation.denyIfNotOwner(dragon, player)) return false;
+            DragonAmuletItem amulet = dragon.getVariant().type.getInstance(DragonAmuletItem.class, null);
+            if (amulet == null) return false;
+            if (dragon.world.isRemote) return true;
+            stack.shrink(1);
+            ItemStack result = amulet.saveEntity(dragon);
+            if (stack.isEmpty()) {
+                stack.setCount(1); // prevent from clearing item
+                ForgeEventFactory.onPlayerDestroyItem(player, stack.copy(), hand);
+                player.setHeldItem(hand, result);
+            } else if (!player.addItemStackToInventory(result)) {
+                player.dropItem(result, false);
             }
+            if (dragon.getLeashed()) dragon.clearLeashed(true, true); // Fix Lead Dupe exploit
+            player.world.playSound(null, player.getPosition(), SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.NEUTRAL, 1, 1);
+            target.setDead();
+            return true;
         }
         return false;
     }
@@ -169,21 +166,10 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound cap) {
         NBTTagCompound root = stack.getTagCompound();
         if (root != null && !root.hasKey("EntityTag") && root.hasKey("Breed", 8)) {
-            NBTTagCompound display = root.getCompoundTag("display");
-            IEntityContainer.simplifyData(root);
-            root.removeTag("display");
-            root.removeTag("LocName");
-            NBTTagCompound entity = root.copy();
-            entity.setString("id", "dragonmounts:dragon");
-            DragonMountsCompat.DRAGON_ENTITY_FIX.fixTagCompound(entity);
-            root.tagMap.clear();
-            root.setTag("EntityTag", entity);
-            if (!display.isEmpty()) {
-                root.setTag("display", display);
-            }
+            stack.setTagCompound(DragonEntityFixer.fixContainerItem(root, cap));
         }
         return this;
     }

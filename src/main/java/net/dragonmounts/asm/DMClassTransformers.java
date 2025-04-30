@@ -116,24 +116,36 @@ public abstract class DMClassTransformers {
         return writer.toByteArray();
     }
 
+    /**
+     * Before:
+     * <pre>{@code
+     * tag.setString("K", e.getKey().toString());
+     * tag.setString("V", e.getKey().toString()); // here
+     * }</pre>
+     * After:
+     * <pre>{@code
+     * tag.setString("K", e.getKey().toString());
+     * tag.setString("V", e.getValue().toString()); // here
+     * }</pre>
+     */
     public static byte[] transformRegistrySnapshot(byte[] bytecodes) {
         ClassReader reader = new ClassReader(bytecodes);
         ClassNode root = new ClassNode();
         reader.accept(root, 0);
         for (MethodNode entry : root.methods) {
             if (!"lambda$write$3".equals(entry.name)) continue;
-            boolean modify = false;
+            boolean redirect = false;
             Iterator<AbstractInsnNode> iterator = entry.instructions.iterator();
             while (iterator.hasNext()) {
                 AbstractInsnNode node = iterator.next();
                 if (node instanceof MethodInsnNode && node.getOpcode() == Opcodes.INVOKEINTERFACE) {
                     MethodInsnNode method = (MethodInsnNode) node;
                     if ("java/util/Map$Entry".equals(method.owner) && "getKey".equals(method.name)) {
-                        if (modify) {
+                        if (redirect) {
                             method.name = "getValue";
                             break;
                         }
-                        modify = true;
+                        redirect = true;
                     }
                 }
             }

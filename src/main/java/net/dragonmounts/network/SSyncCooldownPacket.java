@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import net.dragonmounts.capability.ArmorEffectManager;
 import net.dragonmounts.compat.CooldownOverlayCompat;
 import net.dragonmounts.registry.CooldownCategory;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.util.CooldownTracker;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -41,16 +42,18 @@ public class SSyncCooldownPacket implements IMessage {
     public static class Handler implements IMessageHandler<SSyncCooldownPacket, IMessage> {
         @Override
         public IMessage onMessage(SSyncCooldownPacket packet, MessageContext context) {
-            ArmorEffectManager manager = ArmorEffectManager.getLocal();
-            if (manager == null) return null;
             CooldownCategory category = CooldownCategory.REGISTRY.getValue(packet.id);
             if (category == null) return null;
             int cd = packet.cd;
-            manager.setCooldown(category, cd);
-            CooldownTracker vanilla = manager.player.getCooldownTracker();
-            for (Item item : CooldownOverlayCompat.getItems(category)) {
-                vanilla.setCooldown(item, cd);
-            }
+            Minecraft.getMinecraft().addScheduledTask(() -> {
+                ArmorEffectManager manager = ArmorEffectManager.getLocal();
+                if (manager == null) return;
+                manager.setCooldown(category, cd);
+                CooldownTracker vanilla = manager.player.getCooldownTracker();
+                for (Item item : CooldownOverlayCompat.getItems(category)) {
+                    vanilla.setCooldown(item, cd);
+                }
+            });
             return null;
         }
     }

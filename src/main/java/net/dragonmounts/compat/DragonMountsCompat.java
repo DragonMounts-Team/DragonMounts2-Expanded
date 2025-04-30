@@ -1,11 +1,13 @@
 package net.dragonmounts.compat;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.block.DragonEggCompatBlock;
 import net.dragonmounts.block.HatchableDragonEggBlock;
-import net.dragonmounts.compat.fixer.DMBlockEntityCompat;
-import net.dragonmounts.compat.fixer.DragonEntityCompat;
-import net.dragonmounts.compat.fixer.DragonNestCompat;
+import net.dragonmounts.compat.data.DMBlockEntityFixer;
+import net.dragonmounts.compat.data.DataWalkers;
+import net.dragonmounts.compat.data.DragonEntityFixer;
+import net.dragonmounts.compat.data.DragonNestFixer;
 import net.dragonmounts.init.DMBlocks;
 import net.dragonmounts.init.DMItems;
 import net.dragonmounts.init.DragonVariants;
@@ -17,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.datafix.FixTypes;
+import net.minecraftforge.common.util.CompoundDataFixer;
 import net.minecraftforge.common.util.ModFixs;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -30,14 +33,17 @@ public abstract class DragonMountsCompat {
 
     public static final int VERSION = 1;
     public static final Object2ObjectOpenHashMap<String, Item> ITEM_MAPPINGS;
-    public static final DragonEntityCompat DRAGON_ENTITY_FIX = new DragonEntityCompat();
     public static final Block DRAGON_EGG_BLOCK = new DragonEggCompatBlock().setTranslationKey(HatchableDragonEggBlock.TRANSLATION_KEY).setRegistryName("dragon_egg");
     public static final Item DRAGON_EGG_ITEM = new DragonEggCompatItem().setRegistryName("dragon_egg");
 
-    public static void load(ModFixs fixer) {
-        fixer.registerFix(FixTypes.ENTITY, DRAGON_ENTITY_FIX);
-        fixer.registerFix(FixTypes.BLOCK_ENTITY, new DMBlockEntityCompat());
-        fixer.registerFix(FixTypes.STRUCTURE, new DragonNestCompat());
+    public static void init(CompoundDataFixer fixer) {
+        ModFixs mod = fixer.init(DragonMountsTags.MOD_ID, DragonMountsCompat.VERSION);
+        mod.registerFix(FixTypes.ENTITY, new DragonEntityFixer());
+        mod.registerFix(FixTypes.BLOCK_ENTITY, new DMBlockEntityFixer());
+        mod.registerFix(FixTypes.STRUCTURE, new DragonNestFixer());
+        fixer.registerVanillaWalker(FixTypes.BLOCK_ENTITY, DataWalkers::fixDragonCore);
+        fixer.registerVanillaWalker(FixTypes.ENTITY, DataWalkers::fixDragonInventory);
+        fixer.registerVanillaWalker(FixTypes.ITEM_INSTANCE, DataWalkers::fixEntityContainers);
     }
 
     @SubscribeEvent

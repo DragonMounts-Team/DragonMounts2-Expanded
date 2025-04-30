@@ -10,9 +10,7 @@ import net.minecraft.util.math.Vec3d;
 import static net.minecraft.entity.SharedMonsterAttributes.MOVEMENT_SPEED;
 
 public class DragonMoveHelper extends EntityMoveHelper {
-
     private final TameableDragonEntity dragon;
-    private static int YAW_SPEED = 5;
 
     public DragonMoveHelper(TameableDragonEntity dragon) {
         super(dragon);
@@ -25,26 +23,21 @@ public class DragonMoveHelper extends EntityMoveHelper {
         TameableDragonEntity dragon = this.dragon;
         // original movement behavior if the entity isn't flying
         if (dragon.isFlying()) {
-            Vec3d dragonPos = dragon.getPositionVector();
-            Vec3d movePos = new Vec3d(posX, posY, posZ);
-
-            // get direction vector by subtracting the current position from the
-            // target position and normalizing the result
-            Vec3d dir = movePos.subtract(dragonPos).normalize();
-
+            double posX = this.posX, posY = this.posY, posZ = this.posZ;
             // get Euclidean distance to target
-            double dist = dragonPos.distanceTo(movePos);
-
-            // move towards target if it's far away enough   dragon.width
-            if (dist > dragon.width) {
-                double boost = dragon.boosting() ? 4 : 1;
-                double flySpeed = dragon.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).getAttributeValue() * boost;
-
+            double dist = dragon.getDistanceSq(posX, posY, posZ);
+            // move towards target if it's far away enough
+            if (dist > dragon.width * dragon.width) {
+                double flySpeed = dragon.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).getAttributeValue();
+                if (dragon.boosting()) {
+                    flySpeed = flySpeed * 1.5 + 0.5;
+                }
+                // get direction vector by subtracting the current position from the target position and normalizing
+                Vec3d dir = new Vec3d(posX - dragon.posX, posY - dragon.posY, posZ - dragon.posZ).normalize();
                 // update velocity to approach target
                 dragon.motionX = dir.x * flySpeed;
                 dragon.motionY = dir.y * flySpeed;
                 dragon.motionZ = dir.z * flySpeed;
-
             } else if (dragon.getControllingPlayer() != null) {
                 // just slow down and hover at current location
                 dragon.motionX *= 0.8;
@@ -55,9 +48,9 @@ public class DragonMoveHelper extends EntityMoveHelper {
             }
 
             // face entity towards target
-            if (dist > 2.5E-7) {
+            if (dist > 1E-10) {
                 float YAW_SPEED = dragon.getControllingPlayer() != null ? 5 : 15;
-                float newYaw = (float) Math.toDegrees(Math.PI * 2 - MathHelper.atan2(dir.x, dir.z));
+                float newYaw = (float) Math.toDegrees(MathHelper.atan2(dragon.posX - posX, posZ - dragon.posZ));
                 dragon.rotationYaw = this.limitAngle(dragon.rotationYaw, newYaw, YAW_SPEED);
                 entity.setAIMoveSpeed((float) (speed * entity.getEntityAttribute(MOVEMENT_SPEED).getAttributeValue()));
             }

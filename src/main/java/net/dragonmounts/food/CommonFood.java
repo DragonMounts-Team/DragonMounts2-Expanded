@@ -31,7 +31,7 @@ public class CommonFood implements ICapabilityProvider, IDragonFood {
     public boolean tryFeed(TameableDragonEntity dragon, EntityPlayer player, Relation relation, ItemStack stack, EnumHand hand) {
         if (dragon.world.isRemote) {
             if (dragon.isTamed()) {
-                if (Relation.STRANGER == relation) {
+                if (!relation.isTrusted) {
                     relation.onDeny(player);
                     return false;
                 }
@@ -40,14 +40,12 @@ public class CommonFood implements ICapabilityProvider, IDragonFood {
             dragon.consumeFood(stack, this.level, this.growth);
             return true;
         }
-        if (dragon.isTamed()) {
-            if (Relation.STRANGER == relation) {
-                relation.onDeny(player);
-                return false;
-            }
+        if (Relation.STRANGER == relation) {
+            dragon.tryTame(player, this.taming);
+        } else if (relation.isTrusted) {
             if (IDragonFood.isSatiated(dragon)) return false;
         } else {
-            dragon.tryTame(player, this.taming);
+            relation.onDeny(player);
         }
         dragon.consumeFood(stack, this.level, this.growth);
         dragon.heal(this.health);

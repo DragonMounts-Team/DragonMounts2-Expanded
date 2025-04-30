@@ -1,10 +1,10 @@
-package net.dragonmounts.compat.fixer;
+package net.dragonmounts.compat.data;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.datafix.IFixableData;
 
-public class DragonNestCompat implements IFixableData {
+public class DragonNestFixer implements IFixableData {
     @Override
     public int getFixVersion() {
         return 0;

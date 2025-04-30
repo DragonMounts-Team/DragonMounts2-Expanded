@@ -60,7 +60,7 @@ public class DragonMounts {
         DMConfig.load();
         PROXY.PreInitialization(event);
         DMItemGroups.init();
-        DragonMountsCompat.load(FMLCommonHandler.instance().getDataFixer().init(DragonMountsTags.MOD_ID, DragonMountsCompat.VERSION));
+        DragonMountsCompat.init(FMLCommonHandler.instance().getDataFixer());
     }
 
     @EventHandler

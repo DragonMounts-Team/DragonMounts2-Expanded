@@ -2,6 +2,7 @@ package net.dragonmounts.network;
 
 import io.netty.buffer.ByteBuf;
 import net.dragonmounts.capability.ArmorEffectManager;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -44,7 +45,7 @@ public class SInitCooldownPacket implements IMessage {
     public static class Handler implements IMessageHandler<SInitCooldownPacket, IMessage> {
         @Override
         public IMessage onMessage(SInitCooldownPacket packet, MessageContext context) {
-            ArmorEffectManager.init(packet);
+            Minecraft.getMinecraft().addScheduledTask(() -> ArmorEffectManager.init(packet));
             return null;
         }
     }

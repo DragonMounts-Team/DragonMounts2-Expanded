@@ -642,7 +642,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         if (!isFlying()) {
             super.travel(strafe, forward, vertical);
         }
-
     }
 
     @Nullable

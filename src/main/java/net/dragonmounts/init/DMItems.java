@@ -3,7 +3,7 @@ package net.dragonmounts.init;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import mcp.MethodsReturnNonnullByDefault;
 import net.dragonmounts.DragonMountsTags;
-import net.dragonmounts.api.IDescribableArmorEffect;
+import net.dragonmounts.api.IDescribedArmorEffect;
 import net.dragonmounts.item.*;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
@@ -452,7 +452,7 @@ public class DMItems {
             String boots,
             ItemArmor.ArmorMaterial material,
             DragonType type,
-            IDescribableArmorEffect effect
+            IDescribedArmorEffect effect
     ) {
         DragonScaleArmorSuit suit = new DragonScaleArmorSuit(material, type, effect);
         type.bindInstance(DragonScaleArmorSuit.class, suit);

@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public interface IDescribableArmorEffect extends IArmorEffect {
+public interface IDescribedArmorEffect extends IArmorEffect {
     @SideOnly(Side.CLIENT)
     default void appendTriggerInfo(ItemStack stack, List<String> tooltips) {
         ArmorEffectManager manager = ArmorEffectManager.getLocal();
@@ -24,7 +24,7 @@ public interface IDescribableArmorEffect extends IArmorEffect {
     @SideOnly(Side.CLIENT)
     default void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {}
 
-    class Advanced extends CooldownCategory implements IDescribableArmorEffect {
+    class Advanced extends CooldownCategory implements IDescribedArmorEffect {
         public final int cooldown;
         public final String description;
 

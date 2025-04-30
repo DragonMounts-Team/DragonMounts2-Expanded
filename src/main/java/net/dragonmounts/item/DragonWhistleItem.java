@@ -144,7 +144,7 @@ public class DragonWhistleItem extends Item {
             if (root.hasKey("Name")) {
                 tooltip.add(I18n.format("tooltip.dragonmounts.name", root.getString("Name")));
             } else if (root.hasKey("Type")) {
-                DragonType type = DragonType.REGISTRY.getValue(new ResourceLocation(root.getString("Type")));
+                DragonType type = DragonType.REGISTRY.getIfPresent(new ResourceLocation(root.getString("Type")));
                 if (type != null) {
                     tooltip.add(I18n.format(
                             "tooltip.dragonmounts.name",

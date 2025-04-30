@@ -3,6 +3,7 @@ package net.dragonmounts.block.entity;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.block.DragonCoreBlock;
 import net.dragonmounts.inventory.DragonCoreContainer;
+import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
@@ -98,16 +99,13 @@ public class DragonCoreBlockEntity extends TileEntityLockableLoot implements ITi
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         if (!this.checkLootAndWrite(compound)) {
-            NBTTagCompound item = new NBTTagCompound();
-            this.chestContents.get(0).writeToNBT(item);
-            compound.setTag("Item", item);
+            compound.setTag("Item", this.chestContents.get(0).writeToNBT(new NBTTagCompound()));
         }
-        compound.setString("CustomName", this.customName);
-        return compound;
+        return DMUtils.putIfNeeded(compound, "CustomName", this.customName);
     }
 
-    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
-        return new DragonCoreContainer(playerInventory, this, playerIn);
+    public Container createContainer(InventoryPlayer inventory, EntityPlayer player) {
+        return new DragonCoreContainer(inventory, this, player);
     }
 
     @Override

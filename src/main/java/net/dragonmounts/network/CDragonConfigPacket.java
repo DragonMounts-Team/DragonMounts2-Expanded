@@ -45,7 +45,7 @@ public class CDragonConfigPacket implements IMessage {
                 Relation relation = Relation.checkRelation(dragon, player);
                 switch (message.option) {
                     case DragonStates.SITTING_STATE:
-                        if (Relation.STRANGER == relation) {
+                        if (!relation.isTrusted) {
                             relation.onDeny(player);
                             return null;
                         }

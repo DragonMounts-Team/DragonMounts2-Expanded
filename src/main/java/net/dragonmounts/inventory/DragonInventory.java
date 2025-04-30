@@ -5,6 +5,7 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.network.SSyncBannerPacket;
+import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.EntityUtil;
 import net.dragonmounts.util.ItemUtil;
 import net.minecraft.entity.player.EntityPlayer;
@@ -193,7 +194,7 @@ public final class DragonInventory implements IInventory {
 
     @Override
     public boolean isUsableByPlayer(EntityPlayer player) {
-        return Relation.checkRelation(this.dragon, player) != Relation.STRANGER;
+        return Relation.checkRelation(this.dragon, player).isTrusted;
     }
 
     @Override
@@ -269,14 +270,8 @@ public final class DragonInventory implements IInventory {
         if (!(stack = dragon.getArmor()).isEmpty()) {
             tag.setTag("Armor", stack.writeToNBT(new NBTTagCompound()));
         }
-        NBTTagList banners = ItemUtil.writeToNBT(this.banners);
-        if (!banners.isEmpty()) {
-            tag.setTag("Banners", banners);
-        }
-        NBTTagList stacks = ItemUtil.writeToNBT(this.stacks);
-        if (!stacks.isEmpty()) {
-            tag.setTag("Inventory", stacks);
-        }
+        DMUtils.putIfNeeded(tag, "Banners", ItemUtil.writeToNBT(this.banners));
+        DMUtils.putIfNeeded(tag, "Inventory", ItemUtil.writeToNBT(this.stacks));
     }
 
     public void readAdditionalData(NBTTagCompound tag) {

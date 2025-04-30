@@ -2,6 +2,7 @@ package net.dragonmounts.item;
 
 
 import net.dragonmounts.client.ClientUtil;
+import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.registry.DragonVariant;
@@ -12,7 +13,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -29,20 +29,19 @@ public class VariationOrbItem extends Item {
     public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
         if (target instanceof TameableDragonEntity) {
             TameableDragonEntity dragon = (TameableDragonEntity) target;
-            if (dragon.isOwner(player)) { // requires the actual owner even if dragon is unlocked
-                if (target.world.isRemote) return true;
-                DragonVariant current = dragon.getVariant();
-                DragonVariant neo = current.type.variants.draw(dragon.getRNG(), current);
-                if (current != neo) {
-                    dragon.setVariant(neo);
-                    dragon.world.playSound(null, player.getPosition(), DMSounds.VARIATION_ORB_ACTIVATE, SoundCategory.PLAYERS, 1, 1);
-                    if (!player.capabilities.isCreativeMode) {
-                        stack.shrink(1);
-                    }
+            // requires the actual owner even if dragon is unlocked
+            if (Relation.denyIfNotOwner(dragon, player)) return false;
+            if (target.world.isRemote) return true;
+            DragonVariant current = dragon.getVariant();
+            DragonVariant neo = current.type.variants.draw(dragon.getRNG(), current);
+            if (current != neo) {
+                dragon.setVariant(neo);
+                dragon.world.playSound(null, player.getPosition(), DMSounds.VARIATION_ORB_ACTIVATE, SoundCategory.PLAYERS, 1, 1);
+                if (!player.capabilities.isCreativeMode) {
+                    stack.shrink(1);
                 }
-                return true;
             }
-            player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.dragon.notOwner"), true);
+            return true;
         }
         return false;
     }

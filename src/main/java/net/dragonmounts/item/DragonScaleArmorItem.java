@@ -1,7 +1,7 @@
 package net.dragonmounts.item;
 
 import net.dragonmounts.api.IArmorEffectSource;
-import net.dragonmounts.api.IDescribableArmorEffect;
+import net.dragonmounts.api.IDescribedArmorEffect;
 import net.dragonmounts.capability.IArmorEffectManager;
 import net.dragonmounts.compat.CooldownOverlayCompat;
 import net.dragonmounts.init.DMItemGroups;
@@ -23,9 +23,9 @@ import java.util.List;
 
 public class DragonScaleArmorItem extends ItemArmor implements IArmorEffectSource {
 	private final DragonType type;
-	public final IDescribableArmorEffect effect;
+	public final IDescribedArmorEffect effect;
 
-	public DragonScaleArmorItem(ArmorMaterial material, int index, EntityEquipmentSlot slot, DragonType type, IDescribableArmorEffect effect) {
+	public DragonScaleArmorItem(ArmorMaterial material, int index, EntityEquipmentSlot slot, DragonType type, IDescribedArmorEffect effect) {
 		super(material, index, slot);
 		this.effect = effect;
 		this.type = type;

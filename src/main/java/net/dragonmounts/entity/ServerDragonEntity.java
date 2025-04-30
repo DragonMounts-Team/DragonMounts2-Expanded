@@ -303,7 +303,6 @@ public class ServerDragonEntity extends TameableDragonEntity {
         if (player.isPassenger(this)) return false;
         ItemStack stack = player.getHeldItem(hand);
         final Relation relation = Relation.checkRelation(this, player);
-        final boolean isTrusted = relation != Relation.STRANGER;
         final boolean isChild = stage.isBaby();
         if (!stack.isEmpty()) {
             if (!isChild && this.canShare()) {
@@ -314,14 +313,14 @@ public class ServerDragonEntity extends TameableDragonEntity {
                         this.setSheared(cooldown);
                         this.playSound(SoundEvents.ENTITY_ITEM_BREAK, 1.0F, 1.0F);
                         this.playSound(DMSounds.DRAGON_PURR, 1.0F, 1.0F);
-                        if (!isTrusted) {
+                        if (!relation.isTrusted) {
                             this.setAttackTarget(player);
                         }
                         return true;
                     }
                 }
             }
-            if (isTrusted) {
+            if (relation.isTrusted) {
                 if (this.onGround && ItemUtil.anyMatches(stack, "stickWood", "bone")) {
                     this.getAISit().setSitting(!this.isSitting());
                     this.getNavigator().clearPath();
@@ -361,7 +360,10 @@ public class ServerDragonEntity extends TameableDragonEntity {
             if (food != null && food.tryFeed(this, player, relation, stack, hand)) return true;
         }
         if (stack.interactWithEntity(player, this, hand)) return true;
-        if (!isTrusted) return false;
+        if (!relation.isTrusted) {
+            relation.onDeny(player);
+            return false;
+        }
         if (!player.isSneaking()) {
             if (isChild) {
                 if (!isSitting() && player.getPassengers().size() < 2) {

@@ -17,7 +17,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 
@@ -82,12 +81,6 @@ public class DragonAmuletItem extends AmuletItem<TameableDragonEntity> {
     @Override
     public Item getContainerItem() {
         return DMItems.AMULET;
-    }
-
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return this;
     }
 
     @Override

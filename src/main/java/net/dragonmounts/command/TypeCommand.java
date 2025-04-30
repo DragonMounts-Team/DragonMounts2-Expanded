@@ -3,12 +3,12 @@ package net.dragonmounts.command;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.util.DMUtils;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.EntityNotFoundException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
@@ -52,8 +52,8 @@ public class TypeCommand extends DragonHandlerCommand {
             default:
                 throw new WrongUsageException("commands.dragonmounts.type.usage");
         }
-        DragonType type = DragonType.REGISTRY.getValue(new ResourceLocation(args[0]));
-        if (type == null) throw new CommandException("commands.dragonmounts.type.invalid");
+        DragonType type = DragonType.REGISTRY.getIfPresent(DMUtils.parseIdentifier(args[0]));
+        if (type == null) throw new CommandException("commands.dragonmounts.type.invalid", args[0]);
         for (TameableDragonEntity dragon : dragons) {
             ITextComponent name = dragon.getDisplayName();
             dragon.setVariant(type.variants.draw(dragon.getRNG(), dragon.getVariant()));

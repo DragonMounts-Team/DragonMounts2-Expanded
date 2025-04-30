@@ -98,14 +98,13 @@ public class ClientDragonEntity extends TameableDragonEntity {
         if (player.isPassenger(this)) return false;
         ItemStack stack = player.getHeldItem(hand);
         final Relation relation = Relation.checkRelation(this, player);
-        final boolean isTrusted = relation != Relation.STRANGER;
         if (!stack.isEmpty()) {
             final boolean oldEnough = !stage.isBaby();
             if (oldEnough && this.canShare()) {
                 IHardShears shears = stack.getCapability(DMCapabilities.HARD_SHEARS, null);
                 if (shears != null && shears.canShear(stack, player, this)) return true;
             }
-            if (isTrusted && ((
+            if (relation.isTrusted && ((
                     this.onGround && ItemUtil.anyMatches(stack, "stickWood", "bone")
             ) || (oldEnough && (
                     this.canCollectBreath() && stack.getItem() == Items.GLASS_BOTTLE
@@ -115,7 +114,7 @@ public class ClientDragonEntity extends TameableDragonEntity {
             IDragonFood food = stack.getCapability(DMCapabilities.DRAGON_FOOD, null);
             if (food != null && food.tryFeed(this, player, relation, stack, hand)) return true;
         }
-        return stack.interactWithEntity(player, this, hand) || isTrusted;
+        return stack.interactWithEntity(player, this, hand) || relation.isTrusted;
     }
 
     @Override

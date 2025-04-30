@@ -1,6 +1,6 @@
 package net.dragonmounts.item;
 
-import net.dragonmounts.compat.DragonMountsCompat;
+import net.dragonmounts.compat.data.DragonEntityFixer;
 import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
@@ -70,7 +70,7 @@ public class DragonEssenceItem extends Item implements IEntityContainer<Tameable
 
     @Nullable
     @Override
-    public ServerDragonEntity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos, boolean yOffset, String feedback) {
+    public ServerDragonEntity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos, boolean yOffset, @Nullable String feedback) {
         ServerDragonEntity dragon = new ServerDragonEntity(level);
         NBTTagCompound root = stack.getTagCompound();
         boolean flag = root == null;
@@ -118,25 +118,14 @@ public class DragonEssenceItem extends Item implements IEntityContainer<Tameable
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound cap) {
         NBTTagCompound root = stack.getTagCompound();
         if (root != null && !root.hasKey("EntityTag") && root.hasKey("Breed", 8)) {
-            NBTTagCompound display = root.getCompoundTag("display");
-            IEntityContainer.simplifyData(root);
-            root.removeTag("display");
-            root.removeTag("LocName");
-            NBTTagCompound entity = root.copy();
-            entity.setString("id", "dragonmounts:dragon");
-            entity.removeTag("UUIDMost");
-            entity.removeTag("UUIDLeast");
-            entity.removeTag("Health");
-            entity.removeTag("TicksSinceCreation");
-            DragonMountsCompat.DRAGON_ENTITY_FIX.fixTagCompound(entity);
-            root.tagMap.clear();
-            root.setTag("EntityTag", entity);
-            if (!display.isEmpty()) {
-                root.setTag("display", display);
-            }
+            root.removeTag("UUIDMost");
+            root.removeTag("UUIDLeast");
+            root.removeTag("Health");
+            root.removeTag("TicksSinceCreation");
+            stack.setTagCompound(DragonEntityFixer.fixContainerItem(root, cap));
         }
         return null;
     }

@@ -27,7 +27,7 @@ public class CFollowOrderPacket extends CUUIDPacket {
             if (entity instanceof ServerDragonEntity) {
                 ServerDragonEntity dragon = (ServerDragonEntity) entity;
                 EntityPlayer player = ctx.getServerHandler().player;
-                if (Relation.checkRelation(dragon, player) != Relation.STRANGER) {
+                if (Relation.checkRelation(dragon, player).isTrusted) {
                     dragon.followOwner = !dragon.followOwner;
                     player.world.playSound(null, player.posX, player.posY, player.posZ, DMSounds.WHISTLE_BLOW_SHORT, SoundCategory.PLAYERS, 1, 1);
                     return null;

@@ -1,10 +1,10 @@
-package net.dragonmounts.compat.fixer;
+package net.dragonmounts.compat.data;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.datafix.IFixableData;
 
-public class DMBlockEntityCompat implements IFixableData {
+public class DMBlockEntityFixer implements IFixableData {
     @Override
     public int getFixVersion() {
         return 0;
@@ -12,7 +12,7 @@ public class DMBlockEntityCompat implements IFixableData {
 
     @Override
     public NBTTagCompound fixTagCompound(NBTTagCompound tag) {
-        if (tag.getString("id").equals("dragonmounts:dragon_shulker")) {
+        if ("dragonmounts:dragon_shulker".equals(tag.getString("id"))) {
             tag.setString("id", "dragonmounts:dragon_core");
             NBTTagCompound stack = null;
             if (!tag.hasKey("Item", 10)) {

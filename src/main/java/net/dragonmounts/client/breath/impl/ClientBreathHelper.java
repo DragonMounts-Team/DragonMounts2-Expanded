@@ -78,6 +78,7 @@ public class ClientBreathHelper extends DragonBreathHelper<ClientDragonEntity> {
     @Override
     protected void onBreathStart() {
         this.sound.clear();
+        if (this.breath == null) return;
         this.sound.play(handler ->
                 new BreathSound.Scheduled(handler, DragonBreath::getStartSound, 20)
         );
@@ -89,6 +90,7 @@ public class ClientBreathHelper extends DragonBreathHelper<ClientDragonEntity> {
     @Override
     protected void onBreathStop() {
         this.sound.clear();
+        if (this.breath == null) return;
         this.sound.play(handler ->
                 new BreathSound.Scheduled(handler, DragonBreath::getStopSound, 60)
         );

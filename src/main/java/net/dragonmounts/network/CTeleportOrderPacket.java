@@ -75,8 +75,12 @@ public class CTeleportOrderPacket extends CUUIDPacket {
                 }
                 if (hit.typeOfHit == RayTraceResult.Type.BLOCK) {
                     BlockPos pos = hit.getBlockPos();
-                    dragon.getNavigator().clearPath();
-                    dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+                    handler.server.addScheduledTask(() -> {
+                        if (dragon.isDead) return;
+                        dragon.setAttackTarget(null);
+                        dragon.getNavigator().clearPath();
+                        dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+                    });
                     world.playSound(null, player.posX, player.posY, player.posZ, DMSounds.WHISTLE_BLOW_LONG, SoundCategory.PLAYERS, 1, 1);
                 }
             } else {
