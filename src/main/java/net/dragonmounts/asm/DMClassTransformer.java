@@ -22,6 +22,10 @@ public class DMClassTransformer implements IClassTransformer {
                 "net.minecraft.entity.item.EntityItem",
                 DMClassTransformers::transformEntityItem
         );
+        transformers.put(
+                "net.minecraftforge.registries.ForgeRegistry$Snapshot",
+                DMClassTransformers::transformRegistrySnapshot
+        );
         TRANSFORMERS = Object2ObjectMaps.unmodifiable(transformers);
     }
 

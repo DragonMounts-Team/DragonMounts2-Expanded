@@ -116,5 +116,32 @@ public abstract class DMClassTransformers {
         return writer.toByteArray();
     }
 
+    public static byte[] transformRegistrySnapshot(byte[] bytecodes) {
+        ClassReader reader = new ClassReader(bytecodes);
+        ClassNode root = new ClassNode();
+        reader.accept(root, 0);
+        for (MethodNode entry : root.methods) {
+            if (!"lambda$write$3".equals(entry.name)) continue;
+            boolean modify = false;
+            Iterator<AbstractInsnNode> iterator = entry.instructions.iterator();
+            while (iterator.hasNext()) {
+                AbstractInsnNode node = iterator.next();
+                if (node instanceof MethodInsnNode && node.getOpcode() == Opcodes.INVOKEINTERFACE) {
+                    MethodInsnNode method = (MethodInsnNode) node;
+                    if ("java/util/Map$Entry".equals(method.owner) && "getKey".equals(method.name)) {
+                        if (modify) {
+                            method.name = "getValue";
+                            break;
+                        }
+                        modify = true;
+                    }
+                }
+            }
+        }
+        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+        root.accept(writer);
+        return writer.toByteArray();
+    }
+
     private DMClassTransformers() {}
 }
