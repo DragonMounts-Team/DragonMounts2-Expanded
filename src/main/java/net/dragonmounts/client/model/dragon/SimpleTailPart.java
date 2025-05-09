@@ -4,8 +4,8 @@ import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.Segment;
 import net.minecraft.client.model.ModelBase;
 
-import static net.dragonmounts.client.model.dragon.DragonModel.TAIL_SEGMENTS;
 import static net.dragonmounts.client.model.dragon.ScalablePart.ScalableSnapshot.saveScalable;
+import static net.dragonmounts.entity.DragonModelContracts.TAIL_SEGMENTS;
 
 public class SimpleTailPart extends TailPart {
     protected final ScalableSnapshot[] snapshots;

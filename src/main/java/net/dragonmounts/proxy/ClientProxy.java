@@ -116,7 +116,7 @@ public class ClientProxy extends ServerProxy {
     @Override
     public void Initialization(FMLInitializationEvent evt) {
         super.Initialization(evt);
-        DMKeyBindings.init();
+        DMKeyBindings.register();
     }
 
     @Override

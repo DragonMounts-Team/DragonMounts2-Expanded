@@ -30,7 +30,7 @@ public class DragonDescendGoal extends EntityAIBase {
     private final double speed;
     public final ServerDragonEntity dragon;
     private MutableBlockPosEx landingPos;
-    private boolean canHover;
+    private boolean isHoverDisabled;
 
     public DragonDescendGoal(ServerDragonEntity dragon, double speed) {
         this.dragon = dragon;
@@ -85,7 +85,7 @@ public class DragonDescendGoal extends EntityAIBase {
     @Override
     public void startExecuting() {
         ServerDragonEntity dragon = this.dragon;
-        this.canHover = this.dragon.isUnHovered();
+        this.isHoverDisabled = this.dragon.isUnHovered();
         this.dragon.setUnHovered(true);
         // try to fly to ground block position
         if (!tryMoveToBlockPos(landingPos)) {
@@ -101,7 +101,7 @@ public class DragonDescendGoal extends EntityAIBase {
 
     public void resetTask() {
         this.landingPos = null;
-        this.dragon.setUnHovered(this.canHover);
+        this.dragon.setUnHovered(this.isHoverDisabled);
     }
 
     protected boolean tryMoveToBlockPos(BlockPos pos) {

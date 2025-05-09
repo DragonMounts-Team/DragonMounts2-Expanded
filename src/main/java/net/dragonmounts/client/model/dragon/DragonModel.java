@@ -26,13 +26,6 @@ import net.minecraft.entity.EntityLivingBase;
  * @Modifier James Miller <TheRPGAdventurer.>
  */
 public class DragonModel extends ModelBase {
-
-    // model constants
-    public static final int NECK_SIZE=10;
-    public static final int TAIL_SIZE=10;
-    public static final int TAIL_SEGMENTS = 12;
-    public static final int HEAD_OFS=-16;
-
     // model parts
     public final HeadPart head;
     public final NeckPart neck;
@@ -79,7 +72,7 @@ public class DragonModel extends ModelBase {
         if (entity instanceof ClientDragonEntity) {
             ClientDragonEntity dragon = (ClientDragonEntity) entity;
             DragonAnimator animator = dragon.animator;
-            animator.setMovement(limbSwing, limbSwingAmount);
+            animator.setMovement(limbSwing);
             animator.setLook(netHeadYaw, headPitch);
             animator.animate(this);
             // updateFromAnimator body parts

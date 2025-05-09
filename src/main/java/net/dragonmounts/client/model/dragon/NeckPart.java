@@ -5,7 +5,7 @@ import net.dragonmounts.util.Segment;
 import java.util.function.IntPredicate;
 
 import static net.dragonmounts.client.model.dragon.ScalablePart.ScalableSnapshot.saveScalable;
-import static net.dragonmounts.entity.helper.DragonHeadLocator.NECK_SEGMENTS;
+import static net.dragonmounts.entity.DragonModelContracts.NECK_SEGMENTS;
 
 public class NeckPart implements IModelPart {
     public final ScalablePart normal;

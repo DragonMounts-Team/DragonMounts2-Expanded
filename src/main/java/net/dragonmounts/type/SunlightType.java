@@ -3,6 +3,7 @@ package net.dragonmounts.type;
 import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.registry.DragonTypeBuilder;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -10,8 +11,8 @@ import net.minecraft.world.World;
 import java.util.Random;
 
 public class SunlightType extends DragonType {
-    public SunlightType(ResourceLocation identifier, Properties props) {
-        super(identifier, props);
+    public SunlightType(ResourceLocation identifier, DragonTypeBuilder builder) {
+        super(identifier, builder);
     }
 
     @Override

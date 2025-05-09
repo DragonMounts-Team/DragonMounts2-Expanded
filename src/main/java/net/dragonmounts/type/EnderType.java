@@ -5,13 +5,14 @@ import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.EnderBreath;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.registry.DragonTypeBuilder;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 
 public class EnderType extends DragonType {
-    public EnderType(ResourceLocation identifier, Properties props) {
-        super(identifier, props);
+    public EnderType(ResourceLocation identifier, DragonTypeBuilder builder) {
+        super(identifier, builder);
     }
 
     @Override

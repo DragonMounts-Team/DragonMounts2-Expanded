@@ -4,14 +4,15 @@ import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.StormBreath;
+import net.dragonmounts.registry.DragonTypeBuilder;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 public class StormType extends WaterType {
-    public StormType(ResourceLocation identifier, Properties props) {
-        super(identifier, props);
+    public StormType(ResourceLocation identifier, DragonTypeBuilder builder) {
+        super(identifier, builder);
     }
 
     @Override

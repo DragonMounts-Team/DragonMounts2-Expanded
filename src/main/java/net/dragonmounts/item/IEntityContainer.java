@@ -46,9 +46,7 @@ public interface IEntityContainer<T extends Entity> {
             WorldServer level,
             ItemStack stack,
             @Nullable EntityPlayer player,
-            BlockPos pos,
-            boolean yOffset,
-            @Nullable String feedback
+            BlockPos pos
     );
 
     Class<T> getContentType();
@@ -57,7 +55,7 @@ public interface IEntityContainer<T extends Entity> {
 
     default void onItemDestroy(EntityItem entity, ItemStack stack) {
         if (!this.isEmpty(stack.getTagCompound())) {
-            Entity content = this.loadEntity((WorldServer) entity.world, stack, null, entity.getPosition(), false, null);
+            Entity content = this.loadEntity((WorldServer) entity.world, stack, null, entity.getPosition());
         }
         entity.world.playSound(entity.posX, entity.posY, entity.posZ, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.NEUTRAL, 1F, 1F, false);
     }

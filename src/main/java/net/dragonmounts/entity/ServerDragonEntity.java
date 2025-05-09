@@ -32,6 +32,7 @@ import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -69,6 +70,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
     public final DragonHeadLocator<ServerDragonEntity> headLocator = new DragonHeadLocator<>(this);
     public final DragonReproductionHelper reproductionHelper = new DragonReproductionHelper(this);
     public boolean followOwner = true;
+    public boolean fromVanillaEgg;
     protected int shearCooldown;
     protected int collectBreathCooldown;
 
@@ -163,6 +165,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
         nbt.setBoolean("growthpause", this.isGrowthPaused());
         nbt.setBoolean("AllowOtherPlayers", this.allowedOtherPlayers());
         nbt.setBoolean("FollowOwner", this.followOwner);
+        nbt.setBoolean("FromVanillaEgg", this.fromVanillaEgg);
         nbt.setString(DragonVariant.DATA_PARAMETER_KEY, this.getVariant().getSerializedName());
         //        nbt.setBoolean("sleeping", this.isSleeping()); //unused as of now
         this.inventory.saveAdditionalData(nbt);
@@ -187,6 +190,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
         //        this.setSleeping(nbt.getBoolean("sleeping")); //unused as of now
         this.setToAllowedOtherPlayers(nbt.getBoolean("AllowOtherPlayers"));
         this.followOwner = nbt.getBoolean("FollowOwner");
+        this.fromVanillaEgg = nbt.getBoolean("FromVanillaEgg");
         this.inventory.readAdditionalData(nbt);
         if (nbt.getBoolean("DataFix$IsForest")) {
             boolean male = this.rand.nextBoolean();
@@ -209,14 +213,15 @@ public class ServerDragonEntity extends TameableDragonEntity {
 
     @Override
     public void onLivingUpdate() {
-        this.variantHelper.update();
         this.lifeStageHelper.ageUp(1);
         this.breathHelper.update();
-        this.getVariant().type.tickServer(this);
         if (this.isEgg()) {
+            this.variantHelper.update();
+            this.getVariant().type.tickServer(this);
             super.onLivingUpdate();
             return;
         }
+        this.getVariant().type.tickServer(this);
         this.headLocator.setLook(
                 this.rotationYawHead - this.renderYawOffset, // netYawHead
                 this.rotationPitch
@@ -293,7 +298,10 @@ public class ServerDragonEntity extends TameableDragonEntity {
         if (DragonLifeStage.EGG == stage) {
             if (player.isSneaking()) {
                 world.playSound(player, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.PLAYERS, 0.5F, 1);
-                world.setBlockState(this.getPosition(), this.getVariant().type.getInstance(HatchableDragonEggBlock.class, DMBlocks.ENDER_DRAGON_EGG).getDefaultState());
+                world.setBlockState(this.getPosition(), (this.fromVanillaEgg
+                        ? Blocks.DRAGON_EGG
+                        : this.getVariant().type.getInstance(HatchableDragonEggBlock.class, DMBlocks.ENDER_DRAGON_EGG)
+                ).getDefaultState());
                 setDead();
                 return true;
             }
@@ -483,7 +491,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
     }
 
     public void setBodySize(float size) {
-        this.dataManager.set(DATA_BODY_SIZE, size == 0.0F ? 1.0F : size);
+        this.dataManager.set(DATA_BODY_SIZE, size == 0.0F ? 1.6F : size);
     }
 
     public void setBreatheCollected(int cooldown) {

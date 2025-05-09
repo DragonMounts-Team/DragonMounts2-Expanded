@@ -6,6 +6,7 @@ import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.WitherBreath;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.registry.DragonTypeBuilder;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -13,8 +14,8 @@ import net.minecraft.util.SoundEvent;
 import java.util.Random;
 
 public class WitherType extends DragonType {
-    public WitherType(ResourceLocation identifier, Properties props) {
-        super(identifier, props);
+    public WitherType(ResourceLocation identifier, DragonTypeBuilder builder) {
+        super(identifier, builder);
     }
 
     @Override

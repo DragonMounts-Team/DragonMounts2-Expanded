@@ -6,6 +6,7 @@ import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.MoonlightBreath;
 import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.registry.DragonTypeBuilder;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -13,8 +14,8 @@ import net.minecraft.world.World;
 import java.util.Random;
 
 public class MoonlightType extends DragonType {
-    public MoonlightType(ResourceLocation identifier, Properties props) {
-        super(identifier, props);
+    public MoonlightType(ResourceLocation identifier, DragonTypeBuilder builder) {
+        super(identifier, builder);
     }
 
     @Override

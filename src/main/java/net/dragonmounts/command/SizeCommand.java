@@ -44,7 +44,7 @@ public class SizeCommand extends DragonHandlerCommand {
             default:
                 throw new WrongUsageException("commands.dragonmounts.size.usage");
         }
-        float size = (float) parseDouble(args[0], 0.25, 1.25);
+        float size = (float) parseDouble(args[0], 0.25, 2.00);
         for (ServerDragonEntity dragon : dragons) {
             dragon.setBodySize(size);
             notifyCommandListener(sender, this, "commands.dragonmounts.size.success", dragon.getDisplayName(), size);

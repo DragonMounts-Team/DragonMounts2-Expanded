@@ -105,7 +105,7 @@ gui.dragonmounts.unbindWhistle=Cette Flûte est désormais déliée
 gui.dragonmounts.unbindWhistle.tooltip=Appuyez Left Shift pour dévérouiller cette Flûte
 
 #Controls
-key.categories.dragon=Dragon Mounts
+key.categories.dragonmounts=Dragon Mounts
 key.dragonmounts.breath=Souffle du Dragon
 key.dragonmounts.descent=Descendre du Dragon
 key.dragonmounts.toggleCameraPos=Changer la position de la caméra lorsque monté sur un dragon

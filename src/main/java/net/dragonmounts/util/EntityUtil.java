@@ -2,6 +2,10 @@ package net.dragonmounts.util;
 
 import com.google.common.base.Predicate;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.dragonmounts.entity.Relation;
+import net.dragonmounts.entity.ServerDragonEntity;
+import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -10,15 +14,16 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -26,6 +31,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 public class EntityUtil {
     public static boolean addOrMergeEffect(EntityLivingBase entity, Potion effect, int duration, int amplifier, boolean ambient, boolean visible) {
@@ -48,8 +54,23 @@ public class EntityUtil {
         return true;
     }
 
+    public static void ensureUUIDUnique(WorldServer level, Entity entity) {
+        UUID uuid = entity.getUniqueID();
+        while (level.getEntityFromUuid(uuid) != null) {
+            uuid = MathHelper.getRandomUUID(level.rand);
+        }
+        entity.setUniqueId(uuid);
+    }
+
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean finalizeSpawn(WorldServer level, Entity entity, BlockPos pos, boolean yOffset, IEntityLivingData data) {
+    public static <T extends Entity> boolean finalizeSpawn(
+            WorldServer level,
+            T entity,
+            BlockPos pos,
+            boolean yOffset,
+            IEntityLivingData data,
+            BiConsumer<? super WorldServer, ? super T> modifier
+    ) {
         float x = pos.getX() + 0.5F, y = yOffset ? getSpawnHeight(level, pos) : pos.getY(), z = pos.getZ() + 0.5F;
         entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(level.rand.nextFloat() * 360.0F), 0.0F);
         if (entity instanceof EntityLiving) {
@@ -58,11 +79,7 @@ public class EntityUtil {
             $entity.renderYawOffset = $entity.rotationYaw;
             if (ForgeEventFactory.doSpecialSpawn($entity, level, x, y, z, null)) return false;
             $entity.onInitialSpawn(level.getDifficultyForLocation(new BlockPos($entity)), data);
-            UUID uuid = $entity.getUniqueID();
-            while (level.getEntityFromUuid(uuid) != null) {
-                uuid = MathHelper.getRandomUUID($entity.getRNG());
-            }
-            $entity.setUniqueId(uuid);
+            modifier.accept(level, entity);
             boolean result = level.spawnEntity($entity);
             $entity.playLivingSound();
             return result;
@@ -70,14 +87,36 @@ public class EntityUtil {
         return false;
     }
 
-    public static boolean notOwner(NBTTagCompound data, @Nullable EntityPlayer player, @Nullable String feedback) {
-        if (player == null) return false;
-        String owner = data.getString("OwnerUUID");
-        if (owner.isEmpty() || player.getUniqueID().toString().equals(owner)) return false;
-        if (feedback != null) {
-            player.sendStatusMessage(new TextComponentTranslation(feedback), true);
+    public static ServerDragonEntity spawnDragonFormStack(
+            WorldServer level,
+            ItemStack stack,
+            @Nullable EntityPlayer player,
+            BlockPos pos,
+            DragonType fallback,
+            BiConsumer<WorldServer, ServerDragonEntity> modifier
+    ) {
+        ServerDragonEntity dragon = new ServerDragonEntity(level);
+        NBTTagCompound root = stack.getTagCompound();
+        DragonVariant saved = null;
+        if (root != null) {
+            NBTTagCompound data = root.getCompoundTag("EntityTag");
+            if (!data.isEmpty()) {
+                if (Relation.denyIfNotOwner(data, player)) return null;
+                if (data.hasKey(DragonVariant.DATA_PARAMETER_KEY)) {
+                    saved = DragonVariant.REGISTRY.getIfPresent(new ResourceLocation(data.getString(DragonVariant.DATA_PARAMETER_KEY)));
+                }
+            }
         }
-        return true;
+        DragonVariant variant = saved == null ? fallback.variants.draw(level.rand, null) : saved;
+        return EntityUtil.finalizeSpawn(level, dragon, pos, true, null, (world, entity) -> {
+            if (stack.hasDisplayName()) {
+                entity.setCustomNameTag(stack.getDisplayName());
+            }
+            ItemMonsterPlacer.applyItemEntityDataToEntity(world, player, stack, entity);
+            entity.setVariant(variant);
+            modifier.accept(world, entity);
+            ensureUUIDUnique(world, entity);
+        }) ? dragon : null;
     }
 
     public static float getSpawnHeight(World level, BlockPos pos) {

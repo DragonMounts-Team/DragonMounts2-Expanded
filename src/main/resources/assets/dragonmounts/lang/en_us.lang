@@ -59,15 +59,15 @@ item.dragonmounts.jungle_carriage.name=Jungle CargoBob
 
 # Armory Items
 item.dragonmounts.dragon_scales.name=Dragon Scales
-item.dragonmounts.dragon_scale_sword.name=Dragon Sword
-item.dragonmounts.dragon_scale_pickaxe.name=Dragon Pickaxe
-item.dragonmounts.dragon_scale_axe.name=Dragon Axe
-item.dragonmounts.dragon_scale_shovel.name=Dragon Shovel
-item.dragonmounts.dragon_scale_hoe.name=Dragon Hoe
-item.dragonmounts.dragon_scale_shield.name=Dragon Shield
-item.dragonmounts.dragon_scale_bow.name=Dragon Bow
-item.dragonmounts.dragon_scale_helmet.name=Dragon Scale Cap
-item.dragonmounts.dragon_scale_chestplate.name=Dragon Scale Tunic
+item.dragonmounts.dragon_scale_sword.name=Dragon Scale Sword
+item.dragonmounts.dragon_scale_pickaxe.name=Dragon Scale Pickaxe
+item.dragonmounts.dragon_scale_axe.name=Dragon Scale Axe
+item.dragonmounts.dragon_scale_shovel.name=Dragon Scale Shovel
+item.dragonmounts.dragon_scale_hoe.name=Dragon Scale Hoe
+item.dragonmounts.dragon_scale_shield.name=Dragon Scale Shield
+item.dragonmounts.dragon_scale_bow.name=Dragon Scale Bow
+item.dragonmounts.dragon_scale_helmet.name=Dragon Scale Helmet
+item.dragonmounts.dragon_scale_chestplate.name=Dragon Scale Chestplate
 item.dragonmounts.dragon_scale_leggings.name=Dragon Scale Leggings
 item.dragonmounts.dragon_scale_boots.name=Dragon Scale Boots
 item.dragonmounts.diamond_dragon_armor.name=Diamond Dragon Armor
@@ -111,7 +111,7 @@ gui.dragonmounts.unbindWhistle.tooltip=Press Left Shift to Unlock
 gui.dragonmounts.lock.tooltip=Trust Other Players: %s
 
 #Controls
-key.categories.dragon=Dragon Mounts
+key.categories.dragonmounts=Dragon Mounts
 key.dragonmounts.breath=Dragon Breath
 key.dragonmounts.descent=Descent
 key.dragonmounts.toggleCameraPos=Toggle Camera Position
@@ -211,6 +211,8 @@ config.dragonmounts.baseFlyingSpeed=Base Flying Speed
 config.dragonmounts.baseFlyingSpeed.tooltip=The base flying speed of a newly spawned dragon at adulthood
 config.dragonmounts.baseSwimmingSpeed=Base Swimming Speed
 config.dragonmounts.baseSwimmingSpeed.tooltip=The base swimming speed of a newly spawned dragon at adulthood
+config.dragonmounts.baseBodySize=Base Body Size
+config.dragonmounts.baseBodySize.tooltip=The base body size of a newly spawned dragon at adulthood
 config.dragonmounts.baseStepHeight=Base Step Height
 config.dragonmounts.baseStepHeight.tooltip=The base health of a dragon at adulthood
 config.dragonmounts.forcedRename=Forced Rename

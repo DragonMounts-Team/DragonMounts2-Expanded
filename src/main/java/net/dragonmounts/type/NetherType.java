@@ -7,6 +7,7 @@ import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.NetherBreath;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.registry.DragonTypeBuilder;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -15,8 +16,8 @@ import net.minecraft.world.World;
 import java.util.Random;
 
 public class NetherType extends DragonType {
-    public NetherType(ResourceLocation identifier, Properties props) {
-        super(identifier, props);
+    public NetherType(ResourceLocation identifier, DragonTypeBuilder builder) {
+        super(identifier, builder);
     }
 
     @Override

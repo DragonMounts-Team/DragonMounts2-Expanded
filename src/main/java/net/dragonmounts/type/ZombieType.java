@@ -5,12 +5,13 @@ import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.ZombieBreath;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.registry.DragonTypeBuilder;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 
 public class ZombieType extends DragonType {
-    public ZombieType(ResourceLocation identifier, Properties props) {
-        super(identifier, props);
+    public ZombieType(ResourceLocation identifier, DragonTypeBuilder builder) {
+        super(identifier, builder);
     }
 
     @Override

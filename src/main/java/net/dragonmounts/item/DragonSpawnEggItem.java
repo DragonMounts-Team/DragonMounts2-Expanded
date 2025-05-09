@@ -67,7 +67,7 @@ public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityCont
                 return EnumActionResult.SUCCESS;
             }
         }
-        if (this.loadEntity((WorldServer) level, stack, player, pos, true, null) != null) {
+        if (this.loadEntity((WorldServer) level, stack, player, pos) != null) {
             if (!player.capabilities.isCreativeMode) {
                 stack.shrink(1);
             }
@@ -88,7 +88,7 @@ public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityCont
             return new ActionResult<>(EnumActionResult.PASS, stack);
         if (!level.isBlockModifiable(player, pos) || !player.canPlayerEdit(pos, hit.sideHit, stack))
             return new ActionResult<>(EnumActionResult.FAIL, stack);
-        if (this.loadEntity((WorldServer) level, stack, player, pos, false, null) == null)
+        if (this.loadEntity((WorldServer) level, stack, player, pos) == null)
             return new ActionResult<>(EnumActionResult.PASS, stack);
         if (!player.capabilities.isCreativeMode) {
             stack.shrink(1);
@@ -104,7 +104,7 @@ public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityCont
 
     @Nullable
     @Override
-    public Entity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos, boolean yOffset, @Nullable String feedback) {
+    public Entity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos) {
         ResourceLocation identifier = getEntityTypeFrom(stack);
         Entity entity;
         if (DMEntities.DRAGON_ID.equals(identifier)) {
@@ -119,7 +119,7 @@ public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityCont
             entity = EntityList.createEntityByIDFromName(identifier, level);
             if (entity == null) return null;
         } else return null;
-        if (!EntityUtil.finalizeSpawn(level, entity, pos, true, null)) return null;
+        if (!EntityUtil.finalizeSpawn(level, entity, pos, true, null, EntityUtil::ensureUUIDUnique)) return null;
         if (entity instanceof EntityLivingBase && stack.hasDisplayName()) {
             entity.setCustomNameTag(stack.getDisplayName());
         }

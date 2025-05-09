@@ -228,10 +228,16 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Wh
 
     @Override
     public void beforePlaceItem(WhistleSlot slot, ItemStack stack) {
-        boolean enabled = !stack.isEmpty();
-        if (enabled && slot.getStack().getDisplayName().equals(stack.getDisplayName())) return;
-        this.nameField.setText(slot.desiredName = enabled ? stack.getDisplayName() : "");
-        this.nameField.setEnabled(enabled);
+        if (stack.isEmpty()) {
+            this.nameField.setEnabled(false);
+            this.nameField.setText(slot.desiredName = "");
+        } else {
+            this.nameField.setEnabled(true);
+            String name = stack.getDisplayName();
+            if (!name.equals(slot.getStack().getDisplayName())) {
+                this.nameField.setText(slot.desiredName = name);
+            }
+        }
     }
 
     @Override

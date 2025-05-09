@@ -1,6 +1,5 @@
 package net.dragonmounts.registry;
 
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMultimap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
@@ -17,7 +16,6 @@ import net.dragonmounts.util.DMUtils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
@@ -29,8 +27,6 @@ import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.registries.*;
 
 import javax.annotation.Nullable;
-import java.util.Set;
-import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -59,19 +55,19 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
     @Nullable
     public final ResourceLocation lootTable;
 
-    public DragonType(ResourceLocation identifier, Properties props) {
-        this.color = props.color;
-        this.convertible = props.convertible;
-        this.isSkeleton = props.isSkeleton;
-        this.avoidWater = props.avoidWater;
-        this.formatting = props.formatting;
-        this.attributes = ImmutableMultimap.copyOf(props.attributes);
-        this.immunities = new ReferenceOpenHashSet<>(props.immunities);
-        this.blocks = new ReferenceOpenHashSet<>(props.blocks);
-        this.biomes = new ReferenceOpenHashSet<>(props.biomes);
-        this.sneezeParticle = props.sneezeParticle;
-        this.eggParticle = props.eggParticle;
-        this.lootTable = props.hasLootTable ? (props.lootTable == null ? identifier : props.lootTable) : null;
+    public DragonType(ResourceLocation identifier, DragonTypeBuilder builder) {
+        this.color = builder.color;
+        this.convertible = builder.convertible;
+        this.isSkeleton = builder.isSkeleton;
+        this.avoidWater = builder.avoidWater;
+        this.formatting = builder.formatting;
+        this.attributes = ImmutableMultimap.copyOf(builder.attributes);
+        this.immunities = new ReferenceOpenHashSet<>(builder.immunities);
+        this.blocks = new ReferenceOpenHashSet<>(builder.blocks);
+        this.biomes = new ReferenceOpenHashSet<>(builder.biomes);
+        this.sneezeParticle = builder.sneezeParticle;
+        this.eggParticle = builder.eggParticle;
+        this.lootTable = builder.hasLootTable ? (builder.lootTable == null ? identifier : builder.lootTable) : null;
         this.setRegistryName(this.identifier = identifier);
         this.translationKey = DMUtils.makeDescriptionId("dragon_type", identifier);
     }
@@ -92,33 +88,33 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
         switch (index) {
             case 1:
                 return new Vec3d(
-                        0.6 * scale,
-                        sitting ? 3.4 * scale : 4.4 * scale,
-                        0.1 * scale
+                        0.375 * scale,
+                        sitting ? 2.125 * scale : 2.75 * scale,
+                        0.0625 * scale
                 );
             case 2:
                 return new Vec3d(
-                        -0.6 * scale,
-                        sitting ? 3.4 * scale : 4.4 * scale,
-                        0.1 * scale
+                        -0.375 * scale,
+                        sitting ? 2.125 * scale : 2.75 * scale,
+                        0.0625 * scale
                 );
             case 3:
                 return new Vec3d(
-                        1.6 * scale,
-                        sitting ? 2.1 * scale : 2.5 * scale,
-                        0.2 * scale
+                        scale,
+                        sitting ? 1.3125 * scale : 1.5625 * scale,
+                        0.125 * scale
                 );
             case 4:
                 return new Vec3d(
-                        -1.6 * scale,
-                        sitting ? 2.1 * scale : 2.5 * scale,
-                        0.2 * scale
+                        -scale,
+                        sitting ? 1.3125 * scale : 1.5625 * scale,
+                        0.125 * scale
                 );
             default:
                 return new Vec3d(
                         0,
-                        sitting ? 3.4 * scale : 4.5625 * scale - 0.5,
-                        2.2 * scale
+                        sitting ? 2.125 * scale : 3.0 * scale - 0.5,
+                        1.375 * scale
                 );
         }
     }
@@ -186,93 +182,6 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
             return function.apply(clazz.cast(value));
         }
         return fallback;
-    }
-
-    public static class Properties {
-        protected static final UUID MODIFIER_UUID = UUID.fromString("12e4cc82-db6d-5676-afc5-86498f0f6464");
-        public final HashMultimap<String, AttributeModifier> attributes = HashMultimap.create();
-        public final int color;
-        public final TextFormatting formatting;
-        public final Set<DamageSource> immunities = new ReferenceOpenHashSet<>();
-        public final Set<Block> blocks = new ReferenceOpenHashSet<>();
-        public final Set<Biome> biomes = new ReferenceOpenHashSet<>();
-        public EnumParticleTypes sneezeParticle = EnumParticleTypes.SMOKE_LARGE;
-        public EnumParticleTypes eggParticle = EnumParticleTypes.TOWN_AURA;
-        public ResourceLocation lootTable;
-        boolean hasLootTable = true;
-        public boolean convertible = true;
-        public boolean isSkeleton = false;
-        public boolean avoidWater = false;
-
-        public Properties(int color, TextFormatting formatting) {
-            this.color = color;
-            this.formatting = formatting;
-            // ignore suffocation damage
-            this.addImmunity(DamageSource.DROWN)
-                    .addImmunity(DamageSource.IN_WALL)
-                    .addImmunity(DamageSource.ON_FIRE)
-                    .addImmunity(DamageSource.IN_FIRE)
-                    .addImmunity(DamageSource.LAVA)
-                    .addImmunity(DamageSource.HOT_FLOOR)
-                    .addImmunity(DamageSource.CACTUS) // assume that cactus needles don't do much damage to animals with horned scales
-                    .addImmunity(DamageSource.DRAGON_BREATH); // ignore damage from vanilla ender dragon. I kinda disabled this because it wouldn't make any sense, feel free to re enable
-        }
-
-        public Properties notConvertible() {
-            this.convertible = false;
-            return this;
-        }
-
-        public Properties isSkeleton() {
-            this.isSkeleton = true;
-            return this;
-        }
-
-        public Properties putAttributeModifier(IAttribute attribute, String name, double value, int operation) {
-            this.attributes.put(attribute.getName(), new AttributeModifier(MODIFIER_UUID, name, value, operation));
-            return this;
-        }
-
-        public Properties addImmunity(DamageSource source) {
-            this.immunities.add(source);
-            return this;
-        }
-
-        public Properties addHabitat(Block block) {
-            this.blocks.add(block);
-            return this;
-        }
-
-        public Properties addHabitat(Biome biome) {
-            this.biomes.add(biome);
-            return this;
-        }
-
-        public Properties setSneezeParticle(@Nullable EnumParticleTypes particle) {
-            this.sneezeParticle = particle;
-            return this;
-        }
-
-        public Properties setEggParticle(EnumParticleTypes particle) {
-            this.eggParticle = particle;
-            return this;
-        }
-
-        public Properties avoidWater() {
-            this.avoidWater = true;
-            return this;
-        }
-
-        public Properties removeLoot() {
-            this.hasLootTable = false;
-            return this;
-        }
-
-        public Properties loot(ResourceLocation table) {
-            this.lootTable = table;
-            this.hasLootTable = true;
-            return this;
-        }
     }
 
     public static class Registry extends DeferredRegistry<DragonType> implements IForgeRegistry.AddCallback<DragonType> {

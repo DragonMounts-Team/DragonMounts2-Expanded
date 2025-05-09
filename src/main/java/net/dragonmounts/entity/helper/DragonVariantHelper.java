@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceSet;
 import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.init.DMBlocks;
 import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
@@ -18,6 +19,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
@@ -66,18 +68,17 @@ public class DragonVariantHelper implements ITickable {
     @Override
     public void update() {
         TameableDragonEntity dragon = this.dragon;
-        if (!dragon.isEgg()) return;
         DragonType current = dragon.getVariant().type;
         World level = dragon.world;
         // spawn breed-specific particles every other tick
         if (level.isRemote) {
-            Random random = dragon.getRNG();
             if (current != DragonTypes.ENDER && dragon.ticksExisted % TICK_RATE_PARTICLES == 0) {
-                double px = dragon.posX + (random.nextDouble() - 0.5);
-                double py = dragon.posY + (random.nextDouble() - 0.5);
-                double pz = dragon.posZ + (random.nextDouble() - 0.5);
+                Random random = dragon.getRNG();
+                double px = dragon.posX + random.nextDouble() - 0.5;
+                double py = dragon.posY + random.nextDouble() + 0.5;
+                double pz = dragon.posZ + random.nextDouble() - 0.5;
                 int color = current.color;
-                level.spawnParticle(EnumParticleTypes.REDSTONE, px, py + 1, pz,
+                level.spawnParticle(EnumParticleTypes.REDSTONE, px, py, pz,
                         parseColor(color, 2), parseColor(color, 1), parseColor(color, 0));
             }
             return;
@@ -85,22 +86,30 @@ public class DragonVariantHelper implements ITickable {
 
         // update egg breed every second on the server
         if (DMConfig.ADAPTIVE_CONVERSION.value && current.convertible && dragon.ticksExisted % TICK_RATE_BLOCK == 0) {
-            BlockPos eggPos = dragon.getPosition();
+            int posX = MathHelper.floor(dragon.posX), posY = MathHelper.floor(dragon.posY + 0.5), posZ = MathHelper.floor(dragon.posZ);
             // scan surrounding for breed-loving blocks
             for (BlockPos pos : BlockPos.getAllInBoxMutable(
-                    eggPos.add(BLOCK_RANGE, BLOCK_RANGE, BLOCK_RANGE),
-                    eggPos.add(-BLOCK_RANGE, -BLOCK_RANGE, -BLOCK_RANGE)
+                    posX - BLOCK_RANGE,
+                    posY - BLOCK_RANGE,
+                    posZ - BLOCK_RANGE,
+                    posX + BLOCK_RANGE,
+                    posY + BLOCK_RANGE,
+                    posZ + BLOCK_RANGE
             )) {
                 Block block = level.getBlockState(pos).getBlock();
-                for (DragonType type : DragonType.REGISTRY) {
-                    if (type.isHabitat(block)) {
-                        this.points.addTo(type, POINTS_BLOCK);
+                if (block.equals(DMBlocks.DRAGON_NEST)) {
+                    this.points.addTo(current, POINTS_BLOCK);
+                } else {
+                    for (DragonType type : DragonType.REGISTRY) {
+                        if (type.isHabitat(block)) {
+                            this.points.addTo(type, POINTS_BLOCK);
+                        }
                     }
                 }
             }
 
             // check biome
-            Biome biome = level.getBiome(eggPos);
+            Biome biome = level.getBiome(new BlockPos(posX, posY, posZ));
             for (DragonType type : DragonType.REGISTRY) {
                 if (type.isHabitat(biome)) {
                     this.points.addTo(type, POINTS_BIOME);

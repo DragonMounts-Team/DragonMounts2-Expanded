@@ -43,9 +43,7 @@ public class ByteBufferUtil {
         return buffer;
     }
 
-    /**
-     * @return an array with 8 booleans.
-     */
+    /// @return an array with 8 booleans.
     public static boolean[] readFlags(ByteBuf buffer) {
         boolean[] flags = new boolean[8];
         int data = buffer.readUnsignedByte();
@@ -55,9 +53,7 @@ public class ByteBufferUtil {
         return flags;
     }
 
-    /**
-     * @param flags 8 booleans at most.
-     */
+    /// @param flags 8 booleans at most.
     public static int compressFlags(boolean... flags) {
         int data = 0, bit = 1;
         for (boolean flag : flags) {

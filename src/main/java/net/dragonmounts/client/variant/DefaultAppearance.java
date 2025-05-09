@@ -14,7 +14,6 @@ public class DefaultAppearance extends VariantAppearance {
     public final DragonModel model;
 
     public DefaultAppearance(ResourceLocation body, ResourceLocation glow, IModelFactory factory) {
-        super(1.6F);
         this.model = new DragonModel(this, factory);
         this.body = body;
         this.glow = glow;

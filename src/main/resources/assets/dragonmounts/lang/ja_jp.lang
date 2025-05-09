@@ -112,7 +112,7 @@ gui.dragonmounts.unbindWhistle.tooltip=左Shiftキーを押してロックを解
 gui.dragonmounts.lock.tooltip=他のプレイヤーを信頼する
 
 #Controls
-key.categories.dragon=ドラゴンマウント
+key.categories.dragonmounts=ドラゴンマウント
 key.dragonmounts.breath=ドラゴンブレス
 key.dragonmounts.descent=降下
 key.dragonmounts.toggleCameraPos=カメラポジションの変更

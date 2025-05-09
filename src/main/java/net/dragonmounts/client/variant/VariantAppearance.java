@@ -17,11 +17,9 @@ public abstract class VariantAppearance {
     public final static ResourceLocation DEFAULT_CHEST = makeId(TEXTURES_ROOT + "chest.png");
     public final static ResourceLocation DEFAULT_SADDLE = makeId(TEXTURES_ROOT + "saddle.png");
     public final static ResourceLocation DEFAULT_DISSOLVE = makeId(TEXTURES_ROOT + "dissolve.png");
-    public final float renderScale;
     public final ImmutableList<IDragonLayer> layers;
 
-    public VariantAppearance(float modelScale) {
-        this.renderScale = modelScale;
+    public VariantAppearance() {
         this.layers = this.getLayers();
     }
 

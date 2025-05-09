@@ -66,7 +66,6 @@ public class DragonWhistleItem extends Item {
         Minecraft.getMinecraft().displayGuiScreen(new DragonWhistleGui(uuid));
     }
 
-
     public DragonWhistleItem() {
         this.setMaxStackSize(1);
     }

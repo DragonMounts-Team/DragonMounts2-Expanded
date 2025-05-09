@@ -8,9 +8,9 @@ import net.minecraft.client.model.ModelRenderer;
 
 import java.util.function.IntFunction;
 
-import static net.dragonmounts.client.model.dragon.DragonModel.TAIL_SEGMENTS;
-import static net.dragonmounts.client.model.dragon.DragonModel.TAIL_SIZE;
 import static net.dragonmounts.client.model.dragon.HornedTailPart.Snapshot.saveScalable;
+import static net.dragonmounts.entity.DragonModelContracts.TAIL_SEGMENTS;
+import static net.dragonmounts.entity.DragonModelContracts.TAIL_SIZE;
 
 public class HornedTailPart extends TailPart {
     /// display horns near the tip

@@ -6,6 +6,7 @@ import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.DarkBreath;
 import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.registry.DragonTypeBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
@@ -14,8 +15,8 @@ import net.minecraft.world.World;
 import java.util.Random;
 
 public class DarkType extends DragonType {
-    public DarkType(ResourceLocation identifier, Properties props) {
-        super(identifier, props);
+    public DarkType(ResourceLocation identifier, DragonTypeBuilder builder) {
+        super(identifier, builder);
     }
 
     @Override

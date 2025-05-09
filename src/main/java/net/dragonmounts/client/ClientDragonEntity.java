@@ -58,14 +58,15 @@ public class ClientDragonEntity extends TameableDragonEntity {
                     DMKeyBindings.KEY_BREATH.isKeyDown()
             ));
         }
-        this.variantHelper.update();
         this.lifeStageHelper.ageUp(1);
         this.breathHelper.update();
-        this.getVariant().type.tickClient(this);
         if (this.isEgg()) {
+            this.variantHelper.update();
+            this.getVariant().type.tickClient(this);
             super.onLivingUpdate();
             return;
         }
+        this.getVariant().type.tickClient(this);
         this.animator.update();
         if (!this.isDead) {
             if (this.healingEnderCrystal != null && this.healingEnderCrystal.isDead) {
@@ -140,6 +141,11 @@ public class ClientDragonEntity extends TameableDragonEntity {
             this.lifeStageHelper.playEggCrackEffect();
         }
         super.onDeath(cause);
+    }
+
+    public void onWingsDown(float speed) {
+        // play wing sounds
+        this.playSound(getWingsSound(), 0.8f + (this.lifeStageHelper.getScale() - speed), 1.0F, true);
     }
 
     @Override

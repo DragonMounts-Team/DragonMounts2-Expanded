@@ -86,7 +86,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     private static final DataParameter<Boolean> GOING_DOWN = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> ALLOW_OTHERPLAYERS = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> BOOSTING = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> HOVER_CANCELLED = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> HOVER_DISABLED = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> Y_LOCKED = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> FOLLOW_YAW = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<DragonVariant> DATA_VARIANT = EntityDataManager.createKey(TameableDragonEntity.class, DragonVariant.SERIALIZER);
@@ -104,7 +104,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     public final DragonBreathHelper<?> breathHelper = this.createBreathHelper();
     // public final DragonHungerHelper hungerHelper = new DragonHungerHelper(this);
     public EntityEnderCrystal healingEnderCrystal;
-    public int inAirTicks;
+    protected int inAirTicks;
     private boolean isUsingBreathWeapon;
     private boolean isGoingDown;
     private boolean isUnhovered;
@@ -139,7 +139,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         manager.register(DATA_BREATHING, false);
         manager.register(GOING_DOWN, false);
         manager.register(Y_LOCKED, false);
-        manager.register(HOVER_CANCELLED, false);
+        manager.register(HOVER_DISABLED, false);
         manager.register(ALLOW_OTHERPLAYERS, false);
         manager.register(BOOSTING, false);
         manager.register(DATA_CAN_SHEAR, true);
@@ -149,7 +149,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         manager.register(DATA_ARMOR, ItemStack.EMPTY);
         manager.register(DATA_CHEST, ItemStack.EMPTY);
         manager.register(DATA_SADDLE, ItemStack.EMPTY);
-        manager.register(DATA_BODY_SIZE, 1.0F);
+        manager.register(DATA_BODY_SIZE, (float) DMConfig.BASE_BODY_SIZE.value);
         manager.register(DATA_VARIANT, DragonVariants.ENDER_FEMALE);
         manager.register(DATA_TICKS_SINCE_CREATION, 0);
     }
@@ -279,7 +279,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
 
     public boolean isUnHovered() {
         if (world.isRemote) {
-            boolean isUnhovered = dataManager.get(HOVER_CANCELLED);
+            boolean isUnhovered = dataManager.get(HOVER_DISABLED);
             this.isUnhovered = isUnhovered;
             return isUnhovered;
         }
@@ -287,7 +287,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     }
 
     public void setUnHovered(boolean isUnhovered) {
-        dataManager.set(HOVER_CANCELLED, isUnhovered);
+        dataManager.set(HOVER_DISABLED, isUnhovered);
         if (!world.isRemote) {
             this.isUnhovered = isUnhovered;
         }
@@ -495,6 +495,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
 
     public void tame(EntityPlayer player) {
         this.setTamedBy(player);
+        this.getAISit().setSitting(true);
         this.navigator.clearPath();
         this.setAttackTarget(null);
         this.playTameEffect(true);
@@ -759,7 +760,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         float scale = this.lifeStageHelper.getScale();
         this.stepHeight = 0.5F + scale * (float) DMConfig.BASE_STEP_HEIGHT.value;
         float width = this.width;
-        this.setScale(MathHelper.clamp(scale * this.dataManager.get(DATA_BODY_SIZE), 0.04F, 1.25F));
+        this.setScale(MathHelper.clamp(scale * this.dataManager.get(DATA_BODY_SIZE), 0.04F, 2.00F));
         // workaround for a vanilla bug; the position is apparently not set correctly
         // after changing the entity size, causing asynchronous server/client
         // positioning
@@ -898,8 +899,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         if (DragonLifeStage.EGG == stage) {
             this.setSize(3.5F, 4.0F);
         } else {
-            //Pair<Float, Float> size = this.getBreed().getAdultEntitySize();TODO: use DragonType or something else
-            this.setSize(4.8F, 4.2F);
+            this.setSize(3.0F, 2.5F);
         }
     }
 

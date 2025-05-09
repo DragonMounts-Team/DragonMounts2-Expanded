@@ -32,6 +32,7 @@ public class DMConfig {
     public static final DoubleEntry BASE_MOVEMENT_SPEED = new DoubleEntry("baseMovementSpeed", 0.4);
     public static final DoubleEntry BASE_FLYING_SPEED = new DoubleEntry("baseFlyingSpeed", 0.75);
     public static final DoubleEntry BASE_SWIMMING_SPEED = new DoubleEntry("baseSwimmingSpeed", 5.0);
+    public static final DoubleEntry BASE_BODY_SIZE = new DoubleEntry("baseBodySize", 1.6);
     public static final DoubleEntry BASE_STEP_HEIGHT = new DoubleEntry("baseStepHeight", 1.25);
     // GAMEPLAY:
     public static final BooleanEntry FORCED_RENAME = new BooleanEntry("forcedRename", false);
@@ -133,6 +134,10 @@ public class DMConfig {
                     .setMaxValue(10.0)
                     .setMinValue(0.0)
                     .setLanguageKey("config.dragonmounts.baseSwimmingSpeed");
+            register(category, order, BASE_BODY_SIZE)
+                    .setMaxValue(2.0)
+                    .setMinValue(0.25)
+                    .setLanguageKey("config.dragonmounts.baseBodySize");
             register(category, order, BASE_STEP_HEIGHT)
                     .setMaxValue(Double.MAX_VALUE)
                     .setMinValue(-Double.MAX_VALUE)
@@ -208,6 +213,7 @@ public class DMConfig {
         load(category, BASE_FLYING_SPEED);
         load(category, BASE_SWIMMING_SPEED);
         load(category, BASE_STEP_HEIGHT);
+        load(category, BASE_BODY_SIZE);
 
         category = config.getCategory(CATEGORY_GAMEPLAY);
         load(category, FORCED_RENAME);

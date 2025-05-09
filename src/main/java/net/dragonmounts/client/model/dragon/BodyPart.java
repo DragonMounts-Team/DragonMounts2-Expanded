@@ -13,6 +13,6 @@ public class BodyPart extends ModelRenderer implements IModelPart {
 
     @Override
     public void setupAnim(DragonAnimator animator) {
-        this.back.isHidden = animator.saddled;
+        this.back.isHidden = animator.dragon.isSaddled();
     }
 }

@@ -4,7 +4,7 @@ import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
-import static net.dragonmounts.client.model.dragon.DragonModel.TAIL_SIZE;
+import static net.dragonmounts.entity.DragonModelContracts.TAIL_SIZE;
 
 public enum BuiltinFactory implements IModelFactory {
     NORMAL,
@@ -76,6 +76,7 @@ public enum BuiltinFactory implements IModelFactory {
     public static final int SKELETON_LEG_WIDTH = 7;
     public static final int LEG_LENGTH = 26;
     public static final int FOOT_HEIGHT = 4;
+    public static final int HEAD_OFS = -16;
 
     public static LegPart makeLeg(
             ModelBase base,

@@ -16,17 +16,17 @@ public class LinearInterpolation {
         this.current = this.previous = init;
     }
 
-    public float get() {
+    public final float get() {
         return this.current;
     }
 
-    public float get(float delta) {
+    public final float get(float delta) {
         if (delta <= 0.0F) return this.previous;
         if (delta >= 1.0F) return this.current;
         return this.previous + delta * (this.current - this.previous);
     }
 
-    public void sync() {
+    public final void sync() {
         this.previous = this.current;
     }
 
@@ -35,7 +35,7 @@ public class LinearInterpolation {
         this.current = value;
     }
 
-    public void add(float value) {
+    public final void add(float value) {
         this.set(this.current + value);
     }
 

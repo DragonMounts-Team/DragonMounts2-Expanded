@@ -3,8 +3,9 @@ package net.dragonmounts.client.model.dragon;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
+import static net.dragonmounts.entity.DragonModelContracts.WING_FINGERS;
+
 public class WingPart extends ModelRenderer implements IModelPart {
-    public static final int WING_FINGERS = 4;
     public final ModelRenderer forearm;
     protected final ModelRenderer[] fingers;
 

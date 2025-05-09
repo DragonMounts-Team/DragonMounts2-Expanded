@@ -30,13 +30,14 @@ public class HatchableDragonEggBlock extends BlockDragonEgg {
     public static final String TRANSLATION_KEY = TRANSLATION_KEY_PREFIX + "dragon_egg";
     @Nullable
     public static ServerDragonEntity spawn(World level, BlockPos pos, DragonType type) {
-        level.setBlockToAir(pos);
-        ServerDragonEntity egg = new ServerDragonEntity(level);//TODO: use HatchableDragonEggEntity
         DragonVariant variant = type.variants.draw(level.rand, null);
         if (variant == null) return null;
-        egg.setVariant(variant);
+        ServerDragonEntity egg = new ServerDragonEntity(level);
+        level.setBlockToAir(pos);
         egg.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+        egg.setVariant(variant);
         egg.lifeStageHelper.setLifeStage(DragonLifeStage.EGG);
+        egg.fromVanillaEgg = true;
         level.spawnEntity(egg);
         return egg;
     }

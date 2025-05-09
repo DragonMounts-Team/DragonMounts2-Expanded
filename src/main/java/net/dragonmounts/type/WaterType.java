@@ -8,6 +8,7 @@ import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.WaterBreath;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.registry.DragonTypeBuilder;
 import net.dragonmounts.util.EntityUtil;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.EnumParticleTypes;
@@ -18,8 +19,8 @@ import net.minecraft.world.World;
 import java.util.Random;
 
 public class WaterType extends DragonType {
-    public WaterType(ResourceLocation identifier, Properties props) {
-        super(identifier, props);
+    public WaterType(ResourceLocation identifier, DragonTypeBuilder builder) {
+        super(identifier, builder);
     }
 
     @Override

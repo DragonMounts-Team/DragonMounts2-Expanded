@@ -7,6 +7,7 @@ import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.IceBreath;
 import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.registry.DragonTypeBuilder;
 import net.dragonmounts.util.MutableBlockPosEx;
 import net.minecraft.enchantment.EnchantmentFrostWalker;
 import net.minecraft.init.Blocks;
@@ -21,8 +22,8 @@ import java.util.Random;
 public class IceType extends DragonType {
     public static final float FOOTPRINT_CHANCE = 0.01F;
 
-    public IceType(ResourceLocation identifier, Properties props) {
-        super(identifier, props);
+    public IceType(ResourceLocation identifier, DragonTypeBuilder builder) {
+        super(identifier, builder);
     }
 
     @Override

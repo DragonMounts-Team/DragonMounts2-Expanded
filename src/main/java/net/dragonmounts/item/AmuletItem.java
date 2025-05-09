@@ -37,7 +37,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import static net.dragonmounts.init.DMEntities.DRAGON_ID;
-import static net.dragonmounts.util.EntityUtil.notOwner;
 
 public class AmuletItem<E extends Entity> extends Item implements IEntityContainer<E>, ICapabilityProvider {
     private static final Reference2ObjectOpenHashMap<Capability<?>, Object> CAPABILITIES = new Reference2ObjectOpenHashMap<>();
@@ -84,7 +83,7 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
         if (!(level instanceof WorldServer)) return EnumActionResult.FAIL;
         ItemStack stack = player.getHeldItem(hand);
         if (this.isEmpty(stack.getTagCompound())) return EnumActionResult.FAIL;
-        Entity entity = this.loadEntity((WorldServer) level, stack, player, clicked.offset(facing), true, "message.dragonmounts.dragon.notOwner");
+        Entity entity = this.loadEntity((WorldServer) level, stack, player, clicked.offset(facing));
         if (entity == null) return EnumActionResult.FAIL;
         stack.shrink(1);
         ItemStack amulet = new ItemStack(DMItems.AMULET);
@@ -122,7 +121,7 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
         NBTTagCompound data = new NBTTagCompound();
         if (entity.writeToNBTOptional(data)) {
             NBTTagCompound root = new NBTTagCompound();
-            root.setTag("EntityTag", IEntityContainer.simplifyData(data));
+            root.setTag("EntityTag", IEntityContainer.simplifyData(data.copy()));
             ItemStack stack = new ItemStack(this);
             stack.setTagCompound(root);
             return stack;
@@ -132,11 +131,11 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
 
     @Nullable
     @Override
-    public Entity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos, boolean yOffset, @Nullable String feedback) {
+    public Entity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos) {
         NBTTagCompound root = stack.getTagCompound();
         if (root == null) return null;
         NBTTagCompound data = root.getCompoundTag("EntityTag");
-        if (data.isEmpty() || notOwner(data, player, feedback)) return null;
+        if (data.isEmpty() || Relation.denyIfNotOwner(data, player)) return null;
         ResourceLocation identifier = DragonSpawnEggItem.getEntityTypeFrom(stack);
         Entity entity;
         if (DRAGON_ID.equals(identifier)) {
@@ -145,7 +144,7 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
             entity = EntityList.createEntityByIDFromName(identifier, level);
             if (entity == null) return null;
         } else return null;
-        if (!EntityUtil.finalizeSpawn(level, entity, pos, true, null)) return null;
+        if (!EntityUtil.finalizeSpawn(level, entity, pos, true, null, EntityUtil::ensureUUIDUnique)) return null;
         if (entity instanceof EntityLivingBase && stack.hasDisplayName()) {
             entity.setCustomNameTag(stack.getDisplayName());
         }

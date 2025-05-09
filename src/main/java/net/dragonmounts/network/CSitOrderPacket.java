@@ -27,7 +27,7 @@ public class CSitOrderPacket extends CUUIDPacket {
             if (entity instanceof TameableDragonEntity) {
                 TameableDragonEntity dragon = (TameableDragonEntity) entity;
                 EntityPlayer player = ctx.getServerHandler().player;
-                if (Relation.checkRelation(dragon, player).isTrusted) {
+                if (dragon.dimension == player.dimension && Relation.checkRelation(dragon, player).isTrusted) {
                     dragon.getAISit().setSitting(!dragon.isSitting());
                     player.world.playSound(null, player.posX, player.posY, player.posZ, DMSounds.WHISTLE_BLOW_SHORT, SoundCategory.PLAYERS, 1, 1);
                     return null;

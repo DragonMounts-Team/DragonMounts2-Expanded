@@ -196,7 +196,7 @@ public class DebugOverlay {
         // size
         text.println(String.format(
                 "Size: %s (w: %s h: %s)",
-                dfShort.format(helper.getScale()),
+                dfShort.format(dragon.getAdjustedSize()),
                 dfShort.format(dragon.width),
                 dfShort.format(dragon.height)
         ));

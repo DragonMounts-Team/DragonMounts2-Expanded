@@ -19,7 +19,7 @@ import java.util.Arrays;
  * 
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class CircularBuffer {
+public final class CircularBuffer {
     private final float[] buffer;
     private int index = 0;
 

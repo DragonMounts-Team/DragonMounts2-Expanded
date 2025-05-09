@@ -1,6 +1,5 @@
 package net.dragonmounts.entity.helper;
 
-import net.dragonmounts.client.model.dragon.DragonModel;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.Segment;
@@ -10,8 +9,10 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
+import static net.dragonmounts.entity.DragonModelContracts.NECK_SEGMENTS;
+import static net.dragonmounts.entity.DragonModelContracts.NECK_SIZE;
+
 public class DragonHeadLocator<T extends TameableDragonEntity> implements ITickable {
-    public static final int NECK_SEGMENTS = 7;
     public final T dragon;
     public final Segment[] neckSegments = DMUtils.fillArray(new Segment[NECK_SEGMENTS], Segment::new);
     public final Segment head = new Segment();
@@ -26,7 +27,6 @@ public class DragonHeadLocator<T extends TameableDragonEntity> implements ITicka
     protected float flutter;
     protected float walk;
     protected float sit;
-    private boolean wingsDown;
 
     public DragonHeadLocator(T dragon) {
         this.dragon = dragon;
@@ -44,44 +44,37 @@ public class DragonHeadLocator<T extends TameableDragonEntity> implements ITicka
         TameableDragonEntity dragon = this.dragon;
         // don't move anything during death sequence
         if (dragon.deathTime > 0) return;
-        boolean flying = dragon.isFlying();
-        boolean onGround = !flying || dragon.isEgg();
-        boolean sitting = dragon.isSitting();
         float speedMax = 0.05f;
         float speedEnt = (float) (dragon.motionX * dragon.motionX + dragon.motionZ * dragon.motionZ);
         float speedMulti = MathX.clamp(speedEnt / speedMax);
-
         // update main animation timer, depend timing speed on movement
-        this.anim += onGround
-                ? 0.035F
-                : 0.070F - speedMulti * 0.035F;
+        boolean flying = dragon.isFlying();
+        this.anim += flying ? 0.070F - speedMulti * 0.035F : 0.035F;
         this.animBase = this.anim * MathX.PI_F * 2;
         // update ground transition
-        this.ground = MathX.clamp(onGround ? this.ground * 0.95F + 0.08F : this.ground - 0.1F);
+        this.ground = MathX.clamp(flying ? this.ground - 0.1F : this.ground * 0.95F + 0.08F);
         // update flutter transition
-        this.flutter = MathX.clamp(!onGround && (
-                dragon.collided || dragon.motionY > -0.1 || speedEnt < speedMax
-        ) ? this.flutter + 0.1F : this.flutter - 0.1F);
-        // update walking transition
-        this.walk = MathX.clamp(sitting ? this.walk - 0.1F : this.walk + 0.1F);
-        // update sitting transition
-        this.sit = MathX.clamp((sitting ? this.sit + 0.1F : this.sit - 0.1F) * 0.95F);
+        this.flutter = MathX.clamp(flying && (speedEnt < speedMax || dragon.motionY > -0.1)
+                ? this.flutter + 0.1F
+                : this.flutter - 0.1F
+        );
+        // update walking and sitting transition
+        if (dragon.isSitting()) {
+            this.walk = MathX.clamp(this.walk - 0.1F);
+            this.sit = MathX.clamp((this.sit + 0.1F) * 0.95F);
+        } else {
+            this.walk = MathX.clamp(this.walk + 0.1F);
+            this.sit = MathX.clamp((this.sit - 0.1F) * 0.95F);
+        }
         // update speed transition
-        this.speed = MathX.clamp(onGround ||
+        this.speed = MathX.clamp(!flying ||
                 speedEnt > speedMax ||
-                dragon.getAltitude() < dragon.height * 2 ||
+                dragon.isUnHovered() ||
                 dragon.getPassengers().size() > 1 ||
-                dragon.isUnHovered()
+                dragon.getAltitude() < dragon.height * 2
                 ? this.speed + 0.05F
                 : this.speed - 0.05F
         );
-        // check if the wings are moving down and trigger the event
-        boolean wingsDown = MathHelper.sin(this.animBase - 1.0F) > 0.0F;
-        if (flying && wingsDown && !this.wingsDown && this.flutter != 0 && !dragon.isInWater()) {
-            // play wing sounds
-            dragon.playSound(dragon.getWingsSound(), 0.8F + (dragon.lifeStageHelper.getScale() - this.speed), 1, false);
-        }
-        this.wingsDown = wingsDown;
         this.calculateHeadAndNeck();
     }
 
@@ -124,7 +117,7 @@ public class DragonHeadLocator<T extends TameableDragonEntity> implements ITicka
             segment.scaleZ = 0.6F;
             segment = (++i < NECK_SEGMENTS) ? this.neckSegments[i] : head;
             // move next segment behind the current one
-            float neckSize = 0.6F * DragonModel.NECK_SIZE - 1.4F;
+            float neckSize = 0.6F * NECK_SIZE - 1.4F;
             float factor = MathHelper.cos(rotX) * neckSize;
             segment.posX = posX - MathHelper.sin(lastRotY) * factor;
             segment.posY = posY + MathHelper.sin(rotX) * neckSize;

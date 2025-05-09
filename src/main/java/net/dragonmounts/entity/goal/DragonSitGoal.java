@@ -33,6 +33,7 @@ public class DragonSitGoal extends EntityAISit {
     public void startExecuting() {
         this.dragon.getNavigator().clearPath();
         this.dragon.setSitting(true);
+        this.dragon.setAttackTarget(null);
     }
 
     @Override

@@ -396,7 +396,7 @@ public class DMItems {
     static DragonAmuletItem createDragonAmuletItem(String name, DragonType type) {
         DragonAmuletItem item = new DragonAmuletItem(type);
         type.bindInstance(DragonAmuletItem.class, item);
-        ITEMS.add(item.setTranslationKey(DragonAmuletItem.TRANSLATION_KEY).setRegistryName(name));
+        ITEMS.add(item.setContainerItem(DMItems.AMULET).setTranslationKey(DragonAmuletItem.TRANSLATION_KEY).setRegistryName(name));
         return item;
     }
 

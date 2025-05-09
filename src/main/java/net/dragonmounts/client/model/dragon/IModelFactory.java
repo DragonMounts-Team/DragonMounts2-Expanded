@@ -5,7 +5,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
 import static net.dragonmounts.client.model.dragon.BuiltinFactory.*;
-import static net.dragonmounts.client.model.dragon.DragonModel.*;
+import static net.dragonmounts.entity.DragonModelContracts.*;
 
 public interface IModelFactory {
     default void defineTextures(ITextureOffsetDefiner definer) {

@@ -11,12 +11,13 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.input.Keyboard;
 
+import javax.annotation.Nonnull;
 import java.util.UUID;
 
 public class DragonWhistleGui extends GuiScreen {
     public final UUID uuid;
 
-    public DragonWhistleGui(UUID uuid) {
+    public DragonWhistleGui(@Nonnull UUID uuid) {
         this.uuid = uuid;
     }
 
@@ -43,19 +44,17 @@ public class DragonWhistleGui extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        if (uuid != null) {
-            switch (button.id) {
-                case 1:
-                    EntityPlayer player = this.mc.player;
-                    DragonMounts.NETWORK_WRAPPER.sendToServer(new CTeleportOrderPacket(uuid, player.rotationPitch, player.rotationYawHead));
-                    break;
-                case 2:
-                    DragonMounts.NETWORK_WRAPPER.sendToServer(new CSitOrderPacket(uuid));
-                    break;
-                case 3:
-                    DragonMounts.NETWORK_WRAPPER.sendToServer(new CFollowOrderPacket(uuid));
-                    break;
-            }
+        switch (button.id) {
+            case 1:
+                EntityPlayer player = this.mc.player;
+                DragonMounts.NETWORK_WRAPPER.sendToServer(new CTeleportOrderPacket(uuid, player.rotationPitch, player.rotationYawHead));
+                break;
+            case 2:
+                DragonMounts.NETWORK_WRAPPER.sendToServer(new CSitOrderPacket(uuid));
+                break;
+            case 3:
+                DragonMounts.NETWORK_WRAPPER.sendToServer(new CFollowOrderPacket(uuid));
+                break;
         }
         //Close GUI when option is selected
         this.mc.displayGuiScreen(null);

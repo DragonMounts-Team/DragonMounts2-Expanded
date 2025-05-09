@@ -2,46 +2,37 @@ package net.dragonmounts.entity;
 
 import net.dragonmounts.util.LogUtil;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 
-public enum Relation {
-    STRANGER(false) {
-        @Override
-        public void onDeny(EntityPlayer player) {
-            player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.dragon.untamed"), true);
-        }
-    },
-    UNTRUSTED(false) {
-        @Override
-        public void onDeny(EntityPlayer player) {
-            player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.dragon.locked"), true);
+import javax.annotation.Nullable;
 
-        }
-    },
-    TRUSTED(true) {
-        @Override
-        public void onDeny(EntityPlayer player) {
-            player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.dragon.notOwner"), true);
-        }
-    },
-    OWNER(true) {
-        @Override
-        public void onDeny(EntityPlayer player) {
-            LogUtil.LOGGER.warn("Logical Error: {} is consider as owner", player.getName());
-        }
-    };
+public enum Relation {
+    STRANGER(false, "message.dragonmounts.dragon.untamed"),
+    UNTRUSTED(false, "message.dragonmounts.dragon.locked"),
+    TRUSTED(true, "message.dragonmounts.dragon.notOwner"),
+    OWNER(true, null);
 
     public final boolean isTrusted;
+    private final ITextComponent reason;
 
-    Relation(boolean isTrusted) {
+    Relation(boolean isTrusted, String reason) {
         this.isTrusted = isTrusted;
+        this.reason = reason == null ? null : new TextComponentTranslation(reason);
     }
 
-    public abstract void onDeny(EntityPlayer player);
+    public final void onDeny(EntityPlayer player) {
+        if (this.reason == null) {
+            LogUtil.LOGGER.warn("Logical Error: {} should not be denied!", player.getName());
+        } else {
+            player.sendStatusMessage(this.reason, true);
+        }
+    }
 
     public static Relation checkRelation(TameableDragonEntity dragon, EntityPlayer player) {
         if (!dragon.isTamed() || dragon.isEgg()) return STRANGER;
-        if (dragon.isOwner(player)) return OWNER;
+        if (player.getUniqueID().equals(dragon.getOwnerId())) return OWNER;
         return dragon.allowedOtherPlayers() ? TRUSTED : UNTRUSTED;
     }
 
@@ -50,6 +41,15 @@ public enum Relation {
         Relation relation = checkRelation(dragon, player);
         if (OWNER == relation) return false;
         relation.onDeny(player);
+        return true;
+    }
+
+    /// @return if the player is denied
+    public static boolean denyIfNotOwner(NBTTagCompound entity, @Nullable EntityPlayer player) {
+        if (player == null) return false;
+        String owner = entity.getString("OwnerUUID");
+        if (owner.isEmpty() || player.getUniqueID().toString().equals(owner)) return false;
+        player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.dragon.notOwner"), true);
         return true;
     }
 }
