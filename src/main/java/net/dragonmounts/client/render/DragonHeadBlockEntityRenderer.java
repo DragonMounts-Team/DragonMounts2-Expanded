@@ -150,22 +150,26 @@ public class DragonHeadBlockEntityRenderer extends TileEntitySpecialRenderer<Dra
         }
     }
 
-    public static void renderLayer(DragonHeadItem item, float limbSwing, boolean isVillager) {
-        TextureManager manager = Minecraft.getMinecraft().renderEngine;
-        if (manager != null) {
-            GlStateManager.scale(1.1875F, -1.1875F, -1.1875F);
-            if (isVillager) GlStateManager.translate(0.0F, 0.0625F, 0.0F);
-            render(
-                    manager,
-                    item.variant.appearance,
-                    0.0F,
-                    0.0F,
-                    0.0F,
-                    180.0F,
-                    -1,
-                    limbSwing
-            );
+    public static boolean renderIfAvailable(Item item, float limbSwing, boolean isVillager) {
+        if (item instanceof DragonHeadItem) {
+            TextureManager manager = Minecraft.getMinecraft().renderEngine;
+            if (manager != null) {
+                GlStateManager.scale(1.1875F, -1.1875F, -1.1875F);
+                if (isVillager) GlStateManager.translate(0.0F, 0.0625F, 0.0F);
+                render(
+                        manager,
+                        ((DragonHeadItem) item).variant.appearance,
+                        0.0F,
+                        0.0F,
+                        0.0F,
+                        180.0F,
+                        -1,
+                        limbSwing
+                );
+            }
+            GlStateManager.popMatrix();
+            return true;
         }
-        GlStateManager.popMatrix();
+        return false;
     }
 }

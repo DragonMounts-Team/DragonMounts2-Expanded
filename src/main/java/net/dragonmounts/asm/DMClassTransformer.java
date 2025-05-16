@@ -2,16 +2,25 @@ package net.dragonmounts.asm;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 import static net.dragonmounts.asm.DragonMountsPlugin.PLUGIN_LOGGER;
 
 public class DMClassTransformer implements IClassTransformer {
     private static final HashMap<String, Function<byte[], byte[]>> TRANSFORMERS;
+    private static final boolean DUMP = false;
 
     static {
-        HashMap<String, Function<byte[], byte[]>> transformers = new HashMap<>();
+        HashMap<String, Function<byte[], byte[]>> transformers = TRANSFORMERS = new HashMap<>();
+        transformers.put(
+                "net.minecraft.client.Minecraft",
+                DMClassTransformers::transformMinecraft
+        );
         transformers.put(
                 "net.minecraft.client.renderer.entity.layers.LayerCustomHead",
                 DMClassTransformers::transformLayerCustomHead
@@ -24,7 +33,23 @@ public class DMClassTransformer implements IClassTransformer {
                 "net.minecraftforge.registries.ForgeRegistry$Snapshot",
                 DMClassTransformers::transformRegistrySnapshot
         );
-        TRANSFORMERS = transformers;
+        if (DUMP) {
+            for (Map.Entry<String, Function<byte[], byte[]>> entry : transformers.entrySet()) {
+                String clazz = entry.getKey();
+                Function<byte[], byte[]> impl = entry.getValue();
+                entry.setValue(bytes -> {
+                    byte[] result = impl.apply(bytes);
+                    try (FileOutputStream stream = new FileOutputStream(
+                            Paths.get("ClassDump", clazz + ".class").toAbsolutePath().toString()
+                    )) {
+                        stream.write(result);
+                    } catch (IOException e) {
+                        PLUGIN_LOGGER.warn("Failed to dump class: {}", clazz, e);
+                    }
+                    return result;
+                });
+            }
+        }
     }
 
     @Override

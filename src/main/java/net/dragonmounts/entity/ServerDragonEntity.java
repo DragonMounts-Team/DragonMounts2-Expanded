@@ -229,7 +229,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
         this.headLocator.update();
 
         // delay flying state for 10 ticks (0.5s)
-        if (onSolidGround()) {
+        if (this.isNearGround()) {
             inAirTicks = 0;
         } else {
             inAirTicks++;
@@ -397,7 +397,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
                 }
             }
         }
-        player.openGui(DragonMounts.getInstance(), GuiHandler.GUI_DRAGON, this.world, this.getEntityId(), 0, 0);
+        this.openInventory(player);
         return true;
     }
 
@@ -499,6 +499,19 @@ public class ServerDragonEntity extends TameableDragonEntity {
         this.dataManager.set(DATA_CAN_COLLECT_BREATH, cooldown <= 0);
     }
 
+    /**
+     * Causes this entity to lift off if it can fly.
+     */
+    public void liftOff() {
+        if (canFly()) {
+            boolean flag = isBeingRidden() || (isInWater() && isInLava());
+            // stronger jump for an easier lift-off
+            motionY += flag ? 0.7 : 6;
+            inAirTicks += flag ? 3 : 4;
+            jump();
+        }
+    }
+
     @Override
     public boolean canMateWith(EntityAnimal mate) {
         return this.reproductionHelper.canMateWith(mate);
@@ -516,6 +529,10 @@ public class ServerDragonEntity extends TameableDragonEntity {
                 ? Item.getItemFromBlock(this.getVariant().type.getInstance(HatchableDragonEggBlock.class, DMBlocks.ENDER_DRAGON_EGG))
                 : this.getVariant().type.getInstance(DragonSpawnEggItem.class, DMItems.ENDER_DRAGON_SPAWN_EGG)
         );
+    }
+
+    public final void openInventory(EntityPlayer player) {
+        player.openGui(DragonMounts.getInstance(), GuiHandler.GUI_DRAGON, this.world, this.getEntityId(), 0, 0);
     }
 
     @Nullable

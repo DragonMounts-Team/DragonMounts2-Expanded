@@ -55,6 +55,7 @@ public class ServerProxy {
         DragonMounts.NETWORK_WRAPPER.registerMessage(CSitOrderPacket.Handler.class, CSitOrderPacket.class, ++discriminator, Side.SERVER);
         DragonMounts.NETWORK_WRAPPER.registerMessage(CFollowOrderPacket.Handler.class, CFollowOrderPacket.class, ++discriminator, Side.SERVER);
         DragonMounts.NETWORK_WRAPPER.registerMessage(CRenameWhistlePacket.Handler.class, CRenameWhistlePacket.class, ++discriminator, Side.SERVER);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(COpenInventoryPacket.Handler.class, COpenInventoryPacket.class, ++discriminator, Side.SERVER);
     }
 
     public void PostInitialization(FMLPostInitializationEvent event) {

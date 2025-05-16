@@ -10,7 +10,6 @@
 package net.dragonmounts.entity.goal;
 
 import net.dragonmounts.entity.ServerDragonEntity;
-import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 
@@ -28,7 +27,7 @@ public class EntityAIDragonFollowOwnerElytraFlying extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        TameableDragonEntity dragon = this.dragon;
+        ServerDragonEntity dragon = this.dragon;
         if (!dragon.canFly())
             return false;
 
@@ -53,7 +52,7 @@ public class EntityAIDragonFollowOwnerElytraFlying extends EntityAIBase {
 
     @Override
     public void updateTask() {
-        TameableDragonEntity dragon = this.dragon;
+        ServerDragonEntity dragon = this.dragon;
         EntityLivingBase owner = this.owner;
         // liffoff
         if (!dragon.isFlying()) dragon.liftOff();

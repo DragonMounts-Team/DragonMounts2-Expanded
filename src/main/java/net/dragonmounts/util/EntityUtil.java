@@ -136,6 +136,11 @@ public class EntityUtil {
         attribute.applyModifier(new AttributeModifier(uuid, name, amount, operator).setSaved(serializable));
     }
 
+    public static boolean isMoving(Entity dragon) {
+        double deltaX = dragon.posX - dragon.prevPosX, deltaZ = dragon.posZ - dragon.prevPosZ;
+        return deltaX * deltaX + deltaZ * deltaZ > 2.5E-7F;
+    }
+
     public static void clampYaw(Entity entity, float yaw, float limit) {
         entity.setRenderYawOffset(yaw);
         float delta = MathHelper.wrapDegrees(entity.rotationYaw - yaw);

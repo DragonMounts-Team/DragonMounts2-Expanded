@@ -327,19 +327,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         return this.posY - this.world.getHeight(MathHelper.floor(this.posX), MathHelper.floor(this.posZ));
     }
 
-    /**
-     * Causes this entity to lift off if it can fly.
-     */
-    public void liftOff() {
-        if (canFly()) {
-            boolean flag = isBeingRidden() || (isInWater() && isInLava());
-            // stronger jump for an easier lift-off
-            motionY += flag ? 0.7 : 6;
-            inAirTicks += flag ? 3 : 4;
-            jump();
-        }
-    }
-
     @Override
     protected float getJumpUpwardsMotion() {
         // stronger jumps for easier lift-offs
@@ -349,7 +336,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     /**
      * Checks if the blocks below the dragons hitbox is present and solid
      */
-    public boolean onSolidGround() {
+    public boolean isNearGround() {
         MutableBlockPosEx pos = new MutableBlockPosEx(0, 0, 0);
         AxisAlignedBB box = this.getEntityBoundingBox();
         World level = this.world;

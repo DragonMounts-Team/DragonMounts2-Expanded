@@ -218,9 +218,10 @@ def generateRecipes(output: Output):
   shaped('saddle') \
     .define('#', ingot['iron']) \
     .define('X', leather) \
-    .pattern('XXX') \
+    .pattern(' X ') \
     .pattern('X#X') \
-    .save(output, 'redstone', 'easter_egg')
+    .unlockedBy('has_block', has(leather)) \
+    .save(output, 'tools', 'saddle')
   shaped(makeId('dragon_nest')) \
     .define('#', stick) \
     .pattern('###') \

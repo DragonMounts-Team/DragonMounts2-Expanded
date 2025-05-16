@@ -10,7 +10,6 @@
 package net.dragonmounts.entity.goal;
 
 import net.dragonmounts.entity.ServerDragonEntity;
-import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.util.EntityUtil;
 import net.dragonmounts.util.math.MathX;
@@ -46,7 +45,7 @@ public class EntityAIDragonPlayerControl extends EntityAIBase {
 
     @Override
     public void updateTask() {
-        TameableDragonEntity dragon = this.dragon;
+        ServerDragonEntity dragon = this.dragon;
         EntityPlayer rider = dragon.getControllingPlayer();
         assert rider != null;
         Vec3d wp = rider.getLookVec();

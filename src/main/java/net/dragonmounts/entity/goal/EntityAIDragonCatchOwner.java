@@ -10,7 +10,6 @@
 package net.dragonmounts.entity.goal;
 
 import net.dragonmounts.entity.ServerDragonEntity;
-import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,7 +31,7 @@ public class EntityAIDragonCatchOwner extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        TameableDragonEntity dragon = this.dragon;
+        ServerDragonEntity dragon = this.dragon;
         // don't catch if leashed, sitting or already being ridden
         if (dragon.getLeashed() || dragon.isSitting() || !dragon.isSaddled() || dragon.getControllingPlayer() != null)
             return false;
@@ -56,7 +55,7 @@ public class EntityAIDragonCatchOwner extends EntityAIBase {
 
     @Override
     public void updateTask() {
-        TameableDragonEntity dragon = this.dragon;
+        ServerDragonEntity dragon = this.dragon;
         EntityPlayer owner = this.owner;
         // catch owner in flight if possible
         if (!dragon.isFlying()) {

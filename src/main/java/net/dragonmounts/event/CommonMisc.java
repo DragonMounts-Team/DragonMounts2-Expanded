@@ -6,6 +6,7 @@ import net.dragonmounts.capability.IArmorEffectManager;
 import net.dragonmounts.compat.DragonMountsCompat;
 import net.dragonmounts.compat.PatchouliCompat;
 import net.dragonmounts.config.DMConfig;
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.inventory.WhistleHolder;
@@ -56,16 +57,18 @@ public class CommonMisc {
      */
     @SubscribeEvent
     public static void tryHatchVanillaEgg(PlayerInteractEvent.RightClickBlock event) {
+        if (!DMConfig.BLOCK_OVERRIDE.value) return; //do nothing if config is set
         World level = event.getWorld();
         if (level.isRemote) return; //do nothing on client world
         BlockPos pos = event.getPos();
         if (level.getBlockState(pos).getBlock() != Blocks.DRAGON_EGG) return; //ignore all other blocks
-        if (!DMConfig.BLOCK_OVERRIDE.value) return; //do nothing if config is set
         if (level.provider.getDimensionType() == DimensionType.THE_END) {
             event.getEntityPlayer().sendStatusMessage(new TextComponentTranslation("message.dragonmounts.egg.wrongDimension"), true);
             return;  //cant hatch in the end
         }
-        HatchableDragonEggBlock.spawn(level, pos, DragonTypes.ENDER);
+        ServerDragonEntity egg = HatchableDragonEggBlock.spawn(level, pos, DragonTypes.ENDER);
+        if (egg == null) return;
+        egg.fromVanillaEgg = true;
     }
 
     @SubscribeEvent

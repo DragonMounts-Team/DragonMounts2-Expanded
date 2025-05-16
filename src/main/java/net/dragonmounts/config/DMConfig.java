@@ -22,6 +22,7 @@ public class DMConfig {
     public static final BooleanEntry ENABLE_DEBUG_OVERLAY = new BooleanEntry("enableDebugOverlay", false);
     // CLIENT:
     public static final DoubleEntry CAMERA_DISTANCE = new DoubleEntry("cameraDistance", 20.0);
+    public static final BooleanEntry REDIRECT_INVENTORY = new BooleanEntry("redirectInventory", true);
     // ATTRIBUTES:
     public static final DoubleEntry BASE_ARMOR = new DoubleEntry("baseArmor", 8.0);
     public static final DoubleEntry BASE_ARMOR_TOUGHNESS = new DoubleEntry("baseArmorToughness", 30.0);
@@ -93,6 +94,9 @@ public class DMConfig {
                     .setMaxValue(24.0);
             prop.setHasSlidingControl(true);
             prop.setComment("Zoom out for third person view while riding dragons or carriages.");
+            register(category, order, REDIRECT_INVENTORY)
+                    .setLanguageKey("config.dragonmounts.redirectInventory")
+                    .setComment("Whether to open your mount's inventory instead of yours.");
             category.setPropertyOrder(order);
             // ATTRIBUTES
             order = new ObjectArrayList<>();
@@ -200,7 +204,9 @@ public class DMConfig {
         load(category, DEBUG_MODE);
         loadConditional(category, DEBUG_MODE.value, ENABLE_DEBUG_OVERLAY);
 
-        load(config.getCategory(CATEGORY_CLIENT), CAMERA_DISTANCE);
+        category = config.getCategory(CATEGORY_CLIENT);
+        load(category, CAMERA_DISTANCE);
+        load(category, REDIRECT_INVENTORY);
 
         category = config.getCategory(CATEGORY_ATTRIBUTES);
         load(category, BASE_ARMOR);

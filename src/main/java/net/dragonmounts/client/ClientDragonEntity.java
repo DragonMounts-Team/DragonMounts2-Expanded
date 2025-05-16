@@ -6,12 +6,14 @@ import net.dragonmounts.capability.IDragonFood;
 import net.dragonmounts.capability.IHardShears;
 import net.dragonmounts.client.breath.impl.ClientBreathHelper;
 import net.dragonmounts.client.model.dragon.DragonAnimator;
+import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMKeyBindings;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.network.CDragonBreathPacket;
+import net.dragonmounts.network.COpenInventoryPacket;
 import net.dragonmounts.util.ItemUtil;
 import net.dragonmounts.util.MutableBlockPosEx;
 import net.minecraft.client.Minecraft;
@@ -30,6 +32,17 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 
 public class ClientDragonEntity extends TameableDragonEntity {
+    public static boolean openInventoryIfAvailable(Minecraft minecraft) {
+        if (DMConfig.REDIRECT_INVENTORY.value &&
+                minecraft.player != null &&
+                minecraft.player.getRidingEntity() instanceof ClientDragonEntity
+        ) {
+            DragonMounts.NETWORK_WRAPPER.sendToServer(new COpenInventoryPacket());
+            return true;
+        }
+        return false;
+    }
+
     public final DragonAnimator animator = new DragonAnimator(this);
     public boolean isInGui = false;
     public int controlFlags = -1;
