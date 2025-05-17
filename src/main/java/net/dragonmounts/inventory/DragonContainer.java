@@ -106,19 +106,19 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 				});
 			}
 		}
-		
+
 		/*
 		 * Player Inventory Slots within Dragon GUI
 		 */
 		// Build Inventory Slots
 		for (int j = 0; j < 3; ++j) {
 			for (int k = 0; k < 9; ++k) {
-				this.addSlotToContainer(new Slot(player.inventory, k + j * 9 + 9, 156 + k * 18, 150 + j * 18 - 18));
+				this.addSlotToContainer(new Slot(player.inventory, k + j * 9 + 9, 156 + k * 18, 142 + j * 18));
 			}
 		}
 		// Build hotbar slots
 		for (int j = 0; j < 9; ++j) {
-			this.addSlotToContainer(new Slot(player.inventory, j, 156 + j * 18, 190));
+			this.addSlotToContainer(new Slot(player.inventory, j, 156 + j * 18, 200));
 		}
 	}
 

@@ -163,8 +163,6 @@ public class DragonLifeStageHelper {
             dragon.getNavigator().clearPath();
             // update AI
             ((ServerDragonEntity) dragon).setupTasks();
-            // update attribute modifier
-            this.applyEntityAttributes();
             if (DragonLifeStage.EGG == lifeStage) {
                 dragon.variantHelper.resetPoints(null);
             }
@@ -172,6 +170,8 @@ public class DragonLifeStageHelper {
             // play particle and sound effects when the dragon hatches
             dragon.world.playSound(dragon.posX, dragon.posY, dragon.posZ, DMSounds.DRAGON_EGG_SHATTER, SoundCategory.BLOCKS, 4, 1, false);
         }
+        // update attribute modifier
+        this.applyEntityAttributes();
         dragon.onLifeStageChange(lifeStage);
     }
 
