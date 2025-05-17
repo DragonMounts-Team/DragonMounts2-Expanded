@@ -1,0 +1,42 @@
+{
+  "pools": [
+    {
+      "name": "dragon",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "dragonmounts:raw_dragon_meat",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 3,
+                "max": 8
+              }
+            },
+            {
+              "function": "furnace_smelt",
+              "conditions": [
+                {
+                  "condition": "entity_properties",
+                  "entity": "this",
+                  "properties": {
+                    "on_fire": true
+                  }
+                }
+              ]
+            },
+            {
+              "function": "looting_enchant",
+              "count": {
+                "min": 0,
+                "max": 1
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

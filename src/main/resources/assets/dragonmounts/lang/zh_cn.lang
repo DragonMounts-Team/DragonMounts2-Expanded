@@ -32,6 +32,9 @@ life_stage.dragon.fledgling=少年
 life_stage.dragon.juvenile=青年
 life_stage.dragon.adult=成年
 
+item.dragonmount.raw_dragon_meat.name=生龙排
+item.dragonmount.cooked_dragon_meat.name=熟龙排
+
 item.dragonmounts.diamond_shears.name=钻石剪刀
 item.dragonmounts.dragon_spawn_egg.name=龙刷怪蛋
 item.dragonmounts.dragon_essence.name=龙精华

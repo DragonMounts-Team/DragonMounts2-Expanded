@@ -42,6 +42,11 @@ life_stage.dragon.adult=Adult
 ##
 # Item Names
 ##
+
+
+item.dragonmount.raw_dragon_meat.name=Raw Dragon Meat
+item.dragonmount.cooked_dragon_meat.name=Cooked Dragon Meat
+
 item.dragonmounts.diamond_shears.name=Diamond Shears
 item.dragonmounts.dragon_spawn_egg.name=Dragon Spawn Egg
 item.dragonmounts.dragon_essence.name=Dragon Essence

@@ -9,10 +9,7 @@ import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.DragonScaleArmorSuit;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.function.Consumer;
@@ -23,12 +20,17 @@ import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
 public class DMItems {
     public static final ObjectArrayList<Item> ITEMS = new ObjectArrayList<>();
 
+
+    public static final Item RAW_DEAGON_MEAT = new ItemFood(3,0.5F,true).setTranslationKey("dragonmount.raw_dragon_meat").setCreativeTab(DMItemGroups.ITEMS);
+    public static final Item COOKED_DEAGON_MEAT = new ItemFood(6,1.0F,true).setTranslationKey("dragonmount.cooked_dragon_meat").setCreativeTab(DMItemGroups.ITEMS);
     //Blocks
     public static final CraftableBlockItem DRAGON_NEST = new CraftableBlockItem(DMBlocks.DRAGON_NEST, DMItemGroups.BLOCKS);
     public static final ItemBlock DRAGON_CORE = new ItemBlock(DMBlocks.DRAGON_CORE);
     static {
         ITEMS.add(DRAGON_NEST.setRegistryName("dragon_nest"));
         ITEMS.add(DRAGON_CORE.setRegistryName("dragon_core"));
+        ITEMS.add(RAW_DEAGON_MEAT.setRegistryName("raw_dragon_meat"));
+        ITEMS.add(COOKED_DEAGON_MEAT.setRegistryName("cooked_dragon_meat"));
     }
     //Scales Start
     public static final DragonScalesItem FOREST_DRAGON_SCALES = createDragonScalesItem("forest_dragon_scales", DragonTypes.FOREST);

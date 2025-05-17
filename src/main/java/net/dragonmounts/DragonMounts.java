@@ -67,6 +67,7 @@ public class DragonMounts {
     public void Initialization(FMLInitializationEvent event) {
         PROXY.Initialization(event);
         DMItems.bindRepairMaterials();
+        GameRegistry.addSmelting(DMItems.RAW_DEAGON_MEAT, DMItems.COOKED_DEAGON_MEAT.getDefaultInstance(),0.35F);
         GameRegistry.registerWorldGenerator(new DragonMountsWorldGenerator(), 0);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, GuiHandler.INSTANCE);
         RegistryEventHandler.registerCapabilities();
