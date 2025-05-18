@@ -11,6 +11,7 @@ public class DMSounds {
 	public static final ObjectList<SoundEvent> INSTANCES;
 	public static final SoundEvent DRAGON_AMBIENT;
 	public static final SoundEvent DRAGON_AMBIENT_WATER;
+	public static final SoundEvent DRAGON_CHEST;
 	public static final SoundEvent DRAGON_DEATH;
 	public static final SoundEvent DRAGON_DEATH_ZOMBIE;
 	public static final SoundEvent DRAGON_ROAR;
@@ -58,6 +59,7 @@ public class DMSounds {
 		ObjectArrayList<SoundEvent> list = new ObjectArrayList<>();
 		list.add(DRAGON_AMBIENT = create("entity.dragon.ambient"));
 		list.add(DRAGON_AMBIENT_WATER = create("entity.dragon.ambient.water"));
+		list.add(DRAGON_CHEST = create("entity.dragon.chest"));
 		list.add(DRAGON_DEATH = create("entity.dragon.death"));
 		list.add(DRAGON_DEATH_ZOMBIE = create("entity.dragon.death.zombie"));
 		list.add(DRAGON_ROAR = create("entity.dragon.roar"));

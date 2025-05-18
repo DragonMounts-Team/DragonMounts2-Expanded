@@ -12,26 +12,35 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.*;
 import net.minecraft.util.ResourceLocation;
 
+import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
+import static net.dragonmounts.util.ItemUtil.localize;
 
 @MethodsReturnNonnullByDefault
 public class DMItems {
     public static final ObjectArrayList<Item> ITEMS = new ObjectArrayList<>();
-
-
-    public static final Item RAW_DEAGON_MEAT = new ItemFood(3,0.5F,true).setTranslationKey("dragonmount.raw_dragon_meat").setCreativeTab(DMItemGroups.ITEMS);
-    public static final Item COOKED_DEAGON_MEAT = new ItemFood(6,1.0F,true).setTranslationKey("dragonmount.cooked_dragon_meat").setCreativeTab(DMItemGroups.ITEMS);
     //Blocks
-    public static final CraftableBlockItem DRAGON_NEST = new CraftableBlockItem(DMBlocks.DRAGON_NEST, DMItemGroups.BLOCKS);
-    public static final ItemBlock DRAGON_CORE = new ItemBlock(DMBlocks.DRAGON_CORE);
-    static {
-        ITEMS.add(DRAGON_NEST.setRegistryName("dragon_nest"));
-        ITEMS.add(DRAGON_CORE.setRegistryName("dragon_core"));
-        ITEMS.add(RAW_DEAGON_MEAT.setRegistryName("raw_dragon_meat"));
-        ITEMS.add(COOKED_DEAGON_MEAT.setRegistryName("cooked_dragon_meat"));
-    }
+    public static final CraftableBlockItem DRAGON_NEST = createItem(
+            "dragon_nest",
+            new CraftableBlockItem(DMBlocks.DRAGON_NEST, DMItemGroups.BLOCKS),
+            null
+    );
+    public static final ItemBlock DRAGON_CORE = createItem(
+            "dragon_core",
+            new ItemBlock(DMBlocks.DRAGON_CORE),
+            null
+    );
+    //Foods
+    public static final ItemFood RAW_DRAGON_MEAT = createFood(
+            "raw_dragon_meat",
+            new ItemFood(3, 0.5F, true)
+    );
+    public static final ItemFood COOKED_DRAGON_MEAT = createFood(
+            "cooked_dragon_meat",
+            new ItemFood(6, 1.5F, true)
+    );
     //Scales Start
     public static final DragonScalesItem FOREST_DRAGON_SCALES = createDragonScalesItem("forest_dragon_scales", DragonTypes.FOREST);
     public static final DragonScalesItem FIRE_DRAGON_SCALES = createDragonScalesItem("fire_dragon_scales", DragonTypes.FIRE);
@@ -385,14 +394,20 @@ public class DMItems {
     public static final TestRunnerItem TEST_RUNNER = new TestRunnerItem();
 
     static <T extends Item> T createItem(String name, T item) {
-        ITEMS.add(item.setTranslationKey(TRANSLATION_KEY_PREFIX + name).setRegistryName(name));
+        ITEMS.add(localize(item, name).setRegistryName(name));
         return item;
     }
 
-    static <T extends Item> T createItem(String name, T item, Consumer<T> init) {
+    static <T extends Item> T createItem(String name, T item, @Nullable Consumer<T> init) {
         ITEMS.add(item.setRegistryName(name));
+        if (init == null) return item;
         init.accept(item);
         return item;
+    }
+
+    static <T extends ItemFood> T createFood(String name, T food) {
+        ITEMS.add(localize(food, name).setCreativeTab(DMItemGroups.ITEMS).setRegistryName(name));
+        return food;
     }
 
     static DragonAmuletItem createDragonAmuletItem(String name, DragonType type) {
@@ -404,7 +419,7 @@ public class DMItems {
 
     static DragonArmorItem createDragonArmorItem(String name, String texture, int protection) {
         DragonArmorItem item = new DragonArmorItem(new ResourceLocation(DragonMountsTags.MOD_ID, texture), protection);
-        ITEMS.add(item.setTranslationKey(TRANSLATION_KEY_PREFIX + name).setRegistryName(name));
+        ITEMS.add(localize(item, name).setRegistryName(name));
         return item;
     }
 

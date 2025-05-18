@@ -2,13 +2,13 @@ package net.dragonmounts.entity.breath;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.dragonmounts.util.EntityUtil;
-import net.dragonmounts.util.Pair;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 /**
  * Created by TGG on 31/07/2015.
@@ -20,18 +20,18 @@ import net.minecraft.world.World;
  * 2) call onUpdate() every tick to move and collide
  * 3) various getters for intensity, radius, and recent collisions.
  */
-class EntityBreathNode extends Entity {
-    public static EntityBreathNode createEntityBreathNodeServer(World world, Vec3d pos, Vec3d direction, BreathPower power) {
+class BreathNodeEntity extends Entity {
+    public static BreathNodeEntity createEntityBreathNodeServer(World world, Vec3d pos, Vec3d direction, BreathPower power) {
         BreathNode breathNode = new BreathNode(power);
         Vec3d actualMotion = breathNode.getRandomisedStartingMotion(direction.normalize(), world.rand);
         // don't randomise the other properties (size, age) on the server.
-        return new EntityBreathNode(world, pos.x, pos.y, pos.z, actualMotion, breathNode);
+        return new BreathNodeEntity(world, pos.x, pos.y, pos.z, actualMotion, breathNode);
     }
 
     private final BreathNode breathNode;
     private float intensityAtCollision;
 
-    private EntityBreathNode(
+    private BreathNodeEntity(
             World world,
             double x,
             double y,
@@ -74,7 +74,7 @@ class EntityBreathNode extends Entity {
         this.prevPosX = posX;
         this.prevPosY = posY;
         this.prevPosZ = posZ;
-        ObjectArrayList<Pair<EnumFacing, AxisAlignedBB>> collisions = EntityUtil.moveAndResize(this, motionX, motionY, motionZ, size, size);
+        ObjectArrayList<ImmutablePair<EnumFacing, AxisAlignedBB>> collisions = EntityUtil.moveAndResize(this, motionX, motionY, motionZ, size, size);
         this.intensityAtCollision = getCurrentIntensity();
         if (collided && onGround) {
             motionY -= 0.01F;         // ensure that we hit the ground next time too

@@ -43,9 +43,8 @@ life_stage.dragon.adult=Adult
 # Item Names
 ##
 
-
-item.dragonmount.raw_dragon_meat.name=Raw Dragon Meat
-item.dragonmount.cooked_dragon_meat.name=Cooked Dragon Meat
+item.dragonmounts.raw_dragon_meat.name=Raw Dragon Meat
+item.dragonmounts.cooked_dragon_meat.name=Cooked Dragon Meat
 
 item.dragonmounts.diamond_shears.name=Diamond Shears
 item.dragonmounts.dragon_spawn_egg.name=Dragon Spawn Egg
@@ -155,6 +154,7 @@ tooltip.dragonmounts.carriage=Used to make dragons carry multiple passengers lik
 item.modifiers.equipped=When equipped:
 
 subtitles.entity.dragonmounts.dragon.ambient=Dragon roars
+subtitles.entity.dragonmounts.dragon.chest=Dragon Chest equips
 subtitles.entity.dragonmounts.dragon.death=Dragon dies
 subtitles.entity.dragonmounts.dragon.roar=Dragon roars
 subtitles.entity.dragonmounts.dragon.purr=Dragon purrs

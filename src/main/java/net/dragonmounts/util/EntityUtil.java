@@ -27,6 +27,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeEventFactory;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -188,7 +189,7 @@ public class EntityUtil {
      * (WEST, [3,2,6]-->[3.5, 2, 6] means the west face of the entity collided; the entity tried to move to
      * x = 3, but got pushed back to x=3.5
      */
-    public static ObjectArrayList<Pair<EnumFacing, AxisAlignedBB>> moveAndResize(Entity entity, double dx, double dy, double dz, float newWidth, float newHeight) {
+    public static ObjectArrayList<ImmutablePair<EnumFacing, AxisAlignedBB>> moveAndResize(Entity entity, double dx, double dy, double dz, float newWidth, float newHeight) {
         entity.world.profiler.startSection("move and resize (dm)");
         AxisAlignedBB entityAABB = entity.getEntityBoundingBox();
         double wDXplus = (newWidth - entity.width) * 0.5;
@@ -263,31 +264,31 @@ public class EntityUtil {
         // if we collided in any direction, stop the entity's motion in that direction, and mark the truncated zone
         //   as a collision zone - i.e if we wanted to move to dx += 0.5, but actually could only move +0.2, then the
         //   collision zone is the region from +0.2 to +0.5
-        ObjectArrayList<Pair<EnumFacing, AxisAlignedBB>> collisions = new ObjectArrayList<>(3);
+        ObjectArrayList<ImmutablePair<EnumFacing, AxisAlignedBB>> collisions = new ObjectArrayList<>(3);
         if (desiredDX != dx) {
             entity.motionX = 0.0D;
             if (desiredDX < 0) {
-                collisions.add(new Pair<>(EnumFacing.WEST, new AxisAlignedBB(entityAABB.minX + (desiredDX - dx), entityAABB.minY, entityAABB.minZ, entityAABB.minX, entityAABB.maxY, entityAABB.maxZ)));
+                collisions.add(new ImmutablePair<>(EnumFacing.WEST, new AxisAlignedBB(entityAABB.minX + (desiredDX - dx), entityAABB.minY, entityAABB.minZ, entityAABB.minX, entityAABB.maxY, entityAABB.maxZ)));
             } else {
-                collisions.add(new Pair<>(EnumFacing.EAST, new AxisAlignedBB(entityAABB.maxX, entityAABB.minY, entityAABB.minZ, entityAABB.maxX + (desiredDX - dx), entityAABB.maxY, entityAABB.maxZ)));
+                collisions.add(new ImmutablePair<>(EnumFacing.EAST, new AxisAlignedBB(entityAABB.maxX, entityAABB.minY, entityAABB.minZ, entityAABB.maxX + (desiredDX - dx), entityAABB.maxY, entityAABB.maxZ)));
             }
         }
 
         if (desiredDY != dy) {
             entity.motionY = 0.0D;
             if (desiredDY < 0) {
-                collisions.add(new Pair<>(EnumFacing.DOWN, new AxisAlignedBB(entityAABB.minX, entityAABB.minY + (desiredDY - dy), entityAABB.minZ, entityAABB.maxX, entityAABB.minY, entityAABB.maxZ)));
+                collisions.add(new ImmutablePair<>(EnumFacing.DOWN, new AxisAlignedBB(entityAABB.minX, entityAABB.minY + (desiredDY - dy), entityAABB.minZ, entityAABB.maxX, entityAABB.minY, entityAABB.maxZ)));
             } else {
-                collisions.add(new Pair<>(EnumFacing.UP, new AxisAlignedBB(entityAABB.minX, entityAABB.maxY, entityAABB.minZ, entityAABB.maxX, entityAABB.maxY + (desiredDY - dy), entityAABB.maxZ)));
+                collisions.add(new ImmutablePair<>(EnumFacing.UP, new AxisAlignedBB(entityAABB.minX, entityAABB.maxY, entityAABB.minZ, entityAABB.maxX, entityAABB.maxY + (desiredDY - dy), entityAABB.maxZ)));
             }
         }
 
         if (desiredDZ != dz) {
             entity.motionZ = 0.0D;
             if (desiredDZ < 0) {
-                collisions.add(new Pair<>(EnumFacing.NORTH, new AxisAlignedBB(entityAABB.minX, entityAABB.minY, entityAABB.minZ + (desiredDZ - dz), entityAABB.maxX, entityAABB.maxY, entityAABB.minZ)));
+                collisions.add(new ImmutablePair<>(EnumFacing.NORTH, new AxisAlignedBB(entityAABB.minX, entityAABB.minY, entityAABB.minZ + (desiredDZ - dz), entityAABB.maxX, entityAABB.maxY, entityAABB.minZ)));
             } else {
-                collisions.add(new Pair<>(EnumFacing.SOUTH, new AxisAlignedBB(entityAABB.minX, entityAABB.minY, entityAABB.maxZ, entityAABB.maxX, entityAABB.maxY, entityAABB.maxZ + (desiredDZ - dz))));
+                collisions.add(new ImmutablePair<>(EnumFacing.SOUTH, new AxisAlignedBB(entityAABB.minX, entityAABB.minY, entityAABB.maxZ, entityAABB.maxX, entityAABB.maxY, entityAABB.maxZ + (desiredDZ - dz))));
             }
         }
         entity.world.profiler.endSection();

@@ -79,6 +79,9 @@ def generateItemModels(output: Output):
   spawnEggModel = ResourceLocation('item/spawn_egg')
   dragonHeadModel = ResourceLocation('item/skull_dragon')
   basicItem(output, makeId('variation_orb'))
+  basicItem(output, makeId('raw_dragon_meat'))
+  basicItem(output, makeId('cooked_dragon_meat'))
+  handheldItem(output, makeId('diamond_shears'))
   for type in CarriageType:
     basicItem(
       output,

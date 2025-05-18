@@ -32,7 +32,7 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 public class BreathAffectedArea {
 
-    private final ObjectArrayList<EntityBreathNode> entityBreathNodes = new ObjectArrayList<>();
+    private final ObjectArrayList<BreathNodeEntity> entityBreathNodes = new ObjectArrayList<>();
     private final Object2ObjectOpenHashMap<BlockPos, BreathAffectedBlock> blocksAffectedByBeam = new Object2ObjectOpenHashMap<>();
     private final Reference2ObjectOpenHashMap<EntityLivingBase, BreathAffectedEntity> affectedEntities = new Reference2ObjectOpenHashMap<>();
 
@@ -47,7 +47,7 @@ public class BreathAffectedArea {
      * @param power
      */
     public void continueBreathing(World world, Vec3d origin, Vec3d destination, BreathPower power) {
-        this.entityBreathNodes.add(EntityBreathNode.createEntityBreathNodeServer(world, origin, destination.subtract(origin), power));
+        this.entityBreathNodes.add(BreathNodeEntity.createEntityBreathNodeServer(world, origin, destination.subtract(origin), power));
     }
 
     /**
@@ -59,9 +59,9 @@ public class BreathAffectedArea {
         ObjectArrayList<NodeLineSegment> segments = new ObjectArrayList<>(size);
 
         // create a list of NodeLineSegments from the motion path of the BreathNodes
-        Iterator<EntityBreathNode> it = this.entityBreathNodes.iterator();
+        Iterator<BreathNodeEntity> it = this.entityBreathNodes.iterator();
         while (it.hasNext()) {
-            EntityBreathNode entity = it.next();
+            BreathNodeEntity entity = it.next();
             if (entity.isDead) {
                 it.remove();
             } else {
@@ -116,7 +116,7 @@ public class BreathAffectedArea {
             World world,
             DragonBreath weapon,
             List<NodeLineSegment> nodeLineSegments,
-            List<EntityBreathNode> entityBreathNodes,
+            List<BreathNodeEntity> entityBreathNodes,
             Map<BlockPos, BreathAffectedBlock> affectedBlocks,
             Map<EntityLivingBase, BreathAffectedEntity> affectedEntities
     ) {

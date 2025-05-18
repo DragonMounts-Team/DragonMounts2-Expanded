@@ -1,10 +1,10 @@
 package net.dragonmounts.entity.breath;
 
 import net.dragonmounts.util.MutableBlockPosEx;
-import net.dragonmounts.util.Pair;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.*;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -33,9 +33,9 @@ public class NodeLineSegment {
     public final Vec3d endPoint;
     public final float radius;
     public final AxisAlignedBB box;
-    private final Collection<Pair<EnumFacing, AxisAlignedBB>> collisions; // TODO: remove
+    private final Collection<ImmutablePair<EnumFacing, AxisAlignedBB>> collisions; // TODO: remove
 
-    public NodeLineSegment(Vec3d start, Vec3d end, float radius, @Nullable Collection<Pair<EnumFacing, AxisAlignedBB>> collisions) {
+    public NodeLineSegment(Vec3d start, Vec3d end, float radius, @Nullable Collection<ImmutablePair<EnumFacing, AxisAlignedBB>> collisions) {
         this.startPoint = start;
         this.endPoint = end;
         this.radius = radius;
@@ -47,8 +47,8 @@ public class NodeLineSegment {
         double minZ = Math.min(start.z, end.z) - radius;
         double maxZ = Math.max(start.z, end.z) + radius;
         AxisAlignedBB box = new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
-        for (Pair<EnumFacing, AxisAlignedBB> collision : this.collisions) {
-            box = box.union(collision.getSecond());
+        for (ImmutablePair<EnumFacing, AxisAlignedBB> collision : this.collisions) {
+            box = box.union(collision.getRight());
         }
         this.box = box;
     }
@@ -102,8 +102,8 @@ public class NodeLineSegment {
      * @return a value from 0.0 (no collision) to totalDensity (total collision)
      */
     public float collisionCheckAABB(AxisAlignedBB aabb, float totalDensity, int numberOfCloudPoints) {
-        for (Pair<EnumFacing, AxisAlignedBB> collision : collisions) {
-            if (collision.getSecond().intersects(aabb)) {
+        for (ImmutablePair<EnumFacing, AxisAlignedBB> collision : collisions) {
+            if (collision.getRight().intersects(aabb)) {
                 return totalDensity;
             }
         }
@@ -255,8 +255,8 @@ public class NodeLineSegment {
         }
 
         final double CONTRACTION = 0.001;
-        for (Pair<EnumFacing, AxisAlignedBB> collision : collisions) {
-            AxisAlignedBB aabb=collision.getSecond();
+        for (ImmutablePair<EnumFacing, AxisAlignedBB> collision : collisions) {
+            AxisAlignedBB aabb = collision.getRight();
             if (aabb.maxX - aabb.minX > 2 * CONTRACTION && aabb.maxY - aabb.minY > 2 * CONTRACTION && aabb.maxZ - aabb.minZ > 2 * CONTRACTION) {
                 aabb=aabb.contract(CONTRACTION, CONTRACTION, CONTRACTION);
                 for (BlockPos blockpos : BlockPos.getAllInBox(
@@ -268,7 +268,7 @@ public class NodeLineSegment {
                         MathHelper.floor(aabb.maxZ)
                 )) {
                     hitDensity.computeIfAbsent(blockpos, fallback)
-                            .addHitDensity(collision.getFirst().getOpposite(), totalDensity);
+                            .addHitDensity(collision.getLeft().getOpposite(), totalDensity);
                 }
             }
         }

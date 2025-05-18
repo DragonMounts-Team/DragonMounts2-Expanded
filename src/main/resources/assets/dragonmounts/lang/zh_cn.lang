@@ -32,8 +32,8 @@ life_stage.dragon.fledgling=少年
 life_stage.dragon.juvenile=青年
 life_stage.dragon.adult=成年
 
-item.dragonmount.raw_dragon_meat.name=生龙排
-item.dragonmount.cooked_dragon_meat.name=熟龙排
+item.dragonmounts.raw_dragon_meat.name=生龙排
+item.dragonmounts.cooked_dragon_meat.name=熟龙排
 
 item.dragonmounts.diamond_shears.name=钻石剪刀
 item.dragonmounts.dragon_spawn_egg.name=龙刷怪蛋
@@ -135,6 +135,7 @@ tooltip.dragonmounts.carriage=让龙像一艘船一样携带多个生物
 item.modifiers.equipped=在装备后：
 
 subtitles.entity.dragonmounts.dragon.ambient=龙：呼吸
+subtitles.entity.dragonmounts.dragon.chest=龙：装备箱子
 subtitles.entity.dragonmounts.dragon.death=龙：死亡
 subtitles.entity.dragonmounts.dragon.roar=龙：咆哮
 subtitles.entity.dragonmounts.dragon.purr=龙：低鸣

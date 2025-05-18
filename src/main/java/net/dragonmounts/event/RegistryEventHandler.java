@@ -52,6 +52,8 @@ import java.util.function.Function;
 
 import static net.dragonmounts.DragonMounts.makeId;
 import static net.dragonmounts.DragonMountsTags.MOD_ID;
+import static net.dragonmounts.capability.DMCapabilities.DRAGON_FOOD;
+import static net.dragonmounts.capability.DMCapabilities.hasCapability;
 
 @Mod.EventBusSubscriber(modid = MOD_ID)
 public class RegistryEventHandler {
@@ -210,6 +212,10 @@ public class RegistryEventHandler {
         CapabilityManager.INSTANCE.register(IWhistleHolder.class, new WhistleHolder.Storage(), WhistleHolder::new);
     }
 
+    public static void registerRecipes() {
+        GameRegistry.addSmelting(DMItems.RAW_DRAGON_MEAT, new ItemStack(DMItems.COOKED_DRAGON_MEAT), 0.35F);
+    }
+
     @SubscribeEvent
     public static void attachEntityCapabilities(AttachCapabilitiesEvent<Entity> event) {
         Entity entity = event.getObject();
@@ -245,7 +251,7 @@ public class RegistryEventHandler {
                     );
                 }
             }
-        } else {
+        } else if (hasCapability(provider, DRAGON_FOOD)) {
             event.addCapability(DRAGON_FOOD_ID, provider);
         }
     }

@@ -1,5 +1,7 @@
 package net.dragonmounts.util;
 
+import net.dragonmounts.DragonMountsTags;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -40,5 +42,9 @@ public class ItemUtil {
             if (slot < 0 || slot >= stacks.length) continue;
             stacks[slot] = new ItemStack(stack);
         }
+    }
+
+    public static Item localize(Item item, String name) {
+        return item.setTranslationKey(DragonMountsTags.TRANSLATION_KEY_PREFIX + name);
     }
 }

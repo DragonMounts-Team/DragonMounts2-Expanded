@@ -23,6 +23,12 @@
     ],
     "subtitle": "subtitles.entity.dragonmounts.dragon.ambient"
   },
+  "entity.dragon.chest": {
+    "sounds": [
+      "minecraft:mob/chicken/plop"
+    ],
+    "subtitle": "subtitles.entity.dragonmounts.dragon.chest"
+  },
   "entity.dragon.death": {
     "sounds": [
       "dragonmounts:entity/dragon/death"

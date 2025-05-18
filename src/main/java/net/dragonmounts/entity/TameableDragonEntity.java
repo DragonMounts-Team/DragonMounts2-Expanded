@@ -925,7 +925,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
             ItemStack stack = this.getChest();
             boolean chested = DragonInventory.isValidChest(stack);
             if (!this.firstUpdate && chested && !this.chested) {
-                this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.PLAYERS, 1F, 1F, false);
+                this.world.playSound(this.posX, this.posY, this.posZ, DMSounds.DRAGON_CHEST, SoundCategory.PLAYERS, 1F, 1F, false);
             } else if (!chested && this.chested) {
                 this.inventory.dropItemsInChest();
             }

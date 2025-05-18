@@ -31,7 +31,7 @@ public abstract class PatchouliCompat {
     }
 
     public static void checkAndGrantGuideBook(EntityPlayer player) {
-        if (!(player instanceof EntityPlayerMP)) return;
+        if (player.capabilities.isCreativeMode || !(player instanceof EntityPlayerMP)) return;
         EntityPlayerMP $player = (EntityPlayerMP) player;
         Advancement advancement = $player.getServerWorld()
                 .getAdvancementManager()
