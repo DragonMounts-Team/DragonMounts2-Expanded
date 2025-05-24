@@ -1,0 +1,9 @@
+{
+  "model": "dragonmounts:dracopedia",
+  "creative_tab": "dragonmounts.items",
+  "name": "book.dragonmounts.dracopedia.name",
+  "subtitle": "book.dragonmounts.dracopedia.desc",
+  "landing_text": "book.dragonmounts.dracopedia.landing",
+  "show_progress": false,
+  "macros": {}
+}

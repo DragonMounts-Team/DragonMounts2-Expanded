@@ -1,6 +1,7 @@
 package net.dragonmounts.command;
 
 import net.dragonmounts.entity.ServerDragonEntity;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.EntityNotFoundException;
 import net.minecraft.command.ICommandSender;
@@ -44,7 +45,7 @@ public class SizeCommand extends DragonHandlerCommand {
             default:
                 throw new WrongUsageException("commands.dragonmounts.size.usage");
         }
-        float size = (float) parseDouble(args[0], 0.25, 2.00);
+        float size = (float) parseDouble(args[0], 0.25, TameableDragonEntity.MAX_SCALE);
         for (ServerDragonEntity dragon : dragons) {
             dragon.setBodySize(size);
             notifyCommandListener(sender, this, "commands.dragonmounts.size.success", dragon.getDisplayName(), size);

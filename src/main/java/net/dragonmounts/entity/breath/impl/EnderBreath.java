@@ -24,7 +24,8 @@ public class EnderBreath extends DragonBreath {
     }
 
     @Override
-    public BreathAffectedBlock affectBlock(World level, BlockPos pos, BreathAffectedBlock hit) {
+    public BreathAffectedBlock affectBlock(World level, long location, BreathAffectedBlock hit) {
+        BlockPos pos = BlockPos.fromLong(location);
         IBlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
         if (!block.isAir(state, level, pos) && level.rand.nextFloat() < 0.002F) {

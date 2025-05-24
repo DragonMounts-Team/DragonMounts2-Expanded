@@ -36,7 +36,8 @@ public class WaterBreath extends DragonBreath {
     }
 
     @Override
-    public BreathAffectedBlock affectBlock(World level, BlockPos pos, BreathAffectedBlock hit) {
+    public BreathAffectedBlock affectBlock(World level, long location, BreathAffectedBlock hit) {
+        BlockPos pos = BlockPos.fromLong(location);
         level.spawnParticle(EnumParticleTypes.WATER_SPLASH, pos.getX(), pos.getY(), pos.getZ(), 1.0D, 4.0D, 1.0D);
         if (!DMConfig.BREATH_EFFECTS.value) return new BreathAffectedBlock();
         IBlockState state = level.getBlockState(pos);

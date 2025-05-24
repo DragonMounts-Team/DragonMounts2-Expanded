@@ -30,6 +30,7 @@ class BreathNodeEntity extends Entity {
 
     private final BreathNode breathNode;
     private float intensityAtCollision;
+    private NodeLineSegment segment;
 
     private BreathNodeEntity(
             World world,
@@ -56,17 +57,6 @@ class BreathNodeEntity extends Entity {
 
     @Override
     public void onUpdate() {
-        this.onServerTick();
-    }
-
-    /**
-     * Get a collection of the collisions that occurred during the last tick update
-     *
-     * @return returns a collection showing which parts of the entity collided with an object- eg
-     * (WEST, [3,2,6]-->[3.5, 2, 6] means the west face of the entity collided; the entity tried to move to
-     * x = 3, but got pushed back to x=3.5
-     */
-    public NodeLineSegment onServerTick() {
         float radius = this.getCurrentRadius();
         Vec3d prevPos = this.getPositionVector();
         handleWaterMovement();
@@ -83,12 +73,23 @@ class BreathNodeEntity extends Entity {
         if (breathNode.isDead()) {
             setDead();
         }
-        return new NodeLineSegment(
+        this.segment = new NodeLineSegment(
                 prevPos,
                 this.getPositionVector(),
                 radius,
                 collisions
         );
+    }
+
+    /**
+     * Get a collection of the collisions that occurred during the last tick update
+     *
+     * @return returns a collection showing which parts of the entity collided with an object- eg
+     * (WEST, [3,2,6]-->[3.5, 2, 6] means the west face of the entity collided; the entity tried to move to
+     * x = 3, but got pushed back to x=3.5
+     */
+    public NodeLineSegment getSegment() {
+        return this.segment;
     }
 
     public float getCurrentRadius() {

@@ -7,13 +7,16 @@
   ],
   "key": {
     "Y": {
-      "item": "minecraft:cobblestone"
+      "type": "forge:ore_dict",
+      "ore": "cobblestone"
     },
     "#": {
-      "item": "minecraft:string"
+      "type": "forge:ore_dict",
+      "ore": "string"
     },
     "X": {
-      "item": "minecraft:ender_pearl"
+      "type": "forge:ore_dict",
+      "ore": "enderpearl"
     }
   },
   "result": {

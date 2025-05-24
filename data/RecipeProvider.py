@@ -1,4 +1,4 @@
-from Core.Util import ResourceLocation, ItemStack, makeId, cast2Ingredient
+from Core.Util import ResourceLocation, ItemStack, TagKey, makeId, cast2Ingredient
 from Core.Criterion import InventoryChangedCriterion as has
 from Core.RecipeBuilder import ShapedRecipeBuilder as shaped, ShapelessRecipeBuilder as shapeless
 from Core.Output import Output
@@ -31,20 +31,20 @@ def storageBlock(
 
 def generateRecipes(output: Output):
   ingot = {
-    'iron': cast2Ingredient('iron_ingot'),
-    'gold': cast2Ingredient('gold_ingot'),
-    'emerald': cast2Ingredient('emerald'),
-    'diamond': cast2Ingredient('diamond')
+    'iron': TagKey('ingotIron'),
+    'gold': TagKey('ingotGold'),
+    'emerald': TagKey('gemEmerald'),
+    'diamond': TagKey('gemDiamond')
   }
-  stick = cast2Ingredient('stick')
-  stringItem = cast2Ingredient('string')
-  cobblestone = cast2Ingredient('cobblestone')
-  enderPearl = cast2Ingredient('ender_pearl')
-  redstone = cast2Ingredient('redstone')
-  leather = cast2Ingredient('leather')
-  hasLeather = has('leather')
-  hasDiamond = has('diamond')
-  hasEnderPearl = has('ender_pearl')
+  stick = TagKey('stickWood')
+  stringItem = TagKey('string')
+  cobblestone = TagKey('cobblestone')
+  enderPearl = TagKey('enderpearl')
+  redstone = TagKey('dustRedstone')
+  leather = TagKey('leather')
+  hasLeather = has(leather)
+  hasDiamond = has(TagKey('gemDiamond'))
+  hasEnderPearl = has(enderPearl)
   dragonScaleBows = []
   for type in DragonType:
     if type is DragonType.SKELETON or type is DragonType.WITHER: continue
@@ -186,8 +186,8 @@ def generateRecipes(output: Output):
     .unlockedBy('has_diamond', hasDiamond) \
     .save(output, 'combat')
   shaped(makeId('variation_orb')) \
-    .define('W', 'emerald') \
-    .define('o', 'gold_ingot') \
+    .define('W', ingot['emerald']) \
+    .define('o', ingot['gold']) \
     .define('z', ingot['diamond']) \
     .define('r', redstone) \
     .pattern('roW') \
@@ -220,7 +220,7 @@ def generateRecipes(output: Output):
     .define('X', leather) \
     .pattern(' X ') \
     .pattern('X#X') \
-    .unlockedBy('has_block', has(leather)) \
+    .unlockedBy('has_block', hasLeather) \
     .save(output, 'tools', 'saddle')
   shaped(makeId('dragon_nest')) \
     .define('#', stick) \

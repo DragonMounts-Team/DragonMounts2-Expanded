@@ -28,7 +28,7 @@ public class FireBreath extends DragonBreath {
     }
 
     @Override
-    public BreathAffectedBlock affectBlock(World level, BlockPos pos, BreathAffectedBlock hit) {
+    public BreathAffectedBlock affectBlock(World level, long location, BreathAffectedBlock hit) {
         // Flammable blocks: set fire to them once they have been exposed enough.  After sufficient exposure, destroy the
         //   block (otherwise -if it's raining, the burning block will keep going out)
         // Non-flammable blocks:
@@ -36,6 +36,7 @@ public class FireBreath extends DragonBreath {
         // 2) If the block can be smelted (eg sand), then convert the block to the smelted version
         // 3) If the block can't be smelted then convert to lava
         if (DMConfig.IGNITING_BREATH.value || DMConfig.SMELTING_BREATH.value) {
+            BlockPos pos = BlockPos.fromLong(location);
             IBlockState state = level.getBlockState(pos);
             Block block = state.getBlock();
             Random rand = level.rand;

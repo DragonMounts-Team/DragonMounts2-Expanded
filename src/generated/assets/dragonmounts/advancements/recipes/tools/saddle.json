@@ -17,7 +17,8 @@
       "conditions": {
         "items": [
           {
-            "item": "minecraft:<Core.Util.StackIngredient object at 0x0000023E84FC1BE0>"
+            "type": "forge:ore_dict",
+            "ore": "leather"
           }
         ]
       }

@@ -20,12 +20,10 @@ import net.minecraft.util.math.Vec3d;
  *     delivered twenty times per second - (a player with armour is invulnerable to that)  )
  */
 public class BreathAffectedEntity implements IBreathEffectHandler {
-	
-
   private float hitDensity;
   private int timeSinceLastHit;
   private int ticksUntilDamageApplied;
-  private Vec3d averageDirection = new Vec3d(0, 0, 0);
+  private Vec3d averageDirection = Vec3d.ZERO;
 
   public BreathAffectedEntity() {
     hitDensity = 0.0F;

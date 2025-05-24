@@ -35,7 +35,6 @@ import org.apache.logging.log4j.Level;
 public abstract class DragonBreathHelper<T extends TameableDragonEntity> implements ITickable {
     public static final int BREATH_START_DURATION = 5; // ticks
     public static final int BREATH_STOP_DURATION = 5; // ticks
-    public final BreathAffectedArea breathAffectedArea = new BreathAffectedArea();
     public final T dragon;
     protected BreathState currentBreathState = BreathState.IDLE;
     protected DragonBreath breath;

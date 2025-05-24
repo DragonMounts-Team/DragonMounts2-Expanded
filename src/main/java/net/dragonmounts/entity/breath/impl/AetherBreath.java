@@ -33,8 +33,9 @@ public class AetherBreath extends DragonBreath {
     }
 
     @Override
-    public BreathAffectedBlock affectBlock(World level, BlockPos pos, BreathAffectedBlock hit) {
+    public BreathAffectedBlock affectBlock(World level, long location, BreathAffectedBlock hit) {
         if (!DMConfig.DESTRUCTIVE_BREATH.value) return new BreathAffectedBlock();
+        BlockPos pos = BlockPos.fromLong(location);
         IBlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
         // effects- which occur after the block has been exposed for sufficient time

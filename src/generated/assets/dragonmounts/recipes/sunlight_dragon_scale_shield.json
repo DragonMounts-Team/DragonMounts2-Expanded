@@ -11,7 +11,8 @@
       "item": "dragonmounts:sunlight_dragon_scales"
     },
     "o": {
-      "item": "minecraft:iron_ingot"
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
     }
   },
   "result": {

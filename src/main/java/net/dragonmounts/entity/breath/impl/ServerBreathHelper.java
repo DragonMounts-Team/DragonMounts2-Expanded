@@ -1,11 +1,13 @@
 package net.dragonmounts.entity.breath.impl;
 
 import net.dragonmounts.entity.ServerDragonEntity;
+import net.dragonmounts.entity.breath.BreathAffectedArea;
 import net.dragonmounts.entity.breath.BreathState;
 import net.dragonmounts.entity.breath.DragonBreathHelper;
 import net.minecraft.util.math.Vec3d;
 
 public class ServerBreathHelper extends DragonBreathHelper<ServerDragonEntity> {
+    public final BreathAffectedArea breathAffectedArea = new BreathAffectedArea();
     public ServerBreathHelper(ServerDragonEntity dragon) {
         super(dragon);
     }

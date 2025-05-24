@@ -228,6 +228,6 @@ config.dragonmounts.toggleDimensionLimitation.tooltip=若开启此选项，龙�
 config.dragonmounts.limitedDimensions=限定维度
 config.dragonmounts.limitedDimensions.tooltip=维度数字标识符的列表
 
-book.dragonmounts.guide_book.name=书
-book.dragonmounts.guide_book.desc=描述
-book.dragonmounts.guide_book.landing=测试
+book.dragonmounts.dracopedia.name=龙族博物手册
+book.dragonmounts.dracopedia.desc=描述
+book.dragonmounts.dracopedia.landing=测试

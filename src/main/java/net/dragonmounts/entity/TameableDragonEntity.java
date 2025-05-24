@@ -78,6 +78,9 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     // flags
     public static final byte DO_ATTACK = 66;
     public static final byte DO_ROAR = 67;
+    // limits
+    public static final float MIN_SCALE = 0.04F;
+    public static final float MAX_SCALE = 2.00F;
 
     // data value IDs
     private static final DataParameter<Boolean> DATA_FLYING = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
@@ -747,7 +750,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         float scale = this.lifeStageHelper.getScale();
         this.stepHeight = 0.5F + scale * (float) DMConfig.BASE_STEP_HEIGHT.value;
         float width = this.width;
-        this.setScale(MathHelper.clamp(scale * this.dataManager.get(DATA_BODY_SIZE), 0.04F, 2.00F));
+        this.setScale(MathHelper.clamp(scale * this.dataManager.get(DATA_BODY_SIZE), MIN_SCALE, MAX_SCALE));
         // workaround for a vanilla bug; the position is apparently not set correctly
         // after changing the entity size, causing asynchronous server/client
         // positioning
@@ -782,7 +785,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
      * @return body size
      */
     public float getAdjustedSize() {
-        return MathHelper.clamp(this.lifeStageHelper.getScale() * this.dataManager.get(DATA_BODY_SIZE), 0.04F, 1.25F);
+        return MathHelper.clamp(this.lifeStageHelper.getScale() * this.dataManager.get(DATA_BODY_SIZE), MIN_SCALE, MAX_SCALE);
     }
 
     public boolean isEgg() {

@@ -18,6 +18,7 @@ def cast2Ingredient(obj):
       tmp.append(cast2Ingredient(item))
     return tmp
   if (isinstance(obj, Ingredient)): return obj
+  if (isinstance(obj, TagKey)): return OreIngredient(obj)
   return StackIngredient(cast2Stack(obj))
 
 class JsonSerializable:
@@ -47,6 +48,13 @@ class ResourceLocation(JsonSerializable):
 
   def withSuffix(self, suffix: str):
     return ResourceLocation(self.namespace, self.path + suffix)
+
+class TagKey(JsonSerializable): # Ore Dict Entry
+  def __init__(self, name: str = ''):
+    self.name = name
+
+  def __str__(self):
+    return self.name
 
 class ItemStack(JsonSerializable):
   def __init__(self, item, count = 1, data = 32767):
@@ -81,7 +89,7 @@ class NBTIngredient(Ingredient):
     raise NotImplementedError()
 
 class OreIngredient(Ingredient):
-  def __init__(self, ore: str):
+  def __init__(self, ore: TagKey | str):
     self.ore = ore
 
   def toJson(self):

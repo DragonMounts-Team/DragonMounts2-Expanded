@@ -1,5 +1,6 @@
 package net.dragonmounts.entity.breath;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.dragonmounts.util.MutableBlockPosEx;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.util.EnumFacing;
@@ -9,9 +10,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 import java.util.Random;
-import java.util.function.Function;
 
 /**
  * Created by TGG on 31/07/2015.
@@ -153,7 +152,7 @@ public class NodeLineSegment {
         double dotProduct=deltaAxis.dotProduct(deltaPointToCheck);
         Vec3d closestPoint;
         if (dotProduct <= 0) {
-            closestPoint=new Vec3d(0, 0, 0);
+            closestPoint = Vec3d.ZERO;
         } else if (dotProduct >= deltaAxisLengthSq) {
             closestPoint=deltaAxis;
         } else {
@@ -227,11 +226,10 @@ public class NodeLineSegment {
      * @param totalDensity        the total density to be added (eg 1.0F)
      * @param numberOfCloudPoints number of cloud points to use (1 - 1000) - clamped if out of range
      */
-    public void addBlockCollisionsAndStochasticCloud(Random random, Map<BlockPos, BreathAffectedBlock> hitDensity, float totalDensity, int numberOfCloudPoints) {
+    public void addBlockCollisionsAndStochasticCloud(Random random, Long2ObjectMap<BreathAffectedBlock> hitDensity, float totalDensity, int numberOfCloudPoints) {
         numberOfCloudPoints = MathHelper.clamp(numberOfCloudPoints, 1, 1000);
         final float DENSITY_PER_POINT = totalDensity / numberOfCloudPoints;
         final double SUBSEGMENT_WIDTH = 1.0 / (numberOfCloudPoints + 1);
-        Function<BlockPos, BreathAffectedBlock> fallback = ignored -> new BreathAffectedBlock();
 
         //    Equation of sphere converting from polar to cartesian:
         //    x = r.cos(theta).sin(phi)
@@ -250,13 +248,14 @@ public class NodeLineSegment {
             double hitX = r * cosTable[theta] * sinTable[phi] + x;
             double hitY = r * sinTable[theta] * sinTable[phi] + y;
             double hitZ = r * cosTable[phi] + z;
-            hitDensity.computeIfAbsent(pos.with(hitX, hitY, hitZ), fallback)
+            computeIfAbsent(hitDensity, pos.with(hitX, hitY, hitZ))
                     .addHitDensity(getIntersectedFace(x, y, z, hitX, hitY, hitZ), DENSITY_PER_POINT);
         }
 
         final double CONTRACTION = 0.001;
         for (ImmutablePair<EnumFacing, AxisAlignedBB> collision : collisions) {
             AxisAlignedBB aabb = collision.getRight();
+            EnumFacing side = collision.getLeft().getOpposite();
             if (aabb.maxX - aabb.minX > 2 * CONTRACTION && aabb.maxY - aabb.minY > 2 * CONTRACTION && aabb.maxZ - aabb.minZ > 2 * CONTRACTION) {
                 aabb=aabb.contract(CONTRACTION, CONTRACTION, CONTRACTION);
                 for (BlockPos blockpos : BlockPos.getAllInBox(
@@ -267,8 +266,7 @@ public class NodeLineSegment {
                         MathHelper.floor(aabb.maxY),
                         MathHelper.floor(aabb.maxZ)
                 )) {
-                    hitDensity.computeIfAbsent(blockpos, fallback)
-                            .addHitDensity(collision.getLeft().getOpposite(), totalDensity);
+                    computeIfAbsent(hitDensity, blockpos).addHitDensity(side, totalDensity);
                 }
             }
         }
@@ -308,4 +306,14 @@ public class NodeLineSegment {
         cosTable = cos;
     }
 
+    /// to avoid using lambda
+    static BreathAffectedBlock computeIfAbsent(Long2ObjectMap<BreathAffectedBlock> map, BlockPos pos) {
+        long key = pos.toLong();
+        BreathAffectedBlock instance;
+        if ((instance = map.get(key)) == null) {
+            instance = new BreathAffectedBlock();
+            map.put(key, instance);
+        }
+        return instance;
+    }
 }

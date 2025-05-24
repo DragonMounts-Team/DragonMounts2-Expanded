@@ -8,7 +8,8 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:gold_ingot"
+      "type": "forge:ore_dict",
+      "ore": "gold_ingot"
     },
     "X": {
       "item": "minecraft:gold_block"

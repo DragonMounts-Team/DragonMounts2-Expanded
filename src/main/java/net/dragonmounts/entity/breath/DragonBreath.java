@@ -7,7 +7,6 @@ import net.dragonmounts.init.DMSounds;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -27,7 +26,7 @@ public abstract class DragonBreath {
      * if the hitDensity is high enough, manipulate the block (eg set fire to it)
      * @return the updated block hit density
      */
-    public abstract BreathAffectedBlock affectBlock(World level, BlockPos pos, BreathAffectedBlock hit);
+    public abstract BreathAffectedBlock affectBlock(World level, long location, BreathAffectedBlock hit);
 
     public boolean canAffect(EntityLivingBase entity) {
         return this.dragon != entity && this.dragon.getRidingEntity() != entity && !this.dragon.isPassenger(entity);

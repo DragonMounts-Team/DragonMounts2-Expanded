@@ -81,6 +81,7 @@ def generateItemModels(output: Output):
   basicItem(output, makeId('variation_orb'))
   basicItem(output, makeId('raw_dragon_meat'))
   basicItem(output, makeId('cooked_dragon_meat'))
+  basicItem(output, makeId('dracopedia'))
   handheldItem(output, makeId('diamond_shears'))
   for type in CarriageType:
     basicItem(

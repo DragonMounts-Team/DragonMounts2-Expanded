@@ -35,8 +35,9 @@ public class IceBreath extends DragonBreath {
     }
 
     @Override
-    public BreathAffectedBlock affectBlock(World level, BlockPos pos, BreathAffectedBlock hit) {
+    public BreathAffectedBlock affectBlock(World level, long location, BreathAffectedBlock hit) {
         if (!DMConfig.BREATH_EFFECTS.value) return new BreathAffectedBlock();
+        BlockPos pos = BlockPos.fromLong(location);
         IBlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
         BlockPos upper;

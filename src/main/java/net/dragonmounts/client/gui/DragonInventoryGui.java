@@ -145,8 +145,8 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Wh
         FontRenderer font = this.fontRenderer;
         font.drawString(this.name, 156, 6, this.color);
         font.drawString(this.label, 156, this.ySize - 93, 0x404040);
-        font.drawString(this.health, 20, 33, 0xE99E0C);
-        font.drawString(this.armor, 20, 44, 0xE99E0C);
+        font.drawString(this.armor, 20, 33, 0xE99E0C);
+        font.drawString(this.health, 20, 44, 0xE99E0C);
         font.drawString(this.hunger, 20, 55, 0xE99E0C);
     }
 
@@ -167,10 +167,10 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Wh
             this.drawTexturedModalRect(x + 29, y + 8, 0, this.ySize, 111, 16);
         }
         x += 10;
-        // health
-        this.drawTexturedModalRect(x, y + 32, 147, 48, 9, 9);
         // armor
-        this.drawTexturedModalRect(x, y + 43, 147, 57, 9, 9);
+        this.drawTexturedModalRect(x, y + 32, 147, 57, 9, 9);
+        // health
+        this.drawTexturedModalRect(x, y + 43, 147, 48, 9, 9);
         // hunger
         this.drawTexturedModalRect(x, y + 54, 147, 66, 9, 9);
         // dragon entity

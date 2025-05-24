@@ -247,6 +247,6 @@ config.dragonmounts.toggleDimensionLimitation.tooltip=If enabled, Dragon Nests w
 config.dragonmounts.limitedDimensions=Limited Dimensions
 config.dragonmounts.limitedDimensions.tooltip=A list of limited dimensions' numeric id
 
-book.dragonmounts.guide_book.name=Guide Book
-book.dragonmounts.guide_book.desc=Description
-book.dragonmounts.guide_book.landing=Landing
+book.dragonmounts.dracopedia.name=Dracopedia Guidebook
+book.dragonmounts.dracopedia.desc=Description
+book.dragonmounts.dracopedia.landing=Landing
