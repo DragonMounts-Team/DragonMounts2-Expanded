@@ -12,7 +12,8 @@
       "ore": "gemDiamond"
     },
     "X": {
-      "item": "minecraft:diamond_block"
+      "type": "forge:ore_dict",
+      "ore": "blockDiamond"
     }
   },
   "result": {

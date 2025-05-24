@@ -12,7 +12,8 @@
       "ore": "ingotIron"
     },
     "X": {
-      "item": "minecraft:iron_block"
+      "type": "forge:ore_dict",
+      "ore": "blockIron"
     }
   },
   "result": {
