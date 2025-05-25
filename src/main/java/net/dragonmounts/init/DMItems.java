@@ -60,7 +60,7 @@ public class DMItems {
     public static final DragonArmorItem IRON_DRAGON_ARMOR = createDragonArmorItem("iron_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "iron.png", 3);
     public static final DragonArmorItem GOLDEN_DRAGON_ARMOR = createDragonArmorItem("golden_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "gold.png", 5);
     public static final DragonArmorItem DIAMOND_DRAGON_ARMOR = createDragonArmorItem("diamond_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "diamond.png", 9);
-    public static final DragonArmorItem EMERALD_DRAGON_ARMOR = createDragonArmorItem("emerald_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "emerald.png", 3);
+    public static final DragonArmorItem EMERALD_DRAGON_ARMOR = createDragonArmorItem("emerald_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "emerald.png", 6);
     //Dragon Scale Swords
     public static final DragonScaleSwordItem AETHER_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("aether_dragon_scale_sword", DragonTypes.AETHER, DMTiers.AETHER_DRAGON_SCALE);
     public static final DragonScaleSwordItem WATER_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("water_dragon_scale_sword", DragonTypes.WATER, DMTiers.WATER_DRAGON_SCALE);
