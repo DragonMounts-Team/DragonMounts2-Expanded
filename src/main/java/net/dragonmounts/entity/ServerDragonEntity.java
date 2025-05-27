@@ -84,8 +84,8 @@ public class ServerDragonEntity extends TameableDragonEntity {
     }
 
     @Override
-    public Vec3d getThroatPosition() {
-        return this.headLocator.getThroatPosition();
+    public final Vec3d getHeadRelativeOffset(float x, float y, float z) {
+        return this.headLocator.getHeadRelativeOffset(x, y, z);
     }
 
     @Override

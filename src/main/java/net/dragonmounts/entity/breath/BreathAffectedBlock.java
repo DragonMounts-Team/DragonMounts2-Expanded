@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
  * Every tick that a block is exposed to the breath weapon, its "hit density" increases.
 */
 public class BreathAffectedBlock implements IBreathEffectHandler {
-  private static final float BLOCK_DECAY_PERCENTAGE_PER_TICK = 10.0F;
+  private static final float BLOCK_DECAY_FACTOR_PER_TICK = 0.9F;
   private static final float BLOCK_RESET_EFFECT_THRESHOLD = 0.01F;
   private static final int TICKS_BEFORE_DECAY_STARTS = 10;
   private final float[] hitDensity;
@@ -27,13 +27,15 @@ public class BreathAffectedBlock implements IBreathEffectHandler {
    * @param increase the amount to increase the hit density by
    */
   public void addHitDensity(@Nullable EnumFacing face, float increase) {
+    final float[] hit = this.hitDensity;
     if (face == null) {
-      increase /= EnumFacing.values().length;
-      for (EnumFacing facing : EnumFacing.values()) {
-        hitDensity[facing.getIndex()] += increase;
+      int len = hit.length;
+      increase /= len;
+      for (int i = 0; i < len; ++i) {
+        hit[i] += increase;
       }
     } else {
-      hitDensity[face.getIndex()] += increase;
+      hit[face.getIndex()] += increase;
     }
     timeSinceLastHit = 0;
   }
@@ -62,15 +64,12 @@ public class BreathAffectedBlock implements IBreathEffectHandler {
     if (++timeSinceLastHit < TICKS_BEFORE_DECAY_STARTS) return this.isUnaffected();
     boolean flag = true;
     final float[] hit = this.hitDensity;
-    for (int i = 0, end = hit.length; i < end; i++) {
-      float density = hit[i];
-      density *= (1.0F - BLOCK_DECAY_PERCENTAGE_PER_TICK / 100.0F);
-      if (density < BLOCK_RESET_EFFECT_THRESHOLD) {
-        density = 0.0F;//expired
+    for (int i = 0, end = hit.length; i < end; ++i) {
+      if ((hit[i] *= BLOCK_DECAY_FACTOR_PER_TICK) < BLOCK_RESET_EFFECT_THRESHOLD) {
+        hit[i] = 0.0F;//expired
       } else {
         flag = false;
       }
-      hit[i] = density;
     }
     return flag;
   }

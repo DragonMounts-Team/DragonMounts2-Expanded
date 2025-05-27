@@ -5,6 +5,7 @@ import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.util.LogUtil;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import org.apache.logging.log4j.Level;
 
 /**
@@ -55,6 +56,10 @@ public abstract class DragonBreathHelper<T extends TameableDragonEntity> impleme
 
     public boolean canBreathe() {
         return this.breath != null;
+    }
+
+    public final Vec3d getBreathSpawnPosition() {
+        return this.dragon.getHeadRelativeOffset(0.0F, -10.0F, 24.0F);
     }
 
     public float getBreathStateFractionComplete() {

@@ -121,14 +121,6 @@ public class TestRunner {
             System.out.println("Lighting spawned: mouth at [x,y,z] = " + origin + "to destination [x,y,z,] = " + target);
             return true;
         });
-        registry.register(Side.SERVER, 60, (level, player, stack) -> {
-            ServerDragonEntity dragon = new ServerDragonEntity(level);
-            for (float scale = 0.0f; scale <= 1.0F; scale += 0.01F) {
-                float headsize = dragon.headLocator.getRelativeHeadSize(scale);
-                System.out.println("scale=" + scale + ", relativeheadsize=" + headsize);
-            }
-            return true;
-        });
         registry.register(Side.SERVER, 61, (level, player, stack) -> {
             final int ARBITRARY_MINUS = -1000000;
             final int ARBITRARY_LARGE = 1000000;

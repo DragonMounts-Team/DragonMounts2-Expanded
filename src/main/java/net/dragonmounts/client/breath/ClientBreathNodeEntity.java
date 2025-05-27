@@ -3,6 +3,7 @@ package net.dragonmounts.client.breath;
 import net.dragonmounts.entity.breath.BreathNode;
 import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.util.EntityUtil;
+import net.dragonmounts.util.ICollisionObserver;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,10 +16,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 
 @ParametersAreNonnullByDefault
-public abstract class ClientBreathNodeEntity extends Entity {
+public abstract class ClientBreathNodeEntity extends Entity implements ICollisionObserver {
     public static final float NORMAL_PARTICLE_CHANCE = 0.1F;
     public static final float SPECIAL_PARTICLE_CHANCE = 0.3F;
-    public static final float MAX_ALPHA = 0.99F;
     public float scale;
     protected final BreathNode node;
     public final boolean extraRotation;
@@ -34,7 +34,7 @@ public abstract class ClientBreathNodeEntity extends Entity {
         super(world);
         BreathNode node = new BreathNode(power);
         node.randomiseProperties(this.rand);
-        Vec3d motion = node.getRandomisedStartingMotion(direction.normalize(), this.rand);
+        Vec3d motion = node.getRandomisedStartingMotion(direction, this.rand);
         this.setPosition(
                 position.x + motion.x * partialTicksHeadStart,
                 position.y + motion.y * partialTicksHeadStart,
@@ -61,7 +61,7 @@ public abstract class ClientBreathNodeEntity extends Entity {
         this.prevPosY = this.posY;
         this.prevPosZ = this.posZ;
         float size = node.getCurrentAABBcollisionSize();
-        EntityUtil.moveAndResize(this, this.motionX, this.motionY, this.motionZ, size, size);
+        EntityUtil.resizeAndMove(this, this.motionX, this.motionY, this.motionZ, size, size, this);
         if (this.collided && this.onGround) {
             this.motionY -= 0.01F;// ensure that we hit the ground next time too
         }
@@ -100,15 +100,9 @@ public abstract class ClientBreathNodeEntity extends Entity {
     /**
      * Vanilla moveEntity does a pile of unneeded calculations, and also doesn't handle resize around the centre properly,
      * so replace with a custom one
-     *
-     * @param dx the amount to move the entity in world inates [dx, dy, dz]
-     * @param dy
-     * @param dz
      */
     @Override
-    public void move(MoverType mover, double dx, double dy, double dz) {
-        EntityUtil.moveAndResize(this, dx, dy, dz, this.width, this.height);
-    }
+    public void move(MoverType mover, double dx, double dy, double dz) {}
 
     @Override
     protected void entityInit() {}
@@ -119,4 +113,24 @@ public abstract class ClientBreathNodeEntity extends Entity {
     @Override
     protected void writeEntityToNBT(NBTTagCompound compound) {}
 
+    @Override
+    public final void handleMovement(double desiredX, double desiredY, double desiredZ, double actualX, double actualY, double actualZ) {
+        this.collidedHorizontally = false;
+        if (desiredX != actualX) {
+            this.motionX = 0.0;
+            this.collidedHorizontally = true;
+        }
+        if (desiredY == actualY) {
+            this.collidedVertically = false;
+        } else {
+            this.motionY = 0.0;
+            this.onGround = desiredY < 0;
+            this.collidedVertically = true;
+        }
+        if (desiredZ != actualZ) {
+            this.motionZ = 0.0;
+            this.collidedHorizontally = true;
+        }
+        this.collided = this.collidedHorizontally || this.collidedVertically;
+    }
 }

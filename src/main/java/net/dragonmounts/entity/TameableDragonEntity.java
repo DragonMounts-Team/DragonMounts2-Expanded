@@ -131,7 +131,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
 
     protected abstract DragonBreathHelper<?> createBreathHelper();
 
-    public abstract Vec3d getThroatPosition();
+    public abstract Vec3d getHeadRelativeOffset(float x, float y, float z);
 
     @Override
     protected void entityInit() {
@@ -844,7 +844,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         this.lifeStageHelper.ageUp(growth);
         if (this.world.isRemote) {
             this.resetFeedTimer();
-            Vec3d pos = this.getThroatPosition();
+            Vec3d pos = this.getHeadRelativeOffset(0.0F, -5.0F, 22.0F);
             Random random = this.rand;
             this.world.spawnParticle(
                     EnumParticleTypes.ITEM_CRACK,

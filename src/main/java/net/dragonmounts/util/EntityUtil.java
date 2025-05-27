@@ -1,7 +1,6 @@
 package net.dragonmounts.util;
 
 import com.google.common.base.Predicate;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.registry.DragonType;
@@ -19,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -27,7 +25,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeEventFactory;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -189,8 +186,7 @@ public class EntityUtil {
      * (WEST, [3,2,6]-->[3.5, 2, 6] means the west face of the entity collided; the entity tried to move to
      * x = 3, but got pushed back to x=3.5
      */
-    public static ObjectArrayList<ImmutablePair<EnumFacing, AxisAlignedBB>> moveAndResize(Entity entity, double dx, double dy, double dz, float newWidth, float newHeight) {
-        entity.world.profiler.startSection("move and resize (dm)");
+    public static void resizeAndMove(Entity entity, double dx, double dy, double dz, float newWidth, float newHeight, ICollisionObserver observer) {
         AxisAlignedBB entityAABB = entity.getEntityBoundingBox();
         double wDXplus = (newWidth - entity.width) * 0.5;
         double wDYplus = (newHeight - entity.height) * 0.5;
@@ -209,7 +205,6 @@ public class EntityUtil {
             wDYplus = 0;
             wDYneg = 0;
         }
-
         if (MathX.isSignificantlyDifferent(newWidth, entity.width)) {
             for (AxisAlignedBB aabb : collidingAABB) {
                 wDXplus = aabb.calculateXOffset(entityAABB, wDXplus);
@@ -229,12 +224,8 @@ public class EntityUtil {
             wDZplus = 0;
             wDZneg = 0;
         }
-
         entityAABB = new AxisAlignedBB(entityAABB.minX + wDXneg, entityAABB.minY + wDYneg, entityAABB.minZ + wDZneg, entityAABB.maxX + wDXplus, entityAABB.maxY + wDYplus, entityAABB.maxZ + wDZplus);
-
-        double desiredDX = dx;
-        double desiredDY = dy;
-        double desiredDZ = dz;
+        double desiredDX = dx, desiredDY = dy, desiredDZ = dz;
 
         for (AxisAlignedBB aabb : collidingAABB) {
             dy = aabb.calculateYOffset(entityAABB, dy);
@@ -256,43 +247,7 @@ public class EntityUtil {
         entity.posY = entityAABB.minY;
         entity.posZ = (entityAABB.minZ + entityAABB.maxZ) * 0.5;
 
-        entity.collidedHorizontally = desiredDX != dx || desiredDZ != dz;
-        entity.collidedVertically = desiredDY != dy;
-        entity.onGround = entity.collidedVertically && desiredDY < 0.0;
-        entity.collided = entity.collidedHorizontally || entity.collidedVertically;
-
-        // if we collided in any direction, stop the entity's motion in that direction, and mark the truncated zone
-        //   as a collision zone - i.e if we wanted to move to dx += 0.5, but actually could only move +0.2, then the
-        //   collision zone is the region from +0.2 to +0.5
-        ObjectArrayList<ImmutablePair<EnumFacing, AxisAlignedBB>> collisions = new ObjectArrayList<>(3);
-        if (desiredDX != dx) {
-            entity.motionX = 0.0D;
-            if (desiredDX < 0) {
-                collisions.add(new ImmutablePair<>(EnumFacing.WEST, new AxisAlignedBB(entityAABB.minX + (desiredDX - dx), entityAABB.minY, entityAABB.minZ, entityAABB.minX, entityAABB.maxY, entityAABB.maxZ)));
-            } else {
-                collisions.add(new ImmutablePair<>(EnumFacing.EAST, new AxisAlignedBB(entityAABB.maxX, entityAABB.minY, entityAABB.minZ, entityAABB.maxX + (desiredDX - dx), entityAABB.maxY, entityAABB.maxZ)));
-            }
-        }
-
-        if (desiredDY != dy) {
-            entity.motionY = 0.0D;
-            if (desiredDY < 0) {
-                collisions.add(new ImmutablePair<>(EnumFacing.DOWN, new AxisAlignedBB(entityAABB.minX, entityAABB.minY + (desiredDY - dy), entityAABB.minZ, entityAABB.maxX, entityAABB.minY, entityAABB.maxZ)));
-            } else {
-                collisions.add(new ImmutablePair<>(EnumFacing.UP, new AxisAlignedBB(entityAABB.minX, entityAABB.maxY, entityAABB.minZ, entityAABB.maxX, entityAABB.maxY + (desiredDY - dy), entityAABB.maxZ)));
-            }
-        }
-
-        if (desiredDZ != dz) {
-            entity.motionZ = 0.0D;
-            if (desiredDZ < 0) {
-                collisions.add(new ImmutablePair<>(EnumFacing.NORTH, new AxisAlignedBB(entityAABB.minX, entityAABB.minY, entityAABB.minZ + (desiredDZ - dz), entityAABB.maxX, entityAABB.maxY, entityAABB.minZ)));
-            } else {
-                collisions.add(new ImmutablePair<>(EnumFacing.SOUTH, new AxisAlignedBB(entityAABB.minX, entityAABB.minY, entityAABB.maxZ, entityAABB.maxX, entityAABB.maxY, entityAABB.maxZ + (desiredDZ - dz))));
-            }
-        }
-        entity.world.profiler.endSection();
-        return collisions;
+        observer.handleMovement(desiredDX, desiredDY, desiredDZ, dx, dy, dz);
     }
 
     public static void dropItems(Entity entity, ItemStack[] stacks) {

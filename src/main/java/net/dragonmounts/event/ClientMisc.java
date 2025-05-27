@@ -46,9 +46,9 @@ public class ClientMisc {
             if (player != vehicle.getControllingPassenger()) return;
             ClientDragonEntity dragon = (ClientDragonEntity) vehicle;
             CDragonControlPacket packet = new CDragonControlPacket(
-                    DMKeyBindings.KEY_BREATH.isKeyDown(),
+                    DMKeyBindings.KEY_BREATHE.isKeyDown(),
                     mc.gameSettings.keyBindSprint.isKeyDown(),
-                    DMKeyBindings.KEY_DESCENT.isKeyDown(),
+                    DMKeyBindings.KEY_DESCEND.isKeyDown(),
                     DMKeyBindings.TOGGLE_HOVERING.isPressed(),
                     DMKeyBindings.TOGGLE_YAW_ALIGNMENT.isPressed(),
                     DMKeyBindings.TOGGLE_PITCH_ALIGNMENT.isPressed()

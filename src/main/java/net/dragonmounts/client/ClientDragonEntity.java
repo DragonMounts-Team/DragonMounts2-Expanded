@@ -15,7 +15,6 @@ import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.network.CDragonBreathPacket;
 import net.dragonmounts.network.COpenInventoryPacket;
 import net.dragonmounts.util.ItemUtil;
-import net.dragonmounts.util.MutableBlockPosEx;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -57,8 +56,8 @@ public class ClientDragonEntity extends TameableDragonEntity {
     }
 
     @Override
-    public Vec3d getThroatPosition() {
-        return this.animator.getThroatPosition();
+    public final Vec3d getHeadRelativeOffset(float x, float y, float z) {
+        return this.animator.getHeadRelativeOffset(x, y, z);
     }
 
     @Override
@@ -68,7 +67,7 @@ public class ClientDragonEntity extends TameableDragonEntity {
             // sent when dragon is riding on a player
             DragonMounts.NETWORK_WRAPPER.sendToServer(new CDragonBreathPacket(
                     this.getEntityId(),
-                    DMKeyBindings.KEY_BREATH.isKeyDown()
+                    DMKeyBindings.KEY_BREATHE.isKeyDown()
             ));
         }
         this.lifeStageHelper.ageUp(1);
@@ -88,17 +87,13 @@ public class ClientDragonEntity extends TameableDragonEntity {
             this.findCrystal();
         }
         EnumParticleTypes sneeze = this.getVariant().type.sneezeParticle;
-        if (sneeze != null && rand.nextInt(700) == 0 && !this.isUsingBreathWeapon() && this.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING)) {
-            Vec3d throatPos = this.getThroatPosition();
-            double throatPosX = throatPos.x;
-            double throatPosY = throatPos.y;
-            double throatPosZ = throatPos.z;
-            int floorY = MathHelper.floor(throatPosY);
-            MutableBlockPosEx pos = new MutableBlockPosEx(MathHelper.floor(throatPosX), floorY, MathHelper.floor(throatPosZ));
-            for (int i = -1; i < 2; ++i) {
-                world.spawnParticle(sneeze, throatPosX, throatPosY + i, throatPosZ, 0, 0.3, 0);
-                world.playSound(null, pos.withY(floorY + i), DMSounds.DRAGON_SNEEZE, SoundCategory.NEUTRAL, 0.8F, 1);
+        if (sneeze != null && !this.isUsingBreathWeapon() && rand.nextInt(700) == 0 && this.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING)) {
+            Vec3d pos = this.getHeadRelativeOffset(0.0F, 4.0F, 22.0F);
+            double x = pos.x, y = pos.y, z = pos.z;
+            for (int i = -1; i < 1; ++i) {
+                world.spawnParticle(sneeze, x, y + 0.5 * i, z, 0, 0.3, 0);
             }
+            world.playSound(null, x, y, z, DMSounds.DRAGON_SNEEZE, SoundCategory.NEUTRAL, 0.8F, 1);
         }
         super.onLivingUpdate();
     }

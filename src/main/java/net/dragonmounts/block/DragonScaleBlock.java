@@ -36,9 +36,9 @@ public class DragonScaleBlock extends Block {
 	public void addInformation(ItemStack stack, @Nullable World level, List<String> tooltips, ITooltipFlag flag) {
 		tooltips.add(this.type.getName());
 	}
+
 	@Override
-	public boolean isBeaconBase(IBlockAccess worldObj, BlockPos pos, BlockPos beacon)
-	{
+	public boolean isBeaconBase(IBlockAccess level, BlockPos pos, BlockPos beacon) {
 		return true;
 	}
 }

@@ -9,6 +9,7 @@
  */
 package net.dragonmounts.util.math;
 
+import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -22,6 +23,10 @@ import java.util.Random;
  */
 public abstract class MathX {
     public static final AxisAlignedBB ZERO_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
+    /// @see RenderLivingBase#prepareScale
+    public static final float MOJANG_MODEL_OFFSET_Y = 1.501F;
+    /// @see RenderLivingBase#prepareScale
+    public static final float MOJANG_MODEL_SCALE = 0.0625F;
     public static final float PI_F = (float) Math.PI;
     /**
      * Constant by which to multiply an angular value in degrees to obtain an
@@ -143,16 +148,15 @@ public abstract class MathX {
     /**
      * interpolate from vector 1 to vector 2 using fraction
      *
-     * @param fraction 0 - 1; 0 = vector1, 1 = vector2
+     * @param delta 0 - 1; 0 = vector1, 1 = vector2
      * @return interpolated vector
      */
-    public static Vec3d interpolateVec(Vec3d start, Vec3d end, float fraction) {
+    public static Vec3d interpolateVec(Vec3d start, Vec3d end, float delta) {
         if (start == end) return end;
-        final float factor = 1.0F - fraction;
         return new Vec3d(
-                start.x * factor + end.x * fraction,
-                start.y * factor + end.y * fraction,
-                start.z * factor + end.z * fraction
+                start.x + (end.x - start.x) * delta,
+                start.y + (end.y - start.y) * delta,
+                start.z + (end.z - start.z) * delta
         );
     }
 

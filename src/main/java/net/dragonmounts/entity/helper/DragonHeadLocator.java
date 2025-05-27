@@ -129,52 +129,23 @@ public class DragonHeadLocator<T extends TameableDragonEntity> implements ITicka
         head.rotZ = 0.0F;
     }
 
-    /**
-     * Calculate the position of the dragon's throat
-     * Must have previously called calculateHeadAndNeck()
-     *
-     * @return the world [x,y,z] of the throat
-     */
-    public Vec3d getThroatPosition() {
-        TameableDragonEntity dragon = this.dragon;
+    public Vec3d getHeadRelativeOffset(float x, float y, float z) {
         Segment head = this.head;
-        float scale = dragon.getAdjustedSize();
-        final float ADULT_SCALE_FACTOR = 0.1F;//TODO: use DragonType or something else
-        final float BODY_X_SCALE = -ADULT_SCALE_FACTOR * scale;
-        final float BODY_Y_SCALE = -ADULT_SCALE_FACTOR * scale;
-        final float BODY_Z_SCALE = ADULT_SCALE_FACTOR * scale;
-
-        final float headScale = scale * getRelativeHeadSize(scale) * ADULT_SCALE_FACTOR;
-
-        // the head offset plus the headLocation.rotationPoint is the origin of the head, i.e. the point about which the
-        //   head rotates, relative to the origin of the body (getPositionEyes)
-        final float HEAD_Z_OFFSET = -15;
-
-        final float THROAT_Y_OFFSET = 2;
-        final float THROAT_Z_OFFSET = -8;
-
-        final float centerY = -6 * BODY_Y_SCALE;
-        final float centerZ = 19 * BODY_Z_SCALE;
-
-        // offset of the throat position relative to the head origin- rotate and pitch to match head
-        return new Vec3d(0, THROAT_Y_OFFSET * headScale, THROAT_Z_OFFSET * headScale)
+        TameableDragonEntity dragon = this.dragon;
+        final float scale = dragon.getAdjustedSize();
+        final float modelScale = scale * MathX.MOJANG_MODEL_SCALE;
+        return new Vec3d(x * modelScale, y * modelScale, -z * modelScale)
                 .rotatePitch(head.rotX)
                 .rotateYaw(-head.rotY)
-                .add(
-                        head.posX * BODY_X_SCALE,
-                        head.posY * BODY_Y_SCALE + centerY,
-                        (head.posZ + -15) * BODY_Z_SCALE + centerZ
-                ).rotatePitch(-MathX.toRadians(this.getPitch()))//rotate body
-                .subtract(0, centerY, centerZ)
+                .add(-head.posX * modelScale, -head.posY * modelScale, head.posZ * modelScale)
+                .rotatePitch(-MathX.toRadians(this.getPitch()))
+                .add(0.0, 0.0, -1.5F * scale)
                 .rotateYaw(MathX.PI_F - MathX.toRadians(dragon.renderYawOffset))
-                .add(dragon.posX, dragon.posY + dragon.getEyeHeight(), dragon.posZ);
+                .add(dragon.posX, dragon.posY + scale * (this.getModelOffsetY() + MathX.MOJANG_MODEL_OFFSET_Y), dragon.posZ);
     }
 
-    /**
-     * Baby dragon has a relatively larger head compared to its body size (makes it look cuter)
-     */
-    public float getRelativeHeadSize(float scale) {
-        return 1.6F * MathHelper.clamp(scale, 0.2F, 1.0F) + 0.96F; // 0.96F = 1.6F * 0.6F
+    public final float getModelOffsetY() {
+        return 1.5F - 0.6F * this.sit;
     }
 
     public float getPitch() {

@@ -45,8 +45,8 @@ public class BreathAffectedArea {
      * @param destination the destination of the beam, used to calculate direction
      * @param power
      */
-    public void continueBreathing(World world, Vec3d origin, Vec3d destination, BreathPower power) {
-        this.entityBreathNodes.add(BreathNodeEntity.createEntityBreathNodeServer(world, origin, destination.subtract(origin), power));
+    public void continueBreathing(World world, Vec3d origin, Vec3d direction, BreathPower power) {
+        this.entityBreathNodes.add(BreathNodeEntity.createEntityBreathNodeServer(world, origin, direction, power));
     }
 
     /**
@@ -58,9 +58,9 @@ public class BreathAffectedArea {
         implementEffectsOnBlocksTick(world, weapon, blocksAffectedByBeam);
         implementEffectsOnEntitiesTick(world, weapon, affectedEntities);
         // decay the hit densities of the affected blocks and entities (eg for flame weapon - cools down)
-        Predicate<Map.Entry<?, ? extends IBreathEffectHandler>> predicate = entry -> entry.getValue().decayEffectTick();
-        this.blocksAffectedByBeam.entrySet().removeIf(predicate);
-        this.affectedEntities.entrySet().removeIf(predicate);
+        Predicate<IBreathEffectHandler> predicate = IBreathEffectHandler::decayEffectTick;
+        this.blocksAffectedByBeam.values().removeIf(predicate);
+        this.affectedEntities.values().removeIf(predicate);
     }
 
     private static void implementEffectsOnBlocksTick(World world, DragonBreath weapon, Long2ObjectMap<BreathAffectedBlock> affectedBlocks) {
@@ -111,15 +111,7 @@ public class BreathAffectedArea {
                 it.remove();
                 continue;
             }
-            entity.onUpdate();
-            NodeLineSegment segment = entity.getSegment();
-            segment.addBlockCollisionsAndStochasticCloud(
-                    world.rand,
-                    affectedBlocks,
-                    entity.getIntensityAtCollision(),
-                    10
-            );
-            fullBox = fullBox.union(segment.box);
+            fullBox = fullBox.union(entity.update(affectedBlocks).box);
         }
 
         Object2ObjectOpenHashMap<Vec3i, ObjectArrayList<EntityLivingBase>> occupiedByEntities = new Object2ObjectOpenHashMap<>();
@@ -135,32 +127,28 @@ public class BreathAffectedArea {
         }
 
         MutableBlockPosEx pos = new MutableBlockPosEx(0, 0, 0);
-        final int NUMBER_OF_ENTITY_CLOUD_POINTS = 10;
         for (BreathNodeEntity node : entityBreathNodes) {
             NodeLineSegment segment = node.getSegment();
             AxisAlignedBB aabb = segment.box;
-            ReferenceOpenHashSet<EntityLivingBase> checkedEntities = new ReferenceOpenHashSet<>();
+            ReferenceOpenHashSet<EntityLivingBase> checked = node.checked;
             for (int x = (int) aabb.minX, maxX = (int) aabb.maxX; x <= maxX; ++x) {
                 for (int y = (int) aabb.minY, maxY = (int) aabb.maxY; y <= maxY; ++y) {
                     for (int z = (int) aabb.minZ, maxZ = (int) aabb.maxZ; z <= maxZ; ++z) {
                         ObjectArrayList<EntityLivingBase> entitiesHere = occupiedByEntities.get(pos.with(x, y, z));
                         if (entitiesHere == null) continue;
                         for (EntityLivingBase entity : entitiesHere) {
-                            if (checkedEntities.add(entity)) {
-                                float hitDensity = segment.collisionCheckAABB(
-                                        entity.getEntityBoundingBox(),
-                                        node.getCurrentIntensity(),
-                                        NUMBER_OF_ENTITY_CLOUD_POINTS
-                                );
+                            if (checked.add(entity)) {
+                                float hitDensity = segment.collisionCheckAABB(entity.getEntityBoundingBox());
                                 if (hitDensity > 0.0) {
                                     computeIfAbsent(affectedEntities, entity)
-                                            .addHitDensity(segment.getSegmentDirection(), hitDensity);
+                                            .addHitDensity(segment.direction, hitDensity);
                                 }
                             }
                         }
                     }
                 }
             }
+            checked.clear();
         }
     }
 

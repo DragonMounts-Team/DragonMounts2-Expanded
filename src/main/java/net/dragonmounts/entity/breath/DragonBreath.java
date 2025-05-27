@@ -29,7 +29,8 @@ public abstract class DragonBreath {
     public abstract BreathAffectedBlock affectBlock(World level, long location, BreathAffectedBlock hit);
 
     public boolean canAffect(EntityLivingBase entity) {
-        return this.dragon != entity && this.dragon.getRidingEntity() != entity && !this.dragon.isPassenger(entity);
+        TameableDragonEntity dragon = this.dragon;
+        return dragon != entity && dragon.getRidingEntity() != entity && !dragon.isPassenger(entity);
     }
 
     public void affectEntity(World level, EntityLivingBase target, BreathAffectedEntity hit) {
