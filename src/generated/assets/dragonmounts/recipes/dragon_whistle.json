@@ -6,13 +6,16 @@
   ],
   "key": {
     "P": {
-      "item": "minecraft:ender_pearl"
+      "type": "forge:ore_dict",
+      "ore": "enderpearl"
     },
     "#": {
-      "item": "minecraft:stick"
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
     },
     "X": {
-      "item": "minecraft:string"
+      "type": "forge:ore_dict",
+      "ore": "string"
     }
   },
   "result": {

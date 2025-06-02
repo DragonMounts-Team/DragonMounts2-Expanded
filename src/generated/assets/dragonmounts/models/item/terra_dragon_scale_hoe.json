@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "dragonmounts:items/hoe/terra_dragon_hoe"
+  }
+}

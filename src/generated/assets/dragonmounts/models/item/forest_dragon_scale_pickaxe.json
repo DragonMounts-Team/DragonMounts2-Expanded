@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "dragonmounts:items/pickaxe/forest_dragon_pickaxe"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "roW",
+    "zrW",
+    " z "
+  ],
+  "key": {
+    "W": {
+      "type": "forge:ore_dict",
+      "ore": "gemEmerald"
+    },
+    "o": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    "z": {
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
+    },
+    "r": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    }
+  },
+  "result": {
+    "item": "dragonmounts:variation_orb"
+  }
+}

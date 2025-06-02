@@ -9,7 +9,7 @@
             "entries": [
                 {
                     "type": "item",
-                    "name": "dragonmounts:ice_dragonscales",
+                    "name": "dragonmounts:ice_dragon_scales",
                     "weight": 1,
                     "functions": [
                         {

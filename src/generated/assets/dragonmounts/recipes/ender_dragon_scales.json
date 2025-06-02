@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "dragon_scales",
+  "ingredients": [
+    {
+      "item": "dragonmounts:ender_dragon_scale_block"
+    }
+  ],
+  "result": {
+    "item": "dragonmounts:ender_dragon_scales",
+    "count": 9
+  }
+}

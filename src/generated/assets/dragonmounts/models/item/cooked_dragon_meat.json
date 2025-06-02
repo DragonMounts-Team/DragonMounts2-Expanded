@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "dragonmounts:items/cooked_dragon_meat"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " Y ",
+    "#X#",
+    " # "
+  ],
+  "key": {
+    "Y": {
+      "type": "forge:ore_dict",
+      "ore": "cobblestone"
+    },
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "string"
+    },
+    "X": {
+      "type": "forge:ore_dict",
+      "ore": "enderpearl"
+    }
+  },
+  "result": {
+    "item": "dragonmounts:amulet"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "dragonmounts:items/axe/fire_dragon_axe"
+  }
+}

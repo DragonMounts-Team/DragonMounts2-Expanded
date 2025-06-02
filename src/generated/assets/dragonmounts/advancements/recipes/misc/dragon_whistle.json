@@ -17,7 +17,8 @@
       "conditions": {
         "items": [
           {
-            "item": "minecraft:ender_pearl"
+            "type": "forge:ore_dict",
+            "ore": "enderpearl"
           }
         ]
       }

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "carriage",
+  "pattern": [
+    "X X",
+    "###"
+  ],
+  "key": {
+    "X": {
+      "type": "forge:ore_dict",
+      "ore": "leather"
+    },
+    "#": {
+      "item": "minecraft:planks",
+      "data": 2
+    }
+  },
+  "result": {
+    "item": "dragonmounts:birch_carriage"
+  }
+}

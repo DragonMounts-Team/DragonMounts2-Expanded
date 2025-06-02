@@ -9,7 +9,7 @@
             "entries": [
                 {
                     "type": "item",
-                    "name": "dragonmounts:terra_dragonscales",
+                    "name": "dragonmounts:terra_dragon_scales",
                     "weight": 1,
                     "functions": [
                         {

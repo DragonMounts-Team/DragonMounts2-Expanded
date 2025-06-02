@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "dragonmounts:items/shovel/zombie_dragon_shovel"
+  }
+}

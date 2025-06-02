@@ -1,222 +1,128 @@
 # 日本語訳
 
-# Creative Menu's
-itemGroup.maintab=ドラゴンマウント
-itemGroup.armorytab=ドラゴンマウント装備
+# Creative Tabs
+itemGroup.dragonmounts.blocks=DM2: 拡張 - ブロック
+itemGroup.dragonmounts.items=DM2: 拡張 - アイテム
+itemGroup.dragonmounts.combat=DM2: ドラゴンマウント装備
 
+effect.dragonmounts.dark_dragons_grace=ダークドラゴンの恩恵
 ##
 # Dragon Names
 ##
-entity.DragonMount.name=ドラゴン
+entity.dragonmounts.dragon=%sドラゴン
+entity.dragonmounts.dragon_egg=%sドラゴンの卵
+entity.dragonmounts.dragon.name=ドラゴン
 
-entity.DragonMount.ice.name=アイスドラゴン
-entity.DragonMount.end.name=エンダードラゴン
-entity.DragonMount.ender.name=エンダードラゴン
-entity.DragonMount.aether.name=エーテルドラゴン
-entity.DragonMount.forest.name=フォレストドラゴン
-entity.DragonMount.sylphid.name=ウォータードラゴン
-entity.DragonMount.nether.name=ネザードラゴン
-entity.DragonMount.fire.name=ファイアドラゴン
-entity.DragonMount.skeleton.name=スケルトンドラゴン
-entity.DragonMount.wither.name=ウィザードラゴン
-entity.DragonMount.enchant.name=エンチャントドラゴン
-entity.DragonMount.sunlight.name=サンライトドラゴン
-entity.DragonMount.storm.name=ストームドラゴン
-entity.DragonMount.zombie.name=ゾンビドラゴン
-entity.DragonMount.terra.name=テラドラゴン
-entity.DragonMount.moonlight.name=ムーンライトドラゴン
-
-entity.DragonMount.albino.ice.name=アルビノアイスドラゴン
-entity.DragonMount.albino.ender.name=アルビノエンダードラゴン
-entity.DragonMount.albino.aether.name=アルビノエーテルドラゴン
-entity.DragonMount.albino.forest.name=アルビノフォレストドラゴン
-entity.DragonMount.albino.sylphid.name=アルビノウォータードラゴン
-entity.DragonMount.albino.nether.name=アルビノネザードラゴン
-entity.DragonMount.albino.fire.name=アルビノファイアドラゴン
-entity.DragonMount.albino.skeleton.name=アルビノスケルトンドラゴン
-entity.DragonMount.albino.wither.name=アルビノウィザードラゴン
-entity.DragonMount.albino.enchant.name=アルビノエンチャントドラゴン
-entity.DragonMount.albino.sunlight.name=アルビノサンライトドラゴン
-entity.DragonMount.albino.storm.name=アルビノストームドラゴン
-entity.DragonMount.albino.zombie.name=アルビノゾンビドラゴン
-entity.DragonMount.albino.terra.name=アルビノテラドラゴン
-entity.DragonMount.albino.moonlight.name=アルビノムーンライトドラゴン
-
-entity.DragonMounts.dragon.ice.name=アイスドラゴン
-entity.DragonMounts.dragon.ender.name=エンダードラゴン
-entity.DragonMounts.dragon.aether.name=エーテルドラゴン
-entity.DragonMounts.dragon.forest.name=フォレストドラゴン
-entity.DragonMounts.dragon.sylphid.name=ウォータードラゴン
-entity.DragonMounts.dragon.nether.name=ネザードラゴン
-entity.DragonMounts.dragon.fire.name=ファイアドラゴン
-entity.DragonMounts.dragon.skeleton.name=スケルトンドラゴン
-entity.DragonMounts.dragon.wither.name=ウィザードラゴン
-entity.DragonMounts.dragon.enchant.name=エンチャントドラゴン
-entity.DragonMounts.dragon.sunlight.name=サンライトドラゴン
-entity.DragonMounts.dragon.storm.name=ストームドラゴン
-entity.DragonMounts.dragon.zombie.name=ゾンビドラゴン
-entity.DragonMounts.dragon.terra.name=テラドラゴン
-entity.DragonMounts.dragon.moonlight.name=ムーンライトドラゴン
-
-
-#Breeds
-dragon.forest=フォレスト
-dragon.forest2=フォレスト
-dragon.aether=エーテル
-dragon.ice=アイス
-dragon.sylphid=ウォーター
-dragon.water=ウォーター
-dragon.fire=ファイア
-dragon.fire2=ファイヤ
-dragon.skeleton=スケルトン
-dragon.wither=ウィザー
-dragon.nether=ネザー
-dragon.nether2=ネザー
-dragon.end=エンダー
-dragon.ender=エンダー
-dragon.enchant=エンチャント
-dragon.sunlight=サンライト
-dragon.sunlight2=サンライト
-dragon.moonlight=ムーンライト
-dragon.moonlight2=ムーンライト
-dragon.storm=ストーム
-dragon.storm2=ストーム
-dragon.zombie=ゾンビ
-dragon.terra=テラ
-dragon.terra2=テラ
+#Dragon Types
+dragon_type.dragonmounts.forest=フォレスト
+dragon_type.dragonmounts.aether=エーテル
+dragon_type.dragonmounts.ice=アイス
+dragon_type.dragonmounts.water=ウォーター
+dragon_type.dragonmounts.fire=ファイア
+dragon_type.dragonmounts.skeleton=スケルトン
+dragon_type.dragonmounts.wither=ウィザー
+dragon_type.dragonmounts.nether=ネザー
+dragon_type.dragonmounts.ender=エンダー
+dragon_type.dragonmounts.enchanted=エンチャント
+dragon_type.dragonmounts.sunlight=サンライト
+dragon_type.dragonmounts.moonlight=ムーンライト
+dragon_type.dragonmounts.storm=ストーム
+dragon_type.dragonmounts.zombie=ゾンビ
+dragon_type.dragonmounts.terra=テラ
+dragon_type.dragonmounts.dark=ダーク
 
 #Stage
-dragon.egg=ドラゴンの卵
-#Untranslated
-dragon.infant=Infant
-dragon.hatchling=幼生
-#Untranslated
-dragon.prejuvenile=Pre-Juvenile
-dragon.juvenile=幼体
-dragon.adult=成体
-
+life_stage.dragon.egg=卵
+life_stage.dragon.hatchling=幼生
+life_stage.dragon.infant=幼体
+life_stage.dragon.fledgling=Pre-亜成体
+life_stage.dragon.juvenile=未成体
+life_stage.dragon.adult=成体
 
 ##
 # Item Names
 ##
-item.diamond_shears.name=ダイヤのハサミ
-item.dragonEgg.name=%s ドラゴンの卵
-item.dragon_gender.name=ドラゴンジェンダージェム
-item.gui.dragon_gender=所有しているドラゴンを宝石で右クリックすると性別が切り替わります
-item.summon_egg.name=ドラゴンのスポーンエッグ
-item.dragon_essence.name=ドラゴンエッセンス
-item.dragon_whistle.name=ドラゴンホイッスル
-item.dragon_amulet.name=ドラゴンアミュレット
-item.dragon_orb.name=ドラゴンオーブ
 
-item.carriage_oak.name=オークのカーゴボブ
-item.carriage_birch.name=白樺のカーゴボブ
-item.carriage_spruce.name=トウヒのカーゴボブ
-item.carriage_acacia.name=アカシアのカーゴボブ
-item.carriage_dark_oak.name=ダークオークのカーゴボブ
-item.carriage_jungle.name=ジャングルのカーゴボブ
+item.dragonmounts.raw_dragon_meat.name=生のドラゴン肉
+item.dragonmounts.cooked_dragon_meat.name=焼きドラゴン肉
+
+item.dragonmounts.diamond_shears.name=ダイヤのハサミ
+item.dragonmounts.dragon_spawn_egg.name=ドラゴンのスポーンエッグ
+item.dragonmounts.dragon_essence.name=ドラゴンエッセンス
+item.dragonmounts.dragon_whistle.name=ドラゴンホイッスル
+item.dragonmounts.dragon_amulet.name=ドラゴンアミュレット
+item.dragonmounts.dragon_orb.name=ドラゴンオーブ
+item.dragonmounts.variation_orb.name=バリエーションオーブ
+
+item.dragonmounts.oak_carriage.name=オークのカーゴボブ
+item.dragonmounts.birch_carriage.name=白樺のカーゴボブ
+item.dragonmounts.spruce_carriage.name=トウヒのカーゴボブ
+item.dragonmounts.acacia_carriage.name=アカシアのカーゴボブ
+item.dragonmounts.dark_oak_carriage.name=ダークオークのカーゴボブ
+item.dragonmounts.jungle_carriage.name=ジャングルのカーゴボブ
 
 # Armory Items
-item.dragonscales.name=ドラゴンスケール
-item.dragon_sword.name=ドラゴンソード
-item.dragon_pickaxe.name=ドラゴンピッケル
-item.dragon_axe.name=ドラゴンアックス
-item.dragon_shovel.name=ドラゴンシャベル
-item.dragon_hoe.name=ドラゴンのクワ
-item.dragon_shield.name=ドラゴンシールド
-item.dragon_bow.name=ドラゴンボウ
-item.dragonscale_head.name=ドラゴンスケールキャップ
-item.dragonscale_chest.name=ドラゴンスケールチェスト
-item.dragonscale_legs.name=ドラゴンスケールレギンス
-item.dragonscale_feet.name=ドラゴンスケールブーツ
-item.dragonarmor_diamond.name=ダイヤモンドドラゴンアーマー
-item.dragonarmor_iron.name=アイアンドラゴンアーマー
-item.dragonarmor_gold.name=ゴールドドラゴンアーマー
-item.dragonarmor_emerald.name=エメラルドドラゴンアーマー
+item.dragonmounts.dragon_scales.name=ドラゴンスケイル
+item.dragonmounts.dragon_scale_sword.name=ドラゴンソード
+item.dragonmounts.dragon_scale_pickaxe.name=ドラゴンピッケル
+item.dragonmounts.dragon_scale_axe.name=ドラゴンアックス
+item.dragonmounts.dragon_scale_shovel.name=ドラゴンシャベル
+item.dragonmounts.dragon_scale_hoe.name=ドラゴンのクワ
+item.dragonmounts.dragon_scale_shield.name=ドラゴンシールド
+item.dragonmounts.dragon_scale_bow.name=ドラゴンボウ
+item.dragonmounts.dragon_scale_helmet.name=ドラゴンスケールヘルメット
+item.dragonmounts.dragon_scale_chestplate.name=ドラゴンスケールチェストプレート
+item.dragonmounts.dragon_scale_leggings.name=ドラゴンスケールレギンス
+item.dragonmounts.dragon_scale_boots.name=ドラゴンスケールブーツ
+item.dragonmounts.diamond_dragon_armor.name=ダイヤモンドドラゴンアーマー
+item.dragonmounts.iron_dragon_armor.name=アイアンドラゴンアーマー
+item.dragonmounts.golden_dragon_armor.name=ゴールドドラゴンアーマー
+item.dragonmounts.emerald_dragon_armor.name=エメラルドドラゴンアーマー
 
-# Tiles
-tile.pileofsticks.name=ネストブロック
-tile.block_dragon_shulker.name=ドラゴンコア
-
-tile.storm_egg.name=ストームドラゴンエッグ
-tile.end_egg.name=エンダードラゴンエッグ
-tile.zombie_egg.name=ゾンビドラゴンエッグ
-tile.sylphid_egg.name=ウォータードラゴンエッグ
-tile.nether_egg.name=ネザードラゴンエッグ
-tile.forest_egg.name=フォレストドラゴンエッグ
-tile.aether_egg.name=エーテルドラゴンエッグ
-tile.ice_egg.name=アイスドラゴンエッグ
-tile.fire_egg.name=ファイアドラゴンエッグ
-tile.skeleton_egg.name=スケルトンドラゴンエッグ
-tile.wither_egg.name=ウィザードラゴンエッグ
-tile.enchant_egg.name=エンチャントドラゴンエッグ
-tile.sunlight_egg.name=サンライトドラゴンエッグ
-tile.moonlight_egg.name=ムーンライトドラゴンエッグ
-tile.terra_egg.name=テラドラゴンエッグ
-
-# Item Info
-item.removeNBT=<スニーク+右クリックでドラゴンの拘束を解除>
-item.armoryitems.info=の鱗で鍛えられた
-item.diamondshears.info=飼いならされたドラゴンを殺さずに鱗を手に入れるために使用します。飼いならされていないドラゴンは攻撃してきます
-item.dragonamulet.info=右クリックしてドラゴンを保管して運び、地面を右クリックすると召喚できます
-item.carriage.info=ドラゴンがボートのように複数の乗客を運ぶために使用される
-item.whistle.info=所有している飼いならしたドラゴンを右クリックして操作します
-item.whistle.nullBlockPos=テレポートできません
-
-
+# Blocks
+tile.dragonmounts.dragon_nest.name=ネストブロック
+tile.dragonmounts.dragon_core.name=ドラゴンコア
+tile.dragonmounts.dragon_head.name=ドラゴンの頭
+tile.dragonmounts.dragon_egg.name=ドラゴンの卵
+tile.dragonmounts.dragon_scale_block.name=ドラゴンスケイルブロック
 ##
 # Messages
 ##
-dragon.locked=このドラゴンはオーナーによってロックされています
-dragon.notTamed=肉や魚を使ってドラゴンを飼いならします
-dragon.notOwned=このドラゴンはあなたのものではありません
-entity.dragon.tooYoung=ドラゴンはまだ若すぎます、成長させましょう
-egg.cantHatchEnd.DragonMounts=ドラゴンの卵はジ・エンドでは孵化できません
-dragon.growth.paused=毒ジャガイモはドラゴンの成長を止めますが、成長を続けるにはニンジンを使用してください
-commands.dragon.nodragons=近くにドラゴンがいません
-commands.dragon.canttame=ドラゴンを飼いならすことが出来ません
-msg.dragon.toggleHover=ドラゴンのホバリング ON OFF
-msg.dragon.toggleFollowYaw=プレイヤーの水平視点に追従して回転 ON OFF
-msg.dragon.toggleYLock=プレイヤーの垂直視点に追従して上昇、降下を無視 ON OFF(スペースと左 ALT)
-
-# Whistle
-whistle.msg.cleared=ドラゴンは解放された
-whistle.msg.hasDragon=ドラゴンはホイッスルにバインドされた
-whistle.msg.unBound=先にドラゴンをバインドしなければならない
-whistle.msg.notOwned=このドラゴンはあなたのものではありません
-whistle.msg.noDragon=ドラゴンホイッスルはドラゴンにバインドされていません。まず所有して飼いならしたドラゴンを左クリックしてください
-whistle.msg.fail=ドラゴンは笛の音を聞くことができません...
-whistle.command.new_home=新しいホームポジション
-
+message.dragonmounts.control.toggleHovering=ホバリング: %s
+message.dragonmounts.control.toggleYawAlignment=水平視点による旋回: %s
+message.dragonmounts.control.togglePitchAlignment=垂直視点による上昇、降下: %s
+message.dragonmounts.dragon.untamed=ドラゴンは飼いならされていません
+message.dragonmounts.dragon.locked=このドラゴンは所有者によってロックされています
+message.dragonmounts.dragon.notOwner=このドラゴンの所有者ではありません
+message.dragonmounts.dragon.tooYoung=ドラゴンはまだ若すぎる、成長させましょう
+message.dragonmounts.dragon.growthPaused=ドラゴンの成長は止まりました
+message.dragonmounts.egg.wrongDimension=この次元ではドラゴンの卵は孵化できません
+message.dragonmounts.whistle.empty=ホイッスルはドラゴンを縛っていません
+message.dragonmounts.whistle.invalidPos=ドラゴンはそこへテレポートできません
+message.dragonmounts.whistle.failed=ホイッスルの音はドラゴンへ届かない...
 
 ##
 # Gui Names
 ##
-gui.nothing=無し
-gui.circle=サークルプレイヤー
-gui.followFlying=飛行を追跡
-gui.cometoPlayer=プレイヤーの元に来る
-gui.locked.dragon=ロック
-gui.unlocked.dragon=アンロック
-gui.dragon.sit=座る
-gui.firesupport=火力支援
-gui.dragon.hunger=飢え
-container.dragon_shulker=ドラゴンコンテナー
+container.dragonmounts.dragon_core=ドラゴンコア
+gui.dragonmounts.sit=座る
+gui.dragonmounts.stand=立つ
+gui.dragonmounts.toggleSit=座る / 立つ
+gui.dragonmounts.toggleFollow=従う / 散策
+gui.dragonmounts.teleportToPlayer=ドラゴンを呼ぶ
+gui.dragonmounts.lock.tooltip=他のプレイヤーを信頼する
 
 #Controls
-key.categories.dragon=ドラゴンマウント
-key.dragon.projectile=未使用
-key.dragon.breath=ドラゴンブレス
-key.dragon.cancelhover=ホバリングの停止
-key.dragon.f7=マウントカメラの変更
-key.dragon.followYaw=プレイヤーの水平視点に追従
-key.dragon.boost=スピードブースト
-key.dragon.dismount=肩から降りる
-key.dragon.lockY=プレイヤーの垂直視点に追従して上昇、下降を無視
-key.dragon.down=降下
+key.categories.dragonmounts=ドラゴンマウント
+key.dragonmounts.breath=ドラゴンブレス
+key.dragonmounts.descent=降下
+key.dragonmounts.toggleCameraPos=カメラポジションの変更
+key.dragonmounts.toggleHovering=ホバリングの切替
+key.dragonmounts.toggleYawAlignment=水平視点による旋回を切替
+key.dragonmounts.togglePitchAlignment=垂直視点による上昇、下降を切替
 
 tooltip.armor_effect.dragonmounts.aether=着用者が全力疾走しているとき、5秒間移動速度上昇 IIを適用します
-tooltip.armor_effect.dragonmounts.enchant=着用者が倒したターゲットは120%の追加EXPをドロップする
+tooltip.armor_effect.dragonmounts.enchanted=着用者が倒したターゲットは120%の追加EXPをドロップする
 tooltip.armor_effect.dragonmounts.ender=着用者の体力が5未満のとき、30秒間耐性 IIIを適用し、15秒間攻撃力上昇 IIを適用します
 tooltip.armor_effect.dragonmounts.fire=着用者が炎上すると、30秒間火炎耐性 Iが適用されます
 tooltip.armor_effect.dragonmounts.forest=着用者がダメージを受けると、10秒間再生能力 IIを適用します
@@ -228,13 +134,117 @@ tooltip.armor_effect.dragonmounts.sunlight=着用者の飢餓値が10未満の�
 tooltip.armor_effect.dragonmounts.terra=30秒間、採掘速度上昇 Iを適用します。
 tooltip.armor_effect.dragonmounts.water=着用者が水中にいる場合、水中呼吸Iを30秒間適用する
 tooltip.armor_effect.dragonmounts.zombie=夜に15秒間、攻撃力上昇 Iを適用します
+tooltip.armor_effect.dragonmounts.dark=ダークドラゴンの恩恵効果 Iを30秒間適用する
 tooltip.dragonmounts.armor_effect_cooldown=クールダウン: %ss
 tooltip.dragonmounts.armor_effect_fishing_luck=着用者が釣りをしているとき、クールダウンなしで10秒間幸運 Iを適用します。
-tooltip.dragonmounts.armor_effect_piece_4=4セット効果:
+tooltip.dragonmounts.armor_effect_piece_4=4部位セット効果:
 tooltip.dragonmounts.armor_effect_remaining_cooldown=残りのクールダウン: %ss
-tooltip.dragonmounts.whistle.name=ドラゴンホイッスル (%s)
+tooltip.dragonmounts.whistle=所有している飼いならしたドラゴンを右クリックして操作します
+tooltip.dragonmounts.variation_orb=ドラゴンのバリエーションをランダムに変更する
 tooltip.dragonmounts.age=年齢: %s
 tooltip.dragonmounts.name=名前: %s
 tooltip.dragonmounts.health=健康: %s
 tooltip.dragonmounts.owner=所有者: %s
-tooltip.dragonmounts.gender=性別: %s
+tooltip.dragonmounts.hard_shears=飼いならされたドラゴンを殺さずに鱗を手に入れるために使用します
+tooltip.dragonmounts.amulet.empty=右クリックしてドラゴンを保管して運べます
+tooltip.dragonmounts.carriage=ドラゴンがボートのように複数の乗客を運ぶために使用される
+
+item.modifiers.equipped=装備時：
+
+subtitles.entity.dragonmounts.dragon.ambient=ドラゴンの呼吸
+subtitles.entity.dragonmounts.dragon.chest=ドラゴンチェストを装備
+subtitles.entity.dragonmounts.dragon.death=ドラゴンの死亡
+subtitles.entity.dragonmounts.dragon.roar=ドラゴンの咆哮
+subtitles.entity.dragonmounts.dragon.purr=ドラゴンのうなり声
+subtitles.entity.dragonmounts.dragon.sneeze=ドラゴンのくしゃみ
+subtitles.entity.dragonmounts.dragon.step=ドラゴンの足音
+subtitles.entity.dragonmounts.dragon.breath_start=ドラゴンの吐息
+subtitles.entity.dragonmounts.dragon.breath_loop=ドラゴンの吐息
+subtitles.entity.dragonmounts.dragon.breath_stop=ドラゴンブレスの終息
+subtitles.entity.dragonmounts.dragon_egg.shatter=ドラゴンの卵が砕けた
+subtitles.entity.dragonmounts.dragon_egg.crack=ドラゴンの卵が割れた
+subtitles.item.dragonmounts.whistle.blow=ドラゴンホイッスルを吹く
+subtitles.item.dragonmounts.variation_orb.activate=バリエーションオーブを発動
+
+argument.player.toomany=単体のプレイヤーを指定してください、そのセレクタは複数体指定しています
+
+commands.dragonmounts.usage=/dragonmounts <subcommand>
+commands.dragonmounts.tame.usage=/dragonmounts tame [dragon]
+commands.dragonmounts.tame.success=%s は %s によって飼いならされました
+commands.dragonmounts.unlock.usage=/dragonmounts unlock [dragon]
+commands.dragonmounts.unlock.success=%s がロック解除されました
+commands.dragonmounts.size.usage=/dragonmounts size <size> [dragon]
+commands.dragonmounts.size.success=%s のサイズは次のように設定されました: %s
+commands.dragonmounts.stage.usage=/dragonmounts stage <stage> [dragon]
+commands.dragonmounts.stage.invalid=「%s」 は有効な年齢層ではありません
+commands.dragonmounts.stage.success=%sの年齢層は次のように設定されました: %s
+commands.dragonmounts.type.usage=/dragonmounts type <type> [dragon]
+commands.dragonmounts.type.invalid=「%s」 は有効なタイプではありません
+commands.dragonmounts.type.success=%s のタイプは次のように設定されました: %s
+commands.dragonmounts.notFound=「%s」 に基づくドラゴンが見つかりませんでした
+commands.dragonmounts.unspecified=このアクションを実行するドラゴンを指定する必要があります
+
+config.dragonmounts.category.attributes=属性
+config.dragonmounts.category.attributes.tooltip=エンティティ属性に関する設定
+config.dragonmounts.category.gameplay=ゲーム内容
+config.dragonmounts.category.gameplay.tooltip=ゲームプレイに関する設定
+config.dragonmounts.category.world_gen=ワールドジェネレーション
+config.dragonmounts.category.world_gen.tooltip=ワールド生成に関する設定
+config.dragonmounts.debugMode=デバッグモード
+config.dragonmounts.debugMode.tooltip=デバッグモードを有効にする
+config.dragonmounts.debugOverlay=デバック画面
+config.dragonmounts.debugOverlay.tooltip=デバック画面を有効にする
+config.dragonmounts.cameraDistance=カメラ距離
+config.dragonmounts.cameraDistance.tooltip=ドラゴンに乗っている間は三人称カメラでのみ機能します
+config.dragonmounts.baseArmor=基礎アーマー値
+config.dragonmounts.baseArmor.tooltip=成体ドラゴンの基礎アーマー値。新しくスポーンしたドラゴンにのみ適用されます
+config.dragonmounts.baseArmorToughness=アーマーの基礎防御力
+config.dragonmounts.baseArmorToughness.tooltip=成体ドラゴンの基礎防御力。新しくスポーンしたドラゴンにのみ適用されます
+config.dragonmounts.baseDamage=基礎ダメージ
+config.dragonmounts.baseDamage.tooltip=成体ドラゴンの基礎ダメージ。新しくスポーンしたドラゴンにのみ適用されます
+config.dragonmounts.baseHealth=基礎体力
+config.dragonmounts.baseHealth.tooltip=成体ドラゴンの基礎体力。新しくスポーンしたドラゴンにのみ適用されます
+config.dragonmounts.baseKnockbackResistance=基礎ノックバック耐性
+config.dragonmounts.baseKnockbackResistance.tooltip=成体ドラゴンの基礎ノックバック耐性。新しくスポーンしたドラゴンにのみ適用されます
+config.dragonmounts.baseFollowRange=基礎フォロー範囲
+config.dragonmounts.baseFollowRange.tooltip=成体ドラゴンの基礎フォロー範囲。新しくスポーンしたドラゴンにのみ適用されます
+config.dragonmounts.baseMovementSpeed=基礎移動速度
+config.dragonmounts.baseMovementSpeed.tooltip=成体ドラゴンの基本移動速度。新しくスポーンしたドラゴンにのみ適用されます
+config.dragonmounts.baseFlyingSpeed=基礎飛行速度
+config.dragonmounts.baseFlyingSpeed.tooltip=成体ドラゴンの基本飛行速度。新しくスポーンしたドラゴンにのみ適用されます
+config.dragonmounts.baseSwimmingSpeed=基礎遊泳速度
+config.dragonmounts.baseSwimmingSpeed.tooltip=成体ドラゴンの基礎遊泳速度。新しくスポーンしたドラゴンにのみ適用されます。
+config.dragonmounts.baseBodySize=基礎ボディサイズ
+config.dragonmounts.baseBodySize.tooltip=成体ドラゴンの基礎ボディサイズ。新しくスポーンしたドラゴンにのみ適用されます。
+config.dragonmounts.baseStepHeight=基礎最大オートステップ高
+config.dragonmounts.baseStepHeight.tooltip=成体ドラゴンが移動中に無視できる最大高低差
+config.dragonmounts.forcedRename=強制的に名前を変更
+config.dragonmounts.forcedRename.tooltip=アミュレットの名前を変更するときにドラゴンの名前を強制的に変更するかどうか
+config.dragonmounts.blockOverride=ブロックオーバーライド
+config.dragonmounts.blockOverride.tooltip=ドラゴンの卵と対話するときに元のドラゴンの卵を上書きするロジックを使用するか
+config.dragonmounts.reproductionLimit=繁殖の制限
+config.dragonmounts.reproductionLimit.tooltip=ドラゴンの最大繁殖回数
+config.dragonmounts.adaptiveConversion=適応変換
+config.dragonmounts.adaptiveConversion.tooltip=ドラゴンの卵は環境に適応するために別の種類に変換されるか
+config.dragonmounts.breathEffects=ドラゴンブレスエフェクト
+config.dragonmounts.breathEffects.tooltip=ドラゴンブレスがブロックに当たったときの追加効果
+config.dragonmounts.destructiveBreath=ドラゴンブレスによる破壊
+config.dragonmounts.destructiveBreath.tooltip=ドラゴンの息吹はブロックを破壊できるか
+config.dragonmounts.ignitingBreath=焼け付くドラゴンブレス
+config.dragonmounts.ignitingBreath.tooltip=炎のドラゴンブレスはブロックに着火するか
+config.dragonmounts.smeltingBreath=ブレスによる融解
+config.dragonmounts.smeltingBreath.tooltip=ドラゴンの炎の息はブロックを溶かすか
+config.dragonmounts.frostyBreath=吹雪のドラゴンブレス
+config.dragonmounts.frostyBreath.tooltip=吹雪のドラゴンブレスは雪を残すか
+config.dragonmounts.quenchingBreath=ドラゴンブレスによる鎮静
+config.dragonmounts.quenchingBreath.tooltip=霧のようなドラゴンブレスは火を消したり溶岩を固めたりできるか
+config.dragonmounts.redirectInventory=インベントリのリダイレクト
+config.dragonmounts.redirectInventory.tooltip=自分のインベントリではなくマウントのインベントリを開くかどうか
+config.dragonmounts.toggleDimensionLimitation=宣言されたディメンションのみ許可
+config.dragonmounts.toggleDimensionLimitation.tooltip=有効にすると、ドラゴンネストは宣言されたディメンションにのみ生成されます。有効にしない場合は、宣言されたディメンションには生成されません。
+config.dragonmounts.limitedDimensions=ディメンションの制限
+config.dragonmounts.limitedDimensions.tooltip=制限されたディメンションの数値 ID のリスト
+
+book.dragonmounts.dracopedia.name=ドラコペディアガイドブック
+book.dragonmounts.dracopedia.desc=説明
+book.dragonmounts.dracopedia.landing=着陸

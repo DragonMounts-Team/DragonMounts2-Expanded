@@ -1,0 +1,11 @@
+{
+  "name": "龙蛋",
+  "icon": "dragonmounts:ender_dragon_egg",
+  "category": "dragonmounts:blocks",
+  "pages": [
+    {
+      "type": "text",
+      "text": "不能在末地孵化"
+    }
+  ]
+}

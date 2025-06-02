@@ -1,0 +1,11 @@
+{
+  "name": "Dragon Amulet",
+  "icon": "dragonmounts:amulet",
+  "category": "dragonmounts:items",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Press $(k:use) to use."
+    }
+  ]
+}

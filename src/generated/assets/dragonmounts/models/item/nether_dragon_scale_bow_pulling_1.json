@@ -1,0 +1,6 @@
+{
+  "parent": "dragonmounts:item/nether_dragon_scale_bow",
+  "textures": {
+    "layer0": "dragonmounts:items/bow/nether_dragon_scale_bow_pulling_1"
+  }
+}

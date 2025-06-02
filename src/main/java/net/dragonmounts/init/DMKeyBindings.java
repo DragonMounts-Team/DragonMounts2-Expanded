@@ -1,0 +1,24 @@
+package net.dragonmounts.init;
+
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import org.lwjgl.input.Keyboard;
+
+public class DMKeyBindings {
+    public static final String KEY_CATEGORY = "key.categories.dragonmounts";
+    public static final KeyBinding KEY_BREATHE = new KeyBinding("key.dragonmounts.breathe", Keyboard.KEY_R, KEY_CATEGORY);
+    public static final KeyBinding KEY_DESCEND = new KeyBinding("key.dragonmounts.descend", Keyboard.KEY_NONE, KEY_CATEGORY);
+    public static final KeyBinding TOGGLE_CAMERA_POS = new KeyBinding("key.dragonmounts.toggleCameraPos", Keyboard.KEY_F7, KEY_CATEGORY);
+    public static final KeyBinding TOGGLE_HOVERING = new KeyBinding("key.dragonmounts.toggleHovering", Keyboard.KEY_NONE, KEY_CATEGORY);
+    public static final KeyBinding TOGGLE_YAW_ALIGNMENT = new KeyBinding("key.dragonmounts.toggleYawAlignment", Keyboard.KEY_NONE, KEY_CATEGORY);
+    public static final KeyBinding TOGGLE_PITCH_ALIGNMENT = new KeyBinding("key.dragonmounts.togglePitchAlignment", Keyboard.KEY_NONE, KEY_CATEGORY);
+
+    public static void register() {
+        ClientRegistry.registerKeyBinding(KEY_BREATHE);
+        ClientRegistry.registerKeyBinding(TOGGLE_HOVERING);
+        ClientRegistry.registerKeyBinding(TOGGLE_YAW_ALIGNMENT);
+        ClientRegistry.registerKeyBinding(TOGGLE_PITCH_ALIGNMENT);
+        ClientRegistry.registerKeyBinding(TOGGLE_CAMERA_POS);
+        ClientRegistry.registerKeyBinding(KEY_DESCEND);
+    }
+}

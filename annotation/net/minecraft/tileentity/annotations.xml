@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraft.tileentity.TileEntityLockable net.minecraft.util.text.ITextComponent getDisplayName()'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+</root>

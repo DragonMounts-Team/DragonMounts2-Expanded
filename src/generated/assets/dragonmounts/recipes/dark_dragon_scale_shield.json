@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "dragon_scale_shield",
+  "pattern": [
+    "WoW",
+    "WWW",
+    " W "
+  ],
+  "key": {
+    "W": {
+      "item": "dragonmounts:dark_dragon_scales"
+    },
+    "o": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  },
+  "result": {
+    "item": "dragonmounts:dark_dragon_scale_shield"
+  }
+}

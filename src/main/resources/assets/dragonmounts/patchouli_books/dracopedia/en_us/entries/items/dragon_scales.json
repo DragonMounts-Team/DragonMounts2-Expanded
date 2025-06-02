@@ -1,0 +1,11 @@
+{
+  "name": "Dragon Scales",
+  "icon": "dragonmounts:ender_dragon_scales",
+  "category": "dragonmounts:items",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Important ingredients that obtained by shearing a dragon with $(l:items/hard_shears)Hard Shears$(/l).$(br2)See also: $(l:dragons/shearing)Shearing$(/l)"
+    }
+  ]
+}

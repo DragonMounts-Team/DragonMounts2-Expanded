@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "dragon_armor",
+  "pattern": [
+    "X #",
+    " XX",
+    "## "
+  ],
+  "key": {
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "gemEmerald"
+    },
+    "X": {
+      "type": "forge:ore_dict",
+      "ore": "blockEmerald"
+    }
+  },
+  "result": {
+    "item": "dragonmounts:emerald_dragon_armor"
+  }
+}

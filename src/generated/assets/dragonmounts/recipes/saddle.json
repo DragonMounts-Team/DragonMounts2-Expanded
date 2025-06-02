@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " X ",
+    "X#X"
+  ],
+  "key": {
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "X": {
+      "type": "forge:ore_dict",
+      "ore": "leather"
+    }
+  },
+  "result": {
+    "item": "minecraft:saddle"
+  }
+}

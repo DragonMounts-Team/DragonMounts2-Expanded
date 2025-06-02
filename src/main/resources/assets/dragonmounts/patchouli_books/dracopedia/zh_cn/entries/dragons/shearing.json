@@ -1,0 +1,11 @@
+{
+  "name": "剪龙鳞",
+  "icon": "dragonmounts:diamond_shears",
+  "category": "dragonmounts:dragons",
+  "pages": [
+    {
+      "type": "text",
+      "text": "有$(l:items/dragon_scales)龙鳞$(/l)的龙在成长到$(l:dragons/life_stage)少年阶段$(/l)之后就可以用$(l:items/hard_shears)硬质剪刀$(/l)剪龙鳞了。$(br2)剪龙鳞的冷却时间取决于剪刀的种类，其中钻石剪刀的冷却时间是2.5分钟。$(br2)$(m)$(t:如果你剪的时候龙还不信任你，那你等着被追着咬吧。)整个过程其实不太舒服。$(/t)$()"
+    }
+  ]
+}

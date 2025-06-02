@@ -1,0 +1,11 @@
+{
+  "name": "Life Stage",
+  "icon": "dragonmounts:ender_dragon_egg",
+  "category": "dragonmounts:dragons",
+  "pages": [
+    {
+      "type": "text",
+      "text": "There are 6 life stages:$(br)$(li)$(thing)Egg$(), taking 30 mins hatch.$(li)$(thing)Hatchling$(), taking 40 mins to grow up.$(li2)Regarded as Baby$(li)$(thing)Infant$(), taking 20 mins to grow up.$(li2)Regarded as Baby$(li)$(thing)Fledgling$(), taking about 26.67 mins to grow up.$(li)$(thing)Juvenile$(), taking 50 mins to grow up.$(li)$(thing)Adult$(), finally."
+    }
+  ]
+}
