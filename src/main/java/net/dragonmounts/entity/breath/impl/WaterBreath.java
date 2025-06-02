@@ -20,7 +20,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -37,9 +36,8 @@ public class WaterBreath extends DragonBreath {
 
     @Override
     public BreathAffectedBlock affectBlock(World level, long location, BreathAffectedBlock hit) {
-        BlockPos pos = BlockPos.fromLong(location);
-        level.spawnParticle(EnumParticleTypes.WATER_SPLASH, pos.getX(), pos.getY(), pos.getZ(), 1.0D, 4.0D, 1.0D);
         if (!DMConfig.BREATH_EFFECTS.value) return new BreathAffectedBlock();
+        BlockPos pos = BlockPos.fromLong(location);
         IBlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
         if (block == Blocks.LAVA || block == Blocks.FLOWING_LAVA) {
@@ -55,7 +53,9 @@ public class WaterBreath extends DragonBreath {
             level.setBlockToAir(pos);
             LevelUtil.playExtinguishEffect(level, pos);
         } else if (block == Blocks.FARMLAND && state.getValue(BlockFarmland.MOISTURE) < 7) {
-            level.setBlockState(pos, state.withProperty(BlockFarmland.MOISTURE, 7));
+            int moisture = state.getValue(BlockFarmland.MOISTURE);
+            if (moisture >= 7) return hit;
+            level.setBlockState(pos, state.withProperty(BlockFarmland.MOISTURE, moisture + 1), 2);
         }
         return new BreathAffectedBlock(); // reset to zero
     }

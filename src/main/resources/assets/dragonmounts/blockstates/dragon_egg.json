@@ -55,7 +55,7 @@
       },
       "enchant": {
         "textures": {
-          "all": "dragonmounts:entities/dragon/enchant/egg"
+          "all": "dragonmounts:entities/dragon/enchanted/egg"
         }
       },
       "sunlight": {

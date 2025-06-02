@@ -21,7 +21,7 @@ dragon_type.dragonmounts.skeleton=Squelettique
 dragon_type.dragonmounts.wither=Wither
 dragon_type.dragonmounts.nether=Nether
 dragon_type.dragonmounts.ender=Ender
-dragon_type.dragonmounts.enchant=Enchanté
+dragon_type.dragonmounts.enchanted=Enchanté
 dragon_type.dragonmounts.sunlight=Solaire
 dragon_type.dragonmounts.moonlight=Lunaire
 dragon_type.dragonmounts.storm=Tempêtes
@@ -114,7 +114,7 @@ key.dragonmounts.toggleYawAlignment= Réaligner la caméra sur l'axe de lacet
 key.dragonmounts.togglePitchAlignment=Réaligner la caméra sur l'axe du tanguage
 
 tooltip.armor_effect.dragonmounts.aether=Quand le porteur court, applique l'effet Rapidité II pendant5s
-tooltip.armor_effect.dragonmounts.enchant=La cible tuée par le porteur rapporte 120% d'EXP suplémentaire
+tooltip.armor_effect.dragonmounts.enchanted=La cible tuée par le porteur rapporte 120% d'EXP suplémentaire
 tooltip.armor_effect.dragonmounts.ender=Quand la vie du porteur est en dessous de 5, applique l'effet Résistance III pendant 30s et l'éffet Force II pendant 15s
 tooltip.armor_effect.dragonmounts.fire=Quand le pôrteur est en feu, applique l'effet Résistance au feu I pendant 30s
 tooltip.armor_effect.dragonmounts.forest=Quand le porteur est bléssé, applique l'effet Régénération II pendant 10s
@@ -143,7 +143,6 @@ tooltip.dragonmounts.carriage=Utilisé pour faire en sorte que les Dragons puiss
 
 item.modifiers.equipped=Quand equippé:
 
-##### Translated
 argument.player.toomany=Seulement un joueur est autorisé, mais le sélecteur fourni en autorise plus d'un
 
 commands.dragonmounts.usage=/dragonmounts <subcommand>

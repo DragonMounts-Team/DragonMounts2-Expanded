@@ -118,7 +118,7 @@ public class RegistryEventHandler {
     public static void registerDragonTypes(RegistryEvent.Register<DragonType> event) {
         IForgeRegistry<DragonType> registry = event.getRegistry();
         registry.register(DragonTypes.AETHER);
-        registry.register(DragonTypes.ENCHANT);
+        registry.register(DragonTypes.ENCHANTED);
         registry.register(DragonTypes.ENDER);
         registry.register(DragonTypes.FIRE);
         registry.register(DragonTypes.FOREST);

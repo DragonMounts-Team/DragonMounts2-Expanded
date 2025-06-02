@@ -50,7 +50,7 @@ public class DMItems {
     public static final DragonScalesItem NETHER_DRAGON_SCALES = createDragonScalesItem("nether_dragon_scales", DragonTypes.NETHER);
     public static final DragonScalesItem ENDER_DRAGON_SCALES = createDragonScalesItem("ender_dragon_scales", DragonTypes.ENDER);
     public static final DragonScalesItem SUNLIGHT_DRAGON_SCALES = createDragonScalesItem("sunlight_dragon_scales", DragonTypes.SUNLIGHT);
-    public static final DragonScalesItem ENCHANT_DRAGON_SCALES = createDragonScalesItem("enchant_dragon_scales", DragonTypes.ENCHANT);
+    public static final DragonScalesItem ENCHANTED_DRAGON_SCALES = createDragonScalesItem("enchanted_dragon_scales", DragonTypes.ENCHANTED);
     public static final DragonScalesItem STORM_DRAGON_SCALES = createDragonScalesItem("storm_dragon_scales", DragonTypes.STORM);
     public static final DragonScalesItem TERRA_DRAGON_SCALES = createDragonScalesItem("terra_dragon_scales", DragonTypes.TERRA);
     public static final DragonScalesItem ZOMBIE_DRAGON_SCALES = createDragonScalesItem("zombie_dragon_scales", DragonTypes.ZOMBIE);
@@ -69,7 +69,7 @@ public class DMItems {
     public static final DragonScaleSwordItem FOREST_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("forest_dragon_scale_sword", DragonTypes.FOREST, DMTiers.FOREST_DRAGON_SCALE);
     public static final DragonScaleSwordItem NETHER_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("nether_dragon_scale_sword", DragonTypes.NETHER, DMTiers.NETHER_DRAGON_SCALE);
     public static final DragonScaleSwordItem ENDER_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("ender_dragon_scale_sword", DragonTypes.ENDER, DMTiers.ENDER_DRAGON_SCALE);
-    public static final DragonScaleSwordItem ENCHANT_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("enchant_dragon_scale_sword", DragonTypes.ENCHANT, DMTiers.ENCHANT_DRAGON_SCALE);
+    public static final DragonScaleSwordItem ENCHANTED_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("enchanted_dragon_scale_sword", DragonTypes.ENCHANTED, DMTiers.ENCHANTED_DRAGON_SCALE);
     public static final DragonScaleSwordItem SUNLIGHT_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("sunlight_dragon_scale_sword", DragonTypes.SUNLIGHT, DMTiers.SUNLIGHT_DRAGON_SCALE);
     public static final DragonScaleSwordItem MOONLIGHT_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("moonlight_dragon_scale_sword", DragonTypes.MOONLIGHT, DMTiers.MOONLIGHT_DRAGON_SCALE);
     public static final DragonScaleSwordItem STORM_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("storm_dragon_scale_sword", DragonTypes.STORM, DMTiers.STORM_DRAGON_SCALE);
@@ -84,7 +84,7 @@ public class DMItems {
     public static final DragonScaleAxeItem FOREST_DRAGON_SCALE_AXE = createDragonScaleAxeItem("forest_dragon_scale_axe", DragonTypes.FOREST, DMTiers.FOREST_DRAGON_SCALE);
     public static final DragonScaleAxeItem NETHER_DRAGON_SCALE_AXE = createDragonScaleAxeItem("nether_dragon_scale_axe", DragonTypes.NETHER, DMTiers.NETHER_DRAGON_SCALE, 12.0F, -2.9F);
     public static final DragonScaleAxeItem ENDER_DRAGON_SCALE_AXE = createDragonScaleAxeItem("ender_dragon_scale_axe", DragonTypes.ENDER, DMTiers.ENDER_DRAGON_SCALE, 9.0F, -2.9F);
-    public static final DragonScaleAxeItem ENCHANT_DRAGON_SCALE_AXE = createDragonScaleAxeItem("enchant_dragon_scale_axe", DragonTypes.ENCHANT, DMTiers.ENCHANT_DRAGON_SCALE);
+    public static final DragonScaleAxeItem ENCHANTED_DRAGON_SCALE_AXE = createDragonScaleAxeItem("enchanted_dragon_scale_axe", DragonTypes.ENCHANTED, DMTiers.ENCHANTED_DRAGON_SCALE);
     public static final DragonScaleAxeItem SUNLIGHT_DRAGON_SCALE_AXE = createDragonScaleAxeItem("sunlight_dragon_scale_axe", DragonTypes.SUNLIGHT, DMTiers.SUNLIGHT_DRAGON_SCALE);
     public static final DragonScaleAxeItem MOONLIGHT_DRAGON_SCALE_AXE = createDragonScaleAxeItem("moonlight_dragon_scale_axe", DragonTypes.MOONLIGHT, DMTiers.MOONLIGHT_DRAGON_SCALE);
     public static final DragonScaleAxeItem STORM_DRAGON_SCALE_AXE = createDragonScaleAxeItem("storm_dragon_scale_axe", DragonTypes.STORM, DMTiers.STORM_DRAGON_SCALE);
@@ -99,7 +99,7 @@ public class DMItems {
     public static final DragonScaleBowItem FOREST_DRAGON_SCALE_BOW = createDragonScaleBowItem("forest_dragon_scale_bow", DragonTypes.FOREST, DMTiers.FOREST_DRAGON_SCALE);
     public static final DragonScaleBowItem NETHER_DRAGON_SCALE_BOW = createDragonScaleBowItem("nether_dragon_scale_bow", DragonTypes.NETHER, DMTiers.NETHER_DRAGON_SCALE);
     public static final DragonScaleBowItem ENDER_DRAGON_SCALE_BOW = createDragonScaleBowItem("ender_dragon_scale_bow", DragonTypes.ENDER, DMTiers.ENDER_DRAGON_SCALE);
-    public static final DragonScaleBowItem ENCHANT_DRAGON_SCALE_BOW = createDragonScaleBowItem("enchant_dragon_scale_bow", DragonTypes.ENCHANT, DMTiers.ENCHANT_DRAGON_SCALE);
+    public static final DragonScaleBowItem ENCHANTED_DRAGON_SCALE_BOW = createDragonScaleBowItem("enchanted_dragon_scale_bow", DragonTypes.ENCHANTED, DMTiers.ENCHANTED_DRAGON_SCALE);
     public static final DragonScaleBowItem SUNLIGHT_DRAGON_SCALE_BOW = createDragonScaleBowItem("sunlight_dragon_scale_bow", DragonTypes.SUNLIGHT, DMTiers.SUNLIGHT_DRAGON_SCALE);
     public static final DragonScaleBowItem MOONLIGHT_DRAGON_SCALE_BOW = createDragonScaleBowItem("moonlight_dragon_scale_bow", DragonTypes.MOONLIGHT, DMTiers.MOONLIGHT_DRAGON_SCALE);
     public static final DragonScaleBowItem STORM_DRAGON_SCALE_BOW = createDragonScaleBowItem("storm_dragon_scale_bow", DragonTypes.STORM, DMTiers.STORM_DRAGON_SCALE);
@@ -114,7 +114,7 @@ public class DMItems {
     public static final DragonScaleShieldItem FOREST_DRAGON_SCALE_SHIELD = createDragonScaleShieldItem("forest_dragon_scale_shield", DragonTypes.FOREST, DMMaterials.FOREST_DRAGON_SCALE);
     public static final DragonScaleShieldItem NETHER_DRAGON_SCALE_SHIELD = createDragonScaleShieldItem("nether_dragon_scale_shield", DragonTypes.NETHER, DMMaterials.NETHER_DRAGON_SCALE);
     public static final DragonScaleShieldItem ENDER_DRAGON_SCALE_SHIELD = createDragonScaleShieldItem("ender_dragon_scale_shield", DragonTypes.ENDER, DMMaterials.ENDER_DRAGON_SCALE);
-    public static final DragonScaleShieldItem ENCHANT_DRAGON_SCALE_SHIELD = createDragonScaleShieldItem("enchant_dragon_scale_shield", DragonTypes.ENCHANT, DMMaterials.ENCHANT_DRAGON_SCALE);
+    public static final DragonScaleShieldItem ENCHANTED_DRAGON_SCALE_SHIELD = createDragonScaleShieldItem("enchanted_dragon_scale_shield", DragonTypes.ENCHANTED, DMMaterials.ENCHANTED_DRAGON_SCALE);
     public static final DragonScaleShieldItem SUNLIGHT_DRAGON_SCALE_SHIELD = createDragonScaleShieldItem("sunlight_dragon_scale_shield", DragonTypes.SUNLIGHT, DMMaterials.SUNLIGHT_DRAGON_SCALE);
     public static final DragonScaleShieldItem MOONLIGHT_DRAGON_SCALE_SHIELD = createDragonScaleShieldItem("moonlight_dragon_scale_shield", DragonTypes.MOONLIGHT, DMMaterials.MOONLIGHT_DRAGON_SCALE);
     public static final DragonScaleShieldItem STORM_DRAGON_SCALE_SHIELD = createDragonScaleShieldItem("storm_dragon_scale_shield", DragonTypes.STORM, DMMaterials.STORM_DRAGON_SCALE);
@@ -150,9 +150,9 @@ public class DMItems {
     public static final DragonScalePickaxeItem ENDER_DRAGON_SCALE_PICKAXE = createDragonScalePickaxeItem("ender_dragon_scale_pickaxe", DragonTypes.ENDER, DMTiers.ENDER_DRAGON_SCALE);
     public static final DragonScaleHoeItem ENDER_DRAGON_SCALE_HOE = createDragonScaleHoeItem("ender_dragon_scale_hoe", DragonTypes.ENDER, DMTiers.ENDER_DRAGON_SCALE);
     //Dragon Scale Tools - Enchant
-    public static final DragonScaleShovelItem ENCHANT_DRAGON_SCALE_SHOVEL = createDragonScaleShovelItem("enchant_dragon_scale_shovel", DragonTypes.ENCHANT, DMTiers.ENCHANT_DRAGON_SCALE);
-    public static final DragonScalePickaxeItem ENCHANT_DRAGON_SCALE_PICKAXE = createDragonScalePickaxeItem("enchant_dragon_scale_pickaxe", DragonTypes.ENCHANT, DMTiers.ENCHANT_DRAGON_SCALE);
-    public static final DragonScaleHoeItem ENCHANT_DRAGON_SCALE_HOE = createDragonScaleHoeItem("enchant_dragon_scale_hoe", DragonTypes.ENCHANT, DMTiers.ENCHANT_DRAGON_SCALE);
+    public static final DragonScaleShovelItem ENCHANTED_DRAGON_SCALE_SHOVEL = createDragonScaleShovelItem("enchanted_dragon_scale_shovel", DragonTypes.ENCHANTED, DMTiers.ENCHANTED_DRAGON_SCALE);
+    public static final DragonScalePickaxeItem ENCHANTED_DRAGON_SCALE_PICKAXE = createDragonScalePickaxeItem("enchanted_dragon_scale_pickaxe", DragonTypes.ENCHANTED, DMTiers.ENCHANTED_DRAGON_SCALE);
+    public static final DragonScaleHoeItem ENCHANTED_DRAGON_SCALE_HOE = createDragonScaleHoeItem("enchanted_dragon_scale_hoe", DragonTypes.ENCHANTED, DMTiers.ENCHANTED_DRAGON_SCALE);
     //Dragon Scale Tools - Sunlight
     public static final DragonScaleShovelItem SUNLIGHT_DRAGON_SCALE_SHOVEL = createDragonScaleShovelItem("sunlight_dragon_scale_shovel", DragonTypes.SUNLIGHT, DMTiers.SUNLIGHT_DRAGON_SCALE);
     public static final DragonScalePickaxeItem SUNLIGHT_DRAGON_SCALE_PICKAXE = createDragonScalePickaxeItem("sunlight_dragon_scale_pickaxe", DragonTypes.SUNLIGHT, DMTiers.SUNLIGHT_DRAGON_SCALE);
@@ -241,14 +241,14 @@ public class DMItems {
             DragonTypes.ENDER,
             DMArmorEffects.ENDER_EFFECT
     );
-    public static final DragonScaleArmorSuit ENCHANT_DRAGON_SCALE_ARMORS = createDragonScaleArmors(
-            "enchant_dragon_scale_helmet",
-            "enchant_dragon_scale_chestplate",
-            "enchant_dragon_scale_leggings",
-            "enchant_dragon_scale_boots",
-            DMMaterials.ENCHANT_DRAGON_SCALE,
-            DragonTypes.ENCHANT,
-            DMArmorEffects.ENCHANT_EFFECT
+    public static final DragonScaleArmorSuit ENCHANTED_DRAGON_SCALE_ARMORS = createDragonScaleArmors(
+            "enchanted_dragon_scale_helmet",
+            "enchanted_dragon_scale_chestplate",
+            "enchanted_dragon_scale_leggings",
+            "enchanted_dragon_scale_boots",
+            DMMaterials.ENCHANTED_DRAGON_SCALE,
+            DragonTypes.ENCHANTED,
+            DMArmorEffects.ENCHANTED_EFFECT
     );
     public static final DragonScaleArmorSuit SUNLIGHT_DRAGON_SCALE_ARMORS = createDragonScaleArmors(
             "sunlight_dragon_scale_helmet",
@@ -318,7 +318,7 @@ public class DMItems {
     public static final DragonAmuletItem NETHER_DRAGON_AMULET = createDragonAmuletItem("nether_dragon_amulet", DragonTypes.NETHER);
     public static final DragonAmuletItem ENDER_DRAGON_AMULET = createDragonAmuletItem("ender_dragon_amulet", DragonTypes.ENDER);
     public static final DragonAmuletItem SUNLIGHT_DRAGON_AMULET = createDragonAmuletItem("sunlight_dragon_amulet", DragonTypes.SUNLIGHT);
-    public static final DragonAmuletItem ENCHANT_DRAGON_AMULET = createDragonAmuletItem("enchant_dragon_amulet", DragonTypes.ENCHANT);
+    public static final DragonAmuletItem ENCHANTED_DRAGON_AMULET = createDragonAmuletItem("enchanted_dragon_amulet", DragonTypes.ENCHANTED);
     public static final DragonAmuletItem STORM_DRAGON_AMULET = createDragonAmuletItem("storm_dragon_amulet", DragonTypes.STORM);
     public static final DragonAmuletItem TERRA_DRAGON_AMULET = createDragonAmuletItem("terra_dragon_amulet", DragonTypes.TERRA);
     public static final DragonAmuletItem ZOMBIE_DRAGON_AMULET = createDragonAmuletItem("zombie_dragon_amulet", DragonTypes.ZOMBIE);
@@ -364,7 +364,7 @@ public class DMItems {
     public static final DragonEssenceItem NETHER_DRAGON_ESSENCE = createDragonEssenceItem("nether_dragon_essence", DragonTypes.NETHER);
     public static final DragonEssenceItem ENDER_DRAGON_ESSENCE = createDragonEssenceItem("ender_dragon_essence", DragonTypes.ENDER);
     public static final DragonEssenceItem SUNLIGHT_DRAGON_ESSENCE = createDragonEssenceItem("sunlight_dragon_essence", DragonTypes.SUNLIGHT);
-    public static final DragonEssenceItem ENCHANT_DRAGON_ESSENCE = createDragonEssenceItem("enchant_dragon_essence", DragonTypes.ENCHANT);
+    public static final DragonEssenceItem ENCHANTED_DRAGON_ESSENCE = createDragonEssenceItem("enchanted_dragon_essence", DragonTypes.ENCHANTED);
     public static final DragonEssenceItem STORM_DRAGON_ESSENCE = createDragonEssenceItem("storm_dragon_essence", DragonTypes.STORM);
     public static final DragonEssenceItem TERRA_DRAGON_ESSENCE = createDragonEssenceItem("terra_dragon_essence", DragonTypes.TERRA);
     public static final DragonEssenceItem ZOMBIE_DRAGON_ESSENCE = createDragonEssenceItem("zombie_dragon_essence", DragonTypes.ZOMBIE);
@@ -375,7 +375,7 @@ public class DMItems {
     //Dragon Spawn Eggs
     public static final DragonSpawnEggItem AETHER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("aether_dragon_spawn_egg", DragonTypes.AETHER, 0x06E9FA, 0x281EE7);
     public static final DragonSpawnEggItem DARK_DRAGON_SPAWN_EGG = createDragonSpawnEgg("dark_dragon_spawn_egg", DragonTypes.DARK, 0x222121, 0x971B1B);
-    public static final DragonSpawnEggItem ENCHANT_DRAGON_SPAWN_EGG = createDragonSpawnEgg("enchant_dragon_spawn_egg", DragonTypes.ENCHANT, 0xF30FFF, 0xD7D7D7);
+    public static final DragonSpawnEggItem ENCHANTED_DRAGON_SPAWN_EGG = createDragonSpawnEgg("enchanted_dragon_spawn_egg", DragonTypes.ENCHANTED, 0xF30FFF, 0xD7D7D7);
     public static final DragonSpawnEggItem ENDER_DRAGON_SPAWN_EGG = createDragonSpawnEgg("ender_dragon_spawn_egg", DragonTypes.ENDER, 0x1D1D24, 0x900996);
     public static final DragonSpawnEggItem FIRE_DRAGON_SPAWN_EGG = createDragonSpawnEgg("fire_dragon_spawn_egg", DragonTypes.FIRE, 0x9F2909, 0xF7A502);
     public static final DragonSpawnEggItem FOREST_DRAGON_SPAWN_EGG = createDragonSpawnEgg("forest_dragon_spawn_egg", DragonTypes.FOREST, 0x28AA29, 0x024F06);
@@ -549,9 +549,9 @@ public class DMItems {
         stack = new ItemStack(SUNLIGHT_DRAGON_SCALES);
         DMMaterials.SUNLIGHT_DRAGON_SCALE.setRepairItem(stack);
         DMTiers.SUNLIGHT_DRAGON_SCALE.setRepairItem(stack);
-        stack = new ItemStack(ENCHANT_DRAGON_SCALES);
-        DMMaterials.ENCHANT_DRAGON_SCALE.setRepairItem(stack);
-        DMTiers.ENCHANT_DRAGON_SCALE.setRepairItem(stack);
+        stack = new ItemStack(ENCHANTED_DRAGON_SCALES);
+        DMMaterials.ENCHANTED_DRAGON_SCALE.setRepairItem(stack);
+        DMTiers.ENCHANTED_DRAGON_SCALE.setRepairItem(stack);
         stack = new ItemStack(STORM_DRAGON_SCALES);
         DMMaterials.STORM_DRAGON_SCALE.setRepairItem(stack);
         DMTiers.STORM_DRAGON_SCALE.setRepairItem(stack);

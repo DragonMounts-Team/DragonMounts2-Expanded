@@ -50,7 +50,7 @@ public class DMArmorEffects {
         }
     };
 
-    public static final IDescribedArmorEffect ENCHANT_EFFECT = new IDescribedArmorEffect() {
+    public static final IDescribedArmorEffect ENCHANTED_EFFECT = new IDescribedArmorEffect() {
         @Override
         public boolean activate(IArmorEffectManager manager, EntityPlayer player, int level) {
             World world = player.world;
@@ -85,7 +85,7 @@ public class DMArmorEffects {
         public void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {
             tooltips.add("");
             this.appendTriggerInfo(stack, tooltips);
-            tooltips.add(TextFormatting.RESET + ClientUtil.translateToLocal("tooltip.armor_effect.dragonmounts.enchant"));
+            tooltips.add(TextFormatting.RESET + ClientUtil.translateToLocal("tooltip.armor_effect.dragonmounts.enchanted"));
         }
     };
 
@@ -293,7 +293,7 @@ public class DMArmorEffects {
         if (source == null) return;
         //noinspection DataFlowIssue
         IArmorEffectManager manager = source.getCapability(ARMOR_EFFECT_MANAGER, null);
-        if (manager == null || !manager.isActive(ENCHANT_EFFECT)) return;
+        if (manager == null || !manager.isActive(ENCHANTED_EFFECT)) return;
         int base = event.getDroppedExperience();
         event.setDroppedExperience(base + Math.round(base * EXP_BONUS_FACTOR));
     }

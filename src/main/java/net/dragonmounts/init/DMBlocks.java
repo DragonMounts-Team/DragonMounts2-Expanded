@@ -28,7 +28,7 @@ public class DMBlocks {
     public static final DragonScaleBlock FOREST_DRAGON_SCALE_BLOCK;
     public static final DragonScaleBlock NETHER_DRAGON_SCALE_BLOCK;
     public static final DragonScaleBlock ENDER_DRAGON_SCALE_BLOCK;
-    public static final DragonScaleBlock ENCHANT_DRAGON_SCALE_BLOCK;
+    public static final DragonScaleBlock ENCHANTED_DRAGON_SCALE_BLOCK;
     public static final DragonScaleBlock SUNLIGHT_DRAGON_SCALE_BLOCK;
     public static final DragonScaleBlock MOONLIGHT_DRAGON_SCALE_BLOCK;
     public static final DragonScaleBlock STORM_DRAGON_SCALE_BLOCK;
@@ -36,7 +36,7 @@ public class DMBlocks {
     public static final DragonScaleBlock ZOMBIE_DRAGON_SCALE_BLOCK;
     public static final DragonScaleBlock DARK_DRAGON_SCALE_BLOCK;
     public static final HatchableDragonEggBlock AETHER_DRAGON_EGG;
-    public static final HatchableDragonEggBlock ENCHANT_DRAGON_EGG;
+    public static final HatchableDragonEggBlock ENCHANTED_DRAGON_EGG;
     public static final HatchableDragonEggBlock ENDER_DRAGON_EGG;
     public static final HatchableDragonEggBlock FIRE_DRAGON_EGG;
     public static final HatchableDragonEggBlock FOREST_DRAGON_EGG;
@@ -76,13 +76,32 @@ public class DMBlocks {
 
     static {
         BlockProperties props = new BlockProperties()
+                .setSoundType(SoundType.METAL)
+                .setHardness(4)
+                .setResistance(20)
+                .setCreativeTab(DMItemGroups.BLOCKS);
+        AETHER_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("aether_dragon_scale_block", DragonTypes.AETHER, MapColor.LIGHT_BLUE, props);
+        WATER_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("water_dragon_scale_block", DragonTypes.WATER, MapColor.BLUE, props);
+        ICE_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("ice_dragon_scale_block", DragonTypes.ICE, MapColor.ICE, props);
+        FIRE_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("fire_dragon_scale_block", DragonTypes.FIRE, MapColor.RED, props);
+        FOREST_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("forest_dragon_scale_block", DragonTypes.FOREST, MapColor.GRASS, props);
+        NETHER_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("nether_dragon_scale_block", DragonTypes.NETHER, MapColor.NETHERRACK, props.setLightLevel(0.1875F));
+        ENDER_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("ender_dragon_scale_block", DragonTypes.ENDER, MapColor.PURPLE, props.setLightLevel(0.0F));
+        ENCHANTED_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("enchanted_dragon_scale_block", DragonTypes.ENCHANTED, MapColor.MAGENTA, props);
+        SUNLIGHT_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("sunlight_dragon_scale_block", DragonTypes.SUNLIGHT, MapColor.YELLOW, props);
+        MOONLIGHT_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("moonlight_dragon_scale_block", DragonTypes.MOONLIGHT, MapColor.SILVER, props);
+        STORM_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("storm_dragon_scale_block", DragonTypes.STORM, MapColor.CYAN, props);
+        TERRA_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("terra_dragon_scale_block", DragonTypes.TERRA, MapColor.BROWN, props);
+        ZOMBIE_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("zombie_dragon_scale_block", DragonTypes.ZOMBIE, MapColor.GREEN, props);
+        DARK_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("dark_dragon_scale_block", DragonTypes.DARK, MapColor.BLACK, props);
+        props = new BlockProperties()
                 .setSoundType(SoundType.STONE)
                 .setHardness(0)
                 .setResistance(30)
                 .setLightLevel(0.125F)
                 .setCreativeTab(DMItemGroups.BLOCKS);
         AETHER_DRAGON_EGG = registerDragonEgg("aether_dragon_egg", DragonTypes.AETHER, props);
-        ENCHANT_DRAGON_EGG = registerDragonEgg("enchant_dragon_egg", DragonTypes.ENCHANT, props);
+        ENCHANTED_DRAGON_EGG = registerDragonEgg("enchanted_dragon_egg", DragonTypes.ENCHANTED, props);
         ENDER_DRAGON_EGG = registerDragonEgg("ender_dragon_egg", DragonTypes.ENDER, props);
         FIRE_DRAGON_EGG = registerDragonEgg("fire_dragon_egg", DragonTypes.FIRE, props);
         FOREST_DRAGON_EGG = registerDragonEgg("forest_dragon_egg", DragonTypes.FOREST, props);
@@ -97,24 +116,5 @@ public class DMBlocks {
         WITHER_DRAGON_EGG = registerDragonEgg("wither_dragon_egg", DragonTypes.WITHER, props);
         ZOMBIE_DRAGON_EGG = registerDragonEgg("zombie_dragon_egg", DragonTypes.ZOMBIE, props);
         DARK_DRAGON_EGG = registerDragonEgg("dark_dragon_egg", DragonTypes.DARK, props);
-        props = new BlockProperties()
-                .setSoundType(SoundType.METAL)
-                .setHardness(4)
-                .setResistance(20)
-                .setCreativeTab(DMItemGroups.BLOCKS);
-        AETHER_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("aether_dragon_scale_block", DragonTypes.AETHER, MapColor.LIGHT_BLUE, props);
-        WATER_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("water_dragon_scale_block", DragonTypes.WATER, MapColor.BLUE, props);
-        ICE_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("ice_dragon_scale_block", DragonTypes.ICE, MapColor.ICE, props);
-        FIRE_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("fire_dragon_scale_block", DragonTypes.FIRE, MapColor.RED, props);
-        FOREST_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("forest_dragon_scale_block", DragonTypes.FOREST, MapColor.GRASS, props);
-        NETHER_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("nether_dragon_scale_block", DragonTypes.NETHER, MapColor.NETHERRACK, props.setLightLevel(0.1875F));
-        ENDER_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("ender_dragon_scale_block", DragonTypes.ENDER, MapColor.PURPLE, props.setLightLevel(0.0F));
-        ENCHANT_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("enchant_dragon_scale_block", DragonTypes.ENCHANT, MapColor.MAGENTA, props);
-        SUNLIGHT_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("sunlight_dragon_scale_block", DragonTypes.SUNLIGHT, MapColor.YELLOW, props);
-        MOONLIGHT_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("moonlight_dragon_scale_block", DragonTypes.MOONLIGHT, MapColor.SILVER, props);
-        STORM_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("storm_dragon_scale_block", DragonTypes.STORM, MapColor.CYAN, props);
-        TERRA_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("terra_dragon_scale_block", DragonTypes.TERRA, MapColor.BROWN, props);
-        ZOMBIE_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("zombie_dragon_scale_block", DragonTypes.ZOMBIE, MapColor.GREEN, props);
-        DARK_DRAGON_SCALE_BLOCK = registerDragonScaleBlock("dark_dragon_scale_block", DragonTypes.DARK, MapColor.BLACK, props);
     }
 }

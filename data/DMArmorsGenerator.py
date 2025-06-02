@@ -34,7 +34,7 @@ def makeMaterials():
     DragonType.ZOMBIE
   ]
   special = [
-    DragonType.ENCHANT,
+    DragonType.ENCHANTED,
     DragonType.NETHER,
     DragonType.ENDER,
     DragonType.SKELETON,
@@ -50,7 +50,7 @@ def makeMaterials():
   for breed in DragonType:
     if breed in special or breed in low: continue
     makeMaterial(breed, 50, 11, 7.0)
-  makeMaterial(DragonType.ENCHANT, 50, 30, 7.0)
+  makeMaterial(DragonType.ENCHANTED, 50, 30, 7.0)
   print('defence = new int[]{4, 7, 9, 4};')
   makeMaterial(DragonType.NETHER, 55, 11, 8.0)
   makeMaterial(DragonType.ENDER, 70, 11, 9.0)

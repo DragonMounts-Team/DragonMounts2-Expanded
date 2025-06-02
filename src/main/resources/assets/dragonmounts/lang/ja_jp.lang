@@ -23,7 +23,7 @@ dragon_type.dragonmounts.skeleton=スケルトン
 dragon_type.dragonmounts.wither=ウィザー
 dragon_type.dragonmounts.nether=ネザー
 dragon_type.dragonmounts.ender=エンダー
-dragon_type.dragonmounts.enchant=エンチャント
+dragon_type.dragonmounts.enchanted=エンチャント
 dragon_type.dragonmounts.sunlight=サンライト
 dragon_type.dragonmounts.moonlight=ムーンライト
 dragon_type.dragonmounts.storm=ストーム
@@ -121,7 +121,7 @@ key.dragonmounts.toggleYawAlignment=水平視点による旋回を切替
 key.dragonmounts.togglePitchAlignment=垂直視点による上昇、下降を切替
 
 tooltip.armor_effect.dragonmounts.aether=着用者が全力疾走しているとき、5秒間移動速度上昇 IIを適用します
-tooltip.armor_effect.dragonmounts.enchant=着用者が倒したターゲットは120%の追加EXPをドロップする
+tooltip.armor_effect.dragonmounts.enchanted=着用者が倒したターゲットは120%の追加EXPをドロップする
 tooltip.armor_effect.dragonmounts.ender=着用者の体力が5未満のとき、30秒間耐性 IIIを適用し、15秒間攻撃力上昇 IIを適用します
 tooltip.armor_effect.dragonmounts.fire=着用者が炎上すると、30秒間火炎耐性 Iが適用されます
 tooltip.armor_effect.dragonmounts.forest=着用者がダメージを受けると、10秒間再生能力 IIを適用します
@@ -146,7 +146,6 @@ tooltip.dragonmounts.health=健康: %s
 tooltip.dragonmounts.owner=所有者: %s
 tooltip.dragonmounts.hard_shears=飼いならされたドラゴンを殺さずに鱗を手に入れるために使用します
 tooltip.dragonmounts.amulet.empty=右クリックしてドラゴンを保管して運べます
-tooltip.dragonmounts.amulet.usage=地面を右クリックすると召喚できます
 tooltip.dragonmounts.carriage=ドラゴンがボートのように複数の乗客を運ぶために使用される
 
 item.modifiers.equipped=装備時：

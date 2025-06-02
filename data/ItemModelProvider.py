@@ -43,28 +43,35 @@ def dragonScaleArmorItem(output: Output, type: DragonType, name: str):
     ResourceLocation(type.value.namespace, 'items/armor/' + type.value.path + '/' + identifier.path)
   )
 
+def pullingModel(output: Output, idel: ResourceLocation, textures: ResourceLocation, paths: ResourceLocation, suffix: str):
+    model(idel).texture('layer0', textures.withSuffix(suffix)).save(output, paths.path + suffix)
+    return idel.withSuffix(suffix)
+
 def dragonScaleBowItem(output: Output, type: DragonType):
-  textureBase = type.value.withPrefix('items/bow/dragon_bow_')
   pathBase = type.value.withSuffix('_dragon_scale_bow')
+  textureBase = pathBase.withPrefix('items/bow/')
   actualLoc = pathBase.withPrefix('item/')
-  model(actualLoc).texture('layer0', textureBase.withSuffix('_0')).save(output, pathBase.path + '_0')
-  model(actualLoc).texture('layer0', textureBase.withSuffix('_1')).save(output, pathBase.path + '_1')
-  model(actualLoc).texture('layer0', textureBase.withSuffix('_2')).save(output, pathBase.path + '_2')
   model(bowModel).\
     texture('layer0', textureBase)\
     .override()\
       .predicate(pullingPredicate, 1.0)\
-      .model(actualLoc.withSuffix('_0'))\
+      .model(
+        pullingModel(output, actualLoc, textureBase, pathBase, "_pulling_0")
+      )\
     .end()\
     .override()\
       .predicate(pullingPredicate, 1.0)\
       .predicate(pullPredicate, 0.65)\
-      .model(actualLoc.withSuffix('_1'))\
+      .model(
+        pullingModel(output, actualLoc, textureBase, pathBase, "_pulling_1")
+      )\
     .end()\
     .override()\
       .predicate(pullingPredicate, 1.0)\
       .predicate(pullPredicate, 0.9)\
-      .model(actualLoc.withSuffix('_2'))\
+      .model(
+        pullingModel(output, actualLoc, textureBase, pathBase, "_pulling_2")
+      )\
     .end()\
     .save(output, pathBase.path)
 
@@ -124,10 +131,10 @@ def generateItemModels(output: Output):
     texture = makeId('entities/dragon_scale_shield/' + name)
     blocking = root + '_blocking'
     model(blockingShieldModel)\
-      .texture('base', texture)\
+      .texture('layer0', texture)\
       .save(output, blocking)
     model(shieldModel)\
-      .texture('base', texture)\
+      .texture('layer0', texture)\
       .override()\
         .predicate(blockingPredicate, 1.0)\
         .model(makeId('item/' + blocking))\

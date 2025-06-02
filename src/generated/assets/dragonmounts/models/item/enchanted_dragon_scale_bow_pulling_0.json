@@ -1,0 +1,6 @@
+{
+  "parent": "dragonmounts:item/enchanted_dragon_scale_bow",
+  "textures": {
+    "layer0": "dragonmounts:items/bow/enchanted_dragon_scale_bow_pulling_0"
+  }
+}

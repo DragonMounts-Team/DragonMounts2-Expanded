@@ -22,14 +22,14 @@ public class DragonTypes {
             .addHabitat(Blocks.LAPIS_BLOCK)
             .addHabitat(Blocks.LAPIS_ORE)
             .build(AetherType::new, makeId("aether"));
-    public static final EnchantType ENCHANT = new DragonTypeBuilder(0x8359AE, TextFormatting.LIGHT_PURPLE)
+    public static final EnchantedType ENCHANTED = new DragonTypeBuilder(0x8359AE, TextFormatting.LIGHT_PURPLE)
             .addImmunity(DamageSource.MAGIC)
             .addImmunity(DamageSource.HOT_FLOOR)
             .addImmunity(DamageSource.LIGHTNING_BOLT)
             .addImmunity(DamageSource.WITHER)
             .addHabitat(Blocks.BOOKSHELF)
             .addHabitat(Blocks.ENCHANTING_TABLE)
-            .build(EnchantType::new, makeId("enchant"));
+            .build(EnchantedType::new, makeId("enchanted"));
     public static final EnderType ENDER = new DragonTypeBuilder(0xAB39BE, TextFormatting.DARK_PURPLE)
             .notConvertible()
             .putAttributeModifier(SharedMonsterAttributes.MAX_HEALTH, "DragonTypeBonus", 10.0D, 0)

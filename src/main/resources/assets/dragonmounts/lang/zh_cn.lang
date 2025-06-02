@@ -17,7 +17,7 @@ dragon_type.dragonmounts.skeleton=骷髅
 dragon_type.dragonmounts.wither=凋灵
 dragon_type.dragonmounts.nether=下界
 dragon_type.dragonmounts.ender=末影
-dragon_type.dragonmounts.enchant=魔法
+dragon_type.dragonmounts.enchanted=魔法
 dragon_type.dragonmounts.sunlight=日耀
 dragon_type.dragonmounts.moonlight=月魄
 dragon_type.dragonmounts.storm=风暴
@@ -105,7 +105,7 @@ key.dragonmounts.toggleYawAlignment=切换偏航角趋同状态
 key.dragonmounts.togglePitchAlignment=切换俯仰角趋同状态
 
 tooltip.armor_effect.dragonmounts.aether=当装备者疾跑时，给予其持续5秒的迅捷 II效果
-tooltip.armor_effect.dragonmounts.enchant=装备者击杀目标后掉落的经验增加120%%
+tooltip.armor_effect.dragonmounts.enchanted=装备者击杀目标后掉落的经验增加120%%
 tooltip.armor_effect.dragonmounts.ender=当装备者的生命值小于5时，给予其持续30秒的抗性提升 III效果和持续15秒的力量 II效果
 tooltip.armor_effect.dragonmounts.fire=当装备者着火时，给予其持续30秒的抗火 I效果
 tooltip.armor_effect.dragonmounts.forest=当装备者受伤时，给予其持续10秒的生命恢复 II效果

@@ -25,7 +25,7 @@ public class DragonEntityFixer implements IFixableData {
                     variant = isMale ? DragonVariants.AETHER_MALE : DragonVariants.AETHER_FEMALE;
                     break;
                 case "enchant":
-                    variant = isMale ? DragonVariants.ENCHANT_MALE : DragonVariants.ENCHANT_FEMALE;
+                    variant = isMale ? DragonVariants.ENCHANTED_MALE : DragonVariants.ENCHANTED_FEMALE;
                     break;
                 case "fire":
                     variant = isMale ? DragonVariants.FIRE_MALE : DragonVariants.FIRE_FEMALE;

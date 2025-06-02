@@ -44,7 +44,7 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
     public static final ResourceLocation NETHER = new ResourceLocation(DragonMountsTags.MOD_ID, "nether");
     public static final ResourceLocation ZOMBIE = new ResourceLocation(DragonMountsTags.MOD_ID, "zombie");
     public static final ResourceLocation SKELETON = new ResourceLocation(DragonMountsTags.MOD_ID, "skeleton");
-    public static final ResourceLocation ENCHANT = new ResourceLocation(DragonMountsTags.MOD_ID, "enchant");
+    public static final ResourceLocation ENCHANTED = new ResourceLocation(DragonMountsTags.MOD_ID, "enchanted");
 
     @Override
     public void generate(Random random, int x, int z, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
@@ -237,7 +237,7 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
             int z = (chunkZ * 16) + random.nextInt(16);
             MutableBlockPosEx height = getSurface(world, x, z);
             if (canSpawnHere(world, height, 5, false)) {
-                loadStructure(world, height.descent(), ENCHANT);
+                loadStructure(world, height.descent(), ENCHANTED);
             }
         }
     }

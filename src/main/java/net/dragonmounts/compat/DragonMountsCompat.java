@@ -12,7 +12,7 @@ import net.dragonmounts.init.DMBlocks;
 import net.dragonmounts.init.DMItems;
 import net.dragonmounts.init.DragonVariants;
 import net.dragonmounts.item.DragonEggCompatItem;
-import net.dragonmounts.registry.DragonVariant;
+import net.dragonmounts.registry.CooldownCategory;
 import net.dragonmounts.util.DragonScaleArmorSuit;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -104,23 +104,8 @@ public abstract class DragonMountsCompat {
     }
 
     @SubscribeEvent
-    public static void remapVariant(RegistryEvent.MissingMappings<DragonVariant> event) {
-        for (RegistryEvent.MissingMappings.Mapping<DragonVariant> mapping : event.getMappings()) {
-            switch (mapping.key.getPath()) {
-                case "skeleton_female":
-                case "skeleton_male":
-                    mapping.remap(DragonVariants.SKELETON);
-                    break;
-                case "wither_female":
-                case "wither_male":
-                    mapping.remap(DragonVariants.WITHER);
-                    break;
-                case "zombie_female":
-                case "zombie_male":
-                    mapping.remap(DragonVariants.ZOMBIE);
-                    break;
-            }
-        }
+    public static void remapCategory(RegistryEvent.MissingMappings<CooldownCategory> event) {
+        event.getMappings().forEach(RegistryEvent.MissingMappings.Mapping::ignore);
     }
 
     @SubscribeEvent
@@ -153,7 +138,7 @@ public abstract class DragonMountsCompat {
         mappings.put("dragonarmor_diamond", DMItems.DIAMOND_DRAGON_ARMOR);
         //Spawn Eggs
         mappings.put("summon_aether", DMItems.AETHER_DRAGON_SPAWN_EGG);
-        mappings.put("summon_enchant", DMItems.ENCHANT_DRAGON_SPAWN_EGG);
+        mappings.put("summon_enchant", DMItems.ENCHANTED_DRAGON_SPAWN_EGG);
         mappings.put("summon_end", DMItems.ENDER_DRAGON_SPAWN_EGG);
         mappings.put("summon_fire", DMItems.FIRE_DRAGON_SPAWN_EGG);
         mappings.put("summon_forest", DMItems.FOREST_DRAGON_SPAWN_EGG);
@@ -289,15 +274,15 @@ public abstract class DragonMountsCompat {
         mappings.put("ender_dragonscale_tunic", suit.chestplate);
         mappings.put("ender_dragonscale_leggings", suit.leggings);
         mappings.put("ender_dragonscale_boots", suit.boots);
-        mappings.put("enchant_dragonscales", DMItems.ENCHANT_DRAGON_SCALES);
-        mappings.put("dragon_bow_enchant", DMItems.ENCHANT_DRAGON_SCALE_BOW);
-        mappings.put("dragon_shield_enchant", DMItems.ENCHANT_DRAGON_SCALE_SHIELD);
-        mappings.put("enchant_dragon_sword", DMItems.ENCHANT_DRAGON_SCALE_SWORD);
-        mappings.put("enchant_dragon_axe", DMItems.ENCHANT_DRAGON_SCALE_AXE);
-        mappings.put("enchant_dragon_pickaxe", DMItems.ENCHANT_DRAGON_SCALE_PICKAXE);
-        mappings.put("enchant_dragon_hoe", DMItems.ENCHANT_DRAGON_SCALE_HOE);
-        mappings.put("enchant_dragon_shovel", DMItems.ENCHANT_DRAGON_SCALE_SHOVEL);
-        suit = DMItems.ENCHANT_DRAGON_SCALE_ARMORS;
+        mappings.put("enchant_dragonscales", DMItems.ENCHANTED_DRAGON_SCALES);
+        mappings.put("dragon_bow_enchant", DMItems.ENCHANTED_DRAGON_SCALE_BOW);
+        mappings.put("dragon_shield_enchant", DMItems.ENCHANTED_DRAGON_SCALE_SHIELD);
+        mappings.put("enchant_dragon_sword", DMItems.ENCHANTED_DRAGON_SCALE_SWORD);
+        mappings.put("enchant_dragon_axe", DMItems.ENCHANTED_DRAGON_SCALE_AXE);
+        mappings.put("enchant_dragon_pickaxe", DMItems.ENCHANTED_DRAGON_SCALE_PICKAXE);
+        mappings.put("enchant_dragon_hoe", DMItems.ENCHANTED_DRAGON_SCALE_HOE);
+        mappings.put("enchant_dragon_shovel", DMItems.ENCHANTED_DRAGON_SCALE_SHOVEL);
+        suit = DMItems.ENCHANTED_DRAGON_SCALE_ARMORS;
         mappings.put("enchant_dragonscale_cap", suit.helmet);
         mappings.put("enchant_dragonscale_tunic", suit.chestplate);
         mappings.put("enchant_dragonscale_leggings", suit.leggings);

@@ -23,7 +23,7 @@ dragon_type.dragonmounts.skeleton=Skeleton
 dragon_type.dragonmounts.wither=Wither
 dragon_type.dragonmounts.nether=Nether
 dragon_type.dragonmounts.ender=Ender
-dragon_type.dragonmounts.enchant=Enchant
+dragon_type.dragonmounts.enchanted=Enchanted
 dragon_type.dragonmounts.sunlight=Sunlight
 dragon_type.dragonmounts.moonlight=Moonlight
 dragon_type.dragonmounts.storm=Storm
@@ -124,7 +124,7 @@ key.dragonmounts.toggleYawAlignment=Toggle Yaw Alignment
 key.dragonmounts.togglePitchAlignment=Toggle Pitch Alignment
 
 tooltip.armor_effect.dragonmounts.aether=When the wearer is sprinting, apply Speed II effect for 5s
-tooltip.armor_effect.dragonmounts.enchant=Targets killed by the wearer drop 120%% extra EXP
+tooltip.armor_effect.dragonmounts.enchanted=Targets killed by the wearer drop 120%% extra EXP
 tooltip.armor_effect.dragonmounts.ender=When the health of wearer is less than 5, apply Resistance III effect for 30s and Strength II effect for 15s
 tooltip.armor_effect.dragonmounts.fire=When the wearer is on fire, apply Fire Resistance I effect for 30s
 tooltip.armor_effect.dragonmounts.forest=When the wearer is hurt, apply Regeneration II effect for 10s

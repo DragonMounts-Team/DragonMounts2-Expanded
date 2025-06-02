@@ -39,11 +39,6 @@ public class BreathAffectedArea {
 
     /**
      * Tell BreathAffectedArea that breathing is ongoing.  Call once per tick before updateTick()
-     *
-     * @param world
-     * @param origin      the origin of the beam
-     * @param destination the destination of the beam, used to calculate direction
-     * @param power
      */
     public void continueBreathing(World world, Vec3d origin, Vec3d direction, BreathPower power) {
         this.entityBreathNodes.add(BreathNodeEntity.createEntityBreathNodeServer(world, origin, direction, power));

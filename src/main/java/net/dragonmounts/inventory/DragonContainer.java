@@ -142,22 +142,22 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 				if (!this.mergeItemStack(stack, size, this.inventorySlots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if ((target = this.getSlot(3)).isItemValid(stack) && !target.getHasStack()) {
+			} else if (canPlaceAt(this, 3, stack)) {
 				// move item to armor
 				if (!this.mergeItemStack(stack, 3, 4, false)) {
 					return ItemStack.EMPTY;
 				}
-			} else if ((target = this.getSlot(2)).isItemValid(stack) && !target.getHasStack()) {
+			} else if (canPlaceAt(this, 2, stack)) {
 				// move item as chest
 				if (!this.mergeItemStack(stack, 2, 3, false)) {
 					return ItemStack.EMPTY;
 				}
-			} else if ((target = this.getSlot(1)).isItemValid(stack) && !target.getHasStack()) {
+			} else if (canPlaceAt(this, 1, stack)) {
 				// move item as saddle
 				if (!this.mergeItemStack(stack, 1, 2, false)) {
 					return ItemStack.EMPTY;
 				}
-			} else if ((target = this.getSlot(0)).isItemValid(stack) && !target.getHasStack()) {
+			} else if (canPlaceAt(this, 0, stack)) {
 				// move item as whistle
 				if (!this.mergeItemStack(stack, 0, 1, false)) {
 					return ItemStack.EMPTY;
@@ -185,5 +185,10 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 		if (holder != null) {
 			holder.closeInventory(player);
 		}
+	}
+
+	public static boolean canPlaceAt(Container container, int index, ItemStack stack) {
+		Slot slot = container.getSlot(index);
+		return slot != null && !slot.getHasStack() && slot.isItemValid(stack);
 	}
 }

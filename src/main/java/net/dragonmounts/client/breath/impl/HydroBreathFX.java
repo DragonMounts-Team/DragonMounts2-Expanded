@@ -40,7 +40,7 @@ public class HydroBreathFX extends ClientBreathNodeEntity {
             this.world.spawnParticle(
                     this.getParticleType(),
                     this.posX + (this.rand.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F,
-                    0.8F,
+                    this.posY + 0.8F,
                     this.posZ + (this.rand.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F,
                     this.motionX,
                     this.motionY,

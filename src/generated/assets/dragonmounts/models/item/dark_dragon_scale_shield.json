@@ -1,7 +1,7 @@
 {
   "parent": "dragonmounts:item/shield/shield",
   "textures": {
-    "base": "dragonmounts:entities/dragon_scale_shield/dark"
+    "layer0": "dragonmounts:entities/dragon_scale_shield/dark"
   },
   "overrides": [
     {
