@@ -1,0 +1,15 @@
+{
+  "type": "dragonmounts:dragon_nests",
+  "biome": {
+    "condition": "any_match",
+    "types": ["OCEAN"]
+  },
+  "configs": [
+    {
+      "placement": "in_clouds",
+      "templates": [
+        "dragonmounts:moonlight"
+      ]
+    }
+  ]
+}

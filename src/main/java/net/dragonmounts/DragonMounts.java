@@ -20,6 +20,7 @@ import net.dragonmounts.init.DMEntities;
 import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.init.DMItems;
 import net.dragonmounts.proxy.ServerProxy;
+import net.dragonmounts.world.DMWorldGenerator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.*;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -28,7 +29,6 @@ import net.minecraftforge.fml.common.Mod.Metadata;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.GameData;
 
 @Mod(
@@ -67,7 +67,7 @@ public class DragonMounts {
     public void Initialization(FMLInitializationEvent event) {
         PROXY.Initialization(event);
         DMItems.bindRepairMaterials();
-        GameRegistry.registerWorldGenerator(new DragonMountsWorldGenerator(), 0);
+        DMWorldGenerator.init();
         NetworkRegistry.INSTANCE.registerGuiHandler(this, GuiHandler.INSTANCE);
         RegistryEventHandler.registerCapabilities();
         RegistryEventHandler.registerRecipes();

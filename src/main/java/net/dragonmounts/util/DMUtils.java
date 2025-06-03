@@ -6,6 +6,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
 import java.util.function.IntFunction;
 import java.util.function.Supplier;
 
@@ -34,6 +36,14 @@ public class DMUtils {
             array[i] = factory.apply(i);
         }
         return array;
+    }
+
+    public static <T> T getRandom(T[] values, Random random) {
+        return values[random.nextInt(values.length)];
+    }
+
+    public static <T> T getRandom(List<T> values, Random random) {
+        return values.get(random.nextInt(values.size()));
     }
 
     public static <T extends Slot> T applyBackground(T slot, String name) {

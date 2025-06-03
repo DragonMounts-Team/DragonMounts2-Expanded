@@ -1,0 +1,21 @@
+{
+  "type": "dragonmounts:dragon_nests",
+  "biome": {
+    "condition": "any_match",
+    "types": ["SNOWY"]
+  },
+  "configs": [
+    {
+      "placement": "on_land_surface",
+      "templates": [
+        "dragonmounts:ice"
+      ]
+    },
+    {
+      "placement": "partly_buried",
+      "templates": [
+        "dragonmounts:ice"
+      ]
+    }
+  ]
+}

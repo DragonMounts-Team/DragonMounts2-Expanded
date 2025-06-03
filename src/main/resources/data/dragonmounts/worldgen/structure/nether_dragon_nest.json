@@ -1,0 +1,15 @@
+{
+  "type": "dragonmounts:dragon_nests",
+  "biome": {
+    "condition": "any_match",
+    "types": ["NETHER"]
+  },
+  "configs": [
+    {
+      "placement": "in_nether",
+      "templates": [
+        "dragonmounts:nether"
+      ]
+    }
+  ]
+}

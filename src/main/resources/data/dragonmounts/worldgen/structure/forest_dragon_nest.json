@@ -1,0 +1,23 @@
+{
+  "type": "dragonmounts:dragon_nests",
+  "biome": {
+    "condition": "any_match",
+    "types": ["JUNGLE", "PLAINS"]
+  },
+  "configs": [
+    {
+      "placement": "on_land_surface",
+      "templates": [
+        "dragonmounts:forest1",
+        "dragonmounts:forest2"
+      ]
+    },
+    {
+      "placement": "partly_buried",
+      "templates": [
+        "dragonmounts:forest1",
+        "dragonmounts:forest2"
+      ]
+    }
+  ]
+}

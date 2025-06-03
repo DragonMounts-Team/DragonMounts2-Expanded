@@ -168,6 +168,10 @@ subtitles.item.dragonmounts.variation_orb.activate=Orb of Variation activates
 
 argument.player.toomany=Only one player is allowed, but the provided selector allows more than one
 
+chat.square_brackets=[%s]
+chat.coordinates=%s, %s, %s
+chat.coordinates.tooltip=Click to teleport
+commands.locate.structure.success=The nearest %s is at %s (%s blocks away)
 commands.dragonmounts.usage=/dragonmounts <subcommand>
 commands.dragonmounts.tame.usage=/dragonmounts tame [dragon]
 commands.dragonmounts.tame.success=Dragon %s is tamed by %s now

@@ -1,0 +1,31 @@
+{
+  "type": "dragonmounts:dragon_nests",
+  "biome": {
+    "condition": "any_of",
+    "terms": [
+      {
+        "condition": "any_match",
+        "types": ["OCEAN"]
+      },
+      {
+        "condition": "all_match",
+        "types": ["VOID", "MAGICAL"]
+      }
+    ]
+  },
+  "configs": [
+    {
+      "placement": "in_clouds",
+      "templates": [
+        "dragonmounts:aether"
+      ]
+    },
+    {
+      "island": "minecraft:dirt",
+      "placement": "in_clouds",
+      "templates": [
+        "dragonmounts:aether2"
+      ]
+    }
+  ]
+}

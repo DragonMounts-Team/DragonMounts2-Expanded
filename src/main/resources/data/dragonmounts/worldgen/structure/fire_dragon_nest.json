@@ -1,0 +1,29 @@
+{
+  "type": "dragonmounts:dragon_nests",
+  "biome": {
+    "condition": "any_match",
+    "types": ["MOUNTAIN", "STONE_BEACH"]
+  },
+  "configs": [
+    {
+      "placement": "in_mountain",
+      "templates": [
+        "dragonmounts:fire",
+        "dragonmounts:fire2"
+      ]
+    },
+    {
+      "placement": "partly_buried",
+      "templates": [
+        "dragonmounts:fire",
+        "dragonmounts:fire2"
+      ]
+    },
+    {
+      "placement": "underground",
+      "templates": [
+        "dragonmounts:fire"
+      ]
+    }
+  ]
+}

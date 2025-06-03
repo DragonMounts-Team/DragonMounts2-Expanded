@@ -1,0 +1,25 @@
+{
+  "type": "dragonmounts:dragon_nests",
+  "biome": {
+    "condition": "any_match",
+    "types": ["SWAMP"]
+  },
+  "configs": [
+    {
+      "placement": "on_land_surface",
+      "templates": [
+        "dragonmounts:water1",
+        "dragonmounts:water2",
+        "dragonmounts:water3"
+      ]
+    },
+    {
+      "placement": "on_ocean_floor",
+      "templates": [
+        "dragonmounts:water1",
+        "dragonmounts:water2",
+        "dragonmounts:water3"
+      ]
+    }
+  ]
+}

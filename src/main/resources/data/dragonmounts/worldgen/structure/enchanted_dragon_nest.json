@@ -1,0 +1,16 @@
+{
+  "type": "dragonmounts:dragon_nests",
+  "biome": {
+    "condition": "any_match",
+    "types": ["END"]
+  },
+  "configs": [
+    {
+      "island": "minecraft:end_stone",
+      "placement": "on_land_surface",
+      "templates": [
+        "dragonmounts:enchanted"
+      ]
+    }
+  ]
+}

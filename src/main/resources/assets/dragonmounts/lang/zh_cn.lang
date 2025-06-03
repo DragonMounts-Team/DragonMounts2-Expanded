@@ -149,6 +149,10 @@ subtitles.item.dragonmounts.variation_orb.activate=易形琼珠：激活
 
 argument.player.toomany=只允许一名玩家，但提供的选择器允许多名玩家
 
+chat.square_brackets=[%s]
+chat.coordinates=%s, %s, %s
+chat.coordinates.tooltip=点此传送
+commands.locate.structure.success=最近的%s位于%s（%s个方块外）
 commands.dragonmounts.usage=/dragonmounts <subcommand>
 commands.dragonmounts.tame.usage=/dragonmounts tame [dragon]
 commands.dragonmounts.tame.success=已使%s被%s驯服

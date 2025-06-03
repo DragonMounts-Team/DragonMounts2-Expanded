@@ -136,13 +136,16 @@ tooltip.dragonmounts.health=Vie: %s
 tooltip.dragonmounts.owner=Propriétaire: %s
 tooltip.dragonmounts.hard_shears=Utilisées pour récolter les écailles d'un Dragon apprivoisé
 tooltip.dragonmounts.amulet.empty=Clic Droit avec une amulettes sur un Dragon pour le stocker à l'intérieur
-tooltip.dragonmounts.amulet.usage=Clic Droit sur le sol pour le faire apparaitre
 tooltip.dragonmounts.carriage=Utilisé pour faire en sorte que les Dragons puissent transporter plusieurs passagers
 
 item.modifiers.equipped=Quand equippé:
 
 argument.player.toomany=Seulement un joueur est autorisé, mais le sélecteur fourni en autorise plus d'un
 
+chat.square_brackets=[%s]
+chat.coordinates=%s, %s, %s
+chat.coordinates.tooltip=Cliquez pour copier dans le presse-papiers
+commands.locate.structure.success=La structure "%s" la plus proche se situe en %s (%s blocs de distance)
 commands.dragonmounts.usage=/dragonmounts <subcommand>
 commands.dragonmounts.tame.usage=/dragonmounts tame [dragon]
 commands.dragonmounts.tame.success=Dragon %s is tamed by %s now

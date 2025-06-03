@@ -18,6 +18,10 @@ public class LevelUtil {
         return new MutableBlockPosEx(x, level.getHeight(x, z), z);
     }
 
+    public static BlockPos getChunkCenter(int chunkX, int chunkZ, int height) {
+        return new BlockPos((chunkX << 4) + 8, height, (chunkZ << 4) + 8);
+    }
+
     public static void playExtinguishEffect(World level, BlockPos pos) {
         level.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (level.rand.nextFloat() - level.rand.nextFloat()) * 0.8F);
         if (level instanceof WorldServer) {
