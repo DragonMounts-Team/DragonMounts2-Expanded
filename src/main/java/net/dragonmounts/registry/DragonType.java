@@ -89,13 +89,13 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
             case 1:
                 return new Vec3d(
                         0.375 * scale,
-                        sitting ? 2.125 * scale : 2.75 * scale,
+                        sitting ? 2.125 * scale : 2.25 * scale,
                         0.0625 * scale
                 );
             case 2:
                 return new Vec3d(
                         -0.375 * scale,
-                        sitting ? 2.125 * scale : 2.75 * scale,
+                        sitting ? 2.125 * scale : 2.25 * scale,
                         0.0625 * scale
                 );
             case 3:
@@ -113,7 +113,7 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
             default:
                 return new Vec3d(
                         0,
-                        sitting ? 2.125 * scale : 3.0 * scale - 0.5,
+                        sitting ? 2.125 * scale : 2.25 * scale,
                         1.375 * scale
                 );
         }

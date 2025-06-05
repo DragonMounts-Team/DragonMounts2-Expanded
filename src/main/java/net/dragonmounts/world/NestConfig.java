@@ -5,8 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.JsonContext;
@@ -26,12 +24,12 @@ public class NestConfig {
         }
         if (json.has("island")) {
             String name = context.appendModId(JsonUtils.getString(json, "island"));
-            Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(name));
-            if (block == null) throw new JsonSyntaxException("Unknown block: " + name);
+            ResourceLocation island = new ResourceLocation(name);
+            if (!ForgeRegistries.BLOCKS.containsKey(island)) throw new JsonSyntaxException("Unknown block: " + name);
             return new NestConfig(
                     JsonUtils.getFloat(json, "weight", 1.0F),
                     placement,
-                    block.getDefaultState(),
+                    island,
                     templates.build()
             );
         }
@@ -40,10 +38,10 @@ public class NestConfig {
 
     public final float weight;
     public final NestPlacement placement;
-    public final IBlockState island;
+    public final ResourceLocation island;
     public final List<ResourceLocation> templates;
 
-    public NestConfig(float weight, NestPlacement placement, IBlockState island, List<ResourceLocation> templates) {
+    public NestConfig(float weight, NestPlacement placement, ResourceLocation island, List<ResourceLocation> templates) {
         this.weight = weight;
         this.placement = placement;
         this.island = island;
@@ -54,7 +52,7 @@ public class NestConfig {
         this(1.0F, placement, null, templates);
     }
 
-    public NestConfig(NestPlacement placement, IBlockState island, List<ResourceLocation> templates) {
+    public NestConfig(NestPlacement placement, ResourceLocation island, List<ResourceLocation> templates) {
         this(1.0F, placement, island, templates);
     }
 }

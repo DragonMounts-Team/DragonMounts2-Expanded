@@ -1,10 +1,12 @@
 package net.dragonmounts.world;
 
+import com.google.common.base.Predicates;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureStart;
 import net.minecraftforge.common.BiomeDictionary;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,9 +34,10 @@ public class DragonNestImpl extends DragonNestStructure {
     }
 
     @Override
-    public @Nullable BlockPos getNearestStructurePos(@Nonnull World level, @Nonnull BlockPos pos, boolean flag) {
+    public @Nullable BlockPos getNearestStructurePos(@Nonnull World level, @Nonnull BlockPos pos, boolean findUnexplored) {
         this.world = level;
-        return this.registry.findNearestNest(level, pos, 100, flag, this::equals);
+        ImmutablePair<BlockPos, DragonNestImpl> result = this.registry.findNearestNest(level, pos, 100, findUnexplored, Predicates.alwaysTrue());
+        return result == null ? null : result.getLeft();
     }
 
     @Override

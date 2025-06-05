@@ -42,10 +42,12 @@ public abstract class DragonNestStructure extends MapGenStructure {
             Random random = level.setRandomSeed(chunkX, chunkZ, salt);
             NestConfig config = drawConfig(configs, random);
             ResourceLocation structure = DMUtils.getRandom(config.templates, random);
+            Rotation rotation = DMUtils.getRandom(Rotation.values(), random);
             TemplateManager manager = level.getSaveHandler().getStructureTemplateManager();
-            BlockPos size = manager.getTemplate(null, structure).getSize();
-            int centerX = (chunkX << 4) + 8, centerZ = (chunkZ << 4) + 8;
+            BlockPos size = manager.getTemplate(null, structure).transformedSize(rotation);
+            int centerX = (chunkX << 4) + 7, centerZ = (chunkZ << 4) + 7;
             int posX = centerX - size.getX() / 2, posZ = centerZ - size.getZ() / 2;
+            //this.island = config.island; ban island temporarily
             this.components.add(new DragonNestPiece(
                     manager,
                     structure,
@@ -59,7 +61,7 @@ public abstract class DragonNestStructure extends MapGenStructure {
                             size,
                             random
                     ), posZ),
-                    DMUtils.getRandom(Rotation.values(), random),
+                    rotation,
                     DMUtils.getRandom(Mirror.values(), random)
             ));
             this.updateBoundingBox();
@@ -80,20 +82,22 @@ public abstract class DragonNestStructure extends MapGenStructure {
         }
 
         @Override
-        public void generateStructure(@Nonnull World level, @Nonnull Random random, @Nonnull StructureBoundingBox box) {
-            super.generateStructure(level, random, box);
+        public void generateStructure(@Nonnull World level, @Nonnull Random random, @Nonnull StructureBoundingBox range) {
+            super.generateStructure(level, random, range);
             if (this.island == null) return;
+            StructureBoundingBox box = this.getBoundingBox();
+            if (!range.intersectsWith(box)) return;
             Block block = ForgeRegistries.BLOCKS.getValue(this.island);
             if (block == null) return;
             IBlockState state = block.getDefaultState();
-            int radius = Math.max(box.getXSize(), box.getZSize()) / 2 - 1,
+            int radius = Math.min(7, Math.max(box.getXSize(), box.getZSize()) / 2 - 1),
                     centerX = box.minX + (box.maxX - box.minX + 1) / 2,
                     centerY = box.minY,
                     centerZ = box.minZ + (box.maxZ - box.minZ + 1) / 2,
                     shrink = 2;
             MutableBlockPosEx place = new MutableBlockPosEx(0, 0, 0);
             do {
-                placeCircle(level, place.with(centerX, --centerY, centerZ), radius, state);
+                placeCircle(level, place.with(centerX, --centerY, centerZ), radius, state, range);
             } while ((radius -= random.nextInt(++shrink) + 1) > 3);
         }
 
@@ -129,10 +133,9 @@ public abstract class DragonNestStructure extends MapGenStructure {
                 BlockPos size,
                 Random random
         ) {
-            NestPlacement placement = config.placement;
             int bottom = MIN_Y_INDEX;
             int height;
-            switch (placement) {
+            switch (config.placement) {
                 case IN_MOUNTAIN:
                     height = getRandomWithinInterval(random, 70, level.getHeight(centerX, centerZ) - size.getY());
                     break;
@@ -166,7 +169,19 @@ public abstract class DragonNestStructure extends MapGenStructure {
                 default:
                     height = level.getHeight(centerX, centerZ);
             }
-            int maxX = minX + size.getX(), maxZ = minZ + size.getZ();
+            int sizeX = size.getX(), sizeZ = size.getZ(), maxX, maxZ;
+            if (sizeX < 16) {
+                maxX = minX + sizeX;
+            } else {
+                maxX = centerX + 8;
+                minX = centerX - 7;
+            }
+            if (sizeZ < 16) {
+                maxZ = minZ + sizeZ;
+            } else {
+                maxZ = centerZ + 8;
+                minZ = centerZ - 7;
+            }
             MutableBlockPosEx pos = new MutableBlockPosEx(0, 0, 0);
             do {
                 int supports = 0;
@@ -178,7 +193,7 @@ public abstract class DragonNestStructure extends MapGenStructure {
             return bottom;
         }
 
-        public static void placeCircle(World level, MutableBlockPosEx center, double radius, IBlockState state) {
+        public static void placeCircle(World level, MutableBlockPosEx center, double radius, IBlockState state, StructureBoundingBox range) {
             double dist = radius * (radius + 0.8);
             for (int offsetX = 0,
                  x = center.getX(),
@@ -190,17 +205,17 @@ public abstract class DragonNestStructure extends MapGenStructure {
             ) {
                 for (int offsetZ = 0; offsetZ < end; ++offsetZ) {
                     if (offsetX * offsetX + offsetZ * offsetZ > dist) continue;
-                    checkAndPlace(level, center.with(x + offsetX, y, z + offsetZ), state);
-                    checkAndPlace(level, center.withZ(z - offsetZ), state);
-                    checkAndPlace(level, center.with(x - offsetX, y, z + offsetZ), state);
-                    checkAndPlace(level, center.withZ(z - offsetZ), state);
+                    checkAndPlace(level, center.with(x + offsetX, y, z + offsetZ), state, range);
+                    checkAndPlace(level, center.withZ(z - offsetZ), state, range);
+                    checkAndPlace(level, center.with(x - offsetX, y, z + offsetZ), state, range);
+                    checkAndPlace(level, center.withZ(z - offsetZ), state, range);
                 }
             }
         }
 
-        public static void checkAndPlace(World level, BlockPos pos, IBlockState state) {
-            if (level.getBlockState(pos).getBlock().isReplaceable(level, pos)) {
-                level.setBlockState(pos, state, 3);
+        public static void checkAndPlace(World level, BlockPos pos, IBlockState state, StructureBoundingBox range) {
+            if (range.isVecInside(pos) && level.getBlockState(pos).getBlock().isReplaceable(level, pos)) {
+                level.setBlockState(pos, state, 2);
             }
         }
 

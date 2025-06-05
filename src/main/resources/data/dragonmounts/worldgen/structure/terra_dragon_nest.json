@@ -1,5 +1,5 @@
 {
-  "type": "dragonmounts:dragon_nests",
+  "type": "dragonmounts:dragon_nest",
   "biome": {
     "condition": "any_match",
     "types": ["MESA"]

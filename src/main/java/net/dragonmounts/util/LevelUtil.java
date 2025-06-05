@@ -19,7 +19,7 @@ public class LevelUtil {
     }
 
     public static BlockPos getChunkCenter(int chunkX, int chunkZ, int height) {
-        return new BlockPos((chunkX << 4) + 8, height, (chunkZ << 4) + 8);
+        return new BlockPos((chunkX << 4) + 7, height, (chunkZ << 4) + 7);
     }
 
     public static void playExtinguishEffect(World level, BlockPos pos) {

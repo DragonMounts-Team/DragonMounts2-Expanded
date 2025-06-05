@@ -9,6 +9,7 @@ import com.google.gson.JsonSyntaxException;
 import it.unimi.dsi.fastutil.objects.Object2ObjectRBTreeMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.dragonmounts.util.DMUtils;
+import net.dragonmounts.util.LogUtil;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -18,9 +19,9 @@ import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.structure.StructureStart;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.crafting.JsonContext;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.ModContainer;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -70,7 +71,7 @@ public class DragonNestRegistry extends DragonNestStructure {
                     try (BufferedReader reader = Files.newBufferedReader(file)) {
                         JsonObject json = JsonUtils.fromJson(GSON, reader, JsonObject.class);
                         if (json == null || json.isJsonNull()) throw new JsonSyntaxException("Json cannot be null");
-                        if (!"dragonmounts:dragon_nests".equals(ctx.appendModId(JsonUtils.getString(json, "type"))))
+                        if (!"dragonmounts:dragon_nest".equals(ctx.appendModId(JsonUtils.getString(json, "type"))))
                             return false;
                         ImmutableList.Builder<NestConfig> configs = ImmutableList.builder();
                         for (JsonElement element : JsonUtils.getJsonArray(json, "configs")) {
@@ -82,10 +83,10 @@ public class DragonNestRegistry extends DragonNestStructure {
                         if (list.isEmpty()) throw new JsonSyntaxException("No configs defined");
                         this.registry.put(key, new DragonNestImpl(this, key, BiomeCondition.parse(JsonUtils.getJsonObject(json, "biome")), list));
                     } catch (JsonParseException e) {
-                        FMLLog.log.error("Parsing error loading structure {}", key, e);
+                        LogUtil.LOGGER.error("Parsing error loading structure {}", key, e);
                         return false;
                     } catch (IOException e) {
-                        FMLLog.log.error("Couldn't read structure {} from {}", key, file, e);
+                        LogUtil.LOGGER.error("Couldn't read structure {} from {}", key, file, e);
                         return false;
                     }
                     return true;
@@ -130,10 +131,10 @@ public class DragonNestRegistry extends DragonNestStructure {
                 ).isEmpty();
     }
 
-
     @Override
     public @Nullable BlockPos getNearestStructurePos(@Nonnull World level, @Nonnull BlockPos pos, boolean findUnexplored) {
-        return this.findNearestNest(level, pos, 100, findUnexplored, Predicates.alwaysTrue());
+        ImmutablePair<BlockPos, DragonNestImpl> result = this.findNearestNest(level, pos, 100, findUnexplored, Predicates.alwaysTrue());
+        return result == null ? null : result.getLeft();
     }
 
     @Override
@@ -148,7 +149,7 @@ public class DragonNestRegistry extends DragonNestStructure {
         return this.getStructureStartSafely(this.world, chunkX, chunkZ);
     }
 
-    public final BlockPos findNearestNest(World level, BlockPos center, int maxAttempts, boolean findUnexplored, Predicate<DragonNestImpl> target) {
+    public final ImmutablePair<BlockPos, DragonNestImpl> findNearestNest(World level, BlockPos center, int maxAttempts, boolean findUnexplored, Predicate<DragonNestImpl> target) {
         this.world = level;
         int spacing = this.spacing, distance = spacing - this.separation, salt = this.salt;
         int centerChunkX = center.getX() >> 4, centerChunkZ = center.getZ() >> 4;
@@ -173,10 +174,13 @@ public class DragonNestRegistry extends DragonNestStructure {
                         MapGenBase.setupChunkSeed(level.getSeed(), random, chunkX, chunkZ);
                         random.nextInt();
                         List<DragonNestImpl> nests = this.getValidNests(level.getBiomeProvider().getBiome(getChunkCenter(chunkX, chunkZ, 0)));
-                        if (!nests.isEmpty() && target.test(DMUtils.getRandom(nests, new Random(chunkX + (long) chunkZ * salt)))) {
-                            if (!findUnexplored || !level.isChunkGeneratedAt(chunkX, chunkZ)) {
-                                return getChunkCenter(chunkX, chunkZ, 64);
-                            }
+                        if (!nests.isEmpty()) {
+                            DragonNestImpl nest = DMUtils.getRandom(nests, new Random(chunkX + (long) chunkZ * salt));
+                            if (target.test(nest)) {
+                                if (!findUnexplored || !level.isChunkGeneratedAt(chunkX, chunkZ)) {
+                                    return new ImmutablePair<>(getChunkCenter(chunkX, chunkZ, 64), nest);
+                                }
+                            } else if (attempts == 0) break;
                         } else if (attempts == 0) break;
                     }
                 }
