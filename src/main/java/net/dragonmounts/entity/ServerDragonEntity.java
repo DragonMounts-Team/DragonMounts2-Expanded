@@ -57,10 +57,7 @@ import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static net.minecraft.entity.SharedMonsterAttributes.FOLLOW_RANGE;
 
@@ -431,20 +428,25 @@ public class ServerDragonEntity extends TameableDragonEntity {
         }
     }
 
+    private static final Map<DragonType, DragonType> LIGHTNING_TRANSFORMATIONS = new HashMap<>();
+
+    static {
+        LIGHTNING_TRANSFORMATIONS.put(DragonTypes.SKELETON, DragonTypes.WITHER);
+        LIGHTNING_TRANSFORMATIONS.put(DragonTypes.WATER, DragonTypes.STORM);
+        LIGHTNING_TRANSFORMATIONS.put(DragonTypes.MOONLIGHT, DragonTypes.DARK);
+    }
+
     @Override
     public void onStruckByLightning(EntityLightningBolt bolt) {
         DragonType current = this.getVariant().type;
         super.onStruckByLightning(bolt);
-        if (current == DragonTypes.SKELETON) {
-            this.setVariant(DragonTypes.WITHER.variants.draw(this.rand, null));
-            this.playSound(SoundEvents.BLOCK_PORTAL_TRIGGER, 2, 1);
-            this.playSound(SoundEvents.BLOCK_END_PORTAL_SPAWN, 2, 1);
-        } else if (current == DragonTypes.WATER) {
-            this.setVariant(DragonTypes.STORM.variants.draw(this.rand, null));
+        DragonType target = LIGHTNING_TRANSFORMATIONS.get(current);
+        if (target != null) {
+            this.setVariant(target.variants.draw(this.rand, null));
             this.playSound(SoundEvents.BLOCK_PORTAL_TRIGGER, 2, 1);
             this.playSound(SoundEvents.BLOCK_END_PORTAL_SPAWN, 2, 1);
         }
-        addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 35 * 20));
+        this.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 35 * 20));
     }
 
     @Override
