@@ -16,6 +16,10 @@ import net.dragonmounts.util.DMUtils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
@@ -119,6 +123,10 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
         }
     }
 
+    public void onStruckByLightning(ServerDragonEntity dragon, EntityLightningBolt bolt) {
+        dragon.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 35 * 20));
+    }
+
     @Nullable
     public DragonBreath initBreath(TameableDragonEntity dragon) {
         return new FireBreath(dragon, 0.7F);
@@ -182,6 +190,12 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
             return function.apply(clazz.cast(value));
         }
         return fallback;
+    }
+
+    public static void convertByLightning(ServerDragonEntity dragon, DragonType type) {
+        dragon.setVariant(type.variants.draw(dragon.getRNG(), null));
+        dragon.playSound(SoundEvents.BLOCK_PORTAL_TRIGGER, 2, 1);
+        dragon.playSound(SoundEvents.BLOCK_END_PORTAL_SPAWN, 2, 1);
     }
 
     public static class Registry extends DeferredRegistry<DragonType> implements IForgeRegistry.AddCallback<DragonType> {

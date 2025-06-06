@@ -2,11 +2,14 @@ package net.dragonmounts.type;
 
 import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.entity.DragonLifeStage;
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.MoonlightBreath;
+import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonTypeBuilder;
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -40,5 +43,11 @@ public class MoonlightType extends DragonType {
     @Override
     public DragonBreath initBreath(TameableDragonEntity dragon) {
         return new MoonlightBreath(dragon, 0.7F);
+    }
+
+    @Override
+    public void onStruckByLightning(ServerDragonEntity dragon, EntityLightningBolt bolt) {
+        super.onStruckByLightning(dragon, bolt);
+        convertByLightning(dragon, DragonTypes.DARK);
     }
 }

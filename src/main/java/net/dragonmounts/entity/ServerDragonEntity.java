@@ -16,11 +16,13 @@ import net.dragonmounts.entity.goal.target.DragonHurtByTargetGoal;
 import net.dragonmounts.entity.helper.DragonHeadLocator;
 import net.dragonmounts.entity.helper.DragonReproductionHelper;
 import net.dragonmounts.entity.navigation.PathNavigateFlying;
-import net.dragonmounts.init.*;
+import net.dragonmounts.init.DMBlocks;
+import net.dragonmounts.init.DMItems;
+import net.dragonmounts.init.DMSounds;
+import net.dragonmounts.init.DragonVariants;
 import net.dragonmounts.item.DragonEssenceItem;
 import net.dragonmounts.item.DragonSpawnEggItem;
 import net.dragonmounts.network.SPathDebugPacket;
-import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.ClassPredicate;
 import net.dragonmounts.util.EntityUtil;
@@ -40,7 +42,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathNavigateGround;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
@@ -433,18 +434,8 @@ public class ServerDragonEntity extends TameableDragonEntity {
 
     @Override
     public void onStruckByLightning(EntityLightningBolt bolt) {
-        DragonType current = this.getVariant().type;
         super.onStruckByLightning(bolt);
-        if (current == DragonTypes.SKELETON) {
-            this.setVariant(DragonTypes.WITHER.variants.draw(this.rand, null));
-            this.playSound(SoundEvents.BLOCK_PORTAL_TRIGGER, 2, 1);
-            this.playSound(SoundEvents.BLOCK_END_PORTAL_SPAWN, 2, 1);
-        } else if (current == DragonTypes.WATER) {
-            this.setVariant(DragonTypes.STORM.variants.draw(this.rand, null));
-            this.playSound(SoundEvents.BLOCK_PORTAL_TRIGGER, 2, 1);
-            this.playSound(SoundEvents.BLOCK_END_PORTAL_SPAWN, 2, 1);
-        }
-        addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 35 * 20));
+        this.getVariant().type.onStruckByLightning(this, bolt);
     }
 
     @Override
