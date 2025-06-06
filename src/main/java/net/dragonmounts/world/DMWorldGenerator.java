@@ -4,7 +4,6 @@ import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.config.DMConfig;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -24,7 +23,7 @@ import static net.minecraft.world.gen.structure.MapGenStructureIO.registerStruct
  */
 public class DMWorldGenerator implements IWorldGenerator {
     public static void init() {
-        registerStructure(DragonNestStructure.Start.class, "DM2EDN");
+        registerStructure(DragonNest.Start.class, "DM2EDN");
         registerStructureComponent(DragonNestPiece.class, "DM2EDN");
         GameRegistry.registerWorldGenerator(new DMWorldGenerator(), 0);
         BiomeDictionary.addTypes(Biomes.STONE_BEACH, BiomeDictionary.Type.getType("STONE_BEACH", BiomeDictionary.Type.BEACH));
@@ -53,11 +52,6 @@ public class DMWorldGenerator implements IWorldGenerator {
                 // isGenerationDisabled:
                 DMConfig.LIMITED_DIMENSIONS.value.contains(world.provider.getDimension()) != DMConfig.ALLOW_DECLARED_DIMENSIONS_ONLY.value
         ) return;
-        DRAGON_NESTS.generate(world, x, z, null);
-        random.setSeed(world.getSeed());
-        long k = random.nextLong() / 2L * 2L + 1L;
-        long l = random.nextLong() / 2L * 2L + 1L;
-        random.setSeed((long) x * k + (long) z * l ^ world.getSeed());
-        DRAGON_NESTS.generateStructure(world, random, new ChunkPos(x, z));
+        DRAGON_NESTS.generate(world, x, z, random);
     }
 }

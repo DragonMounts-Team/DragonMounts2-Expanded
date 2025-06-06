@@ -1,11 +1,11 @@
 package net.dragonmounts.world;
 
-import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectRBTreeMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.dragonmounts.util.DMUtils;
@@ -13,9 +13,11 @@ import net.dragonmounts.util.LogUtil;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.MapGenBase;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureStart;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.crafting.JsonContext;
@@ -24,7 +26,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -38,9 +39,14 @@ import static net.dragonmounts.util.LevelUtil.getChunkCenter;
 import static net.minecraftforge.common.crafting.CraftingHelper.GSON;
 import static net.minecraftforge.common.crafting.CraftingHelper.findFiles;
 
-public class DragonNestRegistry extends DragonNestStructure {
-    private final Object2ObjectRBTreeMap<ResourceLocation, DragonNestImpl> registry = new Object2ObjectRBTreeMap<>();
-    private final Reference2ObjectOpenHashMap<Biome, List<DragonNestImpl>> lookup = new Reference2ObjectOpenHashMap<>();
+/// @see net.minecraft.world.gen.structure.MapGenStructure
+public class DragonNestRegistry {
+    public static String SAVED_DATA = "DragonMounts.DragonNest";
+
+    private static final int RANGE = 8;
+    private final Object2ObjectRBTreeMap<ResourceLocation, DragonNest> registry = new Object2ObjectRBTreeMap<>();
+    private final Reference2ObjectOpenHashMap<Biome, List<DragonNest>> lookup = new Reference2ObjectOpenHashMap<>();
+    private final Int2ObjectOpenHashMap<Structures> structures = new Int2ObjectOpenHashMap<>();
     public final int salt;
     public final int spacing;
     public final int separation;
@@ -55,7 +61,7 @@ public class DragonNestRegistry extends DragonNestStructure {
         return this.registry.keySet();
     }
 
-    public DragonNestImpl byName(ResourceLocation name) {
+    public DragonNest byName(ResourceLocation name) {
         return this.registry.get(name);
     }
 
@@ -81,7 +87,7 @@ public class DragonNestRegistry extends DragonNestStructure {
                         }
                         List<NestConfig> list = configs.build();
                         if (list.isEmpty()) throw new JsonSyntaxException("No configs defined");
-                        this.registry.put(key, new DragonNestImpl(this, key, BiomeCondition.parse(JsonUtils.getJsonObject(json, "biome")), list));
+                        this.registry.put(key, new DragonNest(this, key, BiomeCondition.parse(JsonUtils.getJsonObject(json, "biome")), list));
                     } catch (JsonParseException e) {
                         LogUtil.LOGGER.error("Parsing error loading structure {}", key, e);
                         return false;
@@ -96,12 +102,12 @@ public class DragonNestRegistry extends DragonNestStructure {
         );
     }
 
-    public List<DragonNestImpl> getValidNests(Biome biome) {
-        List<DragonNestImpl> nests = this.lookup.get(biome);
+    public List<DragonNest> getValidNests(Biome biome) {
+        List<DragonNest> nests = this.lookup.get(biome);
         if (nests == null) {
             Set<BiomeDictionary.Type> types = BiomeDictionary.getTypes(biome);
-            ImmutableList.Builder<DragonNestImpl> builder = ImmutableList.builder();
-            for (DragonNestImpl nest : this.registry.values()) {
+            ImmutableList.Builder<DragonNest> builder = ImmutableList.builder();
+            for (DragonNest nest : this.registry.values()) {
                 if (nest.biomes.test(types)) {
                     builder.add(nest);
                 }
@@ -111,8 +117,7 @@ public class DragonNestRegistry extends DragonNestStructure {
         return nests;
     }
 
-    @Override
-    protected boolean canSpawnStructureAtCoords(int chunkX, int chunkZ) {
+    protected boolean canSpawnAtCoords(World level, int chunkX, int chunkZ) {
         int spacing = this.spacing, distance = spacing - this.separation;
         int x = chunkX, z = chunkZ;
         if (x < 0) {
@@ -123,34 +128,21 @@ public class DragonNestRegistry extends DragonNestStructure {
         }
         x /= spacing;
         z /= spacing;
-        Random random = this.world.setRandomSeed(x, z, this.salt);
+        Random random = level.setRandomSeed(x, z, this.salt);
         return chunkX == x * spacing + random.nextInt(distance) &&
                 chunkZ == z * spacing + random.nextInt(distance) &&
-                !this.getValidNests(this.world.getBiomeProvider().getBiome(
+                !this.getValidNests(level.getBiomeProvider().getBiome(
                         getChunkCenter(chunkX, chunkZ, 0))
                 ).isEmpty();
     }
 
-    @Override
-    public @Nullable BlockPos getNearestStructurePos(@Nonnull World level, @Nonnull BlockPos pos, boolean findUnexplored) {
-        ImmutablePair<BlockPos, DragonNestImpl> result = this.findNearestNest(level, pos, 100, findUnexplored, Predicates.alwaysTrue());
-        return result == null ? null : result.getLeft();
-    }
-
-    @Override
-    protected Start getStructureStartSafely(World level, int chunkX, int chunkZ) {
+    protected @Nonnull StructureStart populateStart(World level, int chunkX, int chunkZ, Random random) {
         return DMUtils.getRandom(this.getValidNests(level.getBiomeProvider().getBiome(
                 getChunkCenter(chunkX, chunkZ, 0))
-        ), new Random(chunkX + (long) chunkZ * this.salt)).getStructureStartSafely(level, chunkX, chunkZ);
+        ), random).populateStart(level, chunkX, chunkZ, random);
     }
 
-    @Override
-    protected @Nonnull StructureStart getStructureStart(int chunkX, int chunkZ) {
-        return this.getStructureStartSafely(this.world, chunkX, chunkZ);
-    }
-
-    public final ImmutablePair<BlockPos, DragonNestImpl> findNearestNest(World level, BlockPos center, int maxAttempts, boolean findUnexplored, Predicate<DragonNestImpl> target) {
-        this.world = level;
+    public final ImmutablePair<BlockPos, DragonNest> findNearestNest(World level, BlockPos center, int maxAttempts, boolean findUnexplored, Predicate<DragonNest> target) {
         int spacing = this.spacing, distance = spacing - this.separation, salt = this.salt;
         int centerChunkX = center.getX() >> 4, centerChunkZ = center.getZ() >> 4;
         Random random = new Random();
@@ -173,9 +165,9 @@ public class DragonNestRegistry extends DragonNestStructure {
                         chunkZ = chunkZ * spacing + structure.nextInt(distance);
                         MapGenBase.setupChunkSeed(level.getSeed(), random, chunkX, chunkZ);
                         random.nextInt();
-                        List<DragonNestImpl> nests = this.getValidNests(level.getBiomeProvider().getBiome(getChunkCenter(chunkX, chunkZ, 0)));
+                        List<DragonNest> nests = this.getValidNests(level.getBiomeProvider().getBiome(getChunkCenter(chunkX, chunkZ, 0)));
                         if (!nests.isEmpty()) {
-                            DragonNestImpl nest = DMUtils.getRandom(nests, new Random(chunkX + (long) chunkZ * salt));
+                            DragonNest nest = DMUtils.getRandom(nests, random);
                             if (target.test(nest)) {
                                 if (!findUnexplored || !level.isChunkGeneratedAt(chunkX, chunkZ)) {
                                     return new ImmutablePair<>(getChunkCenter(chunkX, chunkZ, 64), nest);
@@ -188,5 +180,71 @@ public class DragonNestRegistry extends DragonNestStructure {
             }
         }
         return null;
+    }
+
+    protected Structures getStructures(World level) {
+        int dimension = level.provider.getDimension();
+        Structures structures = this.structures.get(dimension);
+        if (structures == null) {
+            structures = (Structures) level.getPerWorldStorage().getOrLoadData(Structures.class, SAVED_DATA);
+            if (structures == null) {
+                level.getPerWorldStorage().setData(SAVED_DATA, structures = new Structures(SAVED_DATA));
+            } else {
+                structures.reload(level);
+            }
+            this.structures.put(dimension, structures);
+        }
+        return structures;
+    }
+
+    public void generate(World level, int centerX, int centerZ, Random random) {
+        long seed = level.getSeed();
+        random.setSeed(seed);
+        long seedX = random.nextLong();
+        long seedZ = random.nextLong();
+        Structures structures = this.getStructures(level);
+        for (int x = centerX - RANGE; x <= centerX + RANGE; ++x) {
+            for (int z = centerZ - RANGE; z <= centerZ + RANGE; ++z) {
+                random.setSeed(((long) x * seedX) ^ ((long) z * seedZ) ^ seed);
+                this.prepareStructures(level, structures, x, z, random);
+            }
+        }
+        seedX = seedX / 2L * 2L + 1L;
+        seedZ = seedZ / 2L * 2L + 1L;
+        random.setSeed((long) centerX * seedX + (long) centerZ * seedZ ^ seed);
+        this.placeStructures(level, structures, centerX, centerZ, random);
+    }
+
+    protected final synchronized void prepareStructures(World level, Structures structures, int chunkX, int chunkZ, Random random) {
+        if (structures.instances.containsKey(ChunkPos.asLong(chunkX, chunkZ))) return;
+        random.nextInt();
+        try {
+            if (this.canSpawnAtCoords(level, chunkX, chunkZ)) {
+                long chunk = ChunkPos.asLong(chunkX, chunkZ);
+                StructureStart start = this.populateStart(level, chunkX, chunkZ, random);
+                structures.instances.put(chunk, start);
+                if (start.isSizeableStructure()) {
+                    structures.persistent(chunk, start.writeStructureComponentsToNBT(chunkX, chunkZ));
+                }
+            }
+        } catch (Throwable throwable) {
+            LogUtil.LOGGER.error("Failed to generate structure", throwable);
+        }
+    }
+
+    public final synchronized void placeStructures(World level, Structures structures, int chunkX, int chunkZ, Random random) {
+        int minX = (chunkX << 4) + 8, minZ = (chunkZ << 4) + 8;
+        ChunkPos pos = new ChunkPos(chunkX, chunkZ);
+        for (StructureStart start : structures.instances.values()) {
+            if (start.isSizeableStructure() && start.isValidForPostProcess(pos) && start.getBoundingBox().intersectsWith(minX, minZ, minX + 15, minZ + 15)) {
+                start.generateStructure(level, random, new StructureBoundingBox(minX, minZ, minX + 15, minZ + 15));
+                start.notifyPostProcessAt(pos);
+                int posX = start.getChunkPosX(), posZ = start.getChunkPosZ();
+                structures.persistent(
+                        ChunkPos.asLong(posX, posZ),
+                        start.writeStructureComponentsToNBT(posX, posZ)
+                );
+            }
+        }
     }
 }

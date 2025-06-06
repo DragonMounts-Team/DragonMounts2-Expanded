@@ -3,7 +3,7 @@ package net.dragonmounts.command;
 import com.google.common.base.Predicates;
 import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.world.DMWorldGenerator;
-import net.dragonmounts.world.DragonNestImpl;
+import net.dragonmounts.world.DragonNest;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -42,7 +42,7 @@ public class LocateCommand extends CommandBase {
         BlockPos source = sender.getPosition();
         switch (args.length) {
             case 0: {
-                ImmutablePair<BlockPos, DragonNestImpl> result = DMWorldGenerator.DRAGON_NESTS.findNearestNest(sender.getEntityWorld(), sender.getPosition(), 100, false, Predicates.alwaysTrue());
+                ImmutablePair<BlockPos, DragonNest> result = DMWorldGenerator.DRAGON_NESTS.findNearestNest(sender.getEntityWorld(), sender.getPosition(), 100, false, Predicates.alwaysTrue());
                 if (result == null) {
                     sender.sendMessage(new TextComponentTranslation("commands.locate.structure.not_found", "#draonmounts:dragon_nest"));
                 } else {
@@ -56,9 +56,9 @@ public class LocateCommand extends CommandBase {
                 break;
             }
             case 1: {
-                DragonNestImpl nest = DMWorldGenerator.DRAGON_NESTS.byName(DMUtils.parseIdentifier(args[0]));
+                DragonNest nest = DMWorldGenerator.DRAGON_NESTS.byName(DMUtils.parseIdentifier(args[0]));
                 if (nest == null) throw new CommandException("commands.locate.invalid", args[0]);
-                ImmutablePair<BlockPos, DragonNestImpl> result = DMWorldGenerator.DRAGON_NESTS.findNearestNest(sender.getEntityWorld(), sender.getPosition(), 100, false, nest::equals);
+                ImmutablePair<BlockPos, DragonNest> result = DMWorldGenerator.DRAGON_NESTS.findNearestNest(sender.getEntityWorld(), sender.getPosition(), 100, false, nest::equals);
                 if (result == null) {
                     sender.sendMessage(new TextComponentTranslation("commands.locate.structure.not_found", nest.name));
                 } else {

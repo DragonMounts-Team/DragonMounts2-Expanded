@@ -50,25 +50,6 @@ public class DMConfig {
     public static final BooleanEntry ALLOW_DECLARED_DIMENSIONS_ONLY = new BooleanEntry("toggleDimensionLimitation", false);
     public static final IntSetEntry LIMITED_DIMENSIONS = new IntSetEntry("limitedDimensions");
 
-    // TEMP:
-    public static int FireNestRarity = 150;
-    //	public static int ZombieNestRarity1  = 180;
-    public static int TerraNestRarity = 220;
-    public static int ForestNestRarity = 220;
-    public static int SunlightNestRarity = 60;
-    public static int OceanNestRarity = 8000;
-    public static int EnchantNestRarity = 300;
-    public static int JungleNestRarity = 800;
-    public static int WaterNestRarity = 180;
-    public static int IceNestRarity = 200;
-
-    public static int netherNestRarity = 200;
-    public static int netherNestRarerityInX = 16;
-    public static int netherNestRarerityInZ = 16;
-    public static int zombieNestRarity = 500;
-    public static int zombieNestRarerityInX = 28;
-    public static int zombieNestRarerityInZ = 28;
-
     public static Configuration getConfig() {
         if (config == null) {
             config = new Configuration(new File(
@@ -237,70 +218,6 @@ public class DMConfig {
         category = config.getCategory(CATEGORY_WORLD_GEN);
         load(category, ALLOW_DECLARED_DIMENSIONS_ONLY);
         load(category, LIMITED_DIMENSIONS);
-        // TEMP:
-        Property prop = config.get(CATEGORY_WORLD_GEN, "Forest Nest Rarity", ForestNestRarity);
-        prop.setComment("Determines how rare Forest Plains dragon nests will mainly spawn. I did this because the forest biome is too common thus making the forest breed to common. Higher numbers = higher rarity (in other words  how many blocks for another nest to spawn), "
-                + "(Note: Expermiment on a new world when editing these numbers because it may cause damages to your own worlds)");
-        ForestNestRarity = prop.getInt();
-
-        // sunlight world nest
-        prop = config.get(CATEGORY_WORLD_GEN, "Sunlight Nest Rarity", SunlightNestRarity);
-        prop.setComment("Determines how rare sunlight dragon temples will mainly spawn. Higher numbers = higher rarity (in other words  how many blocks for another nest to spawn), "
-                + "(Note: Expermiment on a new world when editing these numbers because it may cause damages to your own worlds)");
-        SunlightNestRarity = prop.getInt();
-
-        // sunlight world nest
-        prop = config.get(CATEGORY_WORLD_GEN, "Terra Nest Rarity", TerraNestRarity);
-        prop.setComment("Determines how rare terra dragon nests will mainly spawn. Higher numbers = higher rarity (in other words  how many blocks for another nest to spawn), "
-                + "(Note: Expermiment on a new world when editing these numbers because it may cause damages to your own worlds)");
-        TerraNestRarity = prop.getInt();
-
-        // sunlight world nest
-        prop = config.get(CATEGORY_WORLD_GEN, "Ocean Nest Rarity", OceanNestRarity);
-        prop.setComment("Determines how rare moonlight or aether dragon temples will spawn above the ocean. Higher numbers = higher rarity (in other words  how many blocks for another nest to spawn), "
-                + "(Note: Expermiment on a new world when editing these numbers because it may cause damages to your own worlds)");
-        OceanNestRarity = prop.getInt();
-
-        prop = config.get(CATEGORY_WORLD_GEN, "Jungle Nest Rarity", JungleNestRarity);
-        prop.setComment("Determines how rare forest jungnle dragon nests will mainly spawn. Higher numbers = higher rarity (in other words  how many blocks for another nest to spawn), "
-                + "(Note: Expermiment on a new world when editing these numbers because it may cause damages to your own worlds)");
-        JungleNestRarity = prop.getInt();
-
-        prop = config.get(CATEGORY_WORLD_GEN, "Water Nest Rarity", WaterNestRarity);
-        prop.setComment("Determines how rare water dragon nests will mainly spawn. Higher numbers = higher rarity (in other words  how many blocks for another nest to spawn), "
-                + "(Note: Expermiment on a new world when editing these numbers because it may cause damages to your own worlds)");
-        WaterNestRarity = prop.getInt();
-
-        prop = config.get(CATEGORY_WORLD_GEN, "Ice Nest Rarity", IceNestRarity);
-        prop.setComment("Determines how rare ice dragon nests will mainly spawn. Higher numbers = higher rarity (in other words  how many blocks for another nest to spawn), "
-                + "(Note: Expermiment on a new world when editing these numbers because it may cause damages to your own worlds)");
-        IceNestRarity = prop.getInt();
-
-        prop = config.get(CATEGORY_WORLD_GEN, "Fire Nest Rarity", FireNestRarity);
-        prop.setComment("Determines how rare fire dragon nests will mainly spawn. Higher numbers = higher rarity (in other words  how many blocks for another nest to spawn), "
-                + "(Note: Expermiment on a new world when editing these numbers because it may cause damages to your own worlds)");
-        FireNestRarity = prop.getInt();
-
-        prop = config.get(CATEGORY_WORLD_GEN, "Enchant Nest Rarity", EnchantNestRarity);
-        prop.setComment("Determines how rare forest enchant dragon nests will mainly spawn. Higher numbers = higher rarity (in other words  how many blocks for another nest to spawn), "
-                + "(Note: Expermiment on a new world when editing these numbers because it may cause damages to your own worlds)");
-        EnchantNestRarity = prop.getInt();
-
-        // nether nest
-        prop = config.get(CATEGORY_WORLD_GEN, "Nether Nest Chance", netherNestRarity);
-        prop.setComment("Determines how rare nether nests will mainly spawn. Higher numbers = higher rarity (in other words  how many blocks for another nest to spawn)"
-                + "(Note: Expermiment on a new world when editing these numbers because it may cause damages to your own worlds)");
-        netherNestRarity = prop.getInt();
-
-        prop = config.get(CATEGORY_WORLD_GEN, "2 Nether Nest Rarity X", netherNestRarerityInX);
-        prop.setComment("Determines how rare nether nests will spawn in the X Axis. Higher numbers = higher rarity (in other words  how many blocks for another nest to spawn)"
-                + "(Note: Expermiment on a new world when editing these numbers because it may cause damages to your own worlds)");
-        netherNestRarerityInX = prop.getInt();
-
-        prop = config.get(CATEGORY_WORLD_GEN, "2 Nest Nether Rarity Z", netherNestRarerityInZ);
-        prop.setComment("Determines how rare nether nests will spawn in the Z Axis. Higher numbers = higher rarity (in other words  how many blocks for another nest to spawn)"
-                + "(Note: Expermiment on a new world when editing these numbers because it may cause damages to your own worlds)");
-        netherNestRarerityInZ = prop.getInt();
         if (config.hasChanged()) {
             config.save();
         }

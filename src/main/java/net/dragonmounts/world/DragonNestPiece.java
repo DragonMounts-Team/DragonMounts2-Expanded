@@ -1,7 +1,12 @@
 package net.dragonmounts.world;
 
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.monster.EntityShulker;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
@@ -61,5 +66,21 @@ public class DragonNestPiece extends StructureComponentTemplate {
     }
 
     @Override
-    protected void handleDataMarker(String function, BlockPos pos, World level, Random random, StructureBoundingBox box) {}
+    protected void handleDataMarker(String type, BlockPos pos, World level, Random random, StructureBoundingBox box) {
+        switch (type) {
+            case "Sentry": {
+                EntityShulker shulker = new EntityShulker(level);
+                shulker.setPosition(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
+                shulker.setAttachmentPos(pos);
+                level.spawnEntity(shulker);
+                break;
+            }
+            case "Elytra": {
+                EntityItemFrame frame = new EntityItemFrame(level, pos, this.placeSettings.getRotation().rotate(EnumFacing.NORTH));
+                frame.setDisplayedItem(new ItemStack(Items.ELYTRA));
+                level.spawnEntity(frame);
+                break;
+            }
+        }
+    }
 }
