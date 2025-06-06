@@ -8,6 +8,8 @@ import net.dragonmounts.registry.DragonTypeBuilder;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 
 public class StormType extends WaterType {
@@ -27,5 +29,10 @@ public class StormType extends WaterType {
     @Override
     public DragonBreath initBreath(TameableDragonEntity dragon) {
         return new StormBreath(dragon, 0.7F);
+    }
+
+    @Override
+    public void onStruckByLightning(ServerDragonEntity dragon, EntityLightningBolt bolt) {
+        dragon.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 1200, 1));
     }
 }

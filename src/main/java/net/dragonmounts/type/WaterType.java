@@ -7,9 +7,11 @@ import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.WaterBreath;
 import net.dragonmounts.init.DMSounds;
+import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonTypeBuilder;
 import net.dragonmounts.util.EntityUtil;
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
@@ -60,5 +62,11 @@ public class WaterType extends DragonType {
     @Override
     public SoundEvent getRoarSound(TameableDragonEntity dragon) {
         return dragon.isChild() ? DMSounds.DRAGON_ROAR_HATCHLING : DMSounds.DRAGON_ROAR_WATER;
+    }
+
+    @Override
+    public void onStruckByLightning(ServerDragonEntity dragon, EntityLightningBolt bolt) {
+        super.onStruckByLightning(dragon, bolt);
+        convertByLightning(dragon, DragonTypes.STORM);
     }
 }

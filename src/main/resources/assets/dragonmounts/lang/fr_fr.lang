@@ -101,8 +101,6 @@ message.dragonmounts.whistle.failed=Votre Dragon n'entend pas la Flute Draconiqu
 container.dragonmounts.dragon_core=Coeur Draconique
 gui.dragonmounts.sit=Asseoir
 gui.dragonmounts.teleportToPlayer=Revenir vers le Joueur
-gui.dragonmounts.unbindWhistle=Cette Flûte est désormais déliée
-gui.dragonmounts.unbindWhistle.tooltip=Appuyez Left Shift pour dévérouiller cette Flûte
 
 #Controls
 key.categories.dragonmounts=Dragon Mounts

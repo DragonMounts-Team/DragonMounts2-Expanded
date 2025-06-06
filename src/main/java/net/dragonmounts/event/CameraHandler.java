@@ -26,16 +26,13 @@ public class CameraHandler {
      */
     public static void applyZoom(Entity camera, boolean direct, float scale, float yaw, float pitch, double partialTicks) {
         int view = Minecraft.getMinecraft().gameSettings.thirdPersonView;
-        if (view == 0) {
-            GlStateManager.translate(0F, direct ? -1.0F * scale : -1.5F * scale, 0.0F);
-            return;
-        }
+        if (view == 0) return;
         double x = camera.prevPosX + (camera.posX - camera.prevPosX) * partialTicks;
         double y = camera.prevPosY + (camera.posY - camera.prevPosY) * partialTicks + camera.getEyeHeight();
         double z = camera.prevPosZ + (camera.posZ - camera.prevPosZ) * partialTicks;
         World world = Minecraft.getMinecraft().world;
         Vec3d start = new Vec3d(x, y, z);
-        yaw *= 0.017453292F;
+        yaw = view == 2 ? yaw * 0.017453292F : (yaw + 180.F) * 0.017453292F;
         pitch = view == 2 ? (pitch + 180.F) * 0.017453292F : pitch * 0.017453292F;
         double distance = DMConfig.CAMERA_DISTANCE.value * scale;
         double temp = MathHelper.cos(pitch) * distance;
@@ -99,8 +96,6 @@ public class CameraHandler {
                             event.getPitch(),
                             event.getRenderPartialTicks()
                     );
-                } else {
-                    GlStateManager.translate(0F, -0.5F, 0F);
                 }
             }
         }

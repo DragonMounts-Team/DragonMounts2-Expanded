@@ -42,6 +42,10 @@ life_stage.dragon.adult=成体
 ##
 # Item Names
 ##
+
+item.dragonmounts.raw_dragon_meat.name=生のドラゴン肉
+item.dragonmounts.cooked_dragon_meat.name=焼きドラゴン肉
+
 item.dragonmounts.diamond_shears.name=ダイヤのハサミ
 item.dragonmounts.dragon_spawn_egg.name=ドラゴンのスポーンエッグ
 item.dragonmounts.dragon_essence.name=ドラゴンエッセンス
@@ -75,13 +79,12 @@ item.dragonmounts.iron_dragon_armor.name=アイアンドラゴンアーマー
 item.dragonmounts.golden_dragon_armor.name=ゴールドドラゴンアーマー
 item.dragonmounts.emerald_dragon_armor.name=エメラルドドラゴンアーマー
 
-# Tiles
+# Blocks
 tile.dragonmounts.dragon_nest.name=ネストブロック
 tile.dragonmounts.dragon_core.name=ドラゴンコア
 tile.dragonmounts.dragon_head.name=ドラゴンの頭
 tile.dragonmounts.dragon_egg.name=ドラゴンの卵
 tile.dragonmounts.dragon_scale_block.name=ドラゴンスケイルブロック
-
 ##
 # Messages
 ##
@@ -107,8 +110,6 @@ gui.dragonmounts.stand=立つ
 gui.dragonmounts.toggleSit=座る / 立つ
 gui.dragonmounts.toggleFollow=従う / 散策
 gui.dragonmounts.teleportToPlayer=ドラゴンを呼ぶ
-gui.dragonmounts.unbindWhistle=ホイッスルの解除
-gui.dragonmounts.unbindWhistle.tooltip=左Shiftキーを押してロックを解除
 gui.dragonmounts.lock.tooltip=他のプレイヤーを信頼する
 
 #Controls
@@ -150,19 +151,20 @@ tooltip.dragonmounts.carriage=ドラゴンがボートのように複数の乗�
 
 item.modifiers.equipped=装備時：
 
-subtitles.entity.dragonmounts.dragon.ambient=ドラゴン:呼吸
-subtitles.entity.dragonmounts.dragon.death=ドラゴン:死亡
-subtitles.entity.dragonmounts.dragon.roar=ドラゴン:咆哮
-subtitles.entity.dragonmounts.dragon.purr=ドラゴン:うなり
-subtitles.entity.dragonmounts.dragon.sneeze=ドラゴン:くしゃみ
-subtitles.entity.dragonmounts.dragon.step=ドラゴン:足音
-subtitles.entity.dragonmounts.dragon.breath_start=ドラゴン:吐息
-subtitles.entity.dragonmounts.dragon.breath_loop=ドラゴン:吐息
+subtitles.entity.dragonmounts.dragon.ambient=ドラゴンの呼吸
+subtitles.entity.dragonmounts.dragon.chest=ドラゴンチェストを装備
+subtitles.entity.dragonmounts.dragon.death=ドラゴンの死亡
+subtitles.entity.dragonmounts.dragon.roar=ドラゴンの咆哮
+subtitles.entity.dragonmounts.dragon.purr=ドラゴンのうなり声
+subtitles.entity.dragonmounts.dragon.sneeze=ドラゴンのくしゃみ
+subtitles.entity.dragonmounts.dragon.step=ドラゴンの足音
+subtitles.entity.dragonmounts.dragon.breath_start=ドラゴンの吐息
+subtitles.entity.dragonmounts.dragon.breath_loop=ドラゴンの吐息
 subtitles.entity.dragonmounts.dragon.breath_stop=ドラゴンブレスの終息
-subtitles.entity.dragonmounts.dragon_egg.shatter=ドラゴンの卵:砕ける
-subtitles.entity.dragonmounts.dragon_egg.crack=ドラゴンの卵:割れる
-subtitles.item.dragonmounts.whistle.blow=ドラゴンホイッスル:吹く
-subtitles.item.dragonmounts.variation_orb.activate=バリエーションオーブ:発動
+subtitles.entity.dragonmounts.dragon_egg.shatter=ドラゴンの卵が砕けた
+subtitles.entity.dragonmounts.dragon_egg.crack=ドラゴンの卵が割れた
+subtitles.item.dragonmounts.whistle.blow=ドラゴンホイッスルを吹く
+subtitles.item.dragonmounts.variation_orb.activate=バリエーションオーブを発動
 
 argument.player.toomany=単体のプレイヤーを指定してください、そのセレクタは複数体指定しています
 
@@ -171,12 +173,14 @@ commands.dragonmounts.tame.usage=/dragonmounts tame [dragon]
 commands.dragonmounts.tame.success=%s は %s によって飼いならされました
 commands.dragonmounts.unlock.usage=/dragonmounts unlock [dragon]
 commands.dragonmounts.unlock.success=%s がロック解除されました
+commands.dragonmounts.size.usage=/dragonmounts size <size> [dragon]
+commands.dragonmounts.size.success=%s のサイズは次のように設定されました: %s
 commands.dragonmounts.stage.usage=/dragonmounts stage <stage> [dragon]
 commands.dragonmounts.stage.invalid=「%s」 は有効な年齢層ではありません
-commands.dragonmounts.stage.success=%sの年齢層は次のように設定されています: %s
+commands.dragonmounts.stage.success=%sの年齢層は次のように設定されました: %s
 commands.dragonmounts.type.usage=/dragonmounts type <type> [dragon]
 commands.dragonmounts.type.invalid=「%s」 は有効なタイプではありません
-commands.dragonmounts.type.success=%s のタイプは次のように設定されています: %s
+commands.dragonmounts.type.success=%s のタイプは次のように設定されました: %s
 commands.dragonmounts.notFound=「%s」 に基づくドラゴンが見つかりませんでした
 commands.dragonmounts.unspecified=このアクションを実行するドラゴンを指定する必要があります
 
@@ -210,6 +214,8 @@ config.dragonmounts.baseFlyingSpeed=基礎飛行速度
 config.dragonmounts.baseFlyingSpeed.tooltip=成体ドラゴンの基本飛行速度。新しくスポーンしたドラゴンにのみ適用されます
 config.dragonmounts.baseSwimmingSpeed=基礎遊泳速度
 config.dragonmounts.baseSwimmingSpeed.tooltip=成体ドラゴンの基礎遊泳速度。新しくスポーンしたドラゴンにのみ適用されます。
+config.dragonmounts.baseBodySize=基礎ボディサイズ
+config.dragonmounts.baseBodySize.tooltip=成体ドラゴンの基礎ボディサイズ。新しくスポーンしたドラゴンにのみ適用されます。
 config.dragonmounts.baseStepHeight=基礎最大オートステップ高
 config.dragonmounts.baseStepHeight.tooltip=成体ドラゴンが移動中に無視できる最大高低差
 config.dragonmounts.forcedRename=強制的に名前を変更
@@ -232,7 +238,13 @@ config.dragonmounts.frostyBreath=吹雪のドラゴンブレス
 config.dragonmounts.frostyBreath.tooltip=吹雪のドラゴンブレスは雪を残すか
 config.dragonmounts.quenchingBreath=ドラゴンブレスによる鎮静
 config.dragonmounts.quenchingBreath.tooltip=霧のようなドラゴンブレスは火を消したり溶岩を固めたりできるか
+config.dragonmounts.redirectInventory=インベントリのリダイレクト
+config.dragonmounts.redirectInventory.tooltip=自分のインベントリではなくマウントのインベントリを開くかどうか
 config.dragonmounts.toggleDimensionLimitation=宣言されたディメンションのみ許可
 config.dragonmounts.toggleDimensionLimitation.tooltip=有効にすると、ドラゴンネストは宣言されたディメンションにのみ生成されます。有効にしない場合は、宣言されたディメンションには生成されません。
 config.dragonmounts.limitedDimensions=ディメンションの制限
 config.dragonmounts.limitedDimensions.tooltip=制限されたディメンションの数値 ID のリスト
+
+book.dragonmounts.dracopedia.name=ドラコペディアガイドブック
+book.dragonmounts.dracopedia.desc=説明
+book.dragonmounts.dracopedia.landing=着陸

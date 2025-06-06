@@ -92,8 +92,6 @@ gui.dragonmounts.stand=起
 gui.dragonmounts.toggleSit=坐下 / 起立
 gui.dragonmounts.toggleFollow=跟随 / 闲逛
 gui.dragonmounts.teleportToPlayer=传送至玩家
-gui.dragonmounts.unbindWhistle=解绑龙哨
-gui.dragonmounts.unbindWhistle.tooltip=按下左Shift键以解锁
 gui.dragonmounts.lock.tooltip=信任陌生人：%s
 
 key.categories.dragonmounts=龙骑2：延续

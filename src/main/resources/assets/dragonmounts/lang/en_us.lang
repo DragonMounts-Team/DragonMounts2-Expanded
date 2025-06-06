@@ -110,8 +110,6 @@ gui.dragonmounts.stand=Up
 gui.dragonmounts.toggleSit=Sit / Stand
 gui.dragonmounts.toggleFollow=Follow / Wander
 gui.dragonmounts.teleportToPlayer=Come To Player
-gui.dragonmounts.unbindWhistle=Unbind Whistle
-gui.dragonmounts.unbindWhistle.tooltip=Press Left Shift to Unlock
 gui.dragonmounts.lock.tooltip=Trust Other Players: %s
 
 #Controls
