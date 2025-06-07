@@ -114,8 +114,8 @@ gui.dragonmounts.lock.tooltip=他のプレイヤーを信頼する
 
 #Controls
 key.categories.dragonmounts=ドラゴンマウント
-key.dragonmounts.breath=ドラゴンブレス
-key.dragonmounts.descent=降下
+key.dragonmounts.breathe=ドラゴンブレス
+key.dragonmounts.descend=降下
 key.dragonmounts.toggleCameraPos=カメラポジションの変更
 key.dragonmounts.toggleHovering=ホバリングの切替
 key.dragonmounts.toggleYawAlignment=水平視点による旋回を切替

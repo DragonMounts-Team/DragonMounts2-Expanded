@@ -114,8 +114,8 @@ gui.dragonmounts.lock.tooltip=Trust Other Players: %s
 
 #Controls
 key.categories.dragonmounts=Dragon Mounts
-key.dragonmounts.breath=Dragon Breath
-key.dragonmounts.descent=Descent
+key.dragonmounts.breathe=Dragon Breath
+key.dragonmounts.descend=Descend
 key.dragonmounts.toggleCameraPos=Toggle Camera Position
 key.dragonmounts.toggleHovering=Toggle Dragon Hovering
 key.dragonmounts.toggleYawAlignment=Toggle Yaw Alignment

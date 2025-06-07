@@ -27,8 +27,10 @@ public class DragonVariants {
     public static final DragonVariant ENCHANTED_MALE;
     public static final DragonVariant ENDER_FEMALE;
     public static final DragonVariant ENDER_MALE;
+    public static final DragonVariant ENDER_RARE;
     public static final DragonVariant FIRE_FEMALE;
     public static final DragonVariant FIRE_MALE;
+    public static final DragonVariant FIRE_RARE;
     public static final DragonVariant FOREST_FEMALE;
     public static final DragonVariant FOREST_MALE;
     public static final DragonVariant FOREST_DRY_FEMALE;
@@ -44,6 +46,7 @@ public class DragonVariants {
     public static final DragonVariant SKELETON;
     public static final DragonVariant STORM_FEMALE;
     public static final DragonVariant STORM_MALE;
+    public static final DragonVariant STORM_RARE;
     public static final DragonVariant SUNLIGHT_FEMALE;
     public static final DragonVariant SUNLIGHT_MALE;
     public static final DragonVariant TERRA_FEMALE;
@@ -79,8 +82,10 @@ public class DragonVariants {
         values.add(ENCHANTED_MALE = make(appearance, DragonTypes.ENCHANTED, "enchanted_male"));
         values.add(ENDER_FEMALE = make(appearance, DragonTypes.ENDER, "ender_female"));
         values.add(ENDER_MALE = make(appearance, DragonTypes.ENDER, "ender_male"));
+        values.add(ENDER_RARE = make(appearance, DragonTypes.ENDER, "ender_rare"));
         values.add(FIRE_FEMALE = make(appearance, DragonTypes.FIRE, "fire_female"));
         values.add(FIRE_MALE = make(appearance, DragonTypes.FIRE, "fire_male"));
+        values.add(FIRE_RARE = make(appearance, DragonTypes.FIRE, "fire_rare"));
         values.add(FOREST_FEMALE = make(appearance, DragonTypes.FOREST, "forest_female"));
         values.add(FOREST_MALE = make(appearance, DragonTypes.FOREST, "forest_male"));
         values.add(FOREST_DRY_FEMALE = make(appearance, DragonTypes.FOREST, "forest_dry_female"));
@@ -96,6 +101,7 @@ public class DragonVariants {
         values.add(SKELETON = make(appearance, DragonTypes.SKELETON, "skeleton"));
         values.add(STORM_FEMALE = make(appearance, DragonTypes.STORM, "storm_female"));
         values.add(STORM_MALE = make(appearance, DragonTypes.STORM, "storm_male"));
+        values.add(STORM_RARE = make(appearance, DragonTypes.STORM, "storm_rare"));
         values.add(SUNLIGHT_FEMALE = make(appearance, DragonTypes.SUNLIGHT, "sunlight_female"));
         values.add(SUNLIGHT_MALE = make(appearance, DragonTypes.SUNLIGHT, "sunlight_male"));
         values.add(TERRA_FEMALE = make(appearance, DragonTypes.TERRA, "terra_female"));

@@ -95,8 +95,8 @@ gui.dragonmounts.teleportToPlayer=传送至玩家
 gui.dragonmounts.lock.tooltip=信任陌生人：%s
 
 key.categories.dragonmounts=龙骑2：延续
-key.dragonmounts.breath=吐息
-key.dragonmounts.descent=降落
+key.dragonmounts.breathe=吐息
+key.dragonmounts.descend=降落
 key.dragonmounts.toggleCameraPos=切换骑乘视角
 key.dragonmounts.toggleHovering=切换悬停状态
 key.dragonmounts.toggleYawAlignment=切换偏航角趋同状态

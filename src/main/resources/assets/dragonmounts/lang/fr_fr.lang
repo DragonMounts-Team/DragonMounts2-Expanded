@@ -104,8 +104,8 @@ gui.dragonmounts.teleportToPlayer=Revenir vers le Joueur
 
 #Controls
 key.categories.dragonmounts=Dragon Mounts
-key.dragonmounts.breath=Souffle du Dragon
-key.dragonmounts.descent=Descendre du Dragon
+key.dragonmounts.breathe=Souffle du Dragon
+key.dragonmounts.descend=Descendre du Dragon
 key.dragonmounts.toggleCameraPos=Changer la position de la caméra lorsque monté sur un dragon
 key.dragonmounts.toggleHovering=Enclencher / Stopper le vol stationnaire
 key.dragonmounts.toggleYawAlignment= Réaligner la caméra sur l'axe de lacet

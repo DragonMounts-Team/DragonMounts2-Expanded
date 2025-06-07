@@ -31,8 +31,10 @@ public class VariantAppearances {
     public static final VariantAppearance ENCHANTED_MALE = makeAppearance(MOD_ID, "enchanted/male", BuiltinFactory.NORMAL);
     public static final VariantAppearance ENDER_FEMALE = makeAppearance(MOD_ID, "ender/female", BuiltinFactory.NORMAL);
     public static final VariantAppearance ENDER_MALE = makeAppearance(MOD_ID, "ender/male", BuiltinFactory.NORMAL);
+    public static final VariantAppearance ENDER_RARE = makeAppearance(MOD_ID, "ender/rare", BuiltinFactory.NORMAL);
     public static final VariantAppearance FIRE_FEMALE = makeAppearance(MOD_ID, "fire/female", BuiltinFactory.NORMAL);
     public static final VariantAppearance FIRE_MALE = makeAppearance(MOD_ID, "fire/male", BuiltinFactory.NORMAL);
+    public static final VariantAppearance FIRE_RARE = makeAppearance(MOD_ID, "fire/rare", BuiltinFactory.NORMAL);
     public static final VariantAppearance FOREST_FEMALE;
     public static final VariantAppearance FOREST_MALE;
     public static final VariantAppearance FOREST_DRY_FEMALE;
@@ -48,6 +50,7 @@ public class VariantAppearances {
     public static final VariantAppearance SKELETON = makeAppearance(MOD_ID, "skeleton", BuiltinFactory.SKELETON);
     public static final VariantAppearance STORM_FEMALE = makeAppearance(MOD_ID, "storm/female", BuiltinFactory.TAIL_HORNED);
     public static final VariantAppearance STORM_MALE = makeAppearance(MOD_ID, "storm/male", BuiltinFactory.TAIL_HORNED);
+    public static final VariantAppearance STORM_RARE = makeAppearance(MOD_ID, "storm/rare", BuiltinFactory.TAIL_HORNED);
     public static final VariantAppearance SUNLIGHT_FEMALE = makeAppearance(MOD_ID, "sunlight/female", BuiltinFactory.NORMAL);
     public static final VariantAppearance SUNLIGHT_MALE = makeAppearance(MOD_ID, "sunlight/male", BuiltinFactory.NORMAL);
     public static final VariantAppearance TERRA_FEMALE = makeAppearance(MOD_ID, "terra/female", BuiltinFactory.NORMAL);
@@ -77,8 +80,10 @@ public class VariantAppearances {
         map.put("enchanted_male", ENCHANTED_MALE);
         map.put("ender_female", ENDER_FEMALE);
         map.put("ender_male", ENDER_MALE);
+        map.put("ender_rare", ENDER_RARE);
         map.put("fire_female", FIRE_FEMALE);
         map.put("fire_male", FIRE_MALE);
+        map.put("fire_rare", FIRE_RARE);
         map.put("forest_female", FOREST_FEMALE);
         map.put("forest_male", FOREST_MALE);
         map.put("forest_dry_female", FOREST_DRY_FEMALE);
@@ -94,6 +99,7 @@ public class VariantAppearances {
         map.put("skeleton", SKELETON);
         map.put("storm_female", STORM_FEMALE);
         map.put("storm_male", STORM_MALE);
+        map.put("storm_rare", STORM_RARE);
         map.put("sunlight_female", SUNLIGHT_FEMALE);
         map.put("sunlight_male", SUNLIGHT_MALE);
         map.put("terra_female", TERRA_FEMALE);
