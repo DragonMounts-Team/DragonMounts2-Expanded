@@ -10,6 +10,7 @@
 package net.dragonmounts.entity.helper;
 
 import net.dragonmounts.block.HatchableDragonEggBlock;
+import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
@@ -18,6 +19,7 @@ import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.util.ClientServerSynchronisedTickCount;
 import net.minecraft.block.Block;
 import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.SoundCategory;
@@ -36,6 +38,10 @@ import static net.minecraft.entity.SharedMonsterAttributes.*;
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public class DragonLifeStageHelper {
+    public static AttributeModifier makeAttributeModifier(int operator, double amount) {
+        return new AttributeModifier(DRAGON_AEG_MODIFIER_ID, "Dragon size modifier", amount, operator);
+    }
+
     public static final UUID DRAGON_AEG_MODIFIER_ID = UUID.fromString("856d4ba4-9ffe-4a52-8606-890bb9be538b");
     private static final Logger L = LogManager.getLogger();
     private static final String NBT_TICKS_SINCE_CREATION = "TicksSinceCreation";
@@ -71,9 +77,9 @@ public class DragonLifeStageHelper {
         float health = dragon.getHealth() / dragon.getMaxHealth();
         double scale = this.getScale();
         double factor = MathHelper.clamp(scale, 0.1, 1);
-        replaceAttributeModifier(attributes.getAttributeInstance(MAX_HEALTH), DRAGON_AEG_MODIFIER_ID, "Dragon size modifier", factor, 1, false);
-        replaceAttributeModifier(attributes.getAttributeInstance(ATTACK_DAMAGE), DRAGON_AEG_MODIFIER_ID, "Dragon size modifier", factor, 1, false);
-        replaceAttributeModifier(attributes.getAttributeInstance(ARMOR), DRAGON_AEG_MODIFIER_ID, "Dragon size modifier", MathHelper.clamp(scale, 0.1, 1.2), 1, false);
+        replaceAttributeModifier(attributes.getAttributeInstance(MAX_HEALTH), makeAttributeModifier(1, factor));
+        replaceAttributeModifier(attributes.getAttributeInstance(ATTACK_DAMAGE), makeAttributeModifier(1, factor));
+        replaceAttributeModifier(attributes.getAttributeInstance(ARMOR), makeAttributeModifier(0, Math.max(scale, 0.1F) * DMConfig.BASE_ARMOR.value));
         dragon.setHealth(health * dragon.getMaxHealth());
     }
 

@@ -32,6 +32,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.passive.AbstractHorse;
@@ -941,14 +942,12 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
             }
             IAttributeInstance attribute = this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ARMOR);
             if (armored) {
-                replaceAttributeModifier(
-                        attribute,
+                replaceAttributeModifier(attribute, new AttributeModifier(
                         DragonArmorItem.MODIFIER_UUID,
                         "Dragon Armor Bonus",
                         ((DragonArmorItem) stack.getItem()).protection,
-                        0,
-                        false
-                );
+                        0
+                ));
             } else if (attribute != null) {
                 attribute.removeModifier(DragonArmorItem.MODIFIER_UUID);
             }

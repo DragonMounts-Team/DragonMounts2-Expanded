@@ -23,6 +23,7 @@ public class DMConfig {
     // CLIENT:
     public static final DoubleEntry CAMERA_DISTANCE = new DoubleEntry("cameraDistance", 20.0);
     public static final BooleanEntry REDIRECT_INVENTORY = new BooleanEntry("redirectInventory", true);
+    public static final BooleanEntry PAUSE_ON_WHISTLE = new BooleanEntry("pauseOnWhistle", true);
     // ATTRIBUTES:
     public static final DoubleEntry BASE_ARMOR = new DoubleEntry("baseArmor", 8.0);
     public static final DoubleEntry BASE_ARMOR_TOUGHNESS = new DoubleEntry("baseArmorToughness", 30.0);
@@ -33,7 +34,7 @@ public class DMConfig {
     public static final DoubleEntry BASE_MOVEMENT_SPEED = new DoubleEntry("baseMovementSpeed", 0.4);
     public static final DoubleEntry BASE_FLYING_SPEED = new DoubleEntry("baseFlyingSpeed", 0.75);
     public static final DoubleEntry BASE_SWIMMING_SPEED = new DoubleEntry("baseSwimmingSpeed", 5.0);
-    public static final DoubleEntry BASE_BODY_SIZE = new DoubleEntry("baseBodySize", 1.6);
+    public static final DoubleEntry BASE_BODY_SIZE = new DoubleEntry("baseBodySize", 1.0);
     public static final DoubleEntry BASE_STEP_HEIGHT = new DoubleEntry("baseStepHeight", 1.25);
     // GAMEPLAY:
     public static final BooleanEntry FORCED_RENAME = new BooleanEntry("forcedRename", false);
@@ -97,6 +98,9 @@ public class DMConfig {
             register(category, order, REDIRECT_INVENTORY)
                     .setLanguageKey("config.dragonmounts.redirectInventory")
                     .setComment("Whether to open your mount's inventory instead of yours.");
+            register(category, order, PAUSE_ON_WHISTLE)
+                    .setLanguageKey("config.dragonmounts.pauseOnWhistle")
+                    .setComment("Whether to try to pause the game when using whistle.");
             category.setPropertyOrder(order);
             // ATTRIBUTES
             order = new ObjectArrayList<>();
@@ -207,6 +211,7 @@ public class DMConfig {
         category = config.getCategory(CATEGORY_CLIENT);
         load(category, CAMERA_DISTANCE);
         load(category, REDIRECT_INVENTORY);
+        load(category, PAUSE_ON_WHISTLE);
 
         category = config.getCategory(CATEGORY_ATTRIBUTES);
         load(category, BASE_ARMOR);

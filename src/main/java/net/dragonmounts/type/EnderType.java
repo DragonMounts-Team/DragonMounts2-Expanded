@@ -22,7 +22,7 @@ public class EnderType extends DragonType {
 
     @Override
     public SoundEvent getLivingSound(TameableDragonEntity dragon) {
-        return DMSounds.DRAGON_AMBIENT;
+        return dragon.isChild() ? DMSounds.DRAGON_PURR_HATCHLING : DMSounds.DRAGON_AMBIENT;
     }
 
     @Override

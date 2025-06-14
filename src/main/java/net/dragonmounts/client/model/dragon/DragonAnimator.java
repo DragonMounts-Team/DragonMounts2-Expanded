@@ -126,7 +126,7 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
     }
 
     public void setMovement(float moveTime) {
-        this.moveTime = moveTime;
+        this.moveTime = moveTime * 0.2F;
     }
 
     /**
@@ -426,7 +426,7 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
 
     protected void animLegs(DragonModel model) {
         // dangling legs for flying
-        float move = this.moveTime * 0.2F;
+        float move = this.moveTime;
         if (ground < 1) {
             float footAirOfs = cycleOfs * 0.1f;
             float footAirX = 0.75f + footAirOfs;

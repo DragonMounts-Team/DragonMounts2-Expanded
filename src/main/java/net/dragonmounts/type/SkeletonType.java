@@ -20,7 +20,7 @@ public class SkeletonType extends DragonType {
     }
 
     @Override
-    public boolean isHabitatEnvironment(Entity egg) {
+    public boolean isInHabitat(Entity egg) {
         return egg.posY * 5 < egg.world.getHeight() && egg.getBrightness() < 0.25;
     }
 

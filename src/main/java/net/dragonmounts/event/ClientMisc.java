@@ -81,7 +81,7 @@ public class ClientMisc {
         }, DMItems.AETHER_DRAGON_SPAWN_EGG, DMItems.DARK_DRAGON_SPAWN_EGG, DMItems.ENCHANTED_DRAGON_SPAWN_EGG, DMItems.ENDER_DRAGON_SPAWN_EGG, DMItems.FIRE_DRAGON_SPAWN_EGG, DMItems.FOREST_DRAGON_SPAWN_EGG, DMItems.ICE_DRAGON_SPAWN_EGG, DMItems.MOONLIGHT_DRAGON_SPAWN_EGG, DMItems.NETHER_DRAGON_SPAWN_EGG, DMItems.SKELETON_DRAGON_SPAWN_EGG, DMItems.STORM_DRAGON_SPAWN_EGG, DMItems.SUNLIGHT_DRAGON_SPAWN_EGG, DMItems.TERRA_DRAGON_SPAWN_EGG, DMItems.WATER_DRAGON_SPAWN_EGG, DMItems.WITHER_DRAGON_SPAWN_EGG, DMItems.ZOMBIE_DRAGON_SPAWN_EGG);
 
         colors.registerItemColorHandler((stack, tintIndex) -> {
-            if (tintIndex != 1) return 0xFFFFFF;// claw
+            if (tintIndex != 0) return 0xFFFFFF;// claw
             // orb jewel
             final long GLOW_CYCLE_PERIOD_SECONDS = 4;
             final float MIN_GLOW_BRIGHTNESS = 0.4F;

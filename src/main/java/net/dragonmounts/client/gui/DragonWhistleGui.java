@@ -2,6 +2,7 @@ package net.dragonmounts.client.gui;
 
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.client.ClientUtil;
+import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.network.CFollowOrderPacket;
 import net.dragonmounts.network.CSitOrderPacket;
 import net.dragonmounts.network.CTeleportOrderPacket;
@@ -58,6 +59,11 @@ public class DragonWhistleGui extends GuiScreen {
         }
         //Close GUI when option is selected
         this.mc.displayGuiScreen(null);
+    }
+
+    @Override
+    public boolean doesGuiPauseGame() {
+        return DMConfig.PAUSE_ON_WHISTLE.value;
     }
 
     private static int maxTextWidth(FontRenderer font, String... text) {

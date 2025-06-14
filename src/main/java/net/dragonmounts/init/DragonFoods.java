@@ -50,7 +50,7 @@ public class DragonFoods {
         bind(Items.RABBIT_STEW, new WrappedFood(cookedRabbit, Items.BOWL, 0));
         bind(Items.COOKED_MUTTON, new CommonFood(12, 2500, 2.0F, 0.375F));
 
-        bind(DMItems.RAW_DRAGON_MEAT, EmptyProvider.INSTANCE);
+        bind(DMItems.DRAGON_MEAT, EmptyProvider.INSTANCE);
         bind(DMItems.COOKED_DRAGON_MEAT, EmptyProvider.INSTANCE);
     }
 

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "dragonmounts:items/raw_dragon_meat"
+    "layer0": "dragonmounts:items/dragon_meat"
   }
 }

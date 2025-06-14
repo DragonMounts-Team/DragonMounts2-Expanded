@@ -213,7 +213,7 @@ public class RegistryEventHandler {
     }
 
     public static void registerRecipes() {
-        GameRegistry.addSmelting(DMItems.RAW_DRAGON_MEAT, new ItemStack(DMItems.COOKED_DRAGON_MEAT), 0.35F);
+        GameRegistry.addSmelting(DMItems.DRAGON_MEAT, new ItemStack(DMItems.COOKED_DRAGON_MEAT), 0.35F);
     }
 
     @SubscribeEvent

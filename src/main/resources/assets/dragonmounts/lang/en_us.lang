@@ -43,7 +43,7 @@ life_stage.dragon.adult=Adult
 # Item Names
 ##
 
-item.dragonmounts.raw_dragon_meat.name=Raw Dragon Meat
+item.dragonmounts.dragon_meat.name=Raw Dragon Meat
 item.dragonmounts.cooked_dragon_meat.name=Cooked Dragon Meat
 
 item.dragonmounts.diamond_shears.name=Diamond Shears
@@ -52,6 +52,7 @@ item.dragonmounts.dragon_essence.name=Dragon Essence
 item.dragonmounts.dragon_whistle.name=Dragon Whistle
 item.dragonmounts.dragon_amulet.name=Dragon Amulet
 item.dragonmounts.dragon_orb.name=Dragon Orb
+item.dragonmounts.dragon_wand.name=Wand of Dragon
 item.dragonmounts.variation_orb.name=Orb of Variation
 
 item.dragonmounts.oak_carriage.name=Oak CargoBob
@@ -240,6 +241,8 @@ config.dragonmounts.quenchingBreath=Quenching Breath
 config.dragonmounts.quenchingBreath.tooltip=Whether mist-like dragon breath can put out fire and solidify lava
 config.dragonmounts.redirectInventory=Inventory Redirect
 config.dragonmounts.redirectInventory.tooltip=Whether to open your mount's inventory instead of yours
+config.dragonmounts.pauseOnWhistle=Pause On Whistle
+config.dragonmounts.pauseOnWhistle.tooltip=Whether to try to pause the game when using whistle
 config.dragonmounts.toggleDimensionLimitation=Allow Declared Dimensions Only
 config.dragonmounts.toggleDimensionLimitation.tooltip=If enabled, Dragon Nests will only be generated in declared dimensions; otherwise they will not be generated in the declared dimensions
 config.dragonmounts.limitedDimensions=Limited Dimensions

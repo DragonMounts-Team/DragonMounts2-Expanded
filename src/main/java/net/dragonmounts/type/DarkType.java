@@ -46,7 +46,7 @@ public class DarkType extends DragonType {
     }
 
     @Override
-    public boolean isHabitatEnvironment(Entity egg) {
+    public boolean isInHabitat(Entity egg) {
         return egg.posY > egg.world.getHeight() * 0.66;
     }
 }

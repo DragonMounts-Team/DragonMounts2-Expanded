@@ -9,8 +9,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
+
+import static net.dragonmounts.util.EntityUtil.addOrMergeEffect;
 
 public class StormType extends WaterType {
     public StormType(ResourceLocation identifier, DragonTypeBuilder builder) {
@@ -33,6 +34,7 @@ public class StormType extends WaterType {
 
     @Override
     public void onStruckByLightning(ServerDragonEntity dragon, EntityLightningBolt bolt) {
-        dragon.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 1200, 1));
+        if (dragon.isEgg()) return;
+        addOrMergeEffect(dragon, MobEffects.STRENGTH, 1200, 1, false, true);//35s
     }
 }

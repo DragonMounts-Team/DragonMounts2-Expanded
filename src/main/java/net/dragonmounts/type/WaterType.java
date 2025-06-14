@@ -60,6 +60,11 @@ public class WaterType extends DragonType {
     }
 
     @Override
+    public SoundEvent getLivingSound(TameableDragonEntity dragon) {
+        return dragon.isChild() ? DMSounds.DRAGON_PURR_HATCHLING : DMSounds.DRAGON_AMBIENT_WATER;
+    }
+
+    @Override
     public SoundEvent getRoarSound(TameableDragonEntity dragon) {
         return dragon.isChild() ? DMSounds.DRAGON_ROAR_HATCHLING : DMSounds.DRAGON_ROAR_WATER;
     }

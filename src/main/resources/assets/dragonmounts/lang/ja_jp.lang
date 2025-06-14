@@ -43,7 +43,7 @@ life_stage.dragon.adult=成体
 # Item Names
 ##
 
-item.dragonmounts.raw_dragon_meat.name=生のドラゴン肉
+item.dragonmounts.dragon_meat.name=生のドラゴン肉
 item.dragonmounts.cooked_dragon_meat.name=焼きドラゴン肉
 
 item.dragonmounts.diamond_shears.name=ダイヤのハサミ

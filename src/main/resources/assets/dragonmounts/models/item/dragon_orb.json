@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "dragonmounts:items/dragon_orb_handle",
-    "layer1": "dragonmounts:items/dragon_orb"
+    "layer0": "dragonmounts:items/dragon_orb",
+    "layer1": "dragonmounts:items/dragon_orb_handle"
   }
 }

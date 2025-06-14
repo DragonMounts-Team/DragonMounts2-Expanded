@@ -75,7 +75,7 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 		// location of the slot for armor in the dragon inventory
 		this.addSlotToContainer(applyBackground(new Slot(inventory, 32, 156, 54) {
 			public boolean isItemValid(ItemStack stack) {
-				return !stack.isEmpty() && stack.getItem() instanceof DragonArmorItem && dragon.isOldEnoughToBreathe();
+				return !stack.isEmpty() && stack.getItem() instanceof DragonArmorItem;
 			}
 		}, "dragonmounts:items/slot/empty_dragon_armor"));
 

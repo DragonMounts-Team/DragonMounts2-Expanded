@@ -1,6 +1,5 @@
 package net.dragonmounts.init;
 
-import net.dragonmounts.effect.DarkDragonsCurseEffect;
 import net.dragonmounts.effect.DarkDragonsGraceEffect;
 import net.minecraft.potion.Potion;
 
@@ -9,7 +8,4 @@ public class DMMobEffects {
             .setBeneficial()
             .setPotionName("effect.dragonmounts.dark_dragons_grace")
             .setRegistryName("dark_dragons_grace");
-    public static final Potion DARK_DRAGONS_CURSE = new DarkDragonsCurseEffect(true, 0x6908265)
-            .setPotionName("effect.dragonmounts.dark_dragons_curse")
-            .setRegistryName("dark_dragons_curse");
 }

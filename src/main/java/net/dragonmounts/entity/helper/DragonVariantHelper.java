@@ -114,7 +114,7 @@ public class DragonVariantHelper implements ITickable {
                 if (type.isHabitat(biome)) {
                     this.points.addTo(type, POINTS_BIOME);
                 }
-                if (type.isHabitatEnvironment(dragon)) {
+                if (type.isInHabitat(dragon)) {
                     this.points.addTo(type, POINTS_ENV);
                 }
             }

@@ -128,10 +128,10 @@ public class EntityUtil {
         return (float) height;
     }
 
-    public static void replaceAttributeModifier(@Nullable IAttributeInstance attribute, UUID uuid, String name, double amount, int operator, boolean serializable) {
+    public static void replaceAttributeModifier(@Nullable IAttributeInstance attribute, AttributeModifier modifier) {
         if (attribute == null) return;
-        attribute.removeModifier(uuid);
-        attribute.applyModifier(new AttributeModifier(uuid, name, amount, operator).setSaved(serializable));
+        attribute.removeModifier(modifier.getID());
+        attribute.applyModifier(modifier);
     }
 
     public static boolean isMoving(Entity dragon) {

@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class DragonArmorItem extends Item {
-    public static final String TEXTURE_PREFIX = "textures/entities/armor/armor_";
+    public static final String TEXTURE_PREFIX = "textures/entities/dragon_armor/";
     public static final UUID MODIFIER_UUID = UUID.fromString("f4dbd212-cf15-57e9-977c-0019cc5a8933");
     public final ResourceLocation texture;
     public final int protection;

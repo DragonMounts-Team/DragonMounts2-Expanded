@@ -19,7 +19,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
@@ -35,6 +34,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static net.dragonmounts.DragonMounts.makeId;
+import static net.dragonmounts.util.EntityUtil.addOrMergeEffect;
 
 public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
     public static final String DATA_PARAMETER_KEY = "DragonType";
@@ -81,7 +81,12 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
     /// Do **NOT** directly access client only class here!
     public void tickClient(ClientDragonEntity dragon) {}
 
-    public boolean isHabitatEnvironment(Entity egg) {
+    public void onStruckByLightning(ServerDragonEntity dragon, EntityLightningBolt bolt) {
+        if (dragon.isEgg()) return;
+        addOrMergeEffect(dragon, MobEffects.STRENGTH, 700, 0, false, true);//35s
+    }
+
+    public boolean isInHabitat(Entity egg) {
         return false;
     }
 
@@ -123,21 +128,17 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
         }
     }
 
-    public void onStruckByLightning(ServerDragonEntity dragon, EntityLightningBolt bolt) {
-        dragon.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 35 * 20));
-    }
-
     @Nullable
     public DragonBreath initBreath(TameableDragonEntity dragon) {
         return new FireBreath(dragon, 0.7F);
     }
 
     public SoundEvent getLivingSound(TameableDragonEntity dragon) {
-        return dragon.isChild() ? DMSounds.DRAGON_PURR_HATCHLING : (
-                dragon.getRNG().nextFloat() < 0.33F
-                        ? DMSounds.DRAGON_PURR
-                        : DMSounds.DRAGON_AMBIENT
-        );
+        return dragon.isChild()
+                ? DMSounds.DRAGON_PURR_HATCHLING
+                : dragon.getRNG().nextFloat() < 0.33F
+                ? DMSounds.DRAGON_PURR
+                : DMSounds.DRAGON_AMBIENT;
     }
 
     public SoundEvent getDeathSound(TameableDragonEntity dragon) {
