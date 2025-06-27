@@ -1,5 +1,6 @@
 import json
-input = '../run/lang.json'
+from os import path
+source = '../run/lang.json'
 output = '../run/lang/'
 locales = [
   'en_us',
@@ -7,7 +8,8 @@ locales = [
   'ja_jp',
   'fr_fr'
 ]
-with open(input, 'r', encoding='utf-8') as file:
+if not path.exists(source): exit()
+with open(source, 'r', encoding='utf-8') as file:
   data = json.load(file)
   if 'translations' in data:
     data = data['translations']

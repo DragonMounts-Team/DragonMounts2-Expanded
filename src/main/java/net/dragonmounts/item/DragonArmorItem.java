@@ -56,7 +56,7 @@ public class DragonArmorItem extends Item {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World level, List<String> tooltips, ITooltipFlag flag) {
         tooltips.add("");
-        tooltips.add(ClientUtil.translateToLocal("item.modifiers.equipped"));
+        tooltips.add(ClientUtil.translateToLocal("item.modifiers.body"));
         tooltips.add(TextFormatting.BLUE + I18n.translateToLocalFormatted("attribute.modifier.plus.0", ItemStack.DECIMALFORMAT.format(this.protection), I18n.translateToLocal("attribute.name.generic.armor")));
     }
 

@@ -150,7 +150,7 @@ tooltip.dragonmounts.hard_shears=Can shear scales from dragons
 tooltip.dragonmounts.amulet.empty=Can store a dragon
 tooltip.dragonmounts.carriage=Used to make dragons carry multiple passengers like a boat
 
-item.modifiers.equipped=When equipped:
+item.modifiers.body=When equipped:
 
 subtitles.entity.dragonmounts.dragon.ambient=Dragon roars
 subtitles.entity.dragonmounts.dragon.chest=Dragon Chest equips

@@ -131,7 +131,7 @@ tooltip.dragonmounts.hard_shears=可从龙身上剪下龙鳞
 tooltip.dragonmounts.amulet.empty=可容纳一条龙
 tooltip.dragonmounts.carriage=让龙像一艘船一样携带多个生物
 
-item.modifiers.equipped=在装备后：
+item.modifiers.body=装备时：
 
 subtitles.entity.dragonmounts.dragon.ambient=龙：呼吸
 subtitles.entity.dragonmounts.dragon.chest=龙：装备箱子

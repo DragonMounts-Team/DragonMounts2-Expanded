@@ -149,7 +149,8 @@ tooltip.dragonmounts.hard_shears=飼いならされたドラゴンを殺さず�
 tooltip.dragonmounts.amulet.empty=右クリックしてドラゴンを保管して運べます
 tooltip.dragonmounts.carriage=ドラゴンがボートのように複数の乗客を運ぶために使用される
 
-item.modifiers.equipped=装備時：
+## vanilla entry
+item.modifiers.body=装備したとき：
 
 subtitles.entity.dragonmounts.dragon.ambient=ドラゴンの呼吸
 subtitles.entity.dragonmounts.dragon.chest=ドラゴンチェストを装備

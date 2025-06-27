@@ -94,12 +94,13 @@ public class DragonHeadLocator<T extends TameableDragonEntity> implements ITicka
                 * MathX.lerp(1.0F, 0.2F, this.sit)
                 // reduce rotation when on ground
                 * Interpolation.smoothLinear(1.0F, 0.5F, this.walk);
-        if (dragon.isUsingBreathWeapon()) {
+        if (!dragon.isUsingBreathWeapon()) {
             rotXFactor *= MathX.lerp(0.2F, 1.0F, this.flutter);
         }
         float healthFactor = dragon.getHealth() / dragon.getMaxHealth() * this.ground;
         float speed = this.speed;
         float rotYFactor = MathX.toRadians(this.lookYaw) * speed;
+        float speedFactor = 1.0F - speed;
         float base = this.animBase;
         for (int i = 0; i < NECK_SEGMENTS; ) {
             float posX = segment.posX, posY = segment.posY, posZ = segment.posZ;
@@ -107,13 +108,13 @@ public class DragonHeadLocator<T extends TameableDragonEntity> implements ITicka
             float rotX = segment.rotX = MathHelper.cos(i * 0.45F + base)
                     * rotXFactor
                     // flex neck down when hovering
-                    + (1 - speed) * vertMulti
+                    + speedFactor * vertMulti
                     // lower neck on low health
                     - MathX.lerp(0.0F, MathHelper.sin(vertMulti * MathX.PI_F * 0.9F) * 0.63F, healthFactor);
             // use looking yaw
             lastRotY = segment.rotY = rotYFactor * vertMulti;
             // update size (scale)
-            segment.scaleX = segment.scaleY = MathX.lerp(1.6f, 1, vertMulti);
+            segment.scaleX = segment.scaleY = MathX.lerp(1.6F, 1.0F, vertMulti);
             segment.scaleZ = 0.6F;
             segment = (++i < NECK_SEGMENTS) ? this.neckSegments[i] : head;
             // move next segment behind the current one
@@ -124,7 +125,7 @@ public class DragonHeadLocator<T extends TameableDragonEntity> implements ITicka
             segment.posZ = posZ - MathHelper.cos(lastRotY) * factor;
         }
         //final float HEAD_TILT_DURING_BREATH = -0.1F;
-        head.rotX = MathX.toRadians(this.lookPitch) + (1 - speed); // + breath * HEAD_TILT_DURING_BREATH
+        head.rotX = MathX.toRadians(this.lookPitch) + speedFactor; // + breath * HEAD_TILT_DURING_BREATH
         head.rotY = lastRotY;
         head.rotZ = 0.0F;
     }
