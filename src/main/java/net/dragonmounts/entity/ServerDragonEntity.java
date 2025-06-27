@@ -482,7 +482,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
     }
 
     public void setBodySize(float size) {
-        this.dataManager.set(DATA_BODY_SIZE, size == 0.0F ? 1.6F : size);
+        this.dataManager.set(DATA_BODY_SIZE, size > 0.0F ? size : (float) DMConfig.BASE_BODY_SIZE.value);
     }
 
     public void setBreatheCollected(int cooldown) {
