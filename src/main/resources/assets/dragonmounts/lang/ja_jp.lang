@@ -52,6 +52,7 @@ item.dragonmounts.dragon_essence.name=ドラゴンエッセンス
 item.dragonmounts.dragon_whistle.name=ドラゴンホイッスル
 item.dragonmounts.dragon_amulet.name=ドラゴンアミュレット
 item.dragonmounts.dragon_orb.name=ドラゴンオーブ
+item.dragonmounts.dragon_wand.name=ドラゴンワンド
 item.dragonmounts.variation_orb.name=バリエーションオーブ
 
 item.dragonmounts.oak_carriage.name=オークのカーゴボブ
@@ -241,6 +242,8 @@ config.dragonmounts.quenchingBreath=ドラゴンブレスによる鎮静
 config.dragonmounts.quenchingBreath.tooltip=霧のようなドラゴンブレスは火を消したり溶岩を固めたりできるか
 config.dragonmounts.redirectInventory=インベントリのリダイレクト
 config.dragonmounts.redirectInventory.tooltip=自分のインベントリではなくマウントのインベントリを開くかどうか
+config.dragonmounts.pauseOnWhistle=ホイッスル使用時に一時停止
+config.dragonmounts.pauseOnWhistle.tooltip=ホイッスル使用時に一時停止するかどうか
 config.dragonmounts.toggleDimensionLimitation=宣言されたディメンションのみ許可
 config.dragonmounts.toggleDimensionLimitation.tooltip=有効にすると、ドラゴンネストは宣言されたディメンションにのみ生成されます。有効にしない場合は、宣言されたディメンションには生成されません。
 config.dragonmounts.limitedDimensions=ディメンションの制限

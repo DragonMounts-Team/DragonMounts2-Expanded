@@ -40,7 +40,7 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 
 			@SideOnly(Side.CLIENT)
 			public boolean isEnabled() {
-				return dragon.isOldEnoughToBreathe();
+				return this.getHasStack() || dragon.isOldEnoughToBreathe();
 			}
 
 			@Override
@@ -63,7 +63,7 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 
 			@SideOnly(Side.CLIENT)
 			public boolean isEnabled() {
-				return dragon.isOldEnoughToBreathe();
+				return this.getHasStack() || dragon.isOldEnoughToBreathe();
 			}
 
 			@Override
@@ -88,7 +88,7 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 
 				@SideOnly(Side.CLIENT)
 				public boolean isEnabled() {
-					return dragon.isOldEnoughToBreathe();
+					return this.getHasStack() || dragon.isOldEnoughToBreathe();
 				}
 			}, "dragonmounts:items/slot/empty_banner"));
 		}
@@ -97,12 +97,10 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 		for (int k = 0; k < 3; ++k) {
 			for (int l = 0; l < 9; ++l) {
 				this.addSlotToContainer(new Slot(inventory, l + k * 9, 156 + l * 18, 75 + k * 18) {
-
 					@SideOnly(Side.CLIENT)
 					public boolean isEnabled() {
-						return DragonContainer.this.dragon.isChested();
+						return this.getHasStack() || dragon.isChested();
 					}
-
 				});
 			}
 		}
@@ -147,26 +145,27 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 				if (!this.mergeItemStack(stack, 3, 4, false)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (canPlaceAt(this, 2, stack)) {
-				// move item as chest
-				if (!this.mergeItemStack(stack, 2, 3, false)) {
-					return ItemStack.EMPTY;
-				}
-			} else if (canPlaceAt(this, 1, stack)) {
-				// move item as saddle
-				if (!this.mergeItemStack(stack, 1, 2, false)) {
-					return ItemStack.EMPTY;
-				}
-			} else if (canPlaceAt(this, 0, stack)) {
-				// move item as whistle
-				if (!this.mergeItemStack(stack, 0, 1, false)) {
-					return ItemStack.EMPTY;
-				}
-			} else if (!this.dragon.isChested() ||
-					// move item to slots in chest
-					!this.mergeItemStack(stack, 3, size, false)
-			) {
-				return ItemStack.EMPTY;
+			} else {
+				boolean flag = this.dragon.isOldEnoughToBreathe();
+				if (flag && canPlaceAt(this, 2, stack)) {
+					// move item as chest
+					if (!this.mergeItemStack(stack, 2, 3, false)) {
+						return ItemStack.EMPTY;
+					}
+				} else if (flag && canPlaceAt(this, 1, stack)) {
+					// move item as saddle
+					if (!this.mergeItemStack(stack, 1, 2, false)) {
+						return ItemStack.EMPTY;
+					}
+				} else if (canPlaceAt(this, 0, stack)) {
+					// move item as whistle
+					if (!this.mergeItemStack(stack, 0, 1, false)) {
+						return ItemStack.EMPTY;
+					}
+				} else if (!this.dragon.isChested() ||
+						// move item to slots in chest
+						!this.mergeItemStack(stack, 3, size, false)
+				) return ItemStack.EMPTY;
 			}
 			if (stack.isEmpty()) {
 				slot.putStack(ItemStack.EMPTY);

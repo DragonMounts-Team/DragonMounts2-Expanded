@@ -147,8 +147,8 @@ public class DMConfig {
                     .setMinValue(0.25)
                     .setLanguageKey("config.dragonmounts.baseBodySize");
             register(category, order, BASE_STEP_HEIGHT)
-                    .setMaxValue(Double.MAX_VALUE)
-                    .setMinValue(-Double.MAX_VALUE)
+                    .setMaxValue(10.0)
+                    .setMinValue(0.0)
                     .setLanguageKey("config.dragonmounts.baseStepHeight")
                     .setRequiresWorldRestart(true);
             category.setPropertyOrder(order);
