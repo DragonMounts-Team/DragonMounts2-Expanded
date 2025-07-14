@@ -16,11 +16,11 @@ import net.minecraft.entity.ai.EntityAIBase;
 /**
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class EntityAIDragonFollowOwnerElytraFlying extends EntityAIBase {
+public class FollowElytraFlyingOwnerGoal extends EntityAIBase {
     public final ServerDragonEntity dragon;
     protected EntityLivingBase owner;
 
-    public EntityAIDragonFollowOwnerElytraFlying(ServerDragonEntity dragon) {
+    public FollowElytraFlyingOwnerGoal(ServerDragonEntity dragon) {
         this.dragon = dragon;
         this.setMutexBits(3);
     }

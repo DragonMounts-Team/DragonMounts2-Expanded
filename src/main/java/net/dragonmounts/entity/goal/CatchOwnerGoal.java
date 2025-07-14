@@ -21,11 +21,11 @@ import net.minecraft.item.ItemStack;
 /**
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class EntityAIDragonCatchOwner extends EntityAIBase {
+public class CatchOwnerGoal extends EntityAIBase {
     public final ServerDragonEntity dragon;
     protected EntityPlayer owner;
 
-    public EntityAIDragonCatchOwner(ServerDragonEntity dragon) {
+    public CatchOwnerGoal(ServerDragonEntity dragon) {
         this.dragon = dragon;
     }
 

@@ -132,13 +132,13 @@ public class ServerDragonEntity extends TameableDragonEntity {
         // mutex 1: movement
         // mutex 2: looking
         // mutex 4: special state
-        tasks.addTask(0, new EntityAIDragonCatchOwner(this)); // mutex all
-        tasks.addTask(1, new EntityAIDragonPlayerControl(this)); // mutex all
+        tasks.addTask(0, new CatchOwnerGoal(this)); // mutex all
+        tasks.addTask(1, new ControlledByPlayerGoal(this)); // mutex all
         tasks.addTask(2, this.getAISit()); // mutex 4+1
         tasks.addTask(2, new EntityAISwimming(this)); // mutex 4
         tasks.addTask(3, new DragonAttackGoal(this, 1)); // mutex 2+1
         tasks.addTask(4, new DragonDescendGoal(this, 0.25)); // mutex 1
-        tasks.addTask(6, new EntityAIDragonFollowOwnerElytraFlying(this)); // mutex 2+1
+        tasks.addTask(6, new FollowElytraFlyingOwnerGoal(this)); // mutex 2+1
         tasks.addTask(7, new DragonFollowOwnerGoal(this, 1, 18, 14)); // mutex 2+1
         tasks.addTask(9, new EntityAIMoveTowardsRestriction(this, 1)); // mutex 1
         tasks.addTask(11, new EntityAIWander(this, 1)); // mutex 1
@@ -500,6 +500,15 @@ public class ServerDragonEntity extends TameableDragonEntity {
             motionY += flag ? 0.7 : 6;
             inAirTicks += flag ? 3 : 4;
             jump();
+        }
+    }
+
+    @Override
+    protected void tickRidden(EntityPlayer player, boolean forward) {
+        super.tickRidden(player, forward);
+        // lift off from a jump
+        if (player.isJumping && !this.isFlying()) {
+            this.liftOff();
         }
     }
 

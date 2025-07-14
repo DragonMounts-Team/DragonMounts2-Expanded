@@ -17,7 +17,6 @@ import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.breath.DragonBreathHelper;
 import net.dragonmounts.entity.helper.DragonBodyHelper;
 import net.dragonmounts.entity.helper.DragonLifeStageHelper;
-import net.dragonmounts.entity.helper.DragonMoveHelper;
 import net.dragonmounts.entity.helper.DragonVariantHelper;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.init.DragonTypes;
@@ -121,7 +120,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
 
     public TameableDragonEntity(World world) {
         super(world);
-        this.moveHelper = new DragonMoveHelper(this);
         this.lifeStageHelper.applyEntityAttributes();
     }
 
@@ -162,11 +160,9 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         AbstractAttributeMap attributes = this.getAttributeMap();
-        attributes.registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
-        attributes.registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
-        attributes.getAttributeInstance(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(DMConfig.BASE_FLYING_SPEED.value);
+        attributes.registerAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(DMConfig.BASE_FLYING_SPEED.value);
+        attributes.registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(DMConfig.BASE_DAMAGE.value);
         attributes.getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(DMConfig.BASE_MOVEMENT_SPEED.value);
-        attributes.getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(DMConfig.BASE_DAMAGE.value);
         attributes.getAttributeInstance(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(DMConfig.BASE_FOLLOW_RANGE.value);
         attributes.getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(DMConfig.BASE_KNOCKBACK_RESISTANCE.value);
         attributes.getAttributeInstance(SharedMonsterAttributes.ARMOR).setBaseValue(DMConfig.BASE_ARMOR.value);
@@ -622,17 +618,67 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
 
     @Override
     public boolean canBeSteered() {
-        //   must always return false or the vanilla movement code interferes
-        //   with DragonMoveHelper
-        return false;
+        return this.getControllingPassenger() instanceof EntityPlayer;
+    }
+
+    protected void tickRidden(EntityPlayer player, boolean forward) {
+        if (this.getVariant().type == DragonTypes.WATER && player.isInWater()) {
+            EntityUtil.addOrResetEffect(player, MobEffects.WATER_BREATHING, 200, 0, true, true, 21);
+        }
+        if (forward || this.followYaw() || this.isUsingBreathWeapon()) {
+            float rotY = this.rotationYaw;
+            rotY += MathHelper.wrapDegrees(player.rotationYaw - rotY) * 0.08F;
+            this.setRotation(rotY, player.rotationPitch * 0.75F);
+            this.prevRotationYaw = this.rotationYaw = this.rotationYawHead = rotY;
+        }
     }
 
     @Override
-    public void travel(float strafe, float forward, float vertical) {
-        // disable method while flying, the movement is done entirely by
-        // moveEntity() and this one just makes the dragon to fall slowly when
-        if (!isFlying()) {
-            super.travel(strafe, forward, vertical);
+    public void travel(float strafe, float vertical, float forward) {
+        Entity controller = this.getControllingPassenger();
+        if (controller instanceof EntityPlayer && !this.dead) {
+            this.moveStrafing = this.moveVertical = this.moveForward = 0.0F;
+            EntityPlayer player = (EntityPlayer) controller;
+            if (this.onGround) {
+                vertical = 0.0F;
+                strafe = player.moveStrafing * 0.5F;
+                forward = player.moveForward < 0.0F ? player.moveForward * 0.25F : player.moveForward;
+            } else {
+                strafe = player.moveStrafing * 0.75F;
+                vertical = player.isJumping ? 0.5F : this.isGoingDown() ? -0.5F : 0.0F;
+                if (player.moveForward == 0.0F) {
+                    forward = 0.0F;
+                } else if (this.isYLocked()) {
+                    forward = player.moveForward < 0.0F ? 0.5F : 1.0F;
+                } else {
+                    float facing = MathX.toRadians(player.rotationPitch), upward = -MathHelper.sin(facing);
+                    forward = MathHelper.cos(facing);
+                    if (player.moveForward < 0.0F) {
+                        forward *= -0.5F;
+                        upward *= -0.5F;
+                    }
+                    vertical += upward;
+                }
+            }
+            this.tickRidden(player, forward != 0.0F);
+            if (this.isFlying()) {
+                float speed = 0.25F * (float) this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).getAttributeValue();
+                if (this.boosting()) {
+                    speed *= 1.5F;
+                }
+                this.setAIMoveSpeed(speed);
+                this.moveRelative(strafe, vertical, forward, speed);
+                this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
+                this.motionX *= 0.91F;
+                this.motionY *= 0.91F;
+                this.motionZ *= 0.91F;
+            } else {
+                float speed = 0.75F * (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue();
+                this.setAIMoveSpeed(this.boosting() ? speed * 1.5F + 0.125F : speed);
+                super.travel(strafe, vertical, forward);
+            }
+        } else {
+            super.travel(strafe, vertical, forward);
         }
     }
 
