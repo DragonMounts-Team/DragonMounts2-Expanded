@@ -59,7 +59,6 @@ import net.minecraftforge.common.util.Constants;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -379,23 +378,10 @@ public class ServerDragonEntity extends TameableDragonEntity {
                     this.setAttackTarget(null);
                     this.startRiding(player, true);
                 }
-            } else if (this.isSaddled()) {
-                List<Entity> passengers = this.getPassengers();
-                if (passengers.size() < 3) {
-                    boolean flag = true;
-                    for (Entity passenger : passengers) {
-                        if (passenger == player) {
-                            flag = false;
-                            break;
-                        }
-                    }
-                    if (flag) {
-                        player.rotationYaw = rotationYaw;
-                        player.rotationPitch = rotationPitch;
-                        player.startRiding(this);
-                        return true;
-                    }
-                }
+            } else if (this.isSaddled() && player.startRiding(this)) {
+                player.rotationYaw = this.rotationYaw;
+                player.rotationPitch = this.rotationPitch;
+                return true;
             }
         }
         this.openInventory(player);
@@ -461,18 +447,14 @@ public class ServerDragonEntity extends TameableDragonEntity {
 
     @Override
     protected void collideWithEntity(Entity other) {
-        if (other instanceof CarriageEntity &&
-                this.isSaddled() &&
-                !other.isRiding() &&
-                this.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING) &&
-                !other.isPassenger(this)
-        ) {
-            List<Entity> passengers = this.getPassengers();
-            if (passengers.isEmpty() || passengers.size() < (passengers.get(0) instanceof EntityPlayer ? 5 : 4)) {
-                other.startRiding(this);
-                return;
-            }
-        }
+        if (other instanceof CarriageEntity
+                && this.isSaddled()
+                && !other.isRiding()
+                && this.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING)
+                && !other.isPassenger(this)
+                && this.canFitPassenger(other)
+                && other.startRiding(this)
+        ) return;
         super.collideWithEntity(other);
     }
 

@@ -14,10 +14,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -53,22 +50,22 @@ public class CarriageEntity extends Entity {
     private boolean isInReverse;
 
     private int lerpSteps;
-    private double boatPitch;
+    private double lerpX;
     private double lerpY;
     private double lerpZ;
-    private double boatYaw;
-    private double lerpXRot;
+    private double lerpYaw;
+    private double lerpPitch;
 
     public CarriageEntity(World level) {
         super(level);
         this.preventEntitySpawning = true;
         this.setSize(1.0F, 0.5F);
+        this.motionX = this.motionY = this.motionZ = 0.0F;
     }
 
-    public CarriageEntity(World level, Vec3d pos) {
+    public CarriageEntity(World level, double x, double y, double z) {
         this(level);
-        this.setPosition(this.prevPosX = pos.x, this.prevPosY = pos.y, this.prevPosZ = pos.z);
-        this.motionX = this.motionY = this.motionZ = 0.0F;
+        this.setPosition(this.prevPosX = x, this.prevPosY = y, this.prevPosZ = z);
     }
 
     @Override
@@ -166,8 +163,12 @@ public class CarriageEntity extends Entity {
             }
         }
 
-        if (this.getRidingEntity() != null) {
+        Entity vehicle = this.getRidingEntity();
+        if (vehicle == null) {
+            this.setEntityInvulnerable(false);
+        } else {
             this.setEntityInvulnerable(true);
+            this.lerpYaw = this.rotationYaw = vehicle.rotationYaw;
         }
 
         double d0 = onGround ? this.getMaximumSpeed() : getMaxSpeedAirLateral();
@@ -274,12 +275,12 @@ public class CarriageEntity extends Entity {
 
     private void tickLerp() {
         if (this.lerpSteps > 0 && !this.canPassengerSteer()) {
-            double d0 = this.posX + (this.boatPitch - this.posX) / this.lerpSteps;
+            double d0 = this.posX + (this.lerpX - this.posX) / this.lerpSteps;
             double d1 = this.posY + (this.lerpY - this.posY) / this.lerpSteps;
             double d2 = this.posZ + (this.lerpZ - this.posZ) / this.lerpSteps;
-            double d3 = MathHelper.wrapDegrees(this.boatYaw - this.rotationYaw);
+            double d3 = MathHelper.wrapDegrees(this.lerpYaw - this.rotationYaw);
             this.rotationYaw = (float) (this.rotationYaw + d3 / this.lerpSteps);
-            this.rotationPitch = (float) (this.rotationPitch + (this.lerpXRot - this.rotationPitch) / this.lerpSteps);
+            this.rotationPitch = (float) (this.rotationPitch + (this.lerpPitch - this.rotationPitch) / this.lerpSteps);
             --this.lerpSteps;
             this.setPosition(d0, d1, d2);
             this.setRotation(this.rotationYaw, this.rotationPitch);
@@ -293,11 +294,11 @@ public class CarriageEntity extends Entity {
         super.addPassenger(passenger);
         if (this.lerpSteps > 0) {
             this.lerpSteps = 0;
-            this.posX = this.boatPitch;
+            this.posX = this.lerpX;
             this.posY = this.lerpY;
             this.posZ = this.lerpZ;
-            this.rotationYaw = (float) this.boatYaw;
-            this.rotationPitch = (float) this.lerpXRot;
+            this.rotationYaw = (float) this.lerpYaw;
+            this.rotationPitch = (float) this.lerpPitch;
         }
     }
 
@@ -306,11 +307,11 @@ public class CarriageEntity extends Entity {
      */
     @SideOnly(Side.CLIENT)
     public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport) {
-        this.boatPitch = x;
+        this.lerpX = x;
         this.lerpY = y;
         this.lerpZ = z;
-        this.boatYaw = yaw;
-        this.lerpXRot = pitch;
+        this.lerpYaw = yaw;
+        this.lerpPitch = pitch;
         this.lerpSteps = 10;
     }
 
@@ -417,34 +418,34 @@ public class CarriageEntity extends Entity {
      */
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (!this.world.isRemote && !this.isDead) {
-            if (source.getTrueSource() != null && !this.isPassenger(source.getTrueSource()) && !this.isEntityInvulnerable(source)) {
-                this.setForwardDirection(-this.getForwardDirection());
-                this.setTimeSinceHit(10);
-                this.setDamage(this.getDamage() + amount * 10.0F);
-                this.markVelocityChanged();
-                boolean flag = source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer) source.getTrueSource()).capabilities.isCreativeMode;
-                if (flag || this.getDamage() > 40.0F) {
-                    if (!flag && this.world.getGameRules().getBoolean("doEntityDrops")) {
-                        this.entityDropItem(this.getType().getItemStack(this), 0.0F);
-                    }
-                    this.setDead();
-                }
+        if (this.isEntityInvulnerable(source)) return false;
+        if (this.world.isRemote || this.isDead) return true;
+        Entity attacker = source.getTrueSource();
+        if (source instanceof EntityDamageSourceIndirect
+                && attacker != null
+                && this.isPassenger(attacker)
+        ) return false;
+        this.setForwardDirection(-this.getForwardDirection());
+        this.setTimeSinceHit(10);
+        this.setDamage(this.getDamage() + amount * 10.0F);
+        this.markVelocityChanged();
+        boolean flag = attacker instanceof EntityPlayer && ((EntityPlayer) attacker).capabilities.isCreativeMode;
+        if (flag || this.getDamage() > 40.0F) {
+            if (!flag && this.world.getGameRules().getBoolean("doEntityDrops")) {
+                this.entityDropItem(this.getType().getItemStack(this), 0.0F);
             }
+            this.setDead();
         }
-        return false;
+        return true;
     }
 
     @Override
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-        if (player.isSneaking()) {
-            return false;
-        } else {
-            if (!this.world.isRemote) {
-                player.startRiding(this);
-            }
-            return true;
+        if (player.isSneaking()) return false;
+        if (!this.world.isRemote) {
+            player.startRiding(this);
         }
+        return true;
     }
 
     @Override

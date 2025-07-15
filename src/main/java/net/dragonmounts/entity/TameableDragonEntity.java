@@ -625,12 +625,20 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         if (this.getVariant().type == DragonTypes.WATER && player.isInWater()) {
             EntityUtil.addOrResetEffect(player, MobEffects.WATER_BREATHING, 200, 0, true, true, 21);
         }
-        if (forward || this.followYaw() || this.isUsingBreathWeapon()) {
-            float rotY = this.rotationYaw;
-            rotY += MathHelper.wrapDegrees(player.rotationYaw - rotY) * 0.08F;
-            this.setRotation(rotY, player.rotationPitch * 0.75F);
-            this.prevRotationYaw = this.rotationYaw = this.rotationYawHead = rotY;
+        float rotX;
+        if (forward || this.isUsingBreathWeapon()) {
+            rotX = player.rotationPitch * 0.75F;
+        } else if (this.followYaw()) {
+            rotX = 0.0F;
+        } else {
+            this.rotationPitch = 0.0F;
+            return;
         }
+        this.setRotation(
+                this.rotationYaw + MathHelper.wrapDegrees(player.rotationYaw - this.rotationYaw) * 0.08F,
+                rotX
+        );
+        this.prevRotationYaw = this.rotationYawHead = this.rotationYaw;
     }
 
     @Override
@@ -764,8 +772,20 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     }
 
     @Override
-    protected boolean canFitPassenger(Entity passenger) {
-        return this.getPassengers().size() < 5;
+    public boolean canFitPassenger(Entity passenger) {
+        List<Entity> passengers = this.getPassengers();
+        boolean hasController = this.getControllingPassenger() instanceof EntityPlayer;
+        if (passenger instanceof EntityPlayer) {
+            if (passengers.size() >= 5) return false;
+            if (hasController) {
+                int seats = 3;
+                for (Entity rider : passengers) {
+                    if (rider instanceof EntityPlayer && --seats <= 0) return false;
+                }
+            }
+            return true;
+        }
+        return !this.isSitting() && passenger instanceof CarriageEntity && passengers.size() < (hasController ? 5 : 4);
     }
 
     /**
@@ -775,17 +795,20 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     public void updatePassenger(Entity passenger) {
         int index = this.getPassengers().indexOf(passenger);
         if (index == -1) return;
-        Vec3d position = this.getVariant().type.locatePassenger(index, this.isSitting(), this.getAdjustedSize())
-                .rotateYaw(MathX.toRadians(-renderYawOffset));
-        passenger.setPosition(position.x + this.posX, position.y + this.posY, position.z + this.posZ);
-
-        // fix rider rotation
-        if (index == 0 && passenger instanceof EntityPlayer) {
+        Vec3d position = this.getVariant().type.locatePassenger(
+                this.getControllingPassenger() instanceof EntityPlayer ? index : index + 1,
+                this.isSitting(),
+                this.getAdjustedSize() * MathX.MOJANG_MODEL_SCALE
+        ).rotateYaw(MathX.toRadians(-renderYawOffset));
+        if (passenger instanceof EntityPlayer) {
+            passenger.setPosition(position.x + this.posX, position.y + this.posY - 0.6, position.z + this.posZ);
+            if (index == 0) {
                 passenger.prevRotationPitch = passenger.rotationPitch;
                 passenger.prevRotationYaw = passenger.rotationYaw;
                 ((EntityPlayer) passenger).renderYawOffset = renderYawOffset;
+            }
         } else {
-            EntityUtil.clampYaw(passenger, this.rotationYaw, 105.0F);
+            passenger.setPosition(position.x + this.posX, position.y + this.posY, position.z + this.posZ);
         }
     }
 

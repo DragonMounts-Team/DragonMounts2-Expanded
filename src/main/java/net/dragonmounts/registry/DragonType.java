@@ -91,41 +91,41 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
     }
 
     public Vec3d locatePassenger(int index, boolean sitting, float scale) {
-        // dragon position is the middle of the model, and the saddle is on
-        // the shoulders, so move player forwards on Z axis relative to the
-        // dragon's rotation to fix that
+        float offset, x, y, z;
         switch (index) {
             case 1:
-                return new Vec3d(
-                        0.375 * scale,
-                        sitting ? 2.125 * scale : 2.25 * scale,
-                        0.0625 * scale
-                );
+                offset = 0F;
+                x = 6.5F;
+                y = 44F;
+                z = -10F;
+                break;
             case 2:
-                return new Vec3d(
-                        -0.375 * scale,
-                        sitting ? 2.125 * scale : 2.25 * scale,
-                        0.0625 * scale
-                );
+                offset = 0F;
+                x = -6.5F;
+                y = 44F;
+                z = -10F;
+                break;
             case 3:
-                return new Vec3d(
-                        scale,
-                        sitting ? 1.3125 * scale : 1.5625 * scale,
-                        0.125 * scale
-                );
+                offset = 0.3125F;
+                x = 12F;
+                y = 28F;
+                z = -6F;
+                break;
             case 4:
-                return new Vec3d(
-                        -scale,
-                        sitting ? 1.3125 * scale : 1.5625 * scale,
-                        0.125 * scale
-                );
+                offset = -0.3125F;
+                x = -12F;
+                y = 28F;
+                z = -6F;
+                break;
             default:
-                return new Vec3d(
-                        0,
-                        sitting ? 2.125 * scale : 2.25 * scale,
-                        1.375 * scale
-                );
+                offset = 0F;
+                x = 0F;
+                y = 46.5F;
+                z = 20F;
         }
+        return sitting
+                ? new Vec3d(x * scale + offset, (y - 17.5) * scale, z * scale)
+                : new Vec3d(x * scale + offset, y * scale, z * scale);
     }
 
     @Nullable
