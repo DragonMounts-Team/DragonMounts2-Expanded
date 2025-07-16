@@ -26,7 +26,7 @@ import net.minecraft.world.biome.Biome;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import static net.dragonmounts.util.math.MathX.parseColor;
+import static net.dragonmounts.util.math.MathX.extractColor;
 
 public class DragonVariantHelper implements ITickable {
     public static final String NBT_VARIANT_POINTS = "VariantPoints";
@@ -79,7 +79,7 @@ public class DragonVariantHelper implements ITickable {
                 double pz = dragon.posZ + random.nextDouble() - 0.5;
                 int color = current.color;
                 level.spawnParticle(EnumParticleTypes.REDSTONE, px, py, pz,
-                        parseColor(color, 2), parseColor(color, 1), parseColor(color, 0));
+                        extractColor(color, 2), extractColor(color, 1), extractColor(color, 0));
             }
             return;
         }

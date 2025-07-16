@@ -41,9 +41,9 @@ public class CarriageEntity extends Entity {
     private static final DataParameter<Integer> FORWARD_DIRECTION = EntityDataManager.createKey(CarriageEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> TIME_SINCE_HIT = EntityDataManager.createKey(CarriageEntity.class, DataSerializers.VARINT);
     private static final DataParameter<CarriageType> TYPE = EntityDataManager.createKey(CarriageEntity.class, CarriageType.SERIALIZER);
-    public static float defaultMaxSpeedAirLateral = 0.4f;
-    public static float defaultMaxSpeedAirVertical = -1f;
-    public static double defaultDragAir = 0.94999998807907104D;
+    public static final float defaultMaxSpeedAirLateral = 0.4f;
+    public static final float defaultMaxSpeedAirVertical = -1f;
+    public static final double defaultDragAir = 0.94999998807907104D;
     protected float maxSpeedAirLateral = defaultMaxSpeedAirLateral;
     protected float maxSpeedAirVertical = defaultMaxSpeedAirVertical;
     protected double dragAir = defaultDragAir;

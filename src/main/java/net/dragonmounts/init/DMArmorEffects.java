@@ -291,7 +291,6 @@ public class DMArmorEffects {
     public static void onExpDrop(LivingExperienceDropEvent event) {
         EntityPlayer source = event.getAttackingPlayer();
         if (source == null) return;
-        //noinspection DataFlowIssue
         IArmorEffectManager manager = source.getCapability(ARMOR_EFFECT_MANAGER, null);
         if (manager == null || !manager.isActive(ENCHANTED_EFFECT)) return;
         int base = event.getDroppedExperience();
@@ -330,17 +329,14 @@ public class DMArmorEffects {
                     entity.hurtResistantTime = 0;
                     entity.attackEntityFrom(DamageSource.GENERIC, 1F);
                 }
-                if (nether) {
-                    entity.setFire(10);
-                }
             } else {
                 if (ice) {
                     entity.hurtResistantTime = 0;
                     entity.attackEntityFrom(DamageSource.GENERIC, 1F);
                 }
-                if (nether) {
-                    entity.setFire(10);
-                }
+            }
+            if (nether) {
+                entity.setFire(10);
             }
         }
         if (ice) ICE_EFFECT.applyCooldown(manager);

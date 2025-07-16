@@ -160,8 +160,8 @@ public abstract class MathX {
         );
     }
 
-    public static float parseColor(int color, int area) {
-        return (color >> (area << 3) & 0xFF) / 255F;
+    public static float extractColor(int color, int channel) {
+        return (color >> (channel << 3) & 0xFF) / 255F;
     }
 
     private MathX() {}

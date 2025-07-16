@@ -47,7 +47,6 @@ public class ServerProxy {
         DragonMounts.NETWORK_WRAPPER.registerMessage(SSyncCooldownPacket.Handler.class, SSyncCooldownPacket.class, ++discriminator, Side.CLIENT);
         DragonMounts.NETWORK_WRAPPER.registerMessage(SRiposteEffectPacket.Handler.class, SRiposteEffectPacket.class, ++discriminator, Side.CLIENT);
         // C2S:
-        DragonMounts.NETWORK_WRAPPER.registerMessage(MessageDragonTargetHandlerServer.class, MessageDragonTarget.class, ++discriminator, Side.SERVER);
         DragonMounts.NETWORK_WRAPPER.registerMessage(CDragonBreathPacket.Handler.class, CDragonBreathPacket.class, ++discriminator, Side.SERVER);
         DragonMounts.NETWORK_WRAPPER.registerMessage(CDragonControlPacket.Handler.class, CDragonControlPacket.class, ++discriminator, Side.SERVER);
         DragonMounts.NETWORK_WRAPPER.registerMessage(CDragonConfigPacket.Handler.class, CDragonConfigPacket.class, ++discriminator, Side.SERVER);

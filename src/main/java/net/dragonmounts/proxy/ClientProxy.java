@@ -20,7 +20,6 @@ import net.dragonmounts.client.render.DragonCoreBlockEntityRenderer;
 import net.dragonmounts.client.render.DragonHeadBlockEntityRenderer;
 import net.dragonmounts.client.render.dragon.ClientBreathNodeRenderer;
 import net.dragonmounts.client.render.dragon.DragonRenderer;
-import net.dragonmounts.client.userinput.DragonOrbControl;
 import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.client.variant.VariantAppearances;
 import net.dragonmounts.config.DMConfig;
@@ -122,20 +121,15 @@ public class ClientProxy extends ServerProxy {
     @Override
     public void PostInitialization(FMLPostInitializationEvent event) {
         super.PostInitialization(event);
+        MinecraftForge.EVENT_BUS.register(CameraHandler.class);
+        MinecraftForge.EVENT_BUS.register(DMCapeRenderer.class);
         if (DMConfig.DEBUG_MODE.value) {
             // defer the task to be executed after initialization.
             new Thread(() -> Minecraft.getMinecraft().addScheduledTask(() -> {
                 Minecraft.getMinecraft().debugRenderer.pathfindingEnabled = true;
             })).start();
-
             MinecraftForge.EVENT_BUS.register(DebugOverlay.class);
-            DragonOrbControl.createSingleton();
-            DragonOrbControl.initialiseInterceptors();
-            MinecraftForge.EVENT_BUS.register(DragonOrbControl.getInstance());
-            //MinecraftForge.EVENT_BUS.register(new TargetHighlighter());
         }
-        MinecraftForge.EVENT_BUS.register(CameraHandler.class);
-        MinecraftForge.EVENT_BUS.register(DMCapeRenderer.class);
     }
 
     @Override

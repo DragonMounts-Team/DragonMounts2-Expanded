@@ -259,6 +259,6 @@ public class DragonCoreBlockEntity extends TileEntityLockableLoot implements ITi
         CLOSED,
         OPENING,
         OPENED,
-        CLOSING;
+        CLOSING
     }
 }
