@@ -118,7 +118,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     private boolean chested;
     private boolean saddled;
     private Entity controllerCache;
-    private List<Entity> riderCache;
+    private @Nonnull List<Entity> riderCache = Collections.emptyList();
 
     public TameableDragonEntity(World world) {
         super(world);
@@ -708,26 +708,29 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     }
 
     public List<Entity> getCachedPassengers() {
-        if (this.riderCache == null) {
-            this.riderCache = Collections.unmodifiableList(super.getPassengers());
-        }
         return this.riderCache;
+    }
+
+    private void refreshPassengerCache() {
+        List<Entity> passengers = this.riderCache = Collections.unmodifiableList(super.getPassengers());
+        if (passengers.isEmpty()) {
+            this.controllerCache = null;
+        } else {
+            Entity rider = passengers.get(0);
+            this.controllerCache = rider instanceof CarriageEntity ? null : rider;
+        }
     }
 
     @Override
     protected void addPassenger(@Nonnull Entity passenger) {
         super.addPassenger(passenger);
-        this.riderCache = null;
-        List<Entity> passengers = this.getCachedPassengers();
-        this.controllerCache = passengers.isEmpty() ? null : passengers.get(0);
+        this.refreshPassengerCache();
     }
 
     @Override
     protected void removePassenger(@Nonnull Entity passenger) {
         super.removePassenger(passenger);
-        this.riderCache = null;
-        List<Entity> passengers = this.getCachedPassengers();
-        this.controllerCache = passengers.isEmpty() ? null : passengers.get(0);
+        this.refreshPassengerCache();
     }
 
     public boolean isPassengerBroadly(Entity entity) {
