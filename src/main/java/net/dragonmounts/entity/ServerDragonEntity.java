@@ -382,6 +382,14 @@ public class ServerDragonEntity extends TameableDragonEntity {
                 player.rotationYaw = this.rotationYaw;
                 player.rotationPitch = this.rotationPitch;
                 return true;
+            } else {
+                for (Entity passenger : this.getPassengers()) {
+                    if (passenger instanceof CarriageEntity && player.startRiding(passenger)) {
+                        player.rotationYaw = passenger.rotationYaw;
+                        player.rotationPitch = passenger.rotationPitch;
+                        return true;
+                    }
+                }
             }
         }
         this.openInventory(player);

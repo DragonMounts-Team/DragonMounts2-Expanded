@@ -44,12 +44,12 @@ item.dragonmounts.dragon_orb.name=龙宝珠
 item.dragonmounts.dragon_wand.name=龙杖
 item.dragonmounts.variation_orb.name=易形琼珠
 
-item.dragonmounts.oak_carriage.name=橡木货物装载箱
-item.dragonmounts.birch_carriage.name=桦木货物装载箱
-item.dragonmounts.spruce_carriage.name=云杉木货物装载箱
-item.dragonmounts.acacia_carriage.name=金合欢木货物装载箱
-item.dragonmounts.dark_oak_carriage.name=深色橡木货物装载箱
-item.dragonmounts.jungle_carriage.name=丛林木货物装载箱
+item.dragonmounts.oak_carriage.name=橡木运载箱
+item.dragonmounts.birch_carriage.name=白桦木运载箱
+item.dragonmounts.spruce_carriage.name=云杉木运载箱
+item.dragonmounts.acacia_carriage.name=金合欢木运载箱
+item.dragonmounts.dark_oak_carriage.name=深色橡木运载箱
+item.dragonmounts.jungle_carriage.name=丛林木运载箱
 
 item.dragonmounts.dragon_scales.name=龙鳞
 item.dragonmounts.dragon_scale_sword.name=龙鳞剑

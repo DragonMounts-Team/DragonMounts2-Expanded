@@ -5,6 +5,7 @@ import net.dragonmounts.capability.IWhistleHolder;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.item.DragonArmorItem;
 import net.dragonmounts.util.LogUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
@@ -12,6 +13,8 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 import static net.dragonmounts.util.DMUtils.applyBackground;
 
@@ -45,7 +48,8 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 
 			@Override
 			public boolean canTakeStack(EntityPlayer player) {
-				return dragon.getPassengers().isEmpty();
+				List<Entity> passengers = dragon.getPassengers();
+				return passengers.isEmpty() || !(passengers.get(0) instanceof EntityPlayer);
 			}
 
 			@Override

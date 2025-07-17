@@ -62,6 +62,7 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -117,6 +118,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     private boolean chested;
     private boolean saddled;
     private Entity controllerCache;
+    private List<Entity> riderCache;
 
     public TameableDragonEntity(World world) {
         super(world);
@@ -705,22 +707,31 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         return this.controllerCache instanceof EntityPlayer ? (EntityPlayer) this.controllerCache : null;
     }
 
+    public List<Entity> getCachedPassengers() {
+        if (this.riderCache == null) {
+            this.riderCache = Collections.unmodifiableList(super.getPassengers());
+        }
+        return this.riderCache;
+    }
+
     @Override
     protected void addPassenger(@Nonnull Entity passenger) {
         super.addPassenger(passenger);
-        List<Entity> passengers = this.getPassengers();
+        this.riderCache = null;
+        List<Entity> passengers = this.getCachedPassengers();
         this.controllerCache = passengers.isEmpty() ? null : passengers.get(0);
     }
 
     @Override
     protected void removePassenger(@Nonnull Entity passenger) {
         super.removePassenger(passenger);
-        List<Entity> passengers = this.getPassengers();
+        this.riderCache = null;
+        List<Entity> passengers = this.getCachedPassengers();
         this.controllerCache = passengers.isEmpty() ? null : passengers.get(0);
     }
 
     public boolean isPassengerBroadly(Entity entity) {
-        for (Entity rider : this.getPassengers()) {
+        for (Entity rider : this.getCachedPassengers()) {
             if (rider == entity || (
                     rider instanceof CarriageEntity && rider.getPassengers().contains(entity)
             )) return true;
@@ -773,19 +784,11 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
 
     @Override
     public boolean canFitPassenger(Entity passenger) {
-        List<Entity> passengers = this.getPassengers();
+        List<Entity> passengers = this.getCachedPassengers();
         boolean hasController = this.getControllingPassenger() instanceof EntityPlayer;
-        if (passenger instanceof EntityPlayer) {
-            if (passengers.size() >= 5) return false;
-            if (hasController) {
-                int seats = 3;
-                for (Entity rider : passengers) {
-                    if (rider instanceof EntityPlayer && --seats <= 0) return false;
-                }
-            }
-            return true;
-        }
-        return !this.isSitting() && passenger instanceof CarriageEntity && passengers.size() < (hasController ? 5 : 4);
+        return passenger instanceof EntityPlayer
+                ? !hasController
+                : !this.isSitting() && passenger instanceof CarriageEntity && passengers.size() < (hasController ? 5 : 4);
     }
 
     /**
@@ -793,7 +796,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
      */
     @Override
     public void updatePassenger(Entity passenger) {
-        int index = this.getPassengers().indexOf(passenger);
+        int index = this.getCachedPassengers().indexOf(passenger);
         if (index == -1) return;
         Vec3d position = this.getVariant().type.locatePassenger(
                 this.getControllingPassenger() instanceof EntityPlayer ? index : index + 1,

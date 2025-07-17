@@ -73,11 +73,6 @@ public class CarriageEntity extends Entity {
         return false;
     }
 
-    @Override
-    protected boolean canFitPassenger(Entity passenger) {
-        return this.getPassengers().isEmpty();
-    }
-
     /**
      * returns if this entity triggers Block.onEntityWalking on the blocks they walk on. used for spiders and wolves to
      * prevent them from trampling crops
@@ -108,13 +103,6 @@ public class CarriageEntity extends Entity {
      */
     public boolean canBePushed() {
         return !this.isRiding();
-    }
-
-    /**
-     * Returns the collision bounding box for this entity
-     */
-    public AxisAlignedBB getCollisionBoundingBox() {
-        return null;
     }
 
     /**
@@ -256,20 +244,17 @@ public class CarriageEntity extends Entity {
         this.setRotation(this.rotationYaw, this.rotationPitch);
 
         this.doBlockCollisions();
+        if (this.world.isRemote || !this.getPassengers().isEmpty()) return;
         List<Entity> list = world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(0.20000000298023224D, -0.009999999776482582D, 0.20000000298023224D), EntitySelectors.getTeamCollisionPredicate(this));
-
-        if (!list.isEmpty()) {
-            boolean flag = !this.world.isRemote && !(this.getControllingPassenger() instanceof EntityPlayer);
-
-            for (Entity entity : list) {
-                if (!entity.isPassenger(this)) {
-                    if (flag && this.getPassengers().size() < 2 && !entity.isRiding() && entity.width < this.width + 0.7 && entity instanceof EntityLivingBase && !(entity instanceof EntityWaterMob) && !(entity instanceof EntityPlayer)) {
-                        entity.startRiding(this);
-                        // } else {
-                        //    this.applyEntityCollision(entity);
-                    }
-                }
-            }
+        if (list.isEmpty()) return;
+        for (Entity entity : list) {
+            if (!entity.isRiding()
+                    && entity.width < this.width + 0.5
+                    && entity instanceof EntityLivingBase
+                    && !(entity instanceof EntityWaterMob)
+                    && !(entity instanceof EntityPlayer)
+                    && entity.startRiding(this)
+            ) break;
         }
     }
 

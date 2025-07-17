@@ -251,7 +251,7 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
         speedTimer.add(!flying ||
                 speedEnt > speedMax ||
                 dragon.isUnHovered() ||
-                dragon.getPassengers().size() > 1 ||
+                dragon.getCachedPassengers().size() > 1 ||
                 dragon.getAltitude() < dragon.height * 2
                 ? 0.05F
                 : -0.05F
