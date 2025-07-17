@@ -83,8 +83,8 @@ public class BlockDragonShulker extends BlockContainer implements IHasModel {
         if (worldIn.isRemote) return true;
         else if (playerIn.isSpectator()) return true;
         else if (worldIn.getTileEntity(pos) instanceof TileEntityDragonShulker) {
-        	playerIn.openGui(DragonMounts.instance, GuiHandler.GUI_DRAGON_SHULKER, worldIn, pos.getX(), pos.getY(), pos.getZ());
-        	return true;
+            playerIn.openGui(DragonMounts.instance, GuiHandler.GUI_DRAGON_SHULKER, worldIn, pos.getX(), pos.getY(), pos.getZ());
+            return true;
         }
         return false;
     }
@@ -156,10 +156,10 @@ public class BlockDragonShulker extends BlockContainer implements IHasModel {
         return false;
     }
 
-	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityDragonShulker();
-	}
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new TileEntityDragonShulker();
+    }
 
     @Override
     public void RegisterModels() {

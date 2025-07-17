@@ -1,6 +1,0 @@
-{
-  "parent": "dragonmounts:item/dragon_amulet",
-  "textures": {
-    "layer0": "dragonmounts:items/amulet/fire_dragon_amulet"
-  }
-}

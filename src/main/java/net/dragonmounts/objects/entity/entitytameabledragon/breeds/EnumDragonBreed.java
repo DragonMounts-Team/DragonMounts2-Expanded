@@ -23,9 +23,9 @@ public enum EnumDragonBreed implements IStringSerializable {
     STORM(11, DragonBreedStorm::new),
     ZOMBIE(12, DragonBreedZombie::new),
     TERRA(13, DragonBreedTerra::new),
-    MOONLIGHT(14, DragonBreedMoonlight::new);
+    MOONLIGHT(14, DragonBreedMoonlight::new),
 //	LIGHT(15, DragonBreedLight::new);
-//	DARK(16, DragonBreedDark::new);
+	DARK(15, DragonBreedDark::new);
 //	SPECTER(17, DragonBreedSpecter::new);
 
     public static final EnumSerializer<EnumDragonBreed> SERIALIZER = new EnumSerializer<>(EnumDragonBreed.class, EnumDragonBreed.END);

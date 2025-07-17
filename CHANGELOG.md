@@ -1,12 +1,12 @@
 # Changelog
 
-## 2.0.0
+## [2.0.0] - 2024-12-1
 
 ### BREAKING CHANGES
 
 - PACKAGE NAME IS SET TO `net.dragonmounts`.
 - REMOVE GENDER SYSTEM.
-  - Data Fix is scheduled later. Backup your level!
+  - Data Fix is scheduled later. **Backup your level**!
 
 ### Additions
 
@@ -21,6 +21,7 @@
 - Dragon whistle now uses UUID to identify owner.
 - Dragons now get slow down when in fluid.
 - Dragons will get saddled when interacting with saddle.
+- Dragon egg entity has the same bounding box with dragon egg block.
 - Dragons have dedicated inventory now.
 - Moonlight dragons share the same breath with aether dragons.
 - Some dragon breath can smelt block now.
@@ -49,13 +50,12 @@
 - Cooldown of armor effect can be saved properly now.
 - Enchant dragon scale armor effect now work properly.
 - Dragon amulets can prevent interaction properly.
-- Dragon amulets will place dragon at the center of block now.
-- Dragon amulets will not spawn dragon when collected by hopper anymore.
+- Dragon amulets will place dragons at the center of block now.
+- Dragon amulets will not release dragon when collected by hopper anymore.
 - Dragon essences can spawn dragon now.
 - Dragon core can be rendered properly now.
 - Dragon core has breaking particles now.
 - Dragon egg block has correct break particles now.
-- Dragon egg entity has the same size with block.
 - Dragon egg entity cannot execute normal AI now.
 - Items in offhand can interact with dragons now.
 - Dragons have correct initial breed points now.
@@ -66,6 +66,5 @@
 - Hatchling dragons cannot breathe fire anymore.
 - Breath from infant dragons can set entities on fire now.
 - Ice breath won't place snow layer in air anymore.
-- Moonlight dragon breath now use texture of aether dragon breath.
 - Sitting button in dragon inventory screen could be translated now.
 - Crystal beams won't be rendered in dragon inventory screen anymore.

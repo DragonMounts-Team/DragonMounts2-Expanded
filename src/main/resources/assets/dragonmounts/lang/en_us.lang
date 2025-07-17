@@ -61,29 +61,22 @@ entity.DragonMounts.dragon.moonlight.name=Moonlight Dragon
 
 #Breeds
 dragon.forest=Forest
-dragon.forest2=Forest
 dragon.aether=Aether
 dragon.ice=Ice
-dragon.sylphid=Water
 dragon.water=Water
 dragon.fire=Fire
-dragon.fire2=Fire
 dragon.skeleton=Skeleton
 dragon.wither=Wither
 dragon.nether=Nether
-dragon.nether2=Nether
 dragon.end=Ender
-dragon.ender=Ender
 dragon.enchant=Enchant
 dragon.sunlight=Sunlight
-dragon.sunlight2=Sunlight
 dragon.moonlight=Moonlight
-dragon.moonlight2=Moonlight
 dragon.storm=Storm
-dragon.storm2=Storm
 dragon.zombie=Zombie
 dragon.terra=Terra
-dragon.terra2=Terra
+dragon.dark=Dark
+dragon.light=Light
 
 #Stage
 dragon.egg=Egg

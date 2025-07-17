@@ -25,11 +25,11 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static java.lang.System.arraycopy;
-import static java.util.Arrays.fill;
 import static net.dragonmounts.DragonMounts.NETWORK_WRAPPER;
 import static net.dragonmounts.client.ClientUtil.getLocalPlayer;
 import static net.dragonmounts.inits.DMCapabilities.ARMOR_EFFECT_MANAGER;
+import static java.lang.System.arraycopy;
+import static java.util.Arrays.fill;
 
 public final class ArmorEffectManager implements IArmorEffectManager {
     private static ArmorEffectManager LOCAL_MANAGER = null;
@@ -449,7 +449,7 @@ public final class ArmorEffectManager implements IArmorEffectManager {
 
         @Override
         public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-            return ARMOR_EFFECT_MANAGER == capability;
+            return true;
         }
 
         @Nullable

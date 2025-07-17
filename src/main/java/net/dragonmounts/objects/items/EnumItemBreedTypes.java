@@ -22,9 +22,9 @@ public enum EnumItemBreedTypes {
 	MOONLIGHT(TextFormatting.BLUE),
 	STORM(TextFormatting.BLUE),
 	TERRA(TextFormatting.GOLD),
-	ZOMBIE(TextFormatting.DARK_GREEN);
+	ZOMBIE(TextFormatting.DARK_GREEN),
 	//LIGHT(TextFormatting.GRAY);
-	//DARK(TextFormatting.GRAY);
+	DARK(TextFormatting.GRAY);
 	//Specter(TextFormatting.WHITE);
 
 	private static final Map<String, EnumItemBreedTypes> BY_NAME;

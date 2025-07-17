@@ -72,27 +72,8 @@ def generateItemModels(output: Output):
       name = 'end'
     else:
       name = breed.value.path
-    if (breed is ItemBreedType.NETHER2 or breed is ItemBreedType.STORM2):
-      dragonAmuletItem(output, name, name[:-1])
-      continue
-    if breed is ItemBreedType.MOONLIGHT_FEMALE:
-      dragonScalesItem(output, breed)
-      dragonScaleArmorItem(output, name, 'boots')
-      dragonScaleArmorItem(output, name, 'cap')
-      dragonScaleArmorItem(output, name, 'leggings')
-      dragonScaleArmorItem(output, name, 'tunic')
-      dragonScaleToolItem(output, breed, 'axe')
-      dragonScaleToolItem(output, breed, 'hoe')
-      dragonScaleToolItem(output, breed, 'pickaxe')
-      dragonScaleToolItem(output, breed, 'shovel')
-      dragonScaleToolItem(output, breed, 'sword')
-      dragonScaleBowItem(output, breed)
-      dragonAmuletItem(output, name, name[:-1])
-    elif (breed is ItemBreedType.FIRE2 or breed is ItemBreedType.SUNLIGHT2 or breed is ItemBreedType.TERRA2):
-      dragonAmuletItem(output, name, name[:-1])
-    else:
-      dragonAmuletItem(output, name, name)
-      model(spawnEggModel).save(output, 'summon_' + name)
+    dragonAmuletItem(output, name, name)
+    model(spawnEggModel).save(output, 'summon_' + name)
     if (breed is ItemBreedType.SKELETON or breed is ItemBreedType.WITHER): continue
     root = 'dragon_shield_' + name
     texture = makeId('entities/dragon_shield/' + name)

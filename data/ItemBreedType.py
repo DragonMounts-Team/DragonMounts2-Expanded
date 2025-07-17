@@ -18,3 +18,4 @@ class ItemBreedType(Enum):
   TERRA = makeId('terra')
   #GHOST = makeId('ghost')
   ZOMBIE = makeId('zombie')
+  DARK = makeId('dark')
