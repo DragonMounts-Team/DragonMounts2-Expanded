@@ -9,13 +9,14 @@
  */
 package net.dragonmounts.client.render.dragon;
 
+import net.dragonmounts.block.HatchableDragonEggBlock;
 import net.dragonmounts.client.model.dragon.DragonModel;
 import net.dragonmounts.client.model.dragon.DragonModelMode;
-import net.dragonmounts.client.render.dragon.breeds.DefaultDragonBreedRenderer;
-import net.dragonmounts.objects.blocks.BlockDragonBreedEgg;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.breeds.EnumDragonBreed;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.DragonLifeStageHelper;
+import net.dragonmounts.client.render.dragon.layer.DragonLayerRenderer;
+import net.dragonmounts.client.variant.VariantAppearance;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.helper.DragonLifeStageHelper;
+import net.dragonmounts.init.DMBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
@@ -32,9 +33,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
-import java.util.EnumMap;
-import java.util.Map;
-
 import static org.lwjgl.opengl.GL11.*;
 
 /**
@@ -42,36 +40,29 @@ import static org.lwjgl.opengl.GL11.*;
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class DragonRenderer extends RenderLiving<EntityTameableDragon> {
+public class DragonRenderer extends RenderLiving<TameableDragonEntity> {
 
     public static final String TEX_BASE = "textures/entities/dragon/";
-    public static final ResourceLocation ENDERCRYSTAL_BEAM_TEXTURES = new ResourceLocation("textures/entity/endercrystal/endercrystal_beam.png");
-
-    private final Map<EnumDragonBreed, DefaultDragonBreedRenderer> breedRenderers = new EnumMap<>(EnumDragonBreed.class);
 
     public DragonRenderer(RenderManager renderManager) {
         super(renderManager, null, 2);
     }
 
-    public DefaultDragonBreedRenderer getBreedRenderer(EntityTameableDragon dragon) {
-        return this.breedRenderers.computeIfAbsent(dragon.getBreedType(), breed -> new DefaultDragonBreedRenderer(this, breed));
-    }
-
     @Override
-    public void doRender(EntityTameableDragon dragon, double x, double y, double z, float yaw, float partialTicks) {
+    public void doRender(TameableDragonEntity dragon, double x, double y, double z, float yaw, float partialTicks) {
         renderName(dragon, x, y, z);
         if (dragon.isEgg()) {
             renderEgg(dragon, x, y, z, yaw, partialTicks);
             return;
         }
-        DragonModel breedModel = getBreedRenderer(dragon).getModel();
+        DragonModel breedModel = dragon.getVariant().appearance.model;
         breedModel.setMode(DragonModelMode.FULL);
         mainModel = breedModel;
         super.doRender(dragon, x, y, z, yaw, partialTicks);
         if (dragon.getAnimator().isInGui) return;
         EntityEnderCrystal crystal = dragon.healingEnderCrystal;
         if (crystal != null) {
-            this.bindTexture(ENDERCRYSTAL_BEAM_TEXTURES);
+            this.bindTexture(RenderDragon.ENDERCRYSTAL_BEAM_TEXTURES);
             float f = MathHelper.sin((crystal.ticksExisted + partialTicks) * 0.2F) / 2.0F + 0.5F;
             float l = 1.0F - partialTicks;
             RenderDragon.renderCrystalBeams(x, y, z, partialTicks, dragon.posX + (dragon.prevPosX - dragon.posX) * l, dragon.posY + (dragon.prevPosY - dragon.posY) * l, dragon.posZ + (dragon.prevPosZ - dragon.posZ) * l, dragon.ticksExisted, crystal.posX, (f * f + f) * 0.2F + crystal.posY, crystal.posZ);
@@ -79,21 +70,24 @@ public class DragonRenderer extends RenderLiving<EntityTameableDragon> {
     }
 
     @Override
-    protected void renderLayers(EntityTameableDragon dragon, float moveTime, float moveSpeed, float partialTicks, float ticksExisted, float lookYaw, float lookPitch, float scale) {
-        this.getBreedRenderer(dragon).forEachLayer(layer -> {
+    protected void renderLayers(TameableDragonEntity dragon, float moveTime, float moveSpeed, float partialTicks, float ticksExisted, float lookYaw, float lookPitch, float scale) {
+        VariantAppearance appearance = dragon.getVariant().appearance;
+        DragonModel model = appearance.model;
+        for (DragonLayerRenderer layer : appearance.layers) {
+            layer.bind(this, model);
             boolean changed = setBrightness(dragon, partialTicks, layer.shouldCombineTextures());
             layer.doRenderLayer(dragon, moveTime, moveSpeed, partialTicks, ticksExisted, lookYaw, lookPitch, scale);
             if (changed) {
                 unsetBrightness();
             }
-        });
+        }
     }
 
     /**
      * Renders the model in RenderLiving
      */
     @Override
-    protected void renderModel(EntityTameableDragon dragon, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
+    protected void renderModel(TameableDragonEntity dragon, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
 
         float death = dragon.getDeathTime() / (float) dragon.getMaxDeathTime();
 
@@ -104,7 +98,7 @@ public class DragonRenderer extends RenderLiving<EntityTameableDragon> {
             GlStateManager.enableAlpha();
             GlStateManager.alphaFunc(GL_GREATER, death);
 
-            bindTexture(getBreedRenderer(dragon).getDissolveTexture());
+            bindTexture(dragon.getVariant().appearance.getDissolve(dragon));
             mainModel.render(dragon, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
 
             GlStateManager.alphaFunc(GL_GREATER, 0.1f);
@@ -118,7 +112,7 @@ public class DragonRenderer extends RenderLiving<EntityTameableDragon> {
         }
     }
 
-    protected void renderEgg(EntityTameableDragon dragon, double x, double y, double z, float pitch, float partialTicks) {
+    protected void renderEgg(TameableDragonEntity dragon, double x, double y, double z, float pitch, float partialTicks) {
         // apply egg wiggle
         DragonLifeStageHelper lifeStage = dragon.getLifeStageHelper();
         float tickX = lifeStage.getEggWiggleX();
@@ -138,7 +132,7 @@ public class DragonRenderer extends RenderLiving<EntityTameableDragon> {
         BufferBuilder vb = tessellator.getBuffer();
         vb.begin(GL_QUADS, DefaultVertexFormats.BLOCK);
 
-        IBlockState state = BlockDragonBreedEgg.DRAGON_BREED_EGG.getDefaultState().withProperty(BlockDragonBreedEgg.BREED, dragon.getBreedType());
+        IBlockState state = dragon.getVariant().type.getInstance(HatchableDragonEggBlock.class, DMBlocks.ENDER_DRAGON_EGG).getDefaultState();
         BlockPos pos = dragon.getPosition();
         vb.setTranslation(-pos.getX() - 0.5, -pos.getY(), -pos.getZ() - 0.5);
 
@@ -156,7 +150,7 @@ public class DragonRenderer extends RenderLiving<EntityTameableDragon> {
     }
 
     @Override
-    protected void applyRotations(EntityTameableDragon dragon, float par2, float par3, float par4) {
+    protected void applyRotations(TameableDragonEntity dragon, float par2, float par3, float par4) {
         GlStateManager.rotate(180 - par3, 0, 1, 0);
     }
 
@@ -165,19 +159,15 @@ public class DragonRenderer extends RenderLiving<EntityTameableDragon> {
      * the model is rendered. Args: entityLiving, partialTickTime
      */
     @Override
-    protected void preRenderCallback(EntityTameableDragon dragon, float partialTicks) {
+    protected void preRenderCallback(TameableDragonEntity dragon, float partialTicks) {
         // a fully grown dragon is larger than the model by this amount
-        float scale = dragon.getScale() * dragon.getBreed().getAdultModelRenderScaleFactor();
+        float scale = dragon.getScale() * dragon.getVariant().appearance.renderScale;
         GlStateManager.scale(scale, scale, scale);
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(EntityTameableDragon dragon) {
-        DefaultDragonBreedRenderer texture = this.getBreedRenderer(dragon);
-        if (dragon.getBreedType() == EnumDragonBreed.FOREST) {
-            return texture.getMaleForestBodyTexture(dragon.isBaby(), dragon.getForestType().identifier);
-        }
-        return texture.getMaleBodyTexture(dragon.isBaby(), dragon.altTextures());
+    protected ResourceLocation getEntityTexture(TameableDragonEntity dragon) {
+        return dragon.getVariant().appearance.getBody(dragon);
     }
 }
 

@@ -9,7 +9,7 @@
             "entries": [
                 {
                     "type": "item",
-                    "name": "dragonmounts:nether_dragonscales",
+                    "name": "dragonmounts:nether_dragon_scales",
                     "weight": 1,
                     "functions": [
                         {

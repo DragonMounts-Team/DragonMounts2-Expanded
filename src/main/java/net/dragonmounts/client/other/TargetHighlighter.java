@@ -1,9 +1,9 @@
 package net.dragonmounts.client.other;
 
-import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.client.userinput.DragonOrbControl;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.BreathWeaponTarget;
+import net.dragonmounts.entity.breath.BreathWeaponTarget;
+import net.dragonmounts.util.LogUtil;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -14,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -63,9 +64,8 @@ public class TargetHighlighter {
                 return;
             }
             default: {
-                DragonMounts.loggerLimit.error_once(
+                LogUtil.once(Level.ERROR,
                         "Unknown target type in blockHighlightDecider : " + targetToHighlight.getTypeOfTarget());
-                return;
             }
         }
     }

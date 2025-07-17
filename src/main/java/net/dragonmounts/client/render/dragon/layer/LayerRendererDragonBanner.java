@@ -1,10 +1,7 @@
 package net.dragonmounts.client.render.dragon.layer;
 
-import net.dragonmounts.client.model.dragon.DragonModel;
-import net.dragonmounts.client.render.dragon.DragonRenderer;
-import net.dragonmounts.client.render.dragon.breeds.DefaultDragonBreedRenderer;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.inventory.DragonInventory;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
 import net.dragonmounts.util.math.Interpolation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBanner;
@@ -15,21 +12,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.util.ResourceLocation;
 
-public class LayerRendererDragonBanner extends LayerRendererDragon {
-
+public class LayerRendererDragonBanner extends DragonLayerRenderer {
     private final ModelBanner bannerModel=new ModelBanner();
     private final TileEntityBanner banner1=new TileEntityBanner();
     private final TileEntityBanner banner2=new TileEntityBanner();
     private final TileEntityBanner banner3=new TileEntityBanner();
     private final TileEntityBanner banner4=new TileEntityBanner();
 
-    public LayerRendererDragonBanner(DragonRenderer renderer, DefaultDragonBreedRenderer breedRenderer, DragonModel model) {
-        super(renderer, breedRenderer, model);
-
-    }
-
     @Override
-    public void doRenderLayer(EntityTameableDragon dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    public void doRenderLayer(TameableDragonEntity dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         DragonInventory inventory = dragon.inventory;
         ItemStack itemstack1 = inventory.getBanner(0);
         ItemStack itemstack2 = inventory.getBanner(1);

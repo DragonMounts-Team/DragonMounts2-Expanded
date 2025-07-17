@@ -1,0 +1,14 @@
+{
+  "parent": "dragonmounts:item/shield/shield",
+  "textures": {
+    "base": "dragonmounts:entities/dragon_scale_shield/forest"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "minecraft:blocking": 1.0
+      },
+      "model": "dragonmounts:item/forest_dragon_scale_shield_blocking"
+    }
+  ]
+}

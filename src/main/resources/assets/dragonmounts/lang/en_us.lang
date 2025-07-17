@@ -1,210 +1,124 @@
 # US English Translations
 
 # Creative Menu's
-itemGroup.maintab=DM2: Continued
-itemGroup.armorytab=DM2: Continued-Equipement
+itemGroup.dragonmounts.main=DM2: Expanded
+itemGroup.dragonmounts.combat=DM2: Expanded-Equipment
 
+effect.dragonmounts.dark_dragons_grace=Dark Dragon's Grace
 ##
 # Dragon Names
 ##
-entity.DragonMount.name=Dragon
+entity.dragonmounts.dragon=%s Dragon
+entity.dragonmounts.dragon.name=Dragon
 
-entity.DragonMount.ice.name=Ice Dragon
-entity.DragonMount.end.name=Ender Dragon
-entity.DragonMount.ender.name=Ender Dragon
-entity.DragonMount.aether.name=Aether Dragon
-entity.DragonMount.forest.name=Forest Dragon
-entity.DragonMount.sylphid.name=Water Dragon
-entity.DragonMount.nether.name=Nether Dragon
-entity.DragonMount.fire.name=Fire Dragon
-entity.DragonMount.skeleton.name=Skeleton Dragon
-entity.DragonMount.wither.name=Wither Dragon
-entity.DragonMount.enchant.name=Enchantment Dragon
-entity.DragonMount.sunlight.name=Sunlight Dragon
-entity.DragonMount.storm.name=Storm Dragon
-entity.DragonMount.zombie.name=Zombie Dragon
-entity.DragonMount.terra.name=Terra Dragon
-entity.DragonMount.moonlight.name=Moonlight Dragon
-
-entity.DragonMount.albino.ice.name=Albino Ice Dragon
-entity.DragonMount.albino.ender.name=Albino Ender Dragon
-entity.DragonMount.albino.aether.name=Albino Aether Dragon
-entity.DragonMount.albino.forest.name=Albino Forest Dragon
-entity.DragonMount.albino.sylphid.name=Albino Water Dragon
-entity.DragonMount.albino.nether.name=Albino Nether Dragon
-entity.DragonMount.albino.fire.name=Albino Fire Dragon
-entity.DragonMount.albino.skeleton.name=Albino Skeleton Dragon
-entity.DragonMount.albino.wither.name=Albino Wither Dragon
-entity.DragonMount.albino.enchant.name=Albino Enchantment Dragon
-entity.DragonMount.albino.sunlight.name=Albino Sunlight Dragon
-entity.DragonMount.albino.storm.name=Albino Storm Dragon
-entity.DragonMount.albino.zombie.name=Albino Zombie Dragon
-entity.DragonMount.albino.terra.name=Albino Terra Dragon
-entity.DragonMount.albino.moonlight.name=Albino Moonlight Dragon
-
-entity.DragonMounts.dragon.ice.name=Ice Dragon
-entity.DragonMounts.dragon.ender.name=Ender Dragon
-entity.DragonMounts.dragon.aether.name=Aether Dragon
-entity.DragonMounts.dragon.forest.name=Forest Dragon
-entity.DragonMounts.dragon.sylphid.name=Water Dragon
-entity.DragonMounts.dragon.nether.name=Nether Dragon
-entity.DragonMounts.dragon.fire.name=Fire Dragon
-entity.DragonMounts.dragon.skeleton.name=Skeleton Dragon
-entity.DragonMounts.dragon.wither.name=Wither Dragon
-entity.DragonMounts.dragon.enchant.name=Enchantment Dragon
-entity.DragonMounts.dragon.sunlight.name=Sunlight Dragon
-entity.DragonMounts.dragon.storm.name=Storm Dragon
-entity.DragonMounts.dragon.zombie.name=Zombie Dragon
-entity.DragonMounts.dragon.terra.name=Terra Dragon
-entity.DragonMounts.dragon.moonlight.name=Moonlight Dragon
-
-
-#Breeds
-dragon.forest=Forest
-dragon.aether=Aether
-dragon.ice=Ice
-dragon.water=Water
-dragon.fire=Fire
-dragon.skeleton=Skeleton
-dragon.wither=Wither
-dragon.nether=Nether
-dragon.end=Ender
-dragon.enchant=Enchant
-dragon.sunlight=Sunlight
-dragon.moonlight=Moonlight
-dragon.storm=Storm
-dragon.zombie=Zombie
-dragon.terra=Terra
-dragon.dark=Dark
-dragon.light=Light
+#Dragon Types
+dragon_type.dragonmounts.forest=Forest
+dragon_type.dragonmounts.aether=Aether
+dragon_type.dragonmounts.ice=Ice
+dragon_type.dragonmounts.water=Water
+dragon_type.dragonmounts.fire=Fire
+dragon_type.dragonmounts.skeleton=Skeleton
+dragon_type.dragonmounts.wither=Wither
+dragon_type.dragonmounts.nether=Nether
+dragon_type.dragonmounts.ender=Ender
+dragon_type.dragonmounts.enchant=Enchant
+dragon_type.dragonmounts.sunlight=Sunlight
+dragon_type.dragonmounts.moonlight=Moonlight
+dragon_type.dragonmounts.storm=Storm
+dragon_type.dragonmounts.zombie=Zombie
+dragon_type.dragonmounts.terra=Terra
+dragon_type.dragonmounts.dark=Dark
+dragon_type.dragonmounts.light=Light
 
 #Stage
-dragon.egg=Egg
-dragon.hatchling=Hatchling
-dragon.infant=Infant
-dragon.prejuvenile=Pre-Juvenile
-dragon.juvenile=Juvenile
-dragon.adult=Adult
-
+life_stage.dragon.egg=Egg
+life_stage.dragon.hatchling=Hatchling
+life_stage.dragon.infant=Infant
+life_stage.dragon.prejuvenile=Pre-Juvenile
+life_stage.dragon.juvenile=Juvenile
+life_stage.dragon.adult=Adult
 
 ##
 # Item Names
 ##
-item.diamond_shears.name=Diamond Shears
-item.dragonEgg.name=%s Egg
-item.dragon_gender.name=Dragon Gender Gem
-item.gui.dragon_gender=Right Click an owned dragon with the gem will switch its gender
-item.summon_egg.name=Spawn Dragon
-item.dragon_essence.name=Dragon Essence
-item.dragon_whistle.name=Dragon Whistle
-item.dragon_amulet.name=Dragon Amulet
-item.dragon_orb.name=Dragon Orb
+item.dragonmounts.diamond_shears.name=Diamond Shears
+item.dragonmounts.dragon_spawn_egg.name=Dragon Spawn Egg
+item.dragonmounts.dragon_essence.name=Dragon Essence
+item.dragonmounts.dragon_whistle.name=Dragon Whistle
+item.dragonmounts.dragon_amulet.name=Dragon Amulet
+item.dragonmounts.dragon_orb.name=Dragon Orb
+item.dragonmounts.variation_orb.name=Orb of Variation
 
-item.carriage_oak.name=Oak CargoBob
-item.carriage_birch.name=Birch CargoBob
-item.carriage_spruce.name=Spruce CargoBob
-item.carriage_acacia.name=Acacia CargoBob
-item.carriage_dark_oak.name=Dark Oak CargoBob
-item.carriage_jungle.name=Jungle CargoBob
+item.dragonmounts.oak_carriage.name=Oak CargoBob
+item.dragonmounts.birch_carriage.name=Birch CargoBob
+item.dragonmounts.spruce_carriage.name=Spruce CargoBob
+item.dragonmounts.acacia_carriage.name=Acacia CargoBob
+item.dragonmounts.dark_oak_carriage.name=Dark Oak CargoBob
+item.dragonmounts.jungle_carriage.name=Jungle CargoBob
 
 # Armory Items
-item.dragonscales.name=Dragon Scales
-item.dragon_sword.name=Dragon Sword
-item.dragon_pickaxe.name=Dragon Pickaxe
-item.dragon_axe.name=Dragon Axe
-item.dragon_shovel.name=Dragon Shovel
-item.dragon_hoe.name=Dragon Hoe
-item.dragon_shield.name=Dragon Shield
-item.dragon_bow.name=Dragon Bow
-item.dragonscale_head.name=Dragon Scale Cap
-item.dragonscale_chest.name=Dragon Scale Tunic
-item.dragonscale_legs.name=Dragon Scale Leggings
-item.dragonscale_feet.name=Dragon Scale Boots
-item.dragonarmor_diamond.name=Diamond Dragon Armor
-item.dragonarmor_iron.name=Iron Dragon Armor
-item.dragonarmor_gold.name=Gold Dragon Armor
-item.dragonarmor_emerald.name=Emerald Dragon Armor
+item.dragonmounts.dragon_scales.name=Dragon Scales
+item.dragonmounts.dragon_scale_sword.name=Dragon Sword
+item.dragonmounts.dragon_scale_pickaxe.name=Dragon Pickaxe
+item.dragonmounts.dragon_scale_axe.name=Dragon Axe
+item.dragonmounts.dragon_scale_shovel.name=Dragon Shovel
+item.dragonmounts.dragon_scale_hoe.name=Dragon Hoe
+item.dragonmounts.dragon_scale_shield.name=Dragon Shield
+item.dragonmounts.dragon_scale_bow.name=Dragon Bow
+item.dragonmounts.dragon_scale_helmet.name=Dragon Scale Cap
+item.dragonmounts.dragon_scale_chestplate.name=Dragon Scale Tunic
+item.dragonmounts.dragon_scale_leggings.name=Dragon Scale Leggings
+item.dragonmounts.dragon_scale_boots.name=Dragon Scale Boots
+item.dragonmounts.diamond_dragon_armor.name=Diamond Dragon Armor
+item.dragonmounts.iron_dragon_armor.name=Iron Dragon Armor
+item.dragonmounts.golden_dragon_armor.name=Golden Dragon Armor
+item.dragonmounts.emerald_dragon_armor.name=Emerald Dragon Armor
 
 # Tiles
-tile.pileofsticks.name=Nest Block
-tile.block_dragon_shulker.name=Dragon Core
-
-tile.storm_egg.name=Storm Dragon Egg
-tile.end_egg.name=Ender Dragon Egg
-tile.zombie_egg.name=Zombie Dragon Egg
-tile.sylphid_egg.name=Water Dragon Egg
-tile.nether_egg.name=Nether Dragon Egg
-tile.forest_egg.name=Forest Dragon Egg
-tile.aether_egg.name=Aether Dragon Egg
-tile.ice_egg.name=Ice Dragon Egg
-tile.fire_egg.name=Fire Dragon Egg
-tile.skeleton_egg.name=Skeleton Dragon Egg
-tile.wither_egg.name=Wither Dragon Egg
-tile.enchant_egg.name=Enchant Dragon Egg
-tile.sunlight_egg.name=Sunlight Dragon Egg
-tile.moonlight_egg.name=Moonlight Dragon Egg
-tile.terra_egg.name=Terra Dragon Egg
-
-# Item Info
-item.removeNBT=<Sneak + Right Click to unbind a Dragon>
-item.armoryitems.info=Forged with the Scales of
-item.diamondshears.info=Used to get scales from tamed dragons without killing it. Untamed ones will attack
-item.dragonamulet.info=Right Click to store a dragon and carry it, right click on ground to summon
-item.carriage.info=Used to make dragons carry multiple passengers like a boat
-item.whistle.info=Right Click an owned and tamed dragon to control it
-item.whistle.nullBlockPos=Cannot Teleport There
-
+tile.dragonmounts.dragon_nest.name=Nest Block
+tile.dragonmounts.dragon_core.name=Dragon Core
+tile.dragonmounts.dragon_head.name=Dragon Head
+tile.dragonmounts.dragon_egg.name=Dragon Egg
 
 ##
 # Messages
 ##
-dragon.locked=This Dragon has been locked by the Owner
-dragon.notTamed=Use meat or fish to tame the dragon
-dragon.notOwned=You do not own this dragon
-entity.dragon.tooYoung=Dragon is too young for that, let it grow
-egg.cantHatchEnd.DragonMounts=Dragon Eggs cannot be hatched in The End
-dragon.growth.paused=Poisonous potatoes stops dragon growth, use carrots to continue growth
-commands.dragon.nodragons=There are no dragons nearby
-commands.dragon.canttame=You cannot tame dragons
-msg.dragon.toggleHover=Dragon Hover Toggle
-msg.dragon.toggleFollowYaw=Dragon Follow Yaw
-msg.dragon.toggleYLock=Old Controls (Space and Left ALT)
-
-# Whistle
-whistle.msg.cleared=Dragon has been unbound
-whistle.msg.hasDragon=Dragon Successfully Bound to Whistle
-whistle.msg.unBound=You Must Bind a Dragon First
-whistle.msg.notOwned=You Do not Own This Dragon
-whistle.msg.noDragon=Dragon Whistle is not bound to a Dragon, Left Click an owned and tamed dragon first
-whistle.msg.fail=The Dragon can't hear the whistle...
-whistle.command.new_home=New HomePos at
-
+message.dragonmounts.control.toggleHovering=Dragon Hovering: %s
+message.dragonmounts.control.toggleYawAlignment=Yaw Alignment: %s
+message.dragonmounts.control.togglePitchAlignment=Pitch Alignment: %s
+##### following entries will be shown in action bar. btw I am not sure if native speakers would like to capitalize the words there
+message.dragonmounts.dragon.untamed=The dragon is untamed
+message.dragonmounts.dragon.locked=This Dragon has been locked by the Owner
+message.dragonmounts.dragon.notOwner=You do not own this dragon
+message.dragonmounts.dragon.tooYoung=Dragon is too young for that, let it grow
+message.dragonmounts.dragon.growthPaused=The growth of the dragon is paused
+message.dragonmounts.egg.wrongDimension=Dragon Eggs cannot be hatched in this dimension
+message.dragonmounts.whistle.success=Dragon Successfully Bound to Whistle
+message.dragonmounts.whistle.existing=Please Unbind the Whistle First
+message.dragonmounts.whistle.cleared=Whistle has been unbound
+message.dragonmounts.whistle.empty=You Must Bind a Dragon First
+message.dragonmounts.whistle.invalidPos=The Dragon Cannot Teleport There
+message.dragonmounts.whistle.failed=The whistle sound fades away
 
 ##
 # Gui Names
 ##
-gui.nothing=Nothing
-gui.circle=Circle Player
-gui.followFlying=Follow Flying
-gui.cometoPlayer=Come To Player
-gui.locked.dragon=LOCK
-gui.unlocked.dragon=UNLOCK
-gui.dragon.sit=Sit
-gui.firesupport=Fire Support
-gui.dragon.hunger=Hunger
-container.dragon_shulker=Dragon Core
+container.dragonmounts.dragon_core=Dragon Core
+gui.dragonmounts.sit=Sit
+gui.dragonmounts.teleportToPlayer=Come To Player
+gui.dragonmounts.unbindWhistle=Unbind Whistle
+gui.dragonmounts.unbindWhistle.tooltip=Press Left Shift to Unlock
+gui.dragonmounts.lock.tooltip=Trust Other Players: %s
 
 #Controls
 key.categories.dragon=Dragon Mounts
-key.dragon.projectile=UNUSED
-key.dragon.breath=Dragon Breath
-key.dragon.cancelhover=Cancel Hover
-key.dragon.f7=Change Mount Camera
-key.dragon.followYaw=Follow Yaw
-key.dragon.boost=Flight Boost
-key.dragon.dismount=Shoulder Dismount
-key.dragon.lockY=Old Controls
-key.dragon.down=Descent
+key.dragonmounts.breath=Dragon Breath
+key.dragonmounts.boost=Flight Boost
+key.dragonmounts.descent=Descent
+key.dragonmounts.toggleCameraPos=Toggle Camera Position
+key.dragonmounts.toggleHovering=Toggle Dragon Hovering
+key.dragonmounts.toggleYawAlignment=Toggle Yaw Alignment
+key.dragonmounts.togglePitchAlignment=Toggle Pitch Alignment
 
 tooltip.armor_effect.dragonmounts.aether=When the wearer is sprinting, apply Speed II effect for 5s
 tooltip.armor_effect.dragonmounts.enchant=Targets killed by the wearer drop 120%% extra EXP
@@ -219,31 +133,50 @@ tooltip.armor_effect.dragonmounts.sunlight=When the hunger value of wearer is le
 tooltip.armor_effect.dragonmounts.terra=Apply Haste I effect for 30s
 tooltip.armor_effect.dragonmounts.water=When the wearer is underwater, apply Water Breathing I effect for 30s
 tooltip.armor_effect.dragonmounts.zombie=Apply Strength I effect for 15s at night
+tooltip.armor_effect.dragonmounts.dark=Apply Dark Dragon's Grace I effect for 30s
 tooltip.dragonmounts.armor_effect_cooldown=CD: %ss
 tooltip.dragonmounts.armor_effect_fishing_luck=When the wearer is fishing, apply Luck I effect for 10s without cooldown
 tooltip.dragonmounts.armor_effect_piece_4=4-Piece Set:
 tooltip.dragonmounts.armor_effect_remaining_cooldown=Remaining CD: %ss
+# actually it is related to key binding
+tooltip.dragonmounts.whistle=Right Click an owned and tamed dragon to control it
 tooltip.dragonmounts.whistle.name=Dragon Whistle (%s)
 tooltip.dragonmounts.age=Age: %s
 tooltip.dragonmounts.name=Name: %s
 tooltip.dragonmounts.health=Health: %s
 tooltip.dragonmounts.owner=Owner: %s
-tooltip.dragonmounts.gender=Gender: %s
+tooltip.dragonmounts.hard_shears=Used to get scales from dragons
+# actually it is related to key binding
+tooltip.dragonmounts.amulet.empty=Right Click to store a dragon and carry it
+# actually it is related to key binding
+tooltip.dragonmounts.amulet.usage=Right click on ground to summon
+tooltip.dragonmounts.carriage=Used to make dragons carry multiple passengers like a boat
+
+item.modifiers.equipped=When equipped:
 
 argument.player.toomany=Only one player is allowed, but the provided selector allows more than one
 
-commands.dragon.usage=/dragon <subcommand>
-commands.dragon.breed.usage=/dragon breed <breed> [dragon]
-commands.dragon.breed.invalid='%s' is not a valid breed
-commands.dragon.breed.success=The breed of %s has been set to %s
-commands.dragon.gender.usage=/dragon gender [dragon]
-commands.dragon.gender.success=The gender of %s has been set to %s
-commands.dragon.tame.usage=/dragon tame [dragon]
-commands.dragon.tame.success=Dragon %s is tamed by %s now
-commands.dragon.unlock.usage=/dragon unlock [dragon]
-commands.dragon.unlock.success=Dragon %s is unlocked now
-commands.dragon.stage.usage=/dragon stage <stage> [dragon]
-commands.dragon.stage.invalid='%s' is not a valid stage
-commands.dragon.stage.success=The stage of %s has been set to %s
-commands.dragon.notFound=Could not find dragon based on '%s'
-commands.dragon.unspecified=You must specify which dragon you wish to perform this action on.
+commands.dragonmounts.usage=/dragonmounts <subcommand>
+commands.dragonmounts.gender.usage=/dragonmounts gender [dragon]
+commands.dragonmounts.gender.success=The gender of %s has been set to: %s
+commands.dragonmounts.tame.usage=/dragonmounts tame [dragon]
+commands.dragonmounts.tame.success=Dragon %s is tamed by %s now
+commands.dragonmounts.unlock.usage=/dragonmounts unlock [dragon]
+commands.dragonmounts.unlock.success=Dragon %s is unlocked now
+commands.dragonmounts.stage.usage=/dragonmounts stage <stage> [dragon]
+commands.dragonmounts.stage.invalid='%s' is not a valid stage
+commands.dragonmounts.stage.success=The stage of %s has been set to: %s
+commands.dragonmounts.type.usage=/dragonmounts type <type> [dragon]
+commands.dragonmounts.type.invalid='%s' is not a valid type
+commands.dragonmounts.type.success=The type of %s has been set to: %s
+commands.dragonmounts.notFound=Could not find dragon based on '%s'
+commands.dragonmounts.unspecified=You must specify which dragon you wish to perform this action on.
+config.dragonmounts.category.main=Main
+config.dragonmounts.category.world_gen=World Generation
+config.dragonmounts.category.client=Client
+config.dragonmounts.debug=Debug
+config.dragonmounts.debug.tooltip=Enable Debug Mode
+config.dragonmounts.toggleDimensionLimitation=Allow Declared Dimensions Only
+config.dragonmounts.toggleDimensionLimitation.tooltip=If enabled, Dragon Nests will only be generated in declared dimensions; otherwise they will not be generated in the declared dimensions
+config.dragonmounts.limitedDimensions=Limited Dimensions
+config.dragonmounts.limitedDimensions.tooltip=A list of limited dimensions' numeric id

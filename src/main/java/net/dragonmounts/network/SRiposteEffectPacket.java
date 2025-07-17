@@ -13,8 +13,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import java.util.Random;
 
-import static net.dragonmounts.util.VarInt.readVarInt;
-import static net.dragonmounts.util.VarInt.writeVarInt;
+import static net.dragonmounts.util.ByteBufferUtil.readVarInt;
+import static net.dragonmounts.util.ByteBufferUtil.writeVarInt;
 
 public class SRiposteEffectPacket implements IMessage {
     public int id;

@@ -1,9 +1,9 @@
 package net.dragonmounts.network;
 
-import net.dragonmounts.inventory.DragonInventory;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.util.DMUtils;
 import io.netty.buffer.ByteBuf;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.inventory.DragonInventory;
+import net.dragonmounts.util.LogUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
@@ -15,8 +15,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import java.io.IOException;
 
-import static net.dragonmounts.util.VarInt.readVarInt;
-import static net.dragonmounts.util.VarInt.writeVarInt;
+import static net.dragonmounts.util.ByteBufferUtil.readVarInt;
+import static net.dragonmounts.util.ByteBufferUtil.writeVarInt;
 
 public class SSyncBannerPacket implements IMessage {
     public static void writeBanners(ByteBuf raw, int flag, ItemStack[] banners) {
@@ -51,7 +51,7 @@ public class SSyncBannerPacket implements IMessage {
             try {
                 banners[i] = buffer.readItemStack();
             } catch (IOException e) {
-                DMUtils.getLogger().error("Error reading item stack", e);
+                LogUtil.LOGGER.error("Error reading item stack", e);
                 banners[i] = ItemStack.EMPTY;
             }
         }
@@ -91,8 +91,8 @@ public class SSyncBannerPacket implements IMessage {
             WorldClient level = Minecraft.getMinecraft().world;
             if (level == null) return null;
             Entity entity = level.getEntityByID(packet.id);
-            if (entity instanceof EntityTameableDragon) {
-                DragonInventory inventory = ((EntityTameableDragon) entity).inventory;
+            if (entity instanceof TameableDragonEntity) {
+                DragonInventory inventory = ((TameableDragonEntity) entity).inventory;
                 ItemStack[] banners = packet.banners;
                 for (int i = 0; i < 4; ++i) {
                     ItemStack stack = banners[i];

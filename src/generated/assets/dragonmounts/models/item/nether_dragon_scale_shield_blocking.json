@@ -1,0 +1,6 @@
+{
+  "parent": "dragonmounts:item/shield/shield_blocking",
+  "textures": {
+    "base": "dragonmounts:entities/dragon_scale_shield/nether"
+  }
+}

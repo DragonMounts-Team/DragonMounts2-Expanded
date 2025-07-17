@@ -9,7 +9,7 @@
             "entries": [
                 {
                     "type": "item",
-                    "name": "dragonmounts:enchant_dragonscales",
+                    "name": "dragonmounts:enchant_dragon_scales",
                     "weight": 1,
                     "functions": [
                         {

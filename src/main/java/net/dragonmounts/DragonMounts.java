@@ -11,36 +11,33 @@ package net.dragonmounts;
 
 import net.dragonmounts.client.gui.GuiHandler;
 import net.dragonmounts.compat.BaublesCompat;
-import net.dragonmounts.event.EventLiving;
+import net.dragonmounts.compat.DragonMountsCompat;
 import net.dragonmounts.event.RegistryEventHandler;
-import net.dragonmounts.inits.DMArmors;
-import net.dragonmounts.inits.DMItemGroups;
-import net.dragonmounts.inits.ModTools;
+import net.dragonmounts.init.DMItemGroups;
+import net.dragonmounts.init.DMItems;
 import net.dragonmounts.proxy.ServerProxy;
-import net.dragonmounts.util.debugging.testclasses.LoggerLimit;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.*;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.ModMetadata;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.Mod.Metadata;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.util.Locale;
 
 /**
  * Main control class for Forge.
  */
 @Mod(modid = DragonMountsTags.MOD_ID, name = DragonMountsTags.MOD_NAME, version = DragonMountsTags.VERSION, useMetadata = true, guiFactory = DragonMounts.GUI_FACTORY)
 public class DragonMounts {
+    public static ResourceLocation makeId(String name) {
+        return new ResourceLocation(DragonMountsTags.MOD_ID, name);
+    }
 
     public static SimpleNetworkWrapper NETWORK_WRAPPER = NetworkRegistry.INSTANCE.newSimpleChannel(DragonMountsTags.MOD_ID);
     /**
@@ -48,70 +45,49 @@ public class DragonMounts {
      */
     public static final String GUI_FACTORY = "net.dragonmounts.DragonMountsConfigGuiFactory";
 
-    @SidedProxy(serverSide="net.dragonmounts.proxy.ServerProxy", clientSide="net.dragonmounts.proxy.ClientProxy")
-    public static ServerProxy proxy;
+    @SidedProxy(serverSide = "net.dragonmounts.proxy.ServerProxy", clientSide = "net.dragonmounts.proxy.ClientProxy")
+    public static ServerProxy PROXY;
 
-    @Instance(value = DragonMountsTags.MOD_ID)
-    public static DragonMounts instance;
-
-    public static ResourceLocation makeId(String name) {
-        return new ResourceLocation(DragonMountsTags.MOD_ID, name.toLowerCase(Locale.ROOT));
-    }
-
-    private ModMetadata metadata;
-    private DragonMountsConfig config;
-    @Deprecated
-    public static CreativeTabs mainTab = DMItemGroups.MAIN;
-    @Deprecated
-    public static CreativeTabs armoryTab = DMItemGroups.COMBAT;
-
-    public DragonMountsConfig getConfig() {
-        return config;
+    public static DragonMounts getInstance() {
+        return INSTANCE;
     }
 
     // important for debug in config
-    public ModMetadata getMetadata() {
-        return metadata;
+    public static ModMetadata getMetadata() {
+        return METADATA;
     }
-
-  // Add this field to your main class
-  public static final Logger logger = LogManager.getLogger(DragonMountsTags.MOD_ID);
-    public static final LoggerLimit loggerLimit = new LoggerLimit(logger);
 
     @EventHandler
     public void PreInitialization(FMLPreInitializationEvent event) {
-        DragonMountsLootTables.registerLootTables();
-        MinecraftForge.EVENT_BUS.register(new EventLiving());
-        proxy.PreInitialization(event);
-        metadata=event.getModMetadata();
+        PROXY.PreInitialization(event);
         DMItemGroups.init();
+        DragonMountsCompat.load(FMLCommonHandler.instance().getDataFixer().init(DragonMountsTags.MOD_ID, DragonMountsCompat.VERSION));
     }
 
     @EventHandler
     public void Initialization(FMLInitializationEvent event) {
-        proxy.Initialization(event);
-        proxy.render();
-        ModTools.InitializaRepairs();
-        DMArmors.InitializaRepairs();
+        PROXY.Initialization(event);
+        DMItems.bindRepairMaterials();
         GameRegistry.registerWorldGenerator(new DragonMountsWorldGenerator(), 0);
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
-        RegistryEventHandler.initRegistries();
+        RegistryEventHandler.registerCapabilities();
         // Mod Compat Initialization
         if (Loader.isModLoaded("baubles")) BaublesCompat.load();
     }
 
     @EventHandler
     public void PostInitialization(FMLPostInitializationEvent event) {
-        proxy.PostInitialization(event);
+        PROXY.PostInitialization(event);
     }
 
     @EventHandler
     public void ServerStarting(FMLServerStartingEvent event) {
-        proxy.ServerStarting(event);
+        PROXY.ServerStarting(event);
     }
 
-    @EventHandler
-    public void ServerStopped(FMLServerStoppedEvent event) {
-        proxy.ServerStopped(event);
-    }
+    @Instance(value = DragonMountsTags.MOD_ID)
+    private static DragonMounts INSTANCE;
+
+    @Metadata(value = DragonMountsTags.MOD_ID)
+    private static ModMetadata METADATA;
 }

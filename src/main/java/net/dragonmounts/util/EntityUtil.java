@@ -1,16 +1,30 @@
 package net.dragonmounts.util;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.util.Pair;
-import net.dragonmounts.util.math.MathX;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.dragonmounts.util.math.MathX;
+import net.dragonmounts.util.math.Pair;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeEventFactory;
 
+import javax.annotation.Nullable;
 import java.util.List;
+import java.util.UUID;
 
 public class EntityUtil {
     public static boolean addOrMergeEffect(EntityLivingBase entity, Potion effect, int duration, int amplifier, boolean ambient, boolean visible) {
@@ -31,6 +45,56 @@ public class EntityUtil {
             return false;
         entity.addPotionEffect(new PotionEffect(effect, duration, amplifier, ambient, visible));
         return true;
+    }
+
+    public static void finalizeSpawn(World level, Entity entity, BlockPos pos, boolean yOffset, IEntityLivingData data) {
+        float x = pos.getX() + 0.5F, y = yOffset ? getSpawnHeight(level, pos) : pos.getY(), z = pos.getZ() + 0.5F;
+        entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(level.rand.nextFloat() * 360.0F), 0.0F);
+        if (entity instanceof EntityLiving) {
+            EntityLiving $entity = (EntityLiving) entity;
+            $entity.rotationYawHead = $entity.rotationYaw;
+            $entity.renderYawOffset = $entity.rotationYaw;
+            if (ForgeEventFactory.doSpecialSpawn($entity, level, x, y, z, null)) return;
+            $entity.onInitialSpawn(level.getDifficultyForLocation(new BlockPos($entity)), data);
+            level.spawnEntity(entity);
+            $entity.playLivingSound();
+        }
+    }
+
+    public static boolean notOwner(NBTTagCompound data, @Nullable EntityPlayer player, @Nullable String feedback) {
+        if (player == null) return false;
+        String owner = data.getString("OwnerUUID");
+        if (owner.isEmpty() || player.getUniqueID().toString().equals(owner)) return false;
+        if (feedback != null) {
+            player.sendStatusMessage(new TextComponentTranslation(feedback), true);
+        }
+        return true;
+    }
+
+    public static float getSpawnHeight(World level, BlockPos pos) {
+        AxisAlignedBB box = new AxisAlignedBB(pos).expand(0.0D, -1.0D, 0.0D);
+        List<AxisAlignedBB> list = level.getCollisionBoxes(null, box);
+        if (list.isEmpty()) return (float) box.minY;
+        double height = box.minY;
+        for (AxisAlignedBB $box : list) {
+            height = Math.max($box.maxY, height);
+        }
+        return (float) height;
+    }
+
+    public static void replaceAttributeModifier(@Nullable IAttributeInstance attribute, UUID uuid, String name, double amount, int operator, boolean serializable) {
+        if (attribute == null) return;
+        attribute.removeModifier(uuid);
+        attribute.applyModifier(new AttributeModifier(uuid, name, amount, operator).setSaved(serializable));
+    }
+
+    public static void clampYaw(Entity entity, float yaw, float limit) {
+        entity.setRenderYawOffset(yaw);
+        float delta = MathHelper.wrapDegrees(entity.rotationYaw - yaw);
+        float limited = MathHelper.clamp(delta, -limit, limit);
+        entity.prevRotationYaw += limited - delta;
+        entity.rotationYaw += limited - delta;
+        entity.setRotationYawHead(entity.rotationYaw);
     }
 
     /**
@@ -153,5 +217,13 @@ public class EntityUtil {
         }
         entity.world.profiler.endSection();
         return collisions;
+    }
+
+    public static void dropItems(Entity entity, ItemStack[] stacks) {
+        for (int i = 0, j = stacks.length; i < j; ++i) {
+            if (entity.entityDropItem(stacks[i], 0.5F) != null) {
+                stacks[i] = ItemStack.EMPTY;
+            }
+        }
     }
 }

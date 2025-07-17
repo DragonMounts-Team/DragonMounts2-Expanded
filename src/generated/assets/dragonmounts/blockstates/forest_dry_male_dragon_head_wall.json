@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "facing=south": {
+      "model": "dragonmounts:dragon_head"
+    },
+    "facing=west": {
+      "model": "dragonmounts:dragon_head"
+    },
+    "facing=north": {
+      "model": "dragonmounts:dragon_head"
+    },
+    "facing=east": {
+      "model": "dragonmounts:dragon_head"
+    }
+  }
+}

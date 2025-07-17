@@ -2,8 +2,8 @@ package net.dragonmounts.api;
 
 import net.dragonmounts.capability.ArmorEffectManager;
 import net.dragonmounts.capability.IArmorEffectManager;
+import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.registry.CooldownCategory;
-import net.dragonmounts.util.DMUtils;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -18,7 +18,7 @@ public interface IDescribableArmorEffect extends IArmorEffect {
     @SideOnly(Side.CLIENT)
     default void appendTriggerInfo(ItemStack stack, List<String> tooltips) {
         ArmorEffectManager manager = ArmorEffectManager.getLocal();
-        tooltips.add((manager != null && manager.isActive(this) ? TextFormatting.GREEN : TextFormatting.RESET) + DMUtils.translateToLocal("tooltip.dragonmounts.armor_effect_piece_4"));
+        tooltips.add((manager != null && manager.isActive(this) ? TextFormatting.GREEN : TextFormatting.RESET) + ClientUtil.translateToLocal("tooltip.dragonmounts.armor_effect_piece_4"));
     }
 
     @SideOnly(Side.CLIENT)
@@ -42,9 +42,9 @@ public interface IDescribableArmorEffect extends IArmorEffect {
         public final void appendCooldownInfo(List<String> tooltips) {
             int value = ArmorEffectManager.getLocalCooldown(this);
             if (value > 0) {
-                tooltips.add(TextFormatting.RESET + DMUtils.quickFormatAsFloat("tooltip.dragonmounts.armor_effect_remaining_cooldown", value));
+                tooltips.add(TextFormatting.RESET + ClientUtil.quickFormatAsFloat("tooltip.dragonmounts.armor_effect_remaining_cooldown", value));
             } else if (this.cooldown > 0) {
-                tooltips.add(TextFormatting.RESET + DMUtils.quickFormatAsFloat("tooltip.dragonmounts.armor_effect_cooldown", this.cooldown));
+                tooltips.add(TextFormatting.RESET + ClientUtil.quickFormatAsFloat("tooltip.dragonmounts.armor_effect_cooldown", this.cooldown));
             }
         }
 
@@ -53,7 +53,7 @@ public interface IDescribableArmorEffect extends IArmorEffect {
         public void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {
             tooltips.add("");
             this.appendTriggerInfo(stack, tooltips);
-            tooltips.add(TextFormatting.RESET + DMUtils.translateToLocal(this.description));
+            tooltips.add(TextFormatting.RESET + ClientUtil.translateToLocal(this.description));
             this.appendCooldownInfo(tooltips);
         }
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.1] - 2024-12-8
+
+### Fix
+
+- Provider of `ARMOR_EFFECT_MANAGER` returns proper value now.
+
 ## [2.0.0] - 2024-12-1
 
 ### BREAKING CHANGES
@@ -14,7 +20,7 @@
 - Add French localization.
 - Add Japanese localization.
 - Add `ARMOR_EFFECT_MANAGER` capability.
-- Add `Forced Rename` config, which allow anvil to change dragon's name by renaming amulet.
+- Add `Forced Rename` config, which allows anvil to change dragon's name by renaming amulet.
 
 ### Changes
 

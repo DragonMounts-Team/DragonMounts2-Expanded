@@ -30,7 +30,7 @@
       },
       "sylphid": {
         "textures": {
-          "all": "dragonmounts:entities/dragon/sylphid/egg"
+          "all": "dragonmounts:entities/dragon/water/egg"
         }
       },
       "ice": {
@@ -81,11 +81,6 @@
       "moonlight": {
         "textures": {
           "all": "dragonmounts:entities/dragon/moonlight/egg"
-        }
-      },
-      "dark": {
-        "textures": {
-          "all": "dragonmounts:entities/dragon/dark/egg"
         }
       }
     }

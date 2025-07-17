@@ -10,26 +10,30 @@
 package net.dragonmounts.proxy;
 
 import net.dragonmounts.DragonMountsConfig;
+import net.dragonmounts.block.entity.DragonCoreBlockEntity;
+import net.dragonmounts.block.entity.DragonHeadBlockEntity;
 import net.dragonmounts.client.gui.GuiDragonDebug;
 import net.dragonmounts.client.other.TargetHighlighter;
+import net.dragonmounts.client.render.CarriageRenderer;
+import net.dragonmounts.client.render.DMCapeRenderer;
 import net.dragonmounts.client.render.DragonCoreBlockEntityRenderer;
-import net.dragonmounts.client.render.RenderDM2Cape;
+import net.dragonmounts.client.render.DragonHeadBlockEntityRenderer;
 import net.dragonmounts.client.render.dragon.DragonRenderer;
 import net.dragonmounts.client.render.dragon.breathweaponFX.ClientBreathNodeRenderer;
 import net.dragonmounts.client.userinput.DragonOrbControl;
-import net.dragonmounts.event.DragonViewEvent;
+import net.dragonmounts.client.variant.VariantAppearance;
+import net.dragonmounts.client.variant.VariantAppearances;
+import net.dragonmounts.entity.CarriageEntity;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.breath.effects.ClientBreathNodeEntity;
+import net.dragonmounts.event.CameraHandler;
 import net.dragonmounts.event.IItemColorRegistration;
-import net.dragonmounts.inits.ModBlocks;
-import net.dragonmounts.inits.ModKeys;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.effects.ClientBreathNodeEntity;
-import net.dragonmounts.objects.tileentities.TileEntityDragonShulker;
-import net.dragonmounts.util.debugging.StartupDebugClientOnly;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
+import net.dragonmounts.event.KeyBindingHandler;
+import net.dragonmounts.init.DMItems;
+import net.dragonmounts.init.DMKeyBindings;
+import net.dragonmounts.init.DragonVariants;
+import net.dragonmounts.registry.DragonVariant;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -37,10 +41,8 @@ import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.io.File;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -49,9 +51,8 @@ import java.util.stream.Collectors;
  * 2nd @author TheRPGAdventurer
  */
 public class ClientProxy extends ServerProxy {
-    private static StringBuilder addCredit(StringBuilder builder, String credit, String description) {
-        return builder
-                .append(TextFormatting.GREEN)
+    private static void addCredit(StringBuilder builder, String credit, String description) {
+        builder.append(TextFormatting.GREEN)
                 .append(credit)
                 .append(TextFormatting.RESET)
                 .append('-')
@@ -61,22 +62,25 @@ public class ClientProxy extends ServerProxy {
                 .append('\n');
     }
 
-    private int thirdPersonViewDragon = 0;
-
     @Override
     public void PreInitialization(FMLPreInitializationEvent event) {
         super.PreInitialization(event);
         MinecraftForge.EVENT_BUS.register(IItemColorRegistration.class);
         // register dragon entity renderer
         DragonMountsConfig.clientPreInit();
-        RenderingRegistry.registerEntityRenderingHandler(EntityTameableDragon.class, DragonRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(TameableDragonEntity.class, DragonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ClientBreathNodeEntity.class, ClientBreathNodeRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(CarriageEntity.class, CarriageRenderer::new);
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDragonShulker.class, new DragonCoreBlockEntityRenderer());
-        ModBlocks.DRAGONSHULKER.item.setTileEntityItemStackRenderer(new DragonCoreBlockEntityRenderer.ItemStackRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(DragonCoreBlockEntity.class, new DragonCoreBlockEntityRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(DragonHeadBlockEntity.class, new DragonHeadBlockEntityRenderer());
+        DMItems.DRAGON_CORE.setTileEntityItemStackRenderer(new DragonCoreBlockEntityRenderer.ItemStackRenderer());
+        DragonHeadBlockEntityRenderer.ItemStackRenderer renderer = new DragonHeadBlockEntityRenderer.ItemStackRenderer();
+        for (DragonVariant variant : DragonVariants.BUILTIN_VALUES) {
+            variant.head.item.setTileEntityItemStackRenderer(renderer);
+        }
 
         //Override mcmod.info - This looks cooler :)
-        //TODO: LOCALIZATION
         ModMetadata metadata = event.getModMetadata();
         metadata.name = TextFormatting.DARK_AQUA.toString() + TextFormatting.BOLD + metadata.name;
         StringBuilder credits = new StringBuilder(2048).append('\n');
@@ -94,8 +98,8 @@ public class ClientProxy extends ServerProxy {
         addCredit(credits, "TheGreyGhost", "Old DM1 Developer. Prototype Dragon Breath.");
         addCredit(credits, "Tomanex", "Dragon Mounts Team Founder and Texture Artist. Revamped various textures");
         addCredit(credits, "JDSK0ala", "Dragon Mounts Team Founder and Beta Tester");
-        addCredit(credits, "2190303755 (Number-Man)", "Lead Developer and Coder for Dragon Mounts 2: Continued");
-        addCredit(credits, "Moaswies", "Coder for Dragon Mounts 2: Continued");
+        addCredit(credits, "2190303755 (Number-Man)", "Lead Developer and Coder for Dragon Mounts 2: Expanded");
+        addCredit(credits, "Moaswies", "Coder for Dragon Mounts 2: Expanded");
         addCredit(credits, "EnderEXE", "Beta Tester");
         addCredit(credits, "Tomohiko", "For contributing Japanese localization");
         addCredit(credits, "Signis Kerman", "For contributing French localization");
@@ -116,53 +120,28 @@ public class ClientProxy extends ServerProxy {
     @Override
     public void Initialization(FMLInitializationEvent evt) {
         super.Initialization(evt);
-        if (DragonMountsConfig.isDebug()) {
-            MinecraftForge.EVENT_BUS.register(new GuiDragonDebug());
-        }
-        StartupDebugClientOnly.initClientOnly();
+        DMKeyBindings.init();
     }
 
     @Override
     public void PostInitialization(FMLPostInitializationEvent event) {
         super.PostInitialization(event);
-
         if (DragonMountsConfig.isDebug()) {
             MinecraftForge.EVENT_BUS.register(new GuiDragonDebug());
         }
-        StartupDebugClientOnly.postInitClientOnly();
-
         if (DragonMountsConfig.isPrototypeBreathweapons()) {
-            DragonOrbControl.createSingleton(getNetwork());
+            DragonOrbControl.createSingleton();
             DragonOrbControl.initialiseInterceptors();
             MinecraftForge.EVENT_BUS.register(DragonOrbControl.getInstance());
             MinecraftForge.EVENT_BUS.register(new TargetHighlighter());
         }
-
-        MinecraftForge.EVENT_BUS.register(new ModKeys());
-        MinecraftForge.EVENT_BUS.register(new DragonViewEvent());
-        MinecraftForge.EVENT_BUS.register(new RenderDM2Cape());
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void render() {
-        ModKeys.init();
-    }
-
-    public int getDragon3rdPersonView() {
-        return thirdPersonViewDragon;
-    }
-
-    public void setDragon3rdPersonView(int view) {
-        thirdPersonViewDragon = view;
-    }
-
-    public void registerItemRenderer(Item item, int meta, String id) {
-        ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), id));
+        MinecraftForge.EVENT_BUS.register(CameraHandler.class);
+        MinecraftForge.EVENT_BUS.register(KeyBindingHandler.class);
+        MinecraftForge.EVENT_BUS.register(DMCapeRenderer.class);
     }
 
     @Override
-    public File getDataDirectory() {
-        return Minecraft.getMinecraft().gameDir;
+    public Function<String, VariantAppearance> getBuiltinAppearances() {
+        return VariantAppearances.getSupplier();
     }
 }

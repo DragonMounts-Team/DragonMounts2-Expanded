@@ -9,7 +9,7 @@
             "entries": [
                 {
                     "type": "item",
-                    "name": "dragonmounts:light_dragonscales",
+                    "name": "dragonmounts:light_dragon_scales",
                     "weight": 1,
                     "functions": [
                         {

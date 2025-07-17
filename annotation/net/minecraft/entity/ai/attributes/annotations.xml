@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraft.entity.ai.attributes.AbstractAttributeMap net.minecraft.entity.ai.attributes.IAttributeInstance getAttributeInstance(net.minecraft.entity.ai.attributes.IAttribute)'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+</root>

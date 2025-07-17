@@ -9,7 +9,7 @@
  */
 package net.dragonmounts.network;
 
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.BreathWeaponTarget;
+import net.dragonmounts.entity.breath.BreathWeaponTarget;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 

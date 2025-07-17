@@ -2,6 +2,7 @@ package net.dragonmounts.capability;
 
 import net.dragonmounts.api.IArmorEffect;
 import net.dragonmounts.api.IArmorEffectSource;
+import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.compat.CooldownOverlayCompat;
 import net.dragonmounts.network.SInitCooldownPacket;
 import net.dragonmounts.network.SSyncCooldownPacket;
@@ -22,15 +23,14 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static net.dragonmounts.DragonMounts.NETWORK_WRAPPER;
-import static net.dragonmounts.client.ClientUtil.getLocalPlayer;
-import static net.dragonmounts.inits.DMCapabilities.ARMOR_EFFECT_MANAGER;
 import static java.lang.System.arraycopy;
 import static java.util.Arrays.fill;
+import static net.dragonmounts.DragonMounts.NETWORK_WRAPPER;
+import static net.dragonmounts.capability.DMCapabilities.ARMOR_EFFECT_MANAGER;
 
+@SuppressWarnings("DataFlowIssue")
 public final class ArmorEffectManager implements IArmorEffectManager {
     private static ArmorEffectManager LOCAL_MANAGER = null;
     private static SInitCooldownPacket LOCAL_CACHE = null;
@@ -85,7 +85,7 @@ public final class ArmorEffectManager implements IArmorEffectManager {
             // while assignments occur after <init>.
             // if we try to read a field when running <init>,
             // we will get the same value as before <init>.
-            EntityPlayer prior = getLocalPlayer();
+            EntityPlayer prior = ClientUtil.getLocalPlayer();
             if (prior != null) {
                 IArmorEffectManager mgr = prior.getCapability(ARMOR_EFFECT_MANAGER, null);
                 if (mgr instanceof ArmorEffectManager) {
@@ -213,7 +213,7 @@ public final class ArmorEffectManager implements IArmorEffectManager {
     }
 
     @Override
-    public NBTTagCompound saveNBT() {
+    public NBTTagCompound serializeNBT() {
         final int[] cdRef = this.cdRef, cdKey = this.cdKey, cdDat = this.cdDat;
         NBTTagCompound tag = new NBTTagCompound();
         for (int i = 0, j, v, n = this.cdN; i < n; ++i) {
@@ -228,9 +228,8 @@ public final class ArmorEffectManager implements IArmorEffectManager {
         return tag;
     }
 
-
     @Override
-    public void readNBT(NBTTagCompound tag) {
+    public void deserializeNBT(NBTTagCompound tag) {
         for (CooldownCategory category : CooldownCategory.REGISTRY) {
             if (category == null) continue;
             ResourceLocation identifier = category.getRegistryName();
@@ -421,16 +420,16 @@ public final class ArmorEffectManager implements IArmorEffectManager {
         @Nullable
         @Override
         public NBTTagCompound writeNBT(Capability<IArmorEffectManager> capability, IArmorEffectManager instance, EnumFacing side) {
-            return instance.saveNBT();
+            return instance.serializeNBT();
         }
 
         @Override
         public void readNBT(Capability<IArmorEffectManager> capability, IArmorEffectManager instance, EnumFacing side, NBTBase tag) {
-            instance.readNBT((NBTTagCompound) tag);
+            instance.deserializeNBT((NBTTagCompound) tag);
         }
     }
 
-    public static class LazyProvider implements ICapabilitySerializable<NBTTagCompound>, IArmorEffectManager.Provider {
+    public static class LazyProvider implements ICapabilitySerializable<NBTTagCompound> {
         public final ArmorEffectManager manager;
 
         public LazyProvider(EntityPlayer player) {
@@ -448,18 +447,14 @@ public final class ArmorEffectManager implements IArmorEffectManager {
         }
 
         @Override
-        public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-            return true;
+        public boolean hasCapability(@Nullable Capability<?> capability, @Nullable EnumFacing facing) {
+            return ARMOR_EFFECT_MANAGER == capability;
         }
 
         @Nullable
         @Override
-        public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing side) {
+        public <T> T getCapability(@Nullable Capability<T> capability, @Nullable EnumFacing side) {
             return ARMOR_EFFECT_MANAGER == capability ? ARMOR_EFFECT_MANAGER.cast(this.manager) : null;
-        }
-
-        public ArmorEffectManager dragonmounts$getManager() {
-            return this.manager;
         }
     }
 

@@ -21,8 +21,7 @@ import java.util.Set;
 
 public class DragonMountsConfigGuiFactory implements IModGuiFactory {
     @Override
-    public void initialize(Minecraft minecraft) {
-    }
+    public void initialize(Minecraft minecraft) {}
 
     @Override
     public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
@@ -38,9 +37,9 @@ public class DragonMountsConfigGuiFactory implements IModGuiFactory {
     public GuiScreen createConfigGui(GuiScreen parent) {
         Configuration config = DragonMountsConfig.getConfig();
         return new GuiConfig(parent, Arrays.asList(
-                new ConfigElement(config.getCategory(DragonMountsConfig.CATEGORY_MAIN)),
-                new ConfigElement(config.getCategory(DragonMountsConfig.CATEGORY_WORLDGEN)),
-                new ConfigElement(config.getCategory(DragonMountsConfig.CATEGORY_CLIENTDM2))
+                new ConfigElement(config.getCategory(DragonMountsConfig.CATEGORY_MAIN).setLanguageKey("config.dragonmounts.category.main")),
+                new ConfigElement(config.getCategory(DragonMountsConfig.CATEGORY_WORLDGEN).setLanguageKey("config.dragonmounts.category.world_gen")),
+                new ConfigElement(config.getCategory(DragonMountsConfig.CATEGORY_CLIENTDM2).setLanguageKey("config.dragonmounts.category.client"))
         ), DragonMountsTags.MOD_ID, false, false, DragonMountsTags.MOD_NAME);
 	}
 }

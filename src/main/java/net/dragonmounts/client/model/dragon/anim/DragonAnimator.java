@@ -9,16 +9,18 @@
  */
 package net.dragonmounts.client.model.dragon.anim;
 
-import net.dragonmounts.DragonMounts;
 import net.dragonmounts.client.model.dragon.DragonModel;
-import net.dragonmounts.objects.entity.entitytameabledragon.EntityTameableDragon;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.DragonBreathHelper;
-import net.dragonmounts.objects.entity.entitytameabledragon.breath.DragonHeadPositionHelper;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.SegmentSizePositionRotation;
-import net.dragonmounts.objects.entity.entitytameabledragon.helper.util.Spline;
+import net.dragonmounts.client.variant.VariantAppearance;
+import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.breath.DragonBreathHelper;
+import net.dragonmounts.entity.breath.DragonHeadPositionHelper;
+import net.dragonmounts.entity.helper.SegmentSizePositionRotation;
+import net.dragonmounts.util.LogUtil;
 import net.dragonmounts.util.math.Interpolation;
 import net.dragonmounts.util.math.MathX;
+import net.dragonmounts.util.math.Spline;
 import net.minecraft.util.math.Vec3d;
+import org.apache.logging.log4j.Level;
 
 /**
  * Animation control class to put useless reptiles in motion.
@@ -34,7 +36,7 @@ public class DragonAnimator {
     private boolean haveCalculatedAnimations = false;
 
     // entity parameters
-    private final EntityTameableDragon dragon;
+    private final TameableDragonEntity dragon;
     private float partialTicks;
     private float moveTime;
     private float moveSpeed;
@@ -155,11 +157,12 @@ public class DragonAnimator {
     // Y rotation angles for air, thigh only
     private float[] yAirAll = {-0.1f, 0.1f};
 */
-    public DragonAnimator(EntityTameableDragon dragon) {
+    public DragonAnimator(TameableDragonEntity dragon) {
         this.dragon = dragon;
-        WING_FINGERS = dragon.getBreedType().getNumberOfWingFingers();
-        NECK_SEGMENTS = dragon.getBreedType().getNumberOfNeckSegments();
-        TAIL_SEGMENTS = dragon.getBreedType().getNumberOfTailSegments();
+        VariantAppearance appearance = dragon.getVariant().appearance;
+        WING_FINGERS = 4;
+        NECK_SEGMENTS = 7;
+        TAIL_SEGMENTS = 12;
 
         wingFingerRotateX = new float[WING_FINGERS];
         wingFingerRotateY = new float[WING_FINGERS];
@@ -325,7 +328,7 @@ public class DragonAnimator {
                 break;
             }
             default: {
-                DragonMounts.loggerLimit.error_once("unexpected breathstate:" + breathState);
+                LogUtil.once(Level.ERROR, "unexpected breathstate:" + breathState);
                 return;
             }
         }

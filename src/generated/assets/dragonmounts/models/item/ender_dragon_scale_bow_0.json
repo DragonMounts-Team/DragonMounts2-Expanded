@@ -1,0 +1,6 @@
+{
+  "parent": "dragonmounts:item/ender_dragon_scale_bow",
+  "textures": {
+    "layer0": "dragonmounts:items/bow/dragon_bow_ender_0"
+  }
+}
