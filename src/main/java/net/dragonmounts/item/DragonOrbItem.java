@@ -15,7 +15,7 @@ import net.minecraft.world.World;
  */
 public class DragonOrbItem extends Item {
     public DragonOrbItem() {
-        this.setMaxStackSize(1).setCreativeTab(DMItemGroups.MAIN);
+        this.setMaxStackSize(1).setCreativeTab(DMItemGroups.ITEMS);
     }
 
     /**

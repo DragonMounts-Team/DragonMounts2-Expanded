@@ -9,6 +9,8 @@
  */
 package net.dragonmounts.util.math;
 
+import net.minecraft.util.math.MathHelper;
+
 /**
  * Borrowed from http://www.java-gaming.org/index.php?topic=24122.0
  */
@@ -32,45 +34,6 @@ public class Spline {
     public static final float CR32 = 0.0f;
     public static final float CR33 = 0.0f;
 
-    public static float interpolateLinearEnds(float x,
-            float... internalKnots) {
-        return interp(x, getLinearEndKnots(internalKnots));
-    }
-
-    public static float interp(float x, float... knots) {
-        int nknots = knots.length;
-        int nspans = nknots - 3;
-        int knot = 0;
-        if (nspans < 1) {
-            System.out.println(Spline.class.getName()
-                    + " Spline has too few knots");
-            return 0;
-        }
-        x = MathX.clamp(x, 0, 0.9999f) * nspans;
-        // println("clamped x: " + x);
-        int span = (int) x;
-        // println("span before: " + span);
-        if (span >= nknots - 3) {
-            span = nknots - 3;
-        }
-        // println("span after: " + span);
-        x -= span;
-        knot += span;
-
-        // println("knot: " + knot + " knots.length: " + knots.length);
-
-        float knot0 = knots[knot];
-        float knot1 = knots[knot + 1];
-        float knot2 = knots[knot + 2];
-        float knot3 = knots[knot + 3];
-
-        float c3 = CR00 * knot0 + CR01 * knot1 + CR02 * knot2 + CR03 * knot3;
-        float c2 = CR10 * knot0 + CR11 * knot1 + CR12 * knot2 + CR13 * knot3;
-        float c1 = CR20 * knot0 + CR21 * knot1 + CR22 * knot2 + CR23 * knot3;
-        float c0 = CR30 * knot0 + CR31 * knot1 + CR32 * knot2 + CR33 * knot3;
-        return ((c3 * x + c2) * x + c1) * x + c0;
-    }
-
     public static void interp(float x, float[] result, float[]... knots) {
         int nknots = knots.length;
         int nspans = nknots - 3;
@@ -80,7 +43,7 @@ public class Spline {
                     + " Spline has too few knots");
             return;
         }
-        x = MathX.clamp(x, 0, 0.9999f) * nspans;
+        x = MathHelper.clamp(x, 0.0F, 0.9999F) * nspans;
         // println("clamped x: " + x);
         int span = (int) x;
         // println("span before: " + span);
@@ -111,53 +74,5 @@ public class Spline {
 
             result[i] = ((c3 * x + c2) * x + c1) * x + c0;
         }
-    }
-
-    public static float[] interpArray(float[] inputs, float... knots) {
-        float[] result = new float[inputs.length];
-        for (int i = 0; i < inputs.length; i++) {
-            result[i] = interp(inputs[i], knots);
-        }
-        return result;
-    }
-
-    public static float[] interpEndsArray(float[] inputs,
-            float... internalKnots) {
-        float[] knots = getLinearEndKnots(internalKnots);
-        float[] result = new float[inputs.length];
-        for (int i = 0; i < inputs.length; i++) {
-            result[i] = interp(inputs[i], knots);
-        }
-        return result;
-    }
-
-    public static float[] interpLinearEndsArray(float minInputValue,
-            float maxInputValue, int n, float... internalKnots) {
-        float[] inputs = new float[n];
-        float stepLength = (maxInputValue - minInputValue) / (n - 1);
-        for (int i = 0; i < n; i++) {
-            inputs[i] = minInputValue + i * stepLength;
-        }
-        return interpEndsArray(inputs, internalKnots);
-    }
-
-    // Default range between 0.0 and 1.0
-    public static float[] interpLinearEndsArray(int n,
-            float... internalKnots) {
-        return interpLinearEndsArray(0.0f, 1.0f, n, internalKnots);
-    }
-
-    public static float[] getLinearEndKnots(float... internalKnots) {
-        float[] result = new float[internalKnots.length + 2];
-        float diff1 = internalKnots[1] - internalKnots[0];
-        float diff2 = internalKnots[internalKnots.length - 1]
-                - internalKnots[internalKnots.length - 2];
-        result[0] = internalKnots[0] - diff1;
-        result[result.length - 1] = internalKnots[internalKnots.length - 1]
-                + diff2;
-        for (int i = 1; i < result.length - 1; i++) {
-            result[i] = internalKnots[i - 1];
-        }
-        return result;
     }
 }

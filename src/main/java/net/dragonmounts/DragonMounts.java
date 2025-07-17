@@ -9,10 +9,14 @@
  */
 package net.dragonmounts;
 
+import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.gui.GuiHandler;
+import net.dragonmounts.command.DragonCommandTree;
 import net.dragonmounts.compat.BaublesCompat;
 import net.dragonmounts.compat.DragonMountsCompat;
+import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.event.RegistryEventHandler;
+import net.dragonmounts.init.DMEntities;
 import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.init.DMItems;
 import net.dragonmounts.proxy.ServerProxy;
@@ -21,47 +25,42 @@ import net.minecraftforge.fml.common.*;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.Mod.Metadata;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.GameData;
 
-
-/**
- * Main control class for Forge.
- */
-@Mod(modid = DragonMountsTags.MOD_ID, name = DragonMountsTags.MOD_NAME, version = DragonMountsTags.VERSION, useMetadata = true, guiFactory = DragonMounts.GUI_FACTORY)
+@Mod(
+        modid = DragonMountsTags.MOD_ID,
+        name = DragonMountsTags.MOD_NAME,
+        version = DragonMountsTags.VERSION,
+        useMetadata = true,
+        /// @see Class#forName, the fully qualified name of {@link net.dragonmounts.client.gui.ConfigGui}
+        guiFactory = "net.dragonmounts.client.gui.ConfigGui"
+)
 public class DragonMounts {
     public static ResourceLocation makeId(String name) {
         return new ResourceLocation(DragonMountsTags.MOD_ID, name);
     }
-
-    public static SimpleNetworkWrapper NETWORK_WRAPPER = NetworkRegistry.INSTANCE.newSimpleChannel(DragonMountsTags.MOD_ID);
-    /**
-     * the canonical name of {@link DragonMountsConfigGuiFactory}
-     */
-    public static final String GUI_FACTORY = "net.dragonmounts.DragonMountsConfigGuiFactory";
-
     @SidedProxy(serverSide = "net.dragonmounts.proxy.ServerProxy", clientSide = "net.dragonmounts.proxy.ClientProxy")
     public static ServerProxy PROXY;
+    public static final SimpleNetworkWrapper NETWORK_WRAPPER = NetworkRegistry.INSTANCE.newSimpleChannel(DragonMountsTags.MOD_ID);
 
     public static DragonMounts getInstance() {
         return INSTANCE;
     }
 
-    // important for debug in config
     public static ModMetadata getMetadata() {
         return METADATA;
     }
 
     @EventHandler
     public void PreInitialization(FMLPreInitializationEvent event) {
+        DMConfig.load();
         PROXY.PreInitialization(event);
         DMItemGroups.init();
-        DragonMountsCompat.load(FMLCommonHandler.instance().getDataFixer().init(DragonMountsTags.MOD_ID, DragonMountsCompat.VERSION));
+        DragonMountsCompat.init(FMLCommonHandler.instance().getDataFixer());
     }
 
     @EventHandler
@@ -69,10 +68,13 @@ public class DragonMounts {
         PROXY.Initialization(event);
         DMItems.bindRepairMaterials();
         GameRegistry.registerWorldGenerator(new DragonMountsWorldGenerator(), 0);
-        NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, GuiHandler.INSTANCE);
         RegistryEventHandler.registerCapabilities();
+        RegistryEventHandler.registerRecipes();
         // Mod Compat Initialization
-        if (Loader.isModLoaded("baubles")) BaublesCompat.load();
+        if (Loader.isModLoaded(DragonMountsCompat.BAUBLES)) {
+            BaublesCompat.load();
+        }
     }
 
     @EventHandler
@@ -82,7 +84,12 @@ public class DragonMounts {
 
     @EventHandler
     public void ServerStarting(FMLServerStartingEvent event) {
-        PROXY.ServerStarting(event);
+        event.registerServerCommand(new DragonCommandTree());
+    }
+
+    @EventHandler
+    public static void registerEntityMapping(FMLModIdMappingEvent event) {
+        GameData.getEntityClassMap().put(ClientDragonEntity.class, DMEntities.DRAGON);
     }
 
     @Instance(value = DragonMountsTags.MOD_ID)

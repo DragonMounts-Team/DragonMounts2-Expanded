@@ -1,0 +1,6 @@
+{
+  "parent": "dragonmounts:item/zombie_dragon_scale_bow",
+  "textures": {
+    "layer0": "dragonmounts:items/bow/zombie_dragon_scale_bow_pulling_2"
+  }
+}

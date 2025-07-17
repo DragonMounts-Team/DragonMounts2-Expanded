@@ -15,7 +15,7 @@
       },
       "end": {
         "textures": {
-          "all": "dragonmounts:entities/dragon/ender/egg"
+          "all": "minecraft:blocks/dragon_egg"
         }
       },
       "forest": {
@@ -25,7 +25,7 @@
       },
       "nether": {
         "textures": {
-          "all": "dragonmounts:entities/dragon/nether/egg"
+          "all": "minecraft:blocks/magma"
         }
       },
       "sylphid": {
@@ -55,7 +55,7 @@
       },
       "enchant": {
         "textures": {
-          "all": "dragonmounts:entities/dragon/enchant/egg"
+          "all": "dragonmounts:entities/dragon/enchanted/egg"
         }
       },
       "sunlight": {

@@ -1,3 +1,0 @@
-@mcp.MethodsReturnNonnullByDefault
-@javax.annotation.ParametersAreNonnullByDefault
-package net.dragonmounts.compat.fixer;

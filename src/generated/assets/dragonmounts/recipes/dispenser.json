@@ -7,10 +7,12 @@
   ],
   "key": {
     "R": {
-      "item": "minecraft:redstone"
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
     },
     "#": {
-      "item": "minecraft:cobblestone"
+      "type": "forge:ore_dict",
+      "ore": "cobblestone"
     },
     "X": [
       {
@@ -35,7 +37,7 @@
         "item": "dragonmounts:ender_dragon_scale_bow"
       },
       {
-        "item": "dragonmounts:enchant_dragon_scale_bow"
+        "item": "dragonmounts:enchanted_dragon_scale_bow"
       },
       {
         "item": "dragonmounts:sunlight_dragon_scale_bow"

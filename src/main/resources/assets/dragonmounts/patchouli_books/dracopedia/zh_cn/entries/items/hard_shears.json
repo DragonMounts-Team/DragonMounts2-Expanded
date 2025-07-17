@@ -1,0 +1,15 @@
+{
+  "name": "硬质剪刀",
+  "icon": "dragonmounts:diamond_shears",
+  "category": "dragonmounts:items",
+  "pages": [
+    {
+      "type": "text",
+      "text": "一类用于从龙身上剪下$(l:items/dragon_scales)龙鳞$(/l)的剪刀。$(br2)参见: $(l:dragons/shearing)剪龙鳞$(/l)"
+    },
+    {
+      "type": "crafting",
+      "recipe": "dragonmounts:diamond_shears"
+    }
+  ]
+}

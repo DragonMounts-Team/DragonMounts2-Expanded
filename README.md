@@ -1,41 +1,19 @@
 ![LOGO](src/main/resources/logo.png)
 
-# [Dragon Mounts 2: Expanded](https://www.curseforge.com/minecraft/mc-mods/dragon-mounts-2-expanded)
-Dragon Mounts 2: Expanded is a remaster of the infamous Dragon Mounts 2. It polishes the mod with several bug fixes and overhauling it's outdated code and textures.
+[![CurseForge Downloads](https://img.shields.io/curseforge/dt/1123549?logo=curseforge&label=CurseForge)](https://www.curseforge.com/minecraft/mc-mods/dragon-mounts-2)
+[![Modrinth Downloads](https://img.shields.io/modrinth/dt/PTfOH4IO?logo=modrinth&label=Modrinth)](https://modrinth.com/mod/dragon-mounts-2)
+[![Discord](https://img.shields.io/discord/1293105990476103720?logo=Discord&logoColor=white&label=Discord&labelColor=%235865F2)](https://discord.gg/Ewm8aTTJ3K)
+
+Dragon Mounts 2: Expanded is a remaster of the infamous Dragon Mounts 2.
+It polishes the mod with several bug fixes and overhauling its outdated code and textures.
 
 ## License
 The mods binaries, as well as its textures and code are licensed under the **GPLv3 license**.
 
-Feel free to use the mod in any modpacks. You are allowed to use it, you do not need to ask for permission, in fact permission requests will usually be ignored. When using the mod, please use the Curse/Curseforge, Modrinth, or GitHub download and do not rehost the files.
+Feel free to use the mod in any modpacks. You are allowed to use it, you do not need to ask for permission,
+in fact permission requests will usually be ignored. When using the mod, please use the Curse/CurseForge, Modrinth,
+or GitHub to download and do not rehost the files.
 
 Any modpack which uses Dragon Mounts 2 takes full responsibility for user support queries.
-For anyone else, we only support official builds from Curse/Curseforge, Modrinth, and GitHub, not custom built jars. We also do not take bug reports for outdated builds of Minecraft.
-## Credits
-Creators:
-- Tomanex - Owner & Artist; Updated Item Textures
-- JDSK0ala - Owner & Beta Tester. Several Contributions
-- 2190303755 - Coder
-- Moaswies - Coder
-
-Contributors:
-- HaxTheCharizard (Moderator) - Artist; Armor and Tool Textures. Attachable Models
-- Signis Kerman - French Translations
-- Tomohiko - Japanese translations
-- Legitdragonb0y - Several Contributions
-
-Dragon Mounts 2 Creators:
-- BarracudaATA - Original Project; code, textures, ideas.
-- TheRPGAdventurer - Owner & Lead Developer
-- Kingdomall - Artist; Updated Dragon Textures
-- Shannieann - Artist; Nether, Terra and Zombie Textures
-- Ukan - Artist; Sunlight and Moonlight Textures
-- Kay9 - (Ex)-Coder
-
-Original Contributers:
-- AlexModGuy (I&F Owner) - Ice and Fire code
-- FlaemWing - Artist; Nest Block, Tools and Dragon Armor item
-- cesar_zorak - Artist; Dragon Armor model, Breed textures. Several Contributions
-- Majty/GuineaOwl - Artist; Amulet Item Texture
-- Unakitononeko - Artist; Updated Forest Textures
-- Crafty - Artist; Updated Ice Textures
-- TheGreyGhost - DM1 Developer; Prototype Dragon Breath
+For anyone else, we only support official builds from Curse/CurseForge, Modrinth, and GitHub, not custom built jars.
+We also do not take bug reports for outdated builds of Minecraft.

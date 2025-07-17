@@ -10,7 +10,7 @@
 
 ### BREAKING CHANGES
 
-- PACKAGE NAME IS SET TO `net.dragonmounts`.
+- PACKAGE NAME IS RENAMED TO `net.dragonmounts`.
 - REMOVE GENDER SYSTEM.
   - Data Fix is scheduled later. **Backup your level**!
 

@@ -1,7 +1,7 @@
 package net.dragonmounts.init;
 
-import net.dragonmounts.api.IDescribableArmorEffect;
-import net.dragonmounts.api.IDescribableArmorEffect.Advanced;
+import net.dragonmounts.api.IDescribedArmorEffect;
+import net.dragonmounts.api.IDescribedArmorEffect.Advanced;
 import net.dragonmounts.capability.IArmorEffectManager;
 import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.network.SRiposteEffectPacket;
@@ -50,7 +50,7 @@ public class DMArmorEffects {
         }
     };
 
-    public static final IDescribableArmorEffect ENCHANT_EFFECT = new IDescribableArmorEffect() {
+    public static final IDescribedArmorEffect ENCHANTED_EFFECT = new IDescribedArmorEffect() {
         @Override
         public boolean activate(IArmorEffectManager manager, EntityPlayer player, int level) {
             World world = player.world;
@@ -85,7 +85,7 @@ public class DMArmorEffects {
         public void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {
             tooltips.add("");
             this.appendTriggerInfo(stack, tooltips);
-            tooltips.add(TextFormatting.RESET + ClientUtil.translateToLocal("tooltip.armor_effect.dragonmounts.enchant"));
+            tooltips.add(TextFormatting.RESET + ClientUtil.translateToLocal("tooltip.armor_effect.dragonmounts.enchanted"));
         }
     };
 
@@ -155,7 +155,7 @@ public class DMArmorEffects {
 
     public static final Advanced ICE_EFFECT = new Advanced(makeId("ice"), 1200);
 
-    public static final IDescribableArmorEffect MOONLIGHT_EFFECT = new IDescribableArmorEffect() {
+    public static final IDescribedArmorEffect MOONLIGHT_EFFECT = new IDescribedArmorEffect() {
         @Override
         public boolean activate(IArmorEffectManager manager, EntityPlayer player, int level) {
             boolean flag = level > 3;
@@ -175,7 +175,7 @@ public class DMArmorEffects {
 
     public static final Advanced NETHER_EFFECT = new Advanced(makeId("nether"), 1200);
 
-    public static final IDescribableArmorEffect STORM_EFFECT = new IDescribableArmorEffect() {
+    public static final IDescribedArmorEffect STORM_EFFECT = new IDescribedArmorEffect() {
         @Override
         public boolean activate(IArmorEffectManager manager, EntityPlayer player, int level) {
             return level > 3;
@@ -222,7 +222,7 @@ public class DMArmorEffects {
         }
     };
 
-    public static final IDescribableArmorEffect TERRA_EFFECT = new IDescribableArmorEffect() {
+    public static final IDescribedArmorEffect TERRA_EFFECT = new IDescribedArmorEffect() {
         @Override
         public boolean activate(IArmorEffectManager manager, EntityPlayer player, int level) {
             boolean flag = level > 3;
@@ -240,7 +240,7 @@ public class DMArmorEffects {
         }
     };
 
-    public static final IDescribableArmorEffect WATER_EFFECT = new IDescribableArmorEffect() {
+    public static final IDescribedArmorEffect WATER_EFFECT = new IDescribedArmorEffect() {
         @Override
         public boolean activate(IArmorEffectManager manager, EntityPlayer player, int level) {
             boolean flag = level > 3;
@@ -269,7 +269,7 @@ public class DMArmorEffects {
         }
     };
 
-    public static final IDescribableArmorEffect DARK_EFFECT = new IDescribableArmorEffect() {
+    public static final IDescribedArmorEffect DARK_EFFECT = new IDescribedArmorEffect() {
         @Override
         public boolean activate(IArmorEffectManager manager, EntityPlayer player, int level) {
             if (level > 3) {
@@ -291,9 +291,8 @@ public class DMArmorEffects {
     public static void onExpDrop(LivingExperienceDropEvent event) {
         EntityPlayer source = event.getAttackingPlayer();
         if (source == null) return;
-        //noinspection DataFlowIssue
         IArmorEffectManager manager = source.getCapability(ARMOR_EFFECT_MANAGER, null);
-        if (manager == null || !manager.isActive(ENCHANT_EFFECT)) return;
+        if (manager == null || !manager.isActive(ENCHANTED_EFFECT)) return;
         int base = event.getDroppedExperience();
         event.setDroppedExperience(base + Math.round(base * EXP_BONUS_FACTOR));
     }
@@ -330,17 +329,14 @@ public class DMArmorEffects {
                     entity.hurtResistantTime = 0;
                     entity.attackEntityFrom(DamageSource.GENERIC, 1F);
                 }
-                if (nether) {
-                    entity.setFire(10);
-                }
             } else {
                 if (ice) {
                     entity.hurtResistantTime = 0;
                     entity.attackEntityFrom(DamageSource.GENERIC, 1F);
                 }
-                if (nether) {
-                    entity.setFire(10);
-                }
+            }
+            if (nether) {
+                entity.setFire(10);
             }
         }
         if (ice) ICE_EFFECT.applyCooldown(manager);

@@ -1,12 +1,11 @@
 package net.dragonmounts.block;
 
-import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.helper.DragonLifeStage;
-import net.dragonmounts.init.DMItemGroups;
+import net.dragonmounts.entity.DragonLifeStage;
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
+import net.dragonmounts.util.BlockProperties;
 import net.minecraft.block.BlockDragonEgg;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,27 +29,27 @@ import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
 public class HatchableDragonEggBlock extends BlockDragonEgg {
     public static final String TRANSLATION_KEY = TRANSLATION_KEY_PREFIX + "dragon_egg";
     @Nullable
-    public static TameableDragonEntity spawn(World level, BlockPos pos, DragonType type) {
-        level.setBlockToAir(pos);
-        TameableDragonEntity egg = new TameableDragonEntity(level);//TODO: use HatchableDragonEggEntity
+    public static ServerDragonEntity spawn(World level, BlockPos pos, DragonType type) {
         DragonVariant variant = type.variants.draw(level.rand, null);
         if (variant == null) return null;
-        egg.setVariant(variant);
+        ServerDragonEntity egg = new ServerDragonEntity(level);
+        level.setBlockToAir(pos);
         egg.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-        egg.getLifeStageHelper().setLifeStage(DragonLifeStage.EGG);
+        egg.setVariant(variant);
+        egg.lifeStageHelper.setLifeStage(DragonLifeStage.EGG);
         level.spawnEntity(egg);
         return egg;
     }
 
     public final DragonType type;
 
-    public HatchableDragonEggBlock(DragonType type) {
+    public HatchableDragonEggBlock(DragonType type, BlockProperties props) {
         this.type = type;
-        this.setSoundType(SoundType.STONE)
-                .setHardness(0)
-                .setResistance(30)
-                .setLightLevel(0.125F)
-                .setCreativeTab(DMItemGroups.MAIN);
+        this.setSoundType(props.sound)
+                .setHardness(props.hardness)
+                .setResistance(props.resistance)
+                .setLightLevel(props.light)
+                .setCreativeTab(props.creativeTab);
     }
 
     @Override
@@ -72,10 +71,7 @@ public class HatchableDragonEggBlock extends BlockDragonEgg {
             level.playSound(player, pos, SoundEvents.BLOCK_WOOD_HIT, SoundCategory.PLAYERS, 1, 1);
             return true;
         }
-        TameableDragonEntity egg = spawn(level, pos, this.getDragonType(this.getMetaFromState(state)));
-        if (egg != null) {
-            egg.getReproductionHelper().setBreeder(player);
-        }
+        spawn(level, pos, this.getDragonType(this.getMetaFromState(state)));
         return true;
     }
 

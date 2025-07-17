@@ -1,6 +1,8 @@
 package net.dragonmounts.client.variant;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.dragonmounts.client.model.dragon.BuiltinFactory;
+import net.dragonmounts.client.model.dragon.IModelFactory;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.NoSuchElementException;
@@ -11,121 +13,61 @@ import static net.dragonmounts.DragonMountsTags.MOD_ID;
 import static net.dragonmounts.client.variant.VariantAppearance.TEXTURES_ROOT;
 
 public class VariantAppearances {
-    public static AgeableAppearance createAgeableAppearance(String namespace, String path, boolean hasTailHorns, boolean hasSideTailScale) {
-        StringBuilder builder = new StringBuilder(TEXTURES_ROOT + path);
-        int length = builder.length();
-        return new AgeableAppearance(
-                new ResourceLocation(namespace, builder.append("/body.png").toString()),
-                new ResourceLocation(namespace, builder.insert(length, "/baby").toString()),
-                new ResourceLocation(namespace, builder.replace(length + 6, length + 10, "glow").toString()),
-                new ResourceLocation(namespace, builder.delete(length, length + 5).toString()),
-                hasTailHorns,
-                hasSideTailScale,
-                false);
-    }
-
-    public static VariantAppearance createDefaultAppearance(String namespace, String path, boolean hasTailHorns, boolean hasSideTailScale, boolean isSkeleton) {
+    public static VariantAppearance makeAppearance(String namespace, String path, IModelFactory factory) {
         StringBuilder builder = new StringBuilder(TEXTURES_ROOT + path);
         int length = builder.length();
         return new DefaultAppearance(
-                new ResourceLocation(namespace, builder.append("/body.png").toString()),
-                new ResourceLocation(namespace, builder.replace(length + 1, length + 5, "glow").toString()),
-                hasTailHorns,
-                hasSideTailScale,
-                isSkeleton);
+                new ResourceLocation(namespace, TEXTURES_ROOT + path + "/body.png"),
+                new ResourceLocation(namespace, TEXTURES_ROOT + path + "/glow.png"),
+                factory
+        );
     }
 
-    public static final VariantAppearance AETHER_FEMALE;
-    public static final VariantAppearance AETHER_MALE;
-    public static final VariantAppearance DARK_FEMALE = createDefaultAppearance(MOD_ID, "dark/female", false, false, false);
-    public static final VariantAppearance DARK_MALE = createDefaultAppearance(MOD_ID, "dark/male", false, false, false);
-    public static final VariantAppearance ENCHANT_FEMALE = createAgeableAppearance(MOD_ID, "enchant/female", false, false);
-    public static final VariantAppearance ENCHANT_MALE = createAgeableAppearance(MOD_ID, "enchant/male", false, false);
-    public static final VariantAppearance ENDER_FEMALE;
-    public static final VariantAppearance ENDER_MALE;
-    public static final VariantAppearance FIRE_FEMALE = createAgeableAppearance(MOD_ID, "fire/female", false, false);
-    public static final VariantAppearance FIRE_MALE = createAgeableAppearance(MOD_ID, "fire/male", false, false);
+    public static final VariantAppearance AETHER_FEMALE = makeAppearance(MOD_ID, "aether/female", BuiltinFactory.NORMAL);
+    public static final VariantAppearance AETHER_MALE = makeAppearance(MOD_ID, "aether/male", BuiltinFactory.NORMAL);
+    public static final VariantAppearance DARK_FEMALE = makeAppearance(MOD_ID, "dark/female", BuiltinFactory.NORMAL);
+    public static final VariantAppearance DARK_MALE = makeAppearance(MOD_ID, "dark/male", BuiltinFactory.NORMAL);
+    public static final VariantAppearance ENCHANTED_FEMALE = makeAppearance(MOD_ID, "enchanted/female", BuiltinFactory.NORMAL);
+    public static final VariantAppearance ENCHANTED_MALE = makeAppearance(MOD_ID, "enchanted/male", BuiltinFactory.NORMAL);
+    public static final VariantAppearance ENDER_FEMALE = makeAppearance(MOD_ID, "ender/female", BuiltinFactory.NORMAL);
+    public static final VariantAppearance ENDER_MALE = makeAppearance(MOD_ID, "ender/male", BuiltinFactory.NORMAL);
+    public static final VariantAppearance ENDER_RARE = makeAppearance(MOD_ID, "ender/rare", BuiltinFactory.NORMAL);
+    public static final VariantAppearance FIRE_FEMALE = makeAppearance(MOD_ID, "fire/female", BuiltinFactory.NORMAL);
+    public static final VariantAppearance FIRE_MALE = makeAppearance(MOD_ID, "fire/male", BuiltinFactory.NORMAL);
+    public static final VariantAppearance FIRE_RARE = makeAppearance(MOD_ID, "fire/rare", BuiltinFactory.NORMAL);
     public static final VariantAppearance FOREST_FEMALE;
     public static final VariantAppearance FOREST_MALE;
     public static final VariantAppearance FOREST_DRY_FEMALE;
     public static final VariantAppearance FOREST_DRY_MALE;
     public static final VariantAppearance FOREST_TAIGA_FEMALE;
     public static final VariantAppearance FOREST_TAIGA_MALE;
-    public static final VariantAppearance ICE_FEMALE;
-    public static final VariantAppearance ICE_MALE;
-    public static final VariantAppearance MOONLIGHT_FEMALE = createDefaultAppearance(MOD_ID, "moonlight/female", false, false, false);
-    public static final VariantAppearance MOONLIGHT_MALE = createDefaultAppearance(MOD_ID, "moonlight/male", false, false, false);
-    public static final VariantAppearance NETHER_FEMALE = createAgeableAppearance(MOD_ID, "nether/female", false, false);
-    public static final VariantAppearance NETHER_MALE = createAgeableAppearance(MOD_ID, "nether/male", false, false);
-    public static final VariantAppearance SKELETON_FEMALE;
-    public static final VariantAppearance SKELETON_MALE;
-    public static final VariantAppearance STORM_FEMALE;
-    public static final VariantAppearance STORM_MALE = createAgeableAppearance(MOD_ID, "storm/male", true, false);
-    public static final VariantAppearance SUNLIGHT_FEMALE = createAgeableAppearance(MOD_ID, "sunlight/female", false, false);
-    public static final VariantAppearance SUNLIGHT_MALE = createAgeableAppearance(MOD_ID, "sunlight/male", false, false);
-    public static final VariantAppearance TERRA_FEMALE = createAgeableAppearance(MOD_ID, "terra/female", false, false);
-    public static final VariantAppearance TERRA_MALE = createAgeableAppearance(MOD_ID, "terra/male", false, false);
-    public static final VariantAppearance WATER_FEMALE = createAgeableAppearance(MOD_ID, "water/female", true, false);
-    public static final VariantAppearance WATER_MALE = createAgeableAppearance(MOD_ID, "water/male", true, false);
-    public static final VariantAppearance WITHER_FEMALE = createDefaultAppearance(MOD_ID, "wither/female", true, false, true);
-    public static final VariantAppearance WITHER_MALE = createDefaultAppearance(MOD_ID, "wither/male", true, false, true);
-    public static final VariantAppearance ZOMBIE_FEMALE;
-    public static final VariantAppearance ZOMBIE_MALE;
-
-    static {
-        ResourceLocation glow = makeId(TEXTURES_ROOT + "aether/glow.png");
-        ResourceLocation babyGlow = makeId(TEXTURES_ROOT + "aether/baby_glow.png");
-        AETHER_FEMALE = new AgeableAppearance(makeId(TEXTURES_ROOT + "aether/female/body.png"), makeId(TEXTURES_ROOT + "aether/female/baby_body.png"), babyGlow, glow, false, false, false);
-        AETHER_MALE = new AgeableAppearance(makeId(TEXTURES_ROOT + "aether/male/body.png"), makeId(TEXTURES_ROOT + "aether/male/baby_body.png"), babyGlow, glow, false, false, false);
-    }
-
-    static {
-        ResourceLocation glow = makeId(TEXTURES_ROOT + "ender/glow.png");
-        ENDER_FEMALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "ender/female/body.png"), glow, false, false, false);
-        ENDER_MALE = new AgeableAppearance(makeId(TEXTURES_ROOT + "ender/male/body.png"), makeId(TEXTURES_ROOT + "ender/male/baby_body.png"), glow, glow, false, false, false);
-    }
+    public static final VariantAppearance ICE_FEMALE = makeAppearance(MOD_ID, "ice/female", BuiltinFactory.TAIL_SCALE_INCLINED);
+    public static final VariantAppearance ICE_MALE = makeAppearance(MOD_ID, "ice/male", BuiltinFactory.TAIL_SCALE_INCLINED);
+    public static final VariantAppearance MOONLIGHT_FEMALE = makeAppearance(MOD_ID, "moonlight/female", BuiltinFactory.NORMAL);
+    public static final VariantAppearance MOONLIGHT_MALE = makeAppearance(MOD_ID, "moonlight/male", BuiltinFactory.NORMAL);
+    public static final VariantAppearance NETHER_FEMALE = makeAppearance(MOD_ID, "nether/female", BuiltinFactory.NORMAL);
+    public static final VariantAppearance NETHER_MALE = makeAppearance(MOD_ID, "nether/male", BuiltinFactory.NORMAL);
+    public static final VariantAppearance SKELETON = makeAppearance(MOD_ID, "skeleton", BuiltinFactory.SKELETON);
+    public static final VariantAppearance STORM_FEMALE = makeAppearance(MOD_ID, "storm/female", BuiltinFactory.TAIL_HORNED);
+    public static final VariantAppearance STORM_MALE = makeAppearance(MOD_ID, "storm/male", BuiltinFactory.TAIL_HORNED);
+    public static final VariantAppearance STORM_RARE = makeAppearance(MOD_ID, "storm/rare", BuiltinFactory.TAIL_HORNED);
+    public static final VariantAppearance SUNLIGHT_FEMALE = makeAppearance(MOD_ID, "sunlight/female", BuiltinFactory.NORMAL);
+    public static final VariantAppearance SUNLIGHT_MALE = makeAppearance(MOD_ID, "sunlight/male", BuiltinFactory.NORMAL);
+    public static final VariantAppearance TERRA_FEMALE = makeAppearance(MOD_ID, "terra/female", BuiltinFactory.NORMAL);
+    public static final VariantAppearance TERRA_MALE = makeAppearance(MOD_ID, "terra/male", BuiltinFactory.NORMAL);
+    public static final VariantAppearance WATER_FEMALE = makeAppearance(MOD_ID, "water/female", BuiltinFactory.TAIL_HORNED);
+    public static final VariantAppearance WATER_MALE = makeAppearance(MOD_ID, "water/male", BuiltinFactory.TAIL_HORNED);
+    public static final VariantAppearance WITHER = makeAppearance(MOD_ID, "wither", BuiltinFactory.SKELETON);
+    public static final VariantAppearance ZOMBIE = makeAppearance(MOD_ID, "zombie", BuiltinFactory.TAIL_HORNED);
 
     static {
         ResourceLocation glow = makeId(TEXTURES_ROOT + "forest/glow.png");
-        ResourceLocation babyBody = makeId(TEXTURES_ROOT + "forest/forest/baby_body.png");
-        FOREST_FEMALE = new AgeableAppearance(makeId(TEXTURES_ROOT + "forest/forest/female_body.png"), babyBody, glow, glow, false, false, false);
-        FOREST_MALE = new AgeableAppearance(makeId(TEXTURES_ROOT + "forest/forest/male_body.png"), babyBody, glow, glow, false, false, false);
-        babyBody = makeId(TEXTURES_ROOT + "forest/dry/baby_body.png");
-        FOREST_DRY_FEMALE = new AgeableAppearance(makeId(TEXTURES_ROOT + "forest/dry/female_body.png"), babyBody, glow, glow, false, false, false);
-        FOREST_DRY_MALE = new AgeableAppearance(makeId(TEXTURES_ROOT + "forest/dry/male_body.png"), babyBody, glow, glow, false, false, false);
-        FOREST_TAIGA_FEMALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "forest/taiga/female_body.png"), glow, false, false, false);
-        FOREST_TAIGA_MALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "forest/taiga/male_body.png"), glow, false, false, false);
-    }
-
-    static {
-        ResourceLocation babyGlow = makeId(TEXTURES_ROOT + "ice/baby_glow.png");
-        ResourceLocation maleBody = makeId(TEXTURES_ROOT + "ice/male/body.png");
-        ICE_FEMALE = new AgeableAppearance(
-                makeId(TEXTURES_ROOT + "ice/female/body.png"),
-                makeId(TEXTURES_ROOT + "ice/female/baby_body.png"),
-                babyGlow,
-                makeId(TEXTURES_ROOT + "ice/female/glow.png"),
-                false,
-                true,
-                false);
-        ICE_MALE = new AgeableAppearance(maleBody, maleBody, babyGlow, makeId(TEXTURES_ROOT + "ice/male/glow.png"), false, true, false);
-    }
-
-    static {
-        ResourceLocation glow = makeId(TEXTURES_ROOT + "skeleton/glow.png");
-        SKELETON_FEMALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "skeleton/female_body.png"), glow, false, false, true);
-        SKELETON_MALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "skeleton/male_body.png"), glow, false, false, true);
-    }
-
-    static {
-        ResourceLocation body = makeId(TEXTURES_ROOT + "storm/female/body.png");
-        STORM_FEMALE = new AgeableAppearance(body, body, makeId(TEXTURES_ROOT + "storm/female/baby_glow.png"), makeId(TEXTURES_ROOT + "storm/female/glow.png"), true, false, false);
-    }
-
-    static {
-        ResourceLocation body = makeId(TEXTURES_ROOT + "zombie/body.png");
-        ZOMBIE_FEMALE = new DefaultAppearance(body, makeId(TEXTURES_ROOT + "zombie/female_glow.png"), false, false, false);
-        ZOMBIE_MALE = new DefaultAppearance(body, makeId(TEXTURES_ROOT + "zombie/male_glow.png"), false, false, false);
+        FOREST_FEMALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "forest/forest/female_body.png"), glow, BuiltinFactory.NORMAL);
+        FOREST_MALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "forest/forest/male_body.png"), glow, BuiltinFactory.NORMAL);
+        FOREST_DRY_FEMALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "forest/dry/female_body.png"), glow, BuiltinFactory.NORMAL);
+        FOREST_DRY_MALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "forest/dry/male_body.png"), glow, BuiltinFactory.NORMAL);
+        FOREST_TAIGA_FEMALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "forest/taiga/female_body.png"), glow, BuiltinFactory.NORMAL);
+        FOREST_TAIGA_MALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "forest/taiga/male_body.png"), glow, BuiltinFactory.NORMAL);
     }
 
     public static Function<String, VariantAppearance> getSupplier() {
@@ -134,12 +76,14 @@ public class VariantAppearances {
         map.put("aether_male", AETHER_MALE);
         map.put("dark_female", DARK_FEMALE);
         map.put("dark_male", DARK_MALE);
-        map.put("enchant_female", ENCHANT_FEMALE);
-        map.put("enchant_male", ENCHANT_MALE);
+        map.put("enchanted_female", ENCHANTED_FEMALE);
+        map.put("enchanted_male", ENCHANTED_MALE);
         map.put("ender_female", ENDER_FEMALE);
         map.put("ender_male", ENDER_MALE);
+        map.put("ender_rare", ENDER_RARE);
         map.put("fire_female", FIRE_FEMALE);
         map.put("fire_male", FIRE_MALE);
+        map.put("fire_rare", FIRE_RARE);
         map.put("forest_female", FOREST_FEMALE);
         map.put("forest_male", FOREST_MALE);
         map.put("forest_dry_female", FOREST_DRY_FEMALE);
@@ -152,20 +96,18 @@ public class VariantAppearances {
         map.put("moonlight_male", MOONLIGHT_MALE);
         map.put("nether_female", NETHER_FEMALE);
         map.put("nether_male", NETHER_MALE);
-        map.put("skeleton_female", SKELETON_FEMALE);
-        map.put("skeleton_male", SKELETON_MALE);
+        map.put("skeleton", SKELETON);
         map.put("storm_female", STORM_FEMALE);
         map.put("storm_male", STORM_MALE);
+        map.put("storm_rare", STORM_RARE);
         map.put("sunlight_female", SUNLIGHT_FEMALE);
         map.put("sunlight_male", SUNLIGHT_MALE);
         map.put("terra_female", TERRA_FEMALE);
         map.put("terra_male", TERRA_MALE);
         map.put("water_female", WATER_FEMALE);
         map.put("water_male", WATER_MALE);
-        map.put("wither_female", WITHER_FEMALE);
-        map.put("wither_male", WITHER_MALE);
-        map.put("zombie_female", ZOMBIE_FEMALE);
-        map.put("zombie_male", ZOMBIE_MALE);
+        map.put("wither", WITHER);
+        map.put("zombie", ZOMBIE);
         return key -> {
             VariantAppearance value = map.get(key);
             if (value == null) throw new NoSuchElementException();

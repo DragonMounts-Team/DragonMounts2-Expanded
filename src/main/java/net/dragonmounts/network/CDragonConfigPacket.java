@@ -2,7 +2,7 @@ package net.dragonmounts.network;
 
 import io.netty.buffer.ByteBuf;
 import net.dragonmounts.entity.Relation;
-import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -14,10 +14,7 @@ import static net.dragonmounts.util.ByteBufferUtil.writeVarInt;
 
 public class CDragonConfigPacket implements IMessage {
     public int dragonId;
-    /**
-     * 1 -> sit
-     * 2 -> lock
-     */
+    /// @see DragonStates
     public int option;
 
     public CDragonConfigPacket() {}
@@ -43,23 +40,30 @@ public class CDragonConfigPacket implements IMessage {
         public IMessage onMessage(CDragonConfigPacket message, MessageContext ctx) {
             EntityPlayer player = ctx.getServerHandler().player;
             Entity entity = player.world.getEntityByID(message.dragonId);
-            if (entity instanceof TameableDragonEntity) {
-                TameableDragonEntity dragon = (TameableDragonEntity) entity;
+            if (entity instanceof ServerDragonEntity) {
+                ServerDragonEntity dragon = (ServerDragonEntity) entity;
                 Relation relation = Relation.checkRelation(dragon, player);
                 switch (message.option) {
-                    case 1:
-                        if (Relation.STRANGER == relation) {
+                    case DragonStates.SITTING_STATE:
+                        if (!relation.isTrusted) {
                             relation.onDeny(player);
                             return null;
                         }
                         dragon.getAISit().setSitting(!dragon.isSitting());
                         break;
-                    case 2:
+                    case DragonStates.LOCKED_STATE:
                         if (Relation.OWNER != relation) {
                             relation.onDeny(player);
                             return null;
                         }
                         dragon.setToAllowedOtherPlayers(!dragon.allowedOtherPlayers());
+                        break;
+                    case DragonStates.FOLLOWING_STATE:
+                        if (Relation.OWNER != relation) {
+                            relation.onDeny(player);
+                            return null;
+                        }
+                        dragon.followOwner = !dragon.followOwner;
                         break;
                 }
             }

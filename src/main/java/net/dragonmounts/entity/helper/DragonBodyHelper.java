@@ -10,6 +10,7 @@
 package net.dragonmounts.entity.helper;
 
 import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.util.EntityUtil;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.entity.EntityBodyHelper;
 
@@ -32,23 +33,18 @@ public class DragonBodyHelper extends EntityBodyHelper {
     @Override
     public void updateRenderAngles() {
         TameableDragonEntity dragon = this.dragon;
-        double deltaX = dragon.posX - dragon.prevPosX;
-        double deltaY = dragon.posZ - dragon.prevPosZ;
-        double dist = deltaX * deltaX + deltaY * deltaY;
-
         float maximumHeadBodyAngleDifference = 90;
 
         // rotate instantly if flying, sitting or moving
-        if (dragon.isFlying() || dragon.isSitting() || dist > 0.0001) {
+        if (dragon.isUsingBreathWeapon() || dragon.isFlying() || dragon.isSitting() || EntityUtil.isMoving(dragon)) {
             dragon.renderYawOffset = dragon.rotationYaw;
-            dragon.rotationYawHead = MathX.updateRotation(dragon.renderYawOffset, dragon.rotationYawHead, maximumHeadBodyAngleDifference);
+            dragon.rotationYawHead = MathX.clampedRotate(dragon.rotationYawHead, dragon.renderYawOffset, maximumHeadBodyAngleDifference);
             prevRotationYawHead = dragon.rotationYawHead;
             turnTicks = 0;
             return;
         }
 
-        double changeInHeadYaw = Math.abs(dragon.rotationYawHead - prevRotationYawHead);
-        if (changeInHeadYaw > 15) {
+        if (Math.abs(dragon.rotationYawHead - prevRotationYawHead) > 15.0F) {
             turnTicks = 0;
             prevRotationYawHead = dragon.rotationYawHead;
         } else {
@@ -59,8 +55,8 @@ public class DragonBodyHelper extends EntityBodyHelper {
             }
         }
 
-        float rotationYawHead = dragon.getRotationYawHead();
-        dragon.renderYawOffset = MathX.constrainAngle(dragon.renderYawOffset, rotationYawHead, maximumHeadBodyAngleDifference);
+        dragon.renderYawOffset = MathX.clampedRotate(dragon.renderYawOffset, dragon.getRotationYawHead(), maximumHeadBodyAngleDifference);
         dragon.rotationYaw = dragon.renderYawOffset;
     }
+
 }

@@ -3,6 +3,7 @@ package net.dragonmounts.init;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.dragonmounts.capability.IDragonFood;
 import net.dragonmounts.food.*;
+import net.dragonmounts.util.EmptyProvider;
 import net.dragonmounts.util.LogUtil;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -48,6 +49,9 @@ public class DragonFoods {
         bind(Items.COOKED_RABBIT, cookedRabbit);
         bind(Items.RABBIT_STEW, new WrappedFood(cookedRabbit, Items.BOWL, 0));
         bind(Items.COOKED_MUTTON, new CommonFood(12, 2500, 2.0F, 0.375F));
+
+        bind(DMItems.DRAGON_MEAT, EmptyProvider.INSTANCE);
+        bind(DMItems.COOKED_DRAGON_MEAT, EmptyProvider.INSTANCE);
     }
 
     public static class Storage implements Capability.IStorage<IDragonFood> {

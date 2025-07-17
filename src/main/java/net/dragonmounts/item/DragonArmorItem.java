@@ -1,6 +1,7 @@
 package net.dragonmounts.item;
 
 import net.dragonmounts.client.ClientUtil;
+import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMItemGroups;
 import net.minecraft.client.util.ITooltipFlag;
@@ -23,7 +24,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class DragonArmorItem extends Item {
-    public static final String TEXTURE_PREFIX = "textures/entities/armor/armor_";
+    public static final String TEXTURE_PREFIX = "textures/entities/dragon_armor/";
     public static final UUID MODIFIER_UUID = UUID.fromString("f4dbd212-cf15-57e9-977c-0019cc5a8933");
     public final ResourceLocation texture;
     public final int protection;
@@ -38,7 +39,7 @@ public class DragonArmorItem extends Item {
     public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase entity, EnumHand hand) {
         if (stack.isEmpty() || !(entity instanceof TameableDragonEntity)) return false;
         TameableDragonEntity dragon = (TameableDragonEntity) entity;
-        if (dragon.isArmored() || !dragon.isOwner(player)) return false;
+        if (dragon.isArmored() || Relation.denyIfNotOwner(dragon, player)) return false;
         if (dragon.world.isRemote) return true;
         if (player.capabilities.isCreativeMode) {
             ItemStack armor = stack.copy();
@@ -55,7 +56,7 @@ public class DragonArmorItem extends Item {
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World level, List<String> tooltips, ITooltipFlag flag) {
         tooltips.add("");
-        tooltips.add(ClientUtil.translateToLocal("item.modifiers.equipped"));
+        tooltips.add(ClientUtil.translateToLocal("item.modifiers.body"));
         tooltips.add(TextFormatting.BLUE + I18n.translateToLocalFormatted("attribute.modifier.plus.0", ItemStack.DECIMALFORMAT.format(this.protection), I18n.translateToLocal("attribute.name.generic.armor")));
     }
 

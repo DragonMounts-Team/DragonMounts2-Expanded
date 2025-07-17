@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -60,14 +61,14 @@ public class SRiposteEffectPacket implements IMessage {
                 double oz = random.nextDouble() * 2 - 0.6;
                 for (int i = -30; i < 31; ++i) {
                     level.spawnParticle(EnumParticleTypes.BLOCK_DUST, px, py, pz, ox, oy, oz, 79); //79
-                    level.spawnParticle(EnumParticleTypes.CLOUD, false, x, y, z, Math.sin(i), 0, Math.cos(i));
+                    level.spawnParticle(EnumParticleTypes.CLOUD, false, x, y, z, MathHelper.sin(i), 0, MathHelper.cos(i));
                 }
                 level.playSound(entity.getPosition(), SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.PLAYERS, 0.46F, 1.0F, false);
             }
             if ((packet.flag & 0b10) == 0b10) {
                 double y = entity.posY + 1;
                 for (int i = -27; i < 28; ++i) {
-                    level.spawnParticle(EnumParticleTypes.FLAME, x, y, z, Math.sin(i) / 3, 0, Math.cos(i) / 3);
+                    level.spawnParticle(EnumParticleTypes.FLAME, x, y, z, MathHelper.sin(i) / 3.0F, 0, MathHelper.cos(i) / 3.0F);
                 }
                 level.playSound(entity.getPosition(), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.PLAYERS, 0.46F, 1.0F, false);
             }

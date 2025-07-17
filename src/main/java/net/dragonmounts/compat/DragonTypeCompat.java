@@ -17,7 +17,7 @@ public enum DragonTypeCompat implements IStringSerializable {
     NETHER(DragonTypes.NETHER),
     SKELETON(DragonTypes.SKELETON),
     WITHER(DragonTypes.WITHER),
-    ENCHANT(DragonTypes.ENCHANT),
+    ENCHANT(DragonTypes.ENCHANTED),
     SUNLIGHT(DragonTypes.SUNLIGHT),
     STORM(DragonTypes.STORM),
     ZOMBIE(DragonTypes.ZOMBIE),

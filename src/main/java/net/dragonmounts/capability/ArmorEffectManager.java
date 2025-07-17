@@ -17,11 +17,6 @@ import net.minecraft.util.CooldownTracker;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import javax.annotation.Nullable;
 
@@ -30,25 +25,24 @@ import static java.util.Arrays.fill;
 import static net.dragonmounts.DragonMounts.NETWORK_WRAPPER;
 import static net.dragonmounts.capability.DMCapabilities.ARMOR_EFFECT_MANAGER;
 
-@SuppressWarnings("DataFlowIssue")
 public final class ArmorEffectManager implements IArmorEffectManager {
     private static ArmorEffectManager LOCAL_MANAGER = null;
     private static SInitCooldownPacket LOCAL_CACHE = null;
     public static final int INITIAL_COOLDOWN_SIZE = 8;
     public static final int INITIAL_LEVEL_SIZE = 5;
 
-    public static void onPlayerClone(EntityPlayer player, EntityPlayer priorPlayer) {
-        IArmorEffectManager mgr = player.getCapability(ARMOR_EFFECT_MANAGER, null);
-        if (!(mgr instanceof ArmorEffectManager)) return;
-        IArmorEffectManager priorMgr = priorPlayer.getCapability(ARMOR_EFFECT_MANAGER, null);
-        if (!(priorMgr instanceof ArmorEffectManager)) return;
-        ArmorEffectManager manager = (ArmorEffectManager) mgr;
-        ArmorEffectManager priorManager = (ArmorEffectManager) priorMgr;
-        manager.cdRef = priorManager.cdRef;
-        manager.cdKey = priorManager.cdKey;
-        manager.cdDat = priorManager.cdDat;
-        manager.cdMask = priorManager.cdMask;
-        manager.cdN = priorManager.cdN;
+    public static void onPlayerClone(EntityPlayer neoPlayer, EntityPlayer oldPlayer) {
+        IArmorEffectManager neo = neoPlayer.getCapability(ARMOR_EFFECT_MANAGER, null);
+        if (!(neo instanceof ArmorEffectManager)) return;
+        IArmorEffectManager old = oldPlayer.getCapability(ARMOR_EFFECT_MANAGER, null);
+        if (!(old instanceof ArmorEffectManager)) return;
+        ArmorEffectManager $neo = (ArmorEffectManager) neo;
+        ArmorEffectManager $old = (ArmorEffectManager) old;
+        $neo.cdRef = $old.cdRef;
+        $neo.cdKey = $old.cdKey;
+        $neo.cdDat = $old.cdDat;
+        $neo.cdMask = $old.cdMask;
+        $neo.cdN = $old.cdN;
     }
 
     public final EntityPlayer player;
@@ -426,59 +420,6 @@ public final class ArmorEffectManager implements IArmorEffectManager {
         @Override
         public void readNBT(Capability<IArmorEffectManager> capability, IArmorEffectManager instance, EnumFacing side, NBTBase tag) {
             instance.deserializeNBT((NBTTagCompound) tag);
-        }
-    }
-
-    public static class LazyProvider implements ICapabilitySerializable<NBTTagCompound> {
-        public final ArmorEffectManager manager;
-
-        public LazyProvider(EntityPlayer player) {
-            this.manager = new ArmorEffectManager(player);
-        }
-
-        @Override
-        public NBTTagCompound serializeNBT() {
-            return (NBTTagCompound) ARMOR_EFFECT_MANAGER.getStorage().writeNBT(ARMOR_EFFECT_MANAGER, this.manager, null);
-        }
-
-        @Override
-        public void deserializeNBT(NBTTagCompound nbt) {
-            ARMOR_EFFECT_MANAGER.getStorage().readNBT(ARMOR_EFFECT_MANAGER, this.manager, null, nbt);
-        }
-
-        @Override
-        public boolean hasCapability(@Nullable Capability<?> capability, @Nullable EnumFacing facing) {
-            return ARMOR_EFFECT_MANAGER == capability;
-        }
-
-        @Nullable
-        @Override
-        public <T> T getCapability(@Nullable Capability<T> capability, @Nullable EnumFacing side) {
-            return ARMOR_EFFECT_MANAGER == capability ? ARMOR_EFFECT_MANAGER.cast(this.manager) : null;
-        }
-    }
-
-    public static class Events {
-        @SubscribeEvent
-        public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-            if (event.phase == TickEvent.Phase.END) return;
-            IArmorEffectManager manager = event.player.getCapability(ARMOR_EFFECT_MANAGER, null);
-            if (manager != null) {
-                manager.tick();
-            }
-        }
-
-        @SubscribeEvent
-        public static void onPlayerClone(PlayerEvent.Clone event) {
-            ArmorEffectManager.onPlayerClone(event.getEntityPlayer(), event.getOriginal());
-        }
-
-        @SubscribeEvent
-        public static void onPlayerJoin(PlayerLoggedInEvent event) {
-            IArmorEffectManager manager = event.player.getCapability(ARMOR_EFFECT_MANAGER, null);
-            if (manager != null) {
-                manager.sendInitPacket();
-            }
         }
     }
 }

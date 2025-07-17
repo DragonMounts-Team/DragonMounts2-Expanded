@@ -1,6 +1,6 @@
 package net.dragonmounts.util;
 
-import net.dragonmounts.api.IDescribableArmorEffect;
+import net.dragonmounts.api.IDescribedArmorEffect;
 import net.dragonmounts.item.DragonScaleArmorItem;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -14,10 +14,10 @@ public class DragonScaleArmorSuit extends ArmorSuit<DragonScaleArmorItem> {
     public static final String TRANSLATION_KEY_LEGGINGS = TRANSLATION_KEY_PREFIX + "dragon_scale_leggings";
     public static final String TRANSLATION_KEY_BOOTS = TRANSLATION_KEY_PREFIX + "dragon_scale_boots";
     public final ItemArmor.ArmorMaterial material;
-    public final IDescribableArmorEffect effect;
+    public final IDescribedArmorEffect effect;
     public final DragonType type;
 
-    public DragonScaleArmorSuit(ItemArmor.ArmorMaterial material, DragonType type, IDescribableArmorEffect effect) {
+    public DragonScaleArmorSuit(ItemArmor.ArmorMaterial material, DragonType type, IDescribedArmorEffect effect) {
         super(
                 new DragonScaleArmorItem(material, 1, EntityEquipmentSlot.HEAD, type, effect),
                 new DragonScaleArmorItem(material, 1, EntityEquipmentSlot.CHEST, type, effect),

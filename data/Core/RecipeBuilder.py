@@ -2,8 +2,7 @@ from abc import ABC, abstractmethod
 from Core.Output import Output
 from Core.Util import ItemStack, cast2Id, cast2Ingredient
 from Core.Criterion import Criterion
-class RecipeBuilder(ABC):
-  _group = None
+class CraftingRecipeBuilder(ABC):
   def makeAdvancement(self, recipe: str) -> dict:
     requirements = [ 'has_the_recipe' ]
     criteria = {
@@ -32,6 +31,7 @@ class RecipeBuilder(ABC):
     pass
   def __init__(self, result, count = 1, data = 32767):
     self._criteria = {}
+    self._group = {}
     if (isinstance(result, ItemStack)):
       self.result = result
     else:
@@ -54,12 +54,15 @@ class RecipeBuilder(ABC):
     return self
 
   def groupBy(self, group: str):
-    self._group = group
+    if (group is None and 'group' in self._group): 
+      del self._group['group']
+    else:
+     self._group['group'] = group
     return self
 
-class ShapedRecipeBuilder(RecipeBuilder):
+class ShapedRecipeBuilder(CraftingRecipeBuilder):
   _width = 0
-  def __init__(self, result, count=1, data=32767):
+  def __init__(self, result, count = 1, data = 32767):
     super().__init__(result, count, data)
     self._keys = {}
     self._patterns = []
@@ -86,23 +89,32 @@ class ShapedRecipeBuilder(RecipeBuilder):
     for pattern in self._patterns:
       for char in pattern:
         assert char == ' ' or char in self._keys
-    recipe = { 'type': 'minecraft:crafting_shaped' }
-    if (self._group is not None):
-      recipe['group'] = self._group
-    keys = {}
-    for symbol, ingredients in self._keys.items():
-      if (len(ingredients) == 1):
-        keys[symbol] = ingredients[0]
-      else:
-        keys[symbol] = ingredients
-    recipe['pattern'] = self._patterns
-    recipe['key'] = keys
-    recipe['result'] = self.result
-    return recipe
+    return {
+      'type': 'minecraft:crafting_shaped',
+      **self._group,
+      'pattern': self._patterns,
+      'key': {
+        symbol: ingredients[0] if len(ingredients) == 1 else ingredients
+        for symbol, ingredients in self._keys.items()
+      },
+      'result': self.result
+    }
 
-class ShaplessRecipeBuilder(RecipeBuilder):
-  def __init__(self, result: ItemStack, count: int):
-    super().__init__(result, count)
+class ShapelessRecipeBuilder(CraftingRecipeBuilder):
+  def __init__(self, result, count = 1, data = 32767):
+    super().__init__(result, count, data)
+    self._ingredients = []
+
+  def requires(self, ingredient, count = 1):
+    ingredient = cast2Ingredient(ingredient)
+    for _ in range(count):
+      self._ingredients.append(ingredient)
+    return self
 
   def makeRecipe(self) -> dict:
-    pass
+    return {
+      'type': 'minecraft:crafting_shapeless',
+      **self._group,
+      'ingredients': self._ingredients,
+      'result': self.result
+    }

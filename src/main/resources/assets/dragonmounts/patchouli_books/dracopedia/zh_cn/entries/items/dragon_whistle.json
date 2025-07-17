@@ -1,0 +1,11 @@
+{
+  "name": "龙哨",
+  "icon": "dragonmounts:dragon_whistle",
+  "category": "dragonmounts:items",
+  "pages": [
+    {
+      "type": "text",
+      "text": "在驯服的龙的背包中绑定。"
+    }
+  ]
+}

@@ -1,117 +1,138 @@
 package net.dragonmounts.inventory;
 
+import net.dragonmounts.capability.DMCapabilities;
+import net.dragonmounts.capability.IWhistleHolder;
+import net.dragonmounts.entity.CarriageEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.item.DragonArmorItem;
+import net.dragonmounts.util.LogUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class DragonContainer extends Container {
-	public final DragonInventory inventory;
-	private final TameableDragonEntity dragon;
-	public static final int chestStartIndex = 3;
+import java.util.List;
 
-	public DragonContainer(final TameableDragonEntity dragon, EntityPlayer player) {
+import static net.dragonmounts.util.DMUtils.applyBackground;
+
+public class DragonContainer<T extends TameableDragonEntity> extends Container {
+	public final DragonInventory inventory;
+	public final WhistleSlot whistle;
+	public final T dragon;
+	public final EntityPlayer player;
+
+	public DragonContainer(final T dragon, EntityPlayer player) {
 		DragonInventory inventory = this.inventory = dragon.inventory;
 		this.dragon = dragon;
-		final int inventoryColumn = 9;
-		inventory.openInventory(player);
-
+		inventory.openInventory(this.player = player);
+		IWhistleHolder whistle = player.getCapability(DMCapabilities.WHISTLE_HOLDER, null);
+		if (whistle == null) {
+			LogUtil.LOGGER.error("Player {} does NOT have a whistle holder", player);
+		} else {
+			whistle.openInventory(player);
+		}
+		this.addSlotToContainer(this.whistle = new WhistleSlot(whistle, this, 8, 8));
 		// location of the slot for the saddle in the dragon inventory
-		this.addSlotToContainer(new Slot(inventory, 33, 8, 18) {
+		this.addSlotToContainer(applyBackground(new Slot(inventory, 33, 156, 18) {
 			public boolean isItemValid(ItemStack stack) {
-				return stack.getItem() == Items.SADDLE && !this.getHasStack();
+				return !stack.isEmpty() && stack.getItem() == Items.SADDLE && !this.getHasStack();
 			}
 
 			@SideOnly(Side.CLIENT)
 			public boolean isEnabled() {
-				return dragon.isOldEnoughToBreathe();
+				return this.getHasStack() || dragon.isOldEnoughToBreathe();
 			}
 
-		});
-
-		// location of the slot for chest in the dragon inventory
-		this.addSlotToContainer(new Slot(inventory, 31, 8, 36) {
-			public boolean isItemValid(ItemStack stack) {
-				return stack.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !this.getHasStack();
-			}
-
-			@SideOnly(Side.CLIENT)
-			public boolean isEnabled() {
-				return dragon.isOldEnoughToBreathe();
+			@Override
+			public boolean canTakeStack(EntityPlayer player) {
+				List<Entity> passengers = dragon.getPassengers();
+				return passengers.isEmpty() || passengers.get(0) instanceof CarriageEntity;
 			}
 
 			@Override
 			public int getSlotStackLimit() {
 				return 1;
 			}
-		});
+		}, "dragonmounts:items/slot/empty_saddle"));
 
-		// location of the slot for armor in the dragon inventory
-		this.addSlotToContainer(new Slot(inventory, 32, 8, 54) {
-
+		// location of the slot for chest in the dragon inventory
+		this.addSlotToContainer(applyBackground(new Slot(inventory, 31, 156, 36) {
+			@Override
 			public boolean isItemValid(ItemStack stack) {
-				return !stack.isEmpty() && stack.getItem() instanceof DragonArmorItem && dragon.isOldEnoughToBreathe();
+				return DragonInventory.isValidChest(stack) && !this.getHasStack();
 			}
 
-		});
+			@SideOnly(Side.CLIENT)
+			public boolean isEnabled() {
+				return this.getHasStack() || dragon.isOldEnoughToBreathe();
+			}
+
+			@Override
+			public int getSlotStackLimit() {
+				return 1;
+			}
+		}, "dragonmounts:items/slot/empty_chest"));
+
+		// location of the slot for armor in the dragon inventory
+		this.addSlotToContainer(applyBackground(new Slot(inventory, 32, 156, 54) {
+			public boolean isItemValid(ItemStack stack) {
+				return !stack.isEmpty() && stack.getItem() instanceof DragonArmorItem;
+			}
+		}, "dragonmounts:items/slot/empty_dragon_armor"));
 
 		// Build Banner Slots
 		for (int b = 0; b < 4; ++b) {
-			this.addSlotToContainer(new Slot(inventory, 27 + b, b == 1 || b == 2 ? 134 : 152, b < 2 ? 36 : 18) {
+			this.addSlotToContainer(applyBackground(new Slot(inventory, 27 + b, b == 1 || b == 2 ? 282 : 300, b < 2 ? 36 : 18) {
 				public boolean isItemValid(ItemStack stack) {
-					return stack.getItem() == Items.BANNER && !this.getHasStack();
+					return !stack.isEmpty() && stack.getItem() == Items.BANNER && !this.getHasStack();
 				}
-				
+
 				@SideOnly(Side.CLIENT)
 				public boolean isEnabled() {
-					return dragon.isOldEnoughToBreathe();
+					return this.getHasStack() || dragon.isOldEnoughToBreathe();
 				}
-			});
+			}, "dragonmounts:items/slot/empty_banner"));
 		}
 
 		// Build Chest Inventory Slots
 		for (int k = 0; k < 3; ++k) {
 			for (int l = 0; l < 9; ++l) {
-				this.addSlotToContainer(new Slot(inventory, l + k * inventoryColumn, 8 + l * 18, 75 + k * 18) {
-
+				this.addSlotToContainer(new Slot(inventory, l + k * 9, 156 + l * 18, 75 + k * 18) {
 					@SideOnly(Side.CLIENT)
 					public boolean isEnabled() {
-						return DragonContainer.this.dragon.isChested();
+						return this.getHasStack() || dragon.isChested();
 					}
-
 				});
 			}
 		}
-		
+
 		/*
 		 * Player Inventory Slots within Dragon GUI
 		 */
-		// Offhand
-		this.addSlotToContainer(new Slot(player.inventory, 40, -14, 190));
 		// Build Inventory Slots
 		for (int j = 0; j < 3; ++j) {
 			for (int k = 0; k < 9; ++k) {
-				this.addSlotToContainer(new Slot(player.inventory, k + j * 9 + 9, 8 + k * 18, 150 + j * 18 - 18));
+				this.addSlotToContainer(new Slot(player.inventory, k + j * 9 + 9, 156 + k * 18, 142 + j * 18));
 			}
 		}
 		// Build hotbar slots
 		for (int j = 0; j < 9; ++j) {
-			this.addSlotToContainer(new Slot(player.inventory, j, 8 + j * 18, 190));
+			this.addSlotToContainer(new Slot(player.inventory, j, 156 + j * 18, 200));
 		}
 	}
 
-	public boolean canInteractWith(EntityPlayer playerIn) {
-		return this.inventory.isUsableByPlayer(playerIn) && this.dragon.isEntityAlive() && this.dragon.getDistance(playerIn) < 16.0F;
+	@Override
+	public boolean canInteractWith(EntityPlayer player) {
+		return this.inventory.isUsableByPlayer(player) && this.dragon.isEntityAlive() && this.dragon.getDistanceSq(player) < 256.0F;
 	}
 
-	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+	/// @return the remaining stack in the slot
+	@Override
+	public ItemStack transferStackInSlot(EntityPlayer player, int index) {
 		ItemStack result = ItemStack.EMPTY;
 		Slot slot = this.inventorySlots.get(index);
 		if (slot != null && slot.getHasStack()) {
@@ -120,23 +141,36 @@ public class DragonContainer extends Container {
 			Slot target;
 			int size = this.inventory.getSizeInventory();
 			if (index < size) {
+				// move item form dragon's inventory to player's
 				if (!this.mergeItemStack(stack, size, this.inventorySlots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if ((target = this.getSlot(2)).isItemValid(stack) && !target.getHasStack()) {
-				if (!this.mergeItemStack(stack, 2, 3, false)) {
+			} else if (canPlaceAt(this, 3, stack)) {
+				// move item to armor
+				if (!this.mergeItemStack(stack, 3, 4, false)) {
 					return ItemStack.EMPTY;
 				}
-			} else if ((target = this.getSlot(1)).isItemValid(stack) && !target.getHasStack()) {
-				if (!this.mergeItemStack(stack, 1, 2, false)) {
-					return ItemStack.EMPTY;
-				}
-			} else if ((target = this.getSlot(0)).isItemValid(stack) && !target.getHasStack()) {
-				if (!this.mergeItemStack(stack, 0, 1, false)) {
-					return ItemStack.EMPTY;
-				}
-			} else if (!this.mergeItemStack(stack, 0, size, false)) {
-				return ItemStack.EMPTY;
+			} else {
+				boolean flag = this.dragon.isOldEnoughToBreathe();
+				if (flag && canPlaceAt(this, 2, stack)) {
+					// move item as chest
+					if (!this.mergeItemStack(stack, 2, 3, false)) {
+						return ItemStack.EMPTY;
+					}
+				} else if (flag && canPlaceAt(this, 1, stack)) {
+					// move item as saddle
+					if (!this.mergeItemStack(stack, 1, 2, false)) {
+						return ItemStack.EMPTY;
+					}
+				} else if (canPlaceAt(this, 0, stack)) {
+					// move item as whistle
+					if (!this.mergeItemStack(stack, 0, 1, false)) {
+						return ItemStack.EMPTY;
+					}
+				} else if (!this.dragon.isChested() ||
+						// move item to slots in chest
+						!this.mergeItemStack(stack, 3, size, false)
+				) return ItemStack.EMPTY;
 			}
 			if (stack.isEmpty()) {
 				slot.putStack(ItemStack.EMPTY);
@@ -147,11 +181,18 @@ public class DragonContainer extends Container {
 		return result;
 	}
 
-	/**
-	 * Called when the container is closed.
-	 */
-	public void onContainerClosed(EntityPlayer playerIn) {
-		super.onContainerClosed(playerIn);
-		this.inventory.closeInventory(playerIn);
+	@Override
+	public void onContainerClosed(EntityPlayer player) {
+		super.onContainerClosed(player);
+		this.inventory.closeInventory(player);
+		IWhistleHolder holder = this.whistle.holder;
+		if (holder != null) {
+			holder.closeInventory(player);
+		}
+	}
+
+	public static boolean canPlaceAt(Container container, int index, ItemStack stack) {
+		Slot slot = container.getSlot(index);
+		return slot != null && !slot.getHasStack() && slot.isItemValid(stack);
 	}
 }

@@ -19,7 +19,7 @@ public class DragonScalesItem extends Item {
     public final DragonType type;
 
     public DragonScalesItem(DragonType type) {
-        this.setCreativeTab(DMItemGroups.MAIN);
+        this.setCreativeTab(DMItemGroups.ITEMS);
         this.type = type;
     }
 

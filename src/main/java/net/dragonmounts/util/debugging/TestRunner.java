@@ -1,18 +1,16 @@
 package net.dragonmounts.util.debugging;
 
-import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.DragonLifeStage;
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.breath.BreathPower;
-import net.dragonmounts.entity.breath.DragonHeadPositionHelper;
-import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.item.TestRunnerItem;
 import net.dragonmounts.util.LogUtil;
-import net.minecraft.block.BlockLadder;
 import net.minecraft.command.CommandClone;
 import net.minecraft.command.server.CommandTeleport;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -97,7 +95,7 @@ public class TestRunner {
             return true;
         });
         registry.register(Side.SERVER, 2, (level, player, stack) -> {
-            TameableDragonEntity dragon = new TameableDragonEntity(level);
+            ServerDragonEntity dragon = new ServerDragonEntity(level);
             BreathPower power = BreathPower.SMALL;
             ++testCounter;
             Vec3d origin = new Vec3d(0, 24, 0);
@@ -121,15 +119,6 @@ public class TestRunner {
 //        EntityBreathProjectileGhost entity = new EntityBreathProjectileGhost(worldIn, dragon, origin, target, power);
 //        worldIn.spawnEntityInWorld(entity);
             System.out.println("Lighting spawned: mouth at [x,y,z] = " + origin + "to destination [x,y,z,] = " + target);
-            return true;
-        });
-        registry.register(Side.SERVER, 60, (level, player, stack) -> {
-            TameableDragonEntity dragon = new TameableDragonEntity(level);
-            DragonHeadPositionHelper helper = new DragonHeadPositionHelper(dragon, 7);
-            for (float scale = 0.0f; scale <= 1.0F; scale += 0.01F) {
-                float headsize = helper.getRelativeHeadSize(scale);
-                System.out.println("scale=" + scale + ", relativeheadsize=" + headsize);
-            }
             return true;
         });
         registry.register(Side.SERVER, 61, (level, player, stack) -> {
@@ -162,63 +151,20 @@ public class TestRunner {
             System.out.println("Final stage was:" + lastStage);
             return true;
         });
+        registry.register(Side.SERVER, 3, TestRunner::inquireTps);
     }
 
-    static private int testCounter = 0;
-
-    // dummy test: check the correct functioning of the ladder - to see which blocks it can stay attached to
-    // The test region contains a ladder attached to a stone block.  We then replace it with different blocks and see
-    //   whether the ladder remains or breaks appropriately; eg
-    // testA - replace with wood
-    // testB - replace with a glass block
-    // testC - replace with diamond block
-    private boolean test1(World worldIn, EntityPlayer playerIn) {
-        BlockPos sourceRegionOrigin = new BlockPos(0, 204, 0);
-        final int SOURCE_REGION_SIZE_X = 4;
-        final int SOURCE_REGION_SIZE_Y = 2;
-        final int SOURCE_REGION_SIZE_Z = 3;
-
-        // put a stone block with attached ladder in the middle of our test region
-        worldIn.setBlockState(sourceRegionOrigin.add(1, 0, 1), Blocks.STONE.getDefaultState());
-        worldIn.setBlockState(sourceRegionOrigin.add(2, 0, 1),
-                Blocks.LADDER.getDefaultState().withProperty(BlockLadder.FACING, EnumFacing.EAST));
-
-        BlockPos testRegionOriginA = new BlockPos(5, 204, 0);
-        BlockPos testRegionOriginB = new BlockPos(10, 204, 0);
-        BlockPos testRegionOriginC = new BlockPos(15, 204, 0);
-
-        teleportPlayerToTestRegion(playerIn, testRegionOriginA.south(5));  // teleport the player nearby so you can watch
-
-        // copy the test blocks to the destination region
-        copyTestRegion(playerIn, sourceRegionOrigin, testRegionOriginA,
-                SOURCE_REGION_SIZE_X, SOURCE_REGION_SIZE_Y, SOURCE_REGION_SIZE_Z);
-        copyTestRegion(playerIn, sourceRegionOrigin, testRegionOriginB,
-                SOURCE_REGION_SIZE_X, SOURCE_REGION_SIZE_Y, SOURCE_REGION_SIZE_Z);
-        copyTestRegion(playerIn, sourceRegionOrigin, testRegionOriginC,
-                SOURCE_REGION_SIZE_X, SOURCE_REGION_SIZE_Y, SOURCE_REGION_SIZE_Z);
-
-        boolean success = true;
-        // testA: replace stone with wood; ladder should remain
-        worldIn.setBlockState(testRegionOriginA.add(1, 0, 1), Blocks.LOG.getDefaultState());
-        success &= worldIn.getBlockState(testRegionOriginA.add(2, 0, 1)).getBlock() == Blocks.LADDER;
-
-        // testB: replace stone with glass; ladder should be destroyed
-        worldIn.setBlockState(testRegionOriginB.add(1, 0, 1), Blocks.GLASS.getDefaultState());
-        success &= worldIn.getBlockState(testRegionOriginB.add(2, 0, 1)).getBlock() == Blocks.AIR;
-
-        // testC: replace stone with diamond block; ladder should remain
-        worldIn.setBlockState(testRegionOriginC.add(1, 0, 1), Blocks.DIAMOND_BLOCK.getDefaultState());
-        success &= worldIn.getBlockState(testRegionOriginC.add(2, 0, 1)).getBlock() == Blocks.LADDER;
-
-        return success;
+    private static boolean inquireTps(World world, EntityPlayer player, ItemStack stack) {
+        if (player instanceof EntityPlayerMP) {
+            ((EntityPlayerMP) player).server.commandManager.executeCommand(player, "/forge tps");
+        }
+        return true;
     }
+
+    private static int testCounter = 0;
 
     /**
      * Teleport the player to the test region (so you can see the results of the test)
-     *
-     * @param playerIn
-     * @param location
-     * @return
      */
     public static boolean teleportPlayerToTestRegion(EntityPlayer playerIn, BlockPos location) {
         if (!(playerIn instanceof EntityPlayerMP)) {
@@ -242,7 +188,6 @@ public class TestRunner {
      * Copy a cuboid Test Region from one part of the world to another
      * The cuboid is x blocks wide, by y blocks high, by z blocks long
      *
-     * @param entityPlayer
      * @param sourceOrigin origin of the source region
      * @param destOrigin   origin of the destination region
      * @param xCount       >=1

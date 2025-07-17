@@ -1,0 +1,11 @@
+{
+  "name": "Dragon Egg",
+  "icon": "dragonmounts:ender_dragon_egg",
+  "category": "dragonmounts:blocks",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Can NOT get hatched in the End"
+    }
+  ]
+}

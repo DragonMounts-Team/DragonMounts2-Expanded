@@ -9,30 +9,28 @@
  */
 package net.dragonmounts.proxy;
 
-import net.dragonmounts.DragonMountsConfig;
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.block.entity.DragonHeadBlockEntity;
-import net.dragonmounts.client.gui.GuiDragonDebug;
-import net.dragonmounts.client.other.TargetHighlighter;
+import net.dragonmounts.client.ClientDragonEntity;
+import net.dragonmounts.client.breath.ClientBreathNodeEntity;
+import net.dragonmounts.client.gui.DebugOverlay;
 import net.dragonmounts.client.render.CarriageRenderer;
 import net.dragonmounts.client.render.DMCapeRenderer;
 import net.dragonmounts.client.render.DragonCoreBlockEntityRenderer;
 import net.dragonmounts.client.render.DragonHeadBlockEntityRenderer;
+import net.dragonmounts.client.render.dragon.ClientBreathNodeRenderer;
 import net.dragonmounts.client.render.dragon.DragonRenderer;
-import net.dragonmounts.client.render.dragon.breathweaponFX.ClientBreathNodeRenderer;
-import net.dragonmounts.client.userinput.DragonOrbControl;
 import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.client.variant.VariantAppearances;
+import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.CarriageEntity;
-import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.breath.effects.ClientBreathNodeEntity;
 import net.dragonmounts.event.CameraHandler;
-import net.dragonmounts.event.IItemColorRegistration;
-import net.dragonmounts.event.KeyBindingHandler;
+import net.dragonmounts.event.ClientMisc;
 import net.dragonmounts.init.DMItems;
 import net.dragonmounts.init.DMKeyBindings;
 import net.dragonmounts.init.DragonVariants;
 import net.dragonmounts.registry.DragonVariant;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -65,10 +63,8 @@ public class ClientProxy extends ServerProxy {
     @Override
     public void PreInitialization(FMLPreInitializationEvent event) {
         super.PreInitialization(event);
-        MinecraftForge.EVENT_BUS.register(IItemColorRegistration.class);
-        // register dragon entity renderer
-        DragonMountsConfig.clientPreInit();
-        RenderingRegistry.registerEntityRenderingHandler(TameableDragonEntity.class, DragonRenderer::new);
+        MinecraftForge.EVENT_BUS.register(ClientMisc.class);
+        RenderingRegistry.registerEntityRenderingHandler(ClientDragonEntity.class, DragonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ClientBreathNodeEntity.class, ClientBreathNodeRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(CarriageEntity.class, CarriageRenderer::new);
 
@@ -82,7 +78,6 @@ public class ClientProxy extends ServerProxy {
 
         //Override mcmod.info - This looks cooler :)
         ModMetadata metadata = event.getModMetadata();
-        metadata.name = TextFormatting.DARK_AQUA.toString() + TextFormatting.BOLD + metadata.name;
         StringBuilder credits = new StringBuilder(2048).append('\n');
         addCredit(credits, "BarracudaATA", "The Original Owner of Dragon Mounts.");
         addCredit(credits, "TheRPGAdventurer", "Former author of Dragon Mounts 2.");
@@ -120,24 +115,21 @@ public class ClientProxy extends ServerProxy {
     @Override
     public void Initialization(FMLInitializationEvent evt) {
         super.Initialization(evt);
-        DMKeyBindings.init();
+        DMKeyBindings.register();
     }
 
     @Override
     public void PostInitialization(FMLPostInitializationEvent event) {
         super.PostInitialization(event);
-        if (DragonMountsConfig.isDebug()) {
-            MinecraftForge.EVENT_BUS.register(new GuiDragonDebug());
-        }
-        if (DragonMountsConfig.isPrototypeBreathweapons()) {
-            DragonOrbControl.createSingleton();
-            DragonOrbControl.initialiseInterceptors();
-            MinecraftForge.EVENT_BUS.register(DragonOrbControl.getInstance());
-            MinecraftForge.EVENT_BUS.register(new TargetHighlighter());
-        }
         MinecraftForge.EVENT_BUS.register(CameraHandler.class);
-        MinecraftForge.EVENT_BUS.register(KeyBindingHandler.class);
         MinecraftForge.EVENT_BUS.register(DMCapeRenderer.class);
+        if (DMConfig.DEBUG_MODE.value) {
+            // defer the task to be executed after initialization.
+            new Thread(() -> Minecraft.getMinecraft().addScheduledTask(() -> {
+                Minecraft.getMinecraft().debugRenderer.pathfindingEnabled = true;
+            })).start();
+            MinecraftForge.EVENT_BUS.register(DebugOverlay.class);
+        }
     }
 
     @Override

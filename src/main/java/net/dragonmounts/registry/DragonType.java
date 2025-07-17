@@ -1,44 +1,40 @@
 package net.dragonmounts.registry;
 
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMultimap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ReferenceSet;
 import it.unimi.dsi.fastutil.objects.ReferenceSets;
+import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.ClientUtil;
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.DragonBreath;
-import net.dragonmounts.entity.breath.effects.FlameBreathFX;
 import net.dragonmounts.entity.breath.impl.FireBreath;
-import net.dragonmounts.entity.breath.sound.SoundEffectName;
-import net.dragonmounts.entity.breath.sound.SoundState;
-import net.dragonmounts.entity.helper.DragonLifeStage;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.util.DMUtils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.registries.*;
 
 import javax.annotation.Nullable;
-import java.util.Set;
-import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static net.dragonmounts.DragonMounts.makeId;
+import static net.dragonmounts.util.EntityUtil.addOrMergeEffect;
 
 public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
     public static final String DATA_PARAMETER_KEY = "DragonType";
@@ -63,65 +59,73 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
     @Nullable
     public final ResourceLocation lootTable;
 
-    public DragonType(ResourceLocation identifier, Properties props) {
-        this.color = props.color;
-        this.convertible = props.convertible;
-        this.isSkeleton = props.isSkeleton;
-        this.avoidWater = props.avoidWater;
-        this.formatting = props.formatting;
-        this.attributes = ImmutableMultimap.copyOf(props.attributes);
-        this.immunities = new ReferenceOpenHashSet<>(props.immunities);
-        this.blocks = new ReferenceOpenHashSet<>(props.blocks);
-        this.biomes = new ReferenceOpenHashSet<>(props.biomes);
-        this.sneezeParticle = props.sneezeParticle;
-        this.eggParticle = props.eggParticle;
-        this.lootTable = props.hasLootTable ? (props.lootTable == null ? identifier : props.lootTable) : null;
+    public DragonType(ResourceLocation identifier, DragonTypeBuilder builder) {
+        this.color = builder.color;
+        this.convertible = builder.convertible;
+        this.isSkeleton = builder.isSkeleton;
+        this.avoidWater = builder.avoidWater;
+        this.formatting = builder.formatting;
+        this.attributes = ImmutableMultimap.copyOf(builder.attributes);
+        this.immunities = new ReferenceOpenHashSet<>(builder.immunities);
+        this.blocks = new ReferenceOpenHashSet<>(builder.blocks);
+        this.biomes = new ReferenceOpenHashSet<>(builder.biomes);
+        this.sneezeParticle = builder.sneezeParticle;
+        this.eggParticle = builder.eggParticle;
+        this.lootTable = builder.hasLootTable ? (builder.lootTable == null ? identifier : builder.lootTable) : null;
         this.setRegistryName(this.identifier = identifier);
         this.translationKey = DMUtils.makeDescriptionId("dragon_type", identifier);
     }
 
-    public void tick(TameableDragonEntity dragon) {}
+    public void tickServer(ServerDragonEntity dragon) {}
 
-    public boolean isHabitatEnvironment(Entity egg) {
+    /// Do **NOT** directly access client only class here!
+    public void tickClient(ClientDragonEntity dragon) {}
+
+    public void onStruckByLightning(ServerDragonEntity dragon, EntityLightningBolt bolt) {
+        if (dragon.isEgg()) return;
+        addOrMergeEffect(dragon, MobEffects.STRENGTH, 700, 0, false, true);//35s
+    }
+
+    public boolean isInHabitat(Entity egg) {
         return false;
     }
 
     public Vec3d locatePassenger(int index, boolean sitting, float scale) {
-        // dragon position is the middle of the model, and the saddle is on
-        // the shoulders, so move player forwards on Z axis relative to the
-        // dragon's rotation to fix that
+        float offset, x, y, z;
         switch (index) {
             case 1:
-                return new Vec3d(
-                        0.6 * scale,
-                        sitting ? 3.4 * scale : 4.4 * scale,
-                        0.1 * scale
-                );
+                offset = 0F;
+                x = 6.5F;
+                y = 44F;
+                z = -10F;
+                break;
             case 2:
-                return new Vec3d(
-                        -0.6 * scale,
-                        sitting ? 3.4 * scale : 4.4 * scale,
-                        0.1 * scale
-                );
+                offset = 0F;
+                x = -6.5F;
+                y = 44F;
+                z = -10F;
+                break;
             case 3:
-                return new Vec3d(
-                        1.6 * scale,
-                        sitting ? 2.1 * scale : 2.5 * scale,
-                        0.2 * scale
-                );
+                offset = 0.3125F;
+                x = 12F;
+                y = 28F;
+                z = -6F;
+                break;
             case 4:
-                return new Vec3d(
-                        -1.6 * scale,
-                        sitting ? 2.1 * scale : 2.5 * scale,
-                        0.2 * scale
-                );
+                offset = -0.3125F;
+                x = -12F;
+                y = 28F;
+                z = -6F;
+                break;
             default:
-                return new Vec3d(
-                        0,
-                        sitting ? 3.4 * scale : 4.4 * scale,
-                        2.2 * scale
-                );
+                offset = 0F;
+                x = 0F;
+                y = 46.5F;
+                z = 20F;
         }
+        return sitting
+                ? new Vec3d(x * scale + offset, (y - 17.5) * scale, z * scale)
+                : new Vec3d(x * scale + offset, y * scale, z * scale);
     }
 
     @Nullable
@@ -129,24 +133,20 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
         return new FireBreath(dragon, 0.7F);
     }
 
-    public SoundEffectName getBreathSound(DragonLifeStage stage, SoundState state) {
-        return state.getSoundByAge(stage);
+    public SoundEvent getLivingSound(TameableDragonEntity dragon) {
+        return dragon.isChild()
+                ? DMSounds.DRAGON_PURR_HATCHLING
+                : dragon.getRNG().nextFloat() < 0.33F
+                ? DMSounds.DRAGON_PURR
+                : DMSounds.DRAGON_AMBIENT;
     }
 
-    public SoundEvent getLivingSound(TameableDragonEntity dragon) {
-        return dragon.isBaby() ? DMSounds.ENTITY_DRAGON_HATCHLING_GROWL :
-                (dragon.getRNG().nextInt(3) == 0
-                        ? DMSounds.ENTITY_DRAGON_GROWL
-                        : DMSounds.ENTITY_DRAGON_BREATHE
-                );
+    public SoundEvent getDeathSound(TameableDragonEntity dragon) {
+        return dragon.isEgg() ? DMSounds.DRAGON_EGG_SHATTER : DMSounds.DRAGON_DEATH;
     }
 
     public SoundEvent getRoarSound(TameableDragonEntity dragon) {
-        return dragon.isBaby() ? DMSounds.HATCHLING_DRAGON_ROAR : DMSounds.DRAGON_ROAR;
-    }
-
-    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
-        world.spawnEntity(new FlameBreathFX(world, position, direction, power, partialTicks));
+        return dragon.isChild() ? DMSounds.DRAGON_ROAR_HATCHLING : DMSounds.DRAGON_ROAR;
     }
 
     public String getName() {
@@ -193,91 +193,10 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
         return fallback;
     }
 
-    public static class Properties {
-        protected static final UUID MODIFIER_UUID = UUID.fromString("12e4cc82-db6d-5676-afc5-86498f0f6464");
-        public final HashMultimap<String, AttributeModifier> attributes = HashMultimap.create();
-        public final int color;
-        public final TextFormatting formatting;
-        public final Set<DamageSource> immunities = new ReferenceOpenHashSet<>();
-        public final Set<Block> blocks = new ReferenceOpenHashSet<>();
-        public final Set<Biome> biomes = new ReferenceOpenHashSet<>();
-        public EnumParticleTypes sneezeParticle = EnumParticleTypes.SMOKE_LARGE;
-        public EnumParticleTypes eggParticle = EnumParticleTypes.TOWN_AURA;
-        public ResourceLocation lootTable;
-        boolean hasLootTable = true;
-        public boolean convertible = true;
-        public boolean isSkeleton = false;
-        public boolean avoidWater = false;
-
-        public Properties(int color, TextFormatting formatting) {
-            this.color = color;
-            this.formatting = formatting;
-            // ignore suffocation damage
-            this.addImmunity(DamageSource.DROWN)
-                    .addImmunity(DamageSource.IN_WALL)
-                    .addImmunity(DamageSource.ON_FIRE)
-                    .addImmunity(DamageSource.IN_FIRE)
-                    .addImmunity(DamageSource.LAVA)
-                    .addImmunity(DamageSource.HOT_FLOOR)
-                    .addImmunity(DamageSource.CACTUS) // assume that cactus needles don't do much damage to animals with horned scales
-                    .addImmunity(DamageSource.DRAGON_BREATH); // ignore damage from vanilla ender dragon. I kinda disabled this because it wouldn't make any sense, feel free to re enable
-        }
-
-        public Properties notConvertible() {
-            this.convertible = false;
-            return this;
-        }
-
-        public Properties isSkeleton() {
-            this.isSkeleton = true;
-            return this;
-        }
-
-        public Properties putAttributeModifier(IAttribute attribute, String name, double value, int operation) {
-            this.attributes.put(attribute.getName(), new AttributeModifier(MODIFIER_UUID, name, value, operation));
-            return this;
-        }
-
-        public Properties addImmunity(DamageSource source) {
-            this.immunities.add(source);
-            return this;
-        }
-
-        public Properties addHabitat(Block block) {
-            this.blocks.add(block);
-            return this;
-        }
-
-        public Properties addHabitat(Biome biome) {
-            this.biomes.add(biome);
-            return this;
-        }
-
-        public Properties setSneezeParticle(@Nullable EnumParticleTypes particle) {
-            this.sneezeParticle = particle;
-            return this;
-        }
-
-        public Properties setEggParticle(EnumParticleTypes particle) {
-            this.eggParticle = particle;
-            return this;
-        }
-
-        public Properties avoidWater() {
-            this.avoidWater = true;
-            return this;
-        }
-
-        public Properties removeLoot() {
-            this.hasLootTable = false;
-            return this;
-        }
-
-        public Properties loot(ResourceLocation table) {
-            this.lootTable = table;
-            this.hasLootTable = true;
-            return this;
-        }
+    public static void convertByLightning(ServerDragonEntity dragon, DragonType type) {
+        dragon.setVariant(type.variants.draw(dragon.getRNG(), null));
+        dragon.playSound(SoundEvents.BLOCK_PORTAL_TRIGGER, 2, 1);
+        dragon.playSound(SoundEvents.BLOCK_END_PORTAL_SPAWN, 2, 1);
     }
 
     public static class Registry extends DeferredRegistry<DragonType> implements IForgeRegistry.AddCallback<DragonType> {

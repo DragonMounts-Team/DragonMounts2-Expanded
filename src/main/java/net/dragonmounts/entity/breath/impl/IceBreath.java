@@ -1,10 +1,14 @@
 package net.dragonmounts.entity.breath.impl;
 
-import net.dragonmounts.DragonMountsConfig;
+import net.dragonmounts.client.breath.impl.IceBreathFX;
+import net.dragonmounts.config.DMConfig;
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathAffectedBlock;
 import net.dragonmounts.entity.breath.BreathAffectedEntity;
+import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.DragonBreath;
+import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.util.EntityUtil;
 import net.dragonmounts.util.LevelUtil;
 import net.minecraft.block.Block;
@@ -17,7 +21,9 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 /**
@@ -29,11 +35,14 @@ public class IceBreath extends DragonBreath {
     }
 
     @Override
-    public BreathAffectedBlock affectBlock(World level, BlockPos pos, BreathAffectedBlock hit) {
+    public BreathAffectedBlock affectBlock(World level, long location, BreathAffectedBlock hit) {
+        if (!DMConfig.BREATH_EFFECTS.value) return new BreathAffectedBlock();
+        BlockPos pos = BlockPos.fromLong(location);
         IBlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
         BlockPos upper;
         if (block == Blocks.LAVA || block == Blocks.FLOWING_LAVA) {
+            if (!DMConfig.QUENCHING_BREATH.value) return new BreathAffectedBlock();
             int value = state.getValue(BlockLiquid.LEVEL);
             if (value == 0) {
                 level.setBlockState(pos, Blocks.OBSIDIAN.getDefaultState());
@@ -46,8 +55,8 @@ public class IceBreath extends DragonBreath {
             LevelUtil.playExtinguishEffect(level, pos);
         } else if (LevelUtil.isAir(level, upper = pos.offset(EnumFacing.UP))) {
             if ((block == Blocks.WATER || block == Blocks.FLOWING_WATER)) {
-                level.setBlockState(pos, (DragonMountsConfig.canIceBreathBePermanent ? Blocks.ICE : Blocks.FROSTED_ICE).getDefaultState());
-            } else if (DragonMountsConfig.canIceBreathBePermanent && (
+                level.setBlockState(pos, (DMConfig.FROSTY_BREATH.value ? Blocks.ICE : Blocks.FROSTED_ICE).getDefaultState());
+            } else if (DMConfig.FROSTY_BREATH.value && (
                     block.isLeaves(state, level, pos) || state.getBlockFaceShape(level, pos, EnumFacing.UP) == BlockFaceShape.SOLID
             )) {
                 level.setBlockState(upper, Blocks.SNOW_LAYER.getDefaultState());
@@ -68,5 +77,25 @@ public class IceBreath extends DragonBreath {
         target.attackEntityFrom(DamageSource.causeMobDamage(dragon), damage);
         EntityUtil.addOrMergeEffect(target, MobEffects.SLOWNESS, (int) (2 * hit.getHitDensity()), 0, false, true);
         target.knockBack(dragon, 0.1F, dragon.posX - target.posX, dragon.posZ - target.posZ);
+    }
+
+    @Override
+    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
+        world.spawnEntity(new IceBreathFX(world, position, direction, power, partialTicks));
+    }
+
+    @Override
+    public SoundEvent getStartSound(DragonLifeStage stage) {
+        return DMSounds.DRAGON_BREATH_START_ICE;
+    }
+
+    @Override
+    public SoundEvent getLoopSound(DragonLifeStage stage) {
+        return DMSounds.DRAGON_BREATH_LOOP_ICE;
+    }
+
+    @Override
+    public SoundEvent getStopSound(DragonLifeStage stage) {
+        return DMSounds.DRAGON_BREATH_STOP_ICE;
     }
 }

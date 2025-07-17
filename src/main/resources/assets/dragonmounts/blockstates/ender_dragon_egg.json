@@ -1,7 +1,7 @@
 {
   "variants": {
     "normal": {
-      "model": "dragonmounts:ender_dragon_egg"
+      "model": "minecraft:dragon_egg"
     }
   }
 }

@@ -10,7 +10,7 @@ class DragonType(Enum):
   WITHER = makeId('wither')
   NETHER = makeId('nether')
   ENDER = makeId('ender')
-  ENCHANT = makeId('enchant')
+  ENCHANTED = makeId('enchanted')
   SUNLIGHT = makeId('sunlight')
   MOONLIGHT = makeId('moonlight')
   STORM = makeId('storm')

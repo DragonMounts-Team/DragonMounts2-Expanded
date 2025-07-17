@@ -1,6 +1,6 @@
 from Core.Util import ResourceLocation, makeId
 from Core.Output import Output
-from Core.ModelBuilder import ModelBuilder as model
+from Core.ModelBuilder import ItemModelBuilder as model
 from DragonType import DragonType
 from DragonVariant import DragonVariant
 from DragonArmorMaterial import DragonArmorMaterial
@@ -25,8 +25,8 @@ def handheldItem(output: Output, identifier: ResourceLocation, texture: Resource
     .save(output, identifier.path)
 
 def dragonScalesItem(output: Output, type: DragonType):
-  identifier = type.value
-  basicItem(output, identifier.withSuffix('_dragon_scales'), makeId('items/scales/' + identifier.path + '_dragon_scales'))
+  identifier = type.value.withSuffix('_dragon_scales')
+  basicItem(output, identifier, makeId('items/scales/' + identifier.path))
 
 def dragonScaleToolItem(output: Output, type: DragonType, name: str):
   handheldItem(
@@ -35,35 +35,43 @@ def dragonScaleToolItem(output: Output, type: DragonType, name: str):
     ResourceLocation(type.value.namespace, 'items/' + name + '/' + type.value.path + '_dragon_' + name)
   )
 
-def dragonScaleArmorItem(output: Output, type: DragonType, name: str, nick: str):
+def dragonScaleArmorItem(output: Output, type: DragonType, name: str):
+  identifier = type.value.withSuffix('_dragon_scale_' + name)
   basicItem(
     output,
-    type.value.withSuffix('_dragon_scale_' + name),
-    ResourceLocation(type.value.namespace, 'items/armor/' + type.value.path + '/' + type.value.path + '_dragonscale_' + nick)
+    identifier,
+    ResourceLocation(type.value.namespace, 'items/armor/' + type.value.path + '/' + identifier.path)
   )
 
+def pullingModel(output: Output, idel: ResourceLocation, textures: ResourceLocation, paths: ResourceLocation, suffix: str):
+    model(idel).texture('layer0', textures.withSuffix(suffix)).save(output, paths.path + suffix)
+    return idel.withSuffix(suffix)
+
 def dragonScaleBowItem(output: Output, type: DragonType):
-  textureBase = type.value.withPrefix('items/bow/dragon_bow_')
   pathBase = type.value.withSuffix('_dragon_scale_bow')
+  textureBase = pathBase.withPrefix('items/bow/')
   actualLoc = pathBase.withPrefix('item/')
-  model(actualLoc).texture('layer0', textureBase.withSuffix('_0')).save(output, pathBase.path + '_0')
-  model(actualLoc).texture('layer0', textureBase.withSuffix('_1')).save(output, pathBase.path + '_1')
-  model(actualLoc).texture('layer0', textureBase.withSuffix('_2')).save(output, pathBase.path + '_2')
   model(bowModel).\
     texture('layer0', textureBase)\
     .override()\
       .predicate(pullingPredicate, 1.0)\
-      .model(actualLoc.withSuffix('_0'))\
+      .model(
+        pullingModel(output, actualLoc, textureBase, pathBase, "_pulling_0")
+      )\
     .end()\
     .override()\
       .predicate(pullingPredicate, 1.0)\
       .predicate(pullPredicate, 0.65)\
-      .model(actualLoc.withSuffix('_1'))\
+      .model(
+        pullingModel(output, actualLoc, textureBase, pathBase, "_pulling_1")
+      )\
     .end()\
     .override()\
       .predicate(pullingPredicate, 1.0)\
       .predicate(pullPredicate, 0.9)\
-      .model(actualLoc.withSuffix('_2'))\
+      .model(
+        pullingModel(output, actualLoc, textureBase, pathBase, "_pulling_2")
+      )\
     .end()\
     .save(output, pathBase.path)
 
@@ -78,6 +86,10 @@ def generateItemModels(output: Output):
   spawnEggModel = ResourceLocation('item/spawn_egg')
   dragonHeadModel = ResourceLocation('item/skull_dragon')
   basicItem(output, makeId('variation_orb'))
+  basicItem(output, makeId('dragon_meat'))
+  basicItem(output, makeId('cooked_dragon_meat'))
+  basicItem(output, makeId('dracopedia'))
+  handheldItem(output, makeId('diamond_shears'))
   for type in CarriageType:
     basicItem(
       output,
@@ -98,8 +110,12 @@ def generateItemModels(output: Output):
     essence = type.value.withSuffix('_dragon_essence')
     basicItem(output, essence, essence.withPrefix('items/essence/'))
     model(spawnEggModel).save(output, name + '_dragon_spawn_egg')
-    model(ResourceLocation(type.value.namespace, 'block/' + name + '_dragon_egg')).save(output, name + '_dragon_egg')
+    if (type is not DragonType.ENDER):
+      model(ResourceLocation(type.value.namespace, 'block/' + name + '_dragon_egg'))\
+        .save(output, name + '_dragon_egg')
     if (type is DragonType.SKELETON or type is DragonType.WITHER): continue
+    model(ResourceLocation(type.value.namespace, 'block/' + name + '_dragon_scale_block'))\
+      .save(output, name + '_dragon_scale_block')
     dragonScalesItem(output, type)
     dragonScaleBowItem(output, type)
     dragonScaleToolItem(output, type, 'axe')
@@ -107,18 +123,18 @@ def generateItemModels(output: Output):
     dragonScaleToolItem(output, type, 'hoe')
     dragonScaleToolItem(output, type, 'shovel')
     dragonScaleToolItem(output, type, 'sword')
-    dragonScaleArmorItem(output, type, 'helmet', 'cap')
-    dragonScaleArmorItem(output, type, 'chestplate', 'tunic')
-    dragonScaleArmorItem(output, type, 'leggings', 'leggings')
-    dragonScaleArmorItem(output, type, 'boots', 'boots')
+    dragonScaleArmorItem(output, type, 'helmet')
+    dragonScaleArmorItem(output, type, 'chestplate')
+    dragonScaleArmorItem(output, type, 'leggings')
+    dragonScaleArmorItem(output, type, 'boots')
     root = name + '_dragon_scale_shield'
     texture = makeId('entities/dragon_scale_shield/' + name)
     blocking = root + '_blocking'
     model(blockingShieldModel)\
-      .texture('base', texture)\
+      .texture('layer0', texture)\
       .save(output, blocking)
     model(shieldModel)\
-      .texture('base', texture)\
+      .texture('layer0', texture)\
       .override()\
         .predicate(blockingPredicate, 1.0)\
         .model(makeId('item/' + blocking))\

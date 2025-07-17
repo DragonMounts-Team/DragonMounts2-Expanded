@@ -41,4 +41,9 @@ public class MutableBlockPosEx extends BlockPos.MutableBlockPos {
         ++this.y;
         return this;
     }
+
+    public MutableBlockPosEx descent() {
+        --this.y;
+        return this;
+    }
 }

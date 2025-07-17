@@ -1,7 +1,9 @@
 package net.dragonmounts.entity.breath.impl;
 
+import net.dragonmounts.client.breath.impl.EnderBreathFX;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathAffectedBlock;
+import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -10,6 +12,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 /**
@@ -21,7 +24,8 @@ public class EnderBreath extends DragonBreath {
     }
 
     @Override
-    public BreathAffectedBlock affectBlock(World level, BlockPos pos, BreathAffectedBlock hit) {
+    public BreathAffectedBlock affectBlock(World level, long location, BreathAffectedBlock hit) {
+        BlockPos pos = BlockPos.fromLong(location);
         IBlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
         if (!block.isAir(state, level, pos) && level.rand.nextFloat() < 0.002F) {
@@ -35,5 +39,10 @@ public class EnderBreath extends DragonBreath {
             level.spawnEntity(cloud);
         }
         return new BreathAffectedBlock(); // reset to zero
+    }
+
+    @Override
+    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
+        world.spawnEntity(new EnderBreathFX(world, position, direction, power, partialTicks));
     }
 }

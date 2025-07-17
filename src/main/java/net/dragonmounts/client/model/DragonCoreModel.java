@@ -10,9 +10,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class DragonCoreModel extends ModelBase {
-    public ModelRenderer core;
-    public ModelRenderer base;
-    public ModelRenderer lid;
+    public final ModelRenderer core;
+    public final ModelRenderer base;
+    public final ModelRenderer lid;
 
     public DragonCoreModel() {
         this.textureWidth = 64;

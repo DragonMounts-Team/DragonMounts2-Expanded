@@ -1,0 +1,11 @@
+{
+  "name": "龙鳞",
+  "icon": "dragonmounts:ender_dragon_scales",
+  "category": "dragonmounts:items",
+  "pages": [
+    {
+      "type": "text",
+      "text": "一类重要的原材料。可以对龙使用$(l:items/hard_shears)硬质剪刀$(/l)获取。$(br2)参见: $(l:dragons/shearing)剪龙鳞$(/l)"
+    }
+  ]
+}

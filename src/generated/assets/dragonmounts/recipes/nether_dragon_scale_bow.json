@@ -11,7 +11,8 @@
       "item": "dragonmounts:nether_dragon_scales"
     },
     "X": {
-      "item": "minecraft:string"
+      "type": "forge:ore_dict",
+      "ore": "string"
     }
   },
   "result": {

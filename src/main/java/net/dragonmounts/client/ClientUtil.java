@@ -4,25 +4,18 @@ import net.dragonmounts.util.DMUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * to avoid {@link ClassNotFoundException}
- */
 @SideOnly(Side.CLIENT)
 public abstract class ClientUtil {
+    /// to avoid {@link ClassNotFoundException}
     public static EntityPlayer getLocalPlayer() {
         return Minecraft.getMinecraft().player;
     }
 
     public static String translateToLocal(String key) {
         return I18n.format(key, DMUtils.NO_ARGS);
-    }
-
-    public static String translateToLocal(String key, NBTTagCompound fallbackSrc, String fallbackKey) {
-        return I18n.hasKey(key) ? I18n.format(key, DMUtils.NO_ARGS) : fallbackSrc.getString(fallbackKey);
     }
 
     public static String translateBothToLocal(String major, String minor) {

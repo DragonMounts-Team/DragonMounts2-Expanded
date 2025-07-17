@@ -1,8 +1,8 @@
 package net.dragonmounts.item;
 
-import net.dragonmounts.def.EnchantType;
 import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.type.EnchantedType;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -56,7 +56,7 @@ public class DragonScaleShieldItem extends ItemShield {
 
     @Override
     public int getItemEnchantability() {
-        return this.type instanceof EnchantType ? 1 : 0;
+        return this.type instanceof EnchantedType ? 1 : 0;
     }
 
     @Override

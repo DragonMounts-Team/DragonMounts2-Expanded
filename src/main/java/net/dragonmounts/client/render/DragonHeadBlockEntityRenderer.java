@@ -3,11 +3,12 @@ package net.dragonmounts.client.render;
 import net.dragonmounts.block.DragonHeadBlock;
 import net.dragonmounts.block.entity.DragonHeadBlockEntity;
 import net.dragonmounts.client.model.dragon.DragonModel;
-import net.dragonmounts.client.model.dragon.ModelPart;
 import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.item.DragonHeadItem;
+import net.dragonmounts.util.math.MathX;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
@@ -15,6 +16,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.MathHelper;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -29,8 +31,8 @@ public class DragonHeadBlockEntityRenderer extends TileEntitySpecialRenderer<Dra
             int destroyStage,
             float animateTicks
     ) {
-        DragonModel model = appearance.model;
-        ModelPart head = model.head;
+        DragonModel model = appearance.getModel(null);
+        ModelRenderer head = model.head;
         boolean normal = destroyStage < 0;
         if (normal) {
             manager.bindTexture(appearance.getBody(null));
@@ -48,9 +50,9 @@ public class DragonHeadBlockEntityRenderer extends TileEntitySpecialRenderer<Dra
         GlStateManager.enableRescaleNormal();
         GlStateManager.scale(-1.0F, -1.0F, 1.0F);
         GlStateManager.enableAlpha();
-        model.jaw.rotateAngleX = 0.2F * (float) (Math.sin(animateTicks * Math.PI * 0.2F) + 1.0D);
+        model.head.jaw.rotateAngleX = 0.2F * (MathHelper.sin(animateTicks * MathX.PI_F * 0.2F) + 1.0F);
         head.rotateAngleY = yRot * 0.017453292F;
-        head.rotationPointX = head.rotationPointY = head.rotationPointZ = head.renderScaleX = head.renderScaleY = head.renderScaleZ = head.rotateAngleX = 0.0F;
+        head.rotationPointX = head.rotationPointY = head.rotationPointZ = head.rotateAngleX = 0.0F;
         GlStateManager.translate(0.0F, -0.374375F, 0.0F);
         GlStateManager.scale(0.75F, 0.75F, 0.75F);
         head.render(0.0625F);
@@ -148,22 +150,26 @@ public class DragonHeadBlockEntityRenderer extends TileEntitySpecialRenderer<Dra
         }
     }
 
-    public static void renderLayer(DragonHeadItem item, float limbSwing, boolean isVillager) {
-        TextureManager manager = Minecraft.getMinecraft().renderEngine;
-        if (manager != null) {
-            GlStateManager.scale(1.1875F, -1.1875F, -1.1875F);
-            if (isVillager) GlStateManager.translate(0.0F, 0.0625F, 0.0F);
-            render(
-                    manager,
-                    item.variant.appearance,
-                    0.0F,
-                    0.0F,
-                    0.0F,
-                    180.0F,
-                    -1,
-                    limbSwing
-            );
+    public static boolean renderIfAvailable(Item item, float limbSwing, boolean isVillager) {
+        if (item instanceof DragonHeadItem) {
+            TextureManager manager = Minecraft.getMinecraft().renderEngine;
+            if (manager != null) {
+                GlStateManager.scale(1.1875F, -1.1875F, -1.1875F);
+                if (isVillager) GlStateManager.translate(0.0F, 0.0625F, 0.0F);
+                render(
+                        manager,
+                        ((DragonHeadItem) item).variant.appearance,
+                        0.0F,
+                        0.0F,
+                        0.0F,
+                        180.0F,
+                        -1,
+                        limbSwing
+                );
+            }
+            GlStateManager.popMatrix();
+            return true;
         }
-        GlStateManager.popMatrix();
+        return false;
     }
 }

@@ -2,8 +2,9 @@ package net.dragonmounts.item;
 
 import net.dragonmounts.capability.DMCapabilities;
 import net.dragonmounts.capability.IHardShears;
+import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.ClientUtil;
-import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.init.DMItemGroups;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -38,7 +39,12 @@ public class HardShearsItem extends ItemShears implements IHardShears, ICapabili
     }
 
     @Override
-    public int onShear(ItemStack stack, EntityPlayer player, TameableDragonEntity dragon) {
+    public boolean canShear(ItemStack stack, EntityPlayer player, ClientDragonEntity dragon) {
+        return dragon.getVariant().type.getInstance(DragonScalesItem.class, null) != null;
+    }
+
+    @Override
+    public int onShear(ItemStack stack, EntityPlayer player, ServerDragonEntity dragon) {
         DragonScalesItem item = dragon.getVariant().type.getInstance(DragonScalesItem.class, null);
         if (item == null) return 0;
         ItemStack scales = new ItemStack(item, 2 + dragon.getRNG().nextInt(3));
@@ -71,7 +77,7 @@ public class HardShearsItem extends ItemShears implements IHardShears, ICapabili
 
     @Override
     public @Nonnull CreativeTabs[] getCreativeTabs() {
-        return new CreativeTabs[]{DMItemGroups.MAIN};
+        return new CreativeTabs[]{DMItemGroups.ITEMS};
     }
 
     @Override

@@ -1,6 +1,0 @@
-{
-  "parent": "dragonmounts:item/amulet",
-  "textures": {
-    "layer0": "dragonmounts:items/amulet/enchant_dragon_amulet"
-  }
-}

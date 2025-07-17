@@ -35,9 +35,14 @@ public class TestRunnerItem extends Item implements ITestCase {
         TestRunner.register(this);
     }
 
-    public void register(Side side, int index, ITestCase test) {
+    public void register(@Nullable Side side, int index, ITestCase test) {
         if (this == test) return;
-        (side.isClient() ? this.client : this.server).put(index, test);
+        if (side == null) {
+            this.client.put(index, test);
+            this.server.put(index, test);
+        } else {
+            (side.isClient() ? this.client : this.server).put(index, test);
+        }
         if (index > this.maxStackSize) {
             this.setMaxStackSize(index);
         }

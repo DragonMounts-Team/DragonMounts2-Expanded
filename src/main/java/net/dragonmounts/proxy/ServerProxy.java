@@ -10,12 +10,8 @@
 package net.dragonmounts.proxy;
 
 import net.dragonmounts.DragonMounts;
-import net.dragonmounts.DragonMountsConfig;
-import net.dragonmounts.capability.ArmorEffectManager;
-import net.dragonmounts.capability.DMCapabilities;
 import net.dragonmounts.client.variant.VariantAppearance;
-import net.dragonmounts.command.DragonCommandTree;
-import net.dragonmounts.event.VanillaEggHandler;
+import net.dragonmounts.event.CommonMisc;
 import net.dragonmounts.init.DMArmorEffects;
 import net.dragonmounts.network.*;
 import net.dragonmounts.registry.CarriageType;
@@ -26,7 +22,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.function.Function;
@@ -37,7 +32,6 @@ import java.util.function.Function;
  */
 public class ServerProxy {
     public void PreInitialization(FMLPreInitializationEvent event) {
-        DragonMountsConfig.PreInit();
         CarriageType.REGISTRY.register();
         CooldownCategory.REGISTRY.register();
         DragonType.REGISTRY.register();
@@ -45,31 +39,26 @@ public class ServerProxy {
     }
 
     public void Initialization(FMLInitializationEvent evt) {
-        MinecraftForge.EVENT_BUS.register(VanillaEggHandler.class);
-        DragonMounts.NETWORK_WRAPPER.registerMessage(MessageDragonTargetHandlerServer.class, MessageDragonTarget.class, 73, Side.SERVER);
-
-        DragonMounts.NETWORK_WRAPPER.registerMessage(CDragonBreathPacket.Handler.class, CDragonBreathPacket.class, 0, Side.SERVER);
-        DragonMounts.NETWORK_WRAPPER.registerMessage(CDragonControlPacket.Handler.class, CDragonControlPacket.class, 1, Side.SERVER);
-        DragonMounts.NETWORK_WRAPPER.registerMessage(CUnbindWhistlePacket.Handler.class, CUnbindWhistlePacket.class, 2, Side.SERVER);
-        DragonMounts.NETWORK_WRAPPER.registerMessage(CDragonConfigPacket.Handler.class, CDragonConfigPacket.class, 3, Side.SERVER);
-        DragonMounts.NETWORK_WRAPPER.registerMessage(SSyncBannerPacket.Handler.class, SSyncBannerPacket.class, 4, Side.CLIENT);
-        DragonMounts.NETWORK_WRAPPER.registerMessage(CSitOrderPacket.Handler.class, CSitOrderPacket.class, 5, Side.SERVER);
-        DragonMounts.NETWORK_WRAPPER.registerMessage(CTeleportOrderPacket.Handler.class, CTeleportOrderPacket.class, 6, Side.SERVER);
-
-        DragonMounts.NETWORK_WRAPPER.registerMessage(SInitCooldownPacket.Handler.class, SInitCooldownPacket.class, 7, Side.CLIENT);
-        DragonMounts.NETWORK_WRAPPER.registerMessage(SSyncCooldownPacket.Handler.class, SSyncCooldownPacket.class, 8, Side.CLIENT);
-        DragonMounts.NETWORK_WRAPPER.registerMessage(SRiposteEffectPacket.Handler.class, SRiposteEffectPacket.class, 9, Side.CLIENT);
-
-        MinecraftForge.EVENT_BUS.register(DMCapabilities.class);
+        MinecraftForge.EVENT_BUS.register(CommonMisc.class);
+        int discriminator = 0;
+        // S2C:
+        DragonMounts.NETWORK_WRAPPER.registerMessage(SSyncBannerPacket.Handler.class, SSyncBannerPacket.class, ++discriminator, Side.CLIENT);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(SInitCooldownPacket.Handler.class, SInitCooldownPacket.class, ++discriminator, Side.CLIENT);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(SSyncCooldownPacket.Handler.class, SSyncCooldownPacket.class, ++discriminator, Side.CLIENT);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(SRiposteEffectPacket.Handler.class, SRiposteEffectPacket.class, ++discriminator, Side.CLIENT);
+        // C2S:
+        DragonMounts.NETWORK_WRAPPER.registerMessage(CDragonBreathPacket.Handler.class, CDragonBreathPacket.class, ++discriminator, Side.SERVER);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(CDragonControlPacket.Handler.class, CDragonControlPacket.class, ++discriminator, Side.SERVER);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(CDragonConfigPacket.Handler.class, CDragonConfigPacket.class, ++discriminator, Side.SERVER);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(CTeleportOrderPacket.Handler.class, CTeleportOrderPacket.class, ++discriminator, Side.SERVER);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(CSitOrderPacket.Handler.class, CSitOrderPacket.class, ++discriminator, Side.SERVER);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(CFollowOrderPacket.Handler.class, CFollowOrderPacket.class, ++discriminator, Side.SERVER);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(CRenameWhistlePacket.Handler.class, CRenameWhistlePacket.class, ++discriminator, Side.SERVER);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(COpenInventoryPacket.Handler.class, COpenInventoryPacket.class, ++discriminator, Side.SERVER);
     }
 
     public void PostInitialization(FMLPostInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(DMArmorEffects.class);
-        MinecraftForge.EVENT_BUS.register(ArmorEffectManager.Events.class);
-    }
-
-    public void ServerStarting(FMLServerStartingEvent event) {
-        event.registerServerCommand(new DragonCommandTree());
     }
 
     public Function<String, VariantAppearance> getBuiltinAppearances() {

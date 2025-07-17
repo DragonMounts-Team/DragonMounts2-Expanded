@@ -1,17 +1,22 @@
 package net.dragonmounts.entity.breath.impl;
 
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
+import net.dragonmounts.client.breath.impl.AetherBreathFX;
+import net.dragonmounts.config.DMConfig;
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathAffectedBlock;
 import net.dragonmounts.entity.breath.BreathAffectedEntity;
+import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.DragonBreath;
-import net.dragonmounts.util.math.MathX;
+import net.dragonmounts.init.DMSounds;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -28,7 +33,9 @@ public class AetherBreath extends DragonBreath {
     }
 
     @Override
-    public BreathAffectedBlock affectBlock(World level, BlockPos pos, BreathAffectedBlock hit) {
+    public BreathAffectedBlock affectBlock(World level, long location, BreathAffectedBlock hit) {
+        if (!DMConfig.DESTRUCTIVE_BREATH.value) return new BreathAffectedBlock();
+        BlockPos pos = BlockPos.fromLong(location);
         IBlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
         // effects- which occur after the block has been exposed for sufficient time
@@ -75,8 +82,8 @@ public class AetherBreath extends DragonBreath {
         final double FORCE_MULTIPLIER = 0.05;
         final double VERTICAL_FORCE_MULTIPLIER = 0.05;
         float density = hit.getHitDensity();
-        Vec3d airForceDirection = hit.getHitDensityDirection();
-        Vec3d airMotion = MathX.multiply(airForceDirection, FORCE_MULTIPLIER);
+//        Vec3d airForceDirection = hit.getHitDensityDirection();
+//        Vec3d airMotion = MathX.multiply(airForceDirection, FORCE_MULTIPLIER);
 
         final double WT_ENTITY = 0.05;
         final double WT_AIR = 1 - WT_ENTITY;
@@ -84,10 +91,8 @@ public class AetherBreath extends DragonBreath {
         target.knockBack(target, 0.8F, dragon.posX - target.posX, dragon.posZ - target.posZ);
         if (density > 1.0) {
             final double GRAVITY_OFFSET = -0.08;
-            Vec3d up = new Vec3d(0, 1, 0);
-            Vec3d upMotion = MathX.multiply(up, VERTICAL_FORCE_MULTIPLIER * density);
             //      System.out.format("upMotion:%s\n", upMotion);
-            target.motionY = WT_ENTITY * (target.motionY - GRAVITY_OFFSET) + WT_AIR * upMotion.y;
+            target.motionY = WT_ENTITY * (target.motionY - GRAVITY_OFFSET) + WT_AIR * VERTICAL_FORCE_MULTIPLIER * density;
         }
 
         //    System.out.format("airMotion:%s\n", airMotion);
@@ -96,6 +101,26 @@ public class AetherBreath extends DragonBreath {
         // final int DELAY_UNTIL_DECAY=5;
         // final float DECAY_PERCENTAGE_PER_TICK=10.0F;
         //        currentHitDensity.setDecayParameters(DECAY_PERCENTAGE_PER_TICK, DELAY_UNTIL_DECAY);
+    }
+
+    @Override
+    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
+        world.spawnEntity(new AetherBreathFX(world, position, direction, power, partialTicks));
+    }
+
+    @Override
+    public SoundEvent getStartSound(DragonLifeStage stage) {
+        return DMSounds.DRAGON_BREATH_START_AIRFLOW;
+    }
+
+    @Override
+    public SoundEvent getLoopSound(DragonLifeStage stage) {
+        return DMSounds.DRAGON_BREATH_LOOP_AIRFLOW;
+    }
+
+    @Override
+    public SoundEvent getStopSound(DragonLifeStage stage) {
+        return DMSounds.DRAGON_BREATH_STOP_AIRFLOW;
     }
 
     static {

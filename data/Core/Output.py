@@ -16,8 +16,8 @@ class Output:
       self.root = root + '/' + namespace + '/'
     self.namespace = namespace
 
-  def accept(self, name: str, content: dict):
-    path = os.path.join(self.root, name + '.json')
+  def accept(self, location: str, content: dict):
+    path = os.path.join(self.root, location + '.json')
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, 'w') as file:
       json.dump(content, file, cls = Encoder, indent = 2)

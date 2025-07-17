@@ -1,52 +1,26 @@
 {
+  "forge_marker": 1,
+  "defaults": {
+    "model": "dragonmounts:dragon_head"
+  },
   "variants": {
-    "rotation=0": {
-      "model": "dragonmounts:dragon_head"
-    },
-    "rotation=1": {
-      "model": "dragonmounts:dragon_head"
-    },
-    "rotation=2": {
-      "model": "dragonmounts:dragon_head"
-    },
-    "rotation=3": {
-      "model": "dragonmounts:dragon_head"
-    },
-    "rotation=4": {
-      "model": "dragonmounts:dragon_head"
-    },
-    "rotation=5": {
-      "model": "dragonmounts:dragon_head"
-    },
-    "rotation=6": {
-      "model": "dragonmounts:dragon_head"
-    },
-    "rotation=7": {
-      "model": "dragonmounts:dragon_head"
-    },
-    "rotation=8": {
-      "model": "dragonmounts:dragon_head"
-    },
-    "rotation=9": {
-      "model": "dragonmounts:dragon_head"
-    },
-    "rotation=10": {
-      "model": "dragonmounts:dragon_head"
-    },
-    "rotation=11": {
-      "model": "dragonmounts:dragon_head"
-    },
-    "rotation=12": {
-      "model": "dragonmounts:dragon_head"
-    },
-    "rotation=13": {
-      "model": "dragonmounts:dragon_head"
-    },
-    "rotation=14": {
-      "model": "dragonmounts:dragon_head"
-    },
-    "rotation=15": {
-      "model": "dragonmounts:dragon_head"
+    "rotation": {
+      "0": {},
+      "1": {},
+      "2": {},
+      "3": {},
+      "4": {},
+      "5": {},
+      "6": {},
+      "7": {},
+      "8": {},
+      "9": {},
+      "10": {},
+      "11": {},
+      "12": {},
+      "13": {},
+      "14": {},
+      "15": {}
     }
   }
 }

@@ -112,13 +112,13 @@ public class DragonCoreBlock extends BlockContainer {
             int j = rand.nextInt(2) * 2 - 1;
             int k = rand.nextInt(2) * 2 - 1;
             //Coords
-            double x = (double) pos.getX() + 0.5D + 0.25D * (double) j;
-            double y = (double) ((float) pos.getY() + rand.nextFloat());
-            double z = (double) pos.getZ() + 0.5D + 0.25D * (double) k;
+            double x = pos.getX() + 0.5D + 0.25D * j;
+            double y = (pos.getY() + rand.nextFloat());
+            double z = pos.getZ() + 0.5D + 0.25D * k;
             //Speed
-            double s1 = (double) (rand.nextFloat() * (float) j);
-            double s2 = ((double) rand.nextFloat() - 0.5D) * 0.125D;
-            double s3 = (double) (rand.nextFloat() * (float) k);
+            double s1 = rand.nextFloat() * j;
+            double s2 = (rand.nextFloat() - 0.5D) * 0.125D;
+            double s3 = rand.nextFloat() * k;
             worldIn.spawnParticle(EnumParticleTypes.PORTAL, x, y, z, s1, s2, s3);
         }
     }

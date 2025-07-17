@@ -1,5 +1,6 @@
 package net.dragonmounts.capability;
 
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,4 +21,8 @@ public interface IDragonFood {
     }
 
     boolean tryFeed(TameableDragonEntity dragon, EntityPlayer player, Relation relation, ItemStack stack, EnumHand hand);
+
+    static boolean isSatiated(TameableDragonEntity dragon) {
+        return DragonLifeStage.ADULT == dragon.lifeStageHelper.getLifeStage() && dragon.getHealth() >= dragon.getMaxHealth() && dragon.getHunger() >= 100;
+    }
 }

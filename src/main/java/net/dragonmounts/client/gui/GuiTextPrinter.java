@@ -11,13 +11,16 @@ package net.dragonmounts.client.gui;
 
 import net.minecraft.client.gui.FontRenderer;
 
+import java.util.regex.Pattern;
+
 /**
  * GUI helper to "print" text in similar fashion to System.out.
  * 
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public class GuiTextPrinter {
-
+    private static final Pattern PATTERN_TAB = Pattern.compile("\t", Pattern.LITERAL);
+    private static final Pattern PATTERN_RETURN = Pattern.compile("\r", Pattern.LITERAL);
     private final FontRenderer fr;
     private int xOrigin;
     private int yOrigin;
@@ -34,23 +37,23 @@ public class GuiTextPrinter {
         x = xOrigin;
         y += yLineSpace;
     }
-    
+
     public void print(String text) {
         if (fr == null) return;  //  just in case...
         String[] lines = text.split("\n", -1);
         if (lines.length > 1) {
             for (int i = 0; i < lines.length; i++) {
-                if (!lines[i].isEmpty()) {
-                    String line = lines[i];
+                String line = lines[i];
+                if (!line.isEmpty()) {
                     // replace common special chars
-                    line = line.replace("\r", "");
-                    line = line.replace("\t", "    ");
-                    fr.drawStringWithShadow(line, x, y, color);
+                    fr.drawStringWithShadow(PATTERN_TAB.matcher(
+                            PATTERN_RETURN.matcher(line).replaceAll("")
+                    ).replaceAll("    "), x, y, color);
                 }
                 if (i != lines.length - 1) {
                     newLine();
                 } else {
-                    x += fr.getStringWidth(lines[i]);
+                    x += fr.getStringWidth(line);
                 }
             }
         } else {
@@ -58,7 +61,7 @@ public class GuiTextPrinter {
             x += fr.getStringWidth(text);
         }
     }
-    
+
     public void println(String text) {
         print(text);
         newLine();

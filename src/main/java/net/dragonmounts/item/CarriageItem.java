@@ -2,11 +2,14 @@ package net.dragonmounts.item;
 
 import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.entity.CarriageEntity;
+import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.registry.CarriageType;
+import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -44,12 +47,12 @@ public class CarriageItem extends Item {
                 player.prevPosY + (player.posY - player.prevPosY) + player.getEyeHeight(),
                 player.prevPosZ + (player.posZ - player.prevPosZ)
         );
-        float f3 = MathHelper.cos(-f2 * f9 - (float) Math.PI);
-        float f4 = MathHelper.sin(-f2 * f9 - (float) Math.PI);
+        float f3 = MathHelper.cos(-f2 * f9 - MathX.PI_F);
+        float f4 = MathHelper.sin(-f2 * f9 - MathX.PI_F);
         float f5 = -MathHelper.cos(-f1 * f9);
         RayTraceResult hit = level.rayTraceBlocks(pos, pos.add(f4 * f5 * 5, MathHelper.sin(-f1 * f9) * 5, f3 * f5 * 5), true);
         if (hit == null) return new ActionResult<>(EnumActionResult.PASS, stack);
-        Vec3d look = player.getLook(1.0F);
+        Vec3d look = player.getLookVec();
         boolean flag = false;
         for (Entity entity : level.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().expand(look.x * 5, look.y * 5, look.z * 5).grow(1.0D))) {
             if (entity.canBeCollidedWith() && entity.getEntityBoundingBox().grow(entity.getCollisionBorderSize()).contains(pos)) {
@@ -57,19 +60,42 @@ public class CarriageItem extends Item {
             }
         }
         if (flag || hit.typeOfHit != RayTraceResult.Type.BLOCK) return new ActionResult<>(EnumActionResult.PASS, stack);
-        CarriageEntity carriage = new CarriageEntity(level, hit.hitVec);
+        Vec3d location = hit.hitVec;
+        CarriageEntity carriage = new CarriageEntity(level, location.x, location.y, location.z);
         if (!level.getCollisionBoxes(carriage, carriage.getEntityBoundingBox().grow(-0.1D)).isEmpty())
             return new ActionResult<>(EnumActionResult.FAIL, stack);
         if (!level.isRemote) {
             carriage.setType(this.type);
             carriage.rotationYaw = player.rotationYaw;
-            level.spawnEntity(carriage);
-            if (!player.capabilities.isCreativeMode) {
-                stack.shrink(1);
+            if (level.spawnEntity(carriage)) {
+                if (!player.capabilities.isCreativeMode) {
+                    stack.shrink(1);
+                }
+                player.addStat(StatList.getObjectUseStats(this));
             }
-            player.addStat(StatList.getObjectUseStats(this));
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+    }
+
+    @Override
+    public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
+        if (target instanceof TameableDragonEntity) {
+            TameableDragonEntity dragon = (TameableDragonEntity) target;
+            CarriageEntity carriage = new CarriageEntity(dragon.world, dragon.posX, dragon.posY, dragon.posZ);
+            if (dragon.canFitPassenger(carriage)) {
+                if (dragon.world.isRemote) return true;
+                carriage.setType(this.type);
+                if (carriage.world.spawnEntity(carriage)) {
+                    if (!player.capabilities.isCreativeMode) {
+                        stack.shrink(1);
+                    }
+                    player.addStat(StatList.getObjectUseStats(this));
+                    carriage.startRiding(dragon);
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -80,7 +106,7 @@ public class CarriageItem extends Item {
 
     @Override
     public @Nonnull CreativeTabs[] getCreativeTabs() {
-        return new CreativeTabs[]{DMItemGroups.MAIN};
+        return new CreativeTabs[]{DMItemGroups.ITEMS};
     }
 
     @Override

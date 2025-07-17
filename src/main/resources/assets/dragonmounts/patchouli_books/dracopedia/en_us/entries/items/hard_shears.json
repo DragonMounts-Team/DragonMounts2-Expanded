@@ -1,0 +1,15 @@
+{
+  "name": "Hard Shears",
+  "icon": "dragonmounts:diamond_shears",
+  "category": "dragonmounts:items",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Hard Shears are shears that hard enough to shear $(l:items/dragon_scales)Dragon Scales$(/l) from dragons.$(br2)See also: $(l:dragons/shearing)Shearing$(/l)"
+    },
+    {
+      "type": "crafting",
+      "recipe": "dragonmounts:diamond_shears"
+    }
+  ]
+}

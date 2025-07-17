@@ -2,8 +2,10 @@ package net.dragonmounts.inventory;
 
 import io.netty.buffer.ByteBuf;
 import mcp.MethodsReturnNonnullByDefault;
+import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.network.SSyncBannerPacket;
+import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.EntityUtil;
 import net.dragonmounts.util.ItemUtil;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +14,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.oredict.OreDictionary;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
@@ -21,6 +25,13 @@ import static net.dragonmounts.DragonMounts.NETWORK_WRAPPER;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public final class DragonInventory implements IInventory {
+    public static boolean isValidChest(ItemStack stack) {
+        return !stack.isEmpty() && ArrayUtils.contains(
+                OreDictionary.getOreIDs(stack),
+                OreDictionary.getOreID("chestWood")
+        );
+    }
+
     public final TameableDragonEntity dragon;
     /**
      * item stacks in chest
@@ -67,7 +78,42 @@ public final class DragonInventory implements IInventory {
 
     @Override
     public ItemStack decrStackSize(int slot, int count) {
-        ItemStack stack = this.getStackInSlot(slot);
+        if (slot < 0) return ItemStack.EMPTY;
+        ItemStack stack;
+        if (slot >= this.stacks.length) {
+            int take;
+            ItemStack result;
+            switch (slot -= this.stacks.length) {
+                case 4:
+                    result = this.dragon.getChest();
+                    take = Math.min(count, result.getCount());
+                    stack = result.copy();
+                    stack.shrink(take);
+                    this.dragon.setChest(stack);
+                    result.setCount(take);
+                    return result;
+                case 5:
+                    result = this.dragon.getArmor();
+                    take = Math.min(count, result.getCount());
+                    stack = result.copy();
+                    stack.shrink(take);
+                    this.dragon.setArmor(stack);
+                    result.setCount(take);
+                    return result;
+                case 6:
+                    result = this.dragon.getSaddle();
+                    take = Math.min(count, result.getCount());
+                    stack = result.copy();
+                    stack.shrink(take);
+                    this.dragon.setSaddle(stack);
+                    result.setCount(take);
+                    return result;
+                default:
+                    stack = slot < 4 ? this.banners[slot] : ItemStack.EMPTY;
+            }
+        } else {
+            stack = this.stacks[slot];
+        }
         if (stack.isEmpty()) return ItemStack.EMPTY;
         ItemStack result = stack.splitStack(count);
         if (!result.isEmpty()) {
@@ -144,13 +190,11 @@ public final class DragonInventory implements IInventory {
     }
 
     @Override
-    public void markDirty() {
-        //this.dragon.refreshInventory();
-    }
+    public void markDirty() {}
 
     @Override
     public boolean isUsableByPlayer(EntityPlayer player) {
-        return true;
+        return Relation.checkRelation(this.dragon, player).isTrusted;
     }
 
     @Override
@@ -226,14 +270,8 @@ public final class DragonInventory implements IInventory {
         if (!(stack = dragon.getArmor()).isEmpty()) {
             tag.setTag("Armor", stack.writeToNBT(new NBTTagCompound()));
         }
-        NBTTagList banners = ItemUtil.writeToNBT(this.banners);
-        if (!banners.isEmpty()) {
-            tag.setTag("Banners", banners);
-        }
-        NBTTagList stacks = ItemUtil.writeToNBT(this.stacks);
-        if (!stacks.isEmpty()) {
-            tag.setTag("Inventory", stacks);
-        }
+        DMUtils.putIfNeeded(tag, "Banners", ItemUtil.writeToNBT(this.banners));
+        DMUtils.putIfNeeded(tag, "Inventory", ItemUtil.writeToNBT(this.stacks));
     }
 
     public void readAdditionalData(NBTTagCompound tag) {

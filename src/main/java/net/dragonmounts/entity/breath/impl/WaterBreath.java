@@ -1,9 +1,14 @@
 package net.dragonmounts.entity.breath.impl;
 
+import net.dragonmounts.client.breath.impl.HydroBreathFX;
+import net.dragonmounts.config.DMConfig;
+import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathAffectedBlock;
 import net.dragonmounts.entity.breath.BreathAffectedEntity;
+import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.DragonBreath;
+import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.util.LevelUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFarmland;
@@ -15,8 +20,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 
@@ -29,11 +35,13 @@ public class WaterBreath extends DragonBreath {
     }
 
     @Override
-    public BreathAffectedBlock affectBlock(World level, BlockPos pos, BreathAffectedBlock hit) {
+    public BreathAffectedBlock affectBlock(World level, long location, BreathAffectedBlock hit) {
+        if (!DMConfig.BREATH_EFFECTS.value) return new BreathAffectedBlock();
+        BlockPos pos = BlockPos.fromLong(location);
         IBlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
-        level.spawnParticle(EnumParticleTypes.WATER_SPLASH, pos.getX(), pos.getY(), pos.getZ(), 1.0D, 4.0D, 1.0D);
         if (block == Blocks.LAVA || block == Blocks.FLOWING_LAVA) {
+            if (!DMConfig.QUENCHING_BREATH.value) return new BreathAffectedBlock();
             int value = state.getValue(BlockLiquid.LEVEL);
             if (value == 0) {
                 level.setBlockState(pos, Blocks.OBSIDIAN.getDefaultState());
@@ -45,7 +53,9 @@ public class WaterBreath extends DragonBreath {
             level.setBlockToAir(pos);
             LevelUtil.playExtinguishEffect(level, pos);
         } else if (block == Blocks.FARMLAND && state.getValue(BlockFarmland.MOISTURE) < 7) {
-            level.setBlockState(pos, state.withProperty(BlockFarmland.MOISTURE, 7));
+            int moisture = state.getValue(BlockFarmland.MOISTURE);
+            if (moisture >= 7) return hit;
+            level.setBlockState(pos, state.withProperty(BlockFarmland.MOISTURE, moisture + 1), 2);
         }
         return new BreathAffectedBlock(); // reset to zero
     }
@@ -65,5 +75,25 @@ public class WaterBreath extends DragonBreath {
         }
         target.attackEntityFrom(DamageSource.causeMobDamage(dragon), damage);
         target.knockBack(dragon, 0.2F, dragon.posX - target.posX, dragon.posZ - target.posZ);
+    }
+
+    @Override
+    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
+        world.spawnEntity(new HydroBreathFX(world, position, direction, power, partialTicks));
+    }
+
+    @Override
+    public SoundEvent getStartSound(DragonLifeStage stage) {
+        return DMSounds.DRAGON_BREATH_START_WATER;
+    }
+
+    @Override
+    public SoundEvent getLoopSound(DragonLifeStage stage) {
+        return DMSounds.DRAGON_BREATH_LOOP_WATER;
+    }
+
+    @Override
+    public SoundEvent getStopSound(DragonLifeStage stage) {
+        return DMSounds.DRAGON_BREATH_STOP_WATER;
     }
 }

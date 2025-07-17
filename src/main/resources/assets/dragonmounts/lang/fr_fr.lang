@@ -1,55 +1,58 @@
 # French Translations
 
 # Creative Menu's
-itemGroup.dragonmounts.main=DM2: Expanded
-itemGroup.dragonmounts.combat=DM2: Expanded-Equipment
+itemGroup.dragonmounts.blocks=DM2: Expanded - Blocks
+itemGroup.dragonmounts.items=DM2: Expanded - Items
+itemGroup.dragonmounts.combat=DM2: Expanded - Equipment
 
-##### Untranslated
-effect.dragonmounts.dark_dragons_grace=Dark Dragon's Grace
+effect.dragonmounts.dark_dragons_grace=Grâce du Dragon Sombre
 ##
 # Dragon Names
 ##
 entity.dragonmounts.dragon=%s Dragon
+entity.dragonmounts.dragon_egg=%s Oeuf de Dragon
 entity.dragonmounts.dragon.name=Dragon
 
 #Dragon Types
 dragon_type.dragonmounts.forest=Forêts
 dragon_type.dragonmounts.aether=Ethéré
-dragon_type.dragonmounts.ice=Givre
+dragon_type.dragonmounts.ice=Glace
 dragon_type.dragonmounts.water=Océanique
 dragon_type.dragonmounts.fire=Flammes
 dragon_type.dragonmounts.skeleton=Squelettique
 dragon_type.dragonmounts.wither=Wither
 dragon_type.dragonmounts.nether=Nether
 dragon_type.dragonmounts.ender=Ender
-dragon_type.dragonmounts.enchant=Enchanté
+dragon_type.dragonmounts.enchanted=Enchanté
 dragon_type.dragonmounts.sunlight=Solaire
 dragon_type.dragonmounts.moonlight=Lunaire
 dragon_type.dragonmounts.storm=Tempêtes
 dragon_type.dragonmounts.zombie=Zombifié
 dragon_type.dragonmounts.terra=Terrestre
-##### Untranslated
-dragon_type.dragonmounts.dark=Dark
+dragon_type.dragonmounts.dark=Sombre
 
 #Stage
 life_stage.dragon.egg=Oeuf
 life_stage.dragon.hatchling=Nouveau Né
 life_stage.dragon.infant=Enfant
-life_stage.dragon.prejuvenile=Pré-Juvenile
-life_stage.dragon.juvenile=Juvenile
+life_stage.dragon.fledgling=Pré-Juvenile
+life_stage.dragon.juvenile=Juvénile
 life_stage.dragon.adult=Adulte
 
 ##
 # Item Names
 ##
+item.dragonmounts.dragon_meat.name=Viande de Dragon crue
+item.dragonmounts.cooked_dragon_meat.name=Viande de Dragon cuite
+
 item.dragonmounts.diamond_shears.name=Cisailles en Diamants
-item.dragonmounts.dragon_spawn_egg.name=Faire Apparaitre un Dragon
-item.dragonmounts.dragon_essence.name=Essence Draconique 
+item.dragonmounts.dragon_spawn_egg.name=Oeuf de Dragon
+item.dragonmounts.dragon_essence.name=Essence Draconique
 item.dragonmounts.dragon_whistle.name=Flute Draconique
 item.dragonmounts.dragon_amulet.name=Amulette Draconique
 item.dragonmounts.dragon_orb.name=Orbe Draconique
-##### Untranslated
-item.dragonmounts.variation_orb.name=Orb of Variation
+item.dragonmounts.dragon_wand.name=Sceptre Draconique
+item.dragonmounts.variation_orb.name=Orbe de la Variation
 
 item.dragonmounts.oak_carriage.name=Nacelle en Chêne
 item.dragonmounts.birch_carriage.name=Nacelle en Bouleau
@@ -81,62 +84,46 @@ tile.dragonmounts.dragon_nest.name=Pile de bois
 tile.dragonmounts.dragon_core.name=Coeur Draconique
 tile.dragonmounts.dragon_head.name=Tête de dragon
 tile.dragonmounts.dragon_egg.name=Oeuf de dragon
+tile.dragonmounts.dragon_scale_block.name=Block d'Ecailles de Dragons
 
 ##
 # Messages
 ##
-##### May be Mismatched
-message.dragonmounts.control.toggleHovering=Passer en vol stationnaire: %s
-##### Untranslated
-message.dragonmounts.control.toggleYawAlignment=Yaw Alignment: %s
-##### Untranslated
-message.dragonmounts.control.togglePitchAlignment=Pitch Alignment: %s
-##### Untranslated
-message.dragonmounts.dragon.untamed=The dragon is untamed
+message.dragonmounts.control.toggleHovering=Vol stationnaire: %s
+message.dragonmounts.control.toggleYawAlignment=Alignement du lacet: %s
+message.dragonmounts.control.togglePitchAlignment=Alignement du tanguage: %s
+message.dragonmounts.dragon.untamed=Ce dragon n'est pas apprivoisé
 message.dragonmounts.dragon.locked=Ce dragon a été verrouillé par son propriétaire
 message.dragonmounts.dragon.notOwner=You Vous n'êtes pas le propriétaire de ce Dragon
 message.dragonmounts.dragon.tooYoung=Ce Dragon est trop jeune pour cela, attendez qu'il grandisse
-##### Untranslated
-message.dragonmounts.dragon.growthPaused=The growth of the dragon is paused
-##### Mismatched
-message.dragonmounts.egg.wrongDimension=Les oeufs de Dragons ne peuvent pas éclore dans l'End
-message.dragonmounts.whistle.success=Ce Dragon a été lié avec cette flute
-##### Untranslated
-message.dragonmounts.whistle.existing=Please Unbind the Whistle First
-message.dragonmounts.whistle.cleared=Ce Dragon a été délié
-##### "you must bind a dragon first" or "the/dragon whistle is not bound to a dragon"
-message.dragonmounts.whistle.empty=Vous devez d'abord y lier un Dragon
+message.dragonmounts.dragon.growthPaused=La croissance de ce dragon est en pause
+message.dragonmounts.egg.wrongDimension=Les oeufs de Dragons ne peuvent pas éclore dans cette dimension
+message.dragonmounts.whistle.empty=La Flûte n'est pas liée à un dragon
 message.dragonmounts.whistle.invalidPos=Téléportation impossible
-##### Mismatched
-message.dragonmounts.whistle.failed=Ce Dragon n'entend pas la Flute Draconique...
+message.dragonmounts.whistle.failed=Votre Dragon n'entend pas la Flute Draconique...
 
 ##
 # Gui Names
 ##
 container.dragonmounts.dragon_core=Coeur Draconique
 gui.dragonmounts.sit=Asseoir
+gui.dragonmounts.stand=Monter
+gui.dragonmounts.toggleSit=Asseoir / Lever
+gui.dragonmounts.toggleFollow=Suivre / Errer
 gui.dragonmounts.teleportToPlayer=Revenir vers le Joueur
-##### Untranslated
-gui.dragonmounts.unbindWhistle=Unbind Whistle
-##### Untranslated
-gui.dragonmounts.unbindWhistle.tooltip=Press Left Shift to Unlock
+gui.dragonmounts.lock.tooltip=Joueurs de confiance : %s
 
 #Controls
-key.categories.dragon=Dragon Mounts
-key.dragonmounts.breath=Souffle du Dragon
-key.dragonmounts.boost=Boost de vitesse
-key.dragonmounts.descent=Descendre du Dragon
-##### Mismatched
-key.dragonmounts.toggleCameraPos=Changer de caméra sur la monture
-##### Mismatched
-key.dragonmounts.toggleHovering=Stopper le vol stationnaire
-##### Mismatched
-key.dragonmounts.toggleYawAlignment=Suivre
-##### Mismatched
-key.dragonmounts.togglePitchAlignment=Controles par défaults
+key.categories.dragonmounts=Dragon Mounts
+key.dragonmounts.breathe=Souffle du Dragon
+key.dragonmounts.descend=Descendre du Dragon
+key.dragonmounts.toggleCameraPos=Changer la position de la caméra lorsque monté sur un dragon
+key.dragonmounts.toggleHovering=Enclencher / Stopper le vol stationnaire
+key.dragonmounts.toggleYawAlignment= Réaligner la caméra sur l'axe de lacet
+key.dragonmounts.togglePitchAlignment=Réaligner la caméra sur l'axe du tanguage
 
 tooltip.armor_effect.dragonmounts.aether=Quand le porteur court, applique l'effet Rapidité II pendant5s
-tooltip.armor_effect.dragonmounts.enchant=La cible tuée par le porteur rapporte 120% d'EXP suplémentaire
+tooltip.armor_effect.dragonmounts.enchanted=La cible tuée par le porteur rapporte 120% d'EXP suplémentaire
 tooltip.armor_effect.dragonmounts.ender=Quand la vie du porteur est en dessous de 5, applique l'effet Résistance III pendant 30s et l'éffet Force II pendant 15s
 tooltip.armor_effect.dragonmounts.fire=Quand le pôrteur est en feu, applique l'effet Résistance au feu I pendant 30s
 tooltip.armor_effect.dragonmounts.forest=Quand le porteur est bléssé, applique l'effet Régénération II pendant 10s
@@ -147,53 +134,121 @@ tooltip.armor_effect.dragonmounts.storm=Les attaques du porteur ont 5% de chance
 tooltip.armor_effect.dragonmounts.sunlight=Quand la valeur de la barre de faim du porteur est inférieure à 10, applique l'effet Saturation I pendant 10s
 tooltip.armor_effect.dragonmounts.terra=Applique l'effet Célérité I pendant 30s
 tooltip.armor_effect.dragonmounts.water=Quand le porteur est sous l'eau, applique l'effet Apnée I pendant 30s
-##### Untranslated
-tooltip.armor_effect.dragonmounts.dark=Apply Dark Dragon's Grace I effect for 30s
 tooltip.armor_effect.dragonmounts.zombie=Applique l'effet Force I pendant 15s s'il fait nuit
+tooltip.armor_effect.dragonmounts.dark=Applique l'effet Grâce du Dragon Sombre I pendant 30s
 tooltip.dragonmounts.armor_effect_cooldown=Temps de recharge: %ss
 tooltip.dragonmounts.armor_effect_fishing_luck=Quand le porteur pêche, applique l'effett Chance I pendant 10s sans temps de recharge
 tooltip.dragonmounts.armor_effect_piece_4=Ensemble de 4 pièces:
 tooltip.dragonmounts.armor_effect_remaining_cooldown=Temps de recharge restant : %ss
-# actually it is related to key binding, so the text will be changed later
 tooltip.dragonmounts.whistle=Clic Droit sur un Dragon possédé et apprivoisé pour le contrôler
-tooltip.dragonmounts.whistle.name=Flute draconique (%s)
-tooltip.dragonmounts.age=Age: %s
+tooltip.dragonmounts.variation_orb=Possibilité de changer aléatoirement la variante du dragon
+tooltip.dragonmounts.age=Âge: %s
 tooltip.dragonmounts.name=Nom: %s
 tooltip.dragonmounts.health=Vie: %s
 tooltip.dragonmounts.owner=Propriétaire: %s
 tooltip.dragonmounts.hard_shears=Utilisées pour récolter les écailles d'un Dragon apprivoisé
-# actually it is related to key binding, so the text will be changed later
-tooltip.dragonmounts.amulet.empty=Clic Droit pour stocker un Dragon et le transporter
-# actually it is related to key binding, so the text will be changed later
-tooltip.dragonmounts.amulet.usage=Clic Droit sur le sol pour le faire apparaitre
+tooltip.dragonmounts.amulet.empty=Clic Droit avec une amulettes sur un Dragon pour le stocker à l'intérieur
 tooltip.dragonmounts.carriage=Utilisé pour faire en sorte que les Dragons puissent transporter plusieurs passagers
 
-item.modifiers.equipped=When equipped:
+## vanilla entry
+item.modifiers.body=Sur le corps :
 
-##### Translated
+subtitles.entity.dragonmounts.dragon.ambient=Rugissements de Dragon
+subtitles.entity.dragonmounts.dragon.chest=Coffre de Dragon équipé
+subtitles.entity.dragonmounts.dragon.death=Un dragon est mort
+subtitles.entity.dragonmounts.dragon.roar=Rugissements de Dragon
+subtitles.entity.dragonmounts.dragon.purr=Ronronnement de Dragon
+subtitles.entity.dragonmounts.dragon.sneeze=Eternuement de Dragon
+subtitles.entity.dragonmounts.dragon.step=Buits de pas de Dragon
+subtitles.entity.dragonmounts.dragon.breath_start=Souffle de Dragon
+subtitles.entity.dragonmounts.dragon.breath_loop=Souffle de Dragon
+subtitles.entity.dragonmounts.dragon.breath_stop=Fin de souffle de Dragon
+subtitles.entity.dragonmounts.dragon_egg.shatter=L'œuf de Dragon se brise
+subtitles.entity.dragonmounts.dragon_egg.crack=L'œuf de Dragon se craquelle
+subtitles.item.dragonmounts.whistle.blow=La Flute Draconique joue
+subtitles.item.dragonmounts.variation_orb.activate=L'Orbe de Variation s'active
+
 argument.player.toomany=Seulement un joueur est autorisé, mais le sélecteur fourni en autorise plus d'un
 
 commands.dragonmounts.usage=/dragonmounts <subcommand>
-commands.dragonmounts.gender.usage=/dragonmounts gender [dragon]
-commands.dragonmounts.gender.success=The gender of %s has been set to: %s
 commands.dragonmounts.tame.usage=/dragonmounts tame [dragon]
-commands.dragonmounts.tame.success=Dragon %s is tamed by %s now
+commands.dragonmounts.tame.success=Dragon %s est maintenant apprivoisé par %s
 commands.dragonmounts.unlock.usage=/dragonmounts unlock [dragon]
-commands.dragonmounts.unlock.success=Dragon %s is unlocked now
+commands.dragonmounts.unlock.success=Dragon %s est maintenant déverrouillé
+commands.dragonmounts.size.usage=/dragonmounts size <size> [dragon]
+commands.dragonmounts.size.success=La taille de % a été changé en: %s
 commands.dragonmounts.stage.usage=/dragonmounts stage <stage> [dragon]
-commands.dragonmounts.stage.invalid='%s' is not a valid stage
-commands.dragonmounts.stage.success=The stage of %s has been set to: %s
+commands.dragonmounts.stage.invalid='%s' n'est pas un stade valide
+commands.dragonmounts.stage.success=Le stade de %s a été défini en tant que : %s
 commands.dragonmounts.type.usage=/dragonmounts type <type> [dragon]
-commands.dragonmounts.type.invalid='%s' is not a valid type
-commands.dragonmounts.type.success=The type of %s has been set to: %s
-commands.dragonmounts.notFound=Could not find dragon based on '%s'
+commands.dragonmounts.type.invalid='%s' n'est pas un type valide
+commands.dragonmounts.type.success=Le type de %s a été défini en tant que: %s
+commands.dragonmounts.notFound=Impossible de trouver un dragon basé sur '%s'
 commands.dragonmounts.unspecified=You must specify which dragon you wish to perform this action on.
-config.dragonmounts.category.main=Main
-config.dragonmounts.category.world_gen=World Generation
-config.dragonmounts.category.client=Client
-config.dragonmounts.debug=Debug
-config.dragonmounts.debug.tooltip=Enable Debug Mode
-config.dragonmounts.toggleDimensionLimitation=Allow Declared Dimensions Only
-config.dragonmounts.toggleDimensionLimitation.tooltip=If enabled, Dragon Nests will only be generated in declared dimensions; otherwise they will not be generated in the declared dimensions
-config.dragonmounts.limitedDimensions=Limited Dimensions
-config.dragonmounts.limitedDimensions.tooltip=A list of limited dimensions' numeric id
+
+config.dragonmounts.category.attributes=Attributs
+config.dragonmounts.category.attributes.tooltip=Paramètres des attributs d'entité
+config.dragonmounts.category.gameplay=Gameplay
+config.dragonmounts.category.gameplay.tooltip=Paramètres du gameplay
+config.dragonmounts.category.world_gen=Génération du Monde
+config.dragonmounts.category.world_gen.tooltip=Paramètres de la génération du monde
+config.dragonmounts.debugMode=Debug Mode
+config.dragonmounts.debugMode.tooltip=Activer le Debug Mode
+config.dragonmounts.debugOverlay=Debug Overlay
+config.dragonmounts.debugOverlay.tooltip=Activer le Debug Overlay
+config.dragonmounts.cameraDistance=Distance de la caméra
+config.dragonmounts.cameraDistance.tooltip=N'appliquer la caméra à la troisième personne uniquement lorsque qu'un dragon est chevauché
+config.dragonmounts.baseArmor=Protection par défaut
+config.dragonmounts.baseArmor.tooltip=Protection par défaut d'un dragon nouvellement apparu à l'âge adulte
+config.dragonmounts.baseArmorToughness=Durabilité de l'armure par défaut
+config.dragonmounts.baseArmorToughness.tooltip=Durabilité de l'armure par défaut d'un dragon nouvellement apparu à l'âge adulte
+config.dragonmounts.baseDamage=Dégâts par défaut
+config.dragonmounts.baseDamage.tooltip=Dégâts par défaut d'un dragon nouvellement apparu à l'âge adulte
+config.dragonmounts.baseHealth=Santé par défaut
+config.dragonmounts.baseHealth.tooltip=Santé par défaut d'un dragon nouvellement apparu à l'âge adulte
+config.dragonmounts.baseKnockbackResistance=Resistance au recul par défaut
+config.dragonmounts.baseKnockbackResistance.tooltip=Resistance au recul par défaut d'un dragon nouvellement apparu à l'âge adulte
+config.dragonmounts.baseFollowRange=Distance de suivi par défaut
+config.dragonmounts.baseFollowRange.tooltip=Distance de suivi par défaut d'un dragon nouvellement apparu à l'âge adulte
+config.dragonmounts.baseMovementSpeed=Vitesse de mouvement par défaut
+config.dragonmounts.baseMovementSpeed.tooltip=Vitesse de mouvement par défaut d'un dragon nouvellement apparu à l'âge adulte
+config.dragonmounts.baseFlyingSpeed=Vitesse de vol par défaut
+config.dragonmounts.baseFlyingSpeed.tooltip=Vitesse de vol par défaut d'un dragon nouvellement apparu à l'âge adulte
+config.dragonmounts.baseSwimmingSpeed=Vitesse de nage par défaut
+config.dragonmounts.baseSwimmingSpeed.tooltip=Vitesse de nage par défaut d'un dragon nouvellement apparu à l'âge adulte
+config.dragonmounts.baseBodySize=Taille par défaut
+config.dragonmounts.baseBodySize.tooltip=Taille par défaut d'un dragon nouvellement apparu à l'âge adulte
+config.dragonmounts.baseStepHeight=Hauteur franchissable au sol par défaur
+config.dragonmounts.baseStepHeight.tooltip=Hauteur franchissable au sol par défaur d'un dragon nouvellement apparu à l'âge adulte
+config.dragonmounts.forcedRename=Renommage forcé
+config.dragonmounts.forcedRename.tooltip=Option de renommer le dragon en renommant l'amulette
+config.dragonmounts.blockOverride=Block de remplacement
+config.dragonmounts.blockOverride.tooltip=Option d'interaction de l'œuf de dragon vanillia soit activée
+config.dragonmounts.reproductionLimit=Limite de reproduction
+config.dragonmounts.reproductionLimit.tooltip=Nombre de fois maximum qu'un dragon peut se reproduire
+config.dragonmounts.adaptiveConversion=Conversion adaptative
+config.dragonmounts.adaptiveConversion.tooltip=Option qu'un œuf de dragon change de type en fonction de l'environnement
+config.dragonmounts.breathEffects=Effets de souffle
+config.dragonmounts.breathEffects.tooltip=Option qu'un souffle de dragon applique des effets secondaire lorsqu'il touche un block
+config.dragonmounts.destructiveBreath=Souffle Destructeur
+config.dragonmounts.destructiveBreath.tooltip=Option qu'un souffle de dragon puisse détruire des blocks
+config.dragonmounts.ignitingBreath=Souffle Enflammé
+config.dragonmounts.ignitingBreath.tooltip=Option qu'un souffle de dragon semblables au feu puisse enflammer les blocks
+config.dragonmounts.smeltingBreath=Souffle de Fusion
+config.dragonmounts.smeltingBreath.tooltip=Option qu'un souffle de dragon semblables au feu puisse faire fondre les blocks
+config.dragonmounts.frostyBreath=Souffle Glaçant
+config.dragonmounts.frostyBreath.tooltip=Option qu'un souffle de dragon ressemblant à un blizzard puisse laisser de la neige au sol
+config.dragonmounts.quenchingBreath=Souffle d'Extinction
+config.dragonmounts.quenchingBreath.tooltip=Option qu'un souffle de dragon semblable à la brume puisse éteindre le feu et solidifier la lave
+config.dragonmounts.redirectInventory=Redirection d'inventaire
+config.dragonmounts.redirectInventory.tooltip=Option que l'inventaire de votre monture sois ouvert à la place du votre
+config.dragonmounts.pauseOnWhistle=Pause lors de l'utilisation de la flûte
+config.dragonmounts.pauseOnWhistle.tooltip=Option que l'utilisation de la flûte mette en pause le jeu
+config.dragonmounts.toggleDimensionLimitation=Autoriser uniquement les dimensions déclarées
+config.dragonmounts.toggleDimensionLimitation.tooltip=Si activé, les nids de dragon ne seront générés que dans les dimensions déclarées ; sinon, ils n'y seront pas générés
+config.dragonmounts.limitedDimensions=Dimensions limitées
+config.dragonmounts.limitedDimensions.tooltip=Liste des dimensions limitées' numeric id
+
+book.dragonmounts.dracopedia.name=Guide Dracopedia
+book.dragonmounts.dracopedia.desc=Description
+book.dragonmounts.dracopedia.landing=Atterrissage

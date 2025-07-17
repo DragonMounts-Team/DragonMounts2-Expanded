@@ -1,6 +1,7 @@
 package net.dragonmounts.inventory;
 
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
+import net.dragonmounts.util.DMUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -23,7 +24,10 @@ public class DragonCoreContainer extends Container {
         core.openInventory(player);
 
         //Build Dragon Core Inventory Slots
-        this.addSlotToContainer(new Slot(core, 0, 80, 36));
+        this.addSlotToContainer(DMUtils.applyBackground(
+                new Slot(core, 0, 80, 36),
+                "dragonmounts:items/slot/empty_essence"
+        ));
 
         //Build Player Inventory Slots
         for (int i1=0; i1 < 3; ++i1) {

@@ -17,7 +17,8 @@
       "conditions": {
         "items": [
           {
-            "item": "minecraft:emerald_block"
+            "type": "forge:ore_dict",
+            "ore": "blockEmerald"
           }
         ]
       }

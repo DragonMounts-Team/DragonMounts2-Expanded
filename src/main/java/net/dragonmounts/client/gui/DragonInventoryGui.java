@@ -2,123 +2,113 @@ package net.dragonmounts.client.gui;
 
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
+import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.ClientUtil;
-import net.dragonmounts.client.model.dragon.anim.DragonAnimator;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.inventory.DragonContainer;
+import net.dragonmounts.inventory.ISlotListener;
+import net.dragonmounts.inventory.WhistleSlot;
 import net.dragonmounts.network.CDragonConfigPacket;
+import net.dragonmounts.network.CRenameWhistlePacket;
+import net.dragonmounts.network.DragonStates;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
-import javax.annotation.Nonnull;
+import java.io.IOException;
 
+/**
+ * @see net.minecraft.client.gui.GuiRepair
+ */
 @SideOnly(Side.CLIENT)
-public class DragonInventoryGui extends GuiContainer {
-    public static final ResourceLocation LOCK_OPEN = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/lock_open.png");
-    public static final ResourceLocation LOCK_LOCKED = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/lock_locked.png");
-    public static final ResourceLocation LOCK_DISABLED = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/lock_disabled.png");
-    private static final ResourceLocation INVENTORY = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/dragon.png");
-    private static final ResourceLocation HUNGER_FULL = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/hunger_full.png");
-    private final TameableDragonEntity dragon;
-    private final DragonAnimator animator;
+public class DragonInventoryGui extends GuiContainer implements ISlotListener<WhistleSlot> {
+    /// 176 x 214
+    private static final ResourceLocation INVENTORY = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/dragon_inventory.png");
+    /// 147 x 214
+    private static final ResourceLocation PANEL = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/dragon_panel.png");
+    private final DragonContainer<ClientDragonEntity> container;
+    private final ClientDragonEntity dragon;
     private final EntityPlayer player;
+    private GuiTextField nameField;
     private LockButton lock;
+    private GuiButton order;
     private boolean chested;
     private String name;
+    private String label;
+    private String health;
+    private String armor;
     private String hunger;
     private String tip;
+    private String sit;
+    private String stand;
     private int size;
     private int color;
 
-    public DragonInventoryGui(EntityPlayer player, TameableDragonEntity dragon) {
-        super(new DragonContainer(dragon, player));
+    public DragonInventoryGui(EntityPlayer player, DragonContainer<ClientDragonEntity> container) {
+        super(container);
         this.player = player;
-        this.dragon = dragon;
-        this.animator = dragon.getAnimator();
-        this.allowUserInput = false;
-        this.ySize = 214;
-        this.xSize = 176;
-    }
-
-    /**
-     * Draw the foreground layer for the GuiContainer (everything in front of the
-     * items)
-     */
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        this.fontRenderer.drawString(this.name, 8, 6, this.color);
-        GlStateManager.pushMatrix();
-        GlStateManager.scale(0.6, 0.6, 0.6);
-        this.fontRenderer.drawString(this.hunger, 60, 106, 0Xe99e0c);
-        GlStateManager.popMatrix();
-    }
-
-    private void hunger(int x, int y) {
-    }
-
-    @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(INVENTORY);
-        int x = this.guiLeft, y = this.guiTop;
-        this.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize);
-        this.drawTexturedModalRect(x - 22, y + 184, 0, this.ySize, 25, 30);
-        if (this.chested) {
-            this.drawTexturedModalRect(x, y + 73, 0, 130, 170, 55);
-        }
-        this.mc.getTextureManager().bindTexture(HUNGER_FULL);
-        drawModalRectWithCustomSizedTexture(x + 26, y + 60, 0.0F, 0.0F, 9, 9, 9, 9);
-        //draw dragon entity
-        this.animator.isInGui = true;
-        GuiInventory.drawEntityOnScreen(x + 90, y + 60, this.size, x + 125 - mouseX, y + 28 - mouseY, this.dragon);
-        this.animator.isInGui = false;
+        this.dragon = container.dragon;
+        this.container = container;
+        this.allowUserInput = true;
+        this.ySize = 224;
+        this.xSize = 324;
     }
 
     @Override
     public void initGui() {
         super.initGui();
-        this.buttonList.clear();
         Keyboard.enableRepeatEvents(true);
-        int x = this.width / 2 + 45, y = this.height / 2 - 54;
-        this.buttonList.add(new GuiButton(1, x, y, 18, 20, ClientUtil.translateToLocal("gui.dragonmounts.sit")));
-        this.buttonList.add(this.lock = new LockButton(2, x + 18, y, 18, 20));
+        int x = this.guiLeft + 10, y = this.guiTop;
+        GuiTextField name = this.nameField = new GuiTextField(31, this.fontRenderer, x + 22, y + 12, 104, 12);
+        name.setTextColor(-1);
+        name.setDisabledTextColour(-1);
+        name.setEnableBackgroundDrawing(false);
+        name.setMaxStringLength(35);
+        this.buttonList.clear();
+        this.stand = ClientUtil.translateToLocal("gui.dragonmounts.stand");
+        this.buttonList.add(this.order = new GuiButton(DragonStates.SITTING_STATE, x, y + 172, 18, 20, this.sit = ClientUtil.translateToLocal("gui.dragonmounts.sit")));
+        this.buttonList.add(this.lock = new LockButton(DragonStates.LOCKED_STATE, x, y + 194, 18, 20));
         this.updateScreen();
-    }
-
-    @Override
-    protected void actionPerformed(GuiButton button) {
-        int id = button.id;
-        if (id == 1 || id == 2) {
-            DragonMounts.NETWORK_WRAPPER.sendToServer(new CDragonConfigPacket(dragon.getEntityId(), id));
-        }
+        WhistleSlot slot = this.container.whistle;
+        slot.listener = this;
+        ItemStack whistle = slot.getStack();
+        boolean enabled = !whistle.isEmpty();
+        name.setText(slot.desiredName = enabled ? whistle.getDisplayName() : "");
+        name.setEnabled(enabled);
     }
 
     @Override
     public void updateScreen() {
+        this.label = this.player.inventory.getDisplayName().getUnformattedText();
         TameableDragonEntity dragon = this.dragon;
         this.lock.enabled = dragon.isOwner(this.player);
         boolean trustOther = dragon.allowedOtherPlayers();
-        this.lock.icon = trustOther
-                ? LOCK_OPEN
+        this.lock.iconTop = trustOther
+                ? 32
                 : this.lock.enabled
-                ? LOCK_LOCKED
-                : LOCK_DISABLED;
+                ? 16
+                : 0;
         this.tip = ClientUtil.translateBothToLocal("gui.dragonmounts.lock.tooltip", trustOther ? "options.on" : "options.off");
         this.name = dragon.getName();
         this.chested = dragon.isChested();
+        this.health = String.format("%.2f/%.2f", dragon.getHealth(), dragon.getMaxHealth());
+        this.armor = String.format("%.2f", dragon.getEntityAttribute(SharedMonsterAttributes.ARMOR).getAttributeValue());
         this.hunger = dragon.getHunger() + "/100";
         this.color = dragon.getVariant().type.color;
-        switch (dragon.getLifeStageHelper().getLifeStage()) {
+        this.order.displayString = dragon.isSitting() ? this.stand : this.sit;
+        switch (dragon.lifeStageHelper.getLifeStage()) {
             case EGG:
                 this.size = 140;
                 break;
@@ -128,7 +118,7 @@ public class DragonInventoryGui extends GuiContainer {
             case INFANT:
                 this.size = 45;
                 break;
-            case PREJUVENILE:
+            case FLEDGLING:
                 this.size = 18;
                 break;
             case JUVENILE:
@@ -140,10 +130,92 @@ public class DragonInventoryGui extends GuiContainer {
         }
     }
 
+    private void renameWhistle() {
+        ItemStack stack = this.container.whistle.getStack();
+        String text = this.nameField.getText();
+        if (!stack.isEmpty() && !stack.hasDisplayName() && text.equals(stack.getDisplayName())) {
+            text = "";
+        }
+        this.container.whistle.applyName(text);
+        DragonMounts.NETWORK_WRAPPER.sendToServer(new CRenameWhistlePacket(text));
+    }
+
+    @Override
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        FontRenderer font = this.fontRenderer;
+        font.drawString(this.name, 156, 6, this.color);
+        font.drawString(this.label, 156, this.ySize - 93, 0x404040);
+        font.drawString(this.armor, 20, 33, 0xE99E0C);
+        font.drawString(this.health, 20, 44, 0xE99E0C);
+        font.drawString(this.hunger, 20, 55, 0xE99E0C);
+    }
+
+    @Override
+    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        TextureManager manager = this.mc.getTextureManager();
+        manager.bindTexture(INVENTORY);
+        int x = this.guiLeft, y = this.guiTop;
+        int invStart = x + 148;
+        this.drawTexturedModalRect(invStart, y, 0, 0, 176, this.ySize);
+        if (this.chested) {
+            this.drawTexturedModalRect(invStart, y + 73, 0, 140, 170, 55);
+        }
+        manager.bindTexture(PANEL);
+        this.drawTexturedModalRect(x, y, 0, 0, 147, this.ySize);
+        if (this.container.whistle.getHasStack()) {
+            this.drawTexturedModalRect(x + 29, y + 8, 0, this.ySize, 111, 16);
+        }
+        x += 10;
+        // armor
+        this.drawTexturedModalRect(x, y + 32, 147, 57, 9, 9);
+        // health
+        this.drawTexturedModalRect(x, y + 43, 147, 48, 9, 9);
+        // hunger
+        this.drawTexturedModalRect(x, y + 54, 147, 66, 9, 9);
+        // dragon entity
+        this.dragon.isInGui = true;
+        GuiInventory.drawEntityOnScreen(invStart + 80, y + 60, this.size, invStart + 80 - mouseX, y + 28 - mouseY, this.dragon);
+        this.dragon.isInGui = false;
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton button) {
+        int id = button.id;
+        switch (button.id) {
+            case DragonStates.SITTING_STATE:
+            case DragonStates.LOCKED_STATE:
+                DragonMounts.NETWORK_WRAPPER.sendToServer(new CDragonConfigPacket(this.dragon.getEntityId(), button.id));
+                break;
+        }
+    }
+
+    @Override
+    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        if (this.container.whistle.getHasStack() && this.nameField.textboxKeyTyped(typedChar, keyCode)) {
+            this.renameWhistle();
+        } else {
+            super.keyTyped(typedChar, keyCode);
+        }
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int button) throws IOException {
+        super.mouseClicked(mouseX, mouseY, button);
+        if (this.container.whistle.getHasStack()) {
+            this.nameField.mouseClicked(mouseX, mouseY, button);
+        }
+    }
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         super.drawScreen(mouseX, mouseY, partialTicks);
+        if (this.container.whistle.getHasStack()) {
+            GlStateManager.disableLighting();
+            GlStateManager.disableBlend();
+            this.nameField.drawTextBox();
+        }
         this.renderHoveredToolTip(mouseX, mouseY);
     }
 
@@ -155,8 +227,34 @@ public class DragonInventoryGui extends GuiContainer {
         }
     }
 
+    @Override
+    public void onGuiClosed() {
+        super.onGuiClosed();
+        Keyboard.enableRepeatEvents(false);
+    }
+
+    @Override
+    public void beforePlaceItem(WhistleSlot slot, ItemStack stack) {
+        if (stack.isEmpty()) {
+            this.nameField.setEnabled(false);
+            this.nameField.setText(slot.desiredName = "");
+        } else {
+            this.nameField.setEnabled(true);
+            String name = stack.getDisplayName();
+            if (!name.equals(slot.getStack().getDisplayName())) {
+                this.nameField.setText(slot.desiredName = name);
+            }
+        }
+    }
+
+    @Override
+    public void afterTakeItem(WhistleSlot slot, ItemStack stack) {
+        this.nameField.setText("");
+        this.nameField.setEnabled(false);
+    }
+
     static class LockButton extends GuiButton {
-        public @Nonnull ResourceLocation icon = LOCK_DISABLED;
+        public int iconTop;
 
         public LockButton(int buttonId, int x, int y, int width, int height) {
             super(buttonId, x, y, width, height, "");
@@ -166,9 +264,6 @@ public class DragonInventoryGui extends GuiContainer {
             return this.hovered;
         }
 
-        /**
-         * Draws this button to the screen.
-         */
         @Override
         public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
             if (this.visible) {
@@ -183,18 +278,8 @@ public class DragonInventoryGui extends GuiContainer {
                 this.drawTexturedModalRect(x, y, 0, 46 + i * 20, halfWidth, height);
                 this.drawTexturedModalRect(x + halfWidth, y, 200 - halfWidth, 46 + i * 20, halfWidth, height);
                 this.mouseDragged(mc, mouseX, mouseY);
-                mc.getTextureManager().bindTexture(this.icon);
-                float uv = 0.0625F * 16;
-                double renderX = x + 0.5;
-                double renderY = y + 2;
-                Tessellator tessellator = Tessellator.getInstance();
-                BufferBuilder bufferbuilder = tessellator.getBuffer();
-                bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-                bufferbuilder.pos(renderX, renderY + 16, 0.0D).tex(0, uv).endVertex();
-                bufferbuilder.pos(renderX + 16, renderY + 16, 0.0D).tex(uv, uv).endVertex();
-                bufferbuilder.pos(renderX + 16, renderY, 0.0D).tex(uv, 0).endVertex();
-                bufferbuilder.pos(renderX, renderY, 0.0D).tex(0, 0).endVertex();
-                tessellator.draw();
+                mc.getTextureManager().bindTexture(PANEL);
+                this.drawTexturedModalRect(x + 0.5F, y + 2, 147, this.iconTop, 16, 16);
             } else {
                 this.hovered = false;
             }

@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from Core.Util import ResourceLocation, JsonSerializable
 from Core.Output import Output
 
@@ -26,20 +27,32 @@ class OverrideBuilder(JsonSerializable):
       'model': self._model
     }
 
-class ModelBuilder:
+class ModelBuilder(ABC):
   def __init__(self, parent: ResourceLocation):
     self.parent = parent
     self._textures = {}
+  
+  def texture(self, slot: str, texture: ResourceLocation):
+    self._textures[slot] = texture
+    return self
+  
+  def redirect(self, slot: str, target: str):
+    self._textures[slot] = '#' + target
+    return self
+
+  @abstractmethod
+  def save(self, output: Output, path: str):
+    pass
+
+class ItemModelBuilder(ModelBuilder):
+  def __init__(self, parent: ResourceLocation):
+    super().__init__(parent)
     self._overrides = []
 
   def override(self):
     builder = OverrideBuilder(self)
     self._overrides.append(builder)
     return builder
-  
-  def texture(self, key: str, texture: ResourceLocation):
-    self._textures[key] = texture
-    return self
 
   def save(self, output: Output, path: str):
     json = {}
@@ -50,3 +63,15 @@ class ModelBuilder:
     if (len(self._overrides)):
       json['overrides'] = self._overrides
     output.accept('models/item/' + path, json)
+
+class BlockModelBuilder(ModelBuilder):
+  def __init__(self, parent: ResourceLocation):
+    super().__init__(parent)
+
+  def save(self, output: Output, path: str):
+    json = {}
+    if (self.parent is not None):
+      json['parent'] = self.parent
+    if (len(self._textures)):
+      json['textures'] = self._textures
+    output.accept('models/block/' + path, json)

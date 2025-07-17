@@ -1,6 +1,6 @@
 package net.dragonmounts.event;
 
-import net.dragonmounts.DragonMountsConfig;
+import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.item.DragonAmuletItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,7 +16,7 @@ public class AmuletRenameHandler {
 
     @SubscribeEvent
     public static void onTake(AnvilRepairEvent event) {
-        if (!DragonMountsConfig.forcedRename) return;
+        if (!DMConfig.FORCED_RENAME.value) return;
         ItemStack output = event.getItemResult();
         if (!output.isEmpty() && output.getItem() instanceof DragonAmuletItem) {
             NBTTagCompound root = output.getTagCompound();

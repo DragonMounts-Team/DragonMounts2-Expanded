@@ -1,8 +1,11 @@
 package net.dragonmounts.util;
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import com.google.common.base.Predicate;
+import net.dragonmounts.entity.Relation;
+import net.dragonmounts.entity.ServerDragonEntity;
+import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.math.MathX;
-import net.dragonmounts.util.math.Pair;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -10,21 +13,23 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeEventFactory;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.BiConsumer;
 
 public class EntityUtil {
     public static boolean addOrMergeEffect(EntityLivingBase entity, Potion effect, int duration, int amplifier, boolean ambient, boolean visible) {
@@ -47,28 +52,69 @@ public class EntityUtil {
         return true;
     }
 
-    public static void finalizeSpawn(World level, Entity entity, BlockPos pos, boolean yOffset, IEntityLivingData data) {
+    public static void ensureUUIDUnique(WorldServer level, Entity entity) {
+        UUID uuid = entity.getUniqueID();
+        while (level.getEntityFromUuid(uuid) != null) {
+            uuid = MathHelper.getRandomUUID(level.rand);
+        }
+        entity.setUniqueId(uuid);
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public static <T extends Entity> boolean finalizeSpawn(
+            WorldServer level,
+            T entity,
+            BlockPos pos,
+            boolean yOffset,
+            IEntityLivingData data,
+            BiConsumer<? super WorldServer, ? super T> modifier
+    ) {
         float x = pos.getX() + 0.5F, y = yOffset ? getSpawnHeight(level, pos) : pos.getY(), z = pos.getZ() + 0.5F;
         entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(level.rand.nextFloat() * 360.0F), 0.0F);
         if (entity instanceof EntityLiving) {
             EntityLiving $entity = (EntityLiving) entity;
             $entity.rotationYawHead = $entity.rotationYaw;
             $entity.renderYawOffset = $entity.rotationYaw;
-            if (ForgeEventFactory.doSpecialSpawn($entity, level, x, y, z, null)) return;
+            if (ForgeEventFactory.doSpecialSpawn($entity, level, x, y, z, null)) return false;
             $entity.onInitialSpawn(level.getDifficultyForLocation(new BlockPos($entity)), data);
-            level.spawnEntity(entity);
+            modifier.accept(level, entity);
+            boolean result = level.spawnEntity($entity);
             $entity.playLivingSound();
+            return result;
         }
+        return false;
     }
 
-    public static boolean notOwner(NBTTagCompound data, @Nullable EntityPlayer player, @Nullable String feedback) {
-        if (player == null) return false;
-        String owner = data.getString("OwnerUUID");
-        if (owner.isEmpty() || player.getUniqueID().toString().equals(owner)) return false;
-        if (feedback != null) {
-            player.sendStatusMessage(new TextComponentTranslation(feedback), true);
+    public static ServerDragonEntity spawnDragonFormStack(
+            WorldServer level,
+            ItemStack stack,
+            @Nullable EntityPlayer player,
+            BlockPos pos,
+            DragonType fallback,
+            BiConsumer<WorldServer, ServerDragonEntity> modifier
+    ) {
+        ServerDragonEntity dragon = new ServerDragonEntity(level);
+        NBTTagCompound root = stack.getTagCompound();
+        DragonVariant saved = null;
+        if (root != null) {
+            NBTTagCompound data = root.getCompoundTag("EntityTag");
+            if (!data.isEmpty()) {
+                if (Relation.denyIfNotOwner(data, player)) return null;
+                if (data.hasKey(DragonVariant.DATA_PARAMETER_KEY)) {
+                    saved = DragonVariant.REGISTRY.getIfPresent(new ResourceLocation(data.getString(DragonVariant.DATA_PARAMETER_KEY)));
+                }
+            }
         }
-        return true;
+        DragonVariant variant = saved == null ? fallback.variants.draw(level.rand, null) : saved;
+        return EntityUtil.finalizeSpawn(level, dragon, pos, true, null, (world, entity) -> {
+            if (stack.hasDisplayName()) {
+                entity.setCustomNameTag(stack.getDisplayName());
+            }
+            ItemMonsterPlacer.applyItemEntityDataToEntity(world, player, stack, entity);
+            entity.setVariant(variant);
+            modifier.accept(world, entity);
+            ensureUUIDUnique(world, entity);
+        }) ? dragon : null;
     }
 
     public static float getSpawnHeight(World level, BlockPos pos) {
@@ -82,10 +128,15 @@ public class EntityUtil {
         return (float) height;
     }
 
-    public static void replaceAttributeModifier(@Nullable IAttributeInstance attribute, UUID uuid, String name, double amount, int operator, boolean serializable) {
+    public static void replaceAttributeModifier(@Nullable IAttributeInstance attribute, AttributeModifier modifier) {
         if (attribute == null) return;
-        attribute.removeModifier(uuid);
-        attribute.applyModifier(new AttributeModifier(uuid, name, amount, operator).setSaved(serializable));
+        attribute.removeModifier(modifier.getID());
+        attribute.applyModifier(modifier);
+    }
+
+    public static boolean isMoving(Entity dragon) {
+        double deltaX = dragon.posX - dragon.prevPosX, deltaZ = dragon.posZ - dragon.prevPosZ;
+        return deltaX * deltaX + deltaZ * deltaZ > 2.5E-7F;
     }
 
     public static void clampYaw(Entity entity, float yaw, float limit) {
@@ -95,6 +146,28 @@ public class EntityUtil {
         entity.prevRotationYaw += limited - delta;
         entity.rotationYaw += limited - delta;
         entity.setRotationYawHead(entity.rotationYaw);
+    }
+
+    @Nullable
+    public static <T extends Entity> T findNearestEntityWithinAABB(
+            Entity self,
+            Class<? extends T> target,
+            AxisAlignedBB aabb,
+            @Nullable Predicate<? super T> filter
+    ) {
+        List<T> list = self.world.getEntitiesWithinAABB(target, aabb, filter);
+        T result = null;
+        double min = Double.MAX_VALUE;
+        for (T candidate : list) {
+            if (candidate != self) {
+                double dist = self.getDistanceSq(candidate);
+                if (dist <= min) {
+                    result = candidate;
+                    min = dist;
+                }
+            }
+        }
+        return result;
     }
 
     /**
@@ -113,12 +186,11 @@ public class EntityUtil {
      * (WEST, [3,2,6]-->[3.5, 2, 6] means the west face of the entity collided; the entity tried to move to
      * x = 3, but got pushed back to x=3.5
      */
-    public static ObjectArrayList<Pair<EnumFacing, AxisAlignedBB>> moveAndResize(Entity entity, double dx, double dy, double dz, float newWidth, float newHeight) {
-        entity.world.profiler.startSection("move and resize (dm)");
+    public static void resizeAndMove(Entity entity, double dx, double dy, double dz, float newWidth, float newHeight, ICollisionObserver observer) {
         AxisAlignedBB entityAABB = entity.getEntityBoundingBox();
-        double wDXplus = (newWidth - entity.width) / 2.0;
-        double wDYplus = (newHeight - entity.height) / 2.0;
-        double wDZplus = (newWidth - entity.width) / 2.0;
+        double wDXplus = (newWidth - entity.width) * 0.5;
+        double wDYplus = (newHeight - entity.height) * 0.5;
+        double wDZplus = (newWidth - entity.width) * 0.5;
         double wDXneg = -wDXplus;
         double wDYneg = -wDYplus;
         double wDZneg = -wDZplus;
@@ -133,7 +205,6 @@ public class EntityUtil {
             wDYplus = 0;
             wDYneg = 0;
         }
-
         if (MathX.isSignificantlyDifferent(newWidth, entity.width)) {
             for (AxisAlignedBB aabb : collidingAABB) {
                 wDXplus = aabb.calculateXOffset(entityAABB, wDXplus);
@@ -153,12 +224,8 @@ public class EntityUtil {
             wDZplus = 0;
             wDZneg = 0;
         }
-
         entityAABB = new AxisAlignedBB(entityAABB.minX + wDXneg, entityAABB.minY + wDYneg, entityAABB.minZ + wDZneg, entityAABB.maxX + wDXplus, entityAABB.maxY + wDYplus, entityAABB.maxZ + wDZplus);
-
-        double desiredDX = dx;
-        double desiredDY = dy;
-        double desiredDZ = dz;
+        double desiredDX = dx, desiredDY = dy, desiredDZ = dz;
 
         for (AxisAlignedBB aabb : collidingAABB) {
             dy = aabb.calculateYOffset(entityAABB, dy);
@@ -176,47 +243,11 @@ public class EntityUtil {
         entityAABB = entityAABB.offset(0, 0, dz);
         entity.setEntityBoundingBox(entityAABB);
 
-        entity.posX = (entityAABB.minX + entityAABB.maxX) / 2.0;
+        entity.posX = (entityAABB.minX + entityAABB.maxX) * 0.5;
         entity.posY = entityAABB.minY;
-        entity.posZ = (entityAABB.minZ + entityAABB.maxZ) / 2.0;
+        entity.posZ = (entityAABB.minZ + entityAABB.maxZ) * 0.5;
 
-        entity.collidedHorizontally = desiredDX != dx || desiredDZ != dz;
-        entity.collidedVertically = desiredDY != dy;
-        entity.onGround = entity.collidedVertically && desiredDY < 0.0;
-        entity.collided = entity.collidedHorizontally || entity.collidedVertically;
-
-        // if we collided in any direction, stop the entity's motion in that direction, and mark the truncated zone
-        //   as a collision zone - i.e if we wanted to move to dx += 0.5, but actually could only move +0.2, then the
-        //   collision zone is the region from +0.2 to +0.5
-        ObjectArrayList<Pair<EnumFacing, AxisAlignedBB>> collisions = new ObjectArrayList<>(3);
-        if (desiredDX != dx) {
-            entity.motionX = 0.0D;
-            if (desiredDX < 0) {
-                collisions.add(new Pair<>(EnumFacing.WEST, new AxisAlignedBB(entityAABB.minX + (desiredDX - dx), entityAABB.minY, entityAABB.minZ, entityAABB.minX, entityAABB.maxY, entityAABB.maxZ)));
-            } else {
-                collisions.add(new Pair<>(EnumFacing.EAST, new AxisAlignedBB(entityAABB.maxX, entityAABB.minY, entityAABB.minZ, entityAABB.maxX + (desiredDX - dx), entityAABB.maxY, entityAABB.maxZ)));
-            }
-        }
-
-        if (desiredDY != dy) {
-            entity.motionY = 0.0D;
-            if (desiredDY < 0) {
-                collisions.add(new Pair<>(EnumFacing.DOWN, new AxisAlignedBB(entityAABB.minX, entityAABB.minY + (desiredDY - dy), entityAABB.minZ, entityAABB.maxX, entityAABB.minY, entityAABB.maxZ)));
-            } else {
-                collisions.add(new Pair<>(EnumFacing.UP, new AxisAlignedBB(entityAABB.minX, entityAABB.maxY, entityAABB.minZ, entityAABB.maxX, entityAABB.maxY + (desiredDY - dy), entityAABB.maxZ)));
-            }
-        }
-
-        if (desiredDZ != dz) {
-            entity.motionZ = 0.0D;
-            if (desiredDZ < 0) {
-                collisions.add(new Pair<>(EnumFacing.NORTH, new AxisAlignedBB(entityAABB.minX, entityAABB.minY, entityAABB.minZ + (desiredDZ - dz), entityAABB.maxX, entityAABB.maxY, entityAABB.minZ)));
-            } else {
-                collisions.add(new Pair<>(EnumFacing.SOUTH, new AxisAlignedBB(entityAABB.minX, entityAABB.minY, entityAABB.maxZ, entityAABB.maxX, entityAABB.maxY, entityAABB.maxZ + (desiredDZ - dz))));
-            }
-        }
-        entity.world.profiler.endSection();
-        return collisions;
+        observer.handleMovement(desiredDX, desiredDY, desiredDZ, dx, dy, dz);
     }
 
     public static void dropItems(Entity entity, ItemStack[] stacks) {

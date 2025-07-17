@@ -1,0 +1,6 @@
+{
+  "parent": "dragonmounts:item/aether_dragon_scale_bow",
+  "textures": {
+    "layer0": "dragonmounts:items/bow/aether_dragon_scale_bow_pulling_2"
+  }
+}
