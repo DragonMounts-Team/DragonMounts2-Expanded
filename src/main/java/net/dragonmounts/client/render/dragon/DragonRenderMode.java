@@ -7,7 +7,10 @@ public enum DragonRenderMode {
     DRAGON {
         @Override
         public void render(DragonModel model, float scale) {
-            model.head.render(scale * 0.92F);
+            GlStateManager.pushMatrix();
+            GlStateManager.scale(0.92F, 0.92F, 0.92F);
+            model.head.render(scale);
+            GlStateManager.popMatrix();
             model.neck.render(scale);
             model.body.render(scale);
             model.renderLegs(scale);

@@ -282,6 +282,8 @@ public abstract class DragonMountsCompat {
         mappings.put("enchant_dragon_pickaxe", DMItems.ENCHANTED_DRAGON_SCALE_PICKAXE);
         mappings.put("enchant_dragon_hoe", DMItems.ENCHANTED_DRAGON_SCALE_HOE);
         mappings.put("enchant_dragon_shovel", DMItems.ENCHANTED_DRAGON_SCALE_SHOVEL);
+        mappings.put("enchant_dragon_amulet", DMItems.ENCHANTED_DRAGON_AMULET);
+        mappings.put("enchant_dragon_essence", DMItems.ENCHANTED_DRAGON_ESSENCE);
         suit = DMItems.ENCHANTED_DRAGON_SCALE_ARMORS;
         mappings.put("enchant_dragonscale_cap", suit.helmet);
         mappings.put("enchant_dragonscale_tunic", suit.chestplate);

@@ -1,0 +1,25 @@
+name: Feature Request
+description: Tell us about your thought
+title: "[Feat]: "
+type: "Feature"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please fill the form below
+
+  - type: textarea
+    id: background
+    attributes:
+      label: Background & Motivation
+      description: Reason why this feature is needed. If multiple features is requested, please open multiple issues for each of them.
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Detail of the Feature to Be Added or Improved
+      description: Describe the feature in detail.
+    validations:
+      required: true

@@ -78,38 +78,9 @@ public class ClientProxy extends ServerProxy {
 
         //Override mcmod.info - This looks cooler :)
         ModMetadata metadata = event.getModMetadata();
-        StringBuilder credits = new StringBuilder(2048).append('\n');
-        addCredit(credits, "BarracudaATA", "The Original Owner of Dragon Mounts.");
-        addCredit(credits, "TheRPGAdventurer", "Former author of Dragon Mounts 2.");
-        addCredit(credits, "Kingdomall", "First Developer for DM2. Overhauling many textures.");
-        addCredit(credits, "Shannieann", "Second Developer for DM2. Zombie and Terra textures. Texture artist.");
-        addCredit(credits, "UkanGundun", "Fire and Sunlight textures. Texture artist.");
-        addCredit(credits, "WolfShotz (Kay9Unit)", "Coder and codebase improvements");
-        addCredit(credits, "FlaemWing", "New nest textures, tool textures and dragon armor item textures.");
-        addCredit(credits, "AlexThe666", "Open sourcing the code for I&F, Ice and Fire Owner.");
-        addCredit(credits, "cesar_zorak", "Dragon armor model textures, breed textures and more");
-        addCredit(credits, "NightScale", "For contributing new ideas");
-        addCredit(credits, "Unakitononeko", "For the new and improved forest textures");
-        addCredit(credits, "TheGreyGhost", "Old DM1 Developer. Prototype Dragon Breath.");
-        addCredit(credits, "Tomanex", "Dragon Mounts Team Founder and Texture Artist. Revamped various textures");
-        addCredit(credits, "JDSK0ala", "Dragon Mounts Team Founder and Beta Tester");
-        addCredit(credits, "2190303755 (Number-Man)", "Lead Developer and Coder for Dragon Mounts 2: Expanded");
-        addCredit(credits, "Moaswies", "Coder for Dragon Mounts 2: Expanded");
-        addCredit(credits, "EnderEXE", "Beta Tester");
-        addCredit(credits, "Tomohiko", "For contributing Japanese localization");
-        addCredit(credits, "Signis Kerman", "For contributing French localization");
-        metadata.credits = credits.toString();
         metadata.authorList = metadata.authorList.stream().map(author ->
                 TextFormatting.GOLD.toString() + TextFormatting.BOLD + author + TextFormatting.RESET
         ).collect(Collectors.toList());
-        metadata.description +=
-                "\nTips:\n" +
-                        "1. Don't forget to right click the egg to start the hatching process\n" +
-                        "2. Also water dragon needs to be struck by lightning to become t.AQUA storm dragon\n" +
-                        "3. You can't hatch eggs in the End Dimension\n" +
-                        "4. You can press " + TextFormatting.ITALIC + "ctrl" + TextFormatting.RESET + " to enable boost flight\n" +
-                        "5. Dragons need to be of opposite genders to breed\n" +
-                        "6. Shift + right click a right clicked dragon egg to make it a block again";
     }
 
     @Override

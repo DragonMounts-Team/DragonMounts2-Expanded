@@ -26,6 +26,11 @@ public enum DragonTypeCompat implements IStringSerializable {
 
     public static final Object2ObjectMap<String, DragonType> MAPPING;
 
+    public static DragonType byId(int id) {
+        DragonTypeCompat[] types = DragonTypeCompat.values();
+        return id < 0 || id >= types.length ? DragonTypes.ENDER : types[id].type;
+    }
+
     public final DragonType type;
     public final String identifier;
 

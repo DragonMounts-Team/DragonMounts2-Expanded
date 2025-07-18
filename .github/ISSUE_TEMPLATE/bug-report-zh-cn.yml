@@ -1,0 +1,48 @@
+name: 问题反馈
+description: 向开发团队反馈你遇到的问题
+title: "[Bug]: "
+type: "Bug"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > **请在上方以一句话简短地概括你的问题作为标题**
+        > 请按下方的要求填写完整的问题表单以便定位问题。
+
+  - type: input
+    id: version
+    attributes:
+      label: 模组版本
+      description: 可在模组的文件名称或模组列表中的模组详情中找到。
+      placeholder: 例：2.1.0
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-behavior
+    attributes:
+      label: 当前行为
+      description: |
+        详细地描述问题发生前后的操作及程序行为以便复现问题。
+        **如果你的问题涉及程序崩溃，你应当附上崩溃报告或运行日志。**
+        通常，崩溃报告在游戏运行目录下的`crash-reports`文件夹内，而运行日志在游戏运行目录下的`logs`文件夹内。
+        部分启动器会提供崩溃时的日志导出选项。
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: 预期行为
+      description: 详细地描述你希望发生的行为，突出其与当前行为的差异
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: final-check
+    attributes:
+      label: 最后一步
+      description: 回顾你的描述
+      options:
+        - label: 我认为上述描述已经足够详细，开发人员可以据此复现问题。
+          required: true
