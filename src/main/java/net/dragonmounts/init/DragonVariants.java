@@ -15,6 +15,7 @@ import net.minecraft.block.material.Material;
 
 import java.util.function.Function;
 
+import static net.dragonmounts.DragonMounts.applyId;
 import static net.dragonmounts.DragonMounts.makeId;
 
 public class DragonVariants {
@@ -64,9 +65,9 @@ public class DragonVariants {
             DragonHeadWallBlock wall = new DragonHeadWallBlock(Material.CIRCUITS, variant);
             String full = name + "_dragon_head_wall";
             String base = full.substring(0, full.length() - 5);
-            item.setCreativeTab(DMItemGroups.BLOCKS).setTranslationKey(key).setRegistryName(base);
-            standing.setTranslationKey(key).setRegistryName(base);
-            wall.setTranslationKey(key).setRegistryName(full);
+            applyId(item, base).setCreativeTab(DMItemGroups.BLOCKS).setTranslationKey(key);
+            applyId(standing, base).setTranslationKey(key);
+            applyId(wall, full).setTranslationKey(key);
             return new DragonHeadBlock.Holder(standing, wall, item);
         });
     }

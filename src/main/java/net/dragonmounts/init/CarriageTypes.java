@@ -1,11 +1,12 @@
 package net.dragonmounts.init;
 
-import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.registry.CarriageType;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 
 import java.util.function.Supplier;
+
+import static net.dragonmounts.DragonMounts.applyId;
+import static net.dragonmounts.DragonMounts.makeId;
 
 public class CarriageTypes {
     // Item instances in `DMItems` have not been initialized yet, use lambda instead
@@ -17,6 +18,6 @@ public class CarriageTypes {
     public static final CarriageType DARK_OAK = create("dark_oak", () -> DMItems.DARK_OAK_CARRIAGE);
 
     static CarriageType create(String name, Supplier<Item> item) {
-        return new CarriageType.Default(item, new ResourceLocation(DragonMountsTags.MOD_ID, "textures/entities/dragon_carriage/carriage_" + name + ".png")).setRegistryName(name);
+        return applyId(new CarriageType.Default(item, makeId("textures/entities/dragon_carriage/carriage_" + name + ".png")), name);
     }
 }

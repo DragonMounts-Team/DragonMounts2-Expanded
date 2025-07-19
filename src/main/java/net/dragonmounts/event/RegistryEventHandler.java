@@ -50,6 +50,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.util.Objects;
 import java.util.function.Function;
 
+import static net.dragonmounts.DragonMounts.applyId;
 import static net.dragonmounts.DragonMounts.makeId;
 import static net.dragonmounts.DragonMountsTags.MOD_ID;
 import static net.dragonmounts.capability.DMCapabilities.DRAGON_FOOD;
@@ -143,8 +144,8 @@ public class RegistryEventHandler {
     @SubscribeEvent
     public static void registerDataSerializers(RegistryEvent.Register<DataSerializerEntry> event) {
         IForgeRegistry<DataSerializerEntry> registry = event.getRegistry();
-        registry.register(new DataSerializerEntry(CarriageType.SERIALIZER).setRegistryName(MOD_ID + ":carriage_type"));
-        registry.register(new DataSerializerEntry(DragonVariant.SERIALIZER).setRegistryName(MOD_ID + ":dragon_variant"));
+        registry.register(applyId(new DataSerializerEntry(CarriageType.SERIALIZER), "carriage_type"));
+        registry.register(applyId(new DataSerializerEntry(DragonVariant.SERIALIZER), "dragon_variant"));
     }
 
     @SubscribeEvent
@@ -164,18 +165,12 @@ public class RegistryEventHandler {
         DMSounds.INSTANCES.forEach(event.getRegistry()::register);
     }
 
-    /// Why does a mod tamper the identifier of an item in **ANOTHER** mod? 😅
-    public static ResourceLocation recoverTamperedIdentifier(Item item) {
-        ResourceLocation identifier = Objects.requireNonNull(item.getRegistryName());
-        return MOD_ID.equals(identifier.getNamespace()) ? identifier : new ResourceLocation(MOD_ID, identifier.getPath());
-    }
-
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
         Item amulet = DMItems.AMULET;
         for (Item item : DMItems.ITEMS) {
             if (amulet == item) continue;
-            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(recoverTamperedIdentifier(item), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(Objects.requireNonNull(item.getRegistryName()), "inventory"));
         }
         ModelLoader.setCustomModelResourceLocation(DMItems.DRAGON_ORB, 0, new ModelResourceLocation("dragonmounts:dragon_orb", "inventory"));
         ModelLoader.setCustomModelResourceLocation(DMItems.TEST_RUNNER, 0, new ModelResourceLocation("dragonmounts:test_runner", "inventory"));
