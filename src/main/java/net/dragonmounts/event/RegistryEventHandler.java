@@ -164,12 +164,18 @@ public class RegistryEventHandler {
         DMSounds.INSTANCES.forEach(event.getRegistry()::register);
     }
 
+    /// Why does a mod tamper the identifier of an item in **ANOTHER** mod? 😅
+    public static ResourceLocation recoverTamperedIdentifier(Item item) {
+        ResourceLocation identifier = Objects.requireNonNull(item.getRegistryName());
+        return MOD_ID.equals(identifier.getNamespace()) ? identifier : new ResourceLocation(MOD_ID, identifier.getPath());
+    }
+
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
         Item amulet = DMItems.AMULET;
         for (Item item : DMItems.ITEMS) {
             if (amulet == item) continue;
-            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(Objects.requireNonNull(item.getRegistryName()), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(recoverTamperedIdentifier(item), "inventory"));
         }
         ModelLoader.setCustomModelResourceLocation(DMItems.DRAGON_ORB, 0, new ModelResourceLocation("dragonmounts:dragon_orb", "inventory"));
         ModelLoader.setCustomModelResourceLocation(DMItems.TEST_RUNNER, 0, new ModelResourceLocation("dragonmounts:test_runner", "inventory"));
