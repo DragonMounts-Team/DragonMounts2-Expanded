@@ -2,6 +2,7 @@
  * It is advised that you do not edit anything in the build.gradle; unless you are sure of what you are doing
  */
 import com.gtnewhorizons.retrofuturagradle.mcp.InjectTagsTask
+import groovy.json.JsonSlurper
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.gradle.ext.Gradle
 
@@ -170,14 +171,27 @@ static String formatList(List<String> list) {
 }
 
 tasks.register('generateModInfo') {
-    inputs.property("version", project.version)
-    def outputFile = layout.buildDirectory.file("generated/mcmod.info").get().asFile
-    outputs.file(outputFile)
+    def config = new File("run", "build.json")
+    if (config.exists()) {
+        inputs.file config
+        doFirst {
+            def json = new JsonSlurper().parseText(config.text)
+            def suffix = json.suffix as String
+            if (json.weekly) {
+                project.version = "$project.version-${'%dw%02d'.formatted(Calendar.instance.get(Calendar.YEAR) % 100, Calendar.instance.get(Calendar.WEEK_OF_YEAR))}${suffix ?: 'a'}"
+            } else if (suffix != null && !suffix.isBlank()) {
+                project.version = "$project.version-$json.suffix"
+            }
+        }
+    }
+    inputs.property "version", project.version
+    def info = layout.buildDirectory.file("generated/mcmod.info").get().asFile
+    outputs.file info
     doLast {
-        outputFile.parentFile.mkdirs()
+        info.parentFile.mkdirs()
         //'mixin_refmap': propertyString('mixin_refmap')
         //'mixin_package': propertyString('mixin_package')
-        outputFile.text = """[{
+        info.text = """[{
   "modid": "${propertyString('mod_id')}",
   "name": "${propertyString('mod_name')}",
   "version": "$project.version",
@@ -193,7 +207,7 @@ tasks.register('generateModInfo') {
 }
 
 processResources {
-    from(generateModInfo)
+    from generateModInfo
     dependsOn generateModInfo
     // filterList.addAll(propertyStringList('mixin_configs').collect(config -> "mixins.${config}.json" as String))
     if (propertyBool('use_access_transformer')) {
@@ -361,37 +375,6 @@ tasks.register('prioritizeCoremods') {
 tasks.register('runData', Exec) {
     workingDir './data'
     commandLine 'python', 'DataGenerator.py'
-}
-
-tasks.register('appendSnapshot') {
-    String suffix = propertyString('snapshot_suffix')
-    if (suffix == 'weekly') {
-        String prefix = String.format('%dw%02d', Calendar.instance.get(Calendar.YEAR) % 100, Calendar.instance.get(Calendar.WEEK_OF_YEAR))
-        def lastBuild = new File('run', 'lastBuild.txt')
-        lastBuild.parentFile.mkdirs()
-        String snapshot
-        if (lastBuild.exists()) {
-            String text = lastBuild.text
-            if (text.length() == 6 && text.startsWith(prefix)) {
-                snapshot = prefix + (char) (text.charAt(5) + 1)
-            } else {
-                snapshot = prefix + 'a'
-            }
-        } else {
-            snapshot = prefix + 'a'
-        }
-        project.version += '-' + snapshot
-        if (gradle.startParameter.taskNames[0] == "buildSnapshot") { // ignore prepareKotlinBuildScriptModel
-            lastBuild.text = snapshot
-        }
-    } else {
-        project.version += '-' + suffix
-    }
-}
-
-tasks.register('buildSnapshot') {
-    dependsOn appendSnapshot
-    dependsOn build
 }
 
 idea.project.settings {
