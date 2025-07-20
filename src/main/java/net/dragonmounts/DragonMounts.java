@@ -30,6 +30,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.GameData;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
 @Mod(
         modid = DragonMountsTags.MOD_ID,
@@ -43,6 +44,12 @@ public class DragonMounts {
     public static ResourceLocation makeId(String name) {
         return new ResourceLocation(DragonMountsTags.MOD_ID, name);
     }
+
+    public static <T extends IForgeRegistryEntry.Impl<?>> T applyId(T entry, String name) {
+        entry.setRegistryName(DragonMountsTags.MOD_ID + ":" + name);
+        return entry;
+    }
+
     @SidedProxy(serverSide = "net.dragonmounts.proxy.ServerProxy", clientSide = "net.dragonmounts.proxy.ClientProxy")
     public static ServerProxy PROXY;
     public static final SimpleNetworkWrapper NETWORK_WRAPPER = NetworkRegistry.INSTANCE.newSimpleChannel(DragonMountsTags.MOD_ID);

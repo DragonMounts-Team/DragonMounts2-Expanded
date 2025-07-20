@@ -26,6 +26,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 
+import static net.dragonmounts.DragonMounts.applyId;
+
 @Mod.EventBusSubscriber
 public abstract class DragonMountsCompat {
     public static final String BAUBLES = "baubles";
@@ -33,8 +35,8 @@ public abstract class DragonMountsCompat {
 
     public static final int VERSION = 1;
     public static final Object2ObjectOpenHashMap<String, Item> ITEM_MAPPINGS;
-    public static final Block DRAGON_EGG_BLOCK = new DragonEggCompatBlock().setTranslationKey(HatchableDragonEggBlock.TRANSLATION_KEY).setRegistryName("dragon_egg");
-    public static final Item DRAGON_EGG_ITEM = new DragonEggCompatItem().setRegistryName("dragon_egg");
+    public static final Block DRAGON_EGG_BLOCK = applyId(new DragonEggCompatBlock().setTranslationKey(HatchableDragonEggBlock.TRANSLATION_KEY), "dragon_egg");
+    public static final Item DRAGON_EGG_ITEM = applyId(new DragonEggCompatItem(), "dragon_egg");
 
     public static void init(CompoundDataFixer fixer) {
         ModFixs mod = fixer.init(DragonMountsTags.MOD_ID, DragonMountsCompat.VERSION);
@@ -282,6 +284,8 @@ public abstract class DragonMountsCompat {
         mappings.put("enchant_dragon_pickaxe", DMItems.ENCHANTED_DRAGON_SCALE_PICKAXE);
         mappings.put("enchant_dragon_hoe", DMItems.ENCHANTED_DRAGON_SCALE_HOE);
         mappings.put("enchant_dragon_shovel", DMItems.ENCHANTED_DRAGON_SCALE_SHOVEL);
+        mappings.put("enchant_dragon_amulet", DMItems.ENCHANTED_DRAGON_AMULET);
+        mappings.put("enchant_dragon_essence", DMItems.ENCHANTED_DRAGON_ESSENCE);
         suit = DMItems.ENCHANTED_DRAGON_SCALE_ARMORS;
         mappings.put("enchant_dragonscale_cap", suit.helmet);
         mappings.put("enchant_dragonscale_tunic", suit.chestplate);

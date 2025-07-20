@@ -50,6 +50,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.util.Objects;
 import java.util.function.Function;
 
+import static net.dragonmounts.DragonMounts.applyId;
 import static net.dragonmounts.DragonMounts.makeId;
 import static net.dragonmounts.DragonMountsTags.MOD_ID;
 import static net.dragonmounts.capability.DMCapabilities.DRAGON_FOOD;
@@ -143,8 +144,8 @@ public class RegistryEventHandler {
     @SubscribeEvent
     public static void registerDataSerializers(RegistryEvent.Register<DataSerializerEntry> event) {
         IForgeRegistry<DataSerializerEntry> registry = event.getRegistry();
-        registry.register(new DataSerializerEntry(CarriageType.SERIALIZER).setRegistryName(MOD_ID + ":carriage_type"));
-        registry.register(new DataSerializerEntry(DragonVariant.SERIALIZER).setRegistryName(MOD_ID + ":dragon_variant"));
+        registry.register(applyId(new DataSerializerEntry(CarriageType.SERIALIZER), "carriage_type"));
+        registry.register(applyId(new DataSerializerEntry(DragonVariant.SERIALIZER), "dragon_variant"));
     }
 
     @SubscribeEvent

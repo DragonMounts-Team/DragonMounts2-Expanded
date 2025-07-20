@@ -55,14 +55,14 @@ public class DragonHeadBlockEntityRenderer extends TileEntitySpecialRenderer<Dra
         head.rotationPointX = head.rotationPointY = head.rotationPointZ = head.rotateAngleX = 0.0F;
         GlStateManager.translate(0.0F, -0.374375F, 0.0F);
         GlStateManager.scale(0.75F, 0.75F, 0.75F);
-        head.render(0.0625F);
+        head.render(MathX.MOJANG_MODEL_SCALE);
         if (normal) {
             GlStateManager.depthMask(true);
             manager.bindTexture(appearance.getGlow(null));
             GlStateManager.enableBlend();
             GlStateManager.blendFunc(GL_ONE, GL_ONE);
             GlStateManager.disableLighting();
-            head.render(0.0625F);
+            head.render(MathX.MOJANG_MODEL_SCALE);
             GlStateManager.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             GlStateManager.depthMask(true);
         }

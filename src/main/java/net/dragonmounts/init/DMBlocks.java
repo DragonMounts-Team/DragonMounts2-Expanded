@@ -15,6 +15,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 
+import static net.dragonmounts.DragonMounts.applyId;
 import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
 
 public class DMBlocks {
@@ -53,25 +54,25 @@ public class DMBlocks {
     public static final HatchableDragonEggBlock DARK_DRAGON_EGG;
 
     static <T extends Block> T register(String name, T block) {
-        BLOCKS.add(block.setTranslationKey(TRANSLATION_KEY_PREFIX + name).setRegistryName(name));
-        return block;
+        BLOCKS.add(block.setTranslationKey(TRANSLATION_KEY_PREFIX + name));
+        return applyId(block, name);
     }
 
     static HatchableDragonEggBlock registerDragonEgg(String name, DragonType type, BlockProperties props) {
         HatchableDragonEggBlock block = new HatchableDragonEggBlock(type, props);
         type.bindInstance(HatchableDragonEggBlock.class, block);
-        BLOCKS.add(block.setTranslationKey(HatchableDragonEggBlock.TRANSLATION_KEY).setRegistryName(name));
-        DMItems.ITEMS.add(new ItemBlock(block).setRegistryName(name));
-        return block;
+        BLOCKS.add(block.setTranslationKey(HatchableDragonEggBlock.TRANSLATION_KEY));
+        DMItems.ITEMS.add(applyId(new ItemBlock(block), name));
+        return applyId(block, name);
     }
 
     static DragonScaleBlock registerDragonScaleBlock(String name, DragonType type, MapColor color, BlockProperties props) {
         DragonScaleBlock block = new DragonScaleBlock(type, Material.IRON, color, props);
         block.setHarvestLevel("pickaxe", 3);
         type.bindInstance(DragonScaleBlock.class, block);
-        BLOCKS.add(block.setCreativeTab(CreativeTabs.BUILDING_BLOCKS).setTranslationKey(DragonScaleBlock.TRANSLATION_KEY).setRegistryName(name));
-        DMItems.ITEMS.add(new CraftableBlockItem(block, props.creativeTab).setRegistryName(name));
-        return block;
+        BLOCKS.add(block.setCreativeTab(CreativeTabs.BUILDING_BLOCKS).setTranslationKey(DragonScaleBlock.TRANSLATION_KEY));
+        DMItems.ITEMS.add(applyId(new CraftableBlockItem(block, props.creativeTab), name));
+        return applyId(block, name);
     }
 
     static {

@@ -1,0 +1,49 @@
+name: BUG Report
+description: Tell us what issue you have encountered
+title: "[Bug]: "
+type: "Bug"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > **Please use single sentence to briefly describe your issue as title above**
+        > Please follow the instruction below to fill the form so that we can locate the issue quickly
+
+  - type: input
+    id: version
+    attributes:
+      label: Mod Version
+      description: You can find it in mod detail details on mod list or the file name of mod.
+      placeholder: e.g. 2.1.0
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-behavior
+    attributes:
+      label: Current Behavior
+      description: |
+        Provide a detailed description of your operations and program behavior before and after the issue occurred to help reproduce the problem.
+        **If your issue involves a crash, you should attach the crash report or runtime log.**
+        Typically, crash reports are located in the `crash-reports` folder within the game’s running directory,
+        and runtime logs are in the `logs` folder within the game’s running directory.
+        Some launchers offer the option to export logs at the time of a crash.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: Highlighting the difference with current behavior, describe the expected one
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: final-check
+    attributes:
+      label: Last Step
+      description: Review your Form
+      options:
+        - label: I believe the description above is detailed enough for developers to reproduce the issue
+          required: true

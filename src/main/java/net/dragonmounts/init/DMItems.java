@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
+import static net.dragonmounts.DragonMounts.applyId;
 import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
 import static net.dragonmounts.util.ItemUtil.localize;
 
@@ -394,40 +395,40 @@ public class DMItems {
     public static final TestRunnerItem TEST_RUNNER = new TestRunnerItem();
 
     static <T extends Item> T createItem(String name, T item) {
-        ITEMS.add(localize(item, name).setRegistryName(name));
-        return item;
+        ITEMS.add(localize(item, name));
+        return applyId(item, name);
     }
 
     static <T extends Item> T createItem(String name, T item, @Nullable Consumer<T> init) {
-        ITEMS.add(item.setRegistryName(name));
+        ITEMS.add(applyId(item, name));
         if (init == null) return item;
         init.accept(item);
         return item;
     }
 
     static <T extends ItemFood> T createFood(String name, T food) {
-        ITEMS.add(localize(food, name).setCreativeTab(DMItemGroups.ITEMS).setRegistryName(name));
-        return food;
+        ITEMS.add(localize(food, name).setCreativeTab(DMItemGroups.ITEMS));
+        return applyId(food, name);
     }
 
     static DragonAmuletItem createDragonAmuletItem(String name, DragonType type) {
         DragonAmuletItem item = new DragonAmuletItem(type);
         type.bindInstance(DragonAmuletItem.class, item);
-        ITEMS.add(item.setContainerItem(DMItems.AMULET).setTranslationKey(DragonAmuletItem.TRANSLATION_KEY).setRegistryName(name));
-        return item;
+        ITEMS.add(item.setContainerItem(DMItems.AMULET).setTranslationKey(DragonAmuletItem.TRANSLATION_KEY));
+        return applyId(item, name);
     }
 
     static DragonArmorItem createDragonArmorItem(String name, String texture, int protection) {
         DragonArmorItem item = new DragonArmorItem(new ResourceLocation(DragonMountsTags.MOD_ID, texture), protection);
-        ITEMS.add(localize(item, name).setRegistryName(name));
-        return item;
+        ITEMS.add(localize(item, name));
+        return applyId(item, name);
     }
 
     static DragonScaleAxeItem createDragonScaleAxeItem(String name, DragonType type, Item.ToolMaterial tier, float attackDamageModifier, float attackSpeedModifier) {
         DragonScaleAxeItem item = new DragonScaleAxeItem(tier, type, attackDamageModifier, attackSpeedModifier);
         type.bindInstance(DragonScaleAxeItem.class, item);
-        ITEMS.add(item.setTranslationKey(DragonScaleAxeItem.TRANSLATION_KEY).setRegistryName(name));
-        return item;
+        ITEMS.add(item.setTranslationKey(DragonScaleAxeItem.TRANSLATION_KEY));
+        return applyId(item, name);
     }
 
     static DragonScaleAxeItem createDragonScaleAxeItem(String name, DragonType type, Item.ToolMaterial tier) {
@@ -437,29 +438,29 @@ public class DMItems {
     static DragonScaleBowItem createDragonScaleBowItem(String name, DragonType type, Item.ToolMaterial tier) {
         DragonScaleBowItem item = new DragonScaleBowItem(type, tier);
         type.bindInstance(DragonScaleBowItem.class, item);
-        ITEMS.add(item.setTranslationKey(DragonScaleBowItem.TRANSLATION_KEY).setRegistryName(name));
-        return item;
+        ITEMS.add(item.setTranslationKey(DragonScaleBowItem.TRANSLATION_KEY));
+        return applyId(item, name);
     }
 
     static DragonEssenceItem createDragonEssenceItem(String name, DragonType type) {
         DragonEssenceItem item = new DragonEssenceItem(type);
         type.bindInstance(DragonEssenceItem.class, item);
-        ITEMS.add(item.setTranslationKey(DragonEssenceItem.TRANSLATION_KEY).setRegistryName(name));
-        return item;
+        ITEMS.add(item.setTranslationKey(DragonEssenceItem.TRANSLATION_KEY));
+        return applyId(item, name);
     }
 
     static DragonScaleHoeItem createDragonScaleHoeItem(String name, DragonType type, Item.ToolMaterial tier) {
         DragonScaleHoeItem item = new DragonScaleHoeItem(tier, type);
         type.bindInstance(DragonScaleHoeItem.class, item);
-        ITEMS.add(item.setTranslationKey(DragonScaleHoeItem.TRANSLATION_KEY).setRegistryName(name));
-        return item;
+        ITEMS.add(item.setTranslationKey(DragonScaleHoeItem.TRANSLATION_KEY));
+        return applyId(item, name);
     }
 
     static DragonScalePickaxeItem createDragonScalePickaxeItem(String name, DragonType type, Item.ToolMaterial tier) {
         DragonScalePickaxeItem item = new DragonScalePickaxeItem(tier, type);
         type.bindInstance(DragonScalePickaxeItem.class, item);
-        ITEMS.add(item.setTranslationKey(DragonScalePickaxeItem.TRANSLATION_KEY).setRegistryName(name));
-        return item;
+        ITEMS.add(item.setTranslationKey(DragonScalePickaxeItem.TRANSLATION_KEY));
+        return applyId(item, name);
     }
 
     static DragonScaleArmorSuit createDragonScaleArmors(
@@ -473,51 +474,51 @@ public class DMItems {
     ) {
         DragonScaleArmorSuit suit = new DragonScaleArmorSuit(material, type, effect);
         type.bindInstance(DragonScaleArmorSuit.class, suit);
-        ITEMS.add(suit.helmet.setTranslationKey(DragonScaleArmorSuit.TRANSLATION_KEY_HELMET).setRegistryName(helmet));
-        ITEMS.add(suit.chestplate.setTranslationKey(DragonScaleArmorSuit.TRANSLATION_KEY_CHESTPLATE).setRegistryName(chestplate));
-        ITEMS.add(suit.leggings.setTranslationKey(DragonScaleArmorSuit.TRANSLATION_KEY_LEGGINGS).setRegistryName(leggings));
-        ITEMS.add(suit.boots.setTranslationKey(DragonScaleArmorSuit.TRANSLATION_KEY_BOOTS).setRegistryName(boots));
+        ITEMS.add(applyId(suit.helmet.setTranslationKey(DragonScaleArmorSuit.TRANSLATION_KEY_HELMET), helmet));
+        ITEMS.add(applyId(suit.chestplate.setTranslationKey(DragonScaleArmorSuit.TRANSLATION_KEY_CHESTPLATE), chestplate));
+        ITEMS.add(applyId(suit.leggings.setTranslationKey(DragonScaleArmorSuit.TRANSLATION_KEY_LEGGINGS), leggings));
+        ITEMS.add(applyId(suit.boots.setTranslationKey(DragonScaleArmorSuit.TRANSLATION_KEY_BOOTS), boots));
         return suit;
     }
 
     static DragonScalesItem createDragonScalesItem(String name, DragonType type) {
         DragonScalesItem item = new DragonScalesItem(type);
         type.bindInstance(DragonScalesItem.class, item);
-        ITEMS.add(item.setTranslationKey(DragonScalesItem.TRANSLATION_KEY).setRegistryName(name));
-        return item;
+        ITEMS.add(item.setTranslationKey(DragonScalesItem.TRANSLATION_KEY));
+        return applyId(item, name);
     }
 
     static DragonScaleShieldItem createDragonScaleShieldItem(String name, DragonType type, ItemArmor.ArmorMaterial material) {
         DragonScaleShieldItem item = new DragonScaleShieldItem(type, material);
         type.bindInstance(DragonScaleShieldItem.class, item);
-        ITEMS.add(item.setTranslationKey(DragonScaleShieldItem.TRANSLATION_KEY).setRegistryName(name));
-        return item;
+        ITEMS.add(item.setTranslationKey(DragonScaleShieldItem.TRANSLATION_KEY));
+        return applyId(item, name);
     }
 
     static DragonScaleShovelItem createDragonScaleShovelItem(String name, DragonType type, Item.ToolMaterial tier) {
         DragonScaleShovelItem item = new DragonScaleShovelItem(tier, type);
         type.bindInstance(DragonScaleShovelItem.class, item);
-        ITEMS.add(item.setTranslationKey(DragonScaleShovelItem.TRANSLATION_KEY).setRegistryName(name));
-        return item;
+        ITEMS.add(item.setTranslationKey(DragonScaleShovelItem.TRANSLATION_KEY));
+        return applyId(item, name);
     }
 
     static DragonScaleSwordItem createDragonScaleSwordItem(String name, DragonType type, Item.ToolMaterial tier) {
         DragonScaleSwordItem item = new DragonScaleSwordItem(tier, type);
         type.bindInstance(DragonScaleSwordItem.class, item);
-        ITEMS.add(item.setTranslationKey(DragonScaleSwordItem.TRANSLATION_KEY).setRegistryName(name));
-        return item;
+        ITEMS.add(item.setTranslationKey(DragonScaleSwordItem.TRANSLATION_KEY));
+        return applyId(item, name);
     }
 
     static DragonSpawnEggItem createDragonSpawnEgg(String name, DragonType type, int background, int highlight) {
         DragonSpawnEggItem item = new DragonSpawnEggItem(type, background, highlight);
         type.bindInstance(DragonSpawnEggItem.class, item);
-        ITEMS.add(item.setTranslationKey(DragonSpawnEggItem.TRANSLATION_KEY).setRegistryName(name));
-        return item;
+        ITEMS.add(item.setTranslationKey(DragonSpawnEggItem.TRANSLATION_KEY));
+        return applyId(item, name);
     }
 
     static {
-        DRAGON_ORB.setTranslationKey(TRANSLATION_KEY_PREFIX + "dragon_orb").setRegistryName("dragon_orb");
-        TEST_RUNNER.setRegistryName("test_runner");
+        applyId(DRAGON_ORB.setTranslationKey(TRANSLATION_KEY_PREFIX + "dragon_orb"), "dragon_orb");
+        applyId(TEST_RUNNER, "test_runner");
         for (DragonVariant variant : DragonVariants.BUILTIN_VALUES) {
             ITEMS.add(variant.head.item);
         }

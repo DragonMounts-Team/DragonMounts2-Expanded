@@ -43,10 +43,7 @@ public class DragonEggCompatBlock extends HatchableDragonEggBlock {
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        DragonTypeCompat[] types = DragonTypeCompat.values();
-        return meta < 0 || meta >= types.length
-                ? DMBlocks.ENDER_DRAGON_EGG.getDefaultState()
-                : types[meta].type.getInstance(HatchableDragonEggBlock.class, DMBlocks.ENDER_DRAGON_EGG).getDefaultState();
+        return this.getDragonType(meta).getInstance(HatchableDragonEggBlock.class, DMBlocks.ENDER_DRAGON_EGG).getDefaultState();
     }
 
     @Override
@@ -55,7 +52,7 @@ public class DragonEggCompatBlock extends HatchableDragonEggBlock {
     }
 
     @Override
-    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {}
+    public void getSubBlocks(CreativeTabs item, NonNullList<ItemStack> items) {}
 
     @Override
     public int damageDropped(IBlockState state) {
@@ -64,8 +61,6 @@ public class DragonEggCompatBlock extends HatchableDragonEggBlock {
 
     @Override
     public DragonType getDragonType(int meta) {
-        DragonTypeCompat[] types = DragonTypeCompat.values();
-        return meta < 0 || meta >= types.length ? this.type : types[meta].type;
+        return DragonTypeCompat.byId(meta);
     }
-
 }

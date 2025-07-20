@@ -2,6 +2,7 @@
  * It is advised that you do not edit anything in the build.gradle; unless you are sure of what you are doing
  */
 import com.gtnewhorizons.retrofuturagradle.mcp.InjectTagsTask
+import groovy.json.JsonSlurper
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.gradle.ext.Gradle
 
@@ -165,28 +166,50 @@ if (propertyBool('use_access_transformer')) {
     }
 }
 
-processResources {
+static String formatList(List<String> list) {
+    return list.isEmpty() ? '[]' : '["' + list.join('", "') + '"]'
+}
 
-    def filterList = ['mcmod.info', 'pack.mcmeta']
-    filterList.addAll(propertyStringList('mixin_configs').collect(config -> "mixins.${config}.json" as String))
-
-    filesMatching(filterList) { fcd ->
-        def authors = propertyStringList('mod_authors', ',')
-        fcd.expand(
-                'mod_id': propertyString('mod_id'),
-                'mod_name': propertyString('mod_name'),
-                'mod_version': project.version,
-                'mod_description': propertyString('mod_description'),
-                'mod_authors': authors.isEmpty() ? "" : authors.join('", "'),
-                'mod_credits': propertyString('mod_credits'),
-                'mod_url': propertyString('mod_url'),
-                'mod_update_json': propertyString('mod_update_json'),
-                'mod_logo_path': propertyString('mod_logo_path'),
-                'mixin_refmap': propertyString('mixin_refmap'),
-                'mixin_package': propertyString('mixin_package')
-        )
+tasks.register('generateModInfo') {
+    def config = new File("run", "build.json")
+    if (config.exists()) {
+        inputs.file config
+        doFirst {
+            def json = new JsonSlurper().parseText(config.text)
+            def suffix = json.suffix as String
+            if (json.weekly) {
+                project.version = "$project.version-${'%dw%02d'.formatted(Calendar.instance.get(Calendar.YEAR) % 100, Calendar.instance.get(Calendar.WEEK_OF_YEAR))}${suffix ?: 'a'}"
+            } else if (suffix != null && !suffix.isBlank()) {
+                project.version = "$project.version-$json.suffix"
+            }
+        }
     }
+    inputs.property "version", project.version
+    def info = layout.buildDirectory.file("generated/mcmod.info").get().asFile
+    outputs.file info
+    doLast {
+        info.parentFile.mkdirs()
+        //'mixin_refmap': propertyString('mixin_refmap')
+        //'mixin_package': propertyString('mixin_package')
+        info.text = """[{
+  "modid": "${propertyString('mod_id')}",
+  "name": "${propertyString('mod_name')}",
+  "version": "$project.version",
+  "mcversion": "1.12.2",
+  "description": "${propertyString('mod_description')}",
+  "authorList": ${formatList(propertyStringList('mod_authors', ',') as List<String>)},
+  "credits": "${propertyString('mod_credits')}",
+  "url": "${propertyString('mod_url')}",
+  "updateJSON": "${propertyString('mod_update_json')}",
+  "logoFile": "${propertyString('mod_logo_path')}"
+}]"""
+    }
+}
 
+processResources {
+    from generateModInfo
+    dependsOn generateModInfo
+    // filterList.addAll(propertyStringList('mixin_configs').collect(config -> "mixins.${config}.json" as String))
     if (propertyBool('use_access_transformer')) {
         def name = "${propertyString('mod_id')}_at.cfg"
         exclude name
@@ -352,32 +375,6 @@ tasks.register('prioritizeCoremods') {
 tasks.register('runData', Exec) {
     workingDir './data'
     commandLine 'python', 'DataGenerator.py'
-}
-
-tasks.register('appendSnapshot') {
-    String prefix = String.format("%dw%02d", Calendar.instance.get(Calendar.YEAR) % 100, Calendar.instance.get(Calendar.WEEK_OF_YEAR))
-    def lastBuild = new File("run", "lastBuild.txt")
-    lastBuild.parentFile.mkdirs()
-    String snapshot
-    if (lastBuild.exists()) {
-        String text = lastBuild.text
-        if (text.length() == 6 && text.startsWith(prefix)) {
-            snapshot = prefix + (char) (text.charAt(5) + 1)
-        } else {
-            snapshot = prefix + 'a'
-        }
-    } else {
-        snapshot = prefix + 'a'
-    }
-    project.version += '-' + snapshot
-    if (gradle.startParameter.taskNames[0] == "buildSnapshot") { // ignore prepareKotlinBuildScriptModel
-        lastBuild.text = snapshot
-    }
-}
-
-tasks.register('buildSnapshot') {
-    dependsOn appendSnapshot
-    dependsOn build
 }
 
 idea.project.settings {
