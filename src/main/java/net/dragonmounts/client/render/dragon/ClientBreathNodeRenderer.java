@@ -25,14 +25,9 @@ public class ClientBreathNodeRenderer extends Render<ClientBreathNodeEntity> {
         float scale = entity.getRenderScale();
         GlStateManager.scale(scale, scale, scale);
         GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-        if (entity.extraRotation) {
-            if (entity.getRandom().nextInt(4) == 0) {
-                GlStateManager.rotate(entity.ticksExisted * 30, 0, 0, 1);
-            }
-            GlStateManager.rotate(this.renderManager.options.thirdPersonView == 2 ? this.renderManager.playerViewX : -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-            GlStateManager.rotate(entity.ticksExisted * 40, 0, 0, 1);
-        } else {
-            GlStateManager.rotate(this.renderManager.options.thirdPersonView == 2 ? this.renderManager.playerViewX : -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(this.renderManager.options.thirdPersonView == 2 ? this.renderManager.playerViewX : -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+        if (entity.extraRotation != 0.0F) {
+            GlStateManager.rotate((entity.ticksExisted + partialTicks) * entity.extraRotation, 0, 0, 1);
         }
         if (this.renderOutlines) {
             GlStateManager.enableColorMaterial();
@@ -59,6 +54,7 @@ public class ClientBreathNodeRenderer extends Render<ClientBreathNodeEntity> {
         GlStateManager.popMatrix();
     }
 
+    @Override
     protected ResourceLocation getEntityTexture(ClientBreathNodeEntity entity) {
         return entity.getTexture();
     }

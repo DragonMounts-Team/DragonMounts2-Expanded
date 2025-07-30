@@ -1,10 +1,8 @@
 package net.dragonmounts.entity.breath.impl;
 
-import net.dragonmounts.client.breath.impl.WitherBreathFX;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathAffectedBlock;
 import net.dragonmounts.entity.breath.BreathAffectedEntity;
-import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.util.EntityUtil;
 import net.minecraft.block.Block;
@@ -16,7 +14,6 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 /**
@@ -50,10 +47,5 @@ public class WitherBreath extends DragonBreath {
         float density = hit.getHitDensity();
         target.attackEntityFrom(DamageSource.causeMobDamage(this.dragon), this.damage * density);
         EntityUtil.addOrMergeEffect(target, MobEffects.POISON, (int) (4 * hit.getHitDensity()), 0, false, true);
-    }
-
-    @Override
-    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
-        world.spawnEntity(new WitherBreathFX(world, position, direction, power, partialTicks));
     }
 }

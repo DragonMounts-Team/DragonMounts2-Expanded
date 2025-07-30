@@ -1,18 +1,15 @@
 package net.dragonmounts.entity.breath.impl;
 
-import net.dragonmounts.client.breath.impl.NetherBreathFX;
 import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathAffectedBlock;
 import net.dragonmounts.entity.breath.BreathAffectedEntity;
-import net.dragonmounts.entity.breath.BreathPower;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -66,10 +63,5 @@ public class NetherBreath extends FireBreath {
         if (target.isWet()) damage *= 2.0F;
         target.attackEntityFrom(DamageSource.causeMobDamage(this.dragon), damage);
         target.setFire(8);
-    }
-
-    @Override
-    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
-        world.spawnEntity(new NetherBreathFX(world, position, direction, power, partialTicks));
     }
 }

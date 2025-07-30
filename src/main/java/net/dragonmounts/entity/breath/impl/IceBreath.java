@@ -1,12 +1,10 @@
 package net.dragonmounts.entity.breath.impl;
 
-import net.dragonmounts.client.breath.impl.IceBreathFX;
 import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathAffectedBlock;
 import net.dragonmounts.entity.breath.BreathAffectedEntity;
-import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.util.EntityUtil;
@@ -23,7 +21,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 /**
@@ -77,11 +74,6 @@ public class IceBreath extends DragonBreath {
         target.attackEntityFrom(DamageSource.causeMobDamage(dragon), damage);
         EntityUtil.addOrMergeEffect(target, MobEffects.SLOWNESS, (int) (2 * hit.getHitDensity()), 0, false, true);
         target.knockBack(dragon, 0.1F, dragon.posX - target.posX, dragon.posZ - target.posZ);
-    }
-
-    @Override
-    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
-        world.spawnEntity(new IceBreathFX(world, position, direction, power, partialTicks));
     }
 
     @Override

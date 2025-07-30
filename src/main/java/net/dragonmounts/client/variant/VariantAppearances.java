@@ -1,8 +1,10 @@
 package net.dragonmounts.client.variant;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.dragonmounts.client.breath.BuiltinBreathTextures;
+import net.dragonmounts.client.breath.impl.*;
 import net.dragonmounts.client.model.dragon.BuiltinFactory;
-import net.dragonmounts.client.model.dragon.IModelFactory;
+import net.dragonmounts.client.variant.DefaultAppearance.Builder;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.NoSuchElementException;
@@ -13,61 +15,152 @@ import static net.dragonmounts.DragonMountsTags.MOD_ID;
 import static net.dragonmounts.client.variant.VariantAppearance.TEXTURES_ROOT;
 
 public class VariantAppearances {
-    public static VariantAppearance makeAppearance(String namespace, String path, IModelFactory factory) {
-        StringBuilder builder = new StringBuilder(TEXTURES_ROOT + path);
-        int length = builder.length();
-        return new DefaultAppearance(
-                new ResourceLocation(namespace, TEXTURES_ROOT + path + "/body.png"),
-                new ResourceLocation(namespace, TEXTURES_ROOT + path + "/glow.png"),
-                factory
-        );
-    }
-
-    public static final VariantAppearance AETHER_FEMALE = makeAppearance(MOD_ID, "aether/female", BuiltinFactory.NORMAL);
-    public static final VariantAppearance AETHER_MALE = makeAppearance(MOD_ID, "aether/male", BuiltinFactory.NORMAL);
-    public static final VariantAppearance DARK_FEMALE = makeAppearance(MOD_ID, "dark/female", BuiltinFactory.NORMAL);
-    public static final VariantAppearance DARK_MALE = makeAppearance(MOD_ID, "dark/male", BuiltinFactory.NORMAL);
-    public static final VariantAppearance ENCHANTED_FEMALE = makeAppearance(MOD_ID, "enchanted/female", BuiltinFactory.NORMAL);
-    public static final VariantAppearance ENCHANTED_MALE = makeAppearance(MOD_ID, "enchanted/male", BuiltinFactory.NORMAL);
-    public static final VariantAppearance ENDER_FEMALE = makeAppearance(MOD_ID, "ender/female", BuiltinFactory.NORMAL);
-    public static final VariantAppearance ENDER_MALE = makeAppearance(MOD_ID, "ender/male", BuiltinFactory.NORMAL);
-    public static final VariantAppearance ENDER_RARE = makeAppearance(MOD_ID, "ender/rare", BuiltinFactory.NORMAL);
-    public static final VariantAppearance FIRE_FEMALE = makeAppearance(MOD_ID, "fire/female", BuiltinFactory.NORMAL);
-    public static final VariantAppearance FIRE_MALE = makeAppearance(MOD_ID, "fire/male", BuiltinFactory.NORMAL);
-    public static final VariantAppearance FIRE_RARE = makeAppearance(MOD_ID, "fire/rare", BuiltinFactory.NORMAL);
+    public static final VariantAppearance AETHER_FEMALE;
+    public static final VariantAppearance AETHER_MALE;
+    public static final VariantAppearance DARK_FEMALE;
+    public static final VariantAppearance DARK_MALE;
+    public static final VariantAppearance ENCHANTED_FEMALE;
+    public static final VariantAppearance ENCHANTED_MALE;
+    public static final VariantAppearance ENDER_FEMALE;
+    public static final VariantAppearance ENDER_MALE;
+    public static final VariantAppearance ENDER_RARE;
+    public static final VariantAppearance FIRE_FEMALE;
+    public static final VariantAppearance FIRE_MALE;
+    public static final VariantAppearance FIRE_RARE;
     public static final VariantAppearance FOREST_FEMALE;
     public static final VariantAppearance FOREST_MALE;
     public static final VariantAppearance FOREST_DRY_FEMALE;
     public static final VariantAppearance FOREST_DRY_MALE;
     public static final VariantAppearance FOREST_TAIGA_FEMALE;
     public static final VariantAppearance FOREST_TAIGA_MALE;
-    public static final VariantAppearance ICE_FEMALE = makeAppearance(MOD_ID, "ice/female", BuiltinFactory.TAIL_SCALE_INCLINED);
-    public static final VariantAppearance ICE_MALE = makeAppearance(MOD_ID, "ice/male", BuiltinFactory.TAIL_SCALE_INCLINED);
-    public static final VariantAppearance MOONLIGHT_FEMALE = makeAppearance(MOD_ID, "moonlight/female", BuiltinFactory.NORMAL);
-    public static final VariantAppearance MOONLIGHT_MALE = makeAppearance(MOD_ID, "moonlight/male", BuiltinFactory.NORMAL);
-    public static final VariantAppearance NETHER_FEMALE = makeAppearance(MOD_ID, "nether/female", BuiltinFactory.NORMAL);
-    public static final VariantAppearance NETHER_MALE = makeAppearance(MOD_ID, "nether/male", BuiltinFactory.NORMAL);
-    public static final VariantAppearance SKELETON = makeAppearance(MOD_ID, "skeleton", BuiltinFactory.SKELETON);
-    public static final VariantAppearance STORM_FEMALE = makeAppearance(MOD_ID, "storm/female", BuiltinFactory.TAIL_HORNED);
-    public static final VariantAppearance STORM_MALE = makeAppearance(MOD_ID, "storm/male", BuiltinFactory.TAIL_HORNED);
-    public static final VariantAppearance STORM_RARE = makeAppearance(MOD_ID, "storm/rare", BuiltinFactory.TAIL_HORNED);
-    public static final VariantAppearance SUNLIGHT_FEMALE = makeAppearance(MOD_ID, "sunlight/female", BuiltinFactory.NORMAL);
-    public static final VariantAppearance SUNLIGHT_MALE = makeAppearance(MOD_ID, "sunlight/male", BuiltinFactory.NORMAL);
-    public static final VariantAppearance TERRA_FEMALE = makeAppearance(MOD_ID, "terra/female", BuiltinFactory.NORMAL);
-    public static final VariantAppearance TERRA_MALE = makeAppearance(MOD_ID, "terra/male", BuiltinFactory.NORMAL);
-    public static final VariantAppearance WATER_FEMALE = makeAppearance(MOD_ID, "water/female", BuiltinFactory.TAIL_HORNED);
-    public static final VariantAppearance WATER_MALE = makeAppearance(MOD_ID, "water/male", BuiltinFactory.TAIL_HORNED);
-    public static final VariantAppearance WITHER = makeAppearance(MOD_ID, "wither", BuiltinFactory.SKELETON);
-    public static final VariantAppearance ZOMBIE = makeAppearance(MOD_ID, "zombie", BuiltinFactory.TAIL_HORNED);
+    public static final VariantAppearance ICE_FEMALE;
+    public static final VariantAppearance ICE_MALE;
+    public static final VariantAppearance MOONLIGHT_FEMALE;
+    public static final VariantAppearance MOONLIGHT_MALE;
+    public static final VariantAppearance NETHER_FEMALE;
+    public static final VariantAppearance NETHER_MALE;
+    public static final VariantAppearance NETHER_RARE;
+    public static final VariantAppearance SKELETON;
+    public static final VariantAppearance STORM_FEMALE;
+    public static final VariantAppearance STORM_MALE;
+    public static final VariantAppearance STORM_RARE;
+    public static final VariantAppearance SUNLIGHT_FEMALE;
+    public static final VariantAppearance SUNLIGHT_MALE;
+    public static final VariantAppearance TERRA_FEMALE;
+    public static final VariantAppearance TERRA_MALE;
+    public static final VariantAppearance WATER_FEMALE;
+    public static final VariantAppearance WATER_MALE;
+    public static final VariantAppearance WITHER;
+    public static final VariantAppearance ZOMBIE;
 
     static {
+        Builder builder = new Builder(BuiltinFactory.NORMAL)
+                .withBreath(BuiltinBreathTextures.AIRFLOW_BREATH, AirflowBreathParticle.FACTORY);
+        AETHER_FEMALE = builder.build(MOD_ID, "aether/female");
+        AETHER_MALE = builder.build(MOD_ID, "aether/male");
+    }
+
+    static {
+        Builder builder = new Builder(BuiltinFactory.NORMAL)
+                .withBreath(BuiltinBreathTextures.DARK_BREATH);
+        DARK_FEMALE = builder.build(MOD_ID, "dark/female");
+        DARK_MALE = builder.build(MOD_ID, "dark/male");
+    }
+
+    static {
+        Builder builder = new Builder(BuiltinFactory.NORMAL);
+        ENCHANTED_FEMALE = builder.build(MOD_ID, "enchanted/female");
+        ENCHANTED_MALE = builder.build(MOD_ID, "enchanted/male");
+    }
+
+    static {
+        Builder builder = new Builder(BuiltinFactory.NORMAL)
+                .withBreath(BuiltinBreathTextures.ENDER_BREATH, EnderBreathParticle.FACTORY);
+        ENDER_FEMALE = builder.build(MOD_ID, "ender/female");
+        ENDER_MALE = builder.build(MOD_ID, "ender/male");
+        ENDER_RARE = builder.build(MOD_ID, "ender/rare");
+    }
+
+    static {
+        Builder builder = new Builder(BuiltinFactory.NORMAL);
+        FIRE_FEMALE = builder.build(MOD_ID, "fire/female");
+        FIRE_MALE = builder.build(MOD_ID, "fire/male");
+        FIRE_RARE = builder.build(MOD_ID, "fire/rare");
+    }
+
+    static {
+        Builder builder = new Builder(BuiltinFactory.NORMAL);
         ResourceLocation glow = makeId(TEXTURES_ROOT + "forest/glow.png");
-        FOREST_FEMALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "forest/forest/female_body.png"), glow, BuiltinFactory.NORMAL);
-        FOREST_MALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "forest/forest/male_body.png"), glow, BuiltinFactory.NORMAL);
-        FOREST_DRY_FEMALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "forest/dry/female_body.png"), glow, BuiltinFactory.NORMAL);
-        FOREST_DRY_MALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "forest/dry/male_body.png"), glow, BuiltinFactory.NORMAL);
-        FOREST_TAIGA_FEMALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "forest/taiga/female_body.png"), glow, BuiltinFactory.NORMAL);
-        FOREST_TAIGA_MALE = new DefaultAppearance(makeId(TEXTURES_ROOT + "forest/taiga/male_body.png"), glow, BuiltinFactory.NORMAL);
+        FOREST_FEMALE = builder.build(makeId(TEXTURES_ROOT + "forest/forest/female_body.png"), glow);
+        FOREST_MALE = builder.build(makeId(TEXTURES_ROOT + "forest/forest/male_body.png"), glow);
+        FOREST_DRY_FEMALE = builder.build(makeId(TEXTURES_ROOT + "forest/dry/female_body.png"), glow);
+        FOREST_DRY_MALE = builder.build(makeId(TEXTURES_ROOT + "forest/dry/male_body.png"), glow);
+        FOREST_TAIGA_FEMALE = builder.build(makeId(TEXTURES_ROOT + "forest/taiga/female_body.png"), glow);
+        FOREST_TAIGA_MALE = builder.build(makeId(TEXTURES_ROOT + "forest/taiga/male_body.png"), glow);
+    }
+
+    static {
+        Builder builder = new Builder(BuiltinFactory.TAIL_SCALE_INCLINED)
+                .withBreath(BuiltinBreathTextures.ICE_BREATH, IceBreathParticle.FACTORY);
+        ICE_FEMALE = builder.build(MOD_ID, "ice/female");
+        ICE_MALE = builder.build(MOD_ID, "ice/male");
+    }
+
+    static {
+        Builder builder = new Builder(BuiltinFactory.NORMAL);
+        MOONLIGHT_FEMALE = builder.build(MOD_ID, "moonlight/female");
+        MOONLIGHT_MALE = builder.build(MOD_ID, "moonlight/male");
+    }
+
+    static {
+        Builder builder = new Builder(BuiltinFactory.NORMAL)
+                .withBreath(BuiltinBreathTextures.NETHER_BREATH, NetherBreathParticle.FACTORY);
+        NETHER_FEMALE = builder.build(MOD_ID, "nether/female");
+        NETHER_MALE = builder.build(MOD_ID, "nether/male");
+        NETHER_RARE = builder.withBreath(BuiltinBreathTextures.SOUL_BREATH).build(MOD_ID, "nether/rare");
+    }
+
+    static {
+        SKELETON = new Builder(BuiltinFactory.SKELETON).build(MOD_ID, "skeleton");
+    }
+
+    static {
+        Builder builder = new Builder(BuiltinFactory.TAIL_HORNED);
+        STORM_FEMALE = builder.build(MOD_ID, "storm/female");
+        STORM_MALE = builder.build(MOD_ID, "storm/male");
+        STORM_RARE = builder.build(MOD_ID, "storm/rare");
+    }
+
+    static {
+        Builder builder = new Builder(BuiltinFactory.NORMAL);
+        SUNLIGHT_FEMALE = builder.build(MOD_ID, "sunlight/female");
+        SUNLIGHT_MALE = builder.build(MOD_ID, "sunlight/male");
+    }
+
+    static {
+        Builder builder = new Builder(BuiltinFactory.NORMAL);
+        TERRA_FEMALE = builder.build(MOD_ID, "terra/female");
+        TERRA_MALE = builder.build(MOD_ID, "terra/male");
+    }
+
+    static {
+        Builder builder = new Builder(BuiltinFactory.TAIL_HORNED)
+                .withBreath(BuiltinBreathTextures.WATER_BREATH, WaterBreathParticle.FACTORY);
+        WATER_FEMALE = builder.build(MOD_ID, "water/female");
+        WATER_MALE = builder.build(MOD_ID, "water/male");
+    }
+
+
+    static {
+        Builder builder = new Builder(BuiltinFactory.SKELETON)
+                .withBreath(BuiltinBreathTextures.WITHER_BREATH);
+        WITHER = builder.build(MOD_ID, "wither");
+    }
+
+    static {
+        Builder builder = new Builder(BuiltinFactory.TAIL_HORNED)
+                .withBreath(BuiltinBreathTextures.POISON_BREATH, PoisonBreathParticle.FACTORY);
+        ZOMBIE = builder.build(MOD_ID, "zombie");
     }
 
     public static Function<String, VariantAppearance> getSupplier() {
@@ -96,6 +189,7 @@ public class VariantAppearances {
         map.put("moonlight_male", MOONLIGHT_MALE);
         map.put("nether_female", NETHER_FEMALE);
         map.put("nether_male", NETHER_MALE);
+        map.put("nether_rare", NETHER_RARE);
         map.put("skeleton", SKELETON);
         map.put("storm_female", STORM_FEMALE);
         map.put("storm_male", STORM_MALE);
