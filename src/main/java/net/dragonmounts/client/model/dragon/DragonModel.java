@@ -12,7 +12,6 @@ package net.dragonmounts.client.model.dragon;
 
 import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.render.dragon.DragonRenderMode;
-import net.dragonmounts.client.variant.VariantAppearance;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -42,13 +41,9 @@ public class DragonModel extends ModelBase {
     public float offsetZ;
     public float pitch;
     public float partialTicks;
-    public final VariantAppearance appearance;
 
-    public DragonModel(VariantAppearance appearance, IModelFactory factory) {
-        textureWidth=256;
-        textureHeight=256;
-        this.appearance = appearance;
-        factory.defineTextures(this::setTextureOffset);
+    public DragonModel(IModelFactory factory) {
+        factory.defineTextures(this, this::setTextureOffset);
         this.head = factory.makeHead(this);
         this.neck = factory.makeNeck(this);
         this.body = factory.makeBody(this);

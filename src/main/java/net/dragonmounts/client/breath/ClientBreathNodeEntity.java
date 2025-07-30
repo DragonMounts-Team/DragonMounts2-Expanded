@@ -20,29 +20,27 @@ public abstract class ClientBreathNodeEntity extends Entity implements ICollisio
     public static final float NORMAL_PARTICLE_CHANCE = 0.1F;
     public static final float SPECIAL_PARTICLE_CHANCE = 0.3F;
     public float scale;
+    public float extraRotation;
     protected final BreathNode node;
-    public final boolean extraRotation;
 
     public ClientBreathNodeEntity(
             World world,
             Vec3d position,
             Vec3d direction,
             BreathPower power,
-            float partialTicksHeadStart,
-            boolean extraRotation
+            float partialTicks
     ) {
         super(world);
         BreathNode node = new BreathNode(power);
         node.randomiseProperties(this.rand);
         Vec3d motion = node.getRandomisedStartingMotion(direction, this.rand);
         this.setPosition(
-                position.x + motion.x * partialTicksHeadStart,
-                position.y + motion.y * partialTicksHeadStart,
-                position.z + motion.z * partialTicksHeadStart
+                position.x + motion.x * partialTicks,
+                position.y + motion.y * partialTicks,
+                position.z + motion.z * partialTicks
         );
         this.scale = (this.rand.nextFloat() * 0.7F + 0.7F) * 4.0F;
         this.node = node;
-        this.extraRotation = extraRotation;
         //undo random velocity variation of vanilla EntityFX constructor
         this.motionX = motion.x;
         this.motionY = motion.y;

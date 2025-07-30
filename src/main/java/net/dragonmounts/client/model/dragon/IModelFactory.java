@@ -5,10 +5,13 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
 import static net.dragonmounts.client.model.dragon.BuiltinFactory.*;
-import static net.dragonmounts.entity.DragonModelContracts.*;
+import static net.dragonmounts.entity.DragonModelContracts.NECK_SIZE;
+import static net.dragonmounts.entity.DragonModelContracts.TAIL_SIZE;
 
 public interface IModelFactory {
-    default void defineTextures(ITextureOffsetDefiner definer) {
+    default void defineTextures(ModelBase model, ITextureOffsetDefiner definer) {
+        model.textureWidth = 256;
+        model.textureHeight = 256;
         definer.set("body.body", 0, 0);
         definer.set("body.scale", 0, 32);
         definer.set("saddle.cushion", 184, 98);

@@ -56,8 +56,7 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
     private final ReferenceOpenHashSet<Biome> biomes;
     public final EnumParticleTypes sneezeParticle;
     public final EnumParticleTypes eggParticle;
-    @Nullable
-    public final ResourceLocation lootTable;
+    public final @Nullable ResourceLocation lootTable;
 
     public DragonType(ResourceLocation identifier, DragonTypeBuilder builder) {
         this.color = builder.color;

@@ -61,7 +61,7 @@ public class ClientBreathHelper extends DragonBreathHelper<ClientDragonEntity> {
             final int PARTICLES_PER_TICK = 4;
             for (int i = 0; i < PARTICLES_PER_TICK; ++i) {
                 float partialTickHeadStart = i / (float) PARTICLES_PER_TICK;
-                this.breath.spawnClientBreath(
+                dragon.getVariant().appearance.spawnBreathParticle(
                         level,
                         interpolateVec(previousOrigin, headLocation, partialTickHeadStart),
                         interpolateVec(previousDirection, direction, partialTickHeadStart),

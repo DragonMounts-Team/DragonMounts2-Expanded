@@ -1,13 +1,11 @@
 package net.dragonmounts.entity.breath.impl;
 
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
-import net.dragonmounts.client.breath.impl.AetherBreathFX;
 import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathAffectedBlock;
 import net.dragonmounts.entity.breath.BreathAffectedEntity;
-import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.init.DMSounds;
 import net.minecraft.block.Block;
@@ -18,7 +16,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 /**
@@ -101,11 +98,6 @@ public class AetherBreath extends DragonBreath {
         // final int DELAY_UNTIL_DECAY=5;
         // final float DECAY_PERCENTAGE_PER_TICK=10.0F;
         //        currentHitDensity.setDecayParameters(DECAY_PERCENTAGE_PER_TICK, DELAY_UNTIL_DECAY);
-    }
-
-    @Override
-    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
-        world.spawnEntity(new AetherBreathFX(world, position, direction, power, partialTicks));
     }
 
     @Override

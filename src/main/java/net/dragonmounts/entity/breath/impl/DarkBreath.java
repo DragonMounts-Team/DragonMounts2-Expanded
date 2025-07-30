@@ -1,10 +1,8 @@
 package net.dragonmounts.entity.breath.impl;
 
-import net.dragonmounts.client.breath.impl.DarkBreathFX;
 import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathAffectedBlock;
-import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.init.DMSounds;
 import net.minecraft.block.Block;
@@ -15,7 +13,6 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class DarkBreath extends DragonBreath {
@@ -39,11 +36,6 @@ public class DarkBreath extends DragonBreath {
             level.spawnEntity(cloud);
         }
         return new BreathAffectedBlock(); // reset to zero
-    }
-
-    @Override
-    public void spawnClientBreath(World world, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
-        world.spawnEntity(new DarkBreathFX(world, position, direction, power, partialTicks));
     }
 
     @Override
