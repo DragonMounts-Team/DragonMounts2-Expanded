@@ -1,6 +1,6 @@
 package net.dragonmounts.inventory;
 
-import net.dragonmounts.capability.IWhistleHolder;
+import net.dragonmounts.capability.IFluteHolder;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -13,18 +13,18 @@ import net.minecraftforge.common.capabilities.Capability;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static net.dragonmounts.capability.DMCapabilities.WHISTLE_HOLDER;
+import static net.dragonmounts.capability.DMCapabilities.FLUTE_HOLDER;
 
-public class WhistleHolder implements IWhistleHolder {
+public class FluteHolder implements IFluteHolder {
     public static void onPlayerClone(EntityPlayer neoPlayer, EntityPlayer oldPlayer) {
-        IWhistleHolder neo = neoPlayer.getCapability(WHISTLE_HOLDER, null);
+        IFluteHolder neo = neoPlayer.getCapability(FLUTE_HOLDER, null);
         if (neo == null) return;
-        IWhistleHolder old = oldPlayer.getCapability(WHISTLE_HOLDER, null);
+        IFluteHolder old = oldPlayer.getCapability(FLUTE_HOLDER, null);
         if (old == null) return;
-        neo.setWhistle(old.getWhistle());
+        neo.setFlute(old.getFlute());
     }
 
-    private @Nonnull ItemStack whistle = ItemStack.EMPTY;
+    private @Nonnull ItemStack flute = ItemStack.EMPTY;
 
     @Override
     public int getSizeInventory() {
@@ -32,29 +32,29 @@ public class WhistleHolder implements IWhistleHolder {
     }
 
     @Override
-    public ItemStack getWhistle() {
-        return this.whistle;
+    public ItemStack getFlute() {
+        return this.flute;
     }
 
     @Override
-    public void setWhistle(ItemStack whistle) {
-        this.whistle = whistle;
+    public void setFlute(ItemStack flute) {
+        this.flute = flute;
     }
 
     @Override
     public boolean isEmpty() {
-        return this.whistle.isEmpty();
+        return this.flute.isEmpty();
     }
 
     @Override
     public ItemStack getStackInSlot(int index) {
-        return this.whistle;
+        return this.flute;
     }
 
     @Override
     public ItemStack decrStackSize(int index, int count) {
-        if (this.whistle.isEmpty()) return ItemStack.EMPTY;
-        ItemStack result = this.whistle.splitStack(count);
+        if (this.flute.isEmpty()) return ItemStack.EMPTY;
+        ItemStack result = this.flute.splitStack(count);
         if (!result.isEmpty()) {
             this.markDirty();
         }
@@ -63,14 +63,14 @@ public class WhistleHolder implements IWhistleHolder {
 
     @Override
     public ItemStack removeStackFromSlot(int index) {
-        ItemStack stack = this.whistle;
-        this.whistle = ItemStack.EMPTY;
+        ItemStack stack = this.flute;
+        this.flute = ItemStack.EMPTY;
         return stack;
     }
 
     @Override
     public void setInventorySlotContents(int index, ItemStack stack) {
-        this.whistle = stack;
+        this.flute = stack;
     }
 
     @Override
@@ -91,11 +91,11 @@ public class WhistleHolder implements IWhistleHolder {
 
     @Override
     public void closeInventory(EntityPlayer player) {
-        if (this.whistle.isEmpty()) return;
-        if (!player.inventory.addItemStackToInventory(this.whistle)) {
-            player.dropItem(this.whistle, false);
+        if (this.flute.isEmpty()) return;
+        if (!player.inventory.addItemStackToInventory(this.flute)) {
+            player.dropItem(this.flute, false);
         }
-        this.whistle = ItemStack.EMPTY;
+        this.flute = ItemStack.EMPTY;
     }
 
     @Override
@@ -118,12 +118,12 @@ public class WhistleHolder implements IWhistleHolder {
 
     @Override
     public void clear() {
-        this.whistle = ItemStack.EMPTY;
+        this.flute = ItemStack.EMPTY;
     }
 
     @Override
     public String getName() {
-        return "container.dragonmounts.whistle_holder";
+        return "container.dragonmounts.flute_holder";
     }
 
     @Override
@@ -136,16 +136,16 @@ public class WhistleHolder implements IWhistleHolder {
         return new TextComponentTranslation(this.getName());
     }
 
-    public static class Storage implements Capability.IStorage<IWhistleHolder> {
+    public static class Storage implements Capability.IStorage<IFluteHolder> {
         @Override
-        public NBTTagCompound writeNBT(Capability<IWhistleHolder> capability, IWhistleHolder instance, EnumFacing side) {
-            ItemStack whistle = instance.getWhistle();
-            return whistle.isEmpty() ? new NBTTagCompound() : whistle.writeToNBT(new NBTTagCompound());
+        public NBTTagCompound writeNBT(Capability<IFluteHolder> capability, IFluteHolder instance, EnumFacing side) {
+            ItemStack flute = instance.getFlute();
+            return flute.isEmpty() ? new NBTTagCompound() : flute.writeToNBT(new NBTTagCompound());
         }
 
         @Override
-        public void readNBT(Capability<IWhistleHolder> capability, IWhistleHolder instance, EnumFacing side, @Nullable NBTBase tag) {
-            instance.setWhistle(tag instanceof NBTTagCompound ? new ItemStack((NBTTagCompound) tag) : ItemStack.EMPTY);
+        public void readNBT(Capability<IFluteHolder> capability, IFluteHolder instance, EnumFacing side, @Nullable NBTBase tag) {
+            instance.setFlute(tag instanceof NBTTagCompound ? new ItemStack((NBTTagCompound) tag) : ItemStack.EMPTY);
         }
     }
 }

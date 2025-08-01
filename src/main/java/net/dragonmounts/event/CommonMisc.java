@@ -9,7 +9,7 @@ import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DragonTypes;
-import net.dragonmounts.inventory.WhistleHolder;
+import net.dragonmounts.inventory.FluteHolder;
 import net.dragonmounts.item.IEntityContainer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -85,7 +85,7 @@ public class CommonMisc {
         EntityPlayer neo = event.getEntityPlayer();
         EntityPlayer old = event.getOriginal();
         ArmorEffectManager.onPlayerClone(neo, old);
-        WhistleHolder.onPlayerClone(neo, old);
+        FluteHolder.onPlayerClone(neo, old);
     }
 
     @SubscribeEvent

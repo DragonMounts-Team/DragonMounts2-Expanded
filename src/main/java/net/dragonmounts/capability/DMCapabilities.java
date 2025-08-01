@@ -16,8 +16,8 @@ public class DMCapabilities {
     @CapabilityInject(IHardShears.class)
     public static final Capability<IHardShears> HARD_SHEARS = null;
 
-    @CapabilityInject(IWhistleHolder.class)
-    public static final Capability<IWhistleHolder> WHISTLE_HOLDER = null;
+    @CapabilityInject(IFluteHolder.class)
+    public static final Capability<IFluteHolder> FLUTE_HOLDER = null;
 
     @SuppressWarnings("DataFlowIssue")
     public static boolean hasCapability(ICapabilityProvider provider, @Nullable Capability<?> capability) {

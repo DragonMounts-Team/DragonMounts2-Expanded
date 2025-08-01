@@ -29,11 +29,11 @@ public class CSitOrderPacket extends CUUIDPacket {
                 EntityPlayer player = ctx.getServerHandler().player;
                 if (dragon.dimension == player.dimension && Relation.checkRelation(dragon, player).isTrusted) {
                     dragon.getAISit().setSitting(!dragon.isSitting());
-                    player.world.playSound(null, player.posX, player.posY, player.posZ, DMSounds.WHISTLE_BLOW_SHORT, SoundCategory.PLAYERS, 1, 1);
+                    player.world.playSound(null, player.posX, player.posY, player.posZ, DMSounds.FLUTE_BLOW_SHORT, SoundCategory.PLAYERS, 1, 1);
                     return null;
                 }
             }
-            ctx.getServerHandler().player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.whistle.failed"), true);
+            ctx.getServerHandler().player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.flute.failed"), true);
             return null;
         }
     }

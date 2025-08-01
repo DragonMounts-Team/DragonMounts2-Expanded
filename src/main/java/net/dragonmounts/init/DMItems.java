@@ -333,10 +333,10 @@ public class DMItems {
             new DragonWandItem(),
             item -> item.setTranslationKey(TRANSLATION_KEY_PREFIX + "dragon_wand")
     );
-    public static final DragonWhistleItem DRAGON_WHISTLE = createItem(
-            "dragon_whistle",
-            new DragonWhistleItem(),
-            whistle -> whistle.setTranslationKey(DragonWhistleItem.TRANSLATION_KEY).setCreativeTab(DMItemGroups.ITEMS)
+    public static final FluteItem FLUTE = createItem(
+            "flute",
+            new FluteItem(),
+            flute -> flute.setTranslationKey(FluteItem.TRANSLATION_KEY).setCreativeTab(DMItemGroups.ITEMS)
     );
     public static final VariationOrbItem VARIATION_ORB = createItem(
             "variation_orb",

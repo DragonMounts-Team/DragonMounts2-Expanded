@@ -1,0 +1,27 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "dragonmounts:items/flute",
+    "layer1": "dragonmounts:items/flute_string"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [0, -90, 55],
+      "translation": [0, 4.0, 0.5],
+      "scale": [0.68, 0.68, 0.68]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [0, 90, -55],
+      "translation": [0, 4.0, 0.5],
+      "scale": [0.68, 0.68, 0.68]
+    }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "minecraft:playing": 1.0
+      },
+      "model": "dragonmounts:item/flute_playing"
+    }
+  ]
+}

@@ -13,14 +13,14 @@ import javax.annotation.Nonnull;
 import static net.dragonmounts.util.ByteBufferUtil.readString;
 import static net.dragonmounts.util.ByteBufferUtil.writeString;
 
-public class CRenameWhistlePacket implements IMessage {
+public class CRenameFlutePacket implements IMessage {
     public @Nonnull String name;
 
-    public CRenameWhistlePacket() {
+    public CRenameFlutePacket() {
         this.name = "";
     }
 
-    public CRenameWhistlePacket(String name) {
+    public CRenameFlutePacket(String name) {
         this.name = name;
     }
 
@@ -39,12 +39,12 @@ public class CRenameWhistlePacket implements IMessage {
         writeString(buffer, this.name);
     }
 
-    public static class Handler implements IMessageHandler<CRenameWhistlePacket, IMessage> {
+    public static class Handler implements IMessageHandler<CRenameFlutePacket, IMessage> {
         @Override
-        public IMessage onMessage(CRenameWhistlePacket message, MessageContext ctx) {
+        public IMessage onMessage(CRenameFlutePacket message, MessageContext ctx) {
             Container container = ctx.getServerHandler().player.openContainer;
             if (container instanceof DragonContainer) {
-                ((DragonContainer<?>) container).whistle.applyName(message.name);
+                ((DragonContainer<?>) container).flute.applyName(message.name);
             }
             return null;
         }

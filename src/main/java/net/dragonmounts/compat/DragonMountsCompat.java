@@ -123,6 +123,7 @@ public abstract class DragonMountsCompat {
         //Misc
         mappings.put("dragon_amulet", DMItems.AMULET);
         mappings.put("dragon_gender", DMItems.VARIATION_ORB);
+        mappings.put("dragon_whistle", DMItems.FLUTE);
         mappings.put("variant_switcher", DMItems.VARIATION_ORB);
         mappings.put("end_dragon_amulet", DMItems.ENDER_DRAGON_AMULET);
         mappings.put("end_dragon_essence", DMItems.ENDER_DRAGON_ESSENCE);

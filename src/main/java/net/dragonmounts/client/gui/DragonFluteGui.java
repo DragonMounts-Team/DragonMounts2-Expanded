@@ -15,10 +15,10 @@ import org.lwjgl.input.Keyboard;
 import javax.annotation.Nonnull;
 import java.util.UUID;
 
-public class DragonWhistleGui extends GuiScreen {
+public class DragonFluteGui extends GuiScreen {
     public final UUID uuid;
 
-    public DragonWhistleGui(@Nonnull UUID uuid) {
+    public DragonFluteGui(@Nonnull UUID uuid) {
         this.uuid = uuid;
     }
 
@@ -63,7 +63,7 @@ public class DragonWhistleGui extends GuiScreen {
 
     @Override
     public boolean doesGuiPauseGame() {
-        return DMConfig.PAUSE_ON_WHISTLE.value;
+        return DMConfig.PAUSE_ON_FLUTING.value;
     }
 
     private static int maxTextWidth(FontRenderer font, String... text) {

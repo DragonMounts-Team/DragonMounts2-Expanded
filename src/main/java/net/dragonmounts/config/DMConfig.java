@@ -23,7 +23,7 @@ public class DMConfig {
     // CLIENT:
     public static final DoubleEntry CAMERA_DISTANCE = new DoubleEntry("cameraDistance", 20.0);
     public static final BooleanEntry REDIRECT_INVENTORY = new BooleanEntry("redirectInventory", true);
-    public static final BooleanEntry PAUSE_ON_WHISTLE = new BooleanEntry("pauseOnWhistle", true);
+    public static final BooleanEntry PAUSE_ON_FLUTING = new BooleanEntry("pauseOnFluting", true);
     // ATTRIBUTES:
     public static final DoubleEntry BASE_ARMOR = new DoubleEntry("baseArmor", 8.0);
     public static final DoubleEntry BASE_ARMOR_TOUGHNESS = new DoubleEntry("baseArmorToughness", 30.0);
@@ -98,9 +98,9 @@ public class DMConfig {
             register(category, order, REDIRECT_INVENTORY)
                     .setLanguageKey("config.dragonmounts.redirectInventory")
                     .setComment("Whether to open your mount's inventory instead of yours.");
-            register(category, order, PAUSE_ON_WHISTLE)
-                    .setLanguageKey("config.dragonmounts.pauseOnWhistle")
-                    .setComment("Whether to try to pause the game when using whistle.");
+            register(category, order, PAUSE_ON_FLUTING)
+                    .setLanguageKey("config.dragonmounts.pauseOnFluting")
+                    .setComment("Whether to try to pause the game when fluting.");
             category.setPropertyOrder(order);
             // ATTRIBUTES
             order = new ObjectArrayList<>();
@@ -211,7 +211,7 @@ public class DMConfig {
         category = config.getCategory(CATEGORY_CLIENT);
         load(category, CAMERA_DISTANCE);
         load(category, REDIRECT_INVENTORY);
-        load(category, PAUSE_ON_WHISTLE);
+        loadRenamed(category, PAUSE_ON_FLUTING, "pauseOnWhistle");
 
         category = config.getCategory(CATEGORY_ATTRIBUTES);
         load(category, BASE_ARMOR);
@@ -319,6 +319,16 @@ public class DMConfig {
 
     static void load(ConfigCategory category, BooleanEntry entry) {
         entry.value = entry.getOrCreate(category).getBoolean(entry.fallback);
+    }
+
+    static void loadRenamed(ConfigCategory category, BooleanEntry entry, String old) {
+        Property prop = category.get(old);
+        if (prop == null) {
+            load(category, entry);
+        } else {
+            entry.value = entry.getOrCreate(category).getBoolean(prop.getBoolean(entry.fallback));
+            category.remove(old);
+        }
     }
 
     static void loadConditional(ConfigCategory category, boolean condition, BooleanEntry entry) {
