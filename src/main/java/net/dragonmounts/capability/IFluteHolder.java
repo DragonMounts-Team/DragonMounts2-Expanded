@@ -3,8 +3,8 @@ package net.dragonmounts.capability;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-public interface IWhistleHolder extends IInventory {
-    ItemStack getWhistle();
+public interface IFluteHolder extends IInventory {
+    ItemStack getFlute();
 
-    void setWhistle(ItemStack whistle);
+    void setFlute(ItemStack flute);
 }

@@ -1,8 +1,8 @@
 package net.dragonmounts.inventory;
 
-import net.dragonmounts.capability.IWhistleHolder;
+import net.dragonmounts.capability.IFluteHolder;
 import net.dragonmounts.init.DMItems;
-import net.dragonmounts.item.DragonWhistleItem;
+import net.dragonmounts.item.FluteItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.Slot;
@@ -11,24 +11,24 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 
-public class WhistleSlot extends Slot {
-    public final IWhistleHolder holder;
+public class FluteSlot extends Slot {
+    public final IFluteHolder holder;
     public final DragonContainer<?> container;
-    public ISlotListener<? super WhistleSlot> listener;
+    public ISlotListener<? super FluteSlot> listener;
     public String desiredName;
 
-    public WhistleSlot(@Nullable IWhistleHolder holder, DragonContainer<?> container, int x, int y) {
+    public FluteSlot(@Nullable IFluteHolder holder, DragonContainer<?> container, int x, int y) {
         super(holder == null ? new InventoryBasic(
                 "Invalid", true, 1
         ) : holder, 0, x, y);
         this.holder = holder;
         this.container = container;
-        this.setBackgroundName("dragonmounts:items/slot/empty_whistle");
+        this.setBackgroundName("dragonmounts:items/slot/empty_flute");
     }
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return this.holder != null && !stack.isEmpty() && stack.getItem() == DMItems.DRAGON_WHISTLE;
+        return this.holder != null && !stack.isEmpty() && stack.getItem() == DMItems.FLUTE;
     }
 
     @Override
@@ -67,8 +67,8 @@ public class WhistleSlot extends Slot {
         if (this.holder == null) return;
         if (this.getHasStack()) {
             ItemStack stack = this.getStack().copy();
-            if (stack.getItem() != DMItems.DRAGON_WHISTLE) return;
-            DragonWhistleItem.bindWhistle(stack, this.container.dragon, this.container.player);
+            if (stack.getItem() != DMItems.FLUTE) return;
+            FluteItem.bindToFlute(stack, this.container.dragon, this.container.player);
             if (StringUtils.isBlank(this.desiredName)) {
                 if (stack.hasDisplayName()) {
                     stack.clearCustomName();
@@ -76,7 +76,7 @@ public class WhistleSlot extends Slot {
             } else if (!this.desiredName.equals(stack.getDisplayName())) {
                 stack.setStackDisplayName(this.desiredName);
             }
-            this.holder.setWhistle(stack);
+            this.holder.setFlute(stack);
         }
         super.onSlotChanged();
     }

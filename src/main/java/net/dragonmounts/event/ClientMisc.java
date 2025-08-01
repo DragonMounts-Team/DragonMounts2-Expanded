@@ -61,7 +61,7 @@ public class ClientMisc {
 
     @SubscribeEvent
     public static void registerItemColors(ColorHandlerEvent.Item event) {
-        // Dragon Whistle String Color
+        // Dragon Flute String Color
         ItemColors colors = event.getItemColors();
         colors.registerItemColorHandler((stack, tintIndex) -> {
             if (tintIndex == 1) {
@@ -71,7 +71,7 @@ public class ClientMisc {
                 }
             }
             return 0xFFFFFF;
-        }, DMItems.DRAGON_WHISTLE);
+        }, DMItems.FLUTE);
 
         colors.registerItemColorHandler((stack, tintIndex) -> {
             Item item = stack.getItem();
@@ -104,6 +104,6 @@ public class ClientMisc {
         map.registerSprite(new ResourceLocation(MOD_ID, "items/slot/empty_dragon_armor"));
         map.registerSprite(new ResourceLocation(MOD_ID, "items/slot/empty_essence"));
         map.registerSprite(new ResourceLocation(MOD_ID, "items/slot/empty_saddle"));
-        map.registerSprite(new ResourceLocation(MOD_ID, "items/slot/empty_whistle"));
+        map.registerSprite(new ResourceLocation(MOD_ID, "items/slot/empty_flute"));
     }
 }

@@ -1,7 +1,7 @@
 package net.dragonmounts.inventory;
 
 import net.dragonmounts.capability.DMCapabilities;
-import net.dragonmounts.capability.IWhistleHolder;
+import net.dragonmounts.capability.IFluteHolder;
 import net.dragonmounts.entity.CarriageEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.item.DragonArmorItem;
@@ -21,7 +21,7 @@ import static net.dragonmounts.util.DMUtils.applyBackground;
 
 public class DragonContainer<T extends TameableDragonEntity> extends Container {
 	public final DragonInventory inventory;
-	public final WhistleSlot whistle;
+	public final FluteSlot flute;
 	public final T dragon;
 	public final EntityPlayer player;
 
@@ -29,13 +29,13 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 		DragonInventory inventory = this.inventory = dragon.inventory;
 		this.dragon = dragon;
 		inventory.openInventory(this.player = player);
-		IWhistleHolder whistle = player.getCapability(DMCapabilities.WHISTLE_HOLDER, null);
-		if (whistle == null) {
-			LogUtil.LOGGER.error("Player {} does NOT have a whistle holder", player);
+		IFluteHolder flute = player.getCapability(DMCapabilities.FLUTE_HOLDER, null);
+		if (flute == null) {
+			LogUtil.LOGGER.error("Player {} does NOT have a flute holder", player);
 		} else {
-			whistle.openInventory(player);
+			flute.openInventory(player);
 		}
-		this.addSlotToContainer(this.whistle = new WhistleSlot(whistle, this, 8, 8));
+		this.addSlotToContainer(this.flute = new FluteSlot(flute, this, 8, 8));
 		// location of the slot for the saddle in the dragon inventory
 		this.addSlotToContainer(applyBackground(new Slot(inventory, 33, 156, 18) {
 			public boolean isItemValid(ItemStack stack) {
@@ -163,7 +163,7 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 						return ItemStack.EMPTY;
 					}
 				} else if (canPlaceAt(this, 0, stack)) {
-					// move item as whistle
+					// move item as flute
 					if (!this.mergeItemStack(stack, 0, 1, false)) {
 						return ItemStack.EMPTY;
 					}
@@ -185,7 +185,7 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 	public void onContainerClosed(EntityPlayer player) {
 		super.onContainerClosed(player);
 		this.inventory.closeInventory(player);
-		IWhistleHolder holder = this.whistle.holder;
+		IFluteHolder holder = this.flute.holder;
 		if (holder != null) {
 			holder.closeInventory(player);
 		}

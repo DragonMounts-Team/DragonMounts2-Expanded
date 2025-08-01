@@ -55,7 +55,7 @@ public class CTeleportOrderPacket extends CUUIDPacket {
                 TameableDragonEntity dragon = (TameableDragonEntity) entity;
                 World world = player.world;
                 if (!dragon.isOwner(player) || !world.isBlockLoaded(player.getPosition())) {
-                    player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.whistle.failed"), true);
+                    player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.flute.failed"), true);
                     return null;
                 }
                 //Get block pos by raytracing from player for dragon teleport
@@ -70,7 +70,7 @@ public class CTeleportOrderPacket extends CUUIDPacket {
                 );
                 RayTraceResult hit = world.rayTraceBlocks(start, end, true);
                 if (hit == null) {
-                    player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.whistle.invalidPos"), true);
+                    player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.flute.invalidPos"), true);
                     return null; //suppress null block pos warnings
                 }
                 if (hit.typeOfHit == RayTraceResult.Type.BLOCK) {
@@ -81,10 +81,10 @@ public class CTeleportOrderPacket extends CUUIDPacket {
                         dragon.getNavigator().clearPath();
                         dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
                     });
-                    world.playSound(null, player.posX, player.posY, player.posZ, DMSounds.WHISTLE_BLOW_LONG, SoundCategory.PLAYERS, 1, 1);
+                    world.playSound(null, player.posX, player.posY, player.posZ, DMSounds.FLUTE_BLOW_LONG, SoundCategory.PLAYERS, 1, 1);
                 }
             } else {
-                player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.whistle.failed"), true);
+                player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.flute.failed"), true);
             }
             return null;
         }

@@ -3,11 +3,12 @@ package net.dragonmounts.item;
 import com.mojang.authlib.GameProfile;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.client.ClientUtil;
-import net.dragonmounts.client.gui.DragonWhistleGui;
+import net.dragonmounts.client.gui.DragonFluteGui;
 import net.dragonmounts.compat.DragonTypeCompat;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.util.ItemUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -34,17 +35,18 @@ import java.util.UUID;
 import static net.minecraft.tileentity.TileEntitySkull.updateGameProfile;
 
 /**
- * Dragon Whistle Item for controlling certain dragon behaviour remotely.
+ * Flute Item for controlling certain dragon behaviour remotely.
  *
  * @author TheRPGAdventurer
  * @modifier WolfShotz
  */
-public class DragonWhistleItem extends Item {
-    public static final String TRANSLATION_KEY = DragonMountsTags.TRANSLATION_KEY_PREFIX + "dragon_whistle";
+public class FluteItem extends Item {
+    public static final ResourceLocation IS_PLAYING = new ResourceLocation("playing");
+    public static final String TRANSLATION_KEY = DragonMountsTags.TRANSLATION_KEY_PREFIX + "flute";
     public static final String DRAGON_UUID_KEY = "DragonUUID";
     public static final String DEPRECATED_UUID_KEY = "dragonmountsdragon";
 
-    public static void bindWhistle(ItemStack stack, TameableDragonEntity dragon, EntityPlayer player) {
+    public static void bindToFlute(ItemStack stack, TameableDragonEntity dragon, EntityPlayer player) {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setUniqueId(DRAGON_UUID_KEY, dragon.getUniqueID());
         if (dragon.hasCustomName()) {
@@ -59,15 +61,20 @@ public class DragonWhistleItem extends Item {
         stack.setTagCompound(nbt);
     }
 
-    /// Open Dragon Whistle gui for dragon with given uuid
+    /// Open flute gui for dragon with given uuid
     @SideOnly(Side.CLIENT)
-    public static void openDragonWhistleGui(@Nullable UUID uuid, World world, EnumHand hand) {
+    public static void openFluteGui(@Nullable UUID uuid, World world, EnumHand hand) {
         if (uuid == null || !world.isRemote) return;
-        Minecraft.getMinecraft().displayGuiScreen(new DragonWhistleGui(uuid));
+        Minecraft.getMinecraft().displayGuiScreen(new DragonFluteGui(uuid));
     }
 
-    public DragonWhistleItem() {
-        this.setMaxStackSize(1);
+    public FluteItem() {
+        this.setMaxStackSize(1).addPropertyOverride(IS_PLAYING, ItemUtil::isUsingItem);
+    }
+
+    @Override
+    public int getMaxItemUseDuration(ItemStack stack) {
+        return 1200;
     }
 
     /// Compat
@@ -109,29 +116,28 @@ public class DragonWhistleItem extends Item {
 
     /**
      * Called when the ItemStack is right clicked by the player
-     * <p> If player is sneaking, clear the tag compound. else, open the whistle gui with given id
+     * <p> If player is sneaking, clear the tag compound. else, open the flute gui with given id
      */
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World level, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
         NBTTagCompound nbt;
-        if (world.isRemote) {
+        if (level.isRemote) {
             if (!stack.hasTagCompound() || !(nbt = stack.getTagCompound()).hasUniqueId(DRAGON_UUID_KEY)) {
-                player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.whistle.empty"), true);
+                player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.flute.empty"), true);
                 return new ActionResult<>(EnumActionResult.FAIL, stack);
             }
             if (nbt.hasUniqueId("Owner") && !player.getUniqueID().equals(nbt.getUniqueId("Owner"))) {
-                player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.dragon.notOwner"), true);
+                player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.flute.notOwner"), true);
                 return new ActionResult<>(EnumActionResult.FAIL, stack);
             }
-            openDragonWhistleGui(nbt.getUniqueId(DRAGON_UUID_KEY), world, hand);
-            return new ActionResult<>(EnumActionResult.SUCCESS, stack);
-        }
-        if (!stack.hasTagCompound() || !(nbt = stack.getTagCompound()).hasUniqueId(DRAGON_UUID_KEY) || (
+            openFluteGui(nbt.getUniqueId(DRAGON_UUID_KEY), level, hand);
+        } else if (!stack.hasTagCompound() || !(nbt = stack.getTagCompound()).hasUniqueId(DRAGON_UUID_KEY) || (
                 nbt.hasUniqueId("Owner") && !player.getUniqueID().equals(nbt.getUniqueId("Owner"))
         )) {
             return new ActionResult<>(EnumActionResult.FAIL, stack);
         }
+        player.setActiveHand(hand);
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
 
@@ -154,6 +160,6 @@ public class DragonWhistleItem extends Item {
             tooltip.add(I18n.format("tooltip.dragonmounts.age", TextFormatting.AQUA + ClientUtil.translateToLocal(root.getString("Age")) + TextFormatting.RESET));
             tooltip.add(I18n.format("tooltip.dragonmounts.owner", TextFormatting.GOLD + root.getString("OwnerName") + TextFormatting.RESET));
         }
-        tooltip.add(ClientUtil.translateToLocal("tooltip.dragonmounts.whistle"));
+        tooltip.add(ClientUtil.translateToLocal("tooltip.dragonmounts.flute"));
     }
 }

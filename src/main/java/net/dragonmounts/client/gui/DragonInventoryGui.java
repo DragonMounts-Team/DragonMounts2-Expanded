@@ -6,10 +6,10 @@ import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.inventory.DragonContainer;
+import net.dragonmounts.inventory.FluteSlot;
 import net.dragonmounts.inventory.ISlotListener;
-import net.dragonmounts.inventory.WhistleSlot;
 import net.dragonmounts.network.CDragonConfigPacket;
-import net.dragonmounts.network.CRenameWhistlePacket;
+import net.dragonmounts.network.CRenameFlutePacket;
 import net.dragonmounts.network.DragonStates;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -33,7 +33,7 @@ import java.io.IOException;
  * @see net.minecraft.client.gui.GuiRepair
  */
 @SideOnly(Side.CLIENT)
-public class DragonInventoryGui extends GuiContainer implements ISlotListener<WhistleSlot> {
+public class DragonInventoryGui extends GuiContainer implements ISlotListener<FluteSlot> {
     /// 176 x 214
     private static final ResourceLocation INVENTORY = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/dragon_inventory.png");
     /// 147 x 214
@@ -81,11 +81,11 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Wh
         this.buttonList.add(this.order = new GuiButton(DragonStates.SITTING_STATE, x, y + 172, 18, 20, this.sit = ClientUtil.translateToLocal("gui.dragonmounts.sit")));
         this.buttonList.add(this.lock = new LockButton(DragonStates.LOCKED_STATE, x, y + 194, 18, 20));
         this.updateScreen();
-        WhistleSlot slot = this.container.whistle;
+        FluteSlot slot = this.container.flute;
         slot.listener = this;
-        ItemStack whistle = slot.getStack();
-        boolean enabled = !whistle.isEmpty();
-        name.setText(slot.desiredName = enabled ? whistle.getDisplayName() : "");
+        ItemStack flute = slot.getStack();
+        boolean enabled = !flute.isEmpty();
+        name.setText(slot.desiredName = enabled ? flute.getDisplayName() : "");
         name.setEnabled(enabled);
     }
 
@@ -130,14 +130,14 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Wh
         }
     }
 
-    private void renameWhistle() {
-        ItemStack stack = this.container.whistle.getStack();
+    private void renameflute() {
+        ItemStack stack = this.container.flute.getStack();
         String text = this.nameField.getText();
         if (!stack.isEmpty() && !stack.hasDisplayName() && text.equals(stack.getDisplayName())) {
             text = "";
         }
-        this.container.whistle.applyName(text);
-        DragonMounts.NETWORK_WRAPPER.sendToServer(new CRenameWhistlePacket(text));
+        this.container.flute.applyName(text);
+        DragonMounts.NETWORK_WRAPPER.sendToServer(new CRenameFlutePacket(text));
     }
 
     @Override
@@ -163,7 +163,7 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Wh
         }
         manager.bindTexture(PANEL);
         this.drawTexturedModalRect(x, y, 0, 0, 147, this.ySize);
-        if (this.container.whistle.getHasStack()) {
+        if (this.container.flute.getHasStack()) {
             this.drawTexturedModalRect(x + 29, y + 8, 0, this.ySize, 111, 16);
         }
         x += 10;
@@ -192,8 +192,8 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Wh
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if (this.container.whistle.getHasStack() && this.nameField.textboxKeyTyped(typedChar, keyCode)) {
-            this.renameWhistle();
+        if (this.container.flute.getHasStack() && this.nameField.textboxKeyTyped(typedChar, keyCode)) {
+            this.renameflute();
         } else {
             super.keyTyped(typedChar, keyCode);
         }
@@ -202,7 +202,7 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Wh
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int button) throws IOException {
         super.mouseClicked(mouseX, mouseY, button);
-        if (this.container.whistle.getHasStack()) {
+        if (this.container.flute.getHasStack()) {
             this.nameField.mouseClicked(mouseX, mouseY, button);
         }
     }
@@ -211,7 +211,7 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Wh
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         super.drawScreen(mouseX, mouseY, partialTicks);
-        if (this.container.whistle.getHasStack()) {
+        if (this.container.flute.getHasStack()) {
             GlStateManager.disableLighting();
             GlStateManager.disableBlend();
             this.nameField.drawTextBox();
@@ -234,7 +234,7 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Wh
     }
 
     @Override
-    public void beforePlaceItem(WhistleSlot slot, ItemStack stack) {
+    public void beforePlaceItem(FluteSlot slot, ItemStack stack) {
         if (stack.isEmpty()) {
             this.nameField.setEnabled(false);
             this.nameField.setText(slot.desiredName = "");
@@ -248,7 +248,7 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Wh
     }
 
     @Override
-    public void afterTakeItem(WhistleSlot slot, ItemStack stack) {
+    public void afterTakeItem(FluteSlot slot, ItemStack stack) {
         this.nameField.setText("");
         this.nameField.setEnabled(false);
     }

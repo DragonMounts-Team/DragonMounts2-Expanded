@@ -171,7 +171,7 @@ def generateRecipes(output: Output):
     .pattern(' # ') \
     .unlockedBy('has_pearl', hasEnderPearl) \
     .save(output, 'misc')
-  shaped(makeId('dragon_whistle')) \
+  shaped(makeId('flute')) \
     .define('P', enderPearl) \
     .define('#', stick) \
     .define('X', stringItem) \

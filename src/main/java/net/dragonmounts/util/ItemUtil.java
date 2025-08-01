@@ -1,13 +1,21 @@
 package net.dragonmounts.util;
 
 import net.dragonmounts.DragonMountsTags;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nullable;
+
 public class ItemUtil {
+    public static float isUsingItem(ItemStack stack, @Nullable World ignored, @Nullable EntityLivingBase holder) {
+        return holder != null && holder.isHandActive() && holder.getActiveItemStack() == stack ? 1.0F : 0.0F;
+    }
+
     public static boolean anyMatches(ItemStack stack, String... names) {
         if (stack.isEmpty()) return false;
         int[] ores = OreDictionary.getOreIDs(stack);
