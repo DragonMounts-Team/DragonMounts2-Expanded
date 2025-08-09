@@ -15,13 +15,19 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 
+import java.util.function.Supplier;
+
 import static net.dragonmounts.DragonMounts.applyId;
 import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
 
 public class DMBlocks {
     public static final ObjectArrayList<Block> BLOCKS = new ObjectArrayList<>();
-    public static final DragonNestBlock DRAGON_NEST = register("dragon_nest", new DragonNestBlock());
-    public static final DragonCoreBlock DRAGON_CORE = register("dragon_core", new DragonCoreBlock());
+    public static final DragonNestBlock DRAGON_NEST = register("dragon_nest", () -> {
+        DragonNestBlock block = new DragonNestBlock();
+        block.setHarvestLevel("axe", 0);
+        return block;
+    });
+    public static final DragonCoreBlock DRAGON_CORE = register("dragon_core", DragonCoreBlock::new);
     public static final DragonScaleBlock AETHER_DRAGON_SCALE_BLOCK;
     public static final DragonScaleBlock WATER_DRAGON_SCALE_BLOCK;
     public static final DragonScaleBlock ICE_DRAGON_SCALE_BLOCK;
@@ -53,7 +59,8 @@ public class DMBlocks {
     public static final HatchableDragonEggBlock ZOMBIE_DRAGON_EGG;
     public static final HatchableDragonEggBlock DARK_DRAGON_EGG;
 
-    static <T extends Block> T register(String name, T block) {
+    static <T extends Block> T register(String name, Supplier<T> factory) {
+        T block = factory.get();
         BLOCKS.add(block.setTranslationKey(TRANSLATION_KEY_PREFIX + name));
         return applyId(block, name);
     }

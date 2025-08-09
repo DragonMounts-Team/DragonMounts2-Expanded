@@ -3,12 +3,17 @@ package net.dragonmounts.item;
 import net.dragonmounts.block.DragonHeadBlock;
 import net.dragonmounts.registry.DragonVariant;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.dispenser.IBehaviorDispenseItem;
+import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Bootstrap;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -26,11 +31,19 @@ import static net.minecraft.block.BlockHorizontal.FACING;
 import static net.minecraft.block.BlockStandingSign.ROTATION;
 
 public class DragonHeadItem extends Item {
+    public static final IBehaviorDispenseItem DISPENSER_BEHAVIOR = new Bootstrap.BehaviorDispenseOptional() {
+        @Override
+        protected ItemStack dispenseStack(IBlockSource source, ItemStack stack) {
+            this.successful = !ItemArmor.dispenseArmor(source, stack).isEmpty();
+            return stack;
+        }
+    };
     public final DragonVariant variant;
     private String translationKey;
 
     public DragonHeadItem(DragonVariant variant) {
         this.variant = variant;
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, DISPENSER_BEHAVIOR);
     }
 
     @Nullable
