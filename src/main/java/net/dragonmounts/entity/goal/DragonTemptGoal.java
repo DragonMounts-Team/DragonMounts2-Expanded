@@ -30,15 +30,19 @@ public class DragonTemptGoal extends EntityAIBase {
             return false;
         }
         TameableDragonEntity dragon = this.dragon;
-        this.target = dragon.world.getClosestPlayer(dragon.posX, dragon.posY, dragon.posZ, 10.0D, DragonTemptGoal::shouldFollow);
-        return this.target != null;
+        this.target = dragon.world.getClosestPlayer(dragon.posX, dragon.posY, dragon.posZ, 12.0, DragonTemptGoal::shouldFollow);
+        if (this.target == null) {
+            this.delay = 10;
+            return false;
+        }
+        return true;
     }
 
     @Override
     public void resetTask() {
         this.target = null;
         this.dragon.getNavigator().clearPath();
-        this.delay = 100;
+        this.delay = 20;
     }
 
     @Override

@@ -142,11 +142,11 @@ public class ServerDragonEntity extends TameableDragonEntity {
         tasks.addTask(9, new EntityAIMoveTowardsRestriction(this, 1)); // mutex 1
         tasks.addTask(11, new EntityAIWander(this, 1)); // mutex 1
         tasks.addTask(12, new EntityAILookIdle(this)); // mutex 2
-        tasks.addTask(12, new LookAtOtherGoal(this, 16, 0.05f)); // mutex 2
+        tasks.addTask(12, new LookAtOtherGoal(this, 16, 0.05F)); // mutex 2
         if (stage.isBaby()) {
             tasks.addTask(4, new EntityAILeapAtTarget(this, 0.7F)); // mutex 1
             tasks.addTask(7, new DragonTemptGoal(this, 0.75)); // mutex 2+1
-            tasks.addTask(8, new DragonFollowParentGoal(this, 1.4f));
+            tasks.addTask(8, new DragonFollowParentGoal(this, 0.75));
         } else if (DragonLifeStage.ADULT == stage) {
             tasks.addTask(6, new BreedGoal(this, 0.6)); // mutex 2+1
         }

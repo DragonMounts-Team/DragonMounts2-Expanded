@@ -2,17 +2,17 @@ package net.dragonmounts.entity.goal;
 
 import com.google.common.base.Predicate;
 import net.dragonmounts.entity.ServerDragonEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.UUID;
 
 public class DragonFollowParentGoal extends EntityAIBase implements Predicate<ServerDragonEntity> {
     public final ServerDragonEntity dragon;
     /// assume any adult dragon nearby is a parent even if it is not
     private ServerDragonEntity parent;
-    private UUID owner;
+    private Entity owner;
     public final double speedModifier;
     private int pathValidity;
 
@@ -25,7 +25,7 @@ public class DragonFollowParentGoal extends EntityAIBase implements Predicate<Se
     @Override
     public boolean shouldExecute() {
         ServerDragonEntity dragon = this.dragon;
-        this.owner = dragon.getOwnerId();
+        this.owner = dragon.getOwner();
         List<ServerDragonEntity> list = dragon.world.getEntitiesWithinAABB(
                 ServerDragonEntity.class,
                 dragon.getEntityBoundingBox().grow(8.0D, 4.0D, 8.0D),
@@ -61,6 +61,7 @@ public class DragonFollowParentGoal extends EntityAIBase implements Predicate<Se
 
     @Override
     public void resetTask() {
+        this.dragon.getNavigator().clearPath();
         this.parent = null;
     }
 
@@ -74,8 +75,8 @@ public class DragonFollowParentGoal extends EntityAIBase implements Predicate<Se
 
     @Override
     public boolean apply(@Nullable ServerDragonEntity other) {
-        return other != null &&
-                other.getOwnerId() != this.owner &&
-                other.getControllingPassenger() == null;
+        return other != null && other.getControllingPassenger() == null && (
+                this.owner == null || this.owner.equals(other.getOwner())
+        );
     }
 }
