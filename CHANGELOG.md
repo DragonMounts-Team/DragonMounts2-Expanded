@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.1.1] - 2025-08-09
+
+## Changes
+
+- Axes can mine Nest Block faster.
+- Dragon Heads can be dispensed.
+- Make dragons being tempted by food more frequently.
+
+## Fixes
+
+- Navigation will stop if close enough to adult.
+- Dragon variant will be loaded earlier.
+
 ## [2.1.0] - 2025-07-20
 
 ### Additions

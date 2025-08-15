@@ -105,13 +105,12 @@ public class EntityUtil {
                 }
             }
         }
-        DragonVariant variant = saved == null ? fallback.variants.draw(level.rand, null) : saved;
+        dragon.setVariant(saved == null ? fallback.variants.draw(level.rand, null) : saved);
         return EntityUtil.finalizeSpawn(level, dragon, pos, true, null, (world, entity) -> {
             if (stack.hasDisplayName()) {
                 entity.setCustomNameTag(stack.getDisplayName());
             }
             ItemMonsterPlacer.applyItemEntityDataToEntity(world, player, stack, entity);
-            entity.setVariant(variant);
             modifier.accept(world, entity);
             ensureUUIDUnique(world, entity);
         }) ? dragon : null;
