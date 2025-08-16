@@ -1,26 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "roW",
-    "zrW",
-    " z "
+    "#U#",
+    "UOU",
+    "#U#"
   ],
   "key": {
-    "W": {
+    "#": {
       "type": "forge:ore_dict",
-      "ore": "gemEmerald"
+      "ore": "obsidian"
     },
-    "o": {
+    "O": {
       "type": "forge:ore_dict",
-      "ore": "ingotGold"
+      "ore": "enderpearl"
     },
-    "z": {
-      "type": "forge:ore_dict",
-      "ore": "gemDiamond"
-    },
-    "r": {
-      "type": "forge:ore_dict",
-      "ore": "dustRedstone"
+    "U": {
+      "item": "minecraft:dragon_breath"
     }
   },
   "result": {

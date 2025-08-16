@@ -63,7 +63,7 @@ class ItemStack(JsonSerializable):
     self.data = data
 
   def toJson(self):
-    result = { 'item': str(self.item) }
+    result: dict[str, object] = { 'item': str(self.item) }
     if (self.count != 1):
       result['count'] = self.count
     if (self.data != 32767):

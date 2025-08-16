@@ -180,7 +180,7 @@ tasks.register('generateModInfo') {
             if (json.weekly) {
                 project.version = "$project.version-${'%dw%02d'.formatted(Calendar.instance.get(Calendar.YEAR) % 100, Calendar.instance.get(Calendar.WEEK_OF_YEAR))}${suffix ?: 'a'}"
             } else if (suffix != null && !suffix.isBlank()) {
-                project.version = "$project.version-$json.suffix"
+                project.version = "$project.version-$suffix"
             }
         }
     }

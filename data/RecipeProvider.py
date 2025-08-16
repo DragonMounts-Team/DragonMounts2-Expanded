@@ -1,4 +1,4 @@
-from Core.Util import ResourceLocation, ItemStack, TagKey, makeId, cast2Ingredient
+from Core.Util import ResourceLocation, ItemStack, TagKey, makeId
 from Core.Criterion import InventoryChangedCriterion as has
 from Core.RecipeBuilder import ShapedRecipeBuilder as shaped, ShapelessRecipeBuilder as shapeless
 from Core.Output import Output
@@ -172,12 +172,11 @@ def generateRecipes(output: Output):
     .unlockedBy('has_pearl', hasEnderPearl) \
     .save(output, 'misc')
   shaped(makeId('flute')) \
-    .define('P', enderPearl) \
     .define('#', stick) \
     .define('X', stringItem) \
-    .pattern('P#') \
+    .pattern('X#') \
     .pattern('#X') \
-    .unlockedBy('has_pearl', hasEnderPearl) \
+    .unlockedBy('has_string', has(stringItem)) \
     .save(output, 'misc')
   shaped(makeId('diamond_shears')) \
     .define('X', ingot['diamond']) \
@@ -186,14 +185,13 @@ def generateRecipes(output: Output):
     .unlockedBy('has_diamond', hasDiamond) \
     .save(output, 'combat')
   shaped(makeId('variation_orb')) \
-    .define('W', ingot['emerald']) \
-    .define('o', ingot['gold']) \
-    .define('z', ingot['diamond']) \
-    .define('r', redstone) \
-    .pattern('roW') \
-    .pattern('zrW') \
-    .pattern(' z ') \
-    .unlockedBy('has_diamond', hasDiamond) \
+    .define('#', TagKey('obsidian')) \
+    .define('O', enderPearl) \
+    .define('U', 'dragon_breath') \
+    .pattern('#U#') \
+    .pattern('UOU') \
+    .pattern('#U#') \
+    .unlockedBy('has_breath', has('dragon_breath')) \
     .save(output, 'misc')
   shaped('dispenser') \
     .define('R', redstone) \
@@ -227,6 +225,6 @@ def generateRecipes(output: Output):
     .pattern('###') \
     .pattern('###') \
     .pattern('###') \
-    .unlockedBy('has_stick', has('stick')) \
+    .unlockedBy('has_stick', has(stick)) \
     .save(output, 'building_blocks')
   output.log('recipe(s)')

@@ -1,6 +1,11 @@
 from enum import Enum
 from Core.Util import makeId, TagKey
 class DragonArmorMaterial(Enum):
+  COPPER = [
+    makeId("copper_dragon_armor"),
+    TagKey('ingotCopper'),
+    TagKey('blockCopper')
+  ]
   IRON = [
     makeId("iron_dragon_armor"),
     TagKey('ingotIron'),

@@ -12,13 +12,12 @@
         "recipe": "dragonmounts:variation_orb"
       }
     },
-    "has_diamond": {
+    "has_breath": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "type": "forge:ore_dict",
-            "ore": "gemDiamond"
+            "item": "minecraft:dragon_breath"
           }
         ]
       }
@@ -27,7 +26,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_diamond"
+      "has_breath"
     ]
   ]
 }

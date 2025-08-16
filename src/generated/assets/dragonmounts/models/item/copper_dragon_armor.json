@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "dragonmounts:items/variation_orb"
+    "layer0": "dragonmounts:items/armor/dragon/copper"
   }
 }

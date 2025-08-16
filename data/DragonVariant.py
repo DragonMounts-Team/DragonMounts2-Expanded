@@ -25,7 +25,7 @@ class DragonVariant(Enum):
   MOONLIGHT_MALE = makeId('moonlight_male')
   NETHER_FEMALE = makeId('nether_female')
   NETHER_MALE = makeId('nether_male')
-  NETHER_RARE = makeId('nether_rare')
+  SOUL = makeId('soul')
   SKELETON = makeId('skeleton')
   STORM_FEMALE = makeId('storm_female')
   STORM_MALE = makeId('storm_male')

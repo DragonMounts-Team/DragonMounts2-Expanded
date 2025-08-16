@@ -32,7 +32,7 @@ class ModelBuilder(ABC):
     self.parent = parent
     self._textures = {}
   
-  def texture(self, slot: str, texture: ResourceLocation):
+  def texture(self, slot: str, texture: ResourceLocation | str):
     self._textures[slot] = texture
     return self
   
