@@ -26,8 +26,8 @@ public class ClientBreathNodeRenderer extends Render<ClientBreathNodeEntity> {
         GlStateManager.scale(scale, scale, scale);
         GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(this.renderManager.options.thirdPersonView == 2 ? this.renderManager.playerViewX : -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-        if (entity.extraRotation != 0.0F) {
-            GlStateManager.rotate((entity.ticksExisted + partialTicks) * entity.extraRotation, 0, 0, 1);
+        if (entity.rollSpeed != 0.0F) {
+            GlStateManager.rotate((entity.ticksExisted + partialTicks) * entity.rollSpeed, 0, 0, 1);
         }
         if (this.renderOutlines) {
             GlStateManager.enableColorMaterial();

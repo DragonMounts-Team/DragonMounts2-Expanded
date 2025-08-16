@@ -14,12 +14,12 @@ pullingPredicate = ResourceLocation('pulling')
 pullPredicate = ResourceLocation('pull')
 amuletModel = makeId('item/amulet')
 
-def basicItem(output: Output, identifier: ResourceLocation, texture: ResourceLocation = None):
+def basicItem(output: Output, identifier: ResourceLocation, texture: ResourceLocation | None = None):
   model(generatedModel)\
     .texture('layer0', identifier.withPrefix('items/') if texture is None else texture)\
     .save(output, identifier.path)
 
-def handheldItem(output: Output, identifier: ResourceLocation, texture: ResourceLocation = None):
+def handheldItem(output: Output, identifier: ResourceLocation, texture: ResourceLocation | None = None):
   model(handheldModel)\
     .texture('layer0', identifier.withPrefix('items/') if texture is None else texture)\
     .save(output, identifier.path)
@@ -85,7 +85,6 @@ def generateItemModels(output: Output):
   blockingShieldModel = makeId('item/shield/shield_blocking')
   spawnEggModel = ResourceLocation('item/spawn_egg')
   dragonHeadModel = ResourceLocation('item/skull_dragon')
-  basicItem(output, makeId('variation_orb'))
   basicItem(output, makeId('dragon_meat'))
   basicItem(output, makeId('cooked_dragon_meat'))
   basicItem(output, makeId('dracopedia'))

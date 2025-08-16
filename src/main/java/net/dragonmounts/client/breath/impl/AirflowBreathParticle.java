@@ -21,7 +21,7 @@ public class AirflowBreathParticle extends SimpleBreathParticle {
             float partialTicks
     ) {
         super(level, position, direction, power, texture, partialTicks);
-        this.extraRotation = this.rand.nextBoolean() ? 60.0F : -60.0F;
+        this.rollSpeed = this.rand.nextBoolean() ? 60.0F : -60.0F;
     }
 
     @Override

@@ -329,11 +329,9 @@ public class DMArmorEffects {
                     entity.hurtResistantTime = 0;
                     entity.attackEntityFrom(DamageSource.GENERIC, 1F);
                 }
-            } else {
-                if (ice) {
-                    entity.hurtResistantTime = 0;
-                    entity.attackEntityFrom(DamageSource.GENERIC, 1F);
-                }
+            } else if (ice) {
+                entity.hurtResistantTime = 0;
+                entity.attackEntityFrom(DamageSource.GENERIC, 1F);
             }
             if (nether) {
                 entity.setFire(10);

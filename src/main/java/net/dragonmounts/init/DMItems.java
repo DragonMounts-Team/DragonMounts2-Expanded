@@ -58,6 +58,7 @@ public class DMItems {
     public static final DragonScalesItem MOONLIGHT_DRAGON_SCALES = createDragonScalesItem("moonlight_dragon_scales", DragonTypes.MOONLIGHT);
     public static final DragonScalesItem DARK_DRAGON_SCALES = createDragonScalesItem("dark_dragon_scales", DragonTypes.DARK);
     //Dragon Armor
+    public static final DragonArmorItem COPPER_DRAGON_ARMOR = createDragonArmorItem("copper_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "iron.png", 2);
     public static final DragonArmorItem IRON_DRAGON_ARMOR = createDragonArmorItem("iron_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "iron.png", 3);
     public static final DragonArmorItem GOLDEN_DRAGON_ARMOR = createDragonArmorItem("golden_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "gold.png", 5);
     public static final DragonArmorItem EMERALD_DRAGON_ARMOR = createDragonArmorItem("emerald_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "emerald.png", 6);

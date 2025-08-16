@@ -20,7 +20,7 @@ public abstract class ClientBreathNodeEntity extends Entity implements ICollisio
     public static final float NORMAL_PARTICLE_CHANCE = 0.1F;
     public static final float SPECIAL_PARTICLE_CHANCE = 0.3F;
     public float scale;
-    public float extraRotation;
+    public float rollSpeed;
     protected final BreathNode node;
 
     public ClientBreathNodeEntity(

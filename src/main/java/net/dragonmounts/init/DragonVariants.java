@@ -44,7 +44,7 @@ public class DragonVariants {
     public static final DragonVariant MOONLIGHT_MALE;
     public static final DragonVariant NETHER_FEMALE;
     public static final DragonVariant NETHER_MALE;
-    public static final DragonVariant NETHER_RARE;
+    public static final DragonVariant SOUL;
     public static final DragonVariant SKELETON;
     public static final DragonVariant STORM_FEMALE;
     public static final DragonVariant STORM_MALE;
@@ -100,7 +100,7 @@ public class DragonVariants {
         values.add(MOONLIGHT_MALE = make(appearance, DragonTypes.MOONLIGHT, "moonlight_male"));
         values.add(NETHER_FEMALE = make(appearance, DragonTypes.NETHER, "nether_female"));
         values.add(NETHER_MALE = make(appearance, DragonTypes.NETHER, "nether_male"));
-        values.add(NETHER_RARE = make(appearance, DragonTypes.NETHER, "nether_rare"));
+        values.add(SOUL = make(appearance, DragonTypes.NETHER, "soul"));
         values.add(SKELETON = make(appearance, DragonTypes.SKELETON, "skeleton"));
         values.add(STORM_FEMALE = make(appearance, DragonTypes.STORM, "storm_female"));
         values.add(STORM_MALE = make(appearance, DragonTypes.STORM, "storm_male"));
