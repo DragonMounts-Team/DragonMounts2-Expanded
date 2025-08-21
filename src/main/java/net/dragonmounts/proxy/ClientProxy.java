@@ -43,7 +43,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-
 /**
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  * 2nd @author TheRPGAdventurer

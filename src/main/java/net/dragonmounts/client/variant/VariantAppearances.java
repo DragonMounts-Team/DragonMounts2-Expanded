@@ -62,6 +62,7 @@ public class VariantAppearances {
 
     static {
         Builder builder = new Builder(BuiltinFactory.NORMAL)
+                .withDecal(makeId(TEXTURES_ROOT + "dark/dissolve.png"))
                 .withBreath(BuiltinBreathTextures.DARK_BREATH);
         DARK_FEMALE = builder.build(MOD_ID, "dark/female");
         DARK_MALE = builder.build(MOD_ID, "dark/male");
@@ -101,6 +102,7 @@ public class VariantAppearances {
 
     static {
         Builder builder = new Builder(BuiltinFactory.TAIL_SCALE_INCLINED)
+                .withDecal(makeId(TEXTURES_ROOT + "ice/dissolve.png"))
                 .withBreath(BuiltinBreathTextures.ICE_BREATH, IceBreathParticle.FACTORY);
         ICE_FEMALE = builder.build(MOD_ID, "ice/female");
         ICE_MALE = builder.build(MOD_ID, "ice/male");
@@ -108,8 +110,9 @@ public class VariantAppearances {
 
     static {
         Builder builder = new Builder(BuiltinFactory.NORMAL);
-        MOONLIGHT_FEMALE = builder.build(MOD_ID, "moonlight/female");
         MOONLIGHT_MALE = builder.build(MOD_ID, "moonlight/male");
+        MOONLIGHT_FEMALE = builder.withDecal(makeId(TEXTURES_ROOT + "moonlight/female/dissolve.png"))
+                .build(MOD_ID, "moonlight/female");
     }
 
     static {
@@ -118,10 +121,6 @@ public class VariantAppearances {
         NETHER_FEMALE = builder.build(MOD_ID, "nether/female");
         NETHER_MALE = builder.build(MOD_ID, "nether/male");
         SOUL = builder.withBreath(BuiltinBreathTextures.SOUL_BREATH).build(MOD_ID, "nether/soul");
-    }
-
-    static {
-        SKELETON = new Builder(BuiltinFactory.SKELETON).build(MOD_ID, "skeleton");
     }
 
     static {
@@ -153,14 +152,16 @@ public class VariantAppearances {
 
     static {
         Builder builder = new Builder(BuiltinFactory.SKELETON)
-                .withBreath(BuiltinBreathTextures.WITHER_BREATH);
-        WITHER = builder.build(MOD_ID, "wither");
+                .withDecal(makeId(TEXTURES_ROOT + "skeleton/dissolve.png"));
+        SKELETON = builder.build(MOD_ID, "skeleton");
+        WITHER = builder.withBreath(BuiltinBreathTextures.WITHER_BREATH).build(MOD_ID, "wither");
     }
 
     static {
-        Builder builder = new Builder(BuiltinFactory.TAIL_HORNED)
-                .withBreath(BuiltinBreathTextures.POISON_BREATH, PoisonBreathParticle.FACTORY);
-        ZOMBIE = builder.build(MOD_ID, "zombie");
+        ZOMBIE = new Builder(BuiltinFactory.TAIL_HORNED)
+                .withDecal(makeId(TEXTURES_ROOT + "zombie/dissolve.png"))
+                .withBreath(BuiltinBreathTextures.POISON_BREATH, PoisonBreathParticle.FACTORY)
+                .build(MOD_ID, "zombie");
     }
 
     public static Function<String, VariantAppearance> getSupplier() {

@@ -414,6 +414,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
     @Override
     public void onDeath(DamageSource source) {
         super.onDeath(source);
+        this.inventory.dropAllItems();
         if (isTamed()) {
             DragonEssenceItem item = this.getVariant().type.getInstance(DragonEssenceItem.class, null);
             if (item == null) return;
@@ -423,8 +424,6 @@ public class ServerDragonEntity extends TameableDragonEntity {
             if (tile instanceof DragonCoreBlockEntity) {
                 ((DragonCoreBlockEntity) tile).setInventorySlotContents(0, item.saveEntity(this));
             }
-        } else if (!isEgg()) {
-            this.inventory.dropAllItems();
         }
     }
 

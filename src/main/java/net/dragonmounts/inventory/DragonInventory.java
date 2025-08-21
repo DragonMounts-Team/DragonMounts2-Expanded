@@ -332,9 +332,7 @@ public final class DragonInventory implements IInventory {
         }
     }
 
-    /**
-     * Server only
-     */
+    /// Should only be called on SERVER side
     public void dropAllItems() {
         TameableDragonEntity dragon = this.dragon;
         EntityUtil.dropItems(dragon, this.stacks);

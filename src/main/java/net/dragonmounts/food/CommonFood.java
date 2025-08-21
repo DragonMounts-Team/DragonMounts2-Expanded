@@ -46,6 +46,7 @@ public class CommonFood implements ICapabilityProvider, IDragonFood {
             if (IDragonFood.isSatiated(dragon)) return false;
         } else {
             relation.onDeny(player);
+            return false;
         }
         dragon.consumeFood(stack, this.level, this.growth);
         dragon.heal(this.health);
