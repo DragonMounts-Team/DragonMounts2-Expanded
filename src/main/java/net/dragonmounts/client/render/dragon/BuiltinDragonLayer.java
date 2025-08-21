@@ -17,12 +17,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityBanner;
 
-import static org.lwjgl.opengl.GL11.GL_ONE;
+import static org.lwjgl.opengl.GL11.*;
 
 public enum BuiltinDragonLayer implements IDragonLayer {
     GLOW() {
         @Override
         public void renderLayer(TextureManager manager, DragonModel model, ClientDragonEntity dragon, float moveTime, float moveSpeed, float partialTicks, float ticksExisted, float lookYaw, float lookPitch, float scale) {
+            boolean decal = dragon.deathTime > 0;
+            if (decal) {
+                GlStateManager.depthFunc(GL_EQUAL);
+            }
             manager.bindTexture(dragon.getVariant().appearance.getGlow(dragon));
             GlStateManager.enableBlend();
             GlStateManager.blendFunc(GL_ONE, GL_ONE);
@@ -38,6 +42,9 @@ public enum BuiltinDragonLayer implements IDragonLayer {
             );
             GlStateManager.enableLighting();
             GlStateManager.disableBlend();
+            if (decal) {
+                GlStateManager.depthFunc(GL_LEQUAL);
+            }
         }
     },
     ARMOR() {

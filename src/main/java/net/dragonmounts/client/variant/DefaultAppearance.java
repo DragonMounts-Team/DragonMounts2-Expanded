@@ -18,12 +18,21 @@ public class DefaultAppearance extends VariantAppearance {
     public final ResourceLocation breath;
     public final ResourceLocation body;
     public final ResourceLocation glow;
+    public final ResourceLocation decal;
     public final DragonModel model;
 
-    public DefaultAppearance(IModelFactory model, ResourceLocation body, ResourceLocation glow, ResourceLocation breath, IBreathParticleFactory factory) {
+    public DefaultAppearance(
+            IModelFactory model,
+            ResourceLocation body,
+            ResourceLocation glow,
+            ResourceLocation decal,
+            ResourceLocation breath,
+            IBreathParticleFactory factory
+    ) {
         this.model = new DragonModel(model);
         this.body = body;
         this.glow = glow;
+        this.decal = decal;
         this.breath = breath;
         this.factory = factory;
     }
@@ -44,6 +53,11 @@ public class DefaultAppearance extends VariantAppearance {
     }
 
     @Override
+    public ResourceLocation getDissolve(ClientDragonEntity dragon) {
+        return this.decal;
+    }
+
+    @Override
     public void spawnBreathParticle(World level, Vec3d position, Vec3d direction, BreathPower power, float partialTicks) {
         level.spawnEntity(this.factory.createParticle(level, position, direction, power, this.breath, partialTicks));
     }
@@ -52,6 +66,7 @@ public class DefaultAppearance extends VariantAppearance {
         public final IModelFactory model;
         public IBreathParticleFactory factory = SimpleBreathParticle.FACTORY;
         public ResourceLocation breath = BuiltinBreathTextures.FLAME_BREATH;
+        public ResourceLocation decal = DEFAULT_DISSOLVE;
 
         public Builder(IModelFactory model) {
             this.model = model;
@@ -67,6 +82,11 @@ public class DefaultAppearance extends VariantAppearance {
             return this.withBreath(breath);
         }
 
+        public Builder withDecal(ResourceLocation decal) {
+            this.decal = decal;
+            return this;
+        }
+
         public DefaultAppearance build(String namespace, String path) {
             return this.build(
                     new ResourceLocation(namespace, TEXTURES_ROOT + path + "/body.png"),
@@ -75,7 +95,7 @@ public class DefaultAppearance extends VariantAppearance {
         }
 
         public DefaultAppearance build(ResourceLocation body, ResourceLocation glow) {
-            return new DefaultAppearance(this.model, body, glow, this.breath, this.factory);
+            return new DefaultAppearance(this.model, body, glow, this.decal, this.breath, this.factory);
         }
     }
 }

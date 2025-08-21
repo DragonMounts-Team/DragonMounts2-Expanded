@@ -30,6 +30,7 @@ import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -215,6 +216,11 @@ public class RegistryEventHandler {
 
     public static void registerRecipes() {
         GameRegistry.addSmelting(DMItems.DRAGON_MEAT, new ItemStack(DMItems.COOKED_DRAGON_MEAT), 0.35F);
+        GameRegistry.addSmelting(DMItems.IRON_DRAGON_ARMOR, new ItemStack(Items.IRON_INGOT), 0.7F);
+        GameRegistry.addSmelting(DMItems.GOLDEN_DRAGON_ARMOR, new ItemStack(Items.GOLD_INGOT), 1.0F);
+        NonNullList<ItemStack> coppers = OreDictionary.getOres("ingotCopper");
+        if (coppers.isEmpty()) return;
+        GameRegistry.addSmelting(DMItems.COPPER_DRAGON_ARMOR, coppers.get(0), 0.7F);
     }
 
     @SubscribeEvent

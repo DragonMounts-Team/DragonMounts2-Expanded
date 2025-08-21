@@ -32,7 +32,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
+import java.util.Iterator;
+
 import static org.lwjgl.opengl.GL11.*;
+
 
 /**
  * Generic renderer for all dragons.
@@ -67,11 +70,22 @@ public class DragonRenderer extends RenderLiving<ClientDragonEntity> {
         VariantAppearance appearance = dragon.getVariant().appearance;
         TextureManager manager = this.renderManager.renderEngine;
         DragonModel model = appearance.getModel(dragon);
-        for (IDragonLayer layer : appearance.layers) {
-            boolean changed = setBrightness(dragon, partialTicks, layer.shouldCombineTextures());
+        Iterator<IDragonLayer> iterator = appearance.layers.iterator();
+        if (iterator.hasNext()) {
+            IDragonLayer layer = iterator.next();
+            boolean combined = layer.shouldCombineTextures();
+            boolean changed = this.setBrightness(dragon, partialTicks, combined);
             layer.renderLayer(manager, model, dragon, moveTime, moveSpeed, partialTicks, ticksExisted, lookYaw, lookPitch, scale);
+            while (iterator.hasNext()) {
+                layer = iterator.next();
+                if (combined != layer.shouldCombineTextures() && this.setBrightness(dragon, partialTicks, !combined)) {
+                    combined = !combined;
+                    changed = true;
+                }
+                layer.renderLayer(manager, model, dragon, moveTime, moveSpeed, partialTicks, ticksExisted, lookYaw, lookPitch, scale);
+            }
             if (changed) {
-                unsetBrightness();
+                this.unsetBrightness();
             }
         }
     }
@@ -81,27 +95,33 @@ public class DragonRenderer extends RenderLiving<ClientDragonEntity> {
      */
     @Override
     protected void renderModel(ClientDragonEntity dragon, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
-
-        float death = dragon.deathTime / (float) dragon.getMaxDeathTime();
-
-        if (death > 0) {
-            glPushAttrib(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-
-            GlStateManager.depthFunc(GL_LEQUAL);
-            GlStateManager.enableAlpha();
-            GlStateManager.alphaFunc(GL_GREATER, death);
-
-            bindTexture(dragon.getVariant().appearance.getDissolve(dragon));
-            mainModel.render(dragon, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
-
-            GlStateManager.alphaFunc(GL_GREATER, 0.1f);
-            GlStateManager.depthFunc(GL_EQUAL);
-        }
-
-        super.renderModel(dragon, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
-
-        if (death > 0) {
-            GlStateManager.popAttrib();
+        boolean visible = this.isVisible(dragon);
+        boolean transparent = !visible && !dragon.isInvisibleToPlayer(Minecraft.getMinecraft().player);
+        if (visible || transparent) {
+            if (transparent) {
+                GlStateManager.enableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
+            }
+            if (dragon.deathTime > 0) {
+                VariantAppearance appearance = dragon.getVariant().appearance;
+                GlStateManager.enableAlpha();
+                GlStateManager.alphaFunc(GL_GREATER, dragon.deathTime / (float) dragon.getMaxDeathTime());
+                GlStateManager.depthFunc(GL_LEQUAL);
+                GlStateManager.colorMask(false, false, false, false);
+                this.bindTexture(appearance.getDissolve(dragon));
+                this.mainModel.render(dragon, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
+                GlStateManager.colorMask(true, true, true, true);
+                GlStateManager.depthFunc(GL_EQUAL);
+                GlStateManager.alphaFunc(GL_GREATER, 0.1F);
+                this.bindTexture(appearance.getBody(dragon));
+                this.mainModel.render(dragon, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
+                GlStateManager.depthFunc(GL_LEQUAL);
+            } else {
+                this.bindTexture(dragon.getVariant().appearance.getBody(dragon));
+                this.mainModel.render(dragon, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
+            }
+            if (transparent) {
+                GlStateManager.disableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
+            }
         }
     }
 

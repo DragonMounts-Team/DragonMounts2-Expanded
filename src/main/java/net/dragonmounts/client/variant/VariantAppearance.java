@@ -5,7 +5,6 @@ import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.model.dragon.DragonModel;
 import net.dragonmounts.client.render.dragon.BuiltinDragonLayer;
 import net.dragonmounts.client.render.dragon.IDragonLayer;
-import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.BreathPower;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
@@ -36,16 +35,14 @@ public abstract class VariantAppearance {
 
     public abstract ResourceLocation getGlow(@Nullable ClientDragonEntity dragon);
 
-    public ResourceLocation getChest(TameableDragonEntity dragon) {
+    public abstract ResourceLocation getDissolve(@Nullable ClientDragonEntity dragon);
+
+    public ResourceLocation getChest(@Nullable ClientDragonEntity dragon) {
         return DEFAULT_CHEST;
     }
 
-    public ResourceLocation getSaddle(TameableDragonEntity dragon) {
+    public ResourceLocation getSaddle(@Nullable ClientDragonEntity dragon) {
         return DEFAULT_SADDLE;
-    }
-
-    public ResourceLocation getDissolve(TameableDragonEntity dragon) {
-        return DEFAULT_DISSOLVE;
     }
 
     public abstract void spawnBreathParticle(World level, Vec3d position, Vec3d direction, BreathPower power, float partialTicks);
