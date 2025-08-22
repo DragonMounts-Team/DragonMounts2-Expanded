@@ -3,7 +3,7 @@ package net.dragonmounts.client.variant;
 import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.breath.BuiltinBreathTextures;
 import net.dragonmounts.client.breath.IBreathParticleFactory;
-import net.dragonmounts.client.breath.impl.SimpleBreathParticle;
+import net.dragonmounts.client.breath.impl.FlameBreathParticle;
 import net.dragonmounts.client.model.dragon.DragonModel;
 import net.dragonmounts.client.model.dragon.IModelFactory;
 import net.dragonmounts.entity.breath.BreathPower;
@@ -64,7 +64,7 @@ public class DefaultAppearance extends VariantAppearance {
 
     public static class Builder {
         public final IModelFactory model;
-        public IBreathParticleFactory factory = SimpleBreathParticle.FACTORY;
+        public IBreathParticleFactory factory = FlameBreathParticle.FACTORY;
         public ResourceLocation breath = BuiltinBreathTextures.FLAME_BREATH;
         public ResourceLocation decal = DEFAULT_DISSOLVE;
 

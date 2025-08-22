@@ -7,7 +7,6 @@ import net.dragonmounts.util.ICollisionObserver;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -69,21 +68,7 @@ public abstract class ClientBreathNodeEntity extends Entity implements ICollisio
         }
     }
 
-    protected void handleMovement() {
-        // spawn a smoke trail after some time
-        if (this.rand.nextFloat() <= NORMAL_PARTICLE_CHANCE && this.rand.nextFloat() < this.node.getLifetimeFraction()) {
-            this.world.spawnParticle(this.getParticleType(), this.posX, this.posY, this.posZ, this.motionX * 0.5, this.motionY * 0.5, this.motionZ * 0.5);
-        }
-
-        // smoke / steam when hitting water.  node is responsible for aging to death
-        if (this.handleWaterMovement()) {
-            this.world.spawnParticle(this.getParticleType(), this.posX, this.posY, this.posZ, 0, 0, 0);
-        }
-    }
-
-    protected EnumParticleTypes getParticleType() {
-        return this.rand.nextFloat() <= SPECIAL_PARTICLE_CHANCE ? EnumParticleTypes.SMOKE_LARGE : EnumParticleTypes.SMOKE_NORMAL;
-    }
+    protected abstract void handleMovement();
 
     public abstract ResourceLocation getTexture();
 
