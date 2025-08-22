@@ -6,7 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class PoisonBreathParticle extends SimpleBreathParticle {
+public class PoisonBreathParticle extends TexturedBreathParticle {
     public static final IBreathParticleFactory FACTORY = PoisonBreathParticle::new;
 
     public PoisonBreathParticle(

@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EnderBreathParticle extends SimpleBreathParticle {
+public class EnderBreathParticle extends FlameBreathParticle {
     public static final IBreathParticleFactory FACTORY = EnderBreathParticle::new;
 
     public EnderBreathParticle(

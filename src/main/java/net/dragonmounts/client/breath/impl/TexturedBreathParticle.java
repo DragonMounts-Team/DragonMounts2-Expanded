@@ -1,17 +1,15 @@
 package net.dragonmounts.client.breath.impl;
 
 import net.dragonmounts.client.breath.ClientBreathNodeEntity;
-import net.dragonmounts.client.breath.IBreathParticleFactory;
 import net.dragonmounts.entity.breath.BreathPower;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class SimpleBreathParticle extends ClientBreathNodeEntity {
-    public static final IBreathParticleFactory FACTORY = SimpleBreathParticle::new;
+public abstract class TexturedBreathParticle extends ClientBreathNodeEntity {
     public final ResourceLocation texture;
 
-    public SimpleBreathParticle(
+    public TexturedBreathParticle(
             World level,
             Vec3d position,
             Vec3d direction,

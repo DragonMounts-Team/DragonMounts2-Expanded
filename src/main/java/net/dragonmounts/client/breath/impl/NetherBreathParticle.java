@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class NetherBreathParticle extends SimpleBreathParticle {
+public class NetherBreathParticle extends FlameBreathParticle {
     public static final IBreathParticleFactory FACTORY = NetherBreathParticle::new;
 
     public NetherBreathParticle(
@@ -19,6 +19,11 @@ public class NetherBreathParticle extends SimpleBreathParticle {
             float partialTicks
     ) {
         super(level, position, direction, power, texture, partialTicks);
+    }
+
+    @Override
+    public int getBrightnessForRender() {
+        return super.getBrightnessForRender() & 0x00FF0000 | 0xF0;
     }
 
     @Override
