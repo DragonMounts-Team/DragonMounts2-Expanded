@@ -780,12 +780,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     }
 
     @Override
-    public void dismountRidingEntity() {
-        super.dismountRidingEntity();
-        this.setUsingBreathWeapon(false);
-    }
-
-    @Override
     public boolean canFitPassenger(Entity passenger) {
         List<Entity> passengers = this.getCachedPassengers();
         boolean hasController = this.getControllingPassenger() instanceof EntityPlayer;

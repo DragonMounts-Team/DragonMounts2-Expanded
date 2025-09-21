@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraft.server.management.PlayerList net.minecraft.nbt.NBTTagCompound getPlayerNBT(net.minecraft.entity.player.EntityPlayerMP)'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+</root>

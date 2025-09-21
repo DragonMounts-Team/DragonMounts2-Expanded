@@ -53,6 +53,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.util.Constants;
 
@@ -366,17 +367,18 @@ public class ServerDragonEntity extends TameableDragonEntity {
             }
             IDragonFood food = stack.getCapability(DMCapabilities.DRAGON_FOOD, null);
             if (food != null && food.tryFeed(this, player, relation, stack, hand)) return true;
+            if (stack.interactWithEntity(player, this, hand)) return true;
         }
-        if (stack.interactWithEntity(player, this, hand)) return true;
         if (!relation.isTrusted) {
             relation.onDeny(player);
             return false;
         }
         if (!player.isSneaking()) {
             if (isChild) {
-                if (!isSitting() && player.getPassengers().size() < 2) {
+                if (!this.isSitting() && player.getPassengers().size() < 2 && this.startRiding(player, true)) {
                     this.setAttackTarget(null);
-                    this.startRiding(player, true);
+                    this.getNavigator().clearPath();
+                    return true;
                 }
             } else if (this.isSaddled() && player.startRiding(this)) {
                 player.rotationYaw = this.rotationYaw;
@@ -490,6 +492,19 @@ public class ServerDragonEntity extends TameableDragonEntity {
             motionY += flag ? 0.7 : 6;
             inAirTicks += flag ? 3 : 4;
             jump();
+        }
+    }
+
+    @Override
+    public void dismountRidingEntity() {
+        Entity entity = this.getRidingEntity();
+        super.dismountRidingEntity();
+        this.setUsingBreathWeapon(false);
+        if (entity instanceof EntityPlayer) {
+            Chunk chunk = this.world.getChunkProvider().getLoadedChunk(this.chunkCoordX, this.chunkCoordZ);
+            if (chunk != null) {
+                chunk.markDirty();
+            }
         }
     }
 

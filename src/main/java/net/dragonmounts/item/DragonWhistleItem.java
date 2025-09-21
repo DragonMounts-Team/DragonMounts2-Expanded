@@ -99,7 +99,7 @@ public class DragonWhistleItem extends Item {
             root.setLong("DragonUUIDLeast", root.getLong(least));
             root.removeTag(least);
         }
-        if (root.hasKey("OwnerName", 8)) {
+        if (!root.hasUniqueId("Owner") && root.hasKey("OwnerName", 8)) {
             String name = root.getString("OwnerName");
             if (StringUtils.isBlank(name)) return null;
             root.setUniqueId("Owner", updateGameProfile(new GameProfile(null, name)).getId());

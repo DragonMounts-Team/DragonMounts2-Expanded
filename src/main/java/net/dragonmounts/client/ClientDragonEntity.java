@@ -107,23 +107,30 @@ public class ClientDragonEntity extends TameableDragonEntity {
         if (player.isPassenger(this)) return false;
         ItemStack stack = player.getHeldItem(hand);
         final Relation relation = Relation.checkRelation(this, player);
+        final boolean isChild = stage.isBaby();
         if (!stack.isEmpty()) {
-            final boolean oldEnough = !stage.isBaby();
-            if (oldEnough && this.canShare()) {
+            if (!isChild && this.canShare()) {
                 IHardShears shears = stack.getCapability(DMCapabilities.HARD_SHEARS, null);
                 if (shears != null && shears.canShear(stack, player, this)) return true;
             }
             if (relation.isTrusted && ((
                     this.onGround && ItemUtil.anyMatches(stack, "stickWood", "bone")
-            ) || (oldEnough && (
+            ) || (!isChild && (
                     this.canCollectBreath() && stack.getItem() == Items.GLASS_BOTTLE
             ) || (
                     !this.isSaddled() && stack.getItem() == Items.SADDLE
             )))) return true;
             IDragonFood food = stack.getCapability(DMCapabilities.DRAGON_FOOD, null);
             if (food != null && food.tryFeed(this, player, relation, stack, hand)) return true;
+            if (stack.interactWithEntity(player, this, hand)) return true;
         }
-        return stack.interactWithEntity(player, this, hand) || relation.isTrusted;
+        if (relation.isTrusted) {
+            if (isChild && !this.isSitting() && player.getPassengers().size() < 2) {
+                this.startRiding(player, true);
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override
