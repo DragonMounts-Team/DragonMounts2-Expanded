@@ -1,14 +1,23 @@
 # Changelog
 
+## [2.1.2] - 2025-09-30
+
+### Fixes
+
+- Owner name of whistle won't get converted into uuid if uuid already exists.
+- Riding can properly consume interaction to prevent inventory opening.
+- Riding now syncs on client side.
+- Dragon can be saved after dismounting from a disconnected local player.
+
 ## [2.1.1] - 2025-08-09
 
-## Changes
+### Changes
 
 - Axes can mine Nest Block faster.
 - Dragon Heads can be dispensed.
 - Make dragons being tempted by food more frequently.
 
-## Fixes
+### Fixes
 
 - Navigation will stop if close enough to adult.
 - Dragon variant will be loaded earlier.
