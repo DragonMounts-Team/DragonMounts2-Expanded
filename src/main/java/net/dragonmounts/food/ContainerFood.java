@@ -15,13 +15,13 @@ import javax.annotation.Nullable;
 
 import static net.dragonmounts.capability.DMCapabilities.DRAGON_FOOD;
 
-public class WrappedFood implements ICapabilityProvider, IDragonFood {
+public class ContainerFood implements ICapabilityProvider, IDragonFood {
     public final IDragonFood food;
-    public final Item wrapper;
+    public final Item container;
     public final int meta;
 
-    public WrappedFood(IDragonFood food, Item wrapper, int meta) {
-        this.wrapper = wrapper;
+    public ContainerFood(IDragonFood food, Item container, int meta) {
+        this.container = container;
         this.food = food;
         this.meta = meta;
     }
@@ -29,8 +29,11 @@ public class WrappedFood implements ICapabilityProvider, IDragonFood {
     @Override
     public boolean tryFeed(TameableDragonEntity dragon, EntityPlayer player, Relation relation, ItemStack stack, EnumHand hand) {
         if (this.food.tryFeed(dragon, player, relation, stack, hand)) {
-            if (dragon.world.isRemote || player.capabilities.isCreativeMode) return true;
-            player.addItemStackToInventory(new ItemStack(this.wrapper, 1, this.meta));
+            if (dragon.world.isRemote) return true;
+            ItemStack container = new ItemStack(this.container, 1, this.meta);
+            if (!player.inventory.addItemStackToInventory(container) && !player.capabilities.isCreativeMode) {
+                player.dropItem(container, false);
+            }
             return true;
         }
         return false;

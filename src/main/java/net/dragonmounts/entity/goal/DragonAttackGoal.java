@@ -7,11 +7,16 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.Path;
+import net.minecraft.world.EnumDifficulty;
 
 /**
  * @see net.minecraft.entity.ai.EntityAIAttackMelee
  */
 public class DragonAttackGoal extends EntityAIBase {
+    public static boolean shouldIgnoreTarget(EntityPlayer player) {
+        return player.isSpectator() || player.isCreative() || player.world.getDifficulty() == EnumDifficulty.PEACEFUL;
+    }
+
     public final ServerDragonEntity dragon;
     public final double speedModifier;
     protected int attackTick;
@@ -35,6 +40,7 @@ public class DragonAttackGoal extends EntityAIBase {
         this.lastCheck = dragon.ticksExisted;
         EntityLivingBase target = dragon.getAttackTarget();
         if (target == null || !target.isEntityAlive()) return false;
+        if (target instanceof EntityPlayer && shouldIgnoreTarget((EntityPlayer) target)) return false;
         this.path = dragon.getNavigator().getPathToEntityLiving(target);
         return this.path != null || this.getAttackReachSqr(target) >= dragon.getDistanceSq(
                 target.posX,
@@ -47,10 +53,7 @@ public class DragonAttackGoal extends EntityAIBase {
     public boolean shouldContinueExecuting() {
         TameableDragonEntity dragon = this.dragon;
         EntityLivingBase target = dragon.getAttackTarget();
-        if (target instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) target;
-            if (player.isSpectator() || player.isCreative()) return false;
-        }
+        if (target instanceof EntityPlayer && shouldIgnoreTarget((EntityPlayer) target)) return false;
         return target != null && target.isEntityAlive() && dragon.getControllingPassenger() == null;
     }
 
@@ -64,11 +67,8 @@ public class DragonAttackGoal extends EntityAIBase {
     @Override
     public void resetTask() {
         EntityLivingBase target = this.dragon.getAttackTarget();
-        if (target instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) target;
-            if (player.isSpectator() || player.isCreative()) {
-                this.dragon.setAttackTarget(null);
-            }
+        if (target instanceof EntityPlayer && shouldIgnoreTarget((EntityPlayer) target)) {
+            this.dragon.setAttackTarget(null);
         }
         this.dragon.setUsingBreathWeapon(false);
         this.dragon.getNavigator().clearPath();

@@ -10,8 +10,6 @@ c ** 2012 August 13
 package net.dragonmounts.entity;
 
 import io.netty.buffer.ByteBuf;
-import net.dragonmounts.capability.DMCapabilities;
-import net.dragonmounts.capability.IDragonFood;
 import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.breath.DragonBreathHelper;
@@ -19,6 +17,7 @@ import net.dragonmounts.entity.helper.DragonBodyHelper;
 import net.dragonmounts.entity.helper.DragonLifeStageHelper;
 import net.dragonmounts.entity.helper.DragonVariantHelper;
 import net.dragonmounts.init.DMSounds;
+import net.dragonmounts.init.DragonFoods;
 import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.init.DragonVariants;
 import net.dragonmounts.inventory.DragonInventory;
@@ -29,6 +28,7 @@ import net.dragonmounts.util.MutableBlockPosEx;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -66,6 +66,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import static net.dragonmounts.util.EntityUtil.addOrMergeEffect;
 import static net.dragonmounts.util.EntityUtil.replaceAttributeModifier;
 
 public abstract class TameableDragonEntity extends EntityTameable implements IEntityAdditionalSpawnData {
@@ -508,8 +509,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
      */
     @Override
     public boolean isBreedingItem(ItemStack stack) {
-        IDragonFood food = stack.getCapability(DMCapabilities.DRAGON_FOOD, null);
-        return food != null && food.isBreedingItem(this, stack);
+        return DragonFoods.getFood(stack).isBreedingItem(this, stack);
     }
 
     /**
@@ -572,24 +572,21 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         return this.getVariant().type.isInvulnerableTo(src);
     }
 
-    /**
-     * Called when an entity attacks
-     */
-    public boolean attackEntityAsMob(Entity entityIn) {
-        boolean attacked = entityIn.attackEntityFrom(
-                DamageSource.causeMobDamage(this),
-                (float) getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()
-        );
-
-        if (attacked) {
-            applyEnchantments(this, entityIn);
+    @Override
+    public boolean attackEntityAsMob(@Nonnull Entity target) {
+        this.setLastAttackedEntity(target);
+        float damage = (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
+        if (target instanceof EntityLivingBase) {
+            damage += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), ((EntityLivingBase) target).getCreatureAttribute());
+            if (this.getVariant().type == DragonTypes.WITHER) {
+                addOrMergeEffect((EntityLivingBase) target, MobEffects.WITHER, 2000, 0, false, true);
+            }
         }
-
-        if (this.getVariant().type == DragonTypes.WITHER) {
-            ((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.WITHER, 200));
+        if (target.attackEntityFrom(DamageSource.causeMobDamage(this), damage)) {
+            this.applyEnchantments(this, target);
+            return true;
         }
-
-        return attacked;
+        return false;
     }
 
     @Override

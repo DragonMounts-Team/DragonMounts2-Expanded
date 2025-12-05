@@ -32,7 +32,6 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -67,7 +66,7 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
                 stack.setCount(1); // prevent from clearing item
                 ForgeEventFactory.onPlayerDestroyItem(player, stack.copy(), hand);
                 player.setHeldItem(hand, result);
-            } else if (!player.addItemStackToInventory(result)) {
+            } else if (!player.inventory.addItemStackToInventory(result)) {
                 player.dropItem(result, false);
             }
             if (dragon.getLeashed()) dragon.clearLeashed(true, true); // Fix Lead Dupe exploit
@@ -89,7 +88,7 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
         ItemStack amulet = new ItemStack(DMItems.AMULET);
         if (stack.isEmpty()) {
             player.setHeldItem(hand, amulet);
-        } else if (!player.addItemStackToInventory(amulet)) {
+        } else if (!player.inventory.addItemStackToInventory(amulet)) {
             player.dropItem(amulet, false);
         }
         return EnumActionResult.SUCCESS;
@@ -174,14 +173,14 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
     }
 
     @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return CAPABILITIES.containsKey(capability);
     }
 
     @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         return (T) CAPABILITIES.get(capability);
     }
 

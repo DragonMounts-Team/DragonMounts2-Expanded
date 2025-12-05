@@ -1,5 +1,6 @@
 package net.dragonmounts.util;
 
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.dragonmounts.DragonMountsTags;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
@@ -18,14 +19,12 @@ public class ItemUtil {
 
     public static boolean anyMatches(ItemStack stack, String... names) {
         if (stack.isEmpty()) return false;
-        int[] ores = OreDictionary.getOreIDs(stack);
-        int len = ores.length, match = names.length;
-        while (--match >= 0) {
-            int id = OreDictionary.getOreID(names[match]);
-            int i = len;
-            while (--i >= 0) {
-                if (ores[i] == id) return true;
-            }
+        IntOpenHashSet tags = new IntOpenHashSet();
+        for (String name : names) {
+            tags.add(OreDictionary.getOreID(name));
+        }
+        for (int tag : OreDictionary.getOreIDs(stack)) {
+            if (tags.contains(tag)) return true;
         }
         return false;
     }

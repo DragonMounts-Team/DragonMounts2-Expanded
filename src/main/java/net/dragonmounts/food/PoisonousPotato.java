@@ -31,7 +31,7 @@ public class PoisonousPotato implements ICapabilityProvider, IDragonFood {
         }
         dragon.setGrowthPaused(true);
         dragon.attackEntityFrom(DamageSource.STARVE, 1.0F);
-        dragon.playSound(SoundEvents.ENTITY_PLAYER_BURP, 1f, 0.8F);
+        dragon.playSound(SoundEvents.ENTITY_PLAYER_BURP, 1.0F, 0.8F);
         if (!player.capabilities.isCreativeMode) {
             stack.shrink(1);
         }

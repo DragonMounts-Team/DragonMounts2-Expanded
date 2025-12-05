@@ -4,7 +4,6 @@ import net.dragonmounts.DragonMounts;
 import net.dragonmounts.block.HatchableDragonEggBlock;
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.capability.DMCapabilities;
-import net.dragonmounts.capability.IDragonFood;
 import net.dragonmounts.capability.IHardShears;
 import net.dragonmounts.client.gui.GuiHandler;
 import net.dragonmounts.config.DMConfig;
@@ -16,10 +15,7 @@ import net.dragonmounts.entity.goal.target.DragonHurtByTargetGoal;
 import net.dragonmounts.entity.helper.DragonHeadLocator;
 import net.dragonmounts.entity.helper.DragonReproductionHelper;
 import net.dragonmounts.entity.navigation.PathNavigateFlying;
-import net.dragonmounts.init.DMBlocks;
-import net.dragonmounts.init.DMItems;
-import net.dragonmounts.init.DMSounds;
-import net.dragonmounts.init.DragonVariants;
+import net.dragonmounts.init.*;
 import net.dragonmounts.item.DragonEssenceItem;
 import net.dragonmounts.item.DragonSpawnEggItem;
 import net.dragonmounts.network.SPathDebugPacket;
@@ -365,8 +361,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
                     }
                 }
             }
-            IDragonFood food = stack.getCapability(DMCapabilities.DRAGON_FOOD, null);
-            if (food != null && food.tryFeed(this, player, relation, stack, hand)) return true;
+            if (DragonFoods.getFood(stack).tryFeed(this, player, relation, stack, hand)) return true;
             if (stack.interactWithEntity(player, this, hand)) return true;
         }
         if (!relation.isTrusted) {

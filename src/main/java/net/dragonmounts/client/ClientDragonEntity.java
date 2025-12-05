@@ -2,7 +2,6 @@ package net.dragonmounts.client;
 
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.capability.DMCapabilities;
-import net.dragonmounts.capability.IDragonFood;
 import net.dragonmounts.capability.IHardShears;
 import net.dragonmounts.client.breath.impl.ClientBreathHelper;
 import net.dragonmounts.client.model.dragon.DragonAnimator;
@@ -12,6 +11,7 @@ import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMKeyBindings;
 import net.dragonmounts.init.DMSounds;
+import net.dragonmounts.init.DragonFoods;
 import net.dragonmounts.network.CDragonBreathPacket;
 import net.dragonmounts.network.COpenInventoryPacket;
 import net.dragonmounts.util.ItemUtil;
@@ -120,8 +120,7 @@ public class ClientDragonEntity extends TameableDragonEntity {
             ) || (
                     !this.isSaddled() && stack.getItem() == Items.SADDLE
             )))) return true;
-            IDragonFood food = stack.getCapability(DMCapabilities.DRAGON_FOOD, null);
-            if (food != null && food.tryFeed(this, player, relation, stack, hand)) return true;
+            if (DragonFoods.getFood(stack).tryFeed(this, player, relation, stack, hand)) return true;
             if (stack.interactWithEntity(player, this, hand)) return true;
         }
         if (relation.isTrusted) {

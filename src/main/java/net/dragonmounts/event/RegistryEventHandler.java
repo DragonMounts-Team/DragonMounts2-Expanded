@@ -9,7 +9,6 @@ import net.dragonmounts.capability.*;
 import net.dragonmounts.compat.DragonMountsCompat;
 import net.dragonmounts.compat.DragonTypeCompat;
 import net.dragonmounts.config.DMConfig;
-import net.dragonmounts.food.CommonFood;
 import net.dragonmounts.init.*;
 import net.dragonmounts.inventory.FluteHolder;
 import net.dragonmounts.registry.CarriageType;
@@ -25,8 +24,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemFishFood;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -36,7 +33,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -46,7 +42,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.DataSerializerEntry;
 import net.minecraftforge.registries.IForgeRegistry;
-import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -54,13 +49,11 @@ import java.util.function.Function;
 import static net.dragonmounts.DragonMounts.applyId;
 import static net.dragonmounts.DragonMounts.makeId;
 import static net.dragonmounts.DragonMountsTags.MOD_ID;
-import static net.dragonmounts.capability.DMCapabilities.DRAGON_FOOD;
-import static net.dragonmounts.capability.DMCapabilities.hasCapability;
 
 @Mod.EventBusSubscriber(modid = MOD_ID)
 public class RegistryEventHandler {
     public static final ResourceLocation ARMOR_EFFECT_MANAGER_ID = makeId("armor_effect_manager");
-    public static final ResourceLocation DRAGON_FOOD_ID = makeId("dragon_food");
+    public static final ResourceLocation DRAGON_FOOD_ID = makeId("builtin_dragon_food");
     public static final ResourceLocation FLUTE_HOLDER_ID = makeId("flute_holder");
 
     @SubscribeEvent
@@ -235,31 +228,6 @@ public class RegistryEventHandler {
                     FLUTE_HOLDER_ID,
                     new SerializableProvider<>(DMCapabilities.FLUTE_HOLDER, new FluteHolder())
             );
-        }
-    }
-
-    @SubscribeEvent
-    public static void attachItemCapabilities(AttachCapabilitiesEvent<ItemStack> event) {
-        ItemStack stack = event.getObject();
-        Item item = stack.getItem();
-        if (stack.isEmpty() || item == Items.FISH && stack.getMetadata() == ItemFishFood.FishType.PUFFERFISH.getMetadata())
-            return;
-        ICapabilityProvider provider = DragonFoods.getProvider(item);
-        if (provider == null) {
-            if (ArrayUtils.contains(OreDictionary.getOreIDs(stack), OreDictionary.getOreID("listAllfishraw"))) {
-                event.addCapability(DRAGON_FOOD_ID, DragonFoods.RAW_FISH);
-            } else if (item instanceof ItemFood) {
-                ItemFood food = (ItemFood) item;
-                if (food.isWolfsFavoriteMeat()) {
-                    int level = food.getHealAmount(stack) * 2;
-                    event.addCapability(DRAGON_FOOD_ID, level < 10
-                            ? new CommonFood(level, 1500, 0.125F * level + 0.5F, 0.25F)
-                            : new CommonFood(level, 2500, 0.125F * level + 0.5F, 0.375F)
-                    );
-                }
-            }
-        } else if (hasCapability(provider, DRAGON_FOOD)) {
-            event.addCapability(DRAGON_FOOD_ID, provider);
         }
     }
 }

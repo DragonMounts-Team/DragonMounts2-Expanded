@@ -21,7 +21,7 @@ public abstract class PatchouliCompat {
         NBTTagCompound tag = new NBTTagCompound();
         tag.setString("patchouli:book", "dragonmounts:dracopedia");
         book.setTagCompound(tag);
-        if (!player.addItemStackToInventory(book)) {
+        if (!player.inventory.addItemStackToInventory(book)) {
             EntityItem dropped = player.dropItem(book, false);
             if (dropped != null) {
                 dropped.setNoPickupDelay();

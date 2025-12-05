@@ -1,10 +1,11 @@
 package net.dragonmounts.entity.goal;
 
-import net.dragonmounts.capability.DMCapabilities;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
+
+import static net.dragonmounts.init.DragonFoods.isDragonFood;
 
 /**
  * @see net.minecraft.entity.ai.EntityAITempt
@@ -60,7 +61,7 @@ public class DragonTemptGoal extends EntityAIBase {
         if (target instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) target;
             return !player.isSpectator() && (
-                    player.getHeldItemMainhand().hasCapability(DMCapabilities.DRAGON_FOOD, null) || player.getHeldItemOffhand().hasCapability(DMCapabilities.DRAGON_FOOD, null)
+                    isDragonFood(player.getHeldItemMainhand()) || isDragonFood(player.getHeldItemOffhand())
             );
         }
         return false;
