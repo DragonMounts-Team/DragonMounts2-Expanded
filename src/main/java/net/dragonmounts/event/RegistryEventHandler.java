@@ -53,7 +53,6 @@ import static net.dragonmounts.DragonMountsTags.MOD_ID;
 @Mod.EventBusSubscriber(modid = MOD_ID)
 public class RegistryEventHandler {
     public static final ResourceLocation ARMOR_EFFECT_MANAGER_ID = makeId("armor_effect_manager");
-    public static final ResourceLocation DRAGON_FOOD_ID = makeId("builtin_dragon_food");
     public static final ResourceLocation FLUTE_HOLDER_ID = makeId("flute_holder");
 
     @SubscribeEvent

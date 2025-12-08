@@ -27,6 +27,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
 /**
@@ -78,8 +79,8 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Fl
         name.setMaxStringLength(35);
         this.buttonList.clear();
         this.stand = ClientUtil.translateToLocal("gui.dragonmounts.stand");
-        this.buttonList.add(this.order = new GuiButton(DragonStates.SITTING_STATE, x, y + 172, 18, 20, this.sit = ClientUtil.translateToLocal("gui.dragonmounts.sit")));
-        this.buttonList.add(this.lock = new LockButton(DragonStates.LOCKED_STATE, x, y + 194, 18, 20));
+        this.buttonList.add(this.lock = new LockButton(DragonStates.LOCKED_STATE, x, y + 194, 20, 20));
+        this.buttonList.add(this.order = new GuiButton(DragonStates.SITTING_STATE, x + 22, y + 194, 35, 20, this.sit = ClientUtil.translateToLocal("gui.dragonmounts.sit")));
         this.updateScreen();
         FluteSlot slot = this.container.flute;
         slot.listener = this;
@@ -130,7 +131,7 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Fl
         }
     }
 
-    private void renameflute() {
+    private void renameFlute() {
         ItemStack stack = this.container.flute.getStack();
         String text = this.nameField.getText();
         if (!stack.isEmpty() && !stack.hasDisplayName() && text.equals(stack.getDisplayName())) {
@@ -193,7 +194,7 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Fl
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if (this.container.flute.getHasStack() && this.nameField.textboxKeyTyped(typedChar, keyCode)) {
-            this.renameflute();
+            this.renameFlute();
         } else {
             super.keyTyped(typedChar, keyCode);
         }
@@ -265,10 +266,10 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Fl
         }
 
         @Override
-        public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+        public void drawButton(@Nonnull Minecraft minecraft, int mouseX, int mouseY, float partialTicks) {
             if (this.visible) {
                 int x = this.x, y = this.y, width = this.width, height = this.height, halfWidth = width / 2;
-                mc.getTextureManager().bindTexture(BUTTON_TEXTURES);
+                minecraft.getTextureManager().bindTexture(BUTTON_TEXTURES);
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                 this.hovered = mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + height;
                 int i = this.getHoverState(this.hovered);
@@ -277,9 +278,9 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Fl
                 GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
                 this.drawTexturedModalRect(x, y, 0, 46 + i * 20, halfWidth, height);
                 this.drawTexturedModalRect(x + halfWidth, y, 200 - halfWidth, 46 + i * 20, halfWidth, height);
-                this.mouseDragged(mc, mouseX, mouseY);
-                mc.getTextureManager().bindTexture(PANEL);
-                this.drawTexturedModalRect(x + 0.5F, y + 2, 147, this.iconTop, 16, 16);
+                this.mouseDragged(minecraft, mouseX, mouseY);
+                minecraft.getTextureManager().bindTexture(PANEL);
+                this.drawTexturedModalRect(x + 1.5F, y + 2, 147, this.iconTop, 16, 16);
             } else {
                 this.hovered = false;
             }

@@ -48,7 +48,7 @@ public enum Relation {
     public static boolean denyIfNotOwner(NBTTagCompound entity, @Nullable EntityPlayer player) {
         if (player == null) return false;
         String owner = entity.getString("OwnerUUID");
-        if (owner.isEmpty() || player.getUniqueID().toString().equals(owner)) return false;
+        if (owner.isEmpty() || owner.equalsIgnoreCase(player.getUniqueID().toString())) return false;
         player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.dragon.notOwner"), true);
         return true;
     }
