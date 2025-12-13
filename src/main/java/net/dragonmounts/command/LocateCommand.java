@@ -94,7 +94,7 @@ public class LocateCommand extends CommandBase {
                 new TextComponentTranslation("chat.coordinates", pos.getX(), "~", pos.getZ())
         );
         coordinates.getStyle()
-                .setColor(TextFormatting.DARK_GREEN)
+                .setColor(TextFormatting.GREEN)
                 .setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tp @s " + pos.getX() + " ~ " + pos.getZ()))
                 .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentTranslation("chat.coordinates.tooltip")));
         return new TextComponentTranslation("commands.locate.structure.success", new TextComponentTranslation(name), coordinates, distance);

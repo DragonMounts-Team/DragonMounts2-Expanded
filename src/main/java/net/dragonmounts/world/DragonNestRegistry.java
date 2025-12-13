@@ -117,6 +117,10 @@ public class DragonNestRegistry {
         return nests;
     }
 
+    public int getDimensionBasedSalt(World level) {
+        return this.salt + level.provider.getDimensionType().getName().hashCode();
+    }
+
     protected boolean canSpawnAtCoords(World level, int chunkX, int chunkZ) {
         int spacing = this.spacing, distance = spacing - this.separation;
         int x = chunkX, z = chunkZ;
@@ -128,7 +132,7 @@ public class DragonNestRegistry {
         }
         x /= spacing;
         z /= spacing;
-        Random random = level.setRandomSeed(x, z, this.salt);
+        Random random = level.setRandomSeed(x, z, this.getDimensionBasedSalt(level));
         return chunkX == x * spacing + random.nextInt(distance) &&
                 chunkZ == z * spacing + random.nextInt(distance) &&
                 !this.getValidNests(level.getBiomeProvider().getBiome(
@@ -143,7 +147,7 @@ public class DragonNestRegistry {
     }
 
     public final ImmutablePair<BlockPos, DragonNest> findNearestNest(World level, BlockPos center, int maxAttempts, boolean findUnexplored, Predicate<DragonNest> target) {
-        int spacing = this.spacing, distance = spacing - this.separation, salt = this.salt;
+        int spacing = this.spacing, distance = spacing - this.separation, salt = this.getDimensionBasedSalt(level);
         int centerChunkX = center.getX() >> 4, centerChunkZ = center.getZ() >> 4;
         Random random = new Random();
         for (int attempts = 0; attempts <= maxAttempts; ++attempts) {
