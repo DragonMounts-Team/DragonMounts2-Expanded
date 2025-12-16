@@ -152,7 +152,10 @@ subtitles.item.dragonmounts.variation_orb.activate=易形琼珠：激活
 argument.player.toomany=只允许一名玩家，但提供的选择器允许多名玩家
 
 commands.dragonmounts.usage=/dragonmounts <subcommand>
-commands.dragonmounts.tame.usage=/dragonmounts tame [dragon]
+commands.dragonmounts.free.usage=/dragonmounts free [dragon]
+commands.dragonmounts.free.single=已重置%s的驯服状态
+commands.dragonmounts.free.multiple=已重置%s个实体的驯服状态
+commands.dragonmounts.tame.usage=/dragonmounts tame [dragon] [owner]
 commands.dragonmounts.tame.success=已使%s被%s驯服
 commands.dragonmounts.unlock.usage=/dragonmounts unlock [dragon]
 commands.dragonmounts.unlock.success=%s现在信任陌生人

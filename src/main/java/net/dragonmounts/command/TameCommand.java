@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class TameCommand extends DragonHandlerCommand {
+public class TameCommand extends EntityCommand {
     public TameCommand() {
         super(1);
     }
@@ -43,6 +43,11 @@ public class TameCommand extends DragonHandlerCommand {
     }
 
     @Override
+    protected boolean isValidTarget(Entity entity) {
+        return entity instanceof ServerDragonEntity;
+    }
+
+    @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         Entity entity;
         EntityPlayer player;
@@ -53,18 +58,18 @@ public class TameCommand extends DragonHandlerCommand {
                 if (entity instanceof EntityPlayer) {
                     player = (EntityPlayer) entity;
                 } else throw new PlayerNotFoundException("commands.generic.player.unspecified");
-                dragons = Collections.singletonList(getClosestDragon(sender));
+                dragons = Collections.singletonList(getClosestEntity(sender, ServerDragonEntity.class));
                 break;
             case 1:
                 entity = sender.getCommandSenderEntity();
                 if (entity instanceof EntityPlayer) {
                     player = (EntityPlayer) entity;
                 } else throw new PlayerNotFoundException("commands.generic.player.unspecified");
-                dragons = getSelectedDragons(server, sender, args[0]);
+                dragons = getSelectedEntities(server, sender, args[0], ServerDragonEntity.class);
                 if (dragons.isEmpty()) throw new EntityNotFoundException("commands.dragonmounts.notFound", args[0]);
                 break;
             case 2:
-                dragons = getSelectedDragons(server, sender, args[0]);
+                dragons = getSelectedEntities(server, sender, args[0], ServerDragonEntity.class);
                 if (dragons.isEmpty()) throw new EntityNotFoundException("commands.dragonmounts.notFound", args[0]);
                 player = EntitySelector.matchOnePlayer(sender, args[1]);
                 if (player == null) throw new PlayerNotFoundException("argument.player.toomany");

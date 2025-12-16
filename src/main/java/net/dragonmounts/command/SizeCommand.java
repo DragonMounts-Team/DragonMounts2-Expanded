@@ -6,12 +6,13 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.EntityNotFoundException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 
 import java.util.Collections;
 import java.util.List;
 
-public class SizeCommand extends DragonHandlerCommand {
+public class SizeCommand extends EntityCommand {
     public SizeCommand() {
         super(2);
     }
@@ -32,14 +33,19 @@ public class SizeCommand extends DragonHandlerCommand {
     }
 
     @Override
+    protected boolean isValidTarget(Entity entity) {
+        return entity instanceof ServerDragonEntity;
+    }
+
+    @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         List<ServerDragonEntity> dragons;
         switch (args.length) {
             case 1:
-                dragons = Collections.singletonList(getClosestDragon(sender));
+                dragons = Collections.singletonList(getClosestEntity(sender, ServerDragonEntity.class));
                 break;
             case 2:
-                dragons = getSelectedDragons(server, sender, args[1]);
+                dragons = getSelectedEntities(server, sender, args[1], ServerDragonEntity.class);
                 if (dragons.isEmpty()) throw new EntityNotFoundException("commands.dragonmounts.notFound", args[1]);
                 break;
             default:

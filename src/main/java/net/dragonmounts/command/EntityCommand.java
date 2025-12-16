@@ -1,6 +1,5 @@
 package net.dragonmounts.command;
 
-import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.util.DMUtils;
 import net.minecraft.command.*;
 import net.minecraft.entity.Entity;
@@ -15,59 +14,56 @@ import java.util.UUID;
 
 import static net.dragonmounts.util.RayTraceServer.rayTraceEntity;
 
-public abstract class DragonHandlerCommand extends CommandBase {
+public abstract class EntityCommand extends CommandBase {
     public static final double SEARCH_WIDTH = 16;
     public static final double SEARCH_HEIGHT = 12;
 
-    public static ServerDragonEntity getClosestDragon(ICommandSender sender) throws CommandException {
+    public static <T extends Entity> T getClosestEntity(ICommandSender sender, Class<T> clazz) throws CommandException {
         Entity entity = sender.getCommandSenderEntity();
-        if (entity instanceof ServerDragonEntity) return (ServerDragonEntity) entity;
+        if (clazz.isInstance(entity)) return clazz.cast(entity);
         if (entity instanceof EntityPlayer) {
-            List<ServerDragonEntity> dragons = entity.world.getEntitiesWithinAABB(
-                    ServerDragonEntity.class,
-                    entity.getEntityBoundingBox().grow(SEARCH_WIDTH, SEARCH_HEIGHT, SEARCH_WIDTH)
-            );
             double distance = Double.MAX_VALUE, temp;
-            ServerDragonEntity closest = null;
-            for (ServerDragonEntity dragon : dragons) {
-                temp = entity.getDistanceSq(dragon);
+            T closest = null;
+            for (T candidate : entity.world.getEntitiesWithinAABB(
+                    clazz,
+                    entity.getEntityBoundingBox().grow(SEARCH_WIDTH, SEARCH_HEIGHT, SEARCH_WIDTH)
+            )) {
+                temp = entity.getDistanceSq(candidate);
                 if (temp < distance) {
                     distance = temp;
-                    closest = dragon;
+                    closest = candidate;
                 }
             }
             if (closest != null) return closest;
-
         }
         throw new EntityNotFoundException("commands.dragonmounts.unspecified", DMUtils.NO_ARGS);
     }
 
-    public static List<ServerDragonEntity> getSelectedDragons(MinecraftServer server, ICommandSender sender, String selector) throws CommandException {
-        if (selector.isEmpty()) throw new EntityNotFoundException("commands.dragonmounts.unspecified", DMUtils.NO_ARGS);
-        List<ServerDragonEntity> dragons = EntitySelector.matchEntities(sender, selector, ServerDragonEntity.class);
-        if (dragons.isEmpty()) {
+    public static <T extends Entity> List<T> getSelectedEntities(MinecraftServer server, ICommandSender sender, String selector, Class<T> clazz) throws CommandException {
+        List<T> entities = EntitySelector.matchEntities(sender, selector, clazz);
+        if (entities.isEmpty()) {
             try {
                 Entity entity = server.getEntityFromUuid(UUID.fromString(selector));
-                if (entity instanceof ServerDragonEntity) {
-                    return Collections.singletonList((ServerDragonEntity) entity);
-                }
+                if (clazz.isInstance(entity)) return Collections.singletonList(clazz.cast(entity));
             } catch (IllegalArgumentException e) {
                 if (selector.split("-").length == 5) {
                     throw new EntityNotFoundException("commands.generic.entity.invalidUuid", selector);
                 }
             }
         }
-        return dragons;
+        return entities;
     }
 
     /**
-     * the index of the arg that require a dragon
+     * the index of the arg that require an entity
      */
     public final int pos;
 
-    public DragonHandlerCommand(int pos) {
+    public EntityCommand(int pos) {
         this.pos = pos;
     }
+
+    protected abstract boolean isValidTarget(Entity entity);
 
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
@@ -79,11 +75,9 @@ public abstract class DragonHandlerCommand extends CommandBase {
                         entity.world,
                         entity,
                         ((EntityPlayer) entity).getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue(),
-                        target -> target instanceof ServerDragonEntity && target.canBeCollidedWith() && target.getLowestRidingEntity() != vehicle
+                        target -> this.isValidTarget(target) && target.canBeCollidedWith() && target.getLowestRidingEntity() != vehicle
                 );
-                if (hit != null) {
-                    return getListOfStringsMatchingLastWord(args, hit.getCachedUniqueIdString());
-                }
+                if (hit != null) return getListOfStringsMatchingLastWord(args, hit.getCachedUniqueIdString());
             }
         }
         return Collections.emptyList();

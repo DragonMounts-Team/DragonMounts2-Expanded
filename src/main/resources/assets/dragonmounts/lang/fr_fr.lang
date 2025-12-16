@@ -171,7 +171,7 @@ subtitles.item.dragonmounts.variation_orb.activate=L'Orbe de Variation s'active
 argument.player.toomany=Seulement un joueur est autorisé, mais le sélecteur fourni en autorise plus d'un
 
 commands.dragonmounts.usage=/dragonmounts <subcommand>
-commands.dragonmounts.tame.usage=/dragonmounts tame [dragon]
+commands.dragonmounts.tame.usage=/dragonmounts tame [dragon] [owner]
 commands.dragonmounts.tame.success=Dragon %s est maintenant apprivoisé par %s
 commands.dragonmounts.unlock.usage=/dragonmounts unlock [dragon]
 commands.dragonmounts.unlock.success=Dragon %s est maintenant déverrouillé

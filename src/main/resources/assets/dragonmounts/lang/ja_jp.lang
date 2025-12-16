@@ -171,7 +171,7 @@ subtitles.item.dragonmounts.variation_orb.activate=バリエーションオー�
 argument.player.toomany=単体のプレイヤーを指定してください、そのセレクタは複数体指定しています
 
 commands.dragonmounts.usage=/dragonmounts <subcommand>
-commands.dragonmounts.tame.usage=/dragonmounts tame [dragon]
+commands.dragonmounts.tame.usage=/dragonmounts tame [dragon] [owner]
 commands.dragonmounts.tame.success=%s は %s によって飼いならされました
 commands.dragonmounts.unlock.usage=/dragonmounts unlock [dragon]
 commands.dragonmounts.unlock.success=%s がロック解除されました

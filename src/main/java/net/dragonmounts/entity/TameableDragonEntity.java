@@ -56,6 +56,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
@@ -494,7 +495,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
 
     public boolean tryTame(EntityPlayer player, float probability) {
         if (probability == 0) return false;
-        if (this.rand.nextFloat() < probability) {
+        if (this.rand.nextFloat() < probability && !ForgeEventFactory.onAnimalTame(this, player)) {
             this.tame(player);
             return true;
         }

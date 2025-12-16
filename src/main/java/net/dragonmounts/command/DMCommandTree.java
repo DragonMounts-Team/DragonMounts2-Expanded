@@ -20,15 +20,15 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class DragonCommandTree extends CommandTreeBase {
-    public DragonCommandTree() {
-        super.addSubcommand(new TypeCommand());
+public class DMCommandTree extends CommandTreeBase {
+    public DMCommandTree() {
+        super.addSubcommand(new FreeCommand());
         super.addSubcommand(new SizeCommand());
         super.addSubcommand(new StageCommand());
         super.addSubcommand(new TameCommand());
+        super.addSubcommand(new TypeCommand());
         super.addSubcommand(new UnlockCommand());
         if (Loader.isModLoaded(DragonMountsCompat.PATCHOULI)) {
             super.addSubcommand(new BookCommand());

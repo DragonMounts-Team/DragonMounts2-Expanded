@@ -171,7 +171,10 @@ subtitles.item.dragonmounts.variation_orb.activate=Orb of Variation activates
 argument.player.toomany=Only one player is allowed, but the provided selector allows more than one
 
 commands.dragonmounts.usage=/dragonmounts <subcommand>
-commands.dragonmounts.tame.usage=/dragonmounts tame [dragon]
+commands.dragonmounts.free.usage=/dragonmounts free [dragon]
+commands.dragonmounts.free.single=Made %s freed
+commands.dragonmounts.free.multiple=Made %s entities freed
+commands.dragonmounts.tame.usage=/dragonmounts tame [dragon] [owner]
 commands.dragonmounts.tame.success=Dragon %s is tamed by %s now
 commands.dragonmounts.unlock.usage=/dragonmounts unlock [dragon]
 commands.dragonmounts.unlock.success=Dragon %s is unlocked now

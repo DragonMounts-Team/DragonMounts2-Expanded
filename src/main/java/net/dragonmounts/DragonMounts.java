@@ -11,7 +11,7 @@ package net.dragonmounts;
 
 import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.gui.GuiHandler;
-import net.dragonmounts.command.DragonCommandTree;
+import net.dragonmounts.command.DMCommandTree;
 import net.dragonmounts.compat.BaublesCompat;
 import net.dragonmounts.compat.DragonMountsCompat;
 import net.dragonmounts.config.DMConfig;
@@ -91,7 +91,7 @@ public class DragonMounts {
 
     @EventHandler
     public void ServerStarting(FMLServerStartingEvent event) {
-        event.registerServerCommand(new DragonCommandTree());
+        event.registerServerCommand(new DMCommandTree());
     }
 
     @EventHandler
