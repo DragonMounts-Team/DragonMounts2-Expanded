@@ -1,6 +1,7 @@
 package net.dragonmounts.item;
 
 
+import net.dragonmounts.compat.FixerCompat;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,6 +37,7 @@ public interface IEntityContainer<T extends Entity> {
         tag.removeTag("SleepingX");
         tag.removeTag("SleepingY");
         tag.removeTag("SleepingZ");
+        FixerCompat.disableEntityFixers(tag);
         return tag;
     }
 

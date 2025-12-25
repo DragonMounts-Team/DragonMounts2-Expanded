@@ -1,6 +1,6 @@
 package net.dragonmounts.item;
 
-import net.dragonmounts.compat.PotionCoreCompat;
+import net.dragonmounts.compat.FixerCompat;
 import net.dragonmounts.compat.data.DragonEntityFixer;
 import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.ServerDragonEntity;
@@ -60,7 +60,6 @@ public class DragonEssenceItem extends Item implements IEntityContainer<Tameable
         data.removeTag("UUIDLeast");
         data.removeTag("Health");
         data.removeTag("TicksSinceCreation");
-        PotionCoreCompat.fixEntityData(data);
         root.setTag("EntityTag", data);
         ItemStack stack = new ItemStack(this);
         stack.setTagCompound(root);
@@ -106,7 +105,7 @@ public class DragonEssenceItem extends Item implements IEntityContainer<Tameable
             root.removeTag("UUIDLeast");
             root.removeTag("Health");
             root.removeTag("TicksSinceCreation");
-            PotionCoreCompat.fixEntityData(root);
+            FixerCompat.disableEntityFixers(root);
             stack.setTagCompound(DragonEntityFixer.fixContainerItem(root, cap));
         }
         return null;

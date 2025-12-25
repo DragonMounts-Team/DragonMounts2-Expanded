@@ -1,6 +1,7 @@
 package net.dragonmounts.util;
 
 import com.google.common.base.Predicate;
+import net.dragonmounts.compat.FixerCompat;
 import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.registry.DragonType;
@@ -103,6 +104,7 @@ public class EntityUtil {
                 if (data.hasKey(DragonVariant.DATA_PARAMETER_KEY)) {
                     saved = DragonVariant.REGISTRY.getIfPresent(new ResourceLocation(data.getString(DragonVariant.DATA_PARAMETER_KEY)));
                 }
+                FixerCompat.disableEntityFixers(data);
             }
         }
         dragon.setVariant(saved == null ? fallback.variants.draw(level.rand, null) : saved);
