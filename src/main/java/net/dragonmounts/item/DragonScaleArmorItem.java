@@ -3,7 +3,6 @@ package net.dragonmounts.item;
 import net.dragonmounts.api.IArmorEffectSource;
 import net.dragonmounts.api.IDescribedArmorEffect;
 import net.dragonmounts.capability.IArmorEffectManager;
-import net.dragonmounts.compat.CooldownOverlayCompat;
 import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.registry.CooldownCategory;
 import net.dragonmounts.registry.DragonType;
@@ -30,7 +29,7 @@ public class DragonScaleArmorItem extends ItemArmor implements IArmorEffectSourc
 		this.effect = effect;
 		this.type = type;
 		if (effect instanceof CooldownCategory) {
-			CooldownOverlayCompat.register((CooldownCategory) effect, this);
+			((CooldownCategory) effect).registerItem(this);
 		}
 	}
 

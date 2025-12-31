@@ -9,9 +9,7 @@
  */
 package net.dragonmounts.client.gui;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import com.google.common.collect.ArrayListMultimap;
 import it.unimi.dsi.fastutil.objects.Reference2IntMap;
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
@@ -43,6 +41,8 @@ import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
+import java.util.Collection;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -299,16 +299,13 @@ public class DebugOverlay {
         text.setColor(YELLOW);
         text.println(label);
         text.setColor(WHITE);
-        Object2ObjectOpenHashMap<String, ObjectArrayList<String>> map = new Object2ObjectOpenHashMap<>();
+        ArrayListMultimap<String, String> entries = ArrayListMultimap.create();
         for (EntityAITasks.EntityAITaskEntry entry : tasks) {
             String full = entry.action.getClass().getName();
             int dot = full.lastIndexOf('.');
-            map.computeIfAbsent(
-                    full.substring(0, dot),
-                    ignored -> new ObjectArrayList<>()
-            ).add(full.substring(dot + 1));
+            entries.put(full.substring(0, dot), full.substring(dot + 1));
         }
-        for (Object2ObjectMap.Entry<String, ObjectArrayList<String>> entry : map.object2ObjectEntrySet()) {
+        for (Map.Entry<String, Collection<String>> entry : entries.asMap().entrySet()) {
             text.println(entry.getKey());
             for (String value : entry.getValue()) {
                 text.print("-   ");

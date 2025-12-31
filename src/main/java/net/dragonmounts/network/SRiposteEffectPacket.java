@@ -9,7 +9,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import java.util.Random;
@@ -41,38 +40,35 @@ public class SRiposteEffectPacket implements IMessage {
         writeVarInt(buffer, this.id, this.flag);
     }
 
-    public static class Handler implements IMessageHandler<SRiposteEffectPacket, IMessage> {
-        @Override
-        public IMessage onMessage(SRiposteEffectPacket packet, MessageContext context) {
-            WorldClient level = Minecraft.getMinecraft().world;
-            if (level == null) return null;
-            Entity entity = level.getEntityByID(packet.id);
-            if (entity == null) return null;
-            double x = entity.posX;
-            double z = entity.posZ;
-            if ((packet.flag & 0b01) == 0b01) {
-                Random random = level.rand;
-                double y = entity.posY + 0.1;
-                double px = x + random.nextDouble() - 0.3;
-                double py = y + random.nextDouble() + 0.8;
-                double pz = z + random.nextDouble() - 0.3;
-                double ox = random.nextDouble() * 2 - 0.6;
-                double oy = random.nextDouble() - 0.3;
-                double oz = random.nextDouble() * 2 - 0.6;
-                for (int i = -30; i < 31; ++i) {
-                    level.spawnParticle(EnumParticleTypes.BLOCK_DUST, px, py, pz, ox, oy, oz, 79); //79
-                    level.spawnParticle(EnumParticleTypes.CLOUD, false, x, y, z, MathHelper.sin(i), 0, MathHelper.cos(i));
-                }
-                level.playSound(entity.getPosition(), SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.PLAYERS, 0.46F, 1.0F, false);
+    public IMessage handle(MessageContext context) {
+        WorldClient level = Minecraft.getMinecraft().world;
+        if (level == null) return null;
+        Entity entity = level.getEntityByID(this.id);
+        if (entity == null) return null;
+        double x = entity.posX;
+        double z = entity.posZ;
+        if ((this.flag & 0b01) == 0b01) {
+            Random random = level.rand;
+            double y = entity.posY + 0.1;
+            double px = x + random.nextDouble() - 0.3;
+            double py = y + random.nextDouble() + 0.8;
+            double pz = z + random.nextDouble() - 0.3;
+            double ox = random.nextDouble() * 2 - 0.6;
+            double oy = random.nextDouble() - 0.3;
+            double oz = random.nextDouble() * 2 - 0.6;
+            for (int i = -30; i < 31; ++i) {
+                level.spawnParticle(EnumParticleTypes.BLOCK_DUST, px, py, pz, ox, oy, oz, 79); //79
+                level.spawnParticle(EnumParticleTypes.CLOUD, false, x, y, z, MathHelper.sin(i), 0, MathHelper.cos(i));
             }
-            if ((packet.flag & 0b10) == 0b10) {
-                double y = entity.posY + 1;
-                for (int i = -27; i < 28; ++i) {
-                    level.spawnParticle(EnumParticleTypes.FLAME, x, y, z, MathHelper.sin(i) / 3.0F, 0, MathHelper.cos(i) / 3.0F);
-                }
-                level.playSound(entity.getPosition(), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.PLAYERS, 0.46F, 1.0F, false);
-            }
-            return null;
+            level.playSound(entity.getPosition(), SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.PLAYERS, 0.46F, 1.0F, false);
         }
+        if ((this.flag & 0b10) == 0b10) {
+            double y = entity.posY + 1;
+            for (int i = -27; i < 28; ++i) {
+                level.spawnParticle(EnumParticleTypes.FLAME, x, y, z, MathHelper.sin(i) / 3.0F, 0, MathHelper.cos(i) / 3.0F);
+            }
+            level.playSound(entity.getPosition(), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.PLAYERS, 0.46F, 1.0F, false);
+        }
+        return null;
     }
 }

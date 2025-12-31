@@ -19,7 +19,7 @@ import net.dragonmounts.event.RegistryEventHandler;
 import net.dragonmounts.init.DMEntities;
 import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.init.DMItems;
-import net.dragonmounts.proxy.ServerProxy;
+import net.dragonmounts.proxy.CommonProxy;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.*;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -37,7 +37,7 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
         name = DragonMountsTags.MOD_NAME,
         version = DragonMountsTags.VERSION,
         useMetadata = true,
-        /// @see Class#forName, the fully qualified name of {@link net.dragonmounts.client.gui.ConfigGui}
+        /// @see net.dragonmounts.client.gui.ConfigGui
         guiFactory = "net.dragonmounts.client.gui.ConfigGui"
 )
 public class DragonMounts {
@@ -50,8 +50,13 @@ public class DragonMounts {
         return entry;
     }
 
-    @SidedProxy(serverSide = "net.dragonmounts.proxy.ServerProxy", clientSide = "net.dragonmounts.proxy.ClientProxy")
-    public static ServerProxy PROXY;
+    @SidedProxy(
+            /// @see net.dragonmounts.proxy.CommonProxy
+            serverSide = "net.dragonmounts.proxy.CommonProxy",
+            /// @see net.dragonmounts.proxy.ClientProxy
+            clientSide = "net.dragonmounts.proxy.ClientProxy"
+    )
+    public static CommonProxy PROXY;
     public static final SimpleNetworkWrapper NETWORK_WRAPPER = NetworkRegistry.INSTANCE.newSimpleChannel(DragonMountsTags.MOD_ID);
 
     public static DragonMounts getInstance() {

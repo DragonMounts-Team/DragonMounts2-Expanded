@@ -40,25 +40,14 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
+import java.util.ListIterator;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  * 2nd @author TheRPGAdventurer
  */
-public class ClientProxy extends ServerProxy {
-    private static void addCredit(StringBuilder builder, String credit, String description) {
-        builder.append(TextFormatting.GREEN)
-                .append(credit)
-                .append(TextFormatting.RESET)
-                .append('-')
-                .append(TextFormatting.AQUA)
-                .append(description)
-                .append(TextFormatting.RESET)
-                .append('\n');
-    }
-
+public class ClientProxy extends CommonProxy {
     @Override
     public void PreInitialization(FMLPreInitializationEvent event) {
         super.PreInitialization(event);
@@ -77,14 +66,15 @@ public class ClientProxy extends ServerProxy {
 
         //Override mcmod.info - This looks cooler :)
         ModMetadata metadata = event.getModMetadata();
-        metadata.authorList = metadata.authorList.stream().map(author ->
-                TextFormatting.GOLD.toString() + TextFormatting.BOLD + author + TextFormatting.RESET
-        ).collect(Collectors.toList());
+        ListIterator<String> iterator = metadata.authorList.listIterator();
+        while (iterator.hasNext()) {
+            iterator.set(TextFormatting.GOLD.toString() + TextFormatting.BOLD + iterator.next() + TextFormatting.RESET);
+        }
     }
 
     @Override
-    public void Initialization(FMLInitializationEvent evt) {
-        super.Initialization(evt);
+    public void Initialization(FMLInitializationEvent event) {
+        super.Initialization(event);
         DMKeyBindings.register();
     }
 
@@ -103,7 +93,7 @@ public class ClientProxy extends ServerProxy {
     }
 
     @Override
-    public Function<String, VariantAppearance> getBuiltinAppearances() {
+    public Function<? super String, VariantAppearance> getBuiltinAppearances() {
         return VariantAppearances.getSupplier();
     }
 }

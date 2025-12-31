@@ -10,7 +10,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import java.io.IOException;
@@ -85,22 +84,19 @@ public class SSyncBannerPacket implements IMessage {
         writeBanners(raw, this.flag, this.banners);
     }
 
-    public static class Handler implements IMessageHandler<SSyncBannerPacket, IMessage> {
-        @Override
-        public IMessage onMessage(SSyncBannerPacket packet, MessageContext context) {
-            WorldClient level = Minecraft.getMinecraft().world;
-            if (level == null) return null;
-            Entity entity = level.getEntityByID(packet.id);
-            if (entity instanceof TameableDragonEntity) {
-                DragonInventory inventory = ((TameableDragonEntity) entity).inventory;
-                ItemStack[] banners = packet.banners;
-                for (int i = 0; i < 4; ++i) {
-                    ItemStack stack = banners[i];
-                    if (stack == null) continue;
-                    inventory.setBanner(i, packet.banners[i]);
-                }
+    public IMessage handle(MessageContext context) {
+        WorldClient level = Minecraft.getMinecraft().world;
+        if (level == null) return null;
+        Entity entity = level.getEntityByID(this.id);
+        if (entity instanceof TameableDragonEntity) {
+            DragonInventory inventory = ((TameableDragonEntity) entity).inventory;
+            ItemStack[] banners = this.banners;
+            for (int i = 0; i < 4; ++i) {
+                ItemStack stack = banners[i];
+                if (stack == null) continue;
+                inventory.setBanner(i, stack);
             }
-            return null;
         }
+        return null;
     }
 }

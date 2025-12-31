@@ -3,7 +3,6 @@ package net.dragonmounts.compat;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.block.DragonEggCompatBlock;
-import net.dragonmounts.block.HatchableDragonEggBlock;
 import net.dragonmounts.compat.data.DMBlockEntityFixer;
 import net.dragonmounts.compat.data.DataWalkers;
 import net.dragonmounts.compat.data.DragonEntityFixer;
@@ -26,8 +25,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 
-import static net.dragonmounts.DragonMounts.applyId;
-
 @Mod.EventBusSubscriber
 public abstract class DragonMountsCompat {
     public static final String BAUBLES = "baubles";
@@ -35,8 +32,8 @@ public abstract class DragonMountsCompat {
 
     public static final int VERSION = 1;
     public static final Object2ObjectOpenHashMap<String, Item> ITEM_MAPPINGS;
-    public static final Block DRAGON_EGG_BLOCK = applyId(new DragonEggCompatBlock().setTranslationKey(HatchableDragonEggBlock.TRANSLATION_KEY), "dragon_egg");
-    public static final Item DRAGON_EGG_ITEM = applyId(new DragonEggCompatItem(), "dragon_egg");
+    public static final Block DRAGON_EGG_BLOCK = DragonEggCompatBlock.INSTANCE;
+    public static final Item DRAGON_EGG_ITEM = DragonEggCompatItem.INSTANCE;
 
     public static void init(CompoundDataFixer fixer) {
         ModFixs mod = fixer.init(DragonMountsTags.MOD_ID, DragonMountsCompat.VERSION);

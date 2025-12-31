@@ -3,7 +3,6 @@ package net.dragonmounts.capability;
 import net.dragonmounts.api.IArmorEffect;
 import net.dragonmounts.api.IArmorEffectSource;
 import net.dragonmounts.client.ClientUtil;
-import net.dragonmounts.compat.CooldownOverlayCompat;
 import net.dragonmounts.network.SInitCooldownPacket;
 import net.dragonmounts.network.SSyncCooldownPacket;
 import net.dragonmounts.registry.CooldownCategory;
@@ -132,7 +131,7 @@ public final class ArmorEffectManager implements IArmorEffectManager {
                 CooldownCategory category = CooldownCategory.REGISTRY.getValue(k);
                 if (category == null) continue;
                 j = manager.setCdImpl(k, n = data[i], j);
-                for (Item item : CooldownOverlayCompat.getItems(category)) {
+                for (Item item : category.getItems()) {
                     vanilla.setCooldown(item, n);
                 }
             }

@@ -58,7 +58,7 @@ public class DragonVariants {
     public static final DragonVariant WITHER;
     public static final DragonVariant ZOMBIE;
 
-    static DragonVariant make(Function<String, VariantAppearance> supplier, DragonType type, String name) {
+    static DragonVariant make(Function<? super String, VariantAppearance> supplier, DragonType type, String name) {
         return new DragonVariant(type, makeId(name), supplier.apply(name), variant -> {
             final String key = DragonHeadBlock.TRANSLATION_KEY;
             DragonHeadItem item = new DragonHeadItem(variant);
@@ -74,7 +74,7 @@ public class DragonVariants {
     }
 
     static {
-        Function<String, VariantAppearance> appearance = DragonMounts.PROXY.getBuiltinAppearances();
+        Function<? super String, VariantAppearance> appearance = DragonMounts.PROXY.getBuiltinAppearances();
         ObjectArrayList<DragonVariant> values = new ObjectArrayList<>();
         values.add(AETHER_FEMALE = make(appearance, DragonTypes.AETHER, "aether_female"));
         values.add(AETHER_MALE = make(appearance, DragonTypes.AETHER, "aether_male"));

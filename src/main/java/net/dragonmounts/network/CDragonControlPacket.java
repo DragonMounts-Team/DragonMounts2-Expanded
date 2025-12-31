@@ -6,7 +6,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import static net.dragonmounts.util.ByteBufferUtil.compressFlags;
@@ -69,39 +68,36 @@ public class CDragonControlPacket implements IMessage {
         buf.writeByte(this.getFlags());
     }
 
-    public static class Handler implements IMessageHandler<CDragonControlPacket, IMessage> {
-        @Override
-        public IMessage onMessage(CDragonControlPacket message, MessageContext ctx) {
-            EntityPlayer player = ctx.getServerHandler().player;
-            Entity entity = player.getRidingEntity();
-            if (entity instanceof TameableDragonEntity) {
-                TameableDragonEntity dragon = (TameableDragonEntity) entity;
-                dragon.setUsingBreathWeapon(message.breathing);
-                if (message.toggleHovering) {
-                    dragon.setUnHovered(!dragon.isUnHovered());
-                    player.sendStatusMessage(new TextComponentTranslation(
-                            "message.dragonmounts.control.toggleHovering",
-                            new TextComponentTranslation(dragon.isUnHovered() ? "options.off" : "options.on")
-                    ), false);
-                }
-                if (message.toggleYawAlignment) {
-                    dragon.setFollowYaw(!dragon.followYaw());
-                    player.sendStatusMessage(new TextComponentTranslation(
-                            "message.dragonmounts.control.toggleYawAlignment",
-                            new TextComponentTranslation(dragon.followYaw() ? "options.on" : "options.off")
-                    ), false);
-                }
-                if (message.togglePitchAlignment) {
-                    dragon.setYLocked(!dragon.isYLocked());
-                    player.sendStatusMessage(new TextComponentTranslation(
-                            "message.dragonmounts.control.togglePitchAlignment",
-                            new TextComponentTranslation(dragon.isYLocked() ? "options.off" : "options.on")
-                    ), false);
-                }
-                dragon.setGoingDown(message.descent);
-                dragon.setBoosting(message.boosting);
+    public IMessage handle(MessageContext context) {
+        EntityPlayer player = context.getServerHandler().player;
+        Entity entity = player.getRidingEntity();
+        if (entity instanceof TameableDragonEntity) {
+            TameableDragonEntity dragon = (TameableDragonEntity) entity;
+            dragon.setUsingBreathWeapon(this.breathing);
+            if (this.toggleHovering) {
+                dragon.setUnHovered(!dragon.isUnHovered());
+                player.sendStatusMessage(new TextComponentTranslation(
+                        "message.dragonmounts.control.toggleHovering",
+                        new TextComponentTranslation(dragon.isUnHovered() ? "options.off" : "options.on")
+                ), false);
             }
-            return null;
+            if (this.toggleYawAlignment) {
+                dragon.setFollowYaw(!dragon.followYaw());
+                player.sendStatusMessage(new TextComponentTranslation(
+                        "message.dragonmounts.control.toggleYawAlignment",
+                        new TextComponentTranslation(dragon.followYaw() ? "options.on" : "options.off")
+                ), false);
+            }
+            if (this.togglePitchAlignment) {
+                dragon.setYLocked(!dragon.isYLocked());
+                player.sendStatusMessage(new TextComponentTranslation(
+                        "message.dragonmounts.control.togglePitchAlignment",
+                        new TextComponentTranslation(dragon.isYLocked() ? "options.off" : "options.on")
+                ), false);
+            }
+            dragon.setGoingDown(this.descent);
+            dragon.setBoosting(this.boosting);
         }
+        return null;
     }
 }

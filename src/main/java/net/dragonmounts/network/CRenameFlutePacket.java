@@ -5,7 +5,6 @@ import net.dragonmounts.inventory.DragonContainer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import javax.annotation.Nonnull;
@@ -39,14 +38,11 @@ public class CRenameFlutePacket implements IMessage {
         writeString(buffer, this.name);
     }
 
-    public static class Handler implements IMessageHandler<CRenameFlutePacket, IMessage> {
-        @Override
-        public IMessage onMessage(CRenameFlutePacket message, MessageContext ctx) {
-            Container container = ctx.getServerHandler().player.openContainer;
-            if (container instanceof DragonContainer) {
-                ((DragonContainer<?>) container).flute.applyName(message.name);
-            }
-            return null;
+    public IMessage handle(MessageContext context) {
+        Container container = context.getServerHandler().player.openContainer;
+        if (container instanceof DragonContainer) {
+            ((DragonContainer<?>) container).flute.applyName(this.name);
         }
+        return null;
     }
 }

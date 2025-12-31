@@ -2,15 +2,12 @@ package net.dragonmounts.network;
 
 import io.netty.buffer.ByteBuf;
 import net.dragonmounts.capability.ArmorEffectManager;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import static net.dragonmounts.util.ByteBufferUtil.readVarInt;
 import static net.dragonmounts.util.ByteBufferUtil.writeVarInt;
 
-public class SInitCooldownPacket implements IMessage {
+public class SInitCooldownPacket implements IMessage, Runnable {
     public int size;
     public int[] data;
 
@@ -42,11 +39,8 @@ public class SInitCooldownPacket implements IMessage {
         writeVarInt(buffer, this.data);
     }
 
-    public static class Handler implements IMessageHandler<SInitCooldownPacket, IMessage> {
-        @Override
-        public IMessage onMessage(SInitCooldownPacket packet, MessageContext context) {
-            Minecraft.getMinecraft().addScheduledTask(() -> ArmorEffectManager.init(packet));
-            return null;
-        }
+    @Override
+    public void run() {
+        ArmorEffectManager.init(this);
     }
 }

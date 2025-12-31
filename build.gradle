@@ -6,6 +6,8 @@ import groovy.json.JsonSlurper
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.gradle.ext.Gradle
 
+import java.time.LocalDate
+import java.time.temporal.IsoFields
 import java.util.regex.Pattern
 
 plugins {
@@ -178,7 +180,8 @@ tasks.register('generateModInfo') {
             def json = new JsonSlurper().parseText(config.text)
             def suffix = json.suffix as String
             if (json.weekly) {
-                project.version = "$project.version-${'%dw%02d'.formatted(Calendar.instance.get(Calendar.YEAR) % 100, Calendar.instance.get(Calendar.WEEK_OF_YEAR))}${suffix ?: 'a'}"
+                def date = LocalDate.now()
+                project.version = "$project.version-${'%dw%02d'.formatted(date.get(IsoFields.WEEK_BASED_YEAR) % 100, date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR))}${suffix ?: 'a'}"
             } else if (suffix != null && !suffix.isBlank()) {
                 project.version = "$project.version-$suffix"
             }

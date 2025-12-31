@@ -15,7 +15,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import java.util.UUID;
@@ -45,48 +44,45 @@ public class CTeleportOrderPacket extends CUUIDPacket {
         buf.writeFloat(this.pitch).writeFloat(this.yaw);
     }
 
-    public static class Handler implements IMessageHandler<CTeleportOrderPacket, IMessage> {
-        @Override
-        public IMessage onMessage(CTeleportOrderPacket message, MessageContext ctx) {
-            NetHandlerPlayServer handler = ctx.getServerHandler();
-            EntityPlayer player = handler.player;
-            Entity entity = handler.server.getEntityFromUuid(message.uuid);
-            if (entity instanceof TameableDragonEntity) {
-                TameableDragonEntity dragon = (TameableDragonEntity) entity;
-                World world = player.world;
-                if (!dragon.isOwner(player) || !world.isBlockLoaded(player.getPosition())) {
-                    player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.flute.failed"), true);
-                    return null;
-                }
-                //Get block pos by raytracing from player for dragon teleport
-                Vec3d start = new Vec3d(player.posX, player.posY + player.getEyeHeight(), player.posZ);
-                float pitch = message.pitch * -0.017453292F;
-                float yaw = message.yaw * -0.017453292F - MathX.PI_F;
-                float forward = -MathHelper.cos(pitch);
-                Vec3d end = start.add(
-                        MathHelper.sin(yaw) * forward * 5.0,
-                        MathHelper.sin(pitch) * 5.0,
-                        MathHelper.cos(yaw) * forward * 5.0
-                );
-                RayTraceResult hit = world.rayTraceBlocks(start, end, true);
-                if (hit == null) {
-                    player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.flute.invalidPos"), true);
-                    return null; //suppress null block pos warnings
-                }
-                if (hit.typeOfHit == RayTraceResult.Type.BLOCK) {
-                    BlockPos pos = hit.getBlockPos();
-                    handler.server.addScheduledTask(() -> {
-                        if (dragon.isDead) return;
-                        dragon.setAttackTarget(null);
-                        dragon.getNavigator().clearPath();
-                        dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-                    });
-                    world.playSound(null, player.posX, player.posY, player.posZ, DMSounds.FLUTE_BLOW_LONG, SoundCategory.PLAYERS, 1, 1);
-                }
-            } else {
+    public IMessage handle(MessageContext context) {
+        NetHandlerPlayServer handler = context.getServerHandler();
+        EntityPlayer player = handler.player;
+        Entity entity = handler.server.getEntityFromUuid(this.uuid);
+        if (entity instanceof TameableDragonEntity) {
+            TameableDragonEntity dragon = (TameableDragonEntity) entity;
+            World world = player.world;
+            if (!dragon.isOwner(player) || !world.isBlockLoaded(player.getPosition())) {
                 player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.flute.failed"), true);
+                return null;
             }
-            return null;
+            //Get block pos by raytracing from player for dragon teleport
+            Vec3d start = new Vec3d(player.posX, player.posY + player.getEyeHeight(), player.posZ);
+            float pitch = this.pitch * -0.017453292F;
+            float yaw = this.yaw * -0.017453292F - MathX.PI_F;
+            float forward = -MathHelper.cos(pitch);
+            Vec3d end = start.add(
+                    MathHelper.sin(yaw) * forward * 5.0,
+                    MathHelper.sin(pitch) * 5.0,
+                    MathHelper.cos(yaw) * forward * 5.0
+            );
+            RayTraceResult hit = world.rayTraceBlocks(start, end, true);
+            if (hit == null) {
+                player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.flute.invalidPos"), true);
+                return null; //suppress null block pos warnings
+            }
+            if (hit.typeOfHit == RayTraceResult.Type.BLOCK) {
+                BlockPos pos = hit.getBlockPos();
+                handler.server.addScheduledTask(() -> {
+                    if (dragon.isDead) return;
+                    dragon.setAttackTarget(null);
+                    dragon.getNavigator().clearPath();
+                    dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+                });
+                world.playSound(null, player.posX, player.posY, player.posZ, DMSounds.FLUTE_BLOW_LONG, SoundCategory.PLAYERS, 1, 1);
+            }
+        } else {
+            player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.flute.failed"), true);
         }
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 package net.dragonmounts.block;
 
+import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.compat.DragonTypeCompat;
 import net.dragonmounts.init.DMBlocks;
 import net.dragonmounts.init.DMItemGroups;
@@ -20,8 +21,10 @@ import java.util.Random;
 
 public class DragonEggCompatBlock extends HatchableDragonEggBlock {
     private static final PropertyEnum<DragonTypeCompat> TYPE = PropertyEnum.create("breed", DragonTypeCompat.class);
+    public static final String IDENTIFIER = DragonMountsTags.MOD_ID + ":dragon_egg";
+    public static final DragonEggCompatBlock INSTANCE = new DragonEggCompatBlock();
 
-    public DragonEggCompatBlock() {
+    private DragonEggCompatBlock() {
         super(DragonTypes.ENDER, new BlockProperties()
                 .setSoundType(SoundType.STONE)
                 .setHardness(0)
@@ -29,6 +32,7 @@ public class DragonEggCompatBlock extends HatchableDragonEggBlock {
                 .setLightLevel(0.125F)
                 .setCreativeTab(DMItemGroups.BLOCKS)
         );
+        this.setRegistryName(IDENTIFIER).setTranslationKey(HatchableDragonEggBlock.TRANSLATION_KEY);
     }
 
     @Override

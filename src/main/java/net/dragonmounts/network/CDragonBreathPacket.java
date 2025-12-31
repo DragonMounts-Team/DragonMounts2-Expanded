@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import static net.dragonmounts.util.ByteBufferUtil.readVarInt;
@@ -32,14 +31,11 @@ public class CDragonBreathPacket implements IMessage {
         writeVarInt(buffer, this.id).writeBoolean(this.breathing);
     }
 
-    public static class Handler implements IMessageHandler<CDragonBreathPacket, IMessage> {
-        @Override
-        public IMessage onMessage(CDragonBreathPacket message, MessageContext ctx) {
-            Entity entity = ctx.getServerHandler().player.world.getEntityByID(message.id);
-            if (entity instanceof TameableDragonEntity) {
-                ((TameableDragonEntity) entity).setUsingBreathWeapon(message.breathing);
-            }
-            return null;
+    public IMessage handle(MessageContext context) {
+        Entity entity = context.getServerHandler().player.world.getEntityByID(this.id);
+        if (entity instanceof TameableDragonEntity) {
+            ((TameableDragonEntity) entity).setUsingBreathWeapon(this.breathing);
         }
+        return null;
     }
 }

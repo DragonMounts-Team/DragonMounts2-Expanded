@@ -1,7 +1,7 @@
 package net.dragonmounts.item;
 
+import net.dragonmounts.block.DragonEggCompatBlock;
 import net.dragonmounts.block.HatchableDragonEggBlock;
-import net.dragonmounts.compat.DragonMountsCompat;
 import net.dragonmounts.compat.DragonTypeCompat;
 import net.dragonmounts.init.DMBlocks;
 import net.minecraft.entity.Entity;
@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class DragonEggCompatItem extends ItemBlock {
+    public static final DragonEggCompatItem INSTANCE = new DragonEggCompatItem();
     public static ItemStack upgradeStack(ItemStack stack) {
         return new ItemStack(DragonTypeCompat.byId(stack.getMetadata()).getInstance(
                 HatchableDragonEggBlock.class,
@@ -19,9 +20,10 @@ public class DragonEggCompatItem extends ItemBlock {
         ), stack.getCount());
     }
 
-    public DragonEggCompatItem() {
-        super(DragonMountsCompat.DRAGON_EGG_BLOCK);
+    private DragonEggCompatItem() {
+        super(DragonEggCompatBlock.INSTANCE);
         this.setMaxDamage(0).setHasSubtypes(true);
+        this.setRegistryName(DragonEggCompatBlock.IDENTIFIER);
     }
 
     @Override

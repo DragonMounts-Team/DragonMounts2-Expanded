@@ -46,6 +46,16 @@ public class FluteItem extends Item {
     public static final String DRAGON_UUID_KEY = "DragonUUID";
     public static final String DEPRECATED_UUID_KEY = "dragonmountsdragon";
 
+    public static int getTintColor(ItemStack stack, int layer) {
+        if (layer == 1) {
+            NBTTagCompound root = stack.getTagCompound();
+            if (root != null && root.hasKey("Color")) {
+                return root.getInteger("Color");
+            }
+        }
+        return -1;
+    }
+
     public static void bindToFlute(ItemStack stack, TameableDragonEntity dragon, EntityPlayer player) {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setUniqueId(DRAGON_UUID_KEY, dragon.getUniqueID());

@@ -6,7 +6,6 @@ import net.dragonmounts.entity.ServerDragonEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import static net.dragonmounts.util.ByteBufferUtil.readVarInt;
@@ -35,39 +34,36 @@ public class CDragonConfigPacket implements IMessage {
         writeVarInt(buf, this.dragonId, this.option);
     }
 
-    public static class Handler implements IMessageHandler<CDragonConfigPacket, IMessage> {
-        @Override
-        public IMessage onMessage(CDragonConfigPacket message, MessageContext ctx) {
-            EntityPlayer player = ctx.getServerHandler().player;
-            Entity entity = player.world.getEntityByID(message.dragonId);
-            if (entity instanceof ServerDragonEntity) {
-                ServerDragonEntity dragon = (ServerDragonEntity) entity;
-                Relation relation = Relation.checkRelation(dragon, player);
-                switch (message.option) {
-                    case DragonStates.SITTING_STATE:
-                        if (!relation.isTrusted) {
-                            relation.onDeny(player);
-                            return null;
-                        }
-                        dragon.getAISit().setSitting(!dragon.isSitting());
-                        break;
-                    case DragonStates.LOCKED_STATE:
-                        if (Relation.OWNER != relation) {
-                            relation.onDeny(player);
-                            return null;
-                        }
-                        dragon.setToAllowedOtherPlayers(!dragon.allowedOtherPlayers());
-                        break;
-                    case DragonStates.FOLLOWING_STATE:
-                        if (Relation.OWNER != relation) {
-                            relation.onDeny(player);
-                            return null;
-                        }
-                        dragon.followOwner = !dragon.followOwner;
-                        break;
-                }
+    public IMessage handle(MessageContext context) {
+        EntityPlayer player = context.getServerHandler().player;
+        Entity entity = player.world.getEntityByID(this.dragonId);
+        if (entity instanceof ServerDragonEntity) {
+            ServerDragonEntity dragon = (ServerDragonEntity) entity;
+            Relation relation = Relation.checkRelation(dragon, player);
+            switch (this.option) {
+                case DragonStates.SITTING_STATE:
+                    if (!relation.isTrusted) {
+                        relation.onDeny(player);
+                        return null;
+                    }
+                    dragon.getAISit().setSitting(!dragon.isSitting());
+                    break;
+                case DragonStates.LOCKED_STATE:
+                    if (Relation.OWNER != relation) {
+                        relation.onDeny(player);
+                        return null;
+                    }
+                    dragon.setToAllowedOtherPlayers(!dragon.allowedOtherPlayers());
+                    break;
+                case DragonStates.FOLLOWING_STATE:
+                    if (Relation.OWNER != relation) {
+                        relation.onDeny(player);
+                        return null;
+                    }
+                    dragon.followOwner = !dragon.followOwner;
+                    break;
             }
-            return null;
         }
+        return null;
     }
 }

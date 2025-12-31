@@ -1,5 +1,6 @@
 package net.dragonmounts.client.variant;
 
+import com.google.common.base.Functions;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.dragonmounts.client.breath.BuiltinBreathTextures;
 import net.dragonmounts.client.breath.impl.*;
@@ -7,7 +8,6 @@ import net.dragonmounts.client.model.dragon.BuiltinFactory;
 import net.dragonmounts.client.variant.DefaultAppearance.Builder;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 import static net.dragonmounts.DragonMounts.makeId;
@@ -164,7 +164,7 @@ public class VariantAppearances {
                 .build(MOD_ID, "zombie");
     }
 
-    public static Function<String, VariantAppearance> getSupplier() {
+    public static Function<? super String, VariantAppearance> getSupplier() {
         Object2ObjectOpenHashMap<String, VariantAppearance> map = new Object2ObjectOpenHashMap<>();
         map.put("aether_female", AETHER_FEMALE);
         map.put("aether_male", AETHER_MALE);
@@ -203,10 +203,6 @@ public class VariantAppearances {
         map.put("water_male", WATER_MALE);
         map.put("wither", WITHER);
         map.put("zombie", ZOMBIE);
-        return key -> {
-            VariantAppearance value = map.get(key);
-            if (value == null) throw new NoSuchElementException();
-            return value;
-        };
+        return Functions.forMap(map);
     }
 }

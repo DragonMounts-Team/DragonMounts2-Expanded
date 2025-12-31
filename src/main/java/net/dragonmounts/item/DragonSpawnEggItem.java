@@ -15,6 +15,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,6 +38,15 @@ import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
 
 public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityContainer<Entity> {
     public static final String TRANSLATION_KEY = TRANSLATION_KEY_PREFIX + "dragon_spawn_egg";
+
+    public static int getTintColor(ItemStack stack, int layer) {
+        Item item = stack.getItem();
+        return item instanceof DragonSpawnEggItem ? (layer == 0
+                ? ((DragonSpawnEggItem) item).backgroundColor
+                : ((DragonSpawnEggItem) item).highlightColor
+        ) : -1;
+    }
+
     public final DragonType type;
     public final int backgroundColor;
     public final int highlightColor;

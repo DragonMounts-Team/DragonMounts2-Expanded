@@ -5,17 +5,16 @@ import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.init.DMItems;
 import net.dragonmounts.init.DMKeyBindings;
+import net.dragonmounts.item.DragonOrbItem;
 import net.dragonmounts.item.DragonSpawnEggItem;
+import net.dragonmounts.item.FluteItem;
 import net.dragonmounts.network.CDragonControlPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -63,37 +62,27 @@ public class ClientMisc {
     public static void registerItemColors(ColorHandlerEvent.Item event) {
         // Dragon Flute String Color
         ItemColors colors = event.getItemColors();
-        colors.registerItemColorHandler((stack, tintIndex) -> {
-            if (tintIndex == 1) {
-                NBTTagCompound root = stack.getTagCompound();
-                if (root != null && root.hasKey("Color")) {
-                    return root.getInteger("Color");
-                }
-            }
-            return 0xFFFFFF;
-        }, DMItems.FLUTE);
-
-        colors.registerItemColorHandler((stack, tintIndex) -> {
-            Item item = stack.getItem();
-            return item instanceof DragonSpawnEggItem ? (
-                    tintIndex == 0 ? ((DragonSpawnEggItem) item).backgroundColor : ((DragonSpawnEggItem) item).highlightColor
-            ) : -1;
-        }, DMItems.AETHER_DRAGON_SPAWN_EGG, DMItems.DARK_DRAGON_SPAWN_EGG, DMItems.ENCHANTED_DRAGON_SPAWN_EGG, DMItems.ENDER_DRAGON_SPAWN_EGG, DMItems.FIRE_DRAGON_SPAWN_EGG, DMItems.FOREST_DRAGON_SPAWN_EGG, DMItems.ICE_DRAGON_SPAWN_EGG, DMItems.MOONLIGHT_DRAGON_SPAWN_EGG, DMItems.NETHER_DRAGON_SPAWN_EGG, DMItems.SKELETON_DRAGON_SPAWN_EGG, DMItems.STORM_DRAGON_SPAWN_EGG, DMItems.SUNLIGHT_DRAGON_SPAWN_EGG, DMItems.TERRA_DRAGON_SPAWN_EGG, DMItems.WATER_DRAGON_SPAWN_EGG, DMItems.WITHER_DRAGON_SPAWN_EGG, DMItems.ZOMBIE_DRAGON_SPAWN_EGG);
-
-        colors.registerItemColorHandler((stack, tintIndex) -> {
-            if (tintIndex != 0) return 0xFFFFFF;// claw
-            // orb jewel
-            final long GLOW_CYCLE_PERIOD_SECONDS = 4;
-            final float MIN_GLOW_BRIGHTNESS = 0.4F;
-            final float MAX_GLOW_BRIGHTNESS = 1.0F;
-            final long NANO_SEC_PER_SEC = 1000L * 1000L * 1000L;
-            long cyclePosition = System.nanoTime() % (GLOW_CYCLE_PERIOD_SECONDS * NANO_SEC_PER_SEC);
-            double cyclePosRadians = 2 * Math.PI * cyclePosition / (GLOW_CYCLE_PERIOD_SECONDS * NANO_SEC_PER_SEC);
-            final float BRIGHTNESS_MIDPOINT = (MIN_GLOW_BRIGHTNESS + MAX_GLOW_BRIGHTNESS) * 0.5F;
-            final float BRIGHTNESS_AMPLITUDE = (MAX_GLOW_BRIGHTNESS - BRIGHTNESS_MIDPOINT);
-            int brightness = MathHelper.clamp((int) (255 * (BRIGHTNESS_MIDPOINT + BRIGHTNESS_AMPLITUDE * MathHelper.sin((float) cyclePosRadians))), 0, 255);
-            return ((brightness & 0xFF) << 16) | ((brightness & 0xFF) << 8) | (brightness & 0xFF);
-        }, DMItems.DRAGON_ORB);
+        colors.registerItemColorHandler(FluteItem::getTintColor, DMItems.FLUTE);
+        colors.registerItemColorHandler(
+                DragonSpawnEggItem::getTintColor,
+                DMItems.AETHER_DRAGON_SPAWN_EGG,
+                DMItems.DARK_DRAGON_SPAWN_EGG,
+                DMItems.ENCHANTED_DRAGON_SPAWN_EGG,
+                DMItems.ENDER_DRAGON_SPAWN_EGG,
+                DMItems.FIRE_DRAGON_SPAWN_EGG,
+                DMItems.FOREST_DRAGON_SPAWN_EGG,
+                DMItems.ICE_DRAGON_SPAWN_EGG,
+                DMItems.MOONLIGHT_DRAGON_SPAWN_EGG,
+                DMItems.NETHER_DRAGON_SPAWN_EGG,
+                DMItems.SKELETON_DRAGON_SPAWN_EGG,
+                DMItems.STORM_DRAGON_SPAWN_EGG,
+                DMItems.SUNLIGHT_DRAGON_SPAWN_EGG,
+                DMItems.TERRA_DRAGON_SPAWN_EGG,
+                DMItems.WATER_DRAGON_SPAWN_EGG,
+                DMItems.WITHER_DRAGON_SPAWN_EGG,
+                DMItems.ZOMBIE_DRAGON_SPAWN_EGG
+        );
+        colors.registerItemColorHandler(DragonOrbItem::getTintColor, DMItems.DRAGON_ORB);
     }
 
     @SubscribeEvent

@@ -1,8 +1,10 @@
 package net.dragonmounts.event;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import com.google.common.util.concurrent.Callables;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
+import net.dragonmounts.block.DragonEggCompatBlock;
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.block.entity.DragonHeadBlockEntity;
 import net.dragonmounts.capability.*;
@@ -44,7 +46,6 @@ import net.minecraftforge.registries.DataSerializerEntry;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.Objects;
-import java.util.function.Function;
 
 import static net.dragonmounts.DragonMounts.applyId;
 import static net.dragonmounts.DragonMounts.makeId;
@@ -167,42 +168,42 @@ public class RegistryEventHandler {
         }
         ModelLoader.setCustomModelResourceLocation(DMItems.DRAGON_ORB, 0, new ModelResourceLocation("dragonmounts:dragon_orb", "inventory"));
         ModelLoader.setCustomModelResourceLocation(DMItems.TEST_RUNNER, 0, new ModelResourceLocation("dragonmounts:test_runner", "inventory"));
-        {// Compat: register item model for dragon egg variants
+        {
             Item egg = DragonMountsCompat.DRAGON_EGG_ITEM;
-            String model = MOD_ID + ":dragon_egg";
-            for (DragonTypeCompat type : DragonTypeCompat.values()) {
-                ModelLoader.setCustomModelResourceLocation(egg, type.ordinal(), new ModelResourceLocation(model, "breed=" + type.identifier));
-            }
-        }
-        {// Compat: register item model for amulet variants
+            Object2IntOpenHashMap<String> cache = new Object2IntOpenHashMap<>();
+            Reference2IntOpenHashMap<DragonType> mapping = new Reference2IntOpenHashMap<>();
             DragonTypeCompat[] types = DragonTypeCompat.values();
             int size = types.length;
-            Object2ObjectOpenHashMap<String, ModelResourceLocation> mapping = new Object2ObjectOpenHashMap<>();
-            Reference2IntOpenHashMap<DragonType> meta = new Reference2IntOpenHashMap<>();
-            ModelResourceLocation empty = new ModelResourceLocation("dragonmounts:amulet");
             ModelResourceLocation[] models = new ModelResourceLocation[size + 1];
-            models[0] = empty;
+            models[0] = new ModelResourceLocation("dragonmounts:amulet");
             for (int i = 0; i < size; ) {
-                DragonType type = types[i].type;
+                DragonTypeCompat compat = types[i];
+                // Compat: register item model for dragon egg variants
+                ModelLoader.setCustomModelResourceLocation(egg, i, new ModelResourceLocation(DragonEggCompatBlock.IDENTIFIER, "breed=" + compat.identifier));
+                DragonType type = compat.type;
                 models[++i] = new ModelResourceLocation("dragonmounts:" + type.identifier.getPath() + "_dragon_amulet");
-                meta.put(type, i);
+                mapping.put(type, i);
             }
-            Function<String, ModelResourceLocation> computer = variant -> models[meta.getOrDefault(DragonVariant.byName(variant).type, 0)];
+            // Compat: register item model for amulet variants
+            ModelBakery.registerItemVariants(amulet, models);
             ModelLoader.setCustomMeshDefinition(amulet, stack -> {
                 NBTTagCompound root = stack.getTagCompound();
-                if (root == null) return empty;
+                if (root == null) return models[0];
                 NBTTagCompound data = root.getCompoundTag("EntityTag");
-                if (data.isEmpty()) return empty;
-                return mapping.computeIfAbsent(data.getString(DragonVariant.DATA_PARAMETER_KEY), computer);
+                if (data.isEmpty()) return models[0];
+                String variant = data.getString(DragonVariant.DATA_PARAMETER_KEY);
+                if (cache.containsKey(variant)) return models[cache.getInt(variant)];
+                int model = mapping.getInt(DragonVariant.byName(variant).type);
+                cache.put(variant, model);
+                return models[model];
             });
-            ModelBakery.registerItemVariants(amulet, models);
         }
     }
 
     public static void registerCapabilities() {
-        CapabilityManager.INSTANCE.register(IArmorEffectManager.class, new ArmorEffectManager.Storage(), () -> null);
-        CapabilityManager.INSTANCE.register(IDragonFood.class, new DragonFoods.Storage(), () -> IDragonFood.EMPTY);
-        CapabilityManager.INSTANCE.register(IHardShears.class, new DummyStorage<>(), () -> null);
+        CapabilityManager.INSTANCE.register(IArmorEffectManager.class, new ArmorEffectManager.Storage(), Callables.returning(null));
+        CapabilityManager.INSTANCE.register(IDragonFood.class, new DragonFoods.Storage(), Callables.returning(IDragonFood.EMPTY));
+        CapabilityManager.INSTANCE.register(IHardShears.class, new DummyStorage<>(), Callables.returning(null));
         CapabilityManager.INSTANCE.register(IFluteHolder.class, new FluteHolder.Storage(), FluteHolder::new);
     }
 
