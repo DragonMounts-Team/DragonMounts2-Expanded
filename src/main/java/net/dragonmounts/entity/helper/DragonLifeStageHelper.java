@@ -30,6 +30,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Random;
 import java.util.UUID;
 
+import static net.dragonmounts.entity.DragonLifeStage.clipTickCountToValid;
 import static net.dragonmounts.entity.DragonLifeStage.getLifeStageFromTickCount;
 import static net.dragonmounts.util.EntityUtil.replaceAttributeModifier;
 import static net.minecraft.entity.SharedMonsterAttributes.*;
@@ -43,12 +44,13 @@ public class DragonLifeStageHelper {
     }
 
     public static final UUID DRAGON_AEG_MODIFIER_ID = UUID.fromString("856d4ba4-9ffe-4a52-8606-890bb9be538b");
-    private static final Logger L = LogManager.getLogger();
-    private static final String NBT_TICKS_SINCE_CREATION = "TicksSinceCreation";
+    public static final String NBT_TICKS_SINCE_CREATION = "TicksSinceCreation";
+    public static final String NBT_FROM_MOB_SPAWNER = "FromMobSpawner";
     private static final int TICKS_SINCE_CREATION_UPDATE_INTERVAL = 100;
     private static final float EGG_CRACK_THRESHOLD = 0.9f;
     private static final float EGG_WIGGLE_THRESHOLD = 0.75f;
     private static final float EGG_WIGGLE_BASE_CHANCE = 20;
+    private static final Logger L = LogManager.getLogger();
     public final TameableDragonEntity dragon;
     // the ticks since creation is used to control the dragon's life stage.  It is only updated by the server occasionally.
     // the client keeps a cached copy of it and uses client ticks to interpolate in the gaps.
@@ -138,12 +140,13 @@ public class DragonLifeStageHelper {
     }
 
     public void readFromNBT(NBTTagCompound nbt) {
-        int ticksRead = nbt.getInteger(NBT_TICKS_SINCE_CREATION);
-        ticksRead = DragonLifeStage.clipTickCountToValid(ticksRead);
-        ticksSinceCreationServer = ticksRead;
+        int age = nbt.hasKey(NBT_TICKS_SINCE_CREATION)
+                ? clipTickCountToValid(nbt.getInteger(NBT_TICKS_SINCE_CREATION))
+                : nbt.getBoolean(NBT_FROM_MOB_SPAWNER) ? DragonLifeStage.EGG.boundaryTick : 0;
+        ticksSinceCreationServer = age;
         this.dragon.getDataManager().set(dataParam, ticksSinceCreationServer);
         float health = this.dragon.getHealth();
-        DragonLifeStage stage = getLifeStageFromTickCount(ticksRead);
+        DragonLifeStage stage = getLifeStageFromTickCount(age);
         this.onNewLifeStage(stage, this.lifeStagePrev);
         this.lifeStagePrev = stage;
         this.dragon.setHealth(health);

@@ -19,6 +19,7 @@ import net.dragonmounts.init.*;
 import net.dragonmounts.item.DragonEssenceItem;
 import net.dragonmounts.item.DragonSpawnEggItem;
 import net.dragonmounts.network.SPathDebugPacket;
+import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.ClassPredicate;
 import net.dragonmounts.util.EntityUtil;
@@ -201,6 +202,8 @@ public class ServerDragonEntity extends TameableDragonEntity {
             }
         } else if (nbt.hasKey(DragonVariant.DATA_PARAMETER_KEY)) {
             this.setVariant(DragonVariant.byName(nbt.getString(DragonVariant.DATA_PARAMETER_KEY)));
+        } else if (nbt.hasKey(DragonType.DATA_PARAMETER_KEY)) {
+            this.setDragonType(DragonType.byName(nbt.getString(DragonType.DATA_PARAMETER_KEY)), null);
         }
         this.reproductionHelper.readFromNBT(nbt);
         if (this.firstUpdate) {
@@ -521,9 +524,8 @@ public class ServerDragonEntity extends TameableDragonEntity {
         return mate instanceof ServerDragonEntity ? this.reproductionHelper.createChild((ServerDragonEntity) mate) : null;
     }
 
-    @Nonnull
     @Override
-    public ItemStack getPickedResult(RayTraceResult target) {
+    public @Nonnull ItemStack getPickedResult(RayTraceResult target) {
         return new ItemStack(this.isEgg()
                 ? Item.getItemFromBlock(this.getVariant().type.getInstance(HatchableDragonEggBlock.class, DMBlocks.ENDER_DRAGON_EGG))
                 : this.getVariant().type.getInstance(DragonSpawnEggItem.class, DMItems.ENDER_DRAGON_SPAWN_EGG)
@@ -534,9 +536,8 @@ public class ServerDragonEntity extends TameableDragonEntity {
         player.openGui(DragonMounts.getInstance(), GuiHandler.GUI_DRAGON, this.world, this.getEntityId(), 0, 0);
     }
 
-    @Nullable
     @Override
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData data) {
+    public @Nullable IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData data) {
         super.onInitialSpawn(difficulty, data);
         this.variantHelper.onVariantChanged(this.getVariant());
         return data;

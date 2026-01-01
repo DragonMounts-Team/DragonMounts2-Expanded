@@ -34,12 +34,17 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static net.dragonmounts.DragonMounts.makeId;
+import static net.dragonmounts.util.DMUtils.parseIdentifier;
 import static net.dragonmounts.util.EntityUtil.addOrMergeEffect;
 
 public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
     public static final String DATA_PARAMETER_KEY = "DragonType";
     public static final ResourceLocation DEFAULT_KEY = makeId("ender");
     public static final DeferredRegistry<DragonType> REGISTRY = new Registry(makeId("dragon_type"), new RegistryBuilder<DragonType>().setDefaultKey(DEFAULT_KEY));
+
+    public static DragonType byName(String name) {
+        return REGISTRY.getValue(parseIdentifier(name));
+    }
 
     public final int color;
     public final boolean convertible;
@@ -193,7 +198,7 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
     }
 
     public static void convertByLightning(ServerDragonEntity dragon, DragonType type) {
-        dragon.setVariant(type.variants.draw(dragon.getRNG(), null));
+        dragon.setDragonType(type, null);
         dragon.playSound(SoundEvents.BLOCK_PORTAL_TRIGGER, 2, 1);
         dragon.playSound(SoundEvents.BLOCK_END_PORTAL_SPAWN, 2, 1);
     }

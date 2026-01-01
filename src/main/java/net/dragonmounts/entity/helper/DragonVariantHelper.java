@@ -68,7 +68,8 @@ public class DragonVariantHelper implements ITickable {
     @Override
     public void update() {
         TameableDragonEntity dragon = this.dragon;
-        DragonType current = dragon.getVariant().type;
+        DragonVariant variant = dragon.getVariant();
+        DragonType current = variant.type;
         World level = dragon.world;
         // spawn breed-specific particles every other tick
         if (level.isRemote) {
@@ -118,21 +119,21 @@ public class DragonVariantHelper implements ITickable {
                     this.points.addTo(type, POINTS_ENV);
                 }
             }
-            this.applyPoints(current);
+            this.applyPoints(variant);
         }
     }
 
-    public void applyPoints(DragonType current) {
-        DragonType neo = current;
-        int point = this.points.getInt(current);
+    public void applyPoints(DragonVariant current) {
+        DragonType neo = current.type;
+        int point = this.points.getInt(neo);
         for (Reference2IntMap.Entry<DragonType> entry : this.points.reference2IntEntrySet()) {
             if (entry.getIntValue() > point) {
                 point = entry.getIntValue();
                 neo = entry.getKey();
             }
         }
-        if (neo != current) {
-            dragon.setVariant(neo.variants.draw(dragon.getRNG(), null));
+        if (neo != current.type) {
+            this.dragon.setDragonType(neo, current);
         }
     }
 
@@ -140,7 +141,7 @@ public class DragonVariantHelper implements ITickable {
         Random random = this.dragon.getRNG();
         this.points.addTo(parent1.getVariant().type, POINTS_INHERIT + random.nextInt(POINTS_INHERIT));
         this.points.addTo(parent2.getVariant().type, POINTS_INHERIT + random.nextInt(POINTS_INHERIT));
-        this.applyPoints(this.dragon.getVariant().type);
+        this.applyPoints(this.dragon.getVariant());
     }
 
     public void onVariantChanged(DragonVariant variant) {
@@ -169,7 +170,7 @@ public class DragonVariantHelper implements ITickable {
         }
 
         float factor = dragon.getHealth() / dragon.getMaxHealth();
-        AbstractAttributeMap attributes = this.dragon.getAttributeMap();
+        AbstractAttributeMap attributes = dragon.getAttributeMap();
         if (this.lastType != null) {
             attributes.removeAttributeModifiers(this.lastType.attributes);
         }

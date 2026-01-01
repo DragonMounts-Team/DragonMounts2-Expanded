@@ -14,6 +14,8 @@ import net.dragonmounts.init.DMSounds;
 import net.dragonmounts.init.DragonFoods;
 import net.dragonmounts.network.CDragonBreathPacket;
 import net.dragonmounts.network.COpenInventoryPacket;
+import net.dragonmounts.registry.DragonType;
+import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.ItemUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityAgeable;
@@ -22,6 +24,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
@@ -58,6 +61,20 @@ public class ClientDragonEntity extends TameableDragonEntity {
     @Override
     public final Vec3d getHeadRelativeOffset(float x, float y, float z) {
         return this.animator.getHeadRelativeOffset(x, y, z);
+    }
+
+    @Override
+    public void readEntityFromNBT(NBTTagCompound nbt) {
+        this.lifeStageHelper.readFromNBT(nbt);
+        super.readEntityFromNBT(nbt);
+        if (nbt.hasKey(DragonVariant.DATA_PARAMETER_KEY)) {
+            this.setVariant(DragonVariant.byName(nbt.getString(DragonVariant.DATA_PARAMETER_KEY)));
+        } else if (nbt.hasKey(DragonType.DATA_PARAMETER_KEY)) {
+            this.setDragonType(DragonType.byName(nbt.getString(DragonType.DATA_PARAMETER_KEY)), null);
+        }
+        if (this.firstUpdate) {
+            this.variantHelper.onVariantChanged(this.getVariant());
+        }
     }
 
     @Override

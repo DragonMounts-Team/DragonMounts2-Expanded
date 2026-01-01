@@ -32,6 +32,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
+import static net.dragonmounts.util.DMUtils.parseIdentifier;
 import static net.minecraft.tileentity.TileEntitySkull.updateGameProfile;
 
 /**
@@ -159,7 +160,7 @@ public class FluteItem extends Item {
             if (root.hasKey("Name")) {
                 tooltip.add(I18n.format("tooltip.dragonmounts.name", root.getString("Name")));
             } else if (root.hasKey("Type")) {
-                DragonType type = DragonType.REGISTRY.getIfPresent(new ResourceLocation(root.getString("Type")));
+                DragonType type = DragonType.REGISTRY.getIfPresent(parseIdentifier(root.getString("Type")));
                 if (type != null) {
                     tooltip.add(I18n.format(
                             "tooltip.dragonmounts.name",

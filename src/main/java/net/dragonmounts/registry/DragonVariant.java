@@ -18,6 +18,7 @@ import java.util.function.Function;
 
 import static it.unimi.dsi.fastutil.Arrays.MAX_ARRAY_SIZE;
 import static net.dragonmounts.DragonMounts.makeId;
+import static net.dragonmounts.util.DMUtils.parseIdentifier;
 
 public class DragonVariant extends IForgeRegistryEntry.Impl<DragonVariant> {
     public static final String DATA_PARAMETER_KEY = "Variant";
@@ -26,7 +27,7 @@ public class DragonVariant extends IForgeRegistryEntry.Impl<DragonVariant> {
     public static final RegisteredObjectSerializer<DragonVariant> SERIALIZER = new RegisteredObjectSerializer<>(REGISTRY);
 
     public static DragonVariant byName(String name) {
-        return REGISTRY.getValue(new ResourceLocation(name));
+        return REGISTRY.getValue(parseIdentifier(name));
     }
 
     int index = -1;// non-private to simplify nested class access

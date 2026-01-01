@@ -19,7 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -96,18 +95,21 @@ public class EntityUtil {
     ) {
         ServerDragonEntity dragon = new ServerDragonEntity(level);
         NBTTagCompound root = stack.getTagCompound();
-        DragonVariant saved = null;
+        boolean variable = true;
         if (root != null) {
             NBTTagCompound data = root.getCompoundTag("EntityTag");
             if (!data.isEmpty()) {
                 if (Relation.denyIfNotOwner(data, player)) return null;
                 if (data.hasKey(DragonVariant.DATA_PARAMETER_KEY)) {
-                    saved = DragonVariant.REGISTRY.getIfPresent(new ResourceLocation(data.getString(DragonVariant.DATA_PARAMETER_KEY)));
+                    dragon.setVariant(DragonVariant.byName(data.getString(DragonVariant.DATA_PARAMETER_KEY)));
+                    variable = false;
                 }
                 FixerCompat.disableEntityFixers(data);
             }
         }
-        dragon.setVariant(saved == null ? fallback.variants.draw(level.rand, null) : saved);
+        if (variable) {
+            dragon.setDragonType(fallback, null);
+        }
         return EntityUtil.finalizeSpawn(level, dragon, pos, true, null, (world, entity) -> {
             if (stack.hasDisplayName()) {
                 entity.setCustomNameTag(stack.getDisplayName());

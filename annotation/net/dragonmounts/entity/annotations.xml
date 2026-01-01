@@ -1,0 +1,5 @@
+<root>
+    <item name='net.dragonmounts.entity.TameableDragonEntity void setVariant(net.dragonmounts.registry.DragonVariant) 0'>
+        <annotation name='org.jetbrains.annotations.UnknownNullability'/>
+    </item>
+</root>

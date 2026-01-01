@@ -43,10 +43,10 @@ public class DMUtils {
 
     public static ResourceLocation parseIdentifier(String identifier) {
         String[] result = new String[]{MOD_ID, identifier};
-        int i = identifier.indexOf(58);
+        int i = identifier.indexOf(':');
         if (i >= 0) {
             result[1] = identifier.substring(i + 1);
-            if (i > 1) {
+            if (i != 0) {
                 result[0] = identifier.substring(0, i);
             }
         }

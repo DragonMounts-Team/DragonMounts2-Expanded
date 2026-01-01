@@ -22,6 +22,7 @@ import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.init.DragonVariants;
 import net.dragonmounts.inventory.DragonInventory;
 import net.dragonmounts.item.DragonArmorItem;
+import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.EntityUtil;
 import net.dragonmounts.util.MutableBlockPosEx;
@@ -1072,7 +1073,13 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     }
 
     public void setVariant(DragonVariant variant) {
-        this.dataManager.set(DATA_VARIANT, variant);
+        if (variant != null) {
+            this.dataManager.set(DATA_VARIANT, variant);
+        }
+    }
+
+    public final void setDragonType(DragonType type, @Nullable DragonVariant current) {
+        this.setVariant(type.variants.draw(this.rand, current));
     }
 }
 

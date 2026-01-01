@@ -2,4 +2,7 @@
     <item name='net.minecraft.entity.player.EntityPlayer T getCapability(net.minecraftforge.common.capabilities.Capability&lt;T&gt;, net.minecraft.util.EnumFacing) 0'>
         <annotation name='org.jetbrains.annotations.Nullable'/>
     </item>
+    <item name='net.minecraft.entity.player.EntityPlayer void addStat(net.minecraft.stats.StatBase) 0'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
 </root>
