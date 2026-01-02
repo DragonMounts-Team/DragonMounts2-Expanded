@@ -11,6 +11,7 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -23,7 +24,7 @@ public class StageCommand extends EntityCommand {
         super(2);
         Object2ObjectOpenHashMap<String, DragonLifeStage> stages = new Object2ObjectOpenHashMap<>();
         for (DragonLifeStage stage : DragonLifeStage.values()) {
-            stages.put(stage.name().toLowerCase(), stage);
+            stages.put(stage.identifier, stage);
         }
         this.stages = stages;
     }
@@ -62,11 +63,11 @@ public class StageCommand extends EntityCommand {
             default:
                 throw new WrongUsageException("commands.dragonmounts.stage.usage");
         }
-        DragonLifeStage stage = this.stages.get(args[0]);
+        DragonLifeStage stage = this.stages.get(args[0].toLowerCase());
         if (stage == null) throw new CommandException("commands.dragonmounts.stage.invalid", args[0]);
         for (TameableDragonEntity dragon : dragons) {
             dragon.lifeStageHelper.setLifeStage(stage);
-            notifyCommandListener(sender, this, "commands.dragonmounts.stage.success", dragon.getDisplayName(), stage.identifier);
+            notifyCommandListener(sender, this, "commands.dragonmounts.stage.success", dragon.getDisplayName(), new TextComponentTranslation(stage.translationKey));
         }
     }
 
