@@ -1,11 +1,11 @@
 package net.dragonmounts.client.model.dragon;
 
-import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.Segment;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
+import java.util.Arrays;
 import java.util.function.IntFunction;
 
 import static net.dragonmounts.client.model.dragon.HornedTailPart.Snapshot.saveScalable;
@@ -32,7 +32,7 @@ public class HornedTailPart extends TailPart {
         super(base, name);
         this.addChild(this.leftHorn = this.makeHorn(new ModelRenderer(base, name), true));
         this.addChild(this.rightHorn = this.makeHorn(new ModelRenderer(base, name), false));
-        this.snapshots = DMUtils.fillArray(new Snapshot[TAIL_SEGMENTS], factory);
+        Arrays.setAll(this.snapshots = new Snapshot[TAIL_SEGMENTS], factory);
     }
 
     /**

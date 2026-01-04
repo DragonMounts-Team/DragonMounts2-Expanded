@@ -4,11 +4,8 @@ import net.dragonmounts.entity.helper.DragonVariantHelper;
 import net.dragonmounts.init.DragonVariants;
 import net.dragonmounts.item.IEntityContainer;
 import net.dragonmounts.registry.DragonVariant;
-import net.dragonmounts.util.DMUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.datafix.IFixableData;
-
-import javax.annotation.Nullable;
 
 public class DragonEntityFixer implements IFixableData {
     public static void fixDragonData(NBTTagCompound tag) {
@@ -76,13 +73,12 @@ public class DragonEntityFixer implements IFixableData {
         }
     }
 
-    public static NBTTagCompound fixContainerItem(NBTTagCompound root, @Nullable NBTTagCompound cap) {
-        NBTTagCompound result = DMUtils.putIfNeeded(new NBTTagCompound(), "ForgeCaps", cap);
+    public static NBTTagCompound fixContainerItem(NBTTagCompound root) {
+        NBTTagCompound result = new NBTTagCompound();
         if (root.hasKey("display")) {
             result.setTag("display", root.getCompoundTag("display"));
+            root.removeTag("display");
         }
-        root.removeTag("display");
-        root.removeTag("LocName");
         NBTTagCompound entity = IEntityContainer.simplifyData(root).copy();
         fixDragonData(entity);
         entity.setString("id", "dragonmounts:dragon");

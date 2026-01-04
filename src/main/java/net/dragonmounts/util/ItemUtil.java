@@ -19,7 +19,7 @@ public class ItemUtil {
 
     public static boolean anyMatches(ItemStack stack, String... names) {
         if (stack.isEmpty()) return false;
-        IntOpenHashSet tags = new IntOpenHashSet();
+        IntOpenHashSet tags = new IntOpenHashSet(names.length);
         for (String name : names) {
             tags.add(OreDictionary.getOreID(name));
         }

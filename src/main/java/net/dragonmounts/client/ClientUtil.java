@@ -1,11 +1,11 @@
 package net.dragonmounts.client;
 
-import net.dragonmounts.util.DMUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.ArrayUtils;
 
 @SideOnly(Side.CLIENT)
 public abstract class ClientUtil {
@@ -15,11 +15,11 @@ public abstract class ClientUtil {
     }
 
     public static String translateToLocal(String key) {
-        return I18n.format(key, DMUtils.NO_ARGS);
+        return I18n.format(key, ArrayUtils.EMPTY_OBJECT_ARRAY);
     }
 
     public static String translateBothToLocal(String major, String minor) {
-        return I18n.format(major, I18n.format(minor, DMUtils.NO_ARGS));
+        return I18n.format(major, I18n.format(minor, ArrayUtils.EMPTY_OBJECT_ARRAY));
     }
 
     /**

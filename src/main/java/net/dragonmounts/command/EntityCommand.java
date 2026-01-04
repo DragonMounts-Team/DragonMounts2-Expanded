@@ -1,6 +1,5 @@
 package net.dragonmounts.command;
 
-import net.dragonmounts.util.DMUtils;
 import net.minecraft.command.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,7 +35,7 @@ public abstract class EntityCommand extends CommandBase {
             }
             if (closest != null) return closest;
         }
-        throw new EntityNotFoundException("commands.dragonmounts.unspecified", DMUtils.NO_ARGS);
+        throw new EntityNotFoundException("commands.dragonmounts.unspecified");
     }
 
     public static <T extends Entity> List<T> getSelectedEntities(MinecraftServer server, ICommandSender sender, String selector, Class<T> clazz) throws CommandException {

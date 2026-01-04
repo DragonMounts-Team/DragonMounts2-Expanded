@@ -176,6 +176,21 @@ public class ServerDragonEntity extends TameableDragonEntity {
     public void readEntityFromNBT(NBTTagCompound nbt) {
         this.lifeStageHelper.readFromNBT(nbt);
         this.variantHelper.readFromNBT(nbt);
+        if (nbt.getBoolean("DataFix$IsForest")) {
+            boolean male = this.rand.nextBoolean();
+            Set<BiomeDictionary.Type> types = BiomeDictionary.getTypes(this.world.getBiome(this.getPosition()));
+            if (types.contains(BiomeDictionary.Type.SAVANNA) || types.contains(BiomeDictionary.Type.DRY) || types.contains(BiomeDictionary.Type.MESA) || types.contains(BiomeDictionary.Type.SANDY)) {
+                this.setVariant(male ? DragonVariants.FOREST_DRY_MALE : DragonVariants.FOREST_DRY_FEMALE);
+            } else if (types.contains(BiomeDictionary.Type.COLD) || types.contains(BiomeDictionary.Type.MOUNTAIN)) {
+                this.setVariant(male ? DragonVariants.FOREST_TAIGA_MALE : DragonVariants.FOREST_TAIGA_FEMALE);
+            } else {
+                this.setVariant(male ? DragonVariants.FOREST_MALE : DragonVariants.FOREST_FEMALE);
+            }
+        } else if (nbt.hasKey(DragonVariant.DATA_PARAMETER_KEY)) {
+            this.setVariant(DragonVariant.byName(nbt.getString(DragonVariant.DATA_PARAMETER_KEY)));
+        } else if (nbt.hasKey(DragonType.DATA_PARAMETER_KEY)) {
+            this.overrideType(DragonType.byName(nbt.getString(DragonType.DATA_PARAMETER_KEY)));
+        }
         super.readEntityFromNBT(nbt);
         this.setSheared(nbt.getInteger("Sheared"));
         this.setBreatheCollected(nbt.getInteger("BreathCollected"));
@@ -190,21 +205,6 @@ public class ServerDragonEntity extends TameableDragonEntity {
         this.followOwner = nbt.getBoolean("FollowOwner");
         this.fromVanillaEgg = nbt.getBoolean("FromVanillaEgg");
         this.inventory.readAdditionalData(nbt);
-        if (nbt.getBoolean("DataFix$IsForest")) {
-            boolean male = this.rand.nextBoolean();
-            Set<BiomeDictionary.Type> types = BiomeDictionary.getTypes(this.world.getBiome(this.getPosition()));
-            if (types.contains(BiomeDictionary.Type.SAVANNA) || types.contains(BiomeDictionary.Type.DRY) || types.contains(BiomeDictionary.Type.MESA) || types.contains(BiomeDictionary.Type.SANDY)) {
-                this.setVariant(male ? DragonVariants.FOREST_DRY_MALE : DragonVariants.FOREST_DRY_FEMALE);
-            } else if (types.contains(BiomeDictionary.Type.COLD) || types.contains(BiomeDictionary.Type.MOUNTAIN)) {
-                this.setVariant(male ? DragonVariants.FOREST_TAIGA_MALE : DragonVariants.FOREST_TAIGA_FEMALE);
-            } else {
-                this.setVariant(male ? DragonVariants.FOREST_MALE : DragonVariants.FOREST_FEMALE);
-            }
-        } else if (nbt.hasKey(DragonVariant.DATA_PARAMETER_KEY)) {
-            this.setVariant(DragonVariant.byName(nbt.getString(DragonVariant.DATA_PARAMETER_KEY)));
-        } else if (nbt.hasKey(DragonType.DATA_PARAMETER_KEY)) {
-            this.setDragonType(DragonType.byName(nbt.getString(DragonType.DATA_PARAMETER_KEY)), null);
-        }
         this.reproductionHelper.readFromNBT(nbt);
         if (this.firstUpdate) {
             this.variantHelper.onVariantChanged(this.getVariant());

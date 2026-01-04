@@ -167,7 +167,7 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound cap) {
         NBTTagCompound root = stack.getTagCompound();
         if (root != null && !root.hasKey("EntityTag") && root.hasKey("Breed", 8)) {
-            stack.setTagCompound(DragonEntityFixer.fixContainerItem(root, cap));
+            stack.setTagCompound(DragonEntityFixer.fixContainerItem(root));
         }
         return this;
     }

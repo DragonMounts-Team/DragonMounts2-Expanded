@@ -112,37 +112,10 @@ public abstract class MathX {
         }
     }
 
-    /**
-     * Double trigonometric interpolation
-     */
-    public static double terp(double a, double b, double x) {
-        if (x <= 0) {
-            return a;
-        }
-        if (x >= 1) {
-            return b;
-        }
-
-        double mu2 = 0.5 * (1 - Math.cos(x * Math.PI));
-        return a * (1 - mu2) + b * mu2;
-    }
-
     public final static double MINIMUM_SIGNIFICANT_DIFFERENCE = 1e-3;
-
-    public static boolean isApproximatelyEqual(double x1, double x2) {
-        return Math.abs(x1 - x2) <= MINIMUM_SIGNIFICANT_DIFFERENCE;
-    }
 
     public static boolean isSignificantlyDifferent(double left, double right) {
         return Math.abs(left - right) > MINIMUM_SIGNIFICANT_DIFFERENCE;
-    }
-
-    /**
-     * return the modulus (always positive)
-     * @return calculates the numerator modulus by divisor, always positive
-     */
-    public static int modulus(int numerator, int divisor) {
-        return (numerator % divisor + divisor) % divisor;
     }
 
     /**

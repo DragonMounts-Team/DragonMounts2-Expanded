@@ -12,9 +12,8 @@ public class ClassPredicate<T> implements Predicate<T> {
     @Override
     public boolean apply(T input) {
         if (input == null) return false;
-        Class<?> clazz = input.getClass();
         for (Class<?> candidate : this.classes) {
-            if (candidate.isAssignableFrom(clazz)) return true;
+            if (candidate.isInstance(input)) return true;
         }
         return false;
     }

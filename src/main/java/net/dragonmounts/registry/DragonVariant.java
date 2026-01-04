@@ -1,5 +1,6 @@
 package net.dragonmounts.registry;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrays;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.dragonmounts.block.DragonHeadBlock;
 import net.dragonmounts.client.variant.VariantAppearance;
@@ -16,7 +17,6 @@ import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static it.unimi.dsi.fastutil.Arrays.MAX_ARRAY_SIZE;
 import static net.dragonmounts.DragonMounts.makeId;
 import static net.dragonmounts.util.DMUtils.parseIdentifier;
 
@@ -52,44 +52,35 @@ public class DragonVariant extends IForgeRegistryEntry.Impl<DragonVariant> {
         return (key == null ? DEFAULT_KEY : key).toString();
     }
 
-    /**
-     * Simplified {@link it.unimi.dsi.fastutil.objects.ReferenceArrayList}
-     */
+    /// Simplified {@link it.unimi.dsi.fastutil.objects.ObjectArrayList}
     public static final class Manager implements Iterable<DragonVariant> {
         public static final int DEFAULT_INITIAL_CAPACITY = 8;
+        private static final boolean SUPPRESS = false;
         public final DragonType type;
-        DragonVariant[] variants = {};// non-private to simplify nested class access
-        int size;// non-private to simplify nested class access
+        DragonVariant[] variants = {}; // non-private to simplify nested class access
+        int size; // non-private to simplify nested class access
 
         public Manager(DragonType type) {
             this.type = type;
         }
 
         private void grow(int capacity) {
-            if (capacity <= this.variants.length) return;
-            if (this.variants.length > 0) {
-                capacity = (int) Math.max(Math.min((long) this.variants.length + (this.variants.length >> 1), MAX_ARRAY_SIZE), capacity);
-            } else if (capacity < DEFAULT_INITIAL_CAPACITY) {
-                capacity = DEFAULT_INITIAL_CAPACITY;
-            }
-            final DragonVariant[] array = new DragonVariant[capacity];
-            System.arraycopy(this.variants, 0, array, 0, size);
-            this.variants = array;
-            assert this.size <= this.variants.length;
+            this.variants = ObjectArrays.grow(this.variants, capacity, this.size);
+            assert SUPPRESS || this.size <= this.variants.length;
         }
 
         @SuppressWarnings("UnusedReturnValue")
-        boolean add(final DragonVariant variant) {// non-private to simplify nested class access
+        boolean add(final DragonVariant variant) { // non-private to simplify nested class access
             if (variant.type != this.type || variant.index >= 0) return false;
             this.grow(this.size + 1);
             variant.index = this.size;
             this.variants[this.size++] = variant;
-            assert this.size <= this.variants.length;
+            assert SUPPRESS || this.size <= this.variants.length;
             return true;
         }
 
         @SuppressWarnings("UnusedReturnValue")
-        boolean remove(final DragonVariant variant) {// non-private to simplify nested class access
+        boolean remove(final DragonVariant variant) { // non-private to simplify nested class access
             if (variant.type != this.type || variant.index < 0) return false;
             if (variant.index >= this.size) {
                 throw new IndexOutOfBoundsException("Index (" + variant.index + ") is greater than or equal to list size (" + this.size + ")");
@@ -100,11 +91,11 @@ public class DragonVariant extends IForgeRegistryEntry.Impl<DragonVariant> {
             }
             variant.index = -1;
             this.variants[this.size] = null;
-            assert this.size <= this.variants.length;
+            assert SUPPRESS || this.size <= this.variants.length;
             return true;
         }
 
-        void clear() {// non-private to simplify nested class access
+        void clear() { // non-private to simplify nested class access
             for (int i = 0; i < this.size; ++i) {
                 this.variants[i].index = -1;
                 this.variants[i] = null;

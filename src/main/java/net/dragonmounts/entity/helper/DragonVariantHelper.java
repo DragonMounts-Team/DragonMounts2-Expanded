@@ -133,7 +133,7 @@ public class DragonVariantHelper implements ITickable {
             }
         }
         if (neo != current.type) {
-            this.dragon.setDragonType(neo, current);
+            this.dragon.convertTo(neo);
         }
     }
 

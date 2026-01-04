@@ -1,6 +1,5 @@
 package net.dragonmounts.event;
 
-import com.google.common.util.concurrent.Callables;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
@@ -17,6 +16,7 @@ import net.dragonmounts.registry.CarriageType;
 import net.dragonmounts.registry.CooldownCategory;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
+import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.DummyStorage;
 import net.dragonmounts.util.SerializableProvider;
 import net.minecraft.block.Block;
@@ -201,9 +201,9 @@ public class RegistryEventHandler {
     }
 
     public static void registerCapabilities() {
-        CapabilityManager.INSTANCE.register(IArmorEffectManager.class, new ArmorEffectManager.Storage(), Callables.returning(null));
-        CapabilityManager.INSTANCE.register(IDragonFood.class, new DragonFoods.Storage(), Callables.returning(IDragonFood.EMPTY));
-        CapabilityManager.INSTANCE.register(IHardShears.class, new DummyStorage<>(), Callables.returning(null));
+        CapabilityManager.INSTANCE.register(IArmorEffectManager.class, new ArmorEffectManager.Storage(), DMUtils::nil);
+        CapabilityManager.INSTANCE.register(IDragonFood.class, new DragonFoods.Storage(), IDragonFood::empty);
+        CapabilityManager.INSTANCE.register(IHardShears.class, new DummyStorage<>(), DMUtils::nil);
         CapabilityManager.INSTANCE.register(IFluteHolder.class, new FluteHolder.Storage(), FluteHolder::new);
     }
 

@@ -79,8 +79,8 @@ public class DragonEssenceItem extends Item implements IEntityContainer<Tameable
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World level, List<String> tooltips, ITooltipFlag flag) {
         tooltips.add(this.type.getName());
-        NBTTagCompound tag = stack.getTagCompound();
-        if (tag == null || !tag.hasKey("EntityTag")) {
+        NBTTagCompound root = stack.getTagCompound();
+        if (root == null || !root.hasKey("EntityTag")) {
             //Broken NBT, possibly cheated in, Warn the player...
             tooltips.add(TextFormatting.RED + "ERROR: Broken or Missing NBT Data");
         }
@@ -106,7 +106,7 @@ public class DragonEssenceItem extends Item implements IEntityContainer<Tameable
             root.removeTag("Health");
             root.removeTag("TicksSinceCreation");
             FixerCompat.disableEntityFixers(root);
-            stack.setTagCompound(DragonEntityFixer.fixContainerItem(root, cap));
+            stack.setTagCompound(DragonEntityFixer.fixContainerItem(root));
         }
         return null;
     }

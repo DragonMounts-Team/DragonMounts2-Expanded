@@ -21,9 +21,8 @@ public class SerializableProvider<I, T extends NBTBase> implements ICapabilitySe
         return this.type == capability;
     }
 
-    @Nullable
     @Override
-    public <E> E getCapability(@Nullable Capability<E> capability, @Nullable EnumFacing facing) {
+    public <E> @Nullable E getCapability(@Nullable Capability<E> capability, @Nullable EnumFacing facing) {
         return this.type == capability ? this.type.cast(this.instance) : null;
     }
 

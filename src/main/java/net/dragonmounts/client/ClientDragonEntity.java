@@ -66,12 +66,12 @@ public class ClientDragonEntity extends TameableDragonEntity {
     @Override
     public void readEntityFromNBT(NBTTagCompound nbt) {
         this.lifeStageHelper.readFromNBT(nbt);
-        super.readEntityFromNBT(nbt);
         if (nbt.hasKey(DragonVariant.DATA_PARAMETER_KEY)) {
             this.setVariant(DragonVariant.byName(nbt.getString(DragonVariant.DATA_PARAMETER_KEY)));
         } else if (nbt.hasKey(DragonType.DATA_PARAMETER_KEY)) {
-            this.setDragonType(DragonType.byName(nbt.getString(DragonType.DATA_PARAMETER_KEY)), null);
+            this.overrideType(DragonType.byName(nbt.getString(DragonType.DATA_PARAMETER_KEY)));
         }
+        super.readEntityFromNBT(nbt);
         if (this.firstUpdate) {
             this.variantHelper.onVariantChanged(this.getVariant());
         }

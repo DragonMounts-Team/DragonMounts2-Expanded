@@ -5,7 +5,6 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.network.SSyncBannerPacket;
-import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.EntityUtil;
 import net.dragonmounts.util.ItemUtil;
 import net.minecraft.entity.player.EntityPlayer;
@@ -270,8 +269,14 @@ public final class DragonInventory implements IInventory {
         if (!(stack = dragon.getArmor()).isEmpty()) {
             tag.setTag("Armor", stack.writeToNBT(new NBTTagCompound()));
         }
-        DMUtils.putIfNeeded(tag, "Banners", ItemUtil.writeToNBT(this.banners));
-        DMUtils.putIfNeeded(tag, "Inventory", ItemUtil.writeToNBT(this.stacks));
+        NBTTagList list = ItemUtil.writeToNBT(this.banners);
+        if (!list.isEmpty()) {
+            tag.setTag("Banners", list);
+        }
+        list = ItemUtil.writeToNBT(this.stacks);
+        if (!list.isEmpty()) {
+            tag.setTag("Inventory", list);
+        }
     }
 
     public void readAdditionalData(NBTTagCompound tag) {

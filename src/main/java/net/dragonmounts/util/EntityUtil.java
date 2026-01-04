@@ -32,6 +32,10 @@ import java.util.UUID;
 import java.util.function.BiConsumer;
 
 public class EntityUtil {
+    public static boolean isSpectator(Entity entity) {
+        return entity instanceof EntityPlayer && ((EntityPlayer) entity).isSpectator();
+    }
+
     public static boolean addOrMergeEffect(EntityLivingBase entity, Potion effect, int duration, int amplifier, boolean ambient, boolean visible) {
         PotionEffect instance = entity.getActivePotionEffect(effect);
         if (instance == null) {
@@ -39,15 +43,19 @@ public class EntityUtil {
             return true;
         }
         int oldAmplifier = instance.getAmplifier();
-        if (oldAmplifier < amplifier) return false;
+        if (oldAmplifier > amplifier) return false;
         entity.addPotionEffect(new PotionEffect(effect, oldAmplifier == amplifier ? duration + instance.getDuration() : duration, amplifier, ambient, visible));
         return true;
     }
 
     public static boolean addOrResetEffect(EntityLivingBase entity, Potion effect, int duration, int amplifier, boolean ambient, boolean visible, int threshold) {
         PotionEffect instance = entity.getActivePotionEffect(effect);
-        if (instance != null && instance.getAmplifier() == amplifier && instance.getDuration() > threshold)
-            return false;
+        if (instance != null) {
+            int oldAmplifier = instance.getAmplifier();
+            if (oldAmplifier > amplifier || (
+                    oldAmplifier == amplifier && instance.getDuration() > threshold
+            )) return false;
+        }
         entity.addPotionEffect(new PotionEffect(effect, duration, amplifier, ambient, visible));
         return true;
     }
@@ -95,20 +103,15 @@ public class EntityUtil {
     ) {
         ServerDragonEntity dragon = new ServerDragonEntity(level);
         NBTTagCompound root = stack.getTagCompound();
-        boolean variable = true;
         if (root != null) {
             NBTTagCompound data = root.getCompoundTag("EntityTag");
             if (!data.isEmpty()) {
                 if (Relation.denyIfNotOwner(data, player)) return null;
-                if (data.hasKey(DragonVariant.DATA_PARAMETER_KEY)) {
-                    dragon.setVariant(DragonVariant.byName(data.getString(DragonVariant.DATA_PARAMETER_KEY)));
-                    variable = false;
+                if (!data.hasKey(DragonVariant.DATA_PARAMETER_KEY)) {
+                    dragon.overrideType(fallback);
                 }
                 FixerCompat.disableEntityFixers(data);
             }
-        }
-        if (variable) {
-            dragon.setDragonType(fallback, null);
         }
         return EntityUtil.finalizeSpawn(level, dragon, pos, true, null, (world, entity) -> {
             if (stack.hasDisplayName()) {
@@ -158,16 +161,15 @@ public class EntityUtil {
             AxisAlignedBB aabb,
             @Nullable Predicate<? super T> filter
     ) {
-        List<T> list = self.world.getEntitiesWithinAABB(target, aabb, filter);
         T result = null;
         double min = Double.MAX_VALUE;
+        List<T> list = self.world.getEntitiesWithinAABB(target, aabb, filter);
         for (T candidate : list) {
-            if (candidate != self) {
-                double dist = self.getDistanceSq(candidate);
-                if (dist <= min) {
-                    result = candidate;
-                    min = dist;
-                }
+            if (candidate == self) continue;
+            double dist = self.getDistanceSq(candidate);
+            if (dist < min) {
+                min = dist;
+                result = candidate;
             }
         }
         return result;

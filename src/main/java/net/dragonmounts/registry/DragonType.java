@@ -198,7 +198,7 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
     }
 
     public static void convertByLightning(ServerDragonEntity dragon, DragonType type) {
-        dragon.setDragonType(type, null);
+        dragon.convertTo(type);
         dragon.playSound(SoundEvents.BLOCK_PORTAL_TRIGGER, 2, 1);
         dragon.playSound(SoundEvents.BLOCK_END_PORTAL_SPAWN, 2, 1);
     }

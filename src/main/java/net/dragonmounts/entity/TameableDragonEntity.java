@@ -1078,8 +1078,15 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         }
     }
 
-    public final void setDragonType(DragonType type, @Nullable DragonVariant current) {
-        this.setVariant(type.variants.draw(this.rand, current));
+    public final void convertTo(DragonType type) {
+        DragonVariant variant = this.getVariant();
+        if (variant.type != type) {
+            this.setVariant(type.variants.draw(this.rand, variant));
+        }
+    }
+
+    public final void overrideType(DragonType type) {
+        this.setVariant(type.variants.draw(this.rand, null));
     }
 }
 

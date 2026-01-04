@@ -149,7 +149,7 @@ public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityCont
         Entity entity;
         if (DMEntities.DRAGON_ID.equals(identifier)) {
             ServerDragonEntity dragon = new ServerDragonEntity(level);
-            dragon.setDragonType(this.type, null);
+            dragon.overrideType(this.type);
             dragon.lifeStageHelper.setLifeStage(player != null && player.isSneaking()
                     ? DragonLifeStage.HATCHLING
                     : DragonLifeStage.ADULT

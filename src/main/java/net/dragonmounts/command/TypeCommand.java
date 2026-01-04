@@ -62,7 +62,7 @@ public class TypeCommand extends EntityCommand {
         if (type == null) throw new CommandException("commands.dragonmounts.type.invalid", args[0]);
         for (TameableDragonEntity dragon : dragons) {
             ITextComponent name = dragon.getDisplayName();
-            dragon.setDragonType(type, dragon.getVariant());
+            dragon.convertTo(type);
             notifyCommandListener(sender, this, "commands.dragonmounts.type.success", name, new TextComponentTranslation(type.translationKey).setStyle(new Style().setColor(type.formatting)));
         }
     }

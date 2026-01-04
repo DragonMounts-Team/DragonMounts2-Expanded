@@ -10,12 +10,12 @@
 package net.dragonmounts.entity.goal;
 
 import net.dragonmounts.entity.ServerDragonEntity;
+import net.dragonmounts.util.EntityUtil;
 import net.dragonmounts.util.MutableBlockPosEx;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
@@ -48,9 +48,10 @@ public class DragonFollowOwnerGoal extends EntityAIBase {
         ServerDragonEntity dragon = this.dragon;
         if (!dragon.followOwner || dragon.isSitting()) return false;
         EntityLivingBase owner = dragon.getOwner();
-        if (owner == null || (
-                owner instanceof EntityPlayer && ((EntityPlayer) owner).isSpectator()
-        ) || dragon.getDistanceSq(owner) < this.squaredStart) return false;
+        if (owner == null
+                || EntityUtil.isSpectator(owner)
+                || dragon.getDistanceSq(owner) < this.squaredStart
+        ) return false;
         this.owner = owner;
         return true;
     }
@@ -58,9 +59,10 @@ public class DragonFollowOwnerGoal extends EntityAIBase {
     @Override
     public boolean shouldContinueExecuting() {
         ServerDragonEntity dragon = this.dragon;
-        return dragon.followOwner && !dragon.getNavigator().noPath() && (
-                !(this.owner instanceof EntityPlayer) || !((EntityPlayer) this.owner).isSpectator()
-        ) && dragon.getDistanceSq(this.owner) > this.squaredStop;
+        return dragon.followOwner
+                && !dragon.getNavigator().noPath()
+                && !EntityUtil.isSpectator(this.owner)
+                && dragon.getDistanceSq(this.owner) > this.squaredStop;
     }
 
     @Override

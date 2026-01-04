@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 import it.unimi.dsi.fastutil.objects.ObjectSets;
 import net.dragonmounts.compat.DragonTypeCompat;
-import net.dragonmounts.util.DMUtils;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.datafix.DataFixesManager;
 import net.minecraft.util.datafix.FixTypes;
@@ -17,12 +17,14 @@ public abstract class DataWalkers {
     public static NBTTagCompound fixEntityContainers(IDataFixer fixer, NBTTagCompound root, int version) {
         if (ENTITY_CONTAINERS.contains(root.getString("id"))) {
             NBTTagCompound entity = root.getCompoundTag("tag");
-            String id = entity.hasKey("tag", Constants.NBT.TAG_STRING) ? entity.getString("id") : null;
+            NBTBase id = entity.hasKey("tag", Constants.NBT.TAG_STRING) ? entity.getTag("id") : null;
             if (id != null) {
                 entity.setString("id", "dragonmounts:dragon");
             }
             fixer.process(FixTypes.ENTITY, entity, version);
-            DMUtils.putIfNeeded(entity, "id", id);
+            if (id != null) {
+                entity.setTag("id", id);
+            }
         }
         return root;
     }

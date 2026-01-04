@@ -3,7 +3,6 @@ package net.dragonmounts.block.entity;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.block.DragonCoreBlock;
 import net.dragonmounts.inventory.DragonCoreContainer;
-import net.dragonmounts.util.DMUtils;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
@@ -56,19 +55,16 @@ public class DragonCoreBlockEntity extends TileEntityLockableLoot implements ITi
 
     @Override
     public boolean receiveClientEvent(int id, int type) {
-        if (id == 1) {
-            this.numPlayersUsing = type;
+        if (id != 1) return super.receiveClientEvent(id, type);
+        this.numPlayersUsing = type;
 
-            if (type == 0) {
-                this.animationStatus = AnimationStatus.CLOSING;
-            } else if (type == 1) {
-                this.animationStatus = AnimationStatus.OPENING;
-            }
-
-            return true;
-        } else {
-            return super.receiveClientEvent(id, type);
+        if (type == 0) {
+            this.animationStatus = AnimationStatus.CLOSING;
+        } else if (type == 1) {
+            this.animationStatus = AnimationStatus.OPENING;
         }
+
+        return true;
     }
 
     @Override
@@ -101,9 +97,14 @@ public class DragonCoreBlockEntity extends TileEntityLockableLoot implements ITi
         if (!this.checkLootAndWrite(compound)) {
             compound.setTag("Item", this.chestContents.get(0).writeToNBT(new NBTTagCompound()));
         }
-        return DMUtils.putIfNeeded(compound, "CustomName", this.customName);
+        String name = this.customName;
+        if (name != null) {
+            compound.setString("CustomName", name);
+        }
+        return compound;
     }
 
+    @Override
     public Container createContainer(InventoryPlayer inventory, EntityPlayer player) {
         return new DragonCoreContainer(inventory, this, player);
     }
@@ -127,13 +128,13 @@ public class DragonCoreBlockEntity extends TileEntityLockableLoot implements ITi
         }
     }
 
-    private AxisAlignedBB getTopBoundingBox(EnumFacing p_190588_1_) {
-        EnumFacing enumfacing = p_190588_1_.getOpposite();
-        return this.getBoundingBox(p_190588_1_).contract(enumfacing.getXOffset(), enumfacing.getYOffset(), enumfacing.getZOffset());
+    private AxisAlignedBB getTopBoundingBox(EnumFacing facing) {
+        EnumFacing opposite = facing.getOpposite();
+        return this.getBoundingBox(facing).contract(opposite.getXOffset(), opposite.getYOffset(), opposite.getZOffset());
     }
 
-    public AxisAlignedBB getBoundingBox(EnumFacing p_190587_1_) {
-        return Block.FULL_BLOCK_AABB.expand(0.5F * this.getProgress(1.0F) * (float) p_190587_1_.getXOffset(), 0.5F * this.getProgress(1.0F) * (float) p_190587_1_.getYOffset(), 0.5F * this.getProgress(1.0F) * (float) p_190587_1_.getZOffset());
+    public AxisAlignedBB getBoundingBox(EnumFacing facing) {
+        return Block.FULL_BLOCK_AABB.expand(0.5F * this.getProgress(1.0F) * (float) facing.getXOffset(), 0.5F * this.getProgress(1.0F) * (float) facing.getYOffset(), 0.5F * this.getProgress(1.0F) * (float) facing.getZOffset());
     }
 
     private void moveCollidedEntities() {

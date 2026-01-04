@@ -30,7 +30,7 @@ public class RayTraceServer {
                 world,
                 player,
                 hitBlock == null ? distance : hitBlock.hitVec.distanceTo(start),
-                entity -> entity.canBeCollidedWith() && !(entity instanceof EntityPlayer && ((EntityPlayer) entity).isSpectator()) && entity.getLowestRidingEntity() != vehicle
+                entity -> entity.canBeCollidedWith() && !EntityUtil.isSpectator(entity) && entity.getLowestRidingEntity() != vehicle
         );
         return hitEntity == null ? hitBlock : new RayTraceResult(hitEntity, hitEntity.getPositionVector());
     }

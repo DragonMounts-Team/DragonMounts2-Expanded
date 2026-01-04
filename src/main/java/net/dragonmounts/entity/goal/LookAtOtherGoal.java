@@ -13,10 +13,8 @@ import com.google.common.base.Predicate;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.util.EntityUtil;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.player.EntityPlayer;
 
 import javax.annotation.Nullable;
 
@@ -89,12 +87,8 @@ public class LookAtOtherGoal extends EntityAIBase implements Predicate<EntityLiv
 
     @Override
     public boolean apply(@Nullable EntityLivingBase target) {
-        if (target == null) return false;
-        Entity vehicle = target.getRidingEntity();
-        while (vehicle != null) {
-            if (this.dragon == vehicle) return false;
-            vehicle = vehicle.getRidingEntity();
-        }
-        return !(target instanceof EntityPlayer) || !((EntityPlayer) target).isSpectator();
+        return target != null
+                && !EntityUtil.isSpectator(target)
+                && target.getLowestRidingEntity() != this.dragon.getLowestRidingEntity();
     }
 }
