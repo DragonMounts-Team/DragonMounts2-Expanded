@@ -28,7 +28,8 @@ public class CDragonBreathPacket implements IMessage {
 
     @Override
     public void toBytes(ByteBuf buffer) {
-        writeVarInt(buffer, this.id).writeBoolean(this.breathing);
+        writeVarInt(buffer, this.id);
+        buffer.writeBoolean(this.breathing);
     }
 
     public IMessage handle(MessageContext context) {

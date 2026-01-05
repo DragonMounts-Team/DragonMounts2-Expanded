@@ -3,11 +3,22 @@ package net.dragonmounts.util;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class ByteBufferUtil {
+    public static ItemStack readStackSilently(PacketBuffer buffer) {
+        try {
+            return buffer.readItemStack();
+        } catch (IOException e) {
+            LogUtil.LOGGER.error("Error reading item stack", e);
+        }
+        return ItemStack.EMPTY;
+    }
+
     /// @see PacketBuffer#readVarInt()
     public static int readVarInt(ByteBuf buffer) {
         int result = 0;
@@ -22,25 +33,12 @@ public class ByteBufferUtil {
     }
 
     /// @see PacketBuffer#writeVarInt(int)
-    public static <T extends ByteBuf> T writeVarInt(T buffer, int value) {
+    public static void writeVarInt(ByteBuf buffer, int value) {
         while ((value & -128) != 0) {
             buffer.writeByte(value & 127 | 128);
             value >>>= 7;
         }
         buffer.writeByte(value);
-        return buffer;
-    }
-
-    public static <T extends ByteBuf> T writeVarInt(T buffer, int... values) {
-        for (int v, i = 0, size = values.length; i < size; ++i) {
-            v = values[i];
-            while ((v & -128) != 0) {
-                buffer.writeByte(v & 127 | 128);
-                v >>>= 7;
-            }
-            buffer.writeByte(v);
-        }
-        return buffer;
     }
 
     /// @return an array with 8 booleans.
@@ -64,7 +62,7 @@ public class ByteBufferUtil {
     }
 
     /// @see PacketBuffer#readString(int)
-    public static <T extends ByteBuf> String readString(T buffer, int maxLength) {
+    public static String readString(ByteBuf buffer, int maxLength) {
         int length = readVarInt(buffer);
         if (length > maxLength * 4)
             throw new DecoderException("The received encoded string buffer length is longer than maximum allowed (" + length + " > " + maxLength * 4 + ")");
@@ -78,11 +76,11 @@ public class ByteBufferUtil {
     }
 
     /// @see PacketBuffer#writeString(String)
-    public static <T extends ByteBuf> T writeString(T buffer, String string) {
+    public static void writeString(ByteBuf buffer, String string) {
         byte[] bytes = string.getBytes(StandardCharsets.UTF_8);
         if (bytes.length > 32767)
             throw new EncoderException("String too big (was " + bytes.length + " bytes encoded, max " + 32767 + ")");
-        writeVarInt(buffer, bytes.length).writeBytes(bytes);
-        return buffer;
+        writeVarInt(buffer, bytes.length);
+        buffer.writeBytes(bytes);
     }
 }

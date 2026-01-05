@@ -19,7 +19,7 @@ public class CRenameFlutePacket implements IMessage {
         this.name = "";
     }
 
-    public CRenameFlutePacket(String name) {
+    public CRenameFlutePacket(@Nonnull String name) {
         this.name = name;
     }
 

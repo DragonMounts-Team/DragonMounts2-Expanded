@@ -17,8 +17,9 @@ import net.dragonmounts.registry.CooldownCategory;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.DMUtils;
-import net.dragonmounts.util.DummyStorage;
 import net.dragonmounts.util.SerializableProvider;
+import net.dragonmounts.util.ValidatedStorage;
+import net.dragonmounts.util.debugging.TestRunner;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -82,6 +83,7 @@ public class RegistryEventHandler {
         if (DMConfig.DEBUG_MODE.value) {
             registry.register(DMItems.DRAGON_ORB);
             registry.register(DMItems.TEST_RUNNER);
+            TestRunner.register(DMItems.TEST_RUNNER);
         }
     }
 
@@ -201,10 +203,10 @@ public class RegistryEventHandler {
     }
 
     public static void registerCapabilities() {
-        CapabilityManager.INSTANCE.register(IArmorEffectManager.class, new ArmorEffectManager.Storage(), DMUtils::nil);
-        CapabilityManager.INSTANCE.register(IDragonFood.class, new DragonFoods.Storage(), IDragonFood::empty);
-        CapabilityManager.INSTANCE.register(IHardShears.class, new DummyStorage<>(), DMUtils::nil);
-        CapabilityManager.INSTANCE.register(IFluteHolder.class, new FluteHolder.Storage(), FluteHolder::new);
+        CapabilityManager.INSTANCE.register(IArmorEffectManager.class, new ValidatedStorage<>(), DMUtils::nil);
+        CapabilityManager.INSTANCE.register(IDragonFood.class, new ValidatedStorage<>(), IDragonFood::empty);
+        CapabilityManager.INSTANCE.register(IHardShears.class, new ValidatedStorage<>(), DMUtils::nil);
+        CapabilityManager.INSTANCE.register(IFluteHolder.class, new ValidatedStorage<>(), FluteHolder::new);
     }
 
     public static void registerRecipes() {

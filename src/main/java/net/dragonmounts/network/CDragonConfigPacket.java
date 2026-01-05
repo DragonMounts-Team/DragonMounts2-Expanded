@@ -31,7 +31,8 @@ public class CDragonConfigPacket implements IMessage {
 
     @Override
     public void toBytes(ByteBuf buf) {
-        writeVarInt(buf, this.dragonId, this.option);
+        writeVarInt(buf, this.dragonId);
+        writeVarInt(buf, this.option);
     }
 
     public IMessage handle(MessageContext context) {

@@ -39,7 +39,7 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 		// location of the slot for the saddle in the dragon inventory
 		this.addSlotToContainer(applyBackground(new Slot(inventory, 33, 156, 18) {
 			public boolean isItemValid(ItemStack stack) {
-				return !stack.isEmpty() && stack.getItem() == Items.SADDLE && !this.getHasStack();
+				return !stack.isEmpty() && stack.getItem() == Items.SADDLE;
 			}
 
 			@SideOnly(Side.CLIENT)
@@ -63,7 +63,7 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 		this.addSlotToContainer(applyBackground(new Slot(inventory, 31, 156, 36) {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
-				return DragonInventory.isValidChest(stack) && !this.getHasStack();
+				return DragonInventory.isValidChest(stack);
 			}
 
 			@SideOnly(Side.CLIENT)
@@ -88,7 +88,7 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 		for (int b = 0; b < 4; ++b) {
 			this.addSlotToContainer(applyBackground(new Slot(inventory, 27 + b, b == 1 || b == 2 ? 282 : 300, b < 2 ? 36 : 18) {
 				public boolean isItemValid(ItemStack stack) {
-					return !stack.isEmpty() && stack.getItem() == Items.BANNER && !this.getHasStack();
+					return !stack.isEmpty() && stack.getItem() == Items.BANNER;
 				}
 
 				@SideOnly(Side.CLIENT)

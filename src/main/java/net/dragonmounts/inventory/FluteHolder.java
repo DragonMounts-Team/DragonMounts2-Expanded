@@ -5,10 +5,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -43,18 +41,19 @@ public class FluteHolder implements IFluteHolder {
 
     @Override
     public boolean isEmpty() {
-        return this.flute.isEmpty();
+        return this.getFlute().isEmpty();
     }
 
     @Override
     public ItemStack getStackInSlot(int index) {
-        return this.flute;
+        return this.getFlute();
     }
 
     @Override
     public ItemStack decrStackSize(int index, int count) {
-        if (this.flute.isEmpty()) return ItemStack.EMPTY;
-        ItemStack result = this.flute.splitStack(count);
+        ItemStack flute = this.getFlute();
+        if (flute.isEmpty()) return ItemStack.EMPTY;
+        ItemStack result = flute.splitStack(count);
         if (!result.isEmpty()) {
             this.markDirty();
         }
@@ -63,14 +62,14 @@ public class FluteHolder implements IFluteHolder {
 
     @Override
     public ItemStack removeStackFromSlot(int index) {
-        ItemStack stack = this.flute;
-        this.flute = ItemStack.EMPTY;
+        ItemStack stack = this.getFlute();
+        this.setFlute(ItemStack.EMPTY);
         return stack;
     }
 
     @Override
     public void setInventorySlotContents(int index, ItemStack stack) {
-        this.flute = stack;
+        this.setFlute(stack);
     }
 
     @Override
@@ -91,11 +90,12 @@ public class FluteHolder implements IFluteHolder {
 
     @Override
     public void closeInventory(EntityPlayer player) {
-        if (this.flute.isEmpty()) return;
-        if (!player.inventory.addItemStackToInventory(this.flute)) {
-            player.dropItem(this.flute, false);
+        ItemStack flute = this.getFlute();
+        if (flute.isEmpty()) return;
+        if (!player.inventory.addItemStackToInventory(flute)) {
+            player.dropItem(flute, false);
         }
-        this.flute = ItemStack.EMPTY;
+        this.setFlute(ItemStack.EMPTY);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class FluteHolder implements IFluteHolder {
 
     @Override
     public void clear() {
-        this.flute = ItemStack.EMPTY;
+        this.setFlute(ItemStack.EMPTY);
     }
 
     @Override
@@ -136,16 +136,24 @@ public class FluteHolder implements IFluteHolder {
         return new TextComponentTranslation(this.getName());
     }
 
-    public static class Storage implements Capability.IStorage<IFluteHolder> {
-        @Override
-        public NBTTagCompound writeNBT(Capability<IFluteHolder> capability, IFluteHolder instance, EnumFacing side) {
-            ItemStack flute = instance.getFlute();
-            return flute.isEmpty() ? new NBTTagCompound() : flute.writeToNBT(new NBTTagCompound());
-        }
+    @Override
+    public @Nullable NBTTagCompound validateTag(@Nullable NBTBase tag) {
+        return tag instanceof NBTTagCompound ? ((NBTTagCompound) tag) : null;
+    }
 
-        @Override
-        public void readNBT(Capability<IFluteHolder> capability, IFluteHolder instance, EnumFacing side, @Nullable NBTBase tag) {
-            instance.setFlute(tag instanceof NBTTagCompound ? new ItemStack((NBTTagCompound) tag) : ItemStack.EMPTY);
-        }
+    @Override
+    public NBTTagCompound serializeNBT() {
+        ItemStack flute = this.getFlute();
+        return flute.isEmpty() ? new NBTTagCompound() : flute.writeToNBT(new NBTTagCompound());
+    }
+
+    @Override
+    public void deserializeNBT(NBTTagCompound tag) {
+        this.setFlute(tag.isEmpty() ? ItemStack.EMPTY : new ItemStack(tag));
+    }
+
+    @Override
+    public void deserializeNothing() {
+        this.setFlute(ItemStack.EMPTY);
     }
 }

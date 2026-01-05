@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import mcp.MethodsReturnNonnullByDefault;
 import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.network.SSyncBannerPacket;
+import net.dragonmounts.network.SUpdateBannerPacket;
 import net.dragonmounts.util.EntityUtil;
 import net.dragonmounts.util.ItemUtil;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +12,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
@@ -20,6 +21,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 
 import static net.dragonmounts.DragonMounts.NETWORK_WRAPPER;
+import static net.dragonmounts.util.ByteBufferUtil.readStackSilently;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -43,7 +45,7 @@ public final class DragonInventory implements IInventory {
 
     public DragonInventory(TameableDragonEntity dragon) {
         this.dragon = dragon;
-        this.clear();
+        this.clear(); // fill arrays
     }
 
     @Override
@@ -245,10 +247,10 @@ public final class DragonInventory implements IInventory {
         if (slot < 0 || slot > 3) return;
         this.banners[slot] = stack;
         if (!this.dragon.world.isRemote) {
-            NETWORK_WRAPPER.sendToAllTracking(new SSyncBannerPacket(
+            NETWORK_WRAPPER.sendToAllTracking(new SUpdateBannerPacket(
                     this.dragon.getEntityId(),
-                    1 << slot,
-                    this.banners
+                    slot,
+                    stack
             ), this.dragon);
         }
     }
@@ -321,11 +323,18 @@ public final class DragonInventory implements IInventory {
     }
 
     public void writeSpawnData(ByteBuf buffer) {
-        SSyncBannerPacket.writeBanners(buffer, -1, this.banners);
+        PacketBuffer wrapped = new PacketBuffer(buffer);
+        for (ItemStack stack : this.banners) {
+            wrapped.writeItemStack(stack);
+        }
     }
 
     public void readSpawnData(ByteBuf buffer) {
-        SSyncBannerPacket.readBanners(buffer, this.banners);
+        PacketBuffer wrapped = new PacketBuffer(buffer);
+        ItemStack[] banners = this.banners;
+        for (int i = 0; i < banners.length; ++i) {
+            banners[i] = readStackSilently(wrapped);
+        }
     }
 
     public void dropItemsInChest() {

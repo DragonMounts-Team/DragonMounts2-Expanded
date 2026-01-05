@@ -74,7 +74,7 @@ public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityCont
                     WeightedSpawnerEntity candidate = new WeightedSpawnerEntity();
                     NBTTagCompound data = candidate.getNbt();
                     data.setString("id", type.toString());
-                    data.setBoolean(DragonLifeStageHelper.NBT_FROM_MOB_SPAWNER, true);
+                    data.setBoolean(DragonLifeStageHelper.NBT_FROM_SPAWNER, true);
                     boolean variable = true;
                     NBTTagCompound spec = stack.getSubCompound("EntityTag");
                     if (spec != null) {

@@ -46,7 +46,7 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(CommonMisc.class);
         int discriminator = 0;
         // S2C:
-        DragonMounts.NETWORK_WRAPPER.registerMessage(SSyncBannerPacket::handle, SSyncBannerPacket.class, ++discriminator, Side.CLIENT);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(SUpdateBannerPacket::handle, SUpdateBannerPacket.class, ++discriminator, Side.CLIENT);
         DragonMounts.NETWORK_WRAPPER.registerMessage(CommonProxy::scheduleClientTask, SInitCooldownPacket.class, ++discriminator, Side.CLIENT);
         DragonMounts.NETWORK_WRAPPER.registerMessage(CommonProxy::scheduleClientTask, SSyncCooldownPacket.class, ++discriminator, Side.CLIENT);
         DragonMounts.NETWORK_WRAPPER.registerMessage(SRiposteEffectPacket::handle, SRiposteEffectPacket.class, ++discriminator, Side.CLIENT);

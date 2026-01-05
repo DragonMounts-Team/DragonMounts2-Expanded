@@ -1,5 +1,6 @@
 package net.dragonmounts.util;
 
+import net.dragonmounts.api.IValidatedNBTSerializable;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -7,7 +8,7 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
 import javax.annotation.Nullable;
 
-public class SerializableProvider<I, T extends NBTBase> implements ICapabilitySerializable<T> {
+public class SerializableProvider<T extends NBTBase, I extends IValidatedNBTSerializable<T>> implements ICapabilitySerializable<T>, IValidatedNBTSerializable<T> {
     public final Capability<I> type;
     public final I instance;
 
@@ -27,13 +28,22 @@ public class SerializableProvider<I, T extends NBTBase> implements ICapabilitySe
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public T serializeNBT() {
-        return (T) this.type.getStorage().writeNBT(this.type, this.instance, null);
+        return this.instance.serializeNBT();
     }
 
     @Override
     public void deserializeNBT(T nbt) {
-        this.type.getStorage().readNBT(this.type, this.instance, null, nbt);
+        this.type.readNBT(this.instance, null, nbt);
+    }
+
+    @Override
+    public void deserializeNothing() {
+        this.instance.deserializeNothing();
+    }
+
+    @Override
+    public @Nullable T validateTag(@Nullable NBTBase tag) {
+        return this.instance.validateTag(tag);
     }
 }

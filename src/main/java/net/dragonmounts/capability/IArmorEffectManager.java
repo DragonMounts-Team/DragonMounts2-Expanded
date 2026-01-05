@@ -1,11 +1,11 @@
 package net.dragonmounts.capability;
 
 import net.dragonmounts.api.IArmorEffect;
+import net.dragonmounts.api.IValidatedNBTSerializable;
 import net.dragonmounts.registry.CooldownCategory;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.INBTSerializable;
 
-public interface IArmorEffectManager extends INBTSerializable<NBTTagCompound> {
+public interface IArmorEffectManager extends IValidatedNBTSerializable<NBTTagCompound> {
     @SuppressWarnings("UnusedReturnValue")
     int stackLevel(IArmorEffect effect);
 

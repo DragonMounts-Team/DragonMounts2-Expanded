@@ -4,7 +4,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.dragonmounts.util.ITestCase;
 import net.dragonmounts.util.LogUtil;
-import net.dragonmounts.util.debugging.TestRunner;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,12 +27,21 @@ import java.util.List;
  * ItemTestRunner is used to trigger a test case
  */
 public class TestRunnerItem extends Item implements ITestCase {
+    public static void execute(ITestCase test, World level, EntityPlayer player, ItemStack stack, int index) {
+        try {
+            LogUtil.LOGGER.info(
+                    "[{}] Test(#{}) called on {} side",
+                    test.run(level, player, stack) ? "Success" : "Failure",
+                    index,
+                    level.isRemote ? "client" : "server"
+            );
+        } catch (Exception e) {
+            LogUtil.LOGGER.warn("[Error] Test(#{}) called on {} side", index, level.isRemote ? "client" : "server", e);
+        }
+    }
+
     private final Int2ObjectOpenHashMap<ITestCase> client = new Int2ObjectOpenHashMap<>();
     private final Int2ObjectOpenHashMap<ITestCase> server = new Int2ObjectOpenHashMap<>();
-
-    public TestRunnerItem() {
-        TestRunner.register(this);
-    }
 
     public void register(@Nullable Side side, int index, ITestCase test) {
         if (this == test) return;
@@ -71,18 +79,6 @@ public class TestRunnerItem extends Item implements ITestCase {
     public ActionResult<ItemStack> onItemRightClick(World level, EntityPlayer player, EnumHand hand) {
         player.setActiveHand(hand);
         return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
-    }
-
-    public static void execute(ITestCase test, World level, EntityPlayer player, ItemStack stack, int index) {
-        try {
-            if (test.run(level, player, stack)) {
-                LogUtil.LOGGER.info("[Success] Test(#{}) called on {}", index, level.isRemote ? "client side" : "server side");
-            } else {
-                LogUtil.LOGGER.info("[Failure] Test(#{}) called on {}", index, level.isRemote ? "client side" : "server side");
-            }
-        } catch (Exception e) {
-            LogUtil.LOGGER.warn("[Error] Test(#{}) called on {}", index, level.isRemote ? "client side" : "server side", e);
-        }
     }
 
     @Override

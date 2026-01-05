@@ -45,7 +45,7 @@ public class DragonLifeStageHelper {
 
     public static final UUID DRAGON_AEG_MODIFIER_ID = UUID.fromString("856d4ba4-9ffe-4a52-8606-890bb9be538b");
     public static final String NBT_TICKS_SINCE_CREATION = "TicksSinceCreation";
-    public static final String NBT_FROM_MOB_SPAWNER = "FromMobSpawner";
+    public static final String NBT_FROM_SPAWNER = "FromSpawner";
     private static final int TICKS_SINCE_CREATION_UPDATE_INTERVAL = 100;
     private static final float EGG_CRACK_THRESHOLD = 0.9f;
     private static final float EGG_WIGGLE_THRESHOLD = 0.75f;
@@ -142,7 +142,7 @@ public class DragonLifeStageHelper {
     public void readFromNBT(NBTTagCompound nbt) {
         int age = nbt.hasKey(NBT_TICKS_SINCE_CREATION)
                 ? clipTickCountToValid(nbt.getInteger(NBT_TICKS_SINCE_CREATION))
-                : nbt.getBoolean(NBT_FROM_MOB_SPAWNER) ? DragonLifeStage.EGG.boundaryTick : 0;
+                : nbt.getBoolean(NBT_FROM_SPAWNER) ? DragonLifeStage.EGG.boundaryTick : 0;
         ticksSinceCreationServer = age;
         this.dragon.getDataManager().set(dataParam, ticksSinceCreationServer);
         float health = this.dragon.getHealth();

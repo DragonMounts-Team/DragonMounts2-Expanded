@@ -32,7 +32,8 @@ public class SSyncCooldownPacket implements IMessage, Runnable {
 
     @Override
     public void toBytes(ByteBuf buffer) {
-        writeVarInt(buffer, this.id, this.cd);
+        writeVarInt(buffer, this.id);
+        writeVarInt(buffer, this.cd);
     }
 
     @Override

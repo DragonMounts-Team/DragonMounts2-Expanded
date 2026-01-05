@@ -36,7 +36,9 @@ public class SInitCooldownPacket implements IMessage, Runnable {
     @Override
     public void toBytes(ByteBuf buffer) {
         writeVarInt(buffer, this.size);
-        writeVarInt(buffer, this.data);
+        for (int datum : this.data) {
+            writeVarInt(buffer, datum);
+        }
     }
 
     @Override

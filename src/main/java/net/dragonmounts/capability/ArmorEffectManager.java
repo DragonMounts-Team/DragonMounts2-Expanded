@@ -13,9 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.CooldownTracker;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
 
@@ -180,10 +178,7 @@ public final class ArmorEffectManager implements IArmorEffectManager {
         throw new IndexOutOfBoundsException();
     }
 
-    @Override
-    public void setCooldown(final CooldownCategory category, final int cooldown) {
-        final int id = category.getId();
-        if (id < 0) return;
+    private void setCooldown(final int category, final int cooldown) {
         if (this.cdN == this.cdRef.length) {
             final int[] ref = this.cdRef, key = this.cdKey, dat = this.cdDat;
             final int n = this.cdN;
@@ -196,10 +191,17 @@ public final class ArmorEffectManager implements IArmorEffectManager {
             for (int i = temp = 0, j; i < n; ++i) {//temp: cursor
                 temp = this.setCdImpl(key[j = ref[i]], dat[j], temp);
             }
-            this.setCdImpl(id, cooldown, temp);
+            this.setCdImpl(category, cooldown, temp);
         } else {
-            this.setCdImpl(id, cooldown, 0);
+            this.setCdImpl(category, cooldown, 0);
         }
+    }
+
+    @Override
+    public void setCooldown(final CooldownCategory category, final int cooldown) {
+        final int id = category.getId();
+        if (id < 0) return;
+        this.setCooldown(id, cooldown);
         if (!this.player.world.isRemote) {
             NETWORK_WRAPPER.sendTo(new SSyncCooldownPacket(id, cooldown), (EntityPlayerMP) this.player);
         }
@@ -227,26 +229,19 @@ public final class ArmorEffectManager implements IArmorEffectManager {
             if (category == null) continue;
             ResourceLocation identifier = category.getRegistryName();
             if (identifier == null) continue;
-            String name = identifier.toString();
-            if (tag.hasKey(name)) {
-                if (this.cdN == this.cdRef.length) {
-                    final int[] ref = this.cdRef, key = this.cdKey, dat = this.cdDat;
-                    final int n = this.cdN;
-                    int temp = n << 1;//temp: new array size
-                    this.cdMask = temp - 1;
-                    this.cdN = 0;
-                    this.cdRef = new int[temp];
-                    fill(this.cdKey = new int[temp], -1);
-                    this.cdDat = new int[temp];
-                    for (int i = temp = 0, j; i < n; ++i) {//temp: cursor
-                        temp = this.setCdImpl(key[j = ref[i]], dat[j], temp);
-                    }
-                    this.setCdImpl(category.getId(), tag.getInteger(name), temp);
-                } else {
-                    this.setCdImpl(category.getId(), tag.getInteger(name), 0);
-                }
-            }
+            this.setCooldown(category.getId(), tag.getInteger(identifier.toString()));
         }
+    }
+
+    @Override
+    public void deserializeNothing() {
+        this.cdN = 0;
+        fill(this.cdKey, -1);
+    }
+
+    @Override
+    public @Nullable NBTTagCompound validateTag(@Nullable NBTBase tag) {
+        return tag instanceof NBTTagCompound ? ((NBTTagCompound) tag) : null;
     }
 
     @Override
@@ -407,18 +402,5 @@ public final class ArmorEffectManager implements IArmorEffectManager {
             }
         }
         this.activeN = sum;
-    }
-
-    public static class Storage implements Capability.IStorage<IArmorEffectManager> {
-        @Nullable
-        @Override
-        public NBTTagCompound writeNBT(Capability<IArmorEffectManager> capability, IArmorEffectManager instance, EnumFacing side) {
-            return instance.serializeNBT();
-        }
-
-        @Override
-        public void readNBT(Capability<IArmorEffectManager> capability, IArmorEffectManager instance, EnumFacing side, NBTBase tag) {
-            instance.deserializeNBT((NBTTagCompound) tag);
-        }
     }
 }

@@ -10,16 +10,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemFishFood;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class DragonFoods {
     private static final Reference2ObjectOpenHashMap<Item, IDragonFood> FALLBACKS = new Reference2ObjectOpenHashMap<>();
@@ -117,21 +112,5 @@ public class DragonFoods {
 
         bindFallback(DMItems.DRAGON_MEAT, IDragonFood.EMPTY);
         bindFallback(DMItems.COOKED_DRAGON_MEAT, IDragonFood.EMPTY);
-    }
-
-    public static class Storage implements Capability.IStorage<IDragonFood> {
-        @Nullable
-        @Override
-        public NBTBase writeNBT(Capability<IDragonFood> capability, IDragonFood instance, EnumFacing side) {
-            return instance instanceof INBTSerializable ? ((INBTSerializable<?>) instance).serializeNBT() : null;
-        }
-
-        @Override
-        @SuppressWarnings({"rawtypes", "unchecked"})
-        public void readNBT(Capability<IDragonFood> capability, IDragonFood instance, EnumFacing side, NBTBase tag) {
-            if (instance instanceof INBTSerializable) {
-                ((INBTSerializable) instance).deserializeNBT(tag);
-            }
-        }
     }
 }
