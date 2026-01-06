@@ -20,43 +20,51 @@ public class RayTraceServer {
      * Will not target entities which are tamed by the player
      *
      * @return the block or entity that the player is looking at / targeting with their cursor.  null if no collision
+     * @see net.minecraft.client.renderer.EntityRenderer#getMouseOver(float)
      */
-    public static RayTraceResult getMouseOver(World world, EntityPlayer player, double distance) { // int range
-        Vec3d start = new Vec3d(player.posX, player.posY + player.getEyeHeight(), player.posZ);
-        Vec3d view = player.getLookVec().scale(distance);
-        RayTraceResult hitBlock = world.rayTraceBlocks(start, start.add(view), true, false, false);
-        Entity vehicle = player.getLowestRidingEntity();
-        Entity hitEntity = rayTraceEntity(
-                world,
-                player,
-                hitBlock == null ? distance : hitBlock.hitVec.distanceTo(start),
-                entity -> entity.canBeCollidedWith() && !EntityUtil.isSpectator(entity) && entity.getLowestRidingEntity() != vehicle
-        );
+    public static RayTraceResult getMouseOver(World world, EntityPlayer player, double distance) {
+        Vec3d view = player.getLookVec();
+        Vec3d eyes = new Vec3d(player.posX, player.posY + player.getEyeHeight(), player.posZ);
+        RayTraceResult hitBlock = world.rayTraceBlocks(eyes, eyes.add(view.x * distance, view.y * distance, view.z * distance), false, false, true);
+        Entity hitEntity = rayTraceEntity(world, player, hitBlock == null ? distance : hitBlock.hitVec.distanceTo(eyes), RayTraceServer::isSelectable);
         return hitEntity == null ? hitBlock : new RayTraceResult(hitEntity, hitEntity.getPositionVector());
     }
 
     public static Entity rayTraceEntity(World level, Entity entity, double distance, Predicate<? super Entity> filter) {
-        Vec3d start = new Vec3d(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ);
-        Vec3d view = entity.getLookVec().scale(distance);
-        Vec3d end = start.add(view);
+        Vec3d eyes = new Vec3d(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ);
+        Vec3d view = entity.getLookVec();
+        double viewX = view.x * distance, viewY = view.y * distance, viewZ = view.z * distance;
+        Vec3d dest = eyes.add(viewX, viewY, viewZ);
+        Entity vehicle = entity.getLowestRidingEntity();
         Entity hit = null;
-        for (Entity candidate : level.getEntitiesInAABBexcluding(entity, entity.getEntityBoundingBox().expand(view.x, view.y, view.z).grow(1), filter)) {
+        for (Entity candidate : level.getEntitiesInAABBexcluding(entity, entity.getEntityBoundingBox().expand(viewX, viewY, viewZ).grow(1), filter)) {
             AxisAlignedBB border = candidate.getEntityBoundingBox().grow(candidate.getCollisionBorderSize());
-            RayTraceResult clip = border.calculateIntercept(start, end);
-            if (clip != null) {
-                double distanceSQ = start.squareDistanceTo(clip.hitVec);
-                if (distanceSQ <= distance) {
-                    distance = distanceSQ;
+            if (border.contains(eyes)) {
+                if (0.0 < distance) {
+                    distance = 0.0;
                     hit = candidate;
                 }
-            } else if (border.contains(end)) {
-                double distanceSQ = start.squareDistanceTo(end);
-                if (distanceSQ < distance) {
-                    distance = distanceSQ;
-                    hit = candidate;
+            } else {
+                RayTraceResult clip = border.calculateIntercept(eyes, dest);
+                if (clip != null) {
+                    double dist = eyes.squareDistanceTo(clip.hitVec);
+                    if (dist < distance || distance == 0.0) {
+                        if (!candidate.canRiderInteract() && candidate.getLowestRidingEntity() == vehicle) {
+                            if (distance == 0.0D) {
+                                hit = candidate;
+                            }
+                        } else {
+                            distance = dist;
+                            hit = candidate;
+                        }
+                    }
                 }
             }
         }
         return hit;
+    }
+
+    public static boolean isSelectable(Entity entity) {
+        return entity != null && entity.canBeCollidedWith() && !EntityUtil.isSpectator(entity);
     }
 }

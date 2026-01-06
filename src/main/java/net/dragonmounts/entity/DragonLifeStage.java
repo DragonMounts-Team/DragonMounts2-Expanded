@@ -27,7 +27,7 @@ public enum DragonLifeStage {
     FLEDGLING(INFANT, 32, 0.19F, 0.60F, BreathPower.SMALL),
     JUVENILE(FLEDGLING, 60, 0.61F, 0.99F, BreathPower.MEDIUM),
     // scale of the final stage should be 1.00F to avoid breaking other code
-    ADULT(JUVENILE, 0, 1.00F, 1.00f, BreathPower.LARGE);
+    ADULT(JUVENILE, 0, 1.00F, 1.00F, BreathPower.LARGE);
 
 //  durations (28 April 2025)
 //  egg = 30 minutes
@@ -85,7 +85,7 @@ public enum DragonLifeStage {
 
     public static float getScaleFromTickCount(int ticksSinceCreation) {
         DragonLifeStage stage = getLifeStageFromTickCount(ticksSinceCreation);
-        if (stage.durationTicks == 0) return stage.startScale;
+        if (stage.durationTicks == 0) return stage.finalScale;
         return MathX.lerp(
                 stage.startScale,
                 stage.finalScale,

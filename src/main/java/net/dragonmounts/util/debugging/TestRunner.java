@@ -1,8 +1,5 @@
 package net.dragonmounts.util.debugging;
 
-import net.dragonmounts.entity.DragonLifeStage;
-import net.dragonmounts.entity.ServerDragonEntity;
-import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.item.TestRunnerItem;
 import net.dragonmounts.util.LogUtil;
 import net.minecraft.command.CommandClone;
@@ -10,10 +7,7 @@ import net.minecraft.command.server.CommandTeleport;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -23,8 +17,11 @@ import static com.google.common.base.Preconditions.checkArgument;
  * Created by TGG on 4/01/2016.
  */
 public class TestRunner {
+    public static final boolean DISABLED = true;
     public static void register(TestRunnerItem registry) {
+        if (DISABLED) return;
         registry.register(Side.SERVER, 1, (level, player, stack) -> {
+            if (DISABLED) return false;
 /*
   Test the forest breath.  Intended to be run on a blank test world SuperFlat.  Use the TestRunner item (debug config mode)
   Created by TGG on 24/01/2016.
@@ -94,79 +91,13 @@ public class TestRunner {
 
             return true;
         });
-        registry.register(Side.SERVER, 2, (level, player, stack) -> {
-            ServerDragonEntity dragon = new ServerDragonEntity(level);
-            BreathPower power = BreathPower.SMALL;
-            ++testCounter;
-            Vec3d origin = new Vec3d(0, 24, 0);
-            Vec3d target = new Vec3d(0, 4, 0);
-            if (testCounter == 1) {
-                origin = new Vec3d(0, 24, 0);
-                target = new Vec3d(0, 4, 0);
-            }
-            if (testCounter == 2) {
-                origin = new Vec3d(0, 24, 0);
-                target = new Vec3d(0, 4, 0);
-                power = BreathPower.MEDIUM;
-            }
-            if (testCounter == 3) {
-                origin = new Vec3d(0, 24, 0);
-                target = new Vec3d(0, 4, 0);
-                power = BreathPower.LARGE;
-                testCounter = 0;
-            }
-            //todo reinstate test for later if required
-//        EntityBreathProjectileGhost entity = new EntityBreathProjectileGhost(worldIn, dragon, origin, target, power);
-//        worldIn.spawnEntityInWorld(entity);
-            System.out.println("Lighting spawned: mouth at [x,y,z] = " + origin + "to destination [x,y,z,] = " + target);
-            return true;
-        });
-        registry.register(Side.SERVER, 61, (level, player, stack) -> {
-            final int ARBITRARY_MINUS = -1000000;
-            final int ARBITRARY_LARGE = 1000000;
-            int minTick = DragonLifeStage.clipTickCountToValid(ARBITRARY_MINUS);
-            int maxTick = DragonLifeStage.clipTickCountToValid(ARBITRARY_LARGE);
-            System.out.println("Minimum tick:" + minTick);
-            System.out.println("Maximum tick:" + maxTick);
-            DragonLifeStage lastStage = null;
-            int printAnywayTicks = 0;
-            for (int i = minTick - 3; i <= maxTick + 10000; ++i) {
-                boolean printCalcs = false;
-                DragonLifeStage thisStage = DragonLifeStage.getLifeStageFromTickCount(i);
-                if (thisStage != lastStage) {
-                    lastStage = thisStage;
-                    System.out.println("Changed to " + thisStage + " at tick=" + i);
-                    printAnywayTicks = 1000;
-                    printCalcs = true;
-                } else if (--printAnywayTicks <= 0) {
-                    printAnywayTicks = 1000;
-                    printCalcs = true;
-                }
-                if (printCalcs) {
-                    System.out.println("At tick=" + i + ": " +
-                            "Scale = " + DragonLifeStage.getScaleFromTickCount(i) + ", " +
-                            "StageProgress = " + DragonLifeStage.getStageProgressFromTickCount(i));
-                }
-            }
-            System.out.println("Final stage was:" + lastStage);
-            return true;
-        });
-        registry.register(Side.SERVER, 3, TestRunner::inquireTps);
     }
-
-    private static boolean inquireTps(World world, EntityPlayer player, ItemStack stack) {
-        if (player instanceof EntityPlayerMP) {
-            ((EntityPlayerMP) player).server.commandManager.executeCommand(player, "/forge tps");
-        }
-        return true;
-    }
-
-    private static int testCounter = 0;
 
     /**
      * Teleport the player to the test region (so you can see the results of the test)
      */
     public static boolean teleportPlayerToTestRegion(EntityPlayer playerIn, BlockPos location) {
+        if (DISABLED) return false;
         if (!(playerIn instanceof EntityPlayerMP)) {
             throw new UnsupportedOperationException("teleport not supported on client side; server side only");
         }
@@ -198,6 +129,7 @@ public class TestRunner {
     public static boolean copyTestRegion(EntityPlayer entityPlayer,
                                          BlockPos sourceOrigin, BlockPos destOrigin,
                                          int xCount, int yCount, int zCount) {
+        if (DISABLED) return false;
         checkArgument(xCount >= 1);
         checkArgument(yCount >= 1);
         checkArgument(zCount >= 1);

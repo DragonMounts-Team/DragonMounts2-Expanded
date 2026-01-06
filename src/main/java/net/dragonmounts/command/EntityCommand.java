@@ -1,5 +1,6 @@
 package net.dragonmounts.command;
 
+import net.dragonmounts.util.RayTraceServer;
 import net.minecraft.command.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import static net.dragonmounts.util.EntityUtil.findNearestEntityWithinAABB;
 import static net.dragonmounts.util.RayTraceServer.rayTraceEntity;
 
 public abstract class EntityCommand extends CommandBase {
@@ -21,18 +23,7 @@ public abstract class EntityCommand extends CommandBase {
         Entity entity = sender.getCommandSenderEntity();
         if (clazz.isInstance(entity)) return clazz.cast(entity);
         if (entity instanceof EntityPlayer) {
-            double distance = Double.MAX_VALUE, temp;
-            T closest = null;
-            for (T candidate : entity.world.getEntitiesWithinAABB(
-                    clazz,
-                    entity.getEntityBoundingBox().grow(SEARCH_WIDTH, SEARCH_HEIGHT, SEARCH_WIDTH)
-            )) {
-                temp = entity.getDistanceSq(candidate);
-                if (temp < distance) {
-                    distance = temp;
-                    closest = candidate;
-                }
-            }
+            T closest = findNearestEntityWithinAABB(entity, clazz, entity.getEntityBoundingBox().grow(SEARCH_WIDTH, SEARCH_HEIGHT, SEARCH_WIDTH), null);
             if (closest != null) return closest;
         }
         throw new EntityNotFoundException("commands.dragonmounts.unspecified");
@@ -74,7 +65,7 @@ public abstract class EntityCommand extends CommandBase {
                         entity.world,
                         entity,
                         ((EntityPlayer) entity).getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue(),
-                        target -> this.isValidTarget(target) && target.canBeCollidedWith() && target.getLowestRidingEntity() != vehicle
+                        target -> RayTraceServer.isSelectable(target) && this.isValidTarget(target)
                 );
                 if (hit != null) return getListOfStringsMatchingLastWord(args, hit.getCachedUniqueIdString());
             }

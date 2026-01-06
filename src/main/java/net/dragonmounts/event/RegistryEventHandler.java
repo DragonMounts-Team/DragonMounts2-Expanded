@@ -83,6 +83,7 @@ public class RegistryEventHandler {
         if (DMConfig.DEBUG_MODE.value) {
             registry.register(DMItems.DRAGON_ORB);
             registry.register(DMItems.TEST_RUNNER);
+            if (TestRunner.DISABLED) return;
             TestRunner.register(DMItems.TEST_RUNNER);
         }
     }

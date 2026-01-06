@@ -6,7 +6,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class DragonFollowParentGoal extends EntityAIBase implements Predicate<ServerDragonEntity> {
     public final ServerDragonEntity dragon;
@@ -26,20 +25,18 @@ public class DragonFollowParentGoal extends EntityAIBase implements Predicate<Se
     public boolean shouldExecute() {
         ServerDragonEntity dragon = this.dragon;
         this.owner = dragon.getOwner();
-        List<ServerDragonEntity> list = dragon.world.getEntitiesWithinAABB(
-                ServerDragonEntity.class,
-                dragon.getEntityBoundingBox().grow(8.0D, 4.0D, 8.0D),
-                this
-        );
         ServerDragonEntity parent = null;
         double min = Double.MAX_VALUE;
-        for (ServerDragonEntity candidate : list) {
-            if (candidate != dragon) {
-                double dist = dragon.getDistanceSq(candidate);
-                if (dist <= min) {
-                    parent = candidate;
-                    min = dist;
-                }
+        for (ServerDragonEntity candidate : dragon.world.getEntitiesWithinAABB(
+                ServerDragonEntity.class,
+                dragon.getEntityBoundingBox().grow(8.0, 4.0, 8.0),
+                this
+        )) {
+            if (candidate == dragon) continue;
+            double dist = dragon.getDistanceSq(candidate);
+            if (dist < min) {
+                parent = candidate;
+                min = dist;
             }
         }
         if (parent == null || min < 16.0) return false;

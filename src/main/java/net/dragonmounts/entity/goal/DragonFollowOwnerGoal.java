@@ -31,15 +31,16 @@ public class DragonFollowOwnerGoal extends EntityAIBase {
     public final ServerDragonEntity dragon;
     private EntityLivingBase owner;
     private final double speed;
-    private final float squaredStop;
+    private final float stopDistance;
     private final float squaredStart;
+    private float squaredStop;
     private int pathValidity;
 
     public DragonFollowOwnerGoal(ServerDragonEntity dragon, double speed, float startDist, float stopDist) {
         this.dragon = dragon;
         this.speed = speed;
         this.squaredStart = startDist * startDist;
-        this.squaredStop = stopDist * stopDist;
+        this.stopDistance = stopDist;
         this.setMutexBits(0b11);
     }
 
@@ -53,6 +54,8 @@ public class DragonFollowOwnerGoal extends EntityAIBase {
                 || dragon.getDistanceSq(owner) < this.squaredStart
         ) return false;
         this.owner = owner;
+        float dist = this.stopDistance * dragon.getAdjustedSize();
+        this.squaredStop = dist > 1.0F ? dist * dist : 1.0F;
         return true;
     }
 

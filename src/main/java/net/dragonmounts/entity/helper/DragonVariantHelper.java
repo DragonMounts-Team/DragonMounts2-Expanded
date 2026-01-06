@@ -153,10 +153,17 @@ public class DragonVariantHelper implements ITickable {
         // check for fire immunity and disable fire particles
         ReferenceSet<DamageSource> immunities = type.getImmunities();
         dragon.setImmuneToFire(immunities.contains(DamageSource.LAVA) || immunities.contains(DamageSource.IN_FIRE) || immunities.contains(DamageSource.ON_FIRE));
+        float factor = dragon.getHealth() / dragon.getMaxHealth();
+        AbstractAttributeMap attributes = dragon.getAttributeMap();
+        if (this.lastType != null) {
+            attributes.removeAttributeModifiers(this.lastType.attributes);
+        }
+        attributes.applyAttributeModifiers(type.attributes);
         if (dragon.world.isRemote) {
             this.lastType = type;
             return;
         }
+        dragon.setHealth(factor * dragon.getMaxHealth());
         if (this.lastType == null || this.lastType.avoidWater != type.avoidWater) {
             PathNavigate navigator = dragon.getNavigator();
             if (navigator instanceof PathNavigateGround) {
@@ -169,13 +176,6 @@ public class DragonVariantHelper implements ITickable {
             this.resetPoints(type);
         }
 
-        float factor = dragon.getHealth() / dragon.getMaxHealth();
-        AbstractAttributeMap attributes = dragon.getAttributeMap();
-        if (this.lastType != null) {
-            attributes.removeAttributeModifiers(this.lastType.attributes);
-        }
-        attributes.applyAttributeModifiers(type.attributes);
-        dragon.setHealth(factor * dragon.getMaxHealth());
         this.lastType = type;
     }
 

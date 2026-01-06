@@ -14,6 +14,7 @@ package net.dragonmounts.util;
  *     If the mismatch is too great, the tick count will jump immediately.
  * (4) reset() to force the client to start at the given value
  */
+@Deprecated
 public class ClientServerSynchronisedTickCount {
     
     private int cachedRemoteTickCount;

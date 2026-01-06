@@ -61,9 +61,8 @@ public class DebugOverlay {
     private static ServerDragonEntity serverCache;
     
     @SubscribeEvent
-    public static void onRenderOverlay(RenderGameOverlayEvent event) {
-        if (!DMConfig.ENABLE_DEBUG_OVERLAY.value || event.isCanceled() || event.getType() != ElementType.TEXT)
-            return;
+    public static void onRenderOverlay(RenderGameOverlayEvent.Post event) {
+        if (!DMConfig.ENABLE_DEBUG_OVERLAY.value || event.getType() != ElementType.TEXT) return;
         Minecraft minecraft = Minecraft.getMinecraft();
         if (text == null) {
             text = new GuiTextPrinter(minecraft.fontRenderer);

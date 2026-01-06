@@ -68,8 +68,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import static net.dragonmounts.util.EntityUtil.addOrMergeEffect;
-import static net.dragonmounts.util.EntityUtil.replaceAttributeModifier;
+import static net.dragonmounts.util.EntityUtil.*;
 
 public abstract class TameableDragonEntity extends EntityTameable implements IEntityAdditionalSpawnData {
     public static TameableDragonEntity construct(World level) {
@@ -931,19 +930,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
 
     protected void findCrystal() {
         if (this.motionX < 0.6F && this.motionZ < 0.6F && this.rand.nextInt(10) == 0) {
-            EntityEnderCrystal target = null;
-            double min = Double.MAX_VALUE;
-            for (EntityEnderCrystal crystal : this.world.getEntitiesWithinAABB(
-                    EntityEnderCrystal.class,
-                    this.getEntityBoundingBox().grow(32.0D)
-            )) {
-                double distance = crystal.getDistanceSq(this);
-                if (distance < min) {
-                    min = distance;
-                    target = crystal;
-                }
-            }
-            this.healingEnderCrystal = target;
+            this.healingEnderCrystal = findNearestEntityWithinAABB(this, EntityEnderCrystal.class, this.getEntityBoundingBox().grow(32.0), null);
         }
     }
 

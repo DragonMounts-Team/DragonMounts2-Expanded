@@ -154,25 +154,23 @@ public class EntityUtil {
         entity.setRotationYawHead(entity.rotationYaw);
     }
 
-    @Nullable
-    public static <T extends Entity> T findNearestEntityWithinAABB(
+    public static <T extends Entity> @Nullable T findNearestEntityWithinAABB(
             Entity self,
             Class<? extends T> target,
             AxisAlignedBB aabb,
             @Nullable Predicate<? super T> filter
     ) {
-        T result = null;
+        T closest = null;
         double min = Double.MAX_VALUE;
-        List<T> list = self.world.getEntitiesWithinAABB(target, aabb, filter);
-        for (T candidate : list) {
+        for (T candidate : self.world.getEntitiesWithinAABB(target, aabb, filter)) {
             if (candidate == self) continue;
-            double dist = self.getDistanceSq(candidate);
+            double dist = candidate.getDistanceSq(self);
             if (dist < min) {
                 min = dist;
-                result = candidate;
+                closest = candidate;
             }
         }
-        return result;
+        return closest;
     }
 
     /**
