@@ -9,10 +9,9 @@ import java.util.function.Supplier;
 import static net.dragonmounts.DragonMountsTags.MOD_ID;
 
 public class DMUtils {
-    /**
-     * 20 (ticks/real life second) * 60 (seconds / min) * 20 (real life minutes per minecraft day) / 24 (hours/day)
-     */
-    public static final int TICKS_PER_MINECRAFT_HOUR = 20 * 60 * 20 / 24;
+    public static final int TICKS_PER_MINUTE = 20 * 60;
+    /// 20 (ticks/real life second) * 60 (seconds / min) * 20 (real life minutes per minecraft day) / 24 (hours/day)
+    public static final int TICKS_PER_MINECRAFT_HOUR = TICKS_PER_MINUTE * 20 / 24;
 
     public static <T> T nil() {
         return null;

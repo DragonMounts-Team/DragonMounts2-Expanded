@@ -64,12 +64,27 @@ public class ClientDragonEntity extends TameableDragonEntity {
     }
 
     @Override
+    public void setLifeStage(DragonLifeStage stage, boolean reset, boolean sync) {
+        this.applyStage(stage);
+        if (this.stage == stage) return;
+        DragonLifeStage prev = this.stage;
+        this.stage = stage;
+        if (reset) {
+            this.refreshAge();
+        }
+        this.updateScale();
+        if (DragonLifeStage.EGG == prev) {
+            // play particle and sound effects when the dragon hatches
+            this.world.playSound(this.posX, this.posY, this.posZ, DMSounds.DRAGON_EGG_SHATTER, SoundCategory.BLOCKS, 4, 1, false);
+        }
+    }
+
+    @Override
     public void readEntityFromNBT(NBTTagCompound nbt) {
-        this.lifeStageHelper.readFromNBT(nbt);
-        if (nbt.hasKey(DragonVariant.DATA_PARAMETER_KEY)) {
-            this.setVariant(DragonVariant.byName(nbt.getString(DragonVariant.DATA_PARAMETER_KEY)));
-        } else if (nbt.hasKey(DragonType.DATA_PARAMETER_KEY)) {
-            this.overrideType(DragonType.byName(nbt.getString(DragonType.DATA_PARAMETER_KEY)));
+        if (nbt.hasKey(DragonVariant.SERIALIZATION_KEY)) {
+            this.setVariant(DragonVariant.byName(nbt.getString(DragonVariant.SERIALIZATION_KEY)));
+        } else if (nbt.hasKey(DragonType.SERIALIZATION_KEY)) {
+            this.overrideType(DragonType.byName(nbt.getString(DragonType.SERIALIZATION_KEY)));
         }
         super.readEntityFromNBT(nbt);
         if (this.firstUpdate) {
@@ -87,15 +102,14 @@ public class ClientDragonEntity extends TameableDragonEntity {
                     DMKeyBindings.KEY_BREATHE.isKeyDown()
             ));
         }
-        this.lifeStageHelper.ageUp(1);
         this.breathHelper.update();
+        this.getVariant().type.tickClient(this);
         if (this.isEgg()) {
             this.variantHelper.update();
-            this.getVariant().type.tickClient(this);
+            this.updateEgg();
             super.onLivingUpdate();
             return;
         }
-        this.getVariant().type.tickClient(this);
         this.animator.update();
         if (!this.isDead) {
             if (this.healingEnderCrystal != null && this.healingEnderCrystal.isDead) {
@@ -103,8 +117,10 @@ public class ClientDragonEntity extends TameableDragonEntity {
             }
             this.findCrystal();
         }
+        this.ageUp(1, false);
+        super.onLivingUpdate();
         EnumParticleTypes sneeze = this.getVariant().type.sneezeParticle;
-        if (sneeze != null && !this.isUsingBreathWeapon() && rand.nextInt(700) == 0 && this.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING)) {
+        if (sneeze != null && this.stage.isOldEnough(DragonLifeStage.FLEDGLING) && !this.isUsingBreathWeapon() && this.rand.nextInt(700) == 0) {
             Vec3d pos = this.getHeadRelativeOffset(0.0F, 4.0F, 22.0F);
             double x = pos.x, y = pos.y, z = pos.z;
             for (int i = -1; i < 1; ++i) {
@@ -112,13 +128,11 @@ public class ClientDragonEntity extends TameableDragonEntity {
             }
             world.playSound(null, x, y, z, DMSounds.DRAGON_SNEEZE, SoundCategory.NEUTRAL, 0.8F, 1);
         }
-        super.onLivingUpdate();
     }
-
 
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
-        DragonLifeStage stage = this.lifeStageHelper.getLifeStage();
+        DragonLifeStage stage = this.stage;
         if (DragonLifeStage.EGG == stage) return player.isSneaking();
         // prevent doing any interactions when a hatchling rides you, the hitbox could block the player's raytraceresult for rightclick
         if (player.isPassenger(this)) return false;
@@ -159,7 +173,7 @@ public class ClientDragonEntity extends TameableDragonEntity {
         if (isEgg() || ++deathTime > getMaxDeathTime()) setDead();// actually delete entity after the time is up
 
         if (deathTime < getMaxDeathTime() - 20) {
-            int amount = (int) (4 * this.lifeStageHelper.getScale());
+            int amount = (int) (4 * this.getAgingScale());
             for (int i = 0; i < amount; i++) {
                 spawnBodyParticle(EnumParticleTypes.CLOUD);
             }
@@ -169,14 +183,14 @@ public class ClientDragonEntity extends TameableDragonEntity {
     @Override
     public void onDeath(DamageSource cause) {
         if (this.isEgg()) {
-            this.lifeStageHelper.playEggCrackEffect();
+            this.playEggCrackEffect();
         }
         super.onDeath(cause);
     }
 
     public void onWingsDown(float speed) {
         // play wing sounds
-        this.playSound(getWingsSound(), 0.8f + (this.lifeStageHelper.getScale() - speed), 1.0F, true);
+        this.playSound(getWingsSound(), 0.8f + (this.getAgingScale() - speed), 1.0F, true);
     }
 
     @Override
@@ -190,7 +204,7 @@ public class ClientDragonEntity extends TameableDragonEntity {
             case DO_ROAR:
                 SoundEvent sound = this.getVariant().type.getRoarSound(this);
                 if (sound == null) break;
-                this.world.playSound(posX, posY, posZ, sound, SoundCategory.NEUTRAL, MathHelper.clamp(this.lifeStageHelper.getScale(), 0.3F, 0.6F), getSoundPitch(), true);
+                this.world.playSound(posX, posY, posZ, sound, SoundCategory.NEUTRAL, MathHelper.clamp(this.getAgingScale(), 0.3F, 0.6F), getSoundPitch(), true);
                 this.animator.ticksSinceLastRoar = 0;
                 break;
 
@@ -252,5 +266,11 @@ public class ClientDragonEntity extends TameableDragonEntity {
     @Override
     public TameableDragonEntity createChild(EntityAgeable mate) {
         return null;
+    }
+
+    @Override
+    public void setGrowingAge(int age) {
+        this.growingAge = age;
+        this.updateScale();
     }
 }

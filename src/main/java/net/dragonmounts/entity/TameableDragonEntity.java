@@ -10,18 +10,16 @@ c ** 2012 August 13
 package net.dragonmounts.entity;
 
 import io.netty.buffer.ByteBuf;
+import net.dragonmounts.block.HatchableDragonEggBlock;
 import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.breath.DragonBreathHelper;
 import net.dragonmounts.entity.helper.DragonBodyHelper;
-import net.dragonmounts.entity.helper.DragonLifeStageHelper;
 import net.dragonmounts.entity.helper.DragonVariantHelper;
-import net.dragonmounts.init.DMSounds;
-import net.dragonmounts.init.DragonFoods;
-import net.dragonmounts.init.DragonTypes;
-import net.dragonmounts.init.DragonVariants;
+import net.dragonmounts.init.*;
 import net.dragonmounts.inventory.DragonInventory;
 import net.dragonmounts.item.DragonArmorItem;
+import net.dragonmounts.network.SSyncDragonAgePacket;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.EntityUtil;
@@ -45,6 +43,8 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -68,7 +68,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import static net.dragonmounts.entity.DragonLifeStage.makeModifier;
+import static net.dragonmounts.util.ByteBufferUtil.readVarInt;
+import static net.dragonmounts.util.ByteBufferUtil.writeVarInt;
 import static net.dragonmounts.util.EntityUtil.*;
+import static net.minecraft.entity.SharedMonsterAttributes.*;
 
 public abstract class TameableDragonEntity extends EntityTameable implements IEntityAdditionalSpawnData {
     public static TameableDragonEntity construct(World level) {
@@ -84,7 +88,8 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     // limits
     public static final float MIN_SCALE = 0.04F;
     public static final float MAX_SCALE = 2.00F;
-
+    public static final String SERIALIZATION_KEY_AGE_COMPAT = "TicksSinceCreation";
+    public static final String SERIALIZATION_KEY_FROM_SPAWNER = "FromSpawner";
     // data value IDs
     private static final DataParameter<Boolean> DATA_FLYING = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> GROWTH_PAUSED = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
@@ -97,7 +102,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     private static final DataParameter<Boolean> FOLLOW_YAW = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<DragonVariant> DATA_VARIANT = EntityDataManager.createKey(TameableDragonEntity.class, DragonVariant.SERIALIZER);
     private static final DataParameter<Integer> HUNGER = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.VARINT);
-    private static final DataParameter<Integer> DATA_TICKS_SINCE_CREATION = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.VARINT);
     protected static final DataParameter<Boolean> DATA_CAN_SHEAR = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> DATA_CAN_COLLECT_BREATH = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<ItemStack> DATA_ARMOR = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.ITEM_STACK);
@@ -106,10 +110,10 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     protected static final DataParameter<Float> DATA_BODY_SIZE = EntityDataManager.createKey(TameableDragonEntity.class, DataSerializers.FLOAT);
     public final DragonInventory inventory = new DragonInventory(this);
     public final DragonVariantHelper variantHelper = new DragonVariantHelper(this);
-    public final DragonLifeStageHelper lifeStageHelper = new DragonLifeStageHelper(this, DATA_TICKS_SINCE_CREATION);
     public final DragonBreathHelper<?> breathHelper = this.createBreathHelper();
     // public final DragonHungerHelper hungerHelper = new DragonHungerHelper(this);
     public EntityEnderCrystal healingEnderCrystal;
+    protected DragonLifeStage stage;
     protected int inAirTicks;
     private boolean isUsingBreathWeapon;
     private boolean isGoingDown;
@@ -122,9 +126,64 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     private Entity controllerCache;
     private @Nonnull List<Entity> riderCache = Collections.emptyList();
 
+    // TODO rewrite shaking
+
+    private static final int TICKS_SINCE_CREATION_UPDATE_INTERVAL = 100;
+    private static final float EGG_CRACK_THRESHOLD = 0.9f;
+    private static final float EGG_WIGGLE_THRESHOLD = 0.75f;
+    private static final float EGG_WIGGLE_BASE_CHANCE = 20;
+    private int eggWiggleX;
+    private int eggWiggleZ;
+
+    public int getEggWiggleX() {
+        return eggWiggleX;
+    }
+
+    public int getEggWiggleZ() {
+        return eggWiggleZ;
+    }
+
+    protected void updateEgg() {
+        Random rand = this.getRNG();
+        // animate egg wiggle based on the time the eggs take to hatch
+        int age = ++this.growingAge, duration = DMConfig.MIN_INCUBATION_DURATION.getAsInt();
+        float progress = age / (float) duration;
+
+        // wait until the egg is nearly hatched
+        if (progress > EGG_WIGGLE_THRESHOLD) {
+            float wiggleChance = (progress - EGG_WIGGLE_THRESHOLD) / EGG_WIGGLE_BASE_CHANCE * (1 - EGG_WIGGLE_THRESHOLD);
+            boolean mayCrack = false;
+            if (eggWiggleX > 0) {
+                eggWiggleX--;
+            } else if (rand.nextFloat() < wiggleChance) {
+                eggWiggleX = rand.nextBoolean() ? 10 : 20;
+                mayCrack = true;
+            }
+            if (eggWiggleZ > 0) {
+                eggWiggleZ--;
+            } else if (rand.nextFloat() < wiggleChance) {
+                eggWiggleZ = rand.nextBoolean() ? 10 : 20;
+                mayCrack = true;
+            }
+            if (mayCrack && progress > EGG_CRACK_THRESHOLD) {
+                this.playEggCrackEffect();
+                this.world.playSound(null, this.getPosition(), DMSounds.DRAGON_EGG_CRACK, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            }
+        }
+
+        // spawn generic particles
+        double px = this.posX + (rand.nextDouble() - 0.3);
+        double py = this.posY + (rand.nextDouble() - 0.3);
+        double pz = this.posZ + (rand.nextDouble() - 0.3);
+        double ox = (rand.nextDouble() - 0.3) * 2;
+        double oy = (rand.nextDouble() - 0.3) * 2;
+        double oz = (rand.nextDouble() - 0.3) * 2;
+        this.world.spawnParticle(this.getVariant().type.eggParticle, px, py, pz, ox, oy, oz);
+    }
+
     public TameableDragonEntity(World world) {
         super(world);
-        this.lifeStageHelper.applyEntityAttributes();
+        this.setLifeStage(DragonLifeStage.EGG, true, false);
     }
 
     @Override
@@ -135,6 +194,12 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     protected abstract DragonBreathHelper<?> createBreathHelper();
 
     public abstract Vec3d getHeadRelativeOffset(float x, float y, float z);
+
+    public abstract void setLifeStage(DragonLifeStage stage, boolean reset, boolean sync);
+
+    public final DragonLifeStage getLifeStage() {
+        return this.stage;
+    }
 
     @Override
     protected void entityInit() {
@@ -157,7 +222,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         manager.register(DATA_SADDLE, ItemStack.EMPTY);
         manager.register(DATA_BODY_SIZE, (float) DMConfig.BASE_BODY_SIZE.value);
         manager.register(DATA_VARIANT, DragonVariants.ENDER_FEMALE);
-        manager.register(DATA_TICKS_SINCE_CREATION, 0);
     }
 
     @Override
@@ -173,6 +237,28 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         attributes.getAttributeInstance(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(DMConfig.BASE_ARMOR_TOUGHNESS.value);
         attributes.getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(DMConfig.BASE_HEALTH.value);
         attributes.getAttributeInstance(SWIM_SPEED).setBaseValue(DMConfig.BASE_SWIMMING_SPEED.value);
+    }
+
+    @Override
+    public void readEntityFromNBT(NBTTagCompound nbt) {
+        if (nbt.hasKey(DragonLifeStage.SERIALIZATION_KEY)) {
+            this.setLifeStage(DragonLifeStage.byName(nbt.getString(DragonLifeStage.SERIALIZATION_KEY)), false, false);
+        } else if (nbt.hasKey(SERIALIZATION_KEY_AGE_COMPAT)) {
+            SSyncDragonAgePacket record = SSyncDragonAgePacket.fromTotalTicks(nbt.getInteger(SERIALIZATION_KEY_AGE_COMPAT));
+            NBTBase saved = nbt.getTag("Age");
+            nbt.removeTag("Age");
+            this.setLifeStage(record.stage, true, false);
+            int age = this.growingAge;
+            this.growingAge = 0;
+            super.readEntityFromNBT(nbt);
+            this.growingAge = age;
+            this.ageUp(record.age, false);
+            if (saved != null) {
+                nbt.setTag("Age", saved);
+            }
+            return;
+        }
+        super.readEntityFromNBT(nbt);
     }
 
     public boolean boosting() {
@@ -192,7 +278,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     }
 
     public boolean canFly() {
-        return this.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING);
+        return this.stage.isOldEnough(DragonLifeStage.FLEDGLING);
     }
 
     /**
@@ -447,7 +533,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
      * Returns the volume for a sound to play.
      */
     public float getVolume(SoundEvent sound) {
-        return MathHelper.clamp(this.lifeStageHelper.getScale(), 0.8F, 1.4F);
+        return MathHelper.clamp(this.getAgingScale(), 0.8F, 1.4F);
     }
 
     /**
@@ -815,7 +901,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
      */
     public void updateScale() {
         boolean onGround = this.onGround;
-        float scale = this.lifeStageHelper.getScale();
+        float scale = this.getAgingScale();
         this.stepHeight = 0.5F + scale * (float) DMConfig.BASE_STEP_HEIGHT.value;
         float width = this.width;
         this.setScale(MathHelper.clamp(scale * this.dataManager.get(DATA_BODY_SIZE), MIN_SCALE, MAX_SCALE));
@@ -828,24 +914,72 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         this.onGround = onGround;
     }
 
-    /**
-     * The age value may be negative or positive or zero.
-     * Don't confuse this with EntityLiving.getAge. With a negative value the Entity
-     * is considered a child.
-     */
-    @Override
-    public int getGrowingAge() {
-        // adapter for vanilla code to enable breeding interaction
-        return DragonLifeStage.ADULT == this.lifeStageHelper.getLifeStage() ? 0 : -1;
+    public void refreshForcedAgeTimer() {
+        if (this.forcedAgeTimer <= 0) {
+            this.forcedAgeTimer = 40;
+        }
     }
 
-    /// @see DragonLifeStageHelper
     @Override
-    public void setGrowingAge(int age) {}
+    public void ageUp(int amount, boolean forced) {
+        int old = this.growingAge;
+        // Notice:                             ↓↓                             ↓↓              ↓↓                  ↓↓
+        if (!this.isGrowthPaused() && (old < 0 && (this.growingAge += amount) >= 0 || old > 0 && (this.growingAge -= amount) <= 0)) {
+            this.onGrowingAdult();
+            if (forced) {
+                this.forcedAge += old;
+                this.refreshForcedAgeTimer();
+            }
+        }
+    }
 
-    /// @see #updateScale()
     @Override
-    public void setScaleForAge(boolean child) {}
+    public void setScaleForAge(boolean child) {
+        this.updateScale();
+    }
+
+    @Override
+    public final int getGrowingAge() {
+        return this.growingAge;
+    }
+
+    @Override
+    protected void onGrowingAdult() {
+        this.setLifeStage(DragonLifeStage.byId(this.stage.ordinal() + 1), true, false);
+    }
+
+    protected void refreshAge() {
+        switch (this.stage) {
+            case HATCHLING:
+            case INFANT:
+                this.growingAge = -this.stage.duration.getAsInt();
+                return;
+            case FLEDGLING:
+            case JUVENILE:
+                this.growingAge = this.stage.duration.getAsInt();
+                return;
+            case EGG:
+            default:
+                this.growingAge = 0;
+        }
+    }
+
+    protected void applyStage(DragonLifeStage stage) {
+        float health = this.getHealth() / this.getMaxHealth();
+        float scale = stage.getAverageScale();
+        AttributeModifier modifier = makeModifier(1, MathHelper.clamp(scale, 0.1, 1));
+        AbstractAttributeMap attributes = this.getAttributeMap();
+        replaceAttributeModifier(attributes.getAttributeInstance(MAX_HEALTH), modifier);
+        replaceAttributeModifier(attributes.getAttributeInstance(ATTACK_DAMAGE), modifier);
+        replaceAttributeModifier(attributes.getAttributeInstance(ARMOR), makeModifier(0, Math.max(scale, 0.1F) * DMConfig.BASE_ARMOR.value));
+        if (DragonLifeStage.EGG == stage) {
+            this.setSize(3.5F, 4.0F);
+        } else {
+            this.setSize(3.0F, 2.5F);
+        }
+        if (this.world.isRemote) return;
+        this.setHealth(health * this.getMaxHealth());
+    }
 
     /**
      * Returns the body size multiplier for the current age.
@@ -853,20 +987,24 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
      * @return body size
      */
     public float getAdjustedSize() {
-        return MathHelper.clamp(this.lifeStageHelper.getScale() * this.dataManager.get(DATA_BODY_SIZE), MIN_SCALE, MAX_SCALE);
+        return MathHelper.clamp(this.getAgingScale() * this.dataManager.get(DATA_BODY_SIZE), MIN_SCALE, MAX_SCALE);
+    }
+
+    public float getAgingScale() {
+        return this.stage.getScale(this.growingAge);
     }
 
     public boolean isEgg() {
-        return this.lifeStageHelper.isEgg();
+        return DragonLifeStage.EGG == this.stage;
     }
 
     public boolean isOldEnoughToBreathe() {
-        return this.lifeStageHelper.isOldEnough(DragonLifeStage.INFANT);
+        return this.stage.isOldEnough(DragonLifeStage.INFANT);
     }
 
     @Override
     public boolean isChild() {
-        return this.lifeStageHelper.isBaby();
+        return this.stage.isBaby();
     }
 
     @Override
@@ -884,9 +1022,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
 
     @Override
     protected ResourceLocation getLootTable() {
-        return this.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING)
-                ? this.getVariant().type.lootTable
-                : null;
+        return this.stage.isOldEnough(DragonLifeStage.FLEDGLING) ? this.getVariant().type.lootTable : null;
     }
 
     public boolean canShare() {
@@ -897,21 +1033,14 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         return this.dataManager.get(DATA_CAN_COLLECT_BREATH);
     }
 
-    public void resetFeedTimer() {
-        if (this.forcedAgeTimer == 0) {
-            this.forcedAgeTimer = 40;
-        }
-    }
-
     /**
      * @see EntityAnimal#ageUp(int, boolean)
      */
     public void consumeFood(ItemStack stack, int level, int growth) {
         this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1f, 0.75f);
         this.setHunger(this.getHunger() + level);
-        this.lifeStageHelper.ageUp(growth);
+        this.ageUp(growth, true);
         if (this.world.isRemote) {
-            this.resetFeedTimer();
             Vec3d pos = this.getHeadRelativeOffset(0.0F, -5.0F, 22.0F);
             Random random = this.rand;
             this.world.spawnParticle(
@@ -941,23 +1070,18 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         return event.getResult() == Event.Result.DEFAULT ? effect.getPotion() != MobEffects.WEAKNESS : event.getResult() == Event.Result.ALLOW;
     }
 
-    public final void onLifeStageChange(DragonLifeStage stage) {
-        if (DragonLifeStage.EGG == stage) {
-            this.setSize(3.5F, 4.0F);
-        } else {
-            this.setSize(3.0F, 2.5F);
-        }
-    }
-
     @Override
     public void writeSpawnData(ByteBuf buffer) {
+        writeVarInt(buffer, this.stage.ordinal());
+        writeVarInt(buffer, this.growingAge);
         this.inventory.writeSpawnData(buffer);
     }
 
     @Override
     public void readSpawnData(ByteBuf buffer) {
+        this.setLifeStage(DragonLifeStage.byId(readVarInt(buffer)), false, false);
+        this.setGrowingAge(readVarInt(buffer));
         this.inventory.readSpawnData(buffer);
-        this.lifeStageHelper.sync();
     }
 
     @Override
@@ -968,7 +1092,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
             if (!this.firstUpdate && this.world.isRemote) {
                 Random random = this.rand;
                 World level = this.world;
-                for (int i = 0, count = 2 + (int) (this.lifeStageHelper.getScale() * 18); i < count; ++i) {
+                for (int i = 0, count = 2 + (int) (this.getAgingScale() * 18); i < count; ++i) {
                     level.spawnParticle(
                             EnumParticleTypes.CLOUD,
                             this.posX + (random.nextDouble() - 0.5D) * this.width,
@@ -1017,6 +1141,12 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         } else if (DATA_BODY_SIZE.equals(key)) {
             this.updateScale();
         }
+    }
+
+    public void playEggCrackEffect() {
+        this.world.playEvent(2001, this.getPosition(), Block.getIdFromBlock(
+                this.getVariant().type.getInstance(HatchableDragonEggBlock.class, DMBlocks.ENDER_DRAGON_EGG)
+        ));
     }
 
     public void setArmor(ItemStack armor) {

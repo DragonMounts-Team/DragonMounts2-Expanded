@@ -1,6 +1,5 @@
 package net.dragonmounts.command;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
@@ -18,15 +17,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class StageCommand extends EntityCommand {
-    private final Object2ObjectOpenHashMap<String, DragonLifeStage> stages;
-
     public StageCommand() {
         super(2);
-        Object2ObjectOpenHashMap<String, DragonLifeStage> stages = new Object2ObjectOpenHashMap<>();
-        for (DragonLifeStage stage : DragonLifeStage.values()) {
-            stages.put(stage.identifier, stage);
-        }
-        this.stages = stages;
     }
 
     @Override
@@ -63,10 +55,10 @@ public class StageCommand extends EntityCommand {
             default:
                 throw new WrongUsageException("commands.dragonmounts.stage.usage");
         }
-        DragonLifeStage stage = this.stages.get(args[0].toLowerCase());
+        DragonLifeStage stage = DragonLifeStage.BY_NAME.get(args[0].toLowerCase());
         if (stage == null) throw new CommandException("commands.dragonmounts.stage.invalid", args[0]);
         for (TameableDragonEntity dragon : dragons) {
-            dragon.lifeStageHelper.setLifeStage(stage);
+            dragon.setLifeStage(stage, true, true);
             notifyCommandListener(sender, this, "commands.dragonmounts.stage.success", dragon.getDisplayName(), new TextComponentTranslation(stage.translationKey));
         }
     }
@@ -74,7 +66,7 @@ public class StageCommand extends EntityCommand {
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
         return args.length == 1
-                ? getListOfStringsMatchingLastWord(args, this.stages.keySet())
+                ? getListOfStringsMatchingLastWord(args, DragonLifeStage.BY_NAME.keySet())
                 : super.getTabCompletions(server, sender, args, pos);
     }
 }

@@ -24,7 +24,7 @@ public class MoonlightType extends DragonType {
     @Override
     public void tickClient(ClientDragonEntity dragon) {
         World level = dragon.world;
-        if (dragon.posY > level.getHeight() && !level.isDaytime() && dragon.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING)) {
+        if (dragon.posY > level.getHeight() && !level.isDaytime() && dragon.getLifeStage().isOldEnough(DragonLifeStage.FLEDGLING)) {
             Random random = level.rand;
             float s = dragon.getAdjustedSize() * 1.2F;
             float f = (dragon.width - 0.65F) * s;

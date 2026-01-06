@@ -33,12 +33,12 @@ public class ClientBreathHelper extends DragonBreathHelper<ClientDragonEntity> {
             return;
         }
         Vec3d headLocation = this.getBreathSpawnPosition();
-        DragonLifeStage stage = dragon.lifeStageHelper.getLifeStage();
+        DragonLifeStage stage = dragon.getLifeStage();
         this.sound.update(
                 this.breath,
                 headLocation,
                 stage,
-                dragon.lifeStageHelper.getScale()
+                dragon.getAgingScale()
         );
         this.updateBreathState(dragon.isUsingBreathWeapon());
         if (this.currentBreathState == BreathState.SUSTAIN) {

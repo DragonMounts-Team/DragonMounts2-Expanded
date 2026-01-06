@@ -17,7 +17,7 @@ public class EnchantedType extends DragonType {
 
     @Override
     public void tickClient(ClientDragonEntity dragon) {
-        if (dragon.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING)) {
+        if (dragon.getLifeStage().isOldEnough(DragonLifeStage.FLEDGLING)) {
             World level = dragon.world;
             Random random = level.rand;
             float s = dragon.getAdjustedSize() * 1.2f;

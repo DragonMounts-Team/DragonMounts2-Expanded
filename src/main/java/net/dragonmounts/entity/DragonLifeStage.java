@@ -9,54 +9,64 @@
  */
 package net.dragonmounts.entity;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.dragonmounts.entity.breath.BreathPower;
 import net.dragonmounts.util.math.MathX;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.util.IStringSerializable;
 
-import static net.dragonmounts.util.DMUtils.TICKS_PER_MINECRAFT_HOUR;
+import java.util.UUID;
+import java.util.function.IntSupplier;
 
-/**
- * Enum for dragon life stages. Used as aliases for the age value of dragons.
- *
- * @author Nico Bergemann <barracuda415 at yahoo.de>
- */
-public enum DragonLifeStage {
-    EGG(null, 36, 0.25F, 0.25F, BreathPower.SMALL),
-    HATCHLING(EGG, 48, 0.04F, 0.09F, BreathPower.SMALL),
-    INFANT(HATCHLING, 24, 0.10f, 0.18F, BreathPower.SMALL),
-    FLEDGLING(INFANT, 32, 0.19F, 0.60F, BreathPower.SMALL),
-    JUVENILE(FLEDGLING, 60, 0.61F, 0.99F, BreathPower.MEDIUM),
+import static net.dragonmounts.config.DMConfig.*;
+
+public enum DragonLifeStage implements IStringSerializable {
+    EGG(BreathPower.SMALL, 0.25F, 0.25F, MIN_INCUBATION_DURATION),
+    HATCHLING(BreathPower.SMALL, 0.04F, 0.09F, HATCHLING_STAGE_DURATION),
+    INFANT(BreathPower.SMALL, 0.10F, 0.18F, INFANT_STAGE_DURATION),
+    FLEDGLING(BreathPower.SMALL, 0.19F, 0.60F, FLEDGLING_STAGE_DURATION),
+    JUVENILE(BreathPower.MEDIUM, 0.61F, 0.99F, JUVENILE_STAGE_DURATION),
     // scale of the final stage should be 1.00F to avoid breaking other code
-    ADULT(JUVENILE, 0, 1.00F, 1.00F, BreathPower.LARGE);
+    ADULT(BreathPower.LARGE, 1.00F, 1.00F, () -> 0);
+    public static final UUID MODIFIER_ID = UUID.fromString("856d4ba4-9ffe-4a52-8606-890bb9be538b");
+    public static final String SERIALIZATION_KEY = "LifeStage";
+    public static final Object2ObjectMap<String, DragonLifeStage> BY_NAME;
 
-//  durations (28 April 2025)
-//  egg = 30 minutes
-//  hatchling = 40 minutes
-//  infant = 20 minutes (just filler)
-//  fledgling = 26.67 minutes (just filler)
-//  juvenile = 50 minutes
+    public static AttributeModifier makeModifier(int operator, double amount) {
+        return new AttributeModifier(MODIFIER_ID, "LifeStageBonus", amount, operator).setSaved(false);
+    }
 
+    public static DragonLifeStage byId(int id) {
+        DragonLifeStage[] values = values();
+        return id < 0 || id >= values.length ? DragonLifeStage.ADULT : values[id];
+    }
+
+    public static DragonLifeStage byName(String name) {
+        return BY_NAME.getOrDefault(name, DragonLifeStage.ADULT);
+    }
+
+    public static float getProgress(int age, float duration) {
+        return age < 0 ? 1.0F + age / duration : 1.0F - age / duration;
+    }
     public final String identifier;
     public final String translationKey;
     public final BreathPower power;
-    public final int durationTicks;
+    public final IntSupplier duration;
     public final float startScale;
     public final float finalScale;
-    public final int boundaryTick;
 
-    DragonLifeStage(DragonLifeStage prior, int minecraftTimeHours, float scaleAtStartOfStage, float scaleAtEndOfStage, BreathPower power) {
-        this.durationTicks = minecraftTimeHours * TICKS_PER_MINECRAFT_HOUR;
-        this.startScale = scaleAtStartOfStage;
-        this.finalScale = scaleAtEndOfStage;
-        this.boundaryTick = prior == null ? this.durationTicks : prior.boundaryTick + this.durationTicks;
+    DragonLifeStage(BreathPower power, float startScale, float finalScale, IntSupplier duration) {
         this.identifier = this.name().toLowerCase();
         this.translationKey = "life_stage.dragon." + this.identifier;
         this.power = power;
+        this.startScale = startScale;
+        this.finalScale = finalScale;
+        this.duration = duration;
     }
 
-    /**
-     * does this stage act like a minecraft baby
-     */
+    /// @return does this stage act like a Minecraft baby
     public boolean isBaby() {
         return this == HATCHLING || this == INFANT;
     }
@@ -65,35 +75,25 @@ public enum DragonLifeStage {
         return this.ordinal() >= stage.ordinal();
     }
 
-    /**
-     * get the current life stage based on the dragon's age
-     *
-     * @param ticksSinceCreation number of ticks since the egg was created
-     */
-    public static DragonLifeStage getLifeStageFromTickCount(int ticksSinceCreation) {
+    @Override
+    public String getName() {
+        return this.identifier;
+    }
+
+    public float getScale(int age) {
+        int duration = this.duration.getAsInt();
+        return duration == 0 ? 1.0F : MathX.lerp(this.startScale, this.finalScale, getProgress(age, duration));
+    }
+
+    public float getAverageScale() {
+        return (this.finalScale + this.startScale) * 0.5F;
+    }
+
+    static {
+        Object2ObjectOpenHashMap<String, DragonLifeStage> stages = new Object2ObjectOpenHashMap<>();
         for (DragonLifeStage stage : values()) {
-            if (ticksSinceCreation < stage.boundaryTick) return stage;
+            stages.put(stage.identifier, stage);
         }
-        return DragonLifeStage.ADULT;
-    }
-
-    public static float getStageProgressFromTickCount(int ticksSinceCreation) {
-        DragonLifeStage stage = getLifeStageFromTickCount(ticksSinceCreation);
-        if (stage.durationTicks == 0) return 1.0F;
-        return 1.0F + MathHelper.clamp((ticksSinceCreation - stage.boundaryTick) / (float) stage.durationTicks, -1.0F, 0.0F);
-    }
-
-    public static float getScaleFromTickCount(int ticksSinceCreation) {
-        DragonLifeStage stage = getLifeStageFromTickCount(ticksSinceCreation);
-        if (stage.durationTicks == 0) return stage.finalScale;
-        return MathX.lerp(
-                stage.startScale,
-                stage.finalScale,
-                1.0F + MathHelper.clamp((ticksSinceCreation - stage.boundaryTick) / (float) stage.durationTicks, -1.0F, 0.0F)
-        );
-    }
-
-    public static int clipTickCountToValid(int ticksSinceCreation) {
-        return MathHelper.clamp(ticksSinceCreation, 0, ADULT.boundaryTick);
+        BY_NAME = Object2ObjectMaps.unmodifiable(stages);
     }
 }

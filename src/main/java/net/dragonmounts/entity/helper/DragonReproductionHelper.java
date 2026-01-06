@@ -104,7 +104,7 @@ public class DragonReproductionHelper {
             baby.setCustomNameTag(babyName);
         }
 
-        baby.lifeStageHelper.setLifeStage(DragonLifeStage.EGG);
+        baby.setLifeStage(DragonLifeStage.EGG, true, false);
         // inherit the baby's breed from its parents
         baby.variantHelper.inheritBreed(self, mate);
         // increase reproduction counter

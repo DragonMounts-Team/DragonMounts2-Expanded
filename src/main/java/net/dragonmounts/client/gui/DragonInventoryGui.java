@@ -109,7 +109,7 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Fl
         this.hunger = dragon.getHunger() + "/100";
         this.color = dragon.getVariant().type.color;
         this.order.displayString = dragon.isSitting() ? this.stand : this.sit;
-        switch (dragon.lifeStageHelper.getLifeStage()) {
+        switch (dragon.getLifeStage()) {
             case EGG:
                 this.size = 140;
                 break;

@@ -19,6 +19,7 @@ import net.dragonmounts.init.*;
 import net.dragonmounts.item.DragonEssenceItem;
 import net.dragonmounts.item.DragonSpawnEggItem;
 import net.dragonmounts.network.SPathDebugPacket;
+import net.dragonmounts.network.SSyncDragonAgePacket;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.ClassPredicate;
@@ -60,6 +61,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
 
+import static net.dragonmounts.DragonMounts.NETWORK_WRAPPER;
 import static net.minecraft.entity.SharedMonsterAttributes.FOLLOW_RANGE;
 
 public class ServerDragonEntity extends TameableDragonEntity {
@@ -69,6 +71,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
     public final DragonReproductionHelper reproductionHelper = new DragonReproductionHelper(this);
     public boolean followOwner = true;
     public boolean fromVanillaEgg;
+    private boolean asyncAging;
     protected int shearCooldown;
     protected int collectBreathCooldown;
 
@@ -84,6 +87,27 @@ public class ServerDragonEntity extends TameableDragonEntity {
     @Override
     public final Vec3d getHeadRelativeOffset(float x, float y, float z) {
         return this.headLocator.getHeadRelativeOffset(x, y, z);
+    }
+
+    @Override
+    public void setLifeStage(DragonLifeStage stage, boolean reset, boolean sync) {
+        this.applyStage(stage);
+        if (this.stage == stage) return;
+        this.stage = stage;
+        if (reset) {
+            this.refreshAge();
+        }
+        this.updateScale();
+        if (sync) {
+            NETWORK_WRAPPER.sendToAllTracking(new SSyncDragonAgePacket(this.getEntityId(), this.growingAge, stage), this);
+        }
+        // clear current navigation target
+        this.getNavigator().clearPath();
+        // update AI
+        this.setupTasks();
+        if (DragonLifeStage.EGG == stage) {
+            this.variantHelper.resetPoints(null);
+        }
     }
 
     @Override
@@ -123,7 +147,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
                 iterator.remove();
             }
         }
-        DragonLifeStage stage = this.lifeStageHelper.getLifeStage();
+        DragonLifeStage stage = this.stage;
         if (DragonLifeStage.EGG == stage) return;
 
         // mutex 1: movement
@@ -164,17 +188,16 @@ public class ServerDragonEntity extends TameableDragonEntity {
         nbt.setBoolean("AllowOtherPlayers", this.allowedOtherPlayers());
         nbt.setBoolean("FollowOwner", this.followOwner);
         nbt.setBoolean("FromVanillaEgg", this.fromVanillaEgg);
-        nbt.setString(DragonVariant.DATA_PARAMETER_KEY, this.getVariant().getSerializedName());
+        nbt.setString(DragonVariant.SERIALIZATION_KEY, this.getVariant().getSerializedName());
+        nbt.setString(DragonLifeStage.SERIALIZATION_KEY, this.stage.getName());
         //        nbt.setBoolean("sleeping", this.isSleeping()); //unused as of now
         this.inventory.saveAdditionalData(nbt);
-        this.lifeStageHelper.writeToNBT(nbt);
         this.variantHelper.writeToNBT(nbt);
         this.reproductionHelper.writeToNBT(nbt);
     }
 
     @Override
     public void readEntityFromNBT(NBTTagCompound nbt) {
-        this.lifeStageHelper.readFromNBT(nbt);
         this.variantHelper.readFromNBT(nbt);
         if (nbt.getBoolean("DataFix$IsForest")) {
             boolean male = this.rand.nextBoolean();
@@ -186,12 +209,14 @@ public class ServerDragonEntity extends TameableDragonEntity {
             } else {
                 this.setVariant(male ? DragonVariants.FOREST_MALE : DragonVariants.FOREST_FEMALE);
             }
-        } else if (nbt.hasKey(DragonVariant.DATA_PARAMETER_KEY)) {
-            this.setVariant(DragonVariant.byName(nbt.getString(DragonVariant.DATA_PARAMETER_KEY)));
-        } else if (nbt.hasKey(DragonType.DATA_PARAMETER_KEY)) {
-            this.overrideType(DragonType.byName(nbt.getString(DragonType.DATA_PARAMETER_KEY)));
+        } else if (nbt.hasKey(DragonVariant.SERIALIZATION_KEY)) {
+            this.setVariant(DragonVariant.byName(nbt.getString(DragonVariant.SERIALIZATION_KEY)));
+        } else if (nbt.hasKey(DragonType.SERIALIZATION_KEY)) {
+            this.overrideType(DragonType.byName(nbt.getString(DragonType.SERIALIZATION_KEY)));
         }
+        this.asyncAging = this.firstUpdate;
         super.readEntityFromNBT(nbt);
+        this.asyncAging = false;
         this.setSheared(nbt.getInteger("Sheared"));
         this.setBreatheCollected(nbt.getInteger("BreathCollected"));
         this.setHunger(nbt.getInteger("Hunger"));
@@ -213,12 +238,15 @@ public class ServerDragonEntity extends TameableDragonEntity {
 
     @Override
     public void onLivingUpdate() {
-        this.lifeStageHelper.ageUp(1);
         this.breathHelper.update();
         if (this.isEgg()) {
             this.variantHelper.update();
             this.getVariant().type.tickServer(this);
+            this.updateEgg();
+            int age = this.growingAge;
+            this.growingAge = 0;
             super.onLivingUpdate();
+            this.growingAge = age;
             return;
         }
         this.getVariant().type.tickServer(this);
@@ -283,7 +311,17 @@ public class ServerDragonEntity extends TameableDragonEntity {
             }
             this.findCrystal();
         }
-        super.onLivingUpdate();
+        if (this.isGrowthPaused()) {
+            int age = this.growingAge;
+            this.growingAge = 0;
+            super.onLivingUpdate();
+            this.growingAge = age;
+        } else {
+            // sync age every 128 ticks after 64 ticks
+            this.asyncAging = (this.ticksExisted & 0x7F) != 0x3F;
+            super.onLivingUpdate();
+            this.asyncAging = false;
+        }
         if (this.getControllingPlayer() == null && !this.isFlying() && this.isSitting()) {
             this.removePassengers();
         }
@@ -294,7 +332,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
 
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
-        DragonLifeStage stage = this.lifeStageHelper.getLifeStage();
+        DragonLifeStage stage = this.stage;
         if (DragonLifeStage.EGG == stage) {
             if (player.isSneaking()) {
                 world.playSound(player, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.PLAYERS, 0.5F, 1);
@@ -457,12 +495,25 @@ public class ServerDragonEntity extends TameableDragonEntity {
         if (other instanceof CarriageEntity
                 && this.isSaddled()
                 && !other.isRiding()
-                && this.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING)
+                && this.stage.isOldEnough(DragonLifeStage.FLEDGLING)
                 && !other.isPassenger(this)
                 && this.canFitPassenger(other)
                 && other.startRiding(this)
         ) return;
         super.collideWithEntity(other);
+    }
+
+    @Override
+    public void setGrowingAge(int age) {
+        if (this.growingAge == age) return;
+        if (this.growingAge < 0 && age >= 0 || this.growingAge > 0 && age <= 0) {
+            this.onGrowingAdult();
+        } else {
+            this.growingAge = age;
+            this.updateScale();
+        }
+        if (this.asyncAging) return;
+        NETWORK_WRAPPER.sendToAllTracking(new SSyncDragonAgePacket(this.getEntityId(), this.growingAge, this.stage), this);
     }
 
     public void setSheared(int cooldown) {

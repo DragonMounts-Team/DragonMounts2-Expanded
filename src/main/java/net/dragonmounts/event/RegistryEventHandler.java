@@ -194,7 +194,7 @@ public class RegistryEventHandler {
                 if (root == null) return models[0];
                 NBTTagCompound data = root.getCompoundTag("EntityTag");
                 if (data.isEmpty()) return models[0];
-                String variant = data.getString(DragonVariant.DATA_PARAMETER_KEY);
+                String variant = data.getString(DragonVariant.SERIALIZATION_KEY);
                 if (cache.containsKey(variant)) return models[cache.getInt(variant)];
                 int model = mapping.getInt(DragonVariant.byName(variant).type);
                 cache.put(variant, model);

@@ -3,9 +3,11 @@ package net.dragonmounts.config;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Property;
 
+import java.util.function.IntSupplier;
+
 import static net.minecraftforge.common.config.Property.Type.INTEGER;
 
-public class IntEntry implements IConfigEntry {
+public class IntEntry implements IConfigEntry, IntSupplier {
     public final String key;
     public final int fallback;
     public int value;
@@ -34,5 +36,10 @@ public class IntEntry implements IConfigEntry {
             category.put(this.key, prop);
         }
         return prop.setDefaultValue(value);
+    }
+
+    @Override
+    public int getAsInt() {
+        return this.value;
     }
 }

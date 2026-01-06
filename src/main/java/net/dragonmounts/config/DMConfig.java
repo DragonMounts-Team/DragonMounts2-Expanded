@@ -10,6 +10,9 @@ import net.minecraftforge.fml.common.Loader;
 
 import java.io.File;
 
+import static net.dragonmounts.util.DMUtils.TICKS_PER_MINECRAFT_HOUR;
+import static net.dragonmounts.util.DMUtils.TICKS_PER_MINUTE;
+
 public class DMConfig {
     private static Configuration config;
     public static final String CATEGORY_DEBUG = "debug";
@@ -37,6 +40,11 @@ public class DMConfig {
     public static final DoubleEntry BASE_BODY_SIZE = new DoubleEntry("baseBodySize", 1.0);
     public static final DoubleEntry BASE_STEP_HEIGHT = new DoubleEntry("baseStepHeight", 1.25);
     // GAMEPLAY:
+    public static final IntEntry MIN_INCUBATION_DURATION = new IntEntry("minIncubationDuration", 20 * TICKS_PER_MINUTE);
+    public static final IntEntry HATCHLING_STAGE_DURATION = new IntEntry("hatchlingStageDuration", 48 * TICKS_PER_MINECRAFT_HOUR);
+    public static final IntEntry INFANT_STAGE_DURATION = new IntEntry("infantStageDuration", 24 * TICKS_PER_MINECRAFT_HOUR);
+    public static final IntEntry FLEDGLING_STAGE_DURATION = new IntEntry("fledglingStageDuration", 32 * TICKS_PER_MINECRAFT_HOUR);
+    public static final IntEntry JUVENILE_STAGE_DURATION = new IntEntry("juvenileStageDuration", 60 * TICKS_PER_MINECRAFT_HOUR);
     public static final BooleanEntry FORCED_RENAME = new BooleanEntry("forcedRename", false);
     public static final BooleanEntry BLOCK_OVERRIDE = new BooleanEntry("blockOverride", true);
     public static final IntEntry REPRODUCTION_LIMIT = new IntEntry("reproductionLimit", 3);
@@ -94,13 +102,13 @@ public class DMConfig {
                     .setMinValue(4.0)
                     .setMaxValue(24.0);
             prop.setHasSlidingControl(true);
-            prop.setComment("Zoom out for third person view while riding dragons or carriages.");
+            prop.setComment("Zoom out for third person view while riding dragons or carriages");
             register(category, order, REDIRECT_INVENTORY)
                     .setLanguageKey("config.dragonmounts.redirectInventory")
-                    .setComment("Whether to open your mount's inventory instead of yours.");
+                    .setComment("Whether to open your mount's inventory instead of yours");
             register(category, order, PAUSE_ON_FLUTING)
                     .setLanguageKey("config.dragonmounts.pauseOnFluting")
-                    .setComment("Whether to try to pause the game when fluting.");
+                    .setComment("Whether to try to pause the game when fluting");
             category.setPropertyOrder(order);
             // ATTRIBUTES
             order = new ObjectArrayList<>();
@@ -156,36 +164,57 @@ public class DMConfig {
             order = new ObjectArrayList<>();
             category = config.getCategory(CATEGORY_GAMEPLAY)
                     .setLanguageKey("config.dragonmounts.category.gameplay");
+            register(category, order, MIN_INCUBATION_DURATION)
+                    .setMinValue(0)
+                    .setLanguageKey("config.dragonmounts.minIncubationDuration")
+                    .setComment("How long does a dragon egg take to hatch at least");
+            register(category, order, HATCHLING_STAGE_DURATION)
+                    .setMinValue(0)
+                    .setLanguageKey("config.dragonmounts.hatchlingStageDuration")
+                    .setComment("How long does the hatchling stage last");
+            register(category, order, INFANT_STAGE_DURATION)
+                    .setMinValue(0)
+                    .setLanguageKey("config.dragonmounts.infantStageDuration")
+                    .setComment("How long does the infant stage last");
+            register(category, order, FLEDGLING_STAGE_DURATION)
+                    .setMinValue(0)
+                    .setLanguageKey("config.dragonmounts.fledglingStageDuration")
+                    .setComment("How long does the fledgling stage last");
+            register(category, order, JUVENILE_STAGE_DURATION)
+                    .setMinValue(0)
+                    .setLanguageKey("config.dragonmounts.juvenileStageDuration")
+                    .setComment("How long does the juvenile stage last");
             register(category, order, FORCED_RENAME)
                     .setLanguageKey("config.dragonmounts.forcedRename")
-                    .setComment("Whether to rename dragon when renaming amulet.");
+                    .setComment("Whether to rename dragon when renaming amulet");
             register(category, order, BLOCK_OVERRIDE)
                     .setLanguageKey("config.dragonmounts.blockOverride")
-                    .setComment("Whether interaction hook about vanilla dragon egg is enabled.");
+                    .setComment("Whether interaction hook about vanilla dragon egg is enabled");
             register(category, order, REPRODUCTION_LIMIT)
                     .setMinValue(0)
-                    .setLanguageKey("config.dragonmounts.reproductionLimit");
+                    .setLanguageKey("config.dragonmounts.reproductionLimit")
+                    .setComment("The max reproduction times of a dragon");
             register(category, order, ADAPTIVE_CONVERSION)
                     .setLanguageKey("config.dragonmounts.adaptiveConversion")
-                    .setComment("Whether dragon eggs will be converted to another type to adapt to the environment.");
+                    .setComment("Whether dragon eggs will be converted to another type to adapt to the environment");
             register(category, order, BREATH_EFFECTS)
                     .setLanguageKey("config.dragonmounts.breathEffects")
-                    .setComment("Whether dragon breath has side effects when hits blocks.");
+                    .setComment("Whether dragon breath has side effects when hits blocks");
             register(category, order, DESTRUCTIVE_BREATH)
                     .setLanguageKey("config.dragonmounts.destructiveBreath")
-                    .setComment("Whether airflow-like dragon breath can destroy the hit blocks.");
+                    .setComment("Whether airflow-like dragon breath can destroy the hit blocks");
             register(category, order, IGNITING_BREATH)
                     .setLanguageKey("config.dragonmounts.ignitingBreath")
-                    .setComment("Whether fire-like dragon breath can ignite the hit blocks.");
+                    .setComment("Whether fire-like dragon breath can ignite the hit blocks");
             register(category, order, SMELTING_BREATH)
                     .setLanguageKey("config.dragonmounts.smeltingBreath")
-                    .setComment("Whether fire-like dragon breath can smelt the hit blocks.");
+                    .setComment("Whether fire-like dragon breath can smelt the hit blocks");
             register(category, order, FROSTY_BREATH)
                     .setLanguageKey("config.dragonmounts.frostyBreath")
-                    .setComment("Whether blizzard-like dragon breath can leave snow on ground.");
+                    .setComment("Whether blizzard-like dragon breath can leave snow on ground");
             register(category, order, QUENCHING_BREATH)
                     .setLanguageKey("config.dragonmounts.quenchingBreath")
-                    .setComment("Whether mist-like dragon breath can put out fire and solidify lava.");
+                    .setComment("Whether mist-like dragon breath can put out fire and solidify lava");
             category.setPropertyOrder(order);
             // WORLD GEN:
             order = new ObjectArrayList<>();
@@ -193,10 +222,10 @@ public class DMConfig {
                     .setLanguageKey("config.dragonmounts.category.world_gen");
             register(category, order, ALLOW_DECLARED_DIMENSIONS_ONLY)
                     .setLanguageKey("config.dragonmounts.toggleDimensionLimitation")
-                    .setComment("Whether the limited dimension list is an allow list or a block list.");
+                    .setComment("Whether the limited dimension list is an allow list or a block list");
             register(category, order, LIMITED_DIMENSIONS)
                     .setLanguageKey("config.dragonmounts.limitedDimensions")
-                    .setComment("Limited dimension list on dragon nest generation.");
+                    .setComment("Limited dimension list on dragon nest generation");
             category.setPropertyOrder(order);
         }
         return config;
@@ -227,6 +256,11 @@ public class DMConfig {
         load(category, BASE_BODY_SIZE);
 
         category = config.getCategory(CATEGORY_GAMEPLAY);
+        load(category, MIN_INCUBATION_DURATION);
+        load(category, HATCHLING_STAGE_DURATION);
+        load(category, INFANT_STAGE_DURATION);
+        load(category, FLEDGLING_STAGE_DURATION);
+        load(category, JUVENILE_STAGE_DURATION);
         load(category, FORCED_RENAME);
         load(category, BLOCK_OVERRIDE);
         load(category, REPRODUCTION_LIMIT);

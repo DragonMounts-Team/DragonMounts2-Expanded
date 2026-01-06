@@ -22,7 +22,7 @@ public class ServerBreathHelper extends DragonBreathHelper<ServerDragonEntity> {
                     dragon.world,
                     this.getBreathSpawnPosition(),
                     dragon.getLookVec(),
-                    dragon.lifeStageHelper.getLifeStage().power
+                    dragon.getLifeStage().power
             );
         }
         this.breathAffectedArea.updateTick(dragon.world, this.breath);

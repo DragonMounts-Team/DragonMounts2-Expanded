@@ -18,7 +18,6 @@ import net.dragonmounts.config.DMConfig;
 import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.dragonmounts.entity.helper.DragonLifeStageHelper;
 import net.dragonmounts.entity.helper.DragonVariantHelper;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
@@ -188,9 +187,15 @@ public class DebugOverlay {
         text.println("Hunger: " + dfShort.format(dragon.getHunger()));
 
         // life stage
-        DragonLifeStageHelper helper = dragon.lifeStageHelper;
-        int ticksSinceCreation = helper.getTicksSinceCreation();
-        text.printf("Life Stage: %s %s (%d)\n", helper.getLifeStage().name(), dfShort.format(DragonLifeStage.getStageProgressFromTickCount(ticksSinceCreation)), ticksSinceCreation);
+        DragonLifeStage stage = dragon.getLifeStage();
+        // TODO egg
+        int age = dragon.getGrowingAge(), duration = stage.duration.getAsInt();
+        text.printf(
+                "Life Stage: %s %s (%d)\n",
+                stage.identifier,
+                duration == 0 ? '1' : dfShort.format(DragonLifeStage.getProgress(age, duration)),
+                age
+        );
 
         // size
         text.println(String.format(

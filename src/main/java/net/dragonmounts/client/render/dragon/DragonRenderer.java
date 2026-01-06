@@ -13,7 +13,6 @@ import net.dragonmounts.block.HatchableDragonEggBlock;
 import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.model.dragon.DragonModel;
 import net.dragonmounts.client.variant.VariantAppearance;
-import net.dragonmounts.entity.helper.DragonLifeStageHelper;
 import net.dragonmounts.init.DMBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -126,21 +125,21 @@ public class DragonRenderer extends RenderLiving<ClientDragonEntity> {
     }
 
     protected void renderEgg(ClientDragonEntity dragon, double x, double y, double z, float pitch, float partialTicks) {
-        // apply egg wiggle
-        DragonLifeStageHelper lifeStage = dragon.lifeStageHelper;
         this.renderName(dragon, x, y, z);
+        /* apply egg wiggle
+        DragonLifeStageHelper lifeStage = dragon.lifeStageHelper;
         float tickX = lifeStage.getEggWiggleX();
-        float tickZ = lifeStage.getEggWiggleZ();
+        float tickZ = lifeStage.getEggWiggleZ();*/
 
         // prepare GL states
         GlStateManager.pushMatrix();
-        GlStateManager.translate(x, y /*+ (lev ? l : 0)*/, z);
+        GlStateManager.translate(x, y, z);/*
         if (tickX > 0.0F) {
             GlStateManager.rotate(MathHelper.sin(tickX - partialTicks) * 8, 1, 0, 0);
         }
         if (tickZ > 0.0F) {
             GlStateManager.rotate(MathHelper.sin(tickZ - partialTicks) * 8, 0, 0, 1);
-        }
+        }*/
         GlStateManager.disableLighting();
 
         this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);

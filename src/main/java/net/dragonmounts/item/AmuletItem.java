@@ -185,6 +185,6 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
     }
 
     protected DragonType getDragonType(NBTTagCompound data) {
-        return DragonVariant.byName(data.getString(DragonVariant.DATA_PARAMETER_KEY)).type;
+        return DragonVariant.byName(data.getString(DragonVariant.SERIALIZATION_KEY)).type;
     }
 }

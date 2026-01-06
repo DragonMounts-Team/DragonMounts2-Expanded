@@ -22,7 +22,7 @@ public class NetherType extends DragonType {
 
     @Override
     public void tickClient(ClientDragonEntity dragon) {
-        if (dragon.isDead || !dragon.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING)) return;
+        if (dragon.isDead || !dragon.getLifeStage().isOldEnough(DragonLifeStage.FLEDGLING)) return;
         World level = dragon.world;
         Random random = level.rand;
         float s = dragon.getAdjustedSize();

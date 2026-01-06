@@ -20,7 +20,7 @@ public class Carrot implements ICapabilityProvider, IDragonFood {
     public boolean tryFeed(TameableDragonEntity dragon, EntityPlayer player, Relation relation, ItemStack stack, EnumHand hand) {
         if (!dragon.isGrowthPaused()) return false;
         if (dragon.world.isRemote) {
-            dragon.resetFeedTimer();
+            dragon.refreshForcedAgeTimer();
             return true;
         }
         dragon.setGrowthPaused(false);

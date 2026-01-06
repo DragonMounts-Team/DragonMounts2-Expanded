@@ -2,11 +2,9 @@ package net.dragonmounts.item;
 
 import net.dragonmounts.entity.DragonLifeStage;
 import net.dragonmounts.entity.ServerDragonEntity;
-import net.dragonmounts.entity.helper.DragonLifeStageHelper;
 import net.dragonmounts.init.DMEntities;
 import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.registry.DragonType;
-import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.EntityUtil;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -36,6 +34,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
+import static net.dragonmounts.entity.TameableDragonEntity.SERIALIZATION_KEY_FROM_SPAWNER;
 
 public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityContainer<Entity> {
     public static final String TRANSLATION_KEY = TRANSLATION_KEY_PREFIX + "dragon_spawn_egg";
@@ -74,27 +73,8 @@ public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityCont
                     WeightedSpawnerEntity candidate = new WeightedSpawnerEntity();
                     NBTTagCompound data = candidate.getNbt();
                     data.setString("id", type.toString());
-                    data.setBoolean(DragonLifeStageHelper.NBT_FROM_SPAWNER, true);
-                    boolean variable = true;
-                    NBTTagCompound spec = stack.getSubCompound("EntityTag");
-                    if (spec != null) {
-                        if (spec.hasKey(DragonLifeStageHelper.NBT_TICKS_SINCE_CREATION)) {
-                            data.setTag(
-                                    DragonLifeStageHelper.NBT_TICKS_SINCE_CREATION,
-                                    spec.getTag(DragonLifeStageHelper.NBT_TICKS_SINCE_CREATION)
-                            );
-                        }
-                        if (spec.hasKey(DragonVariant.DATA_PARAMETER_KEY)) {
-                            variable = false;
-                            data.setTag(
-                                    DragonVariant.DATA_PARAMETER_KEY,
-                                    spec.getTag(DragonVariant.DATA_PARAMETER_KEY)
-                            );
-                        }
-                    }
-                    if (variable) {
-                        data.setString(DragonType.DATA_PARAMETER_KEY, this.type.identifier.toString());
-                    }
+                    data.setBoolean(SERIALIZATION_KEY_FROM_SPAWNER, true);
+                    data.setString(DragonType.SERIALIZATION_KEY, this.type.identifier.toString());
                     ((TileEntityMobSpawner) block).getSpawnerBaseLogic().setNextSpawnData(candidate);
                 } else {
                     ((TileEntityMobSpawner) block).getSpawnerBaseLogic().setEntityId(type);
@@ -150,10 +130,7 @@ public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityCont
         if (DMEntities.DRAGON_ID.equals(identifier)) {
             ServerDragonEntity dragon = new ServerDragonEntity(level);
             dragon.overrideType(this.type);
-            dragon.lifeStageHelper.setLifeStage(player != null && player.isSneaking()
-                    ? DragonLifeStage.HATCHLING
-                    : DragonLifeStage.ADULT
-            );
+            dragon.setLifeStage(player != null && player.isSneaking() ? DragonLifeStage.HATCHLING : DragonLifeStage.ADULT, true, false);
             entity = dragon;
         } else if (EntityList.ENTITY_EGGS.containsKey(identifier)) {
             entity = EntityList.createEntityByIDFromName(identifier, level);

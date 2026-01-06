@@ -19,7 +19,7 @@ public class FireType extends DragonType {
 
     @Override
     public void tickClient(ClientDragonEntity dragon) {
-        if (dragon.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING)) {
+        if (dragon.getLifeStage().isOldEnough(DragonLifeStage.FLEDGLING)) {
             World level = dragon.world;
             AxisAlignedBB box = dragon.getEntityBoundingBox().grow(-0.1, -0.4, -0.1);
             if (!level.isMaterialInBB(box, Material.LAVA) && !level.isMaterialInBB(box, Material.FIRE)) return;

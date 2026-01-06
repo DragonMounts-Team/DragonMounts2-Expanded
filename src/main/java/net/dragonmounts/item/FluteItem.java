@@ -63,7 +63,7 @@ public class FluteItem extends Item {
         if (dragon.hasCustomName()) {
             nbt.setString("Name", dragon.getCustomNameTag());
         }
-        nbt.setString("Age", dragon.lifeStageHelper.getLifeStage().translationKey);
+        nbt.setString("Age", dragon.getLifeStage().translationKey);
         nbt.setString("OwnerName", player.getName());
         nbt.setUniqueId("Owner", player.getUniqueID());
         DragonType type = dragon.getVariant().type;

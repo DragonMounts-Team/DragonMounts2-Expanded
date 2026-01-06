@@ -31,7 +31,7 @@ public class IceType extends DragonType {
         World level = dragon.world;
         if (!dragon.isDead &&
                 dragon.posY > level.getWorldType().getCloudHeight() &&
-                dragon.lifeStageHelper.isOldEnough(DragonLifeStage.FLEDGLING) &&
+                dragon.getLifeStage().isOldEnough(DragonLifeStage.FLEDGLING) &&
                 BiomeDictionary.hasType(level.getBiome(dragon.getPosition()), BiomeDictionary.Type.SNOWY)
         ) {
             Random random = level.rand;
@@ -52,7 +52,7 @@ public class IceType extends DragonType {
     /// @see net.minecraft.entity.monster.EntitySnowman#onLivingUpdate()
     @Override
     public void tickServer(ServerDragonEntity dragon) {
-        DragonLifeStage stage = dragon.lifeStageHelper.getLifeStage();
+        DragonLifeStage stage = dragon.getLifeStage();
         if (dragon.isOverWater()) {
             EnchantmentFrostWalker.freezeNearby(dragon, dragon.world, new BlockPos(dragon), DragonLifeStage.EGG == stage ? 0 : 1);
         }

@@ -107,7 +107,7 @@ public class EntityUtil {
             NBTTagCompound data = root.getCompoundTag("EntityTag");
             if (!data.isEmpty()) {
                 if (Relation.denyIfNotOwner(data, player)) return null;
-                if (!data.hasKey(DragonVariant.DATA_PARAMETER_KEY)) {
+                if (!data.hasKey(DragonVariant.SERIALIZATION_KEY)) {
                     dragon.overrideType(fallback);
                 }
                 FixerCompat.disableEntityFixers(data);

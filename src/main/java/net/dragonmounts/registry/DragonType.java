@@ -38,7 +38,7 @@ import static net.dragonmounts.util.DMUtils.parseIdentifier;
 import static net.dragonmounts.util.EntityUtil.addOrMergeEffect;
 
 public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
-    public static final String DATA_PARAMETER_KEY = "DragonType";
+    public static final String SERIALIZATION_KEY = "DragonType";
     public static final ResourceLocation DEFAULT_KEY = makeId("ender");
     public static final DeferredRegistry<DragonType> REGISTRY = new Registry(makeId("dragon_type"), new RegistryBuilder<DragonType>().setDefaultKey(DEFAULT_KEY));
 

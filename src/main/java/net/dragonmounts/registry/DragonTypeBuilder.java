@@ -57,7 +57,7 @@ public class DragonTypeBuilder {
     }
 
     public DragonTypeBuilder putAttributeModifier(IAttribute attribute, String name, double value, int operation) {
-        this.attributes.put(attribute.getName(), new AttributeModifier(MODIFIER_UUID, name, value, operation));
+        this.attributes.put(attribute.getName(), new AttributeModifier(MODIFIER_UUID, name, value, operation).setSaved(false));
         return this;
     }
 

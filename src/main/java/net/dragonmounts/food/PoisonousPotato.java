@@ -3,6 +3,7 @@ package net.dragonmounts.food;
 import net.dragonmounts.capability.IDragonFood;
 import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.TameableDragonEntity;
+import net.dragonmounts.network.SSyncDragonAgePacket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -15,6 +16,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
 
+import static net.dragonmounts.DragonMounts.NETWORK_WRAPPER;
 import static net.dragonmounts.capability.DMCapabilities.DRAGON_FOOD;
 
 public class PoisonousPotato implements ICapabilityProvider, IDragonFood {
@@ -30,6 +32,7 @@ public class PoisonousPotato implements ICapabilityProvider, IDragonFood {
             return true;
         }
         dragon.setGrowthPaused(true);
+        NETWORK_WRAPPER.sendToAllTracking(new SSyncDragonAgePacket(dragon.getEntityId(), dragon.getGrowingAge(), dragon.getLifeStage()), dragon);
         dragon.attackEntityFrom(DamageSource.STARVE, 1.0F);
         dragon.playSound(SoundEvents.ENTITY_PLAYER_BURP, 1.0F, 0.8F);
         if (!player.capabilities.isCreativeMode) {

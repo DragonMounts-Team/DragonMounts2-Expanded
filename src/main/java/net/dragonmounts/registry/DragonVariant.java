@@ -21,7 +21,7 @@ import static net.dragonmounts.DragonMounts.makeId;
 import static net.dragonmounts.util.DMUtils.parseIdentifier;
 
 public class DragonVariant extends IForgeRegistryEntry.Impl<DragonVariant> {
-    public static final String DATA_PARAMETER_KEY = "Variant";
+    public static final String SERIALIZATION_KEY = "Variant";
     public static final ResourceLocation DEFAULT_KEY = makeId("ender_female");
     public static final Registry REGISTRY = new Registry(makeId("dragon_variant"), new RegistryBuilder<DragonVariant>().setDefaultKey(DEFAULT_KEY));
     public static final RegisteredObjectSerializer<DragonVariant> SERIALIZER = new RegisteredObjectSerializer<>(REGISTRY);

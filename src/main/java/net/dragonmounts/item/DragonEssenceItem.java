@@ -70,7 +70,7 @@ public class DragonEssenceItem extends Item implements IEntityContainer<Tameable
     @Override
     public ServerDragonEntity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos) {
         return EntityUtil.spawnDragonFormStack(level, stack, player, pos, this.type, (world, entity) -> {
-            entity.lifeStageHelper.setLifeStage(DragonLifeStage.HATCHLING);
+            entity.setLifeStage(DragonLifeStage.HATCHLING, true, false);
             world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundEvents.ENTITY_ILLAGER_MIRROR_MOVE, SoundCategory.NEUTRAL, 1, 1);
         });
     }

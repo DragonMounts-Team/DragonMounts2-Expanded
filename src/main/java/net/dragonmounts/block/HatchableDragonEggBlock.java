@@ -36,7 +36,7 @@ public class HatchableDragonEggBlock extends BlockDragonEgg {
         level.setBlockToAir(pos);
         egg.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
         egg.setVariant(variant);
-        egg.lifeStageHelper.setLifeStage(DragonLifeStage.EGG);
+        egg.setLifeStage(DragonLifeStage.EGG, true, false);
         level.spawnEntity(egg);
         return egg;
     }
