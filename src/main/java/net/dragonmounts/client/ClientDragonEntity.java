@@ -17,6 +17,7 @@ import net.dragonmounts.network.COpenInventoryPacket;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.ItemUtil;
+import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -93,6 +94,16 @@ public class ClientDragonEntity extends TameableDragonEntity {
     }
 
     @Override
+    protected void tickAsEgg() {
+        this.variantHelper.update();
+        if (--this.wobbling > 0) {
+            this.amplitudeO = this.amplitude;
+            this.amplitude = MathHelper.sin(this.world.getWorldTime() * 0.5F) * Math.min(this.wobbling, 15);
+        }
+        super.onLivingUpdate();
+    }
+
+    @Override
     public void onLivingUpdate() {
         EntityPlayer player = Minecraft.getMinecraft().player;
         if (player != null && player == this.getRidingEntity()) {
@@ -105,9 +116,7 @@ public class ClientDragonEntity extends TameableDragonEntity {
         this.breathHelper.update();
         this.getVariant().type.tickClient(this);
         if (this.isEgg()) {
-            this.variantHelper.update();
-            this.updateEgg();
-            super.onLivingUpdate();
+            this.tickAsEgg();
             return;
         }
         this.animator.update();
@@ -248,6 +257,28 @@ public class ClientDragonEntity extends TameableDragonEntity {
         double z = this.posZ + (rand.nextDouble() - 0.5) * this.width * s;
 
         this.world.spawnParticle(type, x, y, z, ox, oy, oz);
+    }
+
+    public void applyWobble(int amplitude, int axis, boolean crack) {
+        this.wobbling = amplitude;
+        this.wobbleAxis = axis;
+        // use game time to make amplitude consistent between clients
+        float target = MathHelper.sin(this.world.getWorldTime() * 0.5F) * Math.min(amplitude, 15);
+        // multiply with a factor to make it smoother
+        this.amplitudeO = target * 0.25F;
+        this.amplitude = target * 0.75F;
+        if (crack) {
+            this.playEggCrackEffect();
+        }
+        this.world.playSound(null, this.getPosition(), DMSounds.DRAGON_EGG_CRACK, SoundCategory.BLOCKS, 1.0F, 1.0F);
+    }
+
+    public float getWobbleAxis() {
+        return this.wobbleAxis;
+    }
+
+    public float getAmplitude(float partialTicks) {
+        return this.wobbling > 0 ? MathX.lerp(this.amplitudeO, this.amplitude, partialTicks) : 0;
     }
 
     @Nonnull

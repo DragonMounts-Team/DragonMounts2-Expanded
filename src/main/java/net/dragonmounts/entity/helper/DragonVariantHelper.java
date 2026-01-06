@@ -36,7 +36,7 @@ public class DragonVariantHelper implements ITickable {
     private static final int POINTS_INITIAL = 1000;
     private static final int POINTS_INHERIT = 1800;
     private static final int POINTS_ENV = 3;
-    private static final int TICK_RATE_PARTICLES = 2;
+    private static final int TICK_PARTICLES_MASK = 0b01; // once every 2 ticks
     private static final int TICK_RATE_BLOCK = 20;
     private final Reference2IntOpenHashMap<DragonType> points = new Reference2IntOpenHashMap<>();
     public final TameableDragonEntity dragon;
@@ -73,14 +73,28 @@ public class DragonVariantHelper implements ITickable {
         World level = dragon.world;
         // spawn breed-specific particles every other tick
         if (level.isRemote) {
-            if (current != DragonTypes.ENDER && dragon.ticksExisted % TICK_RATE_PARTICLES == 0) {
-                Random random = dragon.getRNG();
-                double px = dragon.posX + random.nextDouble() - 0.5;
-                double py = dragon.posY + random.nextDouble() + 0.5;
-                double pz = dragon.posZ + random.nextDouble() - 0.5;
+            Random random = dragon.getRNG();
+            double posX = dragon.posX, posY = dragon.posY, posZ = dragon.posZ;
+            level.spawnParticle(
+                    current.eggParticle,
+                    posX + random.nextDouble() - 0.3,
+                    posX + random.nextDouble() - 0.3,
+                    posX + random.nextDouble() - 0.3,
+                    random.nextDouble() * 2.0 - 0.6,
+                    random.nextDouble() * 2.0 - 0.6,
+                    random.nextDouble() * 2.0 - 0.6
+            );
+            if (current != DragonTypes.ENDER && (dragon.ticksExisted & TICK_PARTICLES_MASK) == TICK_PARTICLES_MASK) {
                 int color = current.color;
-                level.spawnParticle(EnumParticleTypes.REDSTONE, px, py, pz,
-                        extractColor(color, 2), extractColor(color, 1), extractColor(color, 0));
+                level.spawnParticle(
+                        EnumParticleTypes.REDSTONE,
+                        posX + random.nextDouble() - 0.5,
+                        posX + random.nextDouble() + 0.5,
+                        posX + random.nextDouble() - 0.5,
+                        extractColor(color, 2),
+                        extractColor(color, 1),
+                        extractColor(color, 0)
+                );
             }
             return;
         }

@@ -82,6 +82,9 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     // base attributes
     public static final int HOME_RADIUS = 64;
     public static final double IN_AIR_THRESH = 10;
+    public static final float EGG_CRACK_THRESHOLD = 0.9F;
+    public static final float EGG_WOBBLE_THRESHOLD = 0.75F;
+    public static final float EGG_WOBBLE_BASE_CHANCE = 0.05F;
     // flags
     public static final byte DO_ATTACK = 66;
     public static final byte DO_ROAR = 67;
@@ -115,6 +118,10 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     public EntityEnderCrystal healingEnderCrystal;
     protected DragonLifeStage stage;
     protected int inAirTicks;
+    protected float amplitude;
+    protected float amplitudeO;
+    protected float wobbleAxis;
+    protected int wobbling;
     private boolean isUsingBreathWeapon;
     private boolean isGoingDown;
     private boolean isUnhovered;
@@ -125,61 +132,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     private boolean saddled;
     private Entity controllerCache;
     private @Nonnull List<Entity> riderCache = Collections.emptyList();
-
-    // TODO rewrite shaking
-
-    private static final int TICKS_SINCE_CREATION_UPDATE_INTERVAL = 100;
-    private static final float EGG_CRACK_THRESHOLD = 0.9f;
-    private static final float EGG_WIGGLE_THRESHOLD = 0.75f;
-    private static final float EGG_WIGGLE_BASE_CHANCE = 20;
-    private int eggWiggleX;
-    private int eggWiggleZ;
-
-    public int getEggWiggleX() {
-        return eggWiggleX;
-    }
-
-    public int getEggWiggleZ() {
-        return eggWiggleZ;
-    }
-
-    protected void updateEgg() {
-        Random rand = this.getRNG();
-        // animate egg wiggle based on the time the eggs take to hatch
-        int age = ++this.growingAge, duration = DMConfig.MIN_INCUBATION_DURATION.getAsInt();
-        float progress = age / (float) duration;
-
-        // wait until the egg is nearly hatched
-        if (progress > EGG_WIGGLE_THRESHOLD) {
-            float wiggleChance = (progress - EGG_WIGGLE_THRESHOLD) / EGG_WIGGLE_BASE_CHANCE * (1 - EGG_WIGGLE_THRESHOLD);
-            boolean mayCrack = false;
-            if (eggWiggleX > 0) {
-                eggWiggleX--;
-            } else if (rand.nextFloat() < wiggleChance) {
-                eggWiggleX = rand.nextBoolean() ? 10 : 20;
-                mayCrack = true;
-            }
-            if (eggWiggleZ > 0) {
-                eggWiggleZ--;
-            } else if (rand.nextFloat() < wiggleChance) {
-                eggWiggleZ = rand.nextBoolean() ? 10 : 20;
-                mayCrack = true;
-            }
-            if (mayCrack && progress > EGG_CRACK_THRESHOLD) {
-                this.playEggCrackEffect();
-                this.world.playSound(null, this.getPosition(), DMSounds.DRAGON_EGG_CRACK, SoundCategory.BLOCKS, 1.0F, 1.0F);
-            }
-        }
-
-        // spawn generic particles
-        double px = this.posX + (rand.nextDouble() - 0.3);
-        double py = this.posY + (rand.nextDouble() - 0.3);
-        double pz = this.posZ + (rand.nextDouble() - 0.3);
-        double ox = (rand.nextDouble() - 0.3) * 2;
-        double oy = (rand.nextDouble() - 0.3) * 2;
-        double oz = (rand.nextDouble() - 0.3) * 2;
-        this.world.spawnParticle(this.getVariant().type.eggParticle, px, py, pz, ox, oy, oz);
-    }
 
     public TameableDragonEntity(World world) {
         super(world);
@@ -192,6 +144,9 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     }
 
     protected abstract DragonBreathHelper<?> createBreathHelper();
+
+    /// must call super {@link EntityTameable#onLivingUpdate()}
+    protected abstract void tickAsEgg();
 
     public abstract Vec3d getHeadRelativeOffset(float x, float y, float z);
 

@@ -51,6 +51,7 @@ public class CommonProxy {
         DragonMounts.NETWORK_WRAPPER.registerMessage(CommonProxy::scheduleClientTask, SSyncCooldownPacket.class, ++discriminator, Side.CLIENT);
         DragonMounts.NETWORK_WRAPPER.registerMessage(SRiposteEffectPacket::handle, SRiposteEffectPacket.class, ++discriminator, Side.CLIENT);
         DragonMounts.NETWORK_WRAPPER.registerMessage(SSyncDragonAgePacket::handle, SSyncDragonAgePacket.class, ++discriminator, Side.CLIENT);
+        DragonMounts.NETWORK_WRAPPER.registerMessage(SWobbleEggPacket::handle, SWobbleEggPacket.class, ++discriminator, Side.CLIENT);
         // C2S:
         DragonMounts.NETWORK_WRAPPER.registerMessage(CDragonBreathPacket::handle, CDragonBreathPacket.class, ++discriminator, Side.SERVER);
         DragonMounts.NETWORK_WRAPPER.registerMessage(CDragonControlPacket::handle, CDragonControlPacket.class, ++discriminator, Side.SERVER);

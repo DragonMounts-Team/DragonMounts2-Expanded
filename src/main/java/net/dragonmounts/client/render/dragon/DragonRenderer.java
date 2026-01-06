@@ -126,20 +126,16 @@ public class DragonRenderer extends RenderLiving<ClientDragonEntity> {
 
     protected void renderEgg(ClientDragonEntity dragon, double x, double y, double z, float pitch, float partialTicks) {
         this.renderName(dragon, x, y, z);
-        /* apply egg wiggle
-        DragonLifeStageHelper lifeStage = dragon.lifeStageHelper;
-        float tickX = lifeStage.getEggWiggleX();
-        float tickZ = lifeStage.getEggWiggleZ();*/
 
         // prepare GL states
         GlStateManager.pushMatrix();
-        GlStateManager.translate(x, y, z);/*
-        if (tickX > 0.0F) {
-            GlStateManager.rotate(MathHelper.sin(tickX - partialTicks) * 8, 1, 0, 0);
+        GlStateManager.translate(x, y, z);
+        //  apply egg wobble
+        float amplitude = dragon.getAmplitude(partialTicks);
+        if (amplitude != 0.0F) {
+            float axis = dragon.getWobbleAxis();
+            GlStateManager.rotate(amplitude, MathHelper.cos(axis), 0.0F, MathHelper.sin(axis));
         }
-        if (tickZ > 0.0F) {
-            GlStateManager.rotate(MathHelper.sin(tickZ - partialTicks) * 8, 0, 0, 1);
-        }*/
         GlStateManager.disableLighting();
 
         this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);

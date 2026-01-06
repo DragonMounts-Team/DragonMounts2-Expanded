@@ -20,6 +20,7 @@ import net.dragonmounts.item.DragonEssenceItem;
 import net.dragonmounts.item.DragonSpawnEggItem;
 import net.dragonmounts.network.SPathDebugPacket;
 import net.dragonmounts.network.SSyncDragonAgePacket;
+import net.dragonmounts.network.SWobbleEggPacket;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.ClassPredicate;
@@ -58,6 +59,7 @@ import net.minecraftforge.common.util.Constants;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
@@ -237,16 +239,42 @@ public class ServerDragonEntity extends TameableDragonEntity {
     }
 
     @Override
+    protected void tickAsEgg() {
+        this.variantHelper.update();
+        this.getVariant().type.tickServer(this);
+        int age = this.growingAge + 1;
+        this.growingAge = 0;
+        super.onLivingUpdate();
+        --this.wobbling;
+        this.growingAge = age;
+        int duration = DMConfig.MIN_INCUBATION_DURATION.getAsInt();
+        float progress = age / (float) duration;
+        // play the egg wobble animation based on the time the eggs take to hatch
+        if (progress > EGG_WOBBLE_THRESHOLD && this.wobbling < 0) {
+            Random random = this.rand;
+            // wait until the egg is nearly hatched
+            float chance = (progress - EGG_WOBBLE_THRESHOLD) * (1.0F - EGG_WOBBLE_THRESHOLD) * EGG_WOBBLE_BASE_CHANCE;
+            if (age >= duration && random.nextFloat() * 2 < chance) {
+                this.setLifeStage(DragonLifeStage.HATCHLING, true, true);
+                this.world.playSound(null, this.getPosition(), DMSounds.DRAGON_EGG_SHATTER, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                this.playEggCrackEffect();
+            } else if (random.nextFloat() < chance) {
+                int flag = progress > EGG_CRACK_THRESHOLD ? 0b01 : 0b00;
+                NETWORK_WRAPPER.sendToAllTracking(new SWobbleEggPacket(
+                        this.getEntityId(),
+                        this.wobbling = random.nextInt(21) + 10, // [10, 30]
+                        random.nextInt(180),
+                        random.nextBoolean() ? 0b10 | flag : flag
+                ), this);
+            }
+        }
+    }
+
+    @Override
     public void onLivingUpdate() {
         this.breathHelper.update();
         if (this.isEgg()) {
-            this.variantHelper.update();
-            this.getVariant().type.tickServer(this);
-            this.updateEgg();
-            int age = this.growingAge;
-            this.growingAge = 0;
-            super.onLivingUpdate();
-            this.growingAge = age;
+            this.tickAsEgg();
             return;
         }
         this.getVariant().type.tickServer(this);

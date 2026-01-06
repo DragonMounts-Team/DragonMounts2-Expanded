@@ -43,7 +43,6 @@ public class SSyncDragonAgePacket implements IMessage {
 
     public SSyncDragonAgePacket() {
         this.id = -1;
-        this.age = 0;
         this.stage = DragonLifeStage.ADULT;
     }
 
