@@ -11,7 +11,10 @@ package net.dragonmounts.command;
 
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
-import net.minecraft.command.*;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.PlayerNotFoundException;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -65,14 +68,11 @@ public class TameCommand extends EntityCommand {
                 if (entity instanceof EntityPlayer) {
                     player = (EntityPlayer) entity;
                 } else throw new PlayerNotFoundException("commands.generic.player.unspecified");
-                dragons = getSelectedEntities(server, sender, args[0], ServerDragonEntity.class);
-                if (dragons.isEmpty()) throw new EntityNotFoundException("commands.dragonmounts.notFound", args[0]);
+                dragons = getSelectedEntities(server, sender, args[0], ServerDragonEntity.class, "commands.dragonmounts.notFound");
                 break;
             case 2:
-                dragons = getSelectedEntities(server, sender, args[0], ServerDragonEntity.class);
-                if (dragons.isEmpty()) throw new EntityNotFoundException("commands.dragonmounts.notFound", args[0]);
-                player = EntitySelector.matchOnePlayer(sender, args[1]);
-                if (player == null) throw new PlayerNotFoundException("argument.player.toomany");
+                dragons = getSelectedEntities(server, sender, args[0], ServerDragonEntity.class, "commands.dragonmounts.notFound");
+                player = getPlayer(server, sender, args[1]);
                 break;
             default:
                 throw new WrongUsageException("commands.dragonmounts.tame.usage");

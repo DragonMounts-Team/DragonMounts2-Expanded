@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 public class LookAtOtherGoal extends EntityAIBase implements Predicate<EntityLivingBase> {
     public final ServerDragonEntity dragon;
     protected final float lookDistance;
-    protected final float lookDistanceSq;
+    protected final float squaredLook;
     protected final float probability;
     protected @Nullable EntityLivingBase lookAt;
     protected int lookTime;
@@ -32,7 +32,7 @@ public class LookAtOtherGoal extends EntityAIBase implements Predicate<EntityLiv
     public LookAtOtherGoal(ServerDragonEntity dragon, float lookDistance, float probability) {
         this.dragon = dragon;
         this.lookDistance = lookDistance;
-        this.lookDistanceSq = lookDistance * lookDistance;
+        this.squaredLook = lookDistance * lookDistance;
         this.probability = probability;
         this.setMutexBits(0b10);
     }
@@ -56,7 +56,7 @@ public class LookAtOtherGoal extends EntityAIBase implements Predicate<EntityLiv
     public boolean shouldContinueExecuting() {
         if (this.lookTime <= 0) return false;
         EntityLivingBase target = this.lookAt;
-        return target != null && target.isEntityAlive() && this.dragon.getDistanceSq(target) <= this.lookDistanceSq;
+        return target != null && target.isEntityAlive() && this.dragon.getDistanceSq(target) <= this.squaredLook;
     }
 
     @Override

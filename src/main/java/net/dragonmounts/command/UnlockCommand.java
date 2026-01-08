@@ -12,7 +12,6 @@ package net.dragonmounts.command;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.EntityNotFoundException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
@@ -57,8 +56,7 @@ public class UnlockCommand extends EntityCommand {
                 dragons = Collections.singletonList(getClosestEntity(sender, ServerDragonEntity.class));
                 break;
             case 1:
-                dragons = getSelectedEntities(server, sender, args[0], ServerDragonEntity.class);
-                if (dragons.isEmpty()) throw new EntityNotFoundException("commands.dragonmounts.notFound", args[0]);
+                dragons = getSelectedEntities(server, sender, args[0], ServerDragonEntity.class, "commands.dragonmounts.notFound");
                 break;
             default:
                 throw new WrongUsageException("commands.dragonmounts.unlock.usage");

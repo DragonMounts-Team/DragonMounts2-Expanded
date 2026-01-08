@@ -248,13 +248,13 @@ public class ServerDragonEntity extends TameableDragonEntity {
         --this.wobbling;
         this.growingAge = age;
         int duration = DMConfig.MIN_INCUBATION_DURATION.getAsInt();
-        float progress = age / (float) duration;
+        float progress = duration > 0 ? age / (float) duration : 1.0F;
         // play the egg wobble animation based on the time the eggs take to hatch
         if (progress > EGG_WOBBLE_THRESHOLD && this.wobbling < 0) {
             Random random = this.rand;
             // wait until the egg is nearly hatched
             float chance = (progress - EGG_WOBBLE_THRESHOLD) * (1.0F - EGG_WOBBLE_THRESHOLD) * EGG_WOBBLE_BASE_CHANCE;
-            if (age >= duration && random.nextFloat() * 2 < chance) {
+            if (progress >= 1.0F && random.nextFloat() * 2.0F < chance) {
                 this.setLifeStage(DragonLifeStage.HATCHLING, true, true);
                 this.world.playSound(null, this.getPosition(), DMSounds.DRAGON_EGG_SHATTER, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 this.playEggCrackEffect();

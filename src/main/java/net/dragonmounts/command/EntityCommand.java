@@ -10,7 +10,6 @@ import net.minecraft.util.math.BlockPos;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 import static net.dragonmounts.util.EntityUtil.findNearestEntityWithinAABB;
 import static net.dragonmounts.util.RayTraceServer.rayTraceEntity;
@@ -29,19 +28,21 @@ public abstract class EntityCommand extends CommandBase {
         throw new EntityNotFoundException("commands.dragonmounts.unspecified");
     }
 
-    public static <T extends Entity> List<T> getSelectedEntities(MinecraftServer server, ICommandSender sender, String selector, Class<T> clazz) throws CommandException {
-        List<T> entities = EntitySelector.matchEntities(sender, selector, clazz);
-        if (entities.isEmpty()) {
-            try {
-                Entity entity = server.getEntityFromUuid(UUID.fromString(selector));
-                if (clazz.isInstance(entity)) return Collections.singletonList(clazz.cast(entity));
-            } catch (IllegalArgumentException e) {
-                if (selector.split("-").length == 5) {
-                    throw new EntityNotFoundException("commands.generic.entity.invalidUuid", selector);
-                }
+    public static <T extends Entity> List<T> getSelectedEntities(
+            MinecraftServer server,
+            ICommandSender sender,
+            String selector,
+            Class<T> clazz,
+            @Nullable String messageIfEmpty
+    ) throws CommandException {
+        if (EntitySelector.isSelector(selector)) {
+            List<T> entities = EntitySelector.matchEntities(sender, selector, clazz);
+            if (entities.isEmpty() && messageIfEmpty != null) {
+                throw new EntityNotFoundException(messageIfEmpty, selector);
             }
+            return entities;
         }
-        return entities;
+        return Collections.singletonList(getEntity(server, sender, selector, clazz));
     }
 
     /**

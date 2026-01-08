@@ -188,12 +188,14 @@ public class DebugOverlay {
 
         // life stage
         DragonLifeStage stage = dragon.getLifeStage();
-        // TODO egg
         int age = dragon.getGrowingAge(), duration = stage.duration.getAsInt();
         text.printf(
                 "Life Stage: %s %s (%d)\n",
                 stage.identifier,
-                duration == 0 ? '1' : dfShort.format(DragonLifeStage.getProgress(age, duration)),
+                duration == 0 ? '1' : dfShort.format(DragonLifeStage.EGG == stage
+                        ? Math.min(age / (float) duration, 1.0F)
+                        : DragonLifeStage.getProgress(age, duration)
+                ),
                 age
         );
 

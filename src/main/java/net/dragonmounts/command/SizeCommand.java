@@ -3,7 +3,6 @@ package net.dragonmounts.command;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.minecraft.command.CommandException;
-import net.minecraft.command.EntityNotFoundException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
@@ -45,8 +44,7 @@ public class SizeCommand extends EntityCommand {
                 dragons = Collections.singletonList(getClosestEntity(sender, ServerDragonEntity.class));
                 break;
             case 2:
-                dragons = getSelectedEntities(server, sender, args[1], ServerDragonEntity.class);
-                if (dragons.isEmpty()) throw new EntityNotFoundException("commands.dragonmounts.notFound", args[1]);
+                dragons = getSelectedEntities(server, sender, args[1], ServerDragonEntity.class, "commands.dragonmounts.notFound");
                 break;
             default:
                 throw new WrongUsageException("commands.dragonmounts.size.usage");

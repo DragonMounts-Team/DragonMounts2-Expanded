@@ -2,4 +2,7 @@
     <item name='net.minecraft.entity.passive.EntityTameable boolean isOwner(net.minecraft.entity.EntityLivingBase) 0'>
         <annotation name='org.jetbrains.annotations.Nullable'/>
     </item>
+    <item name='net.minecraft.entity.passive.EntityTameable net.minecraft.entity.ai.EntityAISit getAISit()'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
 </root>
