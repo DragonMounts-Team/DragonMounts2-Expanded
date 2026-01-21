@@ -113,9 +113,6 @@ public class DragonHeadLocator<T extends TameableDragonEntity> implements ITicka
                     - MathX.lerp(0.0F, MathHelper.sin(vertMulti * MathX.PI_F * 0.9F) * 0.63F, healthFactor);
             // use looking yaw
             lastRotY = segment.rotY = rotYFactor * vertMulti;
-            // update size (scale)
-            segment.scaleX = segment.scaleY = MathX.lerp(1.6F, 1.0F, vertMulti);
-            segment.scaleZ = 0.6F;
             segment = (++i < NECK_SEGMENTS) ? this.neckSegments[i] : head;
             // move next segment behind the current one
             float neckSize = 0.6F * NECK_SIZE - 1.4F;

@@ -52,9 +52,8 @@ public abstract class DragonHeadBlock extends BlockContainer {
         return true;
     }
 
-    @Nullable
     @Override
-    public DragonHeadBlockEntity createNewTileEntity(World level, int meta) {
+    public @Nullable DragonHeadBlockEntity createNewTileEntity(World level, int meta) {
         return new DragonHeadBlockEntity();
     }
 

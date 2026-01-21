@@ -27,8 +27,8 @@ import net.minecraft.entity.EntityLivingBase;
 public class DragonModel extends ModelBase {
     // model parts
     public final HeadPart head;
-    public final NeckPart neck;
-    public final TailPart tail;
+    public final ISegmentedPart neck;
+    public final ISegmentedPart tail;
     public final LegPart foreLeg;
     public final LegPart hindLeg;
     public final BodyPart body;
@@ -73,7 +73,7 @@ public class DragonModel extends ModelBase {
             // updateFromAnimator body parts
             this.body.setupAnim(animator);
             this.wing.setupAnim(animator);
-            this.tail.setupAnim(animator);
+            this.tail.setupSegments(animator.tailSegments);
         }
     }
 

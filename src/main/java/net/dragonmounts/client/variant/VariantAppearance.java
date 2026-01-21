@@ -37,6 +37,8 @@ public abstract class VariantAppearance {
 
     public abstract ResourceLocation getDissolve(@Nullable ClientDragonEntity dragon);
 
+    public abstract @Nullable ResourceLocation getArmorTexture(ResourceLocation material);
+
     public ResourceLocation getChest(@Nullable ClientDragonEntity dragon) {
         return DEFAULT_CHEST;
     }

@@ -16,6 +16,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityBanner;
+import net.minecraft.util.ResourceLocation;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -54,7 +55,9 @@ public enum BuiltinDragonLayer implements IDragonLayer {
             if (stack.isEmpty()) return;
             Item item = stack.getItem();
             if (item instanceof DragonArmorItem) {
-                manager.bindTexture(((DragonArmorItem) item).texture);
+                ResourceLocation texture = dragon.getVariant().appearance.getArmorTexture(((DragonArmorItem) item).material);
+                if (texture == null) return;
+                manager.bindTexture(texture);
                 model.render(DragonRenderMode.DRAGON, dragon, moveTime, moveSpeed, ticksExisted, lookYaw, lookPitch, scale);
             }
         }

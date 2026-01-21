@@ -36,15 +36,15 @@ public class DragonCoreBlockEntityRenderer extends TileEntitySpecialRenderer<Dra
 
     @Override
     public void bindTexture(TextureManager manager, int destroy) {
-        if (destroy >= 0) {
+        if (destroy < 0) {
+            manager.bindTexture(TEXTURE);
+        } else {
             manager.bindTexture(DESTROY_STAGES[destroy]);
             GlStateManager.matrixMode(5890);
             GlStateManager.pushMatrix();
             GlStateManager.scale(4.0F, 4.0F, 1.0F);
             GlStateManager.translate(0.0625F, 0.0625F, 0.0625F);
             GlStateManager.matrixMode(5888);
-        } else {
-            manager.bindTexture(TEXTURE);
         }
     }
 

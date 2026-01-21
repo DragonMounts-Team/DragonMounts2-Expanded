@@ -9,7 +9,6 @@
  */
 package net.dragonmounts.client.model.dragon;
 
-import net.dragonmounts.util.Segment;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
@@ -108,10 +107,16 @@ public class ScalablePart extends ModelRenderer {
         }
     }
 
-    public static class ScalableSnapshot extends PartSnapshot<ScalablePart> {
-        public float renderScaleX = 1;
-        public float renderScaleY = 1;
-        public float renderScaleZ = 1;
+    public static class Snapshot extends PartSnapshot<ScalablePart> {
+        public float renderScaleX;
+        public float renderScaleY;
+        public float renderScaleZ;
+
+        public Snapshot(float scaleX, float scaleY, float scaleZ) {
+            this.renderScaleX = scaleX;
+            this.renderScaleY = scaleY;
+            this.renderScaleZ = scaleZ;
+        }
 
         @Override
         public void apply(ScalablePart part) {
@@ -119,13 +124,6 @@ public class ScalablePart extends ModelRenderer {
             part.renderScaleX = this.renderScaleX;
             part.renderScaleY = this.renderScaleY;
             part.renderScaleZ = this.renderScaleZ;
-        }
-
-        public static void saveScalable(Segment segment, ScalableSnapshot snapshot) {
-            save(segment, snapshot);
-            snapshot.renderScaleX = takeIfValid(segment.scaleX, snapshot.renderScaleX);
-            snapshot.renderScaleY = takeIfValid(segment.scaleY, snapshot.renderScaleY);
-            snapshot.renderScaleZ = takeIfValid(segment.scaleZ, snapshot.renderScaleZ);
         }
     }
 }

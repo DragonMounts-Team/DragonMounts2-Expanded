@@ -12,6 +12,7 @@ import net.dragonmounts.init.DMItems;
 import net.dragonmounts.init.DragonVariants;
 import net.dragonmounts.item.DragonEggCompatItem;
 import net.dragonmounts.registry.CooldownCategory;
+import net.dragonmounts.registry.DragonVariant;
 import net.dragonmounts.util.DragonScaleArmorSuit;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -30,7 +31,7 @@ public abstract class DragonMountsCompat {
     public static final String BAUBLES = "baubles";
     public static final String PATCHOULI = "patchouli";
 
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
     public static final Object2ObjectOpenHashMap<String, Item> ITEM_MAPPINGS;
     public static final Block DRAGON_EGG_BLOCK = DragonEggCompatBlock.INSTANCE;
     public static final Item DRAGON_EGG_ITEM = DragonEggCompatItem.INSTANCE;
@@ -78,32 +79,53 @@ public abstract class DragonMountsCompat {
                 case "skeleton_male_dragon_head":
                     mapping.remap(DragonVariants.SKELETON.head.standing);
                     break;
-                case "wither_female_dragon_head":
-                case "wither_male_dragon_head":
-                    mapping.remap(DragonVariants.WITHER.head.standing);
-                    break;
-                case "zombie_female_dragon_head":
-                case "zombie_male_dragon_head":
-                    mapping.remap(DragonVariants.ZOMBIE.head.standing);
-                    break;
                 case "skeleton_female_dragon_head_wall":
                 case "skeleton_male_dragon_head_wall":
                     mapping.remap(DragonVariants.SKELETON.head.wall);
+                    break;
+                case "wither_female_dragon_head":
+                case "wither_male_dragon_head":
+                    mapping.remap(DragonVariants.WITHER.head.standing);
                     break;
                 case "wither_female_dragon_head_wall":
                 case "wither_male_dragon_head_wall":
                     mapping.remap(DragonVariants.WITHER.head.wall);
                     break;
+                case "zombie_female_dragon_head":
+                case "zombie_male_dragon_head":
+                    mapping.remap(DragonVariants.ZOMBIE.head.standing);
+                    break;
                 case "zombie_female_dragon_head_wall":
                 case "zombie_male_dragon_head_wall":
                     mapping.remap(DragonVariants.ZOMBIE.head.wall);
+                case "fire_rare_dragon_head":
+                    mapping.remap(DragonVariants.BLUE_FIRE.head.standing);
+                case "fire_rare_dragon_head_wall":
+                    mapping.remap(DragonVariants.BLUE_FIRE.head.wall);
+                case "storm_rare_dragon_head":
+                    mapping.remap(DragonVariants.BRONZED_STORM.head.standing);
+                case "storm_rare_dragon_head_wall":
+                    mapping.remap(DragonVariants.BRONZED_STORM.head.wall);
                     break;
             }
         }
     }
 
     @SubscribeEvent
-    public static void remapCategory(RegistryEvent.MissingMappings<CooldownCategory> event) {
+    public static void remapVariant(RegistryEvent.MissingMappings<DragonVariant> event) {
+        for (RegistryEvent.MissingMappings.Mapping<DragonVariant> mapping : event.getMappings()) {
+            switch (mapping.key.getPath()) {
+                case "fire_rare":
+                    mapping.remap(DragonVariants.BLUE_FIRE);
+                case "storm_rare":
+                    mapping.remap(DragonVariants.BRONZED_STORM);
+                    break;
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void ignoreCategory(RegistryEvent.MissingMappings<CooldownCategory> event) {
         event.getMappings().forEach(RegistryEvent.MissingMappings.Mapping::ignore);
     }
 
@@ -159,6 +181,8 @@ public abstract class DragonMountsCompat {
         mappings.put("wither_male_dragon_head", DragonVariants.WITHER.head.item);
         mappings.put("zombie_female_dragon_head", DragonVariants.ZOMBIE.head.item);
         mappings.put("zombie_male_dragon_head", DragonVariants.ZOMBIE.head.item);
+        mappings.put("fire_rare_dragon_head", DragonVariants.BLUE_FIRE.head.item);
+        mappings.put("storm_rare_dragon_head", DragonVariants.BRONZED_STORM.head.item);
         mappings.put("aether_dragonscales", DMItems.AETHER_DRAGON_SCALES);
         mappings.put("dragon_bow_aether", DMItems.AETHER_DRAGON_SCALE_BOW);
         mappings.put("dragon_shield_aether", DMItems.AETHER_DRAGON_SCALE_SHIELD);

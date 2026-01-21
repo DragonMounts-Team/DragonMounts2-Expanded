@@ -18,19 +18,24 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
+import static net.dragonmounts.DragonMountsTags.MOD_ID;
+
 public class DragonArmorItem extends Item {
-    public static final String TEXTURE_PREFIX = "textures/entities/dragon_armor/";
     public static final UUID MODIFIER_UUID = UUID.fromString("f4dbd212-cf15-57e9-977c-0019cc5a8933");
-    public final ResourceLocation texture;
+    public static final ResourceLocation BUILTIN_MATERIAL_COPPER = new ResourceLocation(MOD_ID, "copper");
+    public static final ResourceLocation BUILTIN_MATERIAL_IRON = new ResourceLocation(MOD_ID, "iron");
+    public static final ResourceLocation BUILTIN_MATERIAL_GOLD = new ResourceLocation(MOD_ID, "gold");
+    public static final ResourceLocation BUILTIN_MATERIAL_EMERALD = new ResourceLocation(MOD_ID, "emerald");
+    public static final ResourceLocation BUILTIN_MATERIAL_DIAMOND = new ResourceLocation(MOD_ID, "diamond");
+    public final ResourceLocation material;
     public final int protection;
 
-    public DragonArmorItem(ResourceLocation texture, int protection) {
-        this.texture = texture;
+    public DragonArmorItem(ResourceLocation material, int protection) {
+        this.material = material;
         this.protection = protection;
         this.setMaxStackSize(1).setCreativeTab(CreativeTabs.COMBAT);
     }
@@ -61,7 +66,7 @@ public class DragonArmorItem extends Item {
     }
 
     @Override
-    public @Nonnull CreativeTabs[] getCreativeTabs() {
+    public CreativeTabs[] getCreativeTabs() {
         return new CreativeTabs[]{DMItemGroups.COMBAT};
     }
 

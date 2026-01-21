@@ -2,7 +2,6 @@ package net.dragonmounts.init;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import mcp.MethodsReturnNonnullByDefault;
-import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.api.IDescribedArmorEffect;
 import net.dragonmounts.item.*;
 import net.dragonmounts.registry.DragonType;
@@ -17,6 +16,7 @@ import java.util.function.Consumer;
 
 import static net.dragonmounts.DragonMounts.applyId;
 import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
+import static net.dragonmounts.item.DragonArmorItem.*;
 import static net.dragonmounts.util.ItemUtil.localize;
 
 @MethodsReturnNonnullByDefault
@@ -58,11 +58,11 @@ public class DMItems {
     public static final DragonScalesItem MOONLIGHT_DRAGON_SCALES = createDragonScalesItem("moonlight_dragon_scales", DragonTypes.MOONLIGHT);
     public static final DragonScalesItem DARK_DRAGON_SCALES = createDragonScalesItem("dark_dragon_scales", DragonTypes.DARK);
     //Dragon Armor
-    public static final DragonArmorItem COPPER_DRAGON_ARMOR = createDragonArmorItem("copper_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "iron.png", 2);
-    public static final DragonArmorItem IRON_DRAGON_ARMOR = createDragonArmorItem("iron_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "iron.png", 3);
-    public static final DragonArmorItem GOLDEN_DRAGON_ARMOR = createDragonArmorItem("golden_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "gold.png", 5);
-    public static final DragonArmorItem EMERALD_DRAGON_ARMOR = createDragonArmorItem("emerald_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "emerald.png", 6);
-    public static final DragonArmorItem DIAMOND_DRAGON_ARMOR = createDragonArmorItem("diamond_dragon_armor", DragonArmorItem.TEXTURE_PREFIX + "diamond.png", 9);
+    public static final DragonArmorItem COPPER_DRAGON_ARMOR = createDragonArmorItem("copper_dragon_armor", BUILTIN_MATERIAL_COPPER, 2);
+    public static final DragonArmorItem IRON_DRAGON_ARMOR = createDragonArmorItem("iron_dragon_armor", BUILTIN_MATERIAL_IRON, 3);
+    public static final DragonArmorItem GOLDEN_DRAGON_ARMOR = createDragonArmorItem("golden_dragon_armor", BUILTIN_MATERIAL_GOLD, 5);
+    public static final DragonArmorItem EMERALD_DRAGON_ARMOR = createDragonArmorItem("emerald_dragon_armor", BUILTIN_MATERIAL_EMERALD, 6);
+    public static final DragonArmorItem DIAMOND_DRAGON_ARMOR = createDragonArmorItem("diamond_dragon_armor", BUILTIN_MATERIAL_DIAMOND, 9);
     //Dragon Scale Swords
     public static final DragonScaleSwordItem AETHER_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("aether_dragon_scale_sword", DragonTypes.AETHER, DMTiers.AETHER_DRAGON_SCALE);
     public static final DragonScaleSwordItem WATER_DRAGON_SCALE_SWORD = createDragonScaleSwordItem("water_dragon_scale_sword", DragonTypes.WATER, DMTiers.WATER_DRAGON_SCALE);
@@ -419,8 +419,8 @@ public class DMItems {
         return applyId(item, name);
     }
 
-    static DragonArmorItem createDragonArmorItem(String name, String texture, int protection) {
-        DragonArmorItem item = new DragonArmorItem(new ResourceLocation(DragonMountsTags.MOD_ID, texture), protection);
+    static DragonArmorItem createDragonArmorItem(String name, ResourceLocation material, int protection) {
+        DragonArmorItem item = new DragonArmorItem(material, protection);
         ITEMS.add(localize(item, name));
         return applyId(item, name);
     }

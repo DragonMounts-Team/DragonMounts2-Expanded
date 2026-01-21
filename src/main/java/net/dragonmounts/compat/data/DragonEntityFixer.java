@@ -14,7 +14,16 @@ public class DragonEntityFixer implements IFixableData {
             tag.setTag(DragonVariantHelper.NBT_VARIANT_POINTS, tag.getCompoundTag("breedPoints"));
             tag.removeTag("breedPoints");
         }
-        if (tag.hasKey("Breed")) {
+        if (tag.hasKey(DragonVariant.SERIALIZATION_KEY)) {
+            switch (tag.getString(DragonVariant.SERIALIZATION_KEY)) {
+                case "dragonmounts:fire_rare":
+                    tag.setString(DragonVariant.SERIALIZATION_KEY, "dragonmounts:blue_fire");
+                    break;
+                case "dragonmounts:storm_rare":
+                    tag.setString(DragonVariant.SERIALIZATION_KEY, "dragonmounts:bronzed_storm");
+                    break;
+            }
+        } else if (tag.hasKey("Breed")) {
             boolean isMale = tag.getBoolean("IsMale");
             DragonVariant variant;
             switch (tag.getString("Breed")) {
@@ -88,7 +97,7 @@ public class DragonEntityFixer implements IFixableData {
 
     @Override
     public int getFixVersion() {
-        return 1;
+        return 2;
     }
 
     @Override

@@ -1,12 +1,12 @@
 package net.dragonmounts.client.breath;
 
-
 import net.minecraft.util.ResourceLocation;
 
 import static net.dragonmounts.DragonMounts.makeId;
 
 public interface BuiltinBreathTextures {
     ResourceLocation FLAME_BREATH = makeId("textures/entities/breath_fire.png");
+    ResourceLocation BLUE_FLAME_BREATH = makeId("textures/entities/breath_blue_fire.png");
     ResourceLocation AIRFLOW_BREATH = makeId("textures/entities/breath_air.png");
     ResourceLocation DARK_BREATH = makeId("textures/entities/breath_dark.png");
     ResourceLocation ENDER_BREATH = makeId("textures/entities/breath_acid.png");

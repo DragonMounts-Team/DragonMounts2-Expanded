@@ -68,16 +68,11 @@ public class ClientDragonEntity extends TameableDragonEntity {
     public void setLifeStage(DragonLifeStage stage, boolean reset, boolean sync) {
         this.applyStage(stage);
         if (this.stage == stage) return;
-        DragonLifeStage prev = this.stage;
         this.stage = stage;
         if (reset) {
             this.refreshAge();
         }
         this.updateScale();
-        if (DragonLifeStage.EGG == prev) {
-            // play particle and sound effects when the dragon hatches
-            this.world.playSound(this.posX, this.posY, this.posZ, DMSounds.DRAGON_EGG_SHATTER, SoundCategory.BLOCKS, 4, 1, false);
-        }
     }
 
     @Override

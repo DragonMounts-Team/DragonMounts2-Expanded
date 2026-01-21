@@ -36,7 +36,7 @@ public class VariationOrbItem extends Item {
             DragonVariant neo = current.type.variants.draw(dragon.getRNG(), current);
             if (current != neo) {
                 dragon.setVariant(neo);
-                dragon.world.playSound(null, player.getPosition(), DMSounds.VARIATION_ORB_ACTIVATE, SoundCategory.PLAYERS, 1, 1);
+                dragon.world.playSound(null, player.getPosition(), DMSounds.VARIATION_ORB_ACTIVATE, SoundCategory.PLAYERS, 0.5F, 0.5F);
                 if (!player.capabilities.isCreativeMode) {
                     stack.shrink(1);
                 }

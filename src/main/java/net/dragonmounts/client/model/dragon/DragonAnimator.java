@@ -154,7 +154,7 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
         // animate head and neck
         this.calculateHeadAndNeck();
         model.head.setupAnim(this);
-        model.neck.setupAnim(this);
+        model.neck.setupSegments(this.neckSegments);
 
         // animate tail
         this.animTail(partialTicks);
@@ -379,7 +379,7 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
         float speedFactor = 2.0F - 2.0F * this.speed;
         float rotXFactor = 1.0F - 0.2F * sit;
         float magicSinFactor = MathHelper.sin(base * 0.2F) * MathHelper.sin(base * 0.37F) * 0.4F;
-        float sitFactor = 1.0F - sit;
+        float sitFactor = sit - 1.0F;
         float rotYStand = 0;
         float rotXAir = 0;
         for (int i = 0; i < TAIL_SEGMENTS; ) {
@@ -389,14 +389,7 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
             float amp = 0.1F + i * 0.5F / TAIL_SEGMENTS;
 
             rotYStand = (rotYStand + MathHelper.sin(i * 0.45F + base * 0.5F)) * amp * 0.4F;
-            float rotX = ((i - TAIL_SEGMENTS * 0.6F) * -amp * 0.4F + (magicSinFactor * amp - 0.1F) * sitFactor); // sit = 0.8 * stand
-            // interpolate between sitting and standing
-            float rotY = MathX.lerp(
-                    rotYStand,
-                    MathHelper.sin(vertMulti * MathX.PI_F) * MathX.PI_F * 1.2F - 0.5F, // curl to the left
-                    sit
-            );
-            rotXAir -= MathHelper.sin(i * 0.45F + base) * flutterFactor;
+            rotXAir += MathHelper.sin(i * 0.45F + base) * flutterFactor;
 
             // body movement
             float limit = 80 * vertMulti;
@@ -404,22 +397,24 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
             float pitchOfs = pitchTrail.getClamped(partialTicks, 0, i + 1, limit) * 2;
 
             // interpolate between flying and grounded
-            rotX = segment.rotX = MathX.lerp(rotXAir, rotX * rotXFactor, ground)
-                    + MathX.toRadians(pitchOfs)
-                    - speedFactor * vertMulti;
-            rotY = segment.rotY = MathX.lerp(0, rotY, ground) + MathX.PI_F - MathX.toRadians(yawOfs);
+            float rotX = segment.rotX = MathX.lerp(rotXAir, (
+                    (i - TAIL_SEGMENTS * 0.6F) * amp * 0.4F + (magicSinFactor * amp - 0.1F) * sitFactor
+            ) * rotXFactor, ground) - MathX.DEGREES_TO_RADIANS * pitchOfs + speedFactor * vertMulti;
+            float rotY = segment.rotY = MathX.lerp(0.0F, MathX.lerp(// interpolate between sitting and standing
+                    rotYStand,
+                    MathHelper.sin(vertMulti * MathX.PI_F) * MathX.PI_F * 1.2F - 0.5F, // curl to the left
+                    sit
+            ), ground) + yawOfs * MathX.DEGREES_TO_RADIANS;
 
-            // update scale
-            float scale = segment.scaleX = segment.scaleY = segment.scaleZ = MathX.lerp(1.5F, 0.3F, vertMulti);
             // move next segment behind the current one
             if (++i == TAIL_SEGMENTS) return;
             float posX = segment.posX, posY = segment.posY, posZ = segment.posZ;
-            float tailSize = TAIL_SIZE * scale - 0.7F;
+            float tailSize = TAIL_SIZE * MathX.lerp(1.5F, 0.3F, vertMulti) - 0.7F;
             float cosFactor = MathHelper.cos(rotX) * tailSize;
             segment = this.tailSegments[i];
-            segment.posX = posX - MathHelper.sin(rotY) * cosFactor;
-            segment.posY = posY + MathHelper.sin(rotX) * tailSize;
-            segment.posZ = posZ - MathHelper.cos(rotY) * cosFactor;
+            segment.posX = posX + MathHelper.sin(rotY) * cosFactor;
+            segment.posY = posY - MathHelper.sin(rotX) * tailSize;
+            segment.posZ = posZ + MathHelper.cos(rotY) * cosFactor;
         }
     }
 

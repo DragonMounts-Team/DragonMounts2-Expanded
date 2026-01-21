@@ -1,78 +1,69 @@
 package net.dragonmounts.client.model.dragon;
 
-import net.dragonmounts.util.ITextureOffsetDefiner;
+import net.dragonmounts.util.IUVRegistry;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
 import static net.dragonmounts.client.model.dragon.BuiltinFactory.*;
-import static net.dragonmounts.entity.DragonModelContracts.NECK_SIZE;
-import static net.dragonmounts.entity.DragonModelContracts.TAIL_SIZE;
+import static net.dragonmounts.client.model.dragon.ComplexSegmentedPart.dualSegmented;
+import static net.dragonmounts.client.model.dragon.HeadPart.buildBasicHead;
+import static net.dragonmounts.entity.DragonModelContracts.*;
 
 public interface IModelFactory {
-    default void defineTextures(ModelBase model, ITextureOffsetDefiner definer) {
+    default void defineTextures(ModelBase model, IUVRegistry registry) {
         model.textureWidth = 256;
         model.textureHeight = 256;
-        definer.set("body.body", 0, 0);
-        definer.set("body.scale", 0, 32);
-        definer.set("saddle.cushion", 184, 98);
-        definer.set("saddle.front", 214, 120);
-        definer.set("saddle.back", 214, 120);
-        definer.set("saddle.tie", 220, 100);
-        definer.set("saddle.metal", 224, 132);
-        definer.set("chest.left", 192, 132);
-        definer.set("chest.right", 224, 132);
-        definer.set("head.nostril", 48, 0);
-        definer.set("head.mainhead", 0, 0);
-        definer.set("head.upperjaw", 56, 88);
-        definer.set("head.lowerjaw", 0, 88);
-        definer.set("head.horn", 28, 32);
-        definer.set("foreLeg.thigh", 112, 0);
-        definer.set("foreLeg.shank", 148, 0);
-        definer.set("foreLeg.foot", 210, 0);
-        definer.set("foreLeg.toe", 176, 0);
-        definer.set("hindLeg.thigh", 112, 29);
-        definer.set("hindLeg.shank", 152, 29);
-        definer.set("hindLeg.foot", 180, 29);
-        definer.set("hindLeg.toe", 215, 29);
-        definer.set("neck.box", 112, 88);
-        definer.set("neck.scale", 0, 0);
-        definer.set("tail.box", 152, 88);
-        definer.set("tail.scale", 0, 0);
-        definer.set("tail.horn", 0, 117);
-        definer.set("wingarm.bone", 0, 152);
-        definer.set("wingarm.skin", 116, 232);
-        definer.set("wingfinger.bone", 0, 172);
-        definer.set("wingfinger.shortskin", -32, 224);
-        definer.set("wingfinger.skin", -49, 176);
-        definer.set("wingforearm.bone", 0, 164);
+        registry.set("body.body", 0, 0);
+        registry.set("body.scale", 0, 32);
+        registry.set("saddle.cushion", 184, 98);
+        registry.set("saddle.front", 214, 120);
+        registry.set("saddle.back", 214, 120);
+        registry.set("saddle.tie", 220, 100);
+        registry.set("saddle.metal", 224, 132);
+        registry.set("chest.left", 192, 132);
+        registry.set("chest.right", 224, 132);
+        registry.set("head.nostril", 48, 0);
+        registry.set("head.mainhead", 0, 0);
+        registry.set("head.upperjaw", 56, 88);
+        registry.set("head.lowerjaw", 0, 88);
+        registry.set("head.horn", 28, 32);
+        registry.set("foreLeg.thigh", 112, 0);
+        registry.set("foreLeg.shank", 148, 0);
+        registry.set("foreLeg.foot", 210, 0);
+        registry.set("foreLeg.toe", 176, 0);
+        registry.set("hindLeg.thigh", 112, 29);
+        registry.set("hindLeg.shank", 152, 29);
+        registry.set("hindLeg.foot", 180, 29);
+        registry.set("hindLeg.toe", 215, 29);
+        registry.set("neck.box", 112, 88);
+        registry.set("neck.scale", 0, 0);
+        registry.set("tail.box", 152, 88);
+        registry.set("tail.scale", 0, 0);
+        registry.set("tail.horn", 0, 117);
+        registry.set("wingarm.bone", 0, 152);
+        registry.set("wingarm.skin", 116, 232);
+        registry.set("wingfinger.bone", 0, 172);
+        registry.set("wingfinger.shortskin", -32, 224);
+        registry.set("wingfinger.skin", -48, 176);
+        registry.set("wingforearm.bone", 0, 164);
     }
 
-    default HeadPart makeHead(ModelBase base) {
-        HeadPart head = new HeadPart(base, "head", new ModelRenderer(base, "head")
-                .addBox("lowerjaw", -6, 0, -16, 12, 4, 16)
-        );
-        head.addBox("upperjaw", -6, -1, -8 + HEAD_OFS, 12, 5, 16);
-        head.addBox("mainhead", -8, -8, 6 + HEAD_OFS, 16, 16, 16);
+    default HeadPart makeHead(ModelBase root) {
+        HeadPart head = buildBasicHead(root);
         head.addBox("nostril", -5, -3, -6 + HEAD_OFS, 2, 2, 4);
         head.mirror = true;
         head.addBox("nostril", 3, -3, -6 + HEAD_OFS, 2, 2, 4);
-        head.jaw.setRotationPoint(0, 4, 8 + HEAD_OFS);
-        head.addChild(makeHorn(base, head, false));
-        head.addChild(makeHorn(base, head, true));
         return head;
     }
 
-    default NeckPart makeNeck(ModelBase base) {
-        NeckPart neck = new NeckPart(
-                new ScalablePart(base, "neck"),
-                new ScalablePart(base, "neck"),
-                // hide the first and every second scale
-                index -> (index & 1) == 0 && index != 0
-        );
-        neck.normal.addBox("box", -5, -5, -5, NECK_SIZE, NECK_SIZE, NECK_SIZE);
-        neck.scaled.addBox("box", -5, -5, -5, NECK_SIZE, NECK_SIZE, NECK_SIZE)
+    default ISegmentedPart makeNeck(ModelBase base) {
+        ScalablePart normal = new ScalablePart(base, "neck");
+        ScalablePart scaled = new ScalablePart(base, "neck");
+        scaled.addBox("box", -5, -5, -5, NECK_SIZE, NECK_SIZE, NECK_SIZE)
                 .addBox("scale", -1, -7, -3, 2, 4, 6);
-        return neck;
+        normal.addBox("box", -5, -5, -5, NECK_SIZE, NECK_SIZE, NECK_SIZE);
+        // hide the first and every second scale
+        return dualSegmented(normal, scaled, NECK_SEGMENTS, BuiltinFactory::makeNormalNeckSnapshot, index -> (index & 1) == 0 && index != 0);
     }
 
     default BodyPart makeBody(ModelBase base) {
@@ -104,8 +95,8 @@ public interface IModelFactory {
         return wing;
     }
 
-    default TailPart makeTail(ModelBase base) {
-        SimpleTailPart tail = new SimpleTailPart(base, "tail");
+    default ISegmentedPart makeTail(ModelBase base) {
+        SimpleSegmentedPart tail = new SimpleSegmentedPart(base, "tail", TAIL_SEGMENTS, BuiltinFactory::makeNormalTailSnapshot);
         tail.addBox("box", -5, -5, -5, TAIL_SIZE, TAIL_SIZE, TAIL_SIZE)
                 .addBox("scale", -1, -8, -3, 2, 4, 6);
         return tail;

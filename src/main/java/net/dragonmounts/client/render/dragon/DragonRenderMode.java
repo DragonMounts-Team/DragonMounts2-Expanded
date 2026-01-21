@@ -11,22 +11,20 @@ public enum DragonRenderMode {
             GlStateManager.scale(0.92F, 0.92F, 0.92F);
             model.head.render(scale);
             GlStateManager.popMatrix();
-            model.neck.render(scale);
+            model.neck.renderSegments(scale);
             model.body.render(scale);
+            model.tail.renderSegments(scale);
             model.renderLegs(scale);
-            model.tail.render(scale);
             model.renderWings(scale);
         }
     },
     CHEST {
         @Override
         public void render(DragonModel model, float scale) {
-            GlStateManager.pushMatrix();
             model.body.postRender(scale);
             model.chest.showModel = true;
             model.chest.render(scale);
             model.chest.showModel = false;
-            GlStateManager.popMatrix();
         }
     },
     SADDLE {

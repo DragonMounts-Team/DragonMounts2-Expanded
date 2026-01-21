@@ -32,13 +32,13 @@ public abstract class MathX {
      * Constant by which to multiply an angular value in degrees to obtain an
      * angular value in radians.
      */
-    private static final float DEGREES_TO_RADIANS = PI_F / 180.0F;
+    public static final float DEGREES_TO_RADIANS = PI_F / 180.0F;
 
     /**
      * Constant by which to multiply an angular value in radians to obtain an
      * angular value in degrees.
      */
-    private static final float RADIANS_TO_DEGREES = 180.F / PI_F;
+    public static final float RADIANS_TO_DEGREES = 180.F / PI_F;
 
     /// convert degrees to radians
     public static float toRadians(float angdeg) {

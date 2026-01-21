@@ -39,6 +39,16 @@ public class DragonCoreBlock extends BlockContainer {
     }
 
     @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, FACING);
+    }
+
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new DragonCoreBlockEntity();
+    }
+
+    @Override
     public void breakBlock(World level, BlockPos pos, IBlockState state) {
         TileEntity tileentity = level.getTileEntity(pos);
         if (tileentity instanceof DragonCoreBlockEntity) {
@@ -58,19 +68,14 @@ public class DragonCoreBlock extends BlockContainer {
         }
     }
 
-    @Override
-    public TileEntity createTileEntity(World worldIn, IBlockState state) {
-        return new DragonCoreBlockEntity();
-    }
-
     /**
      * Called when the block is right clicked by a player.
      */
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (worldIn.isRemote) return true;
-        else if (playerIn.isSpectator()) return true;
-        else if (worldIn.getTileEntity(pos) instanceof DragonCoreBlockEntity) {
-            playerIn.openGui(DragonMounts.getInstance(), GuiHandler.GUI_DRAGON_CORE, worldIn, pos.getX(), pos.getY(), pos.getZ());
+    @Override
+    public boolean onBlockActivated(World level, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (level.isRemote || player.isSpectator()) return true;
+        if (level.getTileEntity(pos) instanceof DragonCoreBlockEntity) {
+            player.openGui(DragonMounts.getInstance(), GuiHandler.GUI_DRAGON_CORE, level, pos.getX(), pos.getY(), pos.getZ());
             return true;
         }
         return false;
@@ -80,17 +85,14 @@ public class DragonCoreBlock extends BlockContainer {
      * Called by ItemBlocks just before a block is actually set in the world, to allow for adjustments to the
      * IBlockstate
      */
+    @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         return this.getDefaultState().withProperty(FACING, facing);
     }
-
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING);
-    }
-
     /**
      * Convert the BlockState into the correct metadata value
      */
+    @Override
     public int getMetaFromState(IBlockState state) {
         return state.getValue(FACING).getIndex();
     }
@@ -98,15 +100,16 @@ public class DragonCoreBlock extends BlockContainer {
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @Override
     public IBlockState getStateFromMeta(int meta) {
-        EnumFacing enumfacing = EnumFacing.byIndex(meta);
-        return this.getDefaultState().withProperty(FACING, enumfacing);
+        return this.getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
     }
 
     /**
      * Creates the particles that play around the block
      */
     @SideOnly(Side.CLIENT)
+    @Override
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         for (int i = 0; i < 3; ++i) {
             int j = rand.nextInt(2) * 2 - 1;
@@ -124,12 +127,12 @@ public class DragonCoreBlock extends BlockContainer {
     }
 
     @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
     }
 
     @Override
-    public boolean isFullBlock(IBlockState state) {
+    public boolean causesSuffocation(IBlockState state) {
         return false;
     }
 
@@ -138,18 +141,14 @@ public class DragonCoreBlock extends BlockContainer {
         return false;
     }
 
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new DragonCoreBlockEntity();
-    }
-
+    @SideOnly(Side.CLIENT)
     @Override
     public boolean hasCustomBreakingProgress(IBlockState state) {
         return true;
+    }
+
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 }

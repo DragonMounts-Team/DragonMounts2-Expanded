@@ -23,9 +23,8 @@ public class DragonMountsPlugin implements IFMLLoadingPlugin {
         return null;
     }
 
-    @Nullable
     @Override
-    public String getSetupClass() {
+    public @Nullable String getSetupClass() {
         return null;
     }
 

@@ -22,9 +22,7 @@ public class PartSnapshot<T extends ModelRenderer> {
         part.rotateAngleZ = rotateAngleZ;
     }
 
-    /**
-     * @return neo if valid (not NaN), old otherwise
-     */
+    /// @return neo if valid (not NaN), old otherwise
     public static float takeIfValid(float neo, float old) {
         return Float.isNaN(neo) ? old : neo;
     }
