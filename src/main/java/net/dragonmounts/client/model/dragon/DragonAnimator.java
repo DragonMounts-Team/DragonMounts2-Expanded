@@ -32,10 +32,10 @@ import static net.dragonmounts.entity.DragonModelContracts.*;
 public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
     public static final int JAW_OPENING_TIME_FOR_ATTACK = 5;
     public static final int JAW_OPENING_TIME_FOR_ROAR = 20;
-    public final Segment[] tailSegments = DMUtils.fillArray(new Segment[TAIL_SEGMENTS], Segment::new);
     // interpolate between folded and unfolded wing angles
     private static final float[] FOLDED_FINGER_ROT = new float[]{2.7F, 2.8F, 2.9F, 3.0F};
     private static final float[] UNFOLDED_FINGER_ROT = new float[]{0.1F, 0.9F, 1.7F, 2.5F};
+    public final Segment[] tailSegments = DMUtils.fillArray(new Segment[TAIL_SEGMENTS], Segment::new);
     // entity parameters
     private float moveTime;
     private double prevRenderYawOffset;

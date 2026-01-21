@@ -22,11 +22,11 @@ public class AetherType extends DragonType {
     @Override
     public void tickClient(ClientDragonEntity dragon) {
         World level = dragon.world;
-        if (dragon.posY > level.getHeight() * 1.2 && level.isDaytime() && dragon.getLifeStage().isOldEnough(DragonLifeStage.FLEDGLING)) {
+        if (dragon.posY > level.getWorldType().getCloudHeight() && dragon.getLifeStage().isOldEnough(DragonLifeStage.FLEDGLING)) {
             Random random = level.rand;
-            float s = dragon.getAdjustedSize() * 1.2f;
-            float h = dragon.height * s;
-            float f = (dragon.width - 0.65F) * s;
+            float s = dragon.getAdjustedSize() * 1.2F;
+            float h = dragon.height * 1.2F;
+            float f = dragon.width * 1.2F + 0.75F;
             for (int i = 0; i < s; ++i) {
                 double x = dragon.posX + (random.nextDouble() - 0.5) * f;
                 double y = dragon.posY + (random.nextDouble() - 0.5) * h;

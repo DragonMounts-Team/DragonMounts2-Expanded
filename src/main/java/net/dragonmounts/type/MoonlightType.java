@@ -16,6 +16,8 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
+import static net.dragonmounts.util.LevelUtil.isDaytime;
+
 public class MoonlightType extends DragonType {
     public MoonlightType(ResourceLocation identifier, DragonTypeBuilder builder) {
         super(identifier, builder);
@@ -24,14 +26,14 @@ public class MoonlightType extends DragonType {
     @Override
     public void tickClient(ClientDragonEntity dragon) {
         World level = dragon.world;
-        if (dragon.posY > level.getHeight() && !level.isDaytime() && dragon.getLifeStage().isOldEnough(DragonLifeStage.FLEDGLING)) {
+        if (dragon.posY > level.getHeight() && !isDaytime(level) && dragon.getLifeStage().isOldEnough(DragonLifeStage.FLEDGLING)) {
             Random random = level.rand;
-            float s = dragon.getAdjustedSize() * 1.2F;
-            float f = (dragon.width - 0.65F) * s;
+            if (random.nextDouble() > dragon.getAdjustedSize()) return;
+            float f = dragon.width * 1.2F + 0.75F;
             level.spawnParticle(
                     EnumParticleTypes.FIREWORKS_SPARK,
                     dragon.posX + (random.nextDouble() - 0.5) * f,
-                    dragon.posY + (random.nextDouble() - 0.5) * dragon.height * s,
+                    dragon.posY + (random.nextDouble() + 0.25) * dragon.height * 0.5F,
                     dragon.posZ + (random.nextDouble() - 0.5) * f,
                     0,
                     0,

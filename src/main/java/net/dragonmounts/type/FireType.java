@@ -19,19 +19,19 @@ public class FireType extends DragonType {
 
     @Override
     public void tickClient(ClientDragonEntity dragon) {
-        if (dragon.getLifeStage().isOldEnough(DragonLifeStage.FLEDGLING)) {
+        if ((dragon.ticksExisted & 1) == 0 && dragon.getLifeStage().isOldEnough(DragonLifeStage.FLEDGLING)) {
             World level = dragon.world;
             AxisAlignedBB box = dragon.getEntityBoundingBox().grow(-0.1, -0.4, -0.1);
             if (!level.isMaterialInBB(box, Material.LAVA) && !level.isMaterialInBB(box, Material.FIRE)) return;
             Random random = level.rand;
-            float s = dragon.getAdjustedSize() * 1.2f;
-            float h = dragon.height * s;
-            float f = (dragon.width - 0.65F) * s;
+            float s = dragon.getAdjustedSize() * 1.2F;
+            float h = dragon.height * 0.5F;
+            float f = dragon.width * 1.2F + 0.75F;
             for (int i = -2; i < s; ++i) {
                 level.spawnParticle(
                         EnumParticleTypes.FLAME,
                         dragon.posX + (random.nextDouble() - 0.5) * f,
-                        dragon.posY - 1 + (random.nextDouble() - 0.5) * h,
+                        dragon.posY + (random.nextDouble() + 0.25) * h,
                         dragon.posZ + (random.nextDouble() - 0.5) * f,
                         0,
                         0,

@@ -219,10 +219,10 @@ public class ClientDragonEntity extends TameableDragonEntity {
 
     public void spawnBodyParticle(EnumParticleTypes type) {
         double ox, oy, oz;
-        float s = this.getAdjustedSize() * 1.2f;
 
         switch (type) {
             case EXPLOSION_NORMAL:
+                float s = this.getAdjustedSize() * 1.2f;
                 ox = rand.nextGaussian() * s;
                 oy = rand.nextGaussian() * s;
                 oz = rand.nextGaussian() * s;
@@ -247,9 +247,9 @@ public class ClientDragonEntity extends TameableDragonEntity {
         }
 
         // use generic random box spawning
-        double x = this.posX + (rand.nextDouble() - 0.5) * this.width * s;
-        double y = this.posY + (rand.nextDouble() - 0.5) * this.height * s;
-        double z = this.posZ + (rand.nextDouble() - 0.5) * this.width * s;
+        double x = this.posX + (rand.nextDouble() - 0.5) * this.width * 1.2F;
+        double y = this.posY + (rand.nextDouble() - 0.5) * this.height * 1.2F;
+        double z = this.posZ + (rand.nextDouble() - 0.5) * this.width * 1.2F;
 
         this.world.spawnParticle(type, x, y, z, ox, oy, oz);
     }

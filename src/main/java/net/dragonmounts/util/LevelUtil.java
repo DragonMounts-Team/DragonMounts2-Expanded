@@ -14,6 +14,11 @@ public class LevelUtil {
         return state.getBlock().isAir(state, world, pos);
     }
 
+    /// work around on client side
+    public static boolean isDaytime(World world) {
+        return world.calculateSkylightSubtracted(1.0F) < 4;
+    }
+
     public static MutableBlockPosEx getSurface(World level, int x, int z) {
         return new MutableBlockPosEx(x, level.getHeight(x, z), z);
     }

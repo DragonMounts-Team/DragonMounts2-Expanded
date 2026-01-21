@@ -19,16 +19,19 @@ public class TerraType extends DragonType {
     @Override
     public void tickClient(ClientDragonEntity dragon) {
         World level = dragon.world;
-        if (dragon.posY > level.getHeight() + 8 && dragon.getLifeStage().isOldEnough(DragonLifeStage.FLEDGLING) && BiomeDictionary.hasType(level.getBiome(dragon.getPosition()), BiomeDictionary.Type.MESA)) {
+        if (dragon.posY > level.getHeight()
+                && dragon.getLifeStage().isOldEnough(DragonLifeStage.FLEDGLING)
+                && BiomeDictionary.hasType(level.getBiome(dragon.getPosition()), BiomeDictionary.Type.MESA)
+        ) {
             Random random = level.rand;
-            float s = dragon.getAdjustedSize() * 1.2f;
-            float h = dragon.height * s;
-            float f = (dragon.width - 0.65F) * s;
+            float s = dragon.getAdjustedSize() * 1.2F;
+            float h = dragon.height * 0.5F;
+            float f = dragon.width * 1.2F + 0.75F;
             for (int i = 0; i < s; ++i) {
                 level.spawnParticle(
                         EnumParticleTypes.FALLING_DUST,
                         dragon.posX + (random.nextDouble() - 0.5) * f,
-                        dragon.posY + (random.nextDouble() - 0.5) * h,
+                        dragon.posY + (random.nextDouble() + 0.25) * h,
                         dragon.posZ + (random.nextDouble() - 0.5) * f,
                         0,
                         0,

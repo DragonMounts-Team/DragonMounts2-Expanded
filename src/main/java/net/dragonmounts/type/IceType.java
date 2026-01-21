@@ -29,18 +29,17 @@ public class IceType extends DragonType {
     @Override
     public void tickClient(ClientDragonEntity dragon) {
         World level = dragon.world;
-        if (!dragon.isDead &&
-                dragon.posY > level.getWorldType().getCloudHeight() &&
-                dragon.getLifeStage().isOldEnough(DragonLifeStage.FLEDGLING) &&
-                BiomeDictionary.hasType(level.getBiome(dragon.getPosition()), BiomeDictionary.Type.SNOWY)
+        if ((dragon.ticksExisted & 1) == 0 && dragon.posY > level.getWorldType().getCloudHeight()
+                && dragon.getLifeStage().isOldEnough(DragonLifeStage.FLEDGLING)
+                && BiomeDictionary.hasType(level.getBiome(dragon.getPosition()), BiomeDictionary.Type.SNOWY)
         ) {
             Random random = level.rand;
-            float s = dragon.getAdjustedSize() * 1.2f;
-            float f = (dragon.width - 0.65F) * s;
+            if (random.nextDouble() > dragon.getAdjustedSize()) return;
+            float f = dragon.width * 1.2F + 0.75F;
             level.spawnParticle(
                     EnumParticleTypes.FIREWORKS_SPARK,
                     dragon.posX + (random.nextDouble() - 0.5) * f,
-                    dragon.posY + (random.nextDouble() - 0.5) * dragon.height * s,
+                    dragon.posY + (random.nextDouble() + 0.25) * dragon.height * 0.5F,
                     dragon.posZ + (random.nextDouble() - 0.5) * f,
                     0,
                     0,

@@ -11,7 +11,6 @@ import net.dragonmounts.registry.DragonTypeBuilder;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
 
 import java.util.Random;
 
@@ -22,26 +21,27 @@ public class NetherType extends DragonType {
 
     @Override
     public void tickClient(ClientDragonEntity dragon) {
-        if (dragon.isDead || !dragon.getLifeStage().isOldEnough(DragonLifeStage.FLEDGLING)) return;
-        World level = dragon.world;
-        Random random = level.rand;
-        float s = dragon.getAdjustedSize();
-        float h = dragon.height * s;
-        float f = (dragon.width - 0.65F) * s;
-        level.spawnParticle(
-                EnumParticleTypes.DRIP_LAVA,
-                dragon.posX + (random.nextDouble() - 0.5) * f,
-                dragon.posY + (random.nextDouble() - 0.5) * h,
-                dragon.posZ + (random.nextDouble() - 0.5) * f,
-                0,
-                0,
-                0
-        );
-        if (dragon.isWet()) {
-            level.spawnParticle(
+        if (!dragon.getLifeStage().isOldEnough(DragonLifeStage.FLEDGLING)) return;
+        Random random = dragon.getRNG();
+        if (random.nextDouble() > dragon.getAdjustedSize()) return;
+        int flag = dragon.ticksExisted & 0b11;
+        if (flag == 0b01) {
+            float f = dragon.width * 1.2F + 0.25F;
+            dragon.world.spawnParticle(
+                    EnumParticleTypes.DRIP_LAVA,
+                    dragon.posX + (random.nextDouble() - 0.5) * f,
+                    dragon.posY + (random.nextDouble() + 0.25) * dragon.height * 0.5F,
+                    dragon.posZ + (random.nextDouble() - 0.5) * f,
+                    0,
+                    0,
+                    0
+            );
+        } else if (flag == 0b10 && dragon.isWet()) {
+            float f = dragon.width * 1.2F + 0.25F;
+            dragon.world.spawnParticle(
                     EnumParticleTypes.SMOKE_NORMAL,
                     dragon.posX + (random.nextDouble() - 0.5) * f,
-                    dragon.posY + (random.nextDouble() - 0.5) * h,
+                    dragon.posY + (random.nextDouble() + 0.25) * dragon.height * 0.5F,
                     dragon.posZ + (random.nextDouble() - 0.5) * f,
                     0,
                     0,

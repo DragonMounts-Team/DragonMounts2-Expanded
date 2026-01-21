@@ -34,17 +34,19 @@ public class WaterType extends DragonType {
 
     @Override
     public void tickClient(ClientDragonEntity dragon) {
-        if (dragon.getLifeStage().isOldEnough(DragonLifeStage.FLEDGLING)) {
+        if ((dragon.ticksExisted & 0b11) == 0 && dragon.getLifeStage().isOldEnough(DragonLifeStage.FLEDGLING)) {
+            float size = dragon.getAdjustedSize();
             World level = dragon.world;
             Random random = level.rand;
-            float s = dragon.getAdjustedSize() * 1.2f;
-            float h = dragon.height * s;
-            float f = (dragon.width - 0.65F) * s;
-            for (int i = -2; i < s; ++i) {
+            if (random.nextDouble() > size * 0.5F) return;
+            size *= 2.0F;
+            float h = dragon.height * 0.5F;
+            float f = dragon.width * 1.2F + 0.75F;
+            for (int i = -1; i < size; ++i) {
                 level.spawnParticle(
                         EnumParticleTypes.DRIP_WATER,
                         dragon.posX + (random.nextDouble() - 0.5) * f,
-                        dragon.posY - 1 + (random.nextDouble() - 0.5) * h,
+                        dragon.posY + (random.nextDouble() + 0.25) * h,
                         dragon.posZ + (random.nextDouble() - 0.5) * f,
                         0,
                         0,

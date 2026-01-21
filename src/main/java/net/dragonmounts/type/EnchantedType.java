@@ -17,15 +17,15 @@ public class EnchantedType extends DragonType {
 
     @Override
     public void tickClient(ClientDragonEntity dragon) {
-        if (dragon.getLifeStage().isOldEnough(DragonLifeStage.FLEDGLING)) {
+        if ((dragon.ticksExisted & 0b11) == 0 && dragon.getLifeStage().isOldEnough(DragonLifeStage.FLEDGLING)) {
             World level = dragon.world;
             Random random = level.rand;
-            float s = dragon.getAdjustedSize() * 1.2f;
-            float h = dragon.height * s;
-            float f = (dragon.width - 0.65F) * s;
-            for (int i = -25; i < s; ++i) {
+            float s = dragon.getAdjustedSize() * 4.0F;
+            float h = dragon.height * 1.2F;
+            float f = dragon.width * 1.2F + 0.75F;
+            for (int i = -2; i < s; ++i) {
                 double x = dragon.posX + (random.nextDouble() - 0.5) * f;
-                double y = dragon.posY + (random.nextDouble() - 0.5) * h;
+                double y = dragon.posY + random.nextDouble() * h;
                 double z = dragon.posZ + (random.nextDouble() - 0.5) * f;
                 level.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, x, y, z, 0, 0, 0);
             }
