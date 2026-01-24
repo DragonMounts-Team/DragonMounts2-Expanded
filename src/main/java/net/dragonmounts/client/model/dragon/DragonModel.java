@@ -88,7 +88,9 @@ public class DragonModel extends ModelBase {
     public void render(DragonRenderMode mode, Entity dragon, float moveTime, float moveSpeed, float ticksExisted, float lookYaw, float lookPitch, float scale) {
         GlStateManager.pushMatrix();
         GlStateManager.translate(offsetX, offsetY, offsetZ);
-        GlStateManager.rotate(-pitch, 1, 0, 0);
+        if (this.pitch != 0.0F) {
+            GlStateManager.rotate(-this.pitch, 1, 0, 0);
+        }
         mode.render(this, scale);
         GlStateManager.popMatrix();
     }
@@ -98,12 +100,19 @@ public class DragonModel extends ModelBase {
         GlStateManager.pushMatrix();
         GlStateManager.enableCull();
         GlStateManager.cullFace(GlStateManager.CullFace.FRONT);
-        this.wing.render(scale);
+        WingPart wing = this.wing;
+        if (this.pitch != 0.0F) {
+            float pivotY = wing.rotationPointY * scale, pivotZ = wing.rotationPointZ * scale;
+            GlStateManager.translate(0, pivotY, pivotZ);
+            GlStateManager.rotate(this.pitch, 1, 0, 0);
+            GlStateManager.translate(0, -pivotY, -pivotZ);
+        }
+        wing.render(scale);
         // mirror following wing
         GlStateManager.scale(-1, 1, 1);
         // switch to back face culling
         GlStateManager.cullFace(GlStateManager.CullFace.BACK);
-        this.wing.render(scale);
+        wing.render(scale);
         GlStateManager.disableCull();
         GlStateManager.popMatrix();
     }
