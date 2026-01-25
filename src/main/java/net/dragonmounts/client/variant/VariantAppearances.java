@@ -25,6 +25,8 @@ public class VariantAppearances {
         registerArmorTexture(category, BUILTIN_MATERIAL_EMERALD, new ResourceLocation(namespace, folder + "/emerald.png"));
         registerArmorTexture(category, BUILTIN_MATERIAL_DIAMOND, new ResourceLocation(namespace, folder + "/diamond.png"));
     }
+
+    private static final @Deprecated ResourceLocation COMPAT_DISSOLVE = makeId(TEXTURES_ROOT + "compat_dissolve.png");
     public static final VariantAppearance AETHER_FEMALE;
     public static final VariantAppearance AETHER_MALE;
     public static final VariantAppearance BREEZE;
@@ -88,7 +90,8 @@ public class VariantAppearances {
     }
 
     static {
-        Builder builder = new Builder(BuiltinFactory.NORMAL);
+        Builder builder = new Builder(BuiltinFactory.NORMAL)
+                .withDecal(makeId(TEXTURES_ROOT + "enchanted/dissolve.png"));
         ENCHANTED_FEMALE = builder.build(MOD_ID, "enchanted/female");
         ENCHANTED_MALE = builder.build(MOD_ID, "enchanted/male");
         ENCHANTING_TABLE = builder.build(MOD_ID, "enchanted/enchanting_table");
@@ -96,6 +99,7 @@ public class VariantAppearances {
 
     static {
         Builder builder = new Builder(BuiltinFactory.COMPAT)
+                .withDecal(COMPAT_DISSOLVE)
                 .withBreath(BuiltinBreathTextures.ENDER_BREATH, EnderBreathParticle.FACTORY);
         ENDER_FEMALE = builder.build(MOD_ID, "ender/female");
         ENDER_MALE = builder.build(MOD_ID, "ender/male");
@@ -103,7 +107,8 @@ public class VariantAppearances {
     }
 
     static {
-        Builder builder = new Builder(BuiltinFactory.NORMAL);
+        Builder builder = new Builder(BuiltinFactory.NORMAL)
+                .withDecal(makeId(TEXTURES_ROOT + "fire/dissolve.png"));
         FIRE_FEMALE = builder.build(MOD_ID, "fire/female");
         FIRE_MALE = builder.build(MOD_ID, "fire/male");
         BLUE_FIRE = builder.withBreath(BuiltinBreathTextures.BLUE_FLAME_BREATH)
@@ -111,7 +116,7 @@ public class VariantAppearances {
     }
 
     static {
-        Builder builder = new Builder(BuiltinFactory.COMPAT);
+        Builder builder = new Builder(BuiltinFactory.COMPAT).withDecal(COMPAT_DISSOLVE);
         ResourceLocation glow = makeId(TEXTURES_ROOT + "forest/glow.png");
         FOREST_FEMALE = builder.build(makeId(TEXTURES_ROOT + "forest/forest/female_body.png"), glow);
         FOREST_MALE = builder.build(makeId(TEXTURES_ROOT + "forest/forest/male_body.png"), glow);
@@ -159,7 +164,8 @@ public class VariantAppearances {
     }
 
     static {
-        Builder builder = new Builder(BuiltinFactory.NORMAL);
+        Builder builder = new Builder(BuiltinFactory.NORMAL)
+                .withDecal(makeId(TEXTURES_ROOT + "terra/dissolve.png"));
         TERRA_FEMALE = builder.build(MOD_ID, "terra/female");
         TERRA_MALE = builder.build(MOD_ID, "terra/male");
         CRYSTAL = builder.build(MOD_ID, "terra/crystal");
@@ -167,15 +173,16 @@ public class VariantAppearances {
 
     static {
         Builder builder = new Builder(BuiltinFactory.SCALE_SHARPENED)
+                .withDecal(makeId(TEXTURES_ROOT + "water/dissolve.png"))
                 .withBreath(BuiltinBreathTextures.WATER_BREATH, WaterBreathParticle.FACTORY);
         WATER_FEMALE = builder.build(MOD_ID, "water/female");
         WATER_MALE = builder.build(MOD_ID, "water/male");
         BRINE = builder.build(MOD_ID, "water/brine");
     }
 
-
     static {
         Builder builder = new Builder(BuiltinFactory.SKELETON)
+                .withDecal(makeId(TEXTURES_ROOT + "skeleton/dissolve.png"))
                 .setArmorCategory("skeleton");
         SKELETON = builder.build(MOD_ID, "skeleton/normal");
         STRAY = builder.build(MOD_ID, "skeleton/stray");
