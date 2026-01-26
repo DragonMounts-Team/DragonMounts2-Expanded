@@ -11,7 +11,6 @@ package net.dragonmounts.client.gui;
 
 import com.google.common.collect.ArrayListMultimap;
 import it.unimi.dsi.fastutil.objects.Reference2IntMap;
-import net.dragonmounts.DragonMounts;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.config.DMConfig;
@@ -35,6 +34,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
@@ -55,10 +56,16 @@ public class DebugOverlay {
     private static final int RED = 0xFF8888;
     private static final DecimalFormat dfShort = new DecimalFormat("0.00");
     private static final DecimalFormat dfLong = new DecimalFormat("0.0000");
+    private static final String MOD_INFO;
     private static GuiTextPrinter text;
     private static TameableDragonEntity clientCache;
     private static ServerDragonEntity serverCache;
-    
+
+    static {
+        ModContainer self = Loader.instance().getIndexedModList().get(DragonMountsTags.MOD_ID);
+        MOD_INFO = DragonMountsTags.MOD_NAME + " " + (self == null ? "[CORRUPTED]" : self.getMetadata().version);
+    }
+
     @SubscribeEvent
     public static void onRenderOverlay(RenderGameOverlayEvent.Post event) {
         if (!DMConfig.ENABLE_DEBUG_OVERLAY.value || event.getType() != ElementType.TEXT) return;
@@ -136,7 +143,7 @@ public class DebugOverlay {
     private static void renderTitle() {
         text.setOrigin(8, 8);
         text.setColor(GREY);
-        text.print(DragonMountsTags.MOD_NAME + " " + DragonMounts.getMetadata().version);
+        text.print(MOD_INFO);
         text.setColor(WHITE);
     }
 

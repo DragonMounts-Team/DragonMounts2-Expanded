@@ -10,17 +10,14 @@
 package net.dragonmounts.client.model.dragon;
 
 import net.dragonmounts.client.ClientDragonEntity;
-import net.dragonmounts.entity.breath.BreathState;
 import net.dragonmounts.entity.helper.DragonHeadLocator;
 import net.dragonmounts.util.CircularBuffer;
 import net.dragonmounts.util.DMUtils;
-import net.dragonmounts.util.LogUtil;
 import net.dragonmounts.util.Segment;
+import net.dragonmounts.util.math.InterpolatedFloat;
 import net.dragonmounts.util.math.Interpolation;
-import net.dragonmounts.util.math.LinearInterpolation;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.util.math.MathHelper;
-import org.apache.logging.log4j.Level;
 
 import static net.dragonmounts.entity.DragonModelContracts.*;
 
@@ -51,15 +48,15 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
     public int ticksSinceLastRoar = JAW_OPENING_TIME_FOR_ROAR;
 
     // timing interp vars
-    private final LinearInterpolation animTimer = new LinearInterpolation(0.0F);
-    private final LinearInterpolation.Clamped groundTimer = new LinearInterpolation.Clamped(1.0F, 0.0F, 1.0F);
-    private final LinearInterpolation.Clamped FlutterTimer = new LinearInterpolation.Clamped(0.0F, 0.0F, 1.0F);
-    private final LinearInterpolation.Clamped walkTimer = new LinearInterpolation.Clamped(0.0F, 0.0F, 1.0F);
-    private final LinearInterpolation.Clamped sitTimer = new LinearInterpolation.Clamped(0.0F, 0.0F, 1.0F);
-    private final LinearInterpolation.Clamped biteTimer = new LinearInterpolation.Clamped(0.0F, 0.0F, 1.0F);
-    private final LinearInterpolation.Clamped breathTimer = new LinearInterpolation.Clamped(0.0F, 0.0F, 1.0F);
-    private final LinearInterpolation.Clamped speedTimer = new LinearInterpolation.Clamped(1.0F, 0.0F, 1.0F);
-    private final LinearInterpolation.Clamped roarTimer = new LinearInterpolation.Clamped(0.0F, 0.0F, 1.0F);
+    private float lastAnim;
+    private final InterpolatedFloat groundTimer = new InterpolatedFloat(1.0F);
+    private final InterpolatedFloat flutterTimer = new InterpolatedFloat(0.0F);
+    private final InterpolatedFloat walkTimer = new InterpolatedFloat(0.0F);
+    private final InterpolatedFloat sitTimer = new InterpolatedFloat(0.0F);
+    private final InterpolatedFloat biteTimer = new InterpolatedFloat(0.0F);
+    private final InterpolatedFloat breathTimer = new InterpolatedFloat(0.0F);
+    private final InterpolatedFloat speedTimer = new InterpolatedFloat(1.0F);
+    private final InterpolatedFloat roarTimer = new InterpolatedFloat(0.0F);
 
     // trails
     public final CircularBuffer yawTrail = new CircularBuffer(16);
@@ -74,6 +71,7 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
     private final float[] wingForearmGlide = new float[3];
     private final float[] wingArmGround = new float[3];
     private final float[] wingForearmGround = new float[3];
+    private final float[] legRotCache = new float[4];
 
     // X rotation angles for ground
     // 1st dim - front, hind
@@ -121,8 +119,6 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
     public DragonAnimator(ClientDragonEntity dragon) {
         super(dragon);
         wingFingerRotateY = new float[WING_FINGERS];
-        yawTrail.fill(0.0F);
-        pitchTrail.fill(0.0F);
     }
 
     public void setMovement(float moveTime) {
@@ -135,9 +131,8 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
      */
     public void animate(DragonModel model) {
         float partialTicks = model.partialTicks;
-        anim = animTimer.get(partialTicks);
         ground = groundTimer.get(partialTicks);
-        flutter = FlutterTimer.get(partialTicks);
+        flutter = flutterTimer.get(partialTicks);
         walk = walkTimer.get(partialTicks);
         sit = sitTimer.get(partialTicks);
         bite = biteTimer.get(partialTicks);
@@ -145,7 +140,7 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
         speed = speedTimer.get(partialTicks);
         roar = roarTimer.get(partialTicks);
 
-        animBase = anim * MathX.PI_F * 2;
+        animBase = MathX.lerp(this.lastAnim, this.anim, partialTicks) * MathX.PI_F * 2;
         float baseOffset = MathHelper.sin(animBase - 1) + 1;
         cycleOfs = (baseOffset * baseOffset + baseOffset * 2) * 0.05F
                 // reduce up/down amplitude
@@ -177,11 +172,11 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
     @Override
     public void update() {
         ClientDragonEntity dragon = this.dragon;
+        this.lastAnim = this.anim;
         // don't move anything during death sequence
-        if (dragon.getHealth() <= 0) {
-            animTimer.sync();
+        if (dragon.getHealth() <= 0.0F) {
             groundTimer.sync();
-            FlutterTimer.sync();
+            flutterTimer.sync();
             biteTimer.sync();
             walkTimer.sync();
             sitTimer.sync();
@@ -194,10 +189,9 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
         float speedEnt = (float) (dragon.motionX * dragon.motionX + dragon.motionZ * dragon.motionZ);
 
         // update main animation timer and depend timing speed on movement
-        animTimer.add(flying
+        this.anim += flying
                 ? 0.070F - MathX.clamp(speedEnt / speedMax) * 0.035F // (2 - speedMulti) * 0.035F
-                : 0.035F
-        );
+                : 0.035F;
 
         // update ground transition
         float ground = groundTimer.get();
@@ -207,7 +201,7 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
         );
 
         // update Flutter transition
-        FlutterTimer.add(flying && (speedEnt < speedMax || dragon.motionY > -0.1) ? 0.1f : -0.1f);
+        flutterTimer.add(flying && (speedEnt < speedMax || dragon.motionY > -0.1) ? 0.1f : -0.1f);
 
         // update walking and sitting transition
         if (dragon.isSitting()) {
@@ -219,14 +213,7 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
         }
 
         // update bite opening transition and breath transitions
-        BreathState breathState = dragon.breathHelper.getCurrentBreathState();
-        switch (breathState) {
-            case IDLE: {  // breath is idle, handle bite attack
-                biteTimer.add(this.ticksSinceLastAttack < JAW_OPENING_TIME_FOR_ATTACK ? 0.2F : -0.2F);
-                breathTimer.set(0.0F);
-                roarTimer.add(this.ticksSinceLastRoar < JAW_OPENING_TIME_FOR_ROAR ? 0.2F : -0.2F);
-                break;
-            }
+        switch (dragon.breathHelper.getCurrentBreathState()) {
             case STARTING: {
                 biteTimer.set(0.0F);
                 breathTimer.set(dragon.breathHelper.getBreathStateFractionComplete());
@@ -241,9 +228,12 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
                 breathTimer.set(1.0F);
                 break;
             }
+            case IDLE: // breath is idle, handle bite attack
             default: {
-                LogUtil.once(Level.ERROR, "unexpected breathstate:" + breathState);
-                return;
+                biteTimer.add(this.ticksSinceLastAttack < JAW_OPENING_TIME_FOR_ATTACK ? 0.2F : -0.2F);
+                breathTimer.set(0.0F);
+                roarTimer.add(this.ticksSinceLastRoar < JAW_OPENING_TIME_FOR_ROAR ? 0.2F : -0.2F);
+                break;
             }
         }
 
@@ -449,7 +439,7 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
         // final X rotation angles for air
         float[] xAir = xAirAll[index];
         // interpolate between sitting and standing
-        float[] rot = new float[4];
+        float[] rot = this.legRotCache;
         MathX.slerpArrays(xGroundStand[index], xGroundSit[index], rot, this.sit);
 
         // align the toes so they're always horizontal on the ground

@@ -164,11 +164,11 @@ public class VariantAppearances {
     }
 
     static {
-        Builder builder = new Builder(BuiltinFactory.NORMAL)
-                .withDecal(makeId(TEXTURES_ROOT + "terra/dissolve.png"));
+        Builder builder = new Builder(BuiltinFactory.NORMAL);
         TERRA_FEMALE = builder.build(MOD_ID, "terra/female");
         TERRA_MALE = builder.build(MOD_ID, "terra/male");
-        CRYSTAL = builder.build(MOD_ID, "terra/crystal");
+        CRYSTAL = builder.withDecal(makeId(TEXTURES_ROOT + "terra/crystal/dissolve.png"))
+                .build(MOD_ID, "terra/crystal");
     }
 
     static {

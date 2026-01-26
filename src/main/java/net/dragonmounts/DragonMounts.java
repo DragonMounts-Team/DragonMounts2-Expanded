@@ -21,10 +21,12 @@ import net.dragonmounts.init.DMItemGroups;
 import net.dragonmounts.init.DMItems;
 import net.dragonmounts.proxy.CommonProxy;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.*;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.Mod.Metadata;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -61,10 +63,6 @@ public class DragonMounts {
 
     public static DragonMounts getInstance() {
         return INSTANCE;
-    }
-
-    public static ModMetadata getMetadata() {
-        return METADATA;
     }
 
     @EventHandler
@@ -106,7 +104,4 @@ public class DragonMounts {
 
     @Instance(value = DragonMountsTags.MOD_ID)
     private static DragonMounts INSTANCE;
-
-    @Metadata(value = DragonMountsTags.MOD_ID)
-    private static ModMetadata METADATA;
 }
