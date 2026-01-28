@@ -51,7 +51,7 @@ public enum BuiltinDragonLayer implements IDragonLayer {
     ARMOR() {
         @Override
         public void renderLayer(TextureManager manager, DragonModel model, ClientDragonEntity dragon, float moveTime, float moveSpeed, float partialTicks, float ticksExisted, float lookYaw, float lookPitch, float scale) {
-            ItemStack stack = dragon.getArmor();
+            ItemStack stack = dragon.armor.getItem();
             if (stack.isEmpty()) return;
             Item item = stack.getItem();
             if (item instanceof DragonArmorItem) {

@@ -18,6 +18,7 @@ import net.dragonmounts.entity.helper.DragonBodyHelper;
 import net.dragonmounts.entity.helper.DragonVariantHelper;
 import net.dragonmounts.init.*;
 import net.dragonmounts.inventory.DragonInventory;
+import net.dragonmounts.inventory.SlotAccess;
 import net.dragonmounts.item.DragonArmorItem;
 import net.dragonmounts.network.SSyncDragonAgePacket;
 import net.dragonmounts.registry.DragonType;
@@ -27,6 +28,7 @@ import net.dragonmounts.util.MutableBlockPosEx;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
@@ -114,6 +116,9 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     public final DragonInventory inventory = new DragonInventory(this);
     public final DragonVariantHelper variantHelper = new DragonVariantHelper(this);
     public final DragonBreathHelper<?> breathHelper = this.createBreathHelper();
+    public final SlotAccess armor = new SlotAccess(this, DATA_ARMOR);
+    public final SlotAccess chest = new SlotAccess(this, DATA_CHEST);
+    public final SlotAccess saddle = new SlotAccess(this, DATA_SADDLE);
     // public final DragonHungerHelper hungerHelper = new DragonHungerHelper(this);
     public EntityEnderCrystal healingEnderCrystal;
     protected DragonLifeStage stage;
@@ -122,11 +127,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     protected float amplitudeO;
     protected float wobbleAxis;
     protected int wobbling;
-    private boolean isUsingBreathWeapon;
-    private boolean isGoingDown;
-    private boolean isUnhovered;
-    private boolean yLocked;
-    private boolean followYaw;
     private boolean armored;
     private boolean chested;
     private boolean saddled;
@@ -254,48 +254,28 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
      * Returns true if the entity is breathing.
      */
     public boolean isUsingBreathWeapon() {
-        if (this.deathTime > 0) return false;
-        if (world.isRemote) {
-            boolean usingBreathWeapon = this.dataManager.get(DATA_BREATHING);
-            this.isUsingBreathWeapon = usingBreathWeapon;
-            return usingBreathWeapon;
-        }
-        return isUsingBreathWeapon;
+        return this.deathTime <= 0 && this.dataManager.get(DATA_BREATHING);
     }
 
     /**
      * Set the breathing flag of the entity.
      */
-    public void setUsingBreathWeapon(boolean usingBreathWeapon) {
-        if (!this.isOldEnoughToBreathe() || !this.breathHelper.canBreathe()) {
-            usingBreathWeapon = false;
-        }
-        this.dataManager.set(DATA_BREATHING, usingBreathWeapon);
-        if (!world.isRemote) {
-            this.isUsingBreathWeapon = usingBreathWeapon;
-        }
+    public void setUsingBreathWeapon(boolean breathing) {
+        this.dataManager.set(DATA_BREATHING, breathing && this.isOldEnoughToBreathe() && this.breathHelper.canBreathe());
     }
 
     /**
      * Returns true if the entity is breathing.
      */
     public boolean isGoingDown() {
-        if (world.isRemote) {
-            boolean isGoingDown = this.dataManager.get(GOING_DOWN);
-            this.isGoingDown = isGoingDown;
-            return isGoingDown;
-        }
-        return this.isGoingDown;
+        return this.dataManager.get(GOING_DOWN);
     }
 
     /**
      * Set the breathing flag of the entity.
      */
-    public void setGoingDown(boolean goingdown) {
-        this.dataManager.set(GOING_DOWN, goingdown);
-        if (!world.isRemote) {
-            this.isGoingDown = goingdown;
-        }
+    public void setGoingDown(boolean descent) {
+        this.dataManager.set(GOING_DOWN, descent);
     }
 
     public boolean allowedOtherPlayers() {
@@ -307,51 +287,28 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     }
 
     public boolean isYLocked() {
-        if (world.isRemote) {
-            boolean yLocked = dataManager.get(Y_LOCKED);
-            this.yLocked = yLocked;
-            return yLocked;
-        }
-        return yLocked;
+        return this.dataManager.get(Y_LOCKED);
     }
 
     public void setYLocked(boolean yLocked) {
-        dataManager.set(Y_LOCKED, yLocked);
-        if (!world.isRemote) {
-            this.yLocked = yLocked;
-        }
+        this.dataManager.set(Y_LOCKED, yLocked);
     }
 
     public boolean isUnHovered() {
-        if (world.isRemote) {
-            boolean isUnhovered = dataManager.get(HOVER_DISABLED);
-            this.isUnhovered = isUnhovered;
-            return isUnhovered;
-        }
-        return isUnhovered;
+        return this.dataManager.get(HOVER_DISABLED);
     }
 
     public void setUnHovered(boolean isUnhovered) {
-        dataManager.set(HOVER_DISABLED, isUnhovered);
-        if (!world.isRemote) {
-            this.isUnhovered = isUnhovered;
-        }
+        this.dataManager.set(HOVER_DISABLED, isUnhovered);
     }
 
     public boolean followYaw() {
-        if (world.isRemote) {
-            boolean folowYaw = dataManager.get(FOLLOW_YAW);
-            this.followYaw = folowYaw;
-            return folowYaw;
-        }
-        return followYaw;
+
+        return this.dataManager.get(FOLLOW_YAW);
     }
 
-    public void setFollowYaw(boolean folowYaw) {
-        dataManager.set(FOLLOW_YAW, folowYaw);
-        if (!world.isRemote) {
-            this.followYaw = folowYaw;
-        }
+    public void setFollowYaw(boolean followYaw) {
+        this.dataManager.set(FOLLOW_YAW, followYaw);
     }
 
     /**
@@ -455,10 +412,13 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         // baby has quiet steps, larger have stomping sound
         if (isChild()) {
             // override sound type if the top block is snowy
-            stepSound = (world.getBlockState(pos.up()).getBlock() == Blocks.SNOW_LAYER
-                    ? Blocks.SNOW_LAYER
-                    : block
-            ).getSoundType().getStepSound();
+            World level = this.world;
+            BlockPos up = pos.up();
+            IBlockState state = level.getBlockState(up);
+            stepSound = (state.getBlock() == Blocks.SNOW_LAYER
+                    ? Blocks.SNOW_LAYER.getSoundType(state, level, up, this)
+                    : block.getSoundType(level.getBlockState(pos), level, pos, this)
+            ).getStepSound();
         } else {
             stepSound = getStepSound();
         }
@@ -1058,7 +1018,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
                 }
             }
         } else if (DATA_CHEST.equals(key)) {
-            ItemStack stack = this.getChest();
+            ItemStack stack = this.chest.getItem();
             boolean chested = DragonInventory.isValidChest(stack);
             if (!this.firstUpdate && chested && !this.chested) {
                 this.world.playSound(this.posX, this.posY, this.posZ, DMSounds.DRAGON_CHEST, SoundCategory.PLAYERS, 1F, 1F, false);
@@ -1067,7 +1027,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
             }
             this.chested = chested;
         } else if (DATA_ARMOR.equals(key)) {
-            ItemStack stack = this.getArmor();
+            ItemStack stack = this.armor.getItem();
             boolean armored = !stack.isEmpty() && stack.getItem() instanceof DragonArmorItem;
             if (!this.firstUpdate && armored && !this.armored) {
                 this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_HORSE_ARMOR, SoundCategory.PLAYERS, 1F, 1F, false);
@@ -1085,7 +1045,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
             }
             this.armored = armored;
         } else if (DATA_SADDLE.equals(key)) {
-            ItemStack stack = this.getSaddle();
+            ItemStack stack = this.saddle.getItem();
             boolean saddled = !stack.isEmpty() && stack.getItem() == Items.SADDLE;
             if (!this.firstUpdate && saddled && !this.saddled) {
                 this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_HORSE_SADDLE, SoundCategory.PLAYERS, 1F, 1F, false);
@@ -1102,40 +1062,16 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         ));
     }
 
-    public void setArmor(ItemStack armor) {
-        this.dataManager.set(DATA_ARMOR, armor);
-    }
-
-    public void setChest(ItemStack chest) {
-        this.dataManager.set(DATA_CHEST, chest);
-    }
-
-    public void setSaddle(ItemStack saddle) {
-        this.dataManager.set(DATA_SADDLE, saddle);
-    }
-
-    public ItemStack getArmor() {
-        return this.dataManager.get(DATA_ARMOR);
-    }
-
     public boolean isArmored() {
-        return this.armored;
-    }
-
-    public ItemStack getChest() {
-        return this.dataManager.get(DATA_CHEST);
+        return !this.armor.getItem().isEmpty();
     }
 
     public boolean isChested() {
-        return this.chested;
-    }
-
-    public ItemStack getSaddle() {
-        return this.dataManager.get(DATA_SADDLE);
+        return !this.chest.getItem().isEmpty();
     }
 
     public boolean isSaddled() {
-        return this.saddled;
+        return !this.saddle.getItem().isEmpty();
     }
 
     public DragonVariant getVariant() {

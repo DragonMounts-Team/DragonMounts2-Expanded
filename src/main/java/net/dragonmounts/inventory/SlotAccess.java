@@ -22,6 +22,16 @@ public final class SlotAccess {
         this.entity.getDataManager().set(this.key, stack);
     }
 
+    public void placeItem(ItemStack stack, int count, boolean creative) {
+        if (creative) {
+            ItemStack copy = stack.copy();
+            copy.setCount(count);
+            this.setItem(copy);
+        } else {
+            this.setItem(stack.splitStack(count));
+        }
+    }
+
     public ItemStack takeItem(int count) {
         EntityDataManager manager = this.entity.getDataManager();
         ItemStack stack = manager.get(this.key);

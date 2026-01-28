@@ -46,15 +46,10 @@ public class DragonArmorItem extends Item {
         if (stack.isEmpty() || !(entity instanceof TameableDragonEntity)) return false;
         TameableDragonEntity dragon = (TameableDragonEntity) entity;
         if (dragon.isArmored() || Relation.denyIfNotOwner(dragon, player)) return false;
-        if (dragon.world.isRemote) return true;
-        if (player.capabilities.isCreativeMode) {
-            ItemStack armor = stack.copy();
-            armor.setCount(1);
-            dragon.setArmor(armor);
-        } else {
-            dragon.setArmor(stack.splitStack(1));
+        if (!dragon.world.isRemote) {
+            dragon.armor.placeItem(stack, 1, player.capabilities.isCreativeMode);
+            player.swingArm(hand);
         }
-        player.swingArm(hand);
         return true;
     }
 

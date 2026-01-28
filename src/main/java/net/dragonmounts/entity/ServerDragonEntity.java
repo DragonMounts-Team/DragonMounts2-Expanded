@@ -423,13 +423,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
                         return true;
                     }
                     if (!this.isSaddled() && stack.getItem() == Items.SADDLE) {
-                        if (player.capabilities.isCreativeMode) {
-                            ItemStack saddle = stack.copy();
-                            saddle.setCount(1);
-                            this.setSaddle(saddle);
-                        } else {
-                            this.setSaddle(stack.splitStack(1));
-                        }
+                        this.saddle.placeItem(stack, 1, player.capabilities.isCreativeMode);
                         return true;
                     }
                 }

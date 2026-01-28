@@ -58,11 +58,11 @@ public final class DragonInventory implements IInventory {
         if (slot < this.stacks.length) return this.stacks[slot];
         switch (slot -= this.stacks.length) {
             case 4:
-                return this.dragon.getChest();
+                return this.dragon.chest.getItem();
             case 5:
-                return this.dragon.getArmor();
+                return this.dragon.armor.getItem();
             case 6:
-                return this.dragon.getSaddle();
+                return this.dragon.saddle.getItem();
             default:
                 return slot < 4 ? this.banners[slot] : ItemStack.EMPTY;
         }
@@ -77,29 +77,11 @@ public final class DragonInventory implements IInventory {
             ItemStack result;
             switch (slot -= this.stacks.length) {
                 case 4:
-                    result = this.dragon.getChest();
-                    take = Math.min(count, result.getCount());
-                    stack = result.copy();
-                    stack.shrink(take);
-                    this.dragon.setChest(stack);
-                    result.setCount(take);
-                    return result;
+                    return this.dragon.chest.takeItem(count);
                 case 5:
-                    result = this.dragon.getArmor();
-                    take = Math.min(count, result.getCount());
-                    stack = result.copy();
-                    stack.shrink(take);
-                    this.dragon.setArmor(stack);
-                    result.setCount(take);
-                    return result;
+                    return this.dragon.armor.takeItem(count);
                 case 6:
-                    result = this.dragon.getSaddle();
-                    take = Math.min(count, result.getCount());
-                    stack = result.copy();
-                    stack.shrink(take);
-                    this.dragon.setSaddle(stack);
-                    result.setCount(take);
-                    return result;
+                    return this.dragon.saddle.takeItem(count);
                 default:
                     stack = slot < 4 ? this.banners[slot] : ItemStack.EMPTY;
             }
@@ -123,20 +105,13 @@ public final class DragonInventory implements IInventory {
             this.stacks[slot] = ItemStack.EMPTY;
             return stack;
         }
-        TameableDragonEntity dragon = this.dragon;
         switch (slot -= this.stacks.length) {
             case 4:
-                stack = dragon.getChest();
-                dragon.setChest(ItemStack.EMPTY);
-                return stack;
+                return this.dragon.chest.clearItem();
             case 5:
-                stack = dragon.getArmor();
-                dragon.setArmor(ItemStack.EMPTY);
-                return stack;
+                return this.dragon.armor.clearItem();
             case 6:
-                stack = dragon.getSaddle();
-                dragon.setSaddle(ItemStack.EMPTY);
-                return stack;
+                return this.dragon.saddle.clearItem();
             default:
                 if (slot < 4) {
                     stack = this.banners[slot];
@@ -160,13 +135,13 @@ public final class DragonInventory implements IInventory {
         }
         switch (slot -= this.stacks.length) {
             case 4:
-                this.dragon.setChest(stack);
+                this.dragon.chest.setItem(stack);
                 break;
             case 5:
-                this.dragon.setArmor(stack);
+                this.dragon.armor.setItem(stack);
                 break;
             case 6:
-                this.dragon.setSaddle(stack);
+                this.dragon.saddle.setItem(stack);
                 break;
             default:
                 if (slot < 4) {
@@ -253,13 +228,13 @@ public final class DragonInventory implements IInventory {
     public void saveAdditionalData(NBTTagCompound tag) {
         TameableDragonEntity dragon = this.dragon;
         ItemStack stack;
-        if (!(stack = dragon.getSaddle()).isEmpty()) {
+        if (!(stack = dragon.saddle.getItem()).isEmpty()) {
             tag.setTag("Saddle", stack.writeToNBT(new NBTTagCompound()));
         }
-        if (!(stack = dragon.getChest()).isEmpty()) {
+        if (!(stack = dragon.chest.getItem()).isEmpty()) {
             tag.setTag("Chest", stack.writeToNBT(new NBTTagCompound()));
         }
-        if (!(stack = dragon.getArmor()).isEmpty()) {
+        if (!(stack = dragon.armor.getItem()).isEmpty()) {
             tag.setTag("Armor", stack.writeToNBT(new NBTTagCompound()));
         }
         NBTTagList list = ItemUtil.writeToNBT(this.banners);
@@ -275,13 +250,13 @@ public final class DragonInventory implements IInventory {
     public void readAdditionalData(NBTTagCompound tag) {
         TameableDragonEntity dragon = this.dragon;
         if (tag.hasKey("Saddle")) {
-            dragon.setSaddle(new ItemStack(tag.getCompoundTag("Saddle")));
+            dragon.saddle.setItem(new ItemStack(tag.getCompoundTag("Saddle")));
         }
         if (tag.hasKey("Chest")) {
-            dragon.setChest(new ItemStack(tag.getCompoundTag("Chest")));
+            dragon.chest.setItem(new ItemStack(tag.getCompoundTag("Chest")));
         }
         if (tag.hasKey("Armor")) {
-            dragon.setArmor(new ItemStack(tag.getCompoundTag("Armor")));
+            dragon.armor.setItem(new ItemStack(tag.getCompoundTag("Armor")));
         }
         if (tag.hasKey("Banners")) {
             ItemUtil.readFromNBT(this.banners, tag.getTagList("Banners", 10));
@@ -296,13 +271,13 @@ public final class DragonInventory implements IInventory {
             int j = stack.getByte("Slot") & 255;
             switch (j) {
                 case 0:
-                    dragon.setSaddle(new ItemStack(stack));
+                    dragon.saddle.setItem(new ItemStack(stack));
                     continue;
                 case 1:
-                    dragon.setChest(new ItemStack(stack));
+                    dragon.chest.setItem(new ItemStack(stack));
                     continue;
                 case 2:
-                    dragon.setArmor(new ItemStack(stack));
+                    dragon.armor.setItem(new ItemStack(stack));
                     continue;
                 default:
                     if (j < 30) {
@@ -342,11 +317,8 @@ public final class DragonInventory implements IInventory {
         TameableDragonEntity dragon = this.dragon;
         EntityUtil.dropItems(dragon, this.stacks);
         EntityUtil.dropItems(dragon, this.banners);
-        dragon.entityDropItem(dragon.getChest(), 0.5F);
-        dragon.entityDropItem(dragon.getArmor(), 0.5F);
-        dragon.entityDropItem(dragon.getSaddle(), 0.5F);
-        dragon.setChest(ItemStack.EMPTY);
-        dragon.setArmor(ItemStack.EMPTY);
-        dragon.setSaddle(ItemStack.EMPTY);
+        dragon.entityDropItem(dragon.chest.clearItem(), 0.5F);
+        dragon.entityDropItem(dragon.armor.clearItem(), 0.5F);
+        dragon.entityDropItem(dragon.saddle.clearItem(), 0.5F);
     }
 }
