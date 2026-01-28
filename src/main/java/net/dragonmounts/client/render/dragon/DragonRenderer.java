@@ -13,6 +13,7 @@ import net.dragonmounts.block.HatchableDragonEggBlock;
 import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.model.dragon.DragonModel;
 import net.dragonmounts.client.variant.VariantAppearance;
+import net.dragonmounts.client.variant.VariantAppearances;
 import net.dragonmounts.init.DMBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -31,19 +32,20 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Iterator;
 
 import static org.lwjgl.opengl.GL11.*;
-
 
 /**
  * Generic renderer for all dragons.
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
+@ParametersAreNonnullByDefault
 public class DragonRenderer extends RenderLiving<ClientDragonEntity> {
-    public DragonRenderer(RenderManager renderManager) {
-        super(renderManager, null, 2);
+    public DragonRenderer(RenderManager manager) {
+        super(manager, VariantAppearances.ENCHANTED_FEMALE.getModel(null), 2);
     }
 
     @Override

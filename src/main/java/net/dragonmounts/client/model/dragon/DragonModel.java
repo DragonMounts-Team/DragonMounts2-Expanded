@@ -18,12 +18,15 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 /**
  * Generic model for all winged tetrapod dragons.
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  * @Modifier James Miller <TheRPGAdventurer.>
  */
+@ParametersAreNonnullByDefault
 public class DragonModel extends ModelBase {
     // model parts
     public final HeadPart head;

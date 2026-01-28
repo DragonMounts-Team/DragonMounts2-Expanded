@@ -15,6 +15,8 @@ import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+
 /**
  * Based on PathNavigateSwimmer but for air blocks.
  * 
@@ -26,7 +28,7 @@ public class PathNavigateFlying extends PathNavigateSwimmer {
     }
 
     @Override
-    protected PathFinder getPathFinder() {
+    protected @Nonnull PathFinder getPathFinder() {
         return new PathFinder(new NodeProcessorFlying());
     }
 
@@ -36,7 +38,7 @@ public class PathNavigateFlying extends PathNavigateSwimmer {
     }
 
     @Override
-    public boolean canEntityStandOnPos(BlockPos pos) {
+    public boolean canEntityStandOnPos(@Nonnull BlockPos pos) {
         return true;
     }
 }

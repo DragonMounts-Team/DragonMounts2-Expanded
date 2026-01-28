@@ -80,6 +80,7 @@ public class FireBreath extends DragonBreath {
         if (stack.isEmpty()) return;
         Block result = Block.getBlockFromItem(stack.getItem());
         if (result == Blocks.AIR) return;
+        //noinspection deprecation
         level.setBlockState(pos, result.getStateFromMeta(stack.getMetadata()));
     }
 

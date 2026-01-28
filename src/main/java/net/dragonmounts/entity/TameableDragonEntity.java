@@ -139,7 +139,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     }
 
     @Override
-    protected @Nonnull EntityBodyHelper createBodyHelper() {
+    protected EntityBodyHelper createBodyHelper() {
         return new DragonBodyHelper(this);
     }
 
@@ -399,7 +399,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         return false;
     }
 
-    @Nonnull
     @Override
     @SuppressWarnings("deprecation")
     public String getName() {
@@ -412,12 +411,12 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     }
 
     @Override
-    protected SoundEvent getDeathSound() {
+    protected @Nullable SoundEvent getDeathSound() {
         return this.getVariant().type.getDeathSound(this);
     }
 
     @Override
-    public SoundEvent getAmbientSound() {
+    public @Nullable SoundEvent getAmbientSound() {
         return this.isEgg() || this.isUsingBreathWeapon() ? null : this.getVariant().type.getLivingSound(this);
     }
 
@@ -466,7 +465,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         playSound(stepSound, 0.2f, 1f, false);
     }
 
-    public void playSound(SoundEvent sound, float volume, float pitch, boolean local) {
+    public void playSound(@Nullable SoundEvent sound, float volume, float pitch, boolean local) {
         if (sound == null || isSilent()) {
             return;
         }
@@ -499,7 +498,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
      */
     @Override
     protected SoundEvent getSwimSound() {
-        return null;
+        return DMSounds.SILENT;
     }
 
     /**
@@ -615,7 +614,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     }
 
     @Override
-    public boolean attackEntityAsMob(@Nonnull Entity target) {
+    public boolean attackEntityAsMob(Entity target) {
         this.setLastAttackedEntity(target);
         float damage = (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
         if (target instanceof EntityLivingBase) {
@@ -632,7 +631,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     }
 
     @Override
-    public boolean shouldAttackEntity(@Nonnull EntityLivingBase target, @Nullable EntityLivingBase owner) {
+    public boolean shouldAttackEntity(EntityLivingBase target, @Nullable EntityLivingBase owner) {
         if (target instanceof EntityTameable) {
             EntityTameable other = (EntityTameable) target;
             return !(
@@ -731,8 +730,8 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         }
     }
 
-    @Nullable
-    public Entity getControllingPassenger() {
+    @Override
+    public @Nullable Entity getControllingPassenger() {
         return this.controllerCache;
     }
 
@@ -741,8 +740,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
      *
      * @return player on the front
      */
-    @Nullable
-    public EntityPlayer getControllingPlayer() {
+    public @Nullable EntityPlayer getControllingPlayer() {
         return this.controllerCache instanceof EntityPlayer ? (EntityPlayer) this.controllerCache : null;
     }
 
@@ -761,21 +759,21 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     }
 
     @Override
-    protected void addPassenger(@Nonnull Entity passenger) {
+    protected void addPassenger(Entity passenger) {
         super.addPassenger(passenger);
         this.refreshPassengerCache();
     }
 
     @Override
-    protected void removePassenger(@Nonnull Entity passenger) {
+    protected void removePassenger(Entity passenger) {
         super.removePassenger(passenger);
         this.refreshPassengerCache();
     }
 
     public boolean isPassengerBroadly(Entity entity) {
         for (Entity rider : this.getCachedPassengers()) {
-            if (rider == entity || (
-                    rider instanceof CarriageEntity && rider.getPassengers().contains(entity)
+            if (rider.equals(entity) || (
+                    rider instanceof CarriageEntity && rider.isPassenger(entity)
             )) return true;
         }
         return false;
@@ -976,7 +974,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     }
 
     @Override
-    protected ResourceLocation getLootTable() {
+    protected @Nullable ResourceLocation getLootTable() {
         return this.stage.isOldEnough(DragonLifeStage.FLEDGLING) ? this.getVariant().type.lootTable : null;
     }
 

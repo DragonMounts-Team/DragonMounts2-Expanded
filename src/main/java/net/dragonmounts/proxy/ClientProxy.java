@@ -35,7 +35,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -65,8 +64,7 @@ public class ClientProxy extends CommonProxy {
         }
 
         //Override mcmod.info - This looks cooler :)
-        ModMetadata metadata = event.getModMetadata();
-        ListIterator<String> iterator = metadata.authorList.listIterator();
+        ListIterator<String> iterator = event.getModMetadata().authorList.listIterator();
         while (iterator.hasNext()) {
             iterator.set(TextFormatting.GOLD.toString() + TextFormatting.BOLD + iterator.next() + TextFormatting.RESET);
         }

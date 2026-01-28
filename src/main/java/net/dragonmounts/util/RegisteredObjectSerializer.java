@@ -1,5 +1,6 @@
 package net.dragonmounts.util;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.dragonmounts.registry.DeferredRegistry;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
@@ -8,6 +9,7 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 
+@MethodsReturnNonnullByDefault
 public class RegisteredObjectSerializer<T extends IForgeRegistryEntry<T>> implements DataSerializer<T> {
     public final DeferredRegistry<T> registry;
 
@@ -16,7 +18,7 @@ public class RegisteredObjectSerializer<T extends IForgeRegistryEntry<T>> implem
     }
 
     @Override
-    public void write(PacketBuffer buffer, T value) {
+    public void write(PacketBuffer buffer, @Nonnull T value) {
         buffer.writeVarInt(this.registry.getID(value));
     }
 

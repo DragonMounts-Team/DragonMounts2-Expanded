@@ -11,6 +11,7 @@ public class DragonHeadBlockEntity extends TileEntity implements ITickable {
         return this.active ? partialTicks + this.progress : this.progress;
     }
 
+    @Override
     public void update() {
         if (this.world.isBlockPowered(this.pos)) {
             this.active = true;

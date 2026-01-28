@@ -6,7 +6,6 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.RegistryBuilder;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.List;
@@ -55,37 +54,36 @@ public class DeferredRegistry<V extends IForgeRegistryEntry<V>> implements IForg
         return this.registry.containsValue(value);
     }
 
-    @Nullable
     @Override
-    public V getValue(ResourceLocation key) {
+    public @Nullable V getValue(ResourceLocation key) {
         return this.registry.getValue(key);
     }
 
-    @Nullable
-    public V getIfPresent(ResourceLocation key) {
+    public V getOrDefault(ResourceLocation key, V fallback) {
+        V value = this.registry.getValue(key);
+        return value == null ? fallback : value;
+    }
+
+    public @Nullable V getIfPresent(ResourceLocation key) {
         return this.registry.containsKey(key) ? this.registry.getValue(key) : null;
     }
 
-    @Nullable
     @Override
-    public ResourceLocation getKey(V value) {
+    public @Nullable ResourceLocation getKey(V value) {
         return this.registry.getKey(value);
     }
 
-    @Nonnull
     @Override
     public Set<ResourceLocation> getKeys() {
         return this.registry.getKeys();
     }
 
-    @Nonnull
+    @Deprecated
     @Override
     public List<V> getValues() {
-        //noinspection deprecation
         return this.registry.getValues();
     }
 
-    @Nonnull
     @Override
     public Set<Map.Entry<ResourceLocation, V>> getEntries() {
         return this.registry.getEntries();
@@ -96,7 +94,6 @@ public class DeferredRegistry<V extends IForgeRegistryEntry<V>> implements IForg
         return this.registry.getSlaveMap(slaveMapName, type);
     }
 
-    @Nonnull
     @Override
     public Iterator<V> iterator() {
         return this.registry.iterator();

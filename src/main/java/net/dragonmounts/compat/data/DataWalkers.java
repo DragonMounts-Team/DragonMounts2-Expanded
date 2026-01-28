@@ -47,9 +47,10 @@ public abstract class DataWalkers {
     }
 
     static {
-        ObjectOpenHashSet<String> containers = new ObjectOpenHashSet<>();
+        DragonTypeCompat[] types = DragonTypeCompat.values();
+        ObjectOpenHashSet<String> containers = new ObjectOpenHashSet<>(types.length * 2 + 1);
         containers.add("dragonmounts:dragon_amulet");
-        for (DragonTypeCompat type : DragonTypeCompat.values()) {
+        for (DragonTypeCompat type : types) {
             containers.add("dragonmounts:" + type.identifier + "_dragon_amulet");
             containers.add("dragonmounts:" + type.identifier + "_dragon_essence");
         }

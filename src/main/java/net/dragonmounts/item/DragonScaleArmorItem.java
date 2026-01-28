@@ -19,6 +19,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static net.dragonmounts.util.ItemUtil.isInCreativeInventory;
+
 public class DragonScaleArmorItem extends ItemArmor implements IArmorEffectSource {
 	private final DragonType type;
 	public final IDescribedArmorEffect effect;
@@ -42,7 +44,7 @@ public class DragonScaleArmorItem extends ItemArmor implements IArmorEffectSourc
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flag) {
-		tooltip.add(this.type.getName());
+		tooltip.add(this.type.getDisplayName());
 		if (this.effect != null) {
 			this.effect.appendHoverText(stack, tooltip, flag);
 		}
@@ -54,10 +56,7 @@ public class DragonScaleArmorItem extends ItemArmor implements IArmorEffectSourc
 	}
 
 	@Override
-	protected boolean isInCreativeTab(CreativeTabs targetTab) {
-		for (CreativeTabs tab : this.getCreativeTabs()) {
-			if (tab == targetTab) return true;
-		}
-		return targetTab == CreativeTabs.SEARCH;
+	protected boolean isInCreativeTab(CreativeTabs tab) {
+		return isInCreativeInventory(this, tab);
 	}
 }

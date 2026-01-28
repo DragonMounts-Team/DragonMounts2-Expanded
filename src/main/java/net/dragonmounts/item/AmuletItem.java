@@ -128,9 +128,8 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
         return ItemStack.EMPTY;
     }
 
-    @Nullable
     @Override
-    public Entity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos) {
+    public @Nullable Entity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos) {
         NBTTagCompound root = stack.getTagCompound();
         if (root == null) return null;
         NBTTagCompound data = root.getCompoundTag("EntityTag");
@@ -162,9 +161,8 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
         return tag == null || tag.getCompoundTag("EntityTag").isEmpty();
     }
 
-    @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound cap) {
+    public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound cap) {
         NBTTagCompound root = stack.getTagCompound();
         if (root != null && !root.hasKey("EntityTag") && root.hasKey("Breed", 8)) {
             stack.setTagCompound(DragonEntityFixer.fixContainerItem(root));
@@ -177,10 +175,9 @@ public class AmuletItem<E extends Entity> extends Item implements IEntityContain
         return CAPABILITIES.containsKey(capability);
     }
 
-    @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+    public <T> @Nullable T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         return (T) CAPABILITIES.get(capability);
     }
 

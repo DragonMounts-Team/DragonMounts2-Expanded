@@ -26,6 +26,7 @@ public class FlameBreathParticle extends TexturedBreathParticle {
         return super.getBrightnessForRender() & 0x00FF0000 | 0xF0;
     }
 
+    @Override
     protected void handleMovement() {
         // spawn a smoke trail after some time
         if (this.rand.nextFloat() < NORMAL_PARTICLE_CHANCE && this.rand.nextFloat() < this.node.getLifetimeFraction()) {

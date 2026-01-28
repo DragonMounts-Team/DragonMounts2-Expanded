@@ -4,6 +4,7 @@ import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMItemGroups;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -13,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static net.dragonmounts.DragonMountsTags.MOD_ID;
+import static net.dragonmounts.util.ItemUtil.isInCreativeInventory;
 
 public class DragonArmorItem extends Item {
     public static final UUID MODIFIER_UUID = UUID.fromString("f4dbd212-cf15-57e9-977c-0019cc5a8933");
@@ -62,7 +63,7 @@ public class DragonArmorItem extends Item {
     public void addInformation(ItemStack stack, @Nullable World level, List<String> tooltips, ITooltipFlag flag) {
         tooltips.add("");
         tooltips.add(ClientUtil.translateToLocal("item.modifiers.body"));
-        tooltips.add(TextFormatting.BLUE + I18n.translateToLocalFormatted("attribute.modifier.plus.0", ItemStack.DECIMALFORMAT.format(this.protection), I18n.translateToLocal("attribute.name.generic.armor")));
+        tooltips.add(TextFormatting.BLUE + I18n.format("attribute.modifier.plus.0", ItemStack.DECIMALFORMAT.format(this.protection), I18n.format("attribute.name.generic.armor")));
     }
 
     @Override
@@ -71,9 +72,7 @@ public class DragonArmorItem extends Item {
     }
 
     @Override
-    protected boolean isInCreativeTab(CreativeTabs targetTab) {
-        for (CreativeTabs tab : this.getCreativeTabs())
-            if (tab == targetTab) return true;
-        return targetTab == CreativeTabs.SEARCH;
+    protected boolean isInCreativeTab(CreativeTabs tab) {
+        return isInCreativeInventory(this, tab);
     }
 }

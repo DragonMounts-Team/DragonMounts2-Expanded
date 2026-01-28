@@ -99,6 +99,7 @@ public class DragonDescendGoal extends EntityAIBase {
         }
     }
 
+    @Override
     public void resetTask() {
         this.landingPos = null;
         this.dragon.setUnHovered(this.isHoverDisabled);

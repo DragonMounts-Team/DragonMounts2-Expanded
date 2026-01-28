@@ -25,8 +25,7 @@ public final class CircularBuffer {
 
     public CircularBuffer(int size) {
         // & with a mask only works if size is a power of 2
-        if (size < 2 || (size & (size - 1)) != 0) throw new IllegalArgumentException();
-        this.buffer = new float[size];
+        this.buffer = new float[MathHelper.smallestEncompassingPowerOfTwo(size)];
     }
 
     public void fill(float value) {

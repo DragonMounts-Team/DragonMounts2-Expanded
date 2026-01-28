@@ -106,8 +106,7 @@ public class DebugOverlay {
         }
     }
 
-    @Nullable
-    private static TameableDragonEntity getClientDragon(Minecraft minecraft) {
+    private static @Nullable TameableDragonEntity getClientDragon(Minecraft minecraft) {
         // always return currently ridden dragon first
         Entity entity = minecraft.player.getRidingEntity();
         if (entity instanceof TameableDragonEntity) {
@@ -121,8 +120,7 @@ public class DebugOverlay {
         return clientCache;
     }
 
-    @Nullable
-    private static ServerDragonEntity getServerDragon(Minecraft minecraft, TameableDragonEntity client) {
+    private static @Nullable ServerDragonEntity getServerDragon(Minecraft minecraft, TameableDragonEntity client) {
         if (!minecraft.isSingleplayer()) return null; // impossible on dedicated
         int target = client.getEntityId();
         if (serverCache != null && serverCache.getEntityId() == target) {
@@ -213,13 +211,13 @@ public class DebugOverlay {
                 dfShort.format(dragon.width),
                 dfShort.format(dragon.height)
         ));
-        text.println("Trust Other Players: " + (dragon.allowedOtherPlayers() ? "Yes" : "No"));
+        text.println("Trust Other Players: " + dragon.allowedOtherPlayers());
         if (dragon instanceof ServerDragonEntity) {
+            text.println("Love: " + dragon.isInLove());
             text.println("Reproduction Count: " + ((ServerDragonEntity) dragon).reproductionHelper.getReproductionCount());
         }
         text.print("Tamed: ");
         // tamed flag/owner name
-        //String tamedString = dragon.getOwnerName();
         if (dragon.isTamed()) {
             Entity player = dragon.getOwner();
             text.println("Yes (" + (player == null

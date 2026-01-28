@@ -12,6 +12,7 @@ import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.entity.breath.DragonBreath;
 import net.dragonmounts.entity.breath.impl.FireBreath;
 import net.dragonmounts.init.DMSounds;
+import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.util.DMUtils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -26,8 +27,8 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.storage.loot.LootTableList;
-import net.minecraftforge.registries.*;
+import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.minecraftforge.registries.RegistryBuilder;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
@@ -40,10 +41,14 @@ import static net.dragonmounts.util.EntityUtil.addOrMergeEffect;
 public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
     public static final String SERIALIZATION_KEY = "DragonType";
     public static final ResourceLocation DEFAULT_KEY = makeId("ender");
-    public static final DeferredRegistry<DragonType> REGISTRY = new Registry(makeId("dragon_type"), new RegistryBuilder<DragonType>().setDefaultKey(DEFAULT_KEY));
+    public static final DeferredRegistry<DragonType> REGISTRY = new DeferredRegistry<>(
+            makeId("dragon_type"),
+            DragonType.class,
+            new RegistryBuilder<DragonType>().setDefaultKey(DEFAULT_KEY)
+    );
 
     public static DragonType byName(String name) {
-        return REGISTRY.getValue(parseIdentifier(name));
+        return REGISTRY.getOrDefault(parseIdentifier(name), DragonTypes.ENDER);
     }
 
     public final int color;
@@ -132,12 +137,11 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
                 : new Vec3d(x * scale + offset, y * scale, z * scale);
     }
 
-    @Nullable
-    public DragonBreath initBreath(TameableDragonEntity dragon) {
+    public @Nullable DragonBreath initBreath(TameableDragonEntity dragon) {
         return new FireBreath(dragon, 0.7F);
     }
 
-    public SoundEvent getLivingSound(TameableDragonEntity dragon) {
+    public @Nullable SoundEvent getLivingSound(TameableDragonEntity dragon) {
         return dragon.isChild()
                 ? DMSounds.DRAGON_PURR_HATCHLING
                 : dragon.getRNG().nextFloat() < 0.33F
@@ -145,20 +149,20 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
                 : DMSounds.DRAGON_AMBIENT;
     }
 
-    public SoundEvent getDeathSound(TameableDragonEntity dragon) {
+    public @Nullable SoundEvent getDeathSound(TameableDragonEntity dragon) {
         return dragon.isEgg() ? DMSounds.DRAGON_EGG_SHATTER : DMSounds.DRAGON_DEATH;
     }
 
-    public SoundEvent getRoarSound(TameableDragonEntity dragon) {
+    public @Nullable SoundEvent getRoarSound(TameableDragonEntity dragon) {
         return dragon.isChild() ? DMSounds.DRAGON_ROAR_HATCHLING : DMSounds.DRAGON_ROAR;
     }
 
-    public String getName() {
+    public String getDisplayName() {
         return this.formatting + ClientUtil.translateToLocal(this.translationKey);
     }
 
     public boolean isInvulnerableTo(DamageSource source) {
-        return !this.immunities.isEmpty() && this.immunities.contains(source);
+        return this.immunities.contains(source);
     }
 
     public ReferenceSet<DamageSource> getImmunities() {
@@ -166,19 +170,19 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
     }
 
     public boolean isHabitat(Block block) {
-        return !this.blocks.isEmpty() && this.blocks.contains(block);
+        return this.blocks.contains(block);
     }
 
     public boolean isHabitat(@Nullable Biome biome) {
-        return biome != null && !this.biomes.isEmpty() && this.biomes.contains(biome);
+        return this.biomes.contains(biome);
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public <T> T bindInstance(Class<T> clazz, T instance) {
+    public <T> @Nullable T bindInstance(Class<T> clazz, T instance) {
         return clazz.cast(this.map.put(clazz, instance));
     }
 
-    public <T> T getInstance(Class<T> clazz, @Nullable T fallback) {
+    public <T> @Nullable T getInstance(Class<T> clazz, @Nullable T fallback) {
         return clazz.cast(this.map.getOrDefault(clazz, fallback));
     }
 
@@ -191,29 +195,12 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
 
     public <T, V> V ifPresent(Class<T> clazz, Function<? super T, V> function, V fallback) {
         Object value = this.map.get(clazz);
-        if (value != null) {
-            return function.apply(clazz.cast(value));
-        }
-        return fallback;
+        return value == null ? fallback : function.apply(clazz.cast(value));
     }
 
     public static void convertByLightning(ServerDragonEntity dragon, DragonType type) {
         dragon.convertTo(type);
         dragon.playSound(SoundEvents.BLOCK_PORTAL_TRIGGER, 2, 1);
         dragon.playSound(SoundEvents.BLOCK_END_PORTAL_SPAWN, 2, 1);
-    }
-
-    public static class Registry extends DeferredRegistry<DragonType> implements IForgeRegistry.AddCallback<DragonType> {
-        public Registry(ResourceLocation identifier, RegistryBuilder<DragonType> builder) {
-            super(identifier, DragonType.class, builder);
-        }
-
-        @Override
-        public void onAdd(IForgeRegistryInternal<DragonType> owner, RegistryManager stage, int id, DragonType obj, @Nullable DragonType oldObj) {
-            ResourceLocation loot = obj.lootTable;
-            if (loot != null && !LootTableList.getAll().contains(loot)) {
-                LootTableList.register(loot);
-            }
-        }
     }
 }

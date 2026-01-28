@@ -18,6 +18,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
 
+import javax.annotation.Nonnull;
+
 import static org.lwjgl.opengl.GL11.*;
 
 public class DragonHeadBlockEntityRenderer extends TileEntitySpecialRenderer<DragonHeadBlockEntity> {
@@ -74,7 +76,7 @@ public class DragonHeadBlockEntityRenderer extends TileEntitySpecialRenderer<Dra
     }
 
     @Override
-    public void render(DragonHeadBlockEntity entity, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+    public void render(@Nonnull DragonHeadBlockEntity entity, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         TextureManager manager = this.rendererDispatcher.renderEngine;
         if (manager == null) return;
         Block block = entity.getBlockType();
@@ -127,6 +129,7 @@ public class DragonHeadBlockEntityRenderer extends TileEntitySpecialRenderer<Dra
     }
 
     public static class ItemStackRenderer extends TileEntityItemStackRenderer {
+        @Override
         public void renderByItem(ItemStack stack, float partialTicks) {
             Item item = stack.getItem();
             if (item instanceof DragonHeadItem) {

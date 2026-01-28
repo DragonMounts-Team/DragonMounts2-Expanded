@@ -135,14 +135,14 @@ public abstract class DragonMountsCompat {
     }
 
     static {
-        Object2ObjectOpenHashMap<String, Item> mappings = new Object2ObjectOpenHashMap<>();
+        Object2ObjectOpenHashMap<String, Item> mappings = new Object2ObjectOpenHashMap<>(271);
         //Blocks
         mappings.put("pileofsticks", DMItems.DRAGON_NEST);
         mappings.put("block_dragon_shulker", DMItems.DRAGON_CORE);
         //Misc
         mappings.put("dragon_amulet", DMItems.AMULET);
-        mappings.put("dragon_gender", DMItems.VARIATION_ORB);
         mappings.put("dragon_whistle", DMItems.FLUTE);
+        mappings.put("dragon_gender", DMItems.VARIATION_ORB);
         mappings.put("variant_switcher", DMItems.VARIATION_ORB);
         mappings.put("end_dragon_amulet", DMItems.ENDER_DRAGON_AMULET);
         mappings.put("end_dragon_essence", DMItems.ENDER_DRAGON_ESSENCE);

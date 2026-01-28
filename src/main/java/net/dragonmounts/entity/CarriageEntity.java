@@ -24,6 +24,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -77,6 +78,7 @@ public class CarriageEntity extends Entity {
      * returns if this entity triggers Block.onEntityWalking on the blocks they walk on. used for spiders and wolves to
      * prevent them from trampling crops
      */
+    @Override
     protected boolean canTriggerWalking() {
         return false;
     }
@@ -85,7 +87,8 @@ public class CarriageEntity extends Entity {
      * For vehicles, the first passenger is generally considered the controller and "drives" the vehicle. For example,
      * Pigs, Horses, and Boats are generally "steered" by the controlling passenger.
      */
-    public Entity getControllingPassenger() {
+    @Override
+    public @Nullable Entity getControllingPassenger() {
         List<Entity> list = this.getPassengers();
         return list.isEmpty() ? null : list.get(0);
     }
@@ -94,13 +97,15 @@ public class CarriageEntity extends Entity {
      * Returns a boundingBox used to collide the entity with other entities and blocks. This enables the entity to be
      * pushable on contact, like boats or minecarts.
      */
-    public AxisAlignedBB getCollisionBox(Entity entity) {
+    @Override
+    public @Nullable AxisAlignedBB getCollisionBox(Entity entity) {
         return entity.canBePushed() ? entity.getEntityBoundingBox() : null;
     }
 
     /**
      * Returns true if this entity should push and be pushed by other entities when colliding.
      */
+    @Override
     public boolean canBePushed() {
         return !this.isRiding();
     }
@@ -272,7 +277,6 @@ public class CarriageEntity extends Entity {
         }
     }
 
-
     // Forge: Fix MC-119811 by instantly completing lerp on board
     @Override
     protected void addPassenger(Entity passenger) {
@@ -290,6 +294,7 @@ public class CarriageEntity extends Entity {
     /**
      * Set the position and rotation values directly without any clamping.
      */
+    @Override
     @SideOnly(Side.CLIENT)
     public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport) {
         this.lerpX = x;
@@ -314,6 +319,7 @@ public class CarriageEntity extends Entity {
     /**
      * Applies a velocity to the entities, to push them away from eachother.
      */
+    @Override
     public void applyEntityCollision(Entity entityIn) {
         if (!this.world.isRemote) {
             if (!entityIn.noClip && !this.noClip && canBePushed()) {
@@ -392,6 +398,7 @@ public class CarriageEntity extends Entity {
      * Setups the entity to do the hurt animation. Only used by packets in multiplayer.
      */
     @SideOnly(Side.CLIENT)
+    @Override
     public void performHurtAnimation() {
         this.setForwardDirection(-this.getForwardDirection());
         this.setTimeSinceHit(10);
@@ -498,7 +505,7 @@ public class CarriageEntity extends Entity {
         compound.setFloat("damage", this.getDamage());
         compound.setInteger("forward", this.getForwardDirection());
         compound.setInteger("timesincehit", this.getTimeSinceHit());
-        compound.setString("Type", this.getType().getSerializedName().toString());
+        compound.setString("Type", this.getType().getName());
     }
 
     @Override
@@ -516,7 +523,6 @@ public class CarriageEntity extends Entity {
      */
     @Override
     public void fall(float distance, float damageMultiplier) {
-        // ignore fall damage if the entity can fly
         if (!isBeingRidden()) {
             super.fall(distance, damageMultiplier);
         }

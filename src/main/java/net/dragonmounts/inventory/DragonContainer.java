@@ -38,10 +38,12 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 		this.addSlotToContainer(this.flute = new FluteSlot(flute, this, 8, 8));
 		// location of the slot for the saddle in the dragon inventory
 		this.addSlotToContainer(applyBackground(new Slot(inventory, 33, 156, 18) {
+			@Override
 			public boolean isItemValid(ItemStack stack) {
 				return !stack.isEmpty() && stack.getItem() == Items.SADDLE;
 			}
 
+			@Override
 			@SideOnly(Side.CLIENT)
 			public boolean isEnabled() {
 				return this.getHasStack() || dragon.isOldEnoughToBreathe();
@@ -66,6 +68,7 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 				return DragonInventory.isValidChest(stack);
 			}
 
+			@Override
 			@SideOnly(Side.CLIENT)
 			public boolean isEnabled() {
 				return this.getHasStack() || dragon.isOldEnoughToBreathe();
@@ -79,6 +82,7 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 
 		// location of the slot for armor in the dragon inventory
 		this.addSlotToContainer(applyBackground(new Slot(inventory, 32, 156, 54) {
+			@Override
 			public boolean isItemValid(ItemStack stack) {
 				return !stack.isEmpty() && stack.getItem() instanceof DragonArmorItem;
 			}
@@ -87,10 +91,12 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 		// Build Banner Slots
 		for (int b = 0; b < 4; ++b) {
 			this.addSlotToContainer(applyBackground(new Slot(inventory, 27 + b, b == 1 || b == 2 ? 282 : 300, b < 2 ? 36 : 18) {
+				@Override
 				public boolean isItemValid(ItemStack stack) {
 					return !stack.isEmpty() && stack.getItem() == Items.BANNER;
 				}
 
+				@Override
 				@SideOnly(Side.CLIENT)
 				public boolean isEnabled() {
 					return this.getHasStack() || dragon.isOldEnoughToBreathe();
@@ -102,6 +108,7 @@ public class DragonContainer<T extends TameableDragonEntity> extends Container {
 		for (int k = 0; k < 3; ++k) {
 			for (int l = 0; l < 9; ++l) {
 				this.addSlotToContainer(new Slot(inventory, l + k * 9, 156 + l * 18, 75 + k * 18) {
+					@Override
 					@SideOnly(Side.CLIENT)
 					public boolean isEnabled() {
 						return this.getHasStack() || dragon.isChested();

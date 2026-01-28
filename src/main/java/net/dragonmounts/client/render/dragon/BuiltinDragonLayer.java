@@ -67,15 +67,17 @@ public enum BuiltinDragonLayer implements IDragonLayer {
         public void renderLayer(TextureManager manager, DragonModel model, ClientDragonEntity dragon, float moveTime, float moveSpeed, float partialTicks, float ticksExisted, float lookYaw, float lookPitch, float scale) {
             DragonAnimator animator = dragon.animator;
             float pitch = animator.getPitch();
+            float speed = animator.getSpeed();
             DragonInventory inventory = dragon.inventory;
             ItemStack stack;
             if ((stack = inventory.getBanner(0)).getItem() == Items.BANNER) {
                 GlStateManager.pushMatrix();
                 model.body.postRender(0.0625F);
-                //lower x++ higher x--
-                GlStateManager.translate(0.7F, 0.0, Interpolation.smoothLinear(-2.6F, -0.6F, animator.getSpeed())); // all of it is get speed or one was pitch?
-                // higher y-- lower y++
-                GlStateManager.translate(0, Interpolation.smoothLinear(0.2F, model.offsetY + 1.2F, animator.getSpeed()), 0);
+                GlStateManager.translate(
+                        0.7F,
+                        Interpolation.smoothLinear(0.2F, model.offsetY + 1.2F, speed),
+                        Interpolation.smoothLinear(-2.6F, -0.6F, speed)
+                ); // all of it is get speed or one was pitch?
                 GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
                 GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
                 GlStateManager.rotate(-pitch, 0.0F, 0.0F, 1.0F);
@@ -85,10 +87,11 @@ public enum BuiltinDragonLayer implements IDragonLayer {
             if ((stack = inventory.getBanner(1)).getItem() == Items.BANNER) {
                 GlStateManager.pushMatrix();
                 model.body.postRender(0.0625F);
-                //lower x++ higher x--
-                GlStateManager.translate(-0.7F, 0.0, Interpolation.smoothLinear(-2.6F, -0.6F, animator.getSpeed()));
-                // higher y-- lower y++
-                GlStateManager.translate(0, Interpolation.smoothLinear(0.2F, model.offsetY + 1.2F, animator.getSpeed()), 0);
+                GlStateManager.translate(
+                        -0.7F,
+                        Interpolation.smoothLinear(0.2F, model.offsetY + 1.2F, speed),
+                        Interpolation.smoothLinear(-2.6F, -0.6F, speed)
+                );
                 GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
                 GlStateManager.rotate(-180.0F, 0.0F, 0.0F, 1.0F);
                 GlStateManager.rotate(pitch, 0.0F, 0.0F, 1.0F);
@@ -98,9 +101,11 @@ public enum BuiltinDragonLayer implements IDragonLayer {
             if ((stack = inventory.getBanner(2)).getItem() == Items.BANNER) {
                 GlStateManager.pushMatrix();
                 model.body.postRender(0.0625F);
-                GlStateManager.translate(-0.4F, -1.7F, 1.7F);
-                GlStateManager.translate(0, Interpolation.smoothLinear(2.9F, model.offsetY + 1.7F, animator.getSpeed()), 0);
-                GlStateManager.translate(0, 0, Interpolation.smoothLinear(-2.3F, model.offsetZ + 1.0F, animator.getSpeed()));
+                GlStateManager.translate(
+                        -0.4F,
+                        Interpolation.smoothLinear(1.2F, model.offsetY, speed),
+                        Interpolation.smoothLinear(-0.6F, model.offsetZ + 2.7F, speed)
+                );
                 GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
                 GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
                 GlStateManager.rotate(pitch, 1.0F, 0.0F, 0.0F);
@@ -110,9 +115,11 @@ public enum BuiltinDragonLayer implements IDragonLayer {
             if ((stack = inventory.getBanner(3)).getItem() == Items.BANNER) {
                 GlStateManager.pushMatrix();
                 model.body.postRender(0.0625F);
-                GlStateManager.translate(0.4F, -1.7F, 1.7F);
-                GlStateManager.translate(0, Interpolation.smoothLinear(2.9F, model.offsetY + 1.7F, animator.getSpeed()), 0);
-                GlStateManager.translate(0, 0, Interpolation.smoothLinear(-2.3F, model.offsetZ + 1.0F, animator.getSpeed()));
+                GlStateManager.translate(
+                        0.4F,
+                        Interpolation.smoothLinear(1.2F, model.offsetY, speed),
+                        Interpolation.smoothLinear(-0.6F, model.offsetZ + 2.7F, speed)
+                );
                 GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
                 GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
                 GlStateManager.rotate(pitch, 1.0F, 0.0F, 0.0F);

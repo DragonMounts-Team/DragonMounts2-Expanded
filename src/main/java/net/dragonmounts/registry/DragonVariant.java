@@ -5,12 +5,13 @@ import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import net.dragonmounts.block.DragonHeadBlock;
 import net.dragonmounts.client.variant.VariantAppearance;
 import net.dragonmounts.config.DMConfig;
+import net.dragonmounts.init.DragonVariants;
 import net.dragonmounts.util.LogUtil;
 import net.dragonmounts.util.RegisteredObjectSerializer;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.*;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.Random;
@@ -20,14 +21,14 @@ import java.util.function.Function;
 import static net.dragonmounts.DragonMounts.makeId;
 import static net.dragonmounts.util.DMUtils.parseIdentifier;
 
-public class DragonVariant extends IForgeRegistryEntry.Impl<DragonVariant> {
+public class DragonVariant extends IForgeRegistryEntry.Impl<DragonVariant> implements IStringSerializable {
     public static final String SERIALIZATION_KEY = "Variant";
     public static final ResourceLocation DEFAULT_KEY = makeId("ender_female");
     public static final Registry REGISTRY = new Registry(makeId("dragon_variant"), new RegistryBuilder<DragonVariant>().setDefaultKey(DEFAULT_KEY));
     public static final RegisteredObjectSerializer<DragonVariant> SERIALIZER = new RegisteredObjectSerializer<>(REGISTRY);
 
     public static DragonVariant byName(String name) {
-        return REGISTRY.getValue(parseIdentifier(name));
+        return REGISTRY.getOrDefault(parseIdentifier(name), DragonVariants.ENDER_FEMALE);
     }
 
     int index = -1;// non-private to simplify nested class access
@@ -47,7 +48,8 @@ public class DragonVariant extends IForgeRegistryEntry.Impl<DragonVariant> {
         this.head = factory.apply(this);
     }
 
-    public final String getSerializedName() {
+    @Override
+    public final String getName() {
         ResourceLocation key = this.getRegistryName();
         return (key == null ? DEFAULT_KEY : key).toString();
     }
@@ -103,7 +105,7 @@ public class DragonVariant extends IForgeRegistryEntry.Impl<DragonVariant> {
             this.size = 0;
         }
 
-        public DragonVariant draw(Random random, @Nullable DragonVariant current) {
+        public @Nullable DragonVariant draw(Random random, @Nullable DragonVariant current) {
             switch (this.size) {
                 case 0:
                     return current;
@@ -124,7 +126,6 @@ public class DragonVariant extends IForgeRegistryEntry.Impl<DragonVariant> {
             return this.size;
         }
 
-        @Nonnull
         @Override
         public Iterator<DragonVariant> iterator() {
             return new IteratorImpl();

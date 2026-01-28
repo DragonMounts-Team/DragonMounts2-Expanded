@@ -17,7 +17,7 @@ public enum Relation {
     public final boolean isTrusted;
     private final ITextComponent reason;
 
-    Relation(boolean isTrusted, String reason) {
+    Relation(boolean isTrusted, @Nullable String reason) {
         this.isTrusted = isTrusted;
         this.reason = reason == null ? null : new TextComponentTranslation(reason);
     }

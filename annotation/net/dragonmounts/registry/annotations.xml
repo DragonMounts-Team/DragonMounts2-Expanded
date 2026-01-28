@@ -1,0 +1,11 @@
+<root>
+    <item name='net.dragonmounts.registry.DeferredRegistry V getValue(int)'>
+        <annotation name='org.jetbrains.annotations.UnknownNullability'/>
+    </item>
+    <item name='net.dragonmounts.registry.DragonType T getInstance(java.lang.Class&lt;T&gt;, T)'>
+        <annotation name='org.jetbrains.annotations.Contract'>
+            <val name="value" val="&quot;_, !null -&gt; !null&quot;"/>
+            <val name="pure" val="true"/>
+        </annotation>
+    </item>
+</root>

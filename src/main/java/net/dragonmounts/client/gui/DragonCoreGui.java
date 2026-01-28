@@ -1,6 +1,5 @@
 package net.dragonmounts.client.gui;
 
-import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.inventory.DragonCoreContainer;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -9,8 +8,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
+import static net.dragonmounts.DragonMounts.makeId;
+
 public class DragonCoreGui extends GuiContainer {
-    private static final ResourceLocation BACKGROUND = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/dragon_core.png");
+    private static final ResourceLocation BACKGROUND = makeId("textures/gui/dragon_core.png");
     private final InventoryPlayer inventory;
     private final DragonCoreBlockEntity core;
 
@@ -42,6 +43,4 @@ public class DragonCoreGui extends GuiContainer {
         this.mc.getTextureManager().bindTexture(BACKGROUND);
         this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
     }
-
-
 }

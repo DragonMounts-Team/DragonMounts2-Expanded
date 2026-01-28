@@ -122,9 +122,8 @@ public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityCont
         return new ItemStack(this);
     }
 
-    @Nullable
     @Override
-    public Entity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos) {
+    public @Nullable Entity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos) {
         ResourceLocation identifier = getEntityTypeFrom(stack);
         Entity entity;
         if (DMEntities.DRAGON_ID.equals(identifier)) {
@@ -164,7 +163,7 @@ public class DragonSpawnEggItem extends ItemMonsterPlacer implements IEntityCont
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World level, List<String> tooltips, ITooltipFlag flag) {
-        tooltips.add(this.type.getName());
+        tooltips.add(this.type.getDisplayName());
     }
 
     public static ResourceLocation getEntityTypeFrom(ItemStack stack) {

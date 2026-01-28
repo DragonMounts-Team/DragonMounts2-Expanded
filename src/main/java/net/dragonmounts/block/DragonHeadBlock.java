@@ -39,15 +39,20 @@ public abstract class DragonHeadBlock extends BlockContainer {
     public abstract EnumFacing getFacing(int meta);
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
+    @Override
+    @SuppressWarnings("deprecation")
     public boolean isFullCube(IBlockState state) {
         return false;
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
+    @SuppressWarnings("deprecation")
     public boolean hasCustomBreakingProgress(IBlockState state) {
         return true;
     }

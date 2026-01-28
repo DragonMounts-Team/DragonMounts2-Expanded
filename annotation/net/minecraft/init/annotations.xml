@@ -1,0 +1,43 @@
+<root>
+    <item name='net.minecraft.init.Blocks COBBLESTONE'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='net.minecraft.init.Blocks FIRE'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='net.minecraft.init.Blocks FROSTED_ICE'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='net.minecraft.init.Blocks ICE'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='net.minecraft.init.Blocks OBSIDIAN'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='net.minecraft.init.Blocks SNOW_LAYER'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='net.minecraft.init.Blocks net.minecraft.block.Block getRegisteredBlock(java.lang.String)'>
+        <annotation name='org.jetbrains.annotations.Contract'>
+            <val val="&quot;_ -&gt; !null&quot;"/>
+        </annotation>
+    </item>
+    <item name='net.minecraft.init.MobEffects BLINDNESS'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='net.minecraft.init.MobEffects POISON'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='net.minecraft.init.MobEffects WATER_BREATHING'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='net.minecraft.init.MobEffects WITHER'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+    <item name='net.minecraft.init.MobEffects net.minecraft.potion.Potion getRegisteredMobEffect(java.lang.String)'>
+        <annotation name='org.jetbrains.annotations.Contract'>
+            <val name="value" val="&quot;!null -&gt; !null&quot;"/>
+            <val name="pure" val="true"/>
+        </annotation>
+    </item>
+</root>

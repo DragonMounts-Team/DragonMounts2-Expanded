@@ -22,11 +22,11 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
 import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
+import static net.dragonmounts.util.ItemUtil.isInCreativeInventory;
 
 public class DragonScaleBowItem extends ItemBow {
     public static final String TRANSLATION_KEY = TRANSLATION_KEY_PREFIX + "dragon_scale_bow";
@@ -129,19 +129,16 @@ public class DragonScaleBowItem extends ItemBow {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(this.type.getName());
+        tooltip.add(this.type.getDisplayName());
     }
 
-
     @Override
-    public @Nonnull CreativeTabs[] getCreativeTabs() {
+    public CreativeTabs[] getCreativeTabs() {
         return new CreativeTabs[]{DMItemGroups.COMBAT};
     }
 
     @Override
-    protected boolean isInCreativeTab(CreativeTabs targetTab) {
-        for (CreativeTabs tab : this.getCreativeTabs())
-            if (tab == targetTab) return true;
-        return targetTab == CreativeTabs.SEARCH;
+    protected boolean isInCreativeTab(CreativeTabs tab) {
+        return isInCreativeInventory(this, tab);
     }
 }

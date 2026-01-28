@@ -5,7 +5,6 @@ import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.init.DMSounds;
 import net.minecraft.util.SoundEvent;
 
-
 public class MoonlightBreath extends AetherBreath {
     public MoonlightBreath(TameableDragonEntity dragon, float damage) {
         super(dragon, damage);

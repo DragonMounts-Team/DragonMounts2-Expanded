@@ -34,7 +34,7 @@ public class DragonScaleBlock extends Block {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World level, List<String> tooltips, ITooltipFlag flag) {
-		tooltips.add(this.type.getName());
+		tooltips.add(this.type.getDisplayName());
 	}
 
 	@Override

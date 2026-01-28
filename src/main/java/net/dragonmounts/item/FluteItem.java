@@ -89,9 +89,8 @@ public class FluteItem extends Item {
     }
 
     /// Compat
-    @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+    public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
         NBTTagCompound root = stack.getTagCompound();
         if (root == null) return null;
         if (root.hasKey("Breed")) {
@@ -132,9 +131,10 @@ public class FluteItem extends Item {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World level, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
+        if (stack.isEmpty()) return new ActionResult<>(EnumActionResult.PASS, stack); // ?
         NBTTagCompound nbt;
         if (level.isRemote) {
-            if (!stack.hasTagCompound() || !(nbt = stack.getTagCompound()).hasUniqueId(DRAGON_UUID_KEY)) {
+            if ((nbt = stack.getTagCompound()) == null || !nbt.hasUniqueId(DRAGON_UUID_KEY)) {
                 player.sendStatusMessage(new TextComponentTranslation("message.dragonmounts.flute.empty"), true);
                 return new ActionResult<>(EnumActionResult.FAIL, stack);
             }
@@ -143,7 +143,7 @@ public class FluteItem extends Item {
                 return new ActionResult<>(EnumActionResult.FAIL, stack);
             }
             openFluteGui(nbt.getUniqueId(DRAGON_UUID_KEY), level, hand);
-        } else if (!stack.hasTagCompound() || !(nbt = stack.getTagCompound()).hasUniqueId(DRAGON_UUID_KEY) || (
+        } else if ((nbt = stack.getTagCompound()) == null || !nbt.hasUniqueId(DRAGON_UUID_KEY) || (
                 nbt.hasUniqueId("Owner") && !player.getUniqueID().equals(nbt.getUniqueId("Owner"))
         )) {
             return new ActionResult<>(EnumActionResult.FAIL, stack);
@@ -154,7 +154,7 @@ public class FluteItem extends Item {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, World level, List<String> tooltip, ITooltipFlag flag) {
+    public void addInformation(ItemStack stack, @Nullable World level, List<String> tooltip, ITooltipFlag flag) {
         NBTTagCompound root = stack.getTagCompound();
         if (root != null && root.hasUniqueId(DRAGON_UUID_KEY)) {
             if (root.hasKey("Name")) {

@@ -4,7 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 
-import javax.annotation.Nonnull;
+import static net.dragonmounts.util.ItemUtil.isInCreativeInventory;
 
 public class CraftableBlockItem extends ItemBlock {
     public final CreativeTabs tab;
@@ -15,14 +15,12 @@ public class CraftableBlockItem extends ItemBlock {
     }
 
     @Override
-    public @Nonnull CreativeTabs[] getCreativeTabs() {
+    public CreativeTabs[] getCreativeTabs() {
         return new CreativeTabs[]{this.tab};
     }
 
     @Override
-    protected boolean isInCreativeTab(@Nonnull CreativeTabs targetTab) {
-        for (CreativeTabs tab : this.getCreativeTabs())
-            if (tab == targetTab) return true;
-        return targetTab == CreativeTabs.SEARCH;
+    protected boolean isInCreativeTab(CreativeTabs tab) {
+        return isInCreativeInventory(this, tab);
     }
 }

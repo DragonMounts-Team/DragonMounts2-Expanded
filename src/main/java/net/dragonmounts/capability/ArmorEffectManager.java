@@ -353,7 +353,6 @@ public final class ArmorEffectManager implements IArmorEffectManager {
         return false;
     }
 
-
     @Override
     public int getLevel(final IArmorEffect effect, final boolean filtered) {
         final IArmorEffect[] lvlKey = this.lvlKey;

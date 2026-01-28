@@ -133,20 +133,20 @@ public class DragonVariantHelper implements ITickable {
                     this.points.addTo(type, POINTS_ENV);
                 }
             }
-            this.applyPoints(variant);
+            this.applyPoints(current);
         }
     }
 
-    public void applyPoints(DragonVariant current) {
-        DragonType neo = current.type;
-        int point = this.points.getInt(neo);
+    public void applyPoints(DragonType current) {
+        DragonType neo = null;
+        int point = this.points.getInt(current);
         for (Reference2IntMap.Entry<DragonType> entry : this.points.reference2IntEntrySet()) {
             if (entry.getIntValue() > point) {
                 point = entry.getIntValue();
                 neo = entry.getKey();
             }
         }
-        if (neo != current.type) {
+        if (neo != null) {
             this.dragon.convertTo(neo);
         }
     }
@@ -155,7 +155,7 @@ public class DragonVariantHelper implements ITickable {
         Random random = this.dragon.getRNG();
         this.points.addTo(parent1.getVariant().type, POINTS_INHERIT + random.nextInt(POINTS_INHERIT));
         this.points.addTo(parent2.getVariant().type, POINTS_INHERIT + random.nextInt(POINTS_INHERIT));
-        this.applyPoints(this.dragon.getVariant());
+        this.applyPoints(this.dragon.getVariant().type);
     }
 
     public void onVariantChanged(DragonVariant variant) {

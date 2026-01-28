@@ -20,8 +20,7 @@ public abstract class DMClassTransformers {
         return writer.toByteArray();
     }
 
-    @Nonnull
-    static MethodNode findMethod(ClassNode clazz, byte[] bytecodes, String forge, String searge) {
+    static @Nonnull MethodNode findMethod(ClassNode clazz, byte[] bytecodes, String forge, String searge) {
         new ClassReader(bytecodes).accept(clazz, 0);
         for (MethodNode method : clazz.methods) {
             if (forge.equals(method.name) || searge.equals(

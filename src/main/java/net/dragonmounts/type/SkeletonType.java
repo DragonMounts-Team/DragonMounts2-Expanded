@@ -21,12 +21,11 @@ public class SkeletonType extends DragonType {
 
     @Override
     public boolean isInHabitat(Entity egg) {
-        return egg.posY * 5 < egg.world.getHeight() && egg.getBrightness() < 0.25;
+        return egg.posY * 5 < egg.world.provider.getActualHeight() && egg.world.getLightFromNeighbors(egg.getPosition()) < 4;
     }
 
-    @Nullable
     @Override
-    public DragonBreath initBreath(TameableDragonEntity dragon) {
+    public @Nullable DragonBreath initBreath(TameableDragonEntity dragon) {
         return null;
     }
 

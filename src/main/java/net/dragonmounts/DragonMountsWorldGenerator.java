@@ -25,6 +25,7 @@ import net.minecraftforge.fml.common.IWorldGenerator;
 import java.util.Random;
 import java.util.Set;
 
+import static net.dragonmounts.DragonMounts.makeId;
 import static net.dragonmounts.util.LevelUtil.getSurface;
 
 /**
@@ -32,19 +33,19 @@ import static net.dragonmounts.util.LevelUtil.getSurface;
  */
 public class DragonMountsWorldGenerator implements IWorldGenerator {
     private static final PlacementSettings PLACEMENT_SETTINGS = new PlacementSettings().setIgnoreEntities(false).setIgnoreStructureBlock(true);
-    public static final ResourceLocation AETHER = new ResourceLocation(DragonMountsTags.MOD_ID, "aether");
-    public static final ResourceLocation MOONLIGHT = new ResourceLocation(DragonMountsTags.MOD_ID, "moonlight");
-    public static final ResourceLocation ICE = new ResourceLocation(DragonMountsTags.MOD_ID, "ice");
-    public static final ResourceLocation FOREST1 = new ResourceLocation(DragonMountsTags.MOD_ID, "forest1");
-    public static final ResourceLocation SUNLIGHT = new ResourceLocation(DragonMountsTags.MOD_ID, "sunlight");
-    public static final ResourceLocation TERRA = new ResourceLocation(DragonMountsTags.MOD_ID, "terra");
-    public static final ResourceLocation WATER3 = new ResourceLocation(DragonMountsTags.MOD_ID, "water3");
-    public static final ResourceLocation FOREST2 = new ResourceLocation(DragonMountsTags.MOD_ID, "forest2");
-    public static final ResourceLocation FIRE = new ResourceLocation(DragonMountsTags.MOD_ID, "fire");
-    public static final ResourceLocation NETHER = new ResourceLocation(DragonMountsTags.MOD_ID, "nether");
-    public static final ResourceLocation ZOMBIE = new ResourceLocation(DragonMountsTags.MOD_ID, "zombie");
-    public static final ResourceLocation SKELETON = new ResourceLocation(DragonMountsTags.MOD_ID, "skeleton");
-    public static final ResourceLocation ENCHANTED = new ResourceLocation(DragonMountsTags.MOD_ID, "enchanted");
+    public static final ResourceLocation AETHER = makeId("aether");
+    public static final ResourceLocation MOONLIGHT = makeId("moonlight");
+    public static final ResourceLocation ICE = makeId("ice");
+    public static final ResourceLocation FOREST1 = makeId("forest1");
+    public static final ResourceLocation SUNLIGHT = makeId("sunlight");
+    public static final ResourceLocation TERRA = makeId("terra");
+    public static final ResourceLocation WATER3 = makeId("water3");
+    public static final ResourceLocation FOREST2 = makeId("forest2");
+    public static final ResourceLocation FIRE = makeId("fire");
+    public static final ResourceLocation NETHER = makeId("nether");
+    public static final ResourceLocation ZOMBIE = makeId("zombie");
+    public static final ResourceLocation SKELETON = makeId("skeleton");
+    public static final ResourceLocation ENCHANTED = makeId("enchanted");
 
     @Override
     public void generate(Random random, int x, int z, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
@@ -65,7 +66,7 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
 
     private static MutableBlockPosEx getNetherHeight(World world, int x, int z) {
         MutableBlockPosEx pos = new MutableBlockPosEx(x, 1, z);
-        for (int i = 1, end = world.getHeight(); i < end; pos.withY(++i)) {
+        for (int i = 1, end = world.provider.getActualHeight(); i < end; pos.withY(++i)) {
             if (world.isAirBlock(pos) && world.getBlockState(pos.withY(i - 1)).getBlock() == Blocks.LAVA) {
                 return pos;
             }

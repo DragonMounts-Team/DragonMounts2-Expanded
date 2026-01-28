@@ -1,4 +1,7 @@
 {
+  "silent": {
+    "sounds": ["dragonmounts:silent"]
+  },
   "entity.dragon.ambient": {
     "sounds": [
       {

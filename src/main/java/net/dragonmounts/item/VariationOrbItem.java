@@ -1,6 +1,5 @@
 package net.dragonmounts.item;
 
-
 import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.TameableDragonEntity;

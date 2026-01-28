@@ -107,9 +107,9 @@ public class CommonMisc {
             EntityItem item = (EntityItem) entity;
             ItemStack stack = item.getItem();
             Item type = stack.getItem();
-            if (type instanceof IEntityContainer<?> && !(
-                    (IEntityContainer<?>) type
-            ).isEmpty(stack.getTagCompound())) {
+            if (type instanceof IEntityContainer<?>
+                    && !((IEntityContainer<?>) type).isEmpty(stack.getTagCompound())
+            ) {
                 item.age = -32768;
             }
         }

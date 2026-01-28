@@ -20,6 +20,7 @@ public class DragonHurtByTargetGoal extends EntityAITarget {
         this.setMutexBits(1);
     }
 
+    @Override
     public boolean shouldExecute() {
         int time = this.dragon.getRevengeTimer();
         EntityLivingBase target = this.dragon.getRevengeTarget();
@@ -32,6 +33,7 @@ public class DragonHurtByTargetGoal extends EntityAITarget {
                 this.isSuitableTarget(target, false);
     }
 
+    @Override
     public void startExecuting() {
         TameableDragonEntity dragon = this.dragon;
         dragon.setAttackTarget(this.target = dragon.getRevengeTarget());

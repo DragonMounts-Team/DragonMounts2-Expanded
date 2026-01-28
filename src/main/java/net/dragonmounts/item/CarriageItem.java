@@ -25,9 +25,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+
+import static net.dragonmounts.util.ItemUtil.isInCreativeInventory;
 
 public class CarriageItem extends Item {
     public final CarriageType type;
@@ -37,6 +38,7 @@ public class CarriageItem extends Item {
         this.setCreativeTab(CreativeTabs.TRANSPORTATION);
     }
 
+    @Override
     public ActionResult<ItemStack> onItemRightClick(World level, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
         float f9 = 0.017453292F;
@@ -105,14 +107,12 @@ public class CarriageItem extends Item {
     }
 
     @Override
-    public @Nonnull CreativeTabs[] getCreativeTabs() {
+    public CreativeTabs[] getCreativeTabs() {
         return new CreativeTabs[]{DMItemGroups.ITEMS};
     }
 
     @Override
-    protected boolean isInCreativeTab(CreativeTabs targetTab) {
-        for (CreativeTabs tab : this.getCreativeTabs())
-            if (tab == targetTab) return true;
-        return targetTab == CreativeTabs.SEARCH;
+    protected boolean isInCreativeTab(CreativeTabs tab) {
+        return isInCreativeInventory(this, tab);
     }
 }

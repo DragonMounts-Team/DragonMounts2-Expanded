@@ -1,5 +1,6 @@
 package net.dragonmounts.client;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.dragonmounts.DragonMounts;
 import net.dragonmounts.capability.DMCapabilities;
 import net.dragonmounts.capability.IHardShears;
@@ -32,8 +33,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class ClientDragonEntity extends TameableDragonEntity {
     public static boolean openInventoryIfAvailable(Minecraft minecraft) {
         if (DMConfig.REDIRECT_INVENTORY.value &&
@@ -174,9 +178,10 @@ public class ClientDragonEntity extends TameableDragonEntity {
         rotationYaw = prevRotationYaw;
         rotationYawHead = prevRotationYawHead;
 
-        if (isEgg() || ++deathTime > getMaxDeathTime()) setDead();// actually delete entity after the time is up
-
-        if (deathTime < getMaxDeathTime() - 20) {
+        if (isEgg() || ++this.deathTime > this.getMaxDeathTime()) {
+            // actually discard entity after the time is up
+            this.setDead();
+        } else if (this.deathTime + 20 < this.getMaxDeathTime()) {
             int amount = (int) (4 * this.getAgingScale());
             for (int i = 0; i < amount; i++) {
                 spawnBodyParticle(EnumParticleTypes.CLOUD);
@@ -276,7 +281,6 @@ public class ClientDragonEntity extends TameableDragonEntity {
         return this.wobbling > 0 ? MathX.lerp(this.amplitudeO, this.amplitude, partialTicks) : 0;
     }
 
-    @Nonnull
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
         return this.getEntityBoundingBox().grow(2.0, 1.0, 2.0);
@@ -290,7 +294,7 @@ public class ClientDragonEntity extends TameableDragonEntity {
 
     /// Unsupported Operation
     @Override
-    public TameableDragonEntity createChild(EntityAgeable mate) {
+    public @Nullable TameableDragonEntity createChild(EntityAgeable mate) {
         return null;
     }
 

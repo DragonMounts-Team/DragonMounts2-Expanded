@@ -13,6 +13,7 @@ public class DragonSitGoal extends EntityAISit {
         this.dragon = dragon;
     }
 
+    @Override
     public boolean shouldExecute() {
         TameableDragonEntity dragon = this.dragon;
         if (!this.isSitting ||

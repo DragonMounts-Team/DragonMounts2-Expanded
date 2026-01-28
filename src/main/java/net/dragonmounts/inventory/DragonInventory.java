@@ -1,7 +1,6 @@
 package net.dragonmounts.inventory;
 
 import io.netty.buffer.ByteBuf;
-import mcp.MethodsReturnNonnullByDefault;
 import net.dragonmounts.entity.Relation;
 import net.dragonmounts.entity.TameableDragonEntity;
 import net.dragonmounts.network.SUpdateBannerPacket;
@@ -17,14 +16,11 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 
 import static net.dragonmounts.DragonMounts.NETWORK_WRAPPER;
 import static net.dragonmounts.util.ByteBufferUtil.readStackSilently;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 public final class DragonInventory implements IInventory {
     public static boolean isValidChest(ItemStack stack) {
         return !stack.isEmpty() && ArrayUtils.contains(
@@ -34,14 +30,9 @@ public final class DragonInventory implements IInventory {
     }
 
     public final TameableDragonEntity dragon;
-    /**
-     * item stacks in chest
-     */
-    private final ItemStack[] stacks = new ItemStack[27];
-    /**
-     * banner stacks
-     */
     private final ItemStack[] banners = new ItemStack[4];
+    /// item stacks in chest
+    private final ItemStack[] stacks = new ItemStack[27];
 
     public DragonInventory(TameableDragonEntity dragon) {
         this.dragon = dragon;
@@ -282,14 +273,15 @@ public final class DragonInventory implements IInventory {
     }
 
     public void readAdditionalData(NBTTagCompound tag) {
+        TameableDragonEntity dragon = this.dragon;
         if (tag.hasKey("Saddle")) {
-            this.dragon.setSaddle(new ItemStack(tag.getCompoundTag("Saddle")));
+            dragon.setSaddle(new ItemStack(tag.getCompoundTag("Saddle")));
         }
         if (tag.hasKey("Chest")) {
-            this.dragon.setChest(new ItemStack(tag.getCompoundTag("Chest")));
+            dragon.setChest(new ItemStack(tag.getCompoundTag("Chest")));
         }
         if (tag.hasKey("Armor")) {
-            this.dragon.setArmor(new ItemStack(tag.getCompoundTag("Armor")));
+            dragon.setArmor(new ItemStack(tag.getCompoundTag("Armor")));
         }
         if (tag.hasKey("Banners")) {
             ItemUtil.readFromNBT(this.banners, tag.getTagList("Banners", 10));
@@ -304,13 +296,13 @@ public final class DragonInventory implements IInventory {
             int j = stack.getByte("Slot") & 255;
             switch (j) {
                 case 0:
-                    this.dragon.setSaddle(new ItemStack(stack));
+                    dragon.setSaddle(new ItemStack(stack));
                     continue;
                 case 1:
-                    this.dragon.setChest(new ItemStack(stack));
+                    dragon.setChest(new ItemStack(stack));
                     continue;
                 case 2:
-                    this.dragon.setArmor(new ItemStack(stack));
+                    dragon.setArmor(new ItemStack(stack));
                     continue;
                 default:
                     if (j < 30) {
@@ -338,8 +330,7 @@ public final class DragonInventory implements IInventory {
     }
 
     public void dropItemsInChest() {
-        TameableDragonEntity dragon = this.dragon;
-        if (dragon.world.isRemote) {
+        if (this.dragon.world.isRemote) {
             Arrays.fill(this.stacks, ItemStack.EMPTY);
         } else {
             EntityUtil.dropItems(this.dragon, this.stacks);

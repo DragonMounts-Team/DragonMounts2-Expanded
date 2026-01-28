@@ -46,9 +46,8 @@ public class DragonAmuletItem extends AmuletItem<TameableDragonEntity> {
         return stack;
     }
 
-    @Nullable
     @Override
-    public ServerDragonEntity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos) {
+    public @Nullable ServerDragonEntity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos) {
         return EntityUtil.spawnDragonFormStack(level, stack, player, pos, this.type, (world, entity) ->
                 world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundEvents.ENTITY_ILLAGER_MIRROR_MOVE, SoundCategory.NEUTRAL, 1, 1)
         );

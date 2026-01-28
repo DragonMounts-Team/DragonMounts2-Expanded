@@ -3,7 +3,6 @@ package net.dragonmounts.client.render;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.dragonmounts.DragonMountsTags;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,16 +12,17 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Map;
 import java.util.UUID;
+
+import static net.dragonmounts.DragonMounts.makeId;
 
 @SideOnly(Side.CLIENT)
 public class DMCapeRenderer {
-    public static final ResourceLocation SUN_CAPE = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/models/misc/sun_cape.png");
-    public static final ResourceLocation ICE_CAPE = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/models/misc/wolfs_cape.png");
-    public static final ResourceLocation STORM_CAPE = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/models/misc/storm_cape.png");
-    public static final ResourceLocation NETHER_CAPE = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/models/misc/nether_cape.png");
-    public static final ResourceLocation FOREST_CATE = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/models/misc/forest_cape.png");
+    public static final ResourceLocation SUN_CAPE = makeId("textures/models/misc/sun_cape.png");
+    public static final ResourceLocation ICE_CAPE = makeId("textures/models/misc/wolfs_cape.png");
+    public static final ResourceLocation STORM_CAPE = makeId("textures/models/misc/storm_cape.png");
+    public static final ResourceLocation NETHER_CAPE = makeId("textures/models/misc/nether_cape.png");
+    public static final ResourceLocation FOREST_CATE = makeId("textures/models/misc/forest_cape.png");
     public static final Object2ObjectMap<UUID, ResourceLocation> PLAYER_CAPES = new Object2ObjectOpenHashMap<>();
     static {
         PLAYER_CAPES.put(UUID.fromString("003b050f-f6fd-43b5-9738-669b23c3452f"), SUN_CAPE);// GundunUkan
@@ -35,14 +35,12 @@ public class DMCapeRenderer {
     @SubscribeEvent
     public static void playerRender(RenderPlayerEvent.Pre event) {
         EntityPlayer player = event.getEntityPlayer();
-        if (player instanceof AbstractClientPlayer) {
+        ResourceLocation texture = PLAYER_CAPES.get(player.getUniqueID());
+        if (texture != null && player instanceof AbstractClientPlayer) {
             NetworkPlayerInfo info = ((AbstractClientPlayer) player).playerInfo;
-            if (info == null) return;
-            Map<MinecraftProfileTexture.Type, ResourceLocation> textureMap = info.playerTextures;
-            if (textureMap == null) return;
-            ResourceLocation texture = PLAYER_CAPES.get(player.getUniqueID());
-            if (texture == null) return;
-            textureMap.put(MinecraftProfileTexture.Type.CAPE, texture);
+            if (info != null) {
+                info.playerTextures.put(MinecraftProfileTexture.Type.CAPE, texture);
+            }
         }
     }
 }

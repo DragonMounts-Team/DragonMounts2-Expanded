@@ -66,9 +66,8 @@ public class DragonEssenceItem extends Item implements IEntityContainer<Tameable
         return stack;
     }
 
-    @Nullable
     @Override
-    public ServerDragonEntity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos) {
+    public @Nullable ServerDragonEntity loadEntity(WorldServer level, ItemStack stack, @Nullable EntityPlayer player, BlockPos pos) {
         return EntityUtil.spawnDragonFormStack(level, stack, player, pos, this.type, (world, entity) -> {
             entity.setLifeStage(DragonLifeStage.HATCHLING, true, false);
             world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundEvents.ENTITY_ILLAGER_MIRROR_MOVE, SoundCategory.NEUTRAL, 1, 1);
@@ -78,7 +77,7 @@ public class DragonEssenceItem extends Item implements IEntityContainer<Tameable
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World level, List<String> tooltips, ITooltipFlag flag) {
-        tooltips.add(this.type.getName());
+        tooltips.add(this.type.getDisplayName());
         NBTTagCompound root = stack.getTagCompound();
         if (root == null || !root.hasKey("EntityTag")) {
             //Broken NBT, possibly cheated in, Warn the player...
@@ -96,9 +95,8 @@ public class DragonEssenceItem extends Item implements IEntityContainer<Tameable
         return false;
     }
 
-    @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound cap) {
+    public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound cap) {
         NBTTagCompound root = stack.getTagCompound();
         if (root != null && !root.hasKey("EntityTag") && root.hasKey("Breed", 8)) {
             root.removeTag("UUIDMost");

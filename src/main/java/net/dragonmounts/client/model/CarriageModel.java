@@ -5,6 +5,8 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
+import javax.annotation.Nonnull;
+
 /**
  * ModelMinecart - Either Mojang or a mod author
  * Created using Tabula 7.0.0
@@ -44,7 +46,7 @@ public class CarriageModel extends ModelBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
+    public void render(@Nonnull Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.field_78154_a1.render(f5);
         this.field_78154_a4.render(f5);
         this.field_78154_a2.render(f5);

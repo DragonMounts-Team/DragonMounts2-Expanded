@@ -28,8 +28,8 @@ import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
 
 public class HatchableDragonEggBlock extends BlockDragonEgg {
     public static final String TRANSLATION_KEY = TRANSLATION_KEY_PREFIX + "dragon_egg";
-    @Nullable
-    public static ServerDragonEntity spawn(World level, BlockPos pos, DragonType type) {
+
+    public static @Nullable ServerDragonEntity spawn(World level, BlockPos pos, DragonType type) {
         DragonVariant variant = type.variants.draw(level.rand, null);
         if (variant == null) return null;
         ServerDragonEntity egg = new ServerDragonEntity(level);
@@ -78,7 +78,7 @@ public class HatchableDragonEggBlock extends BlockDragonEgg {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World level, List<String> tooltips, ITooltipFlag flag) {
-        tooltips.add(this.getDragonType(stack.getMetadata()).getName());
+        tooltips.add(this.getDragonType(stack.getMetadata()).getDisplayName());
     }
 
     public DragonType getDragonType(int meta) {

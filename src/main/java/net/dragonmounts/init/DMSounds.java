@@ -3,12 +3,14 @@ package net.dragonmounts.init;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
 import it.unimi.dsi.fastutil.objects.ObjectLists;
-import net.dragonmounts.DragonMountsTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 
+import static net.dragonmounts.DragonMounts.makeId;
+
 public class DMSounds {
 	public static final ObjectList<SoundEvent> INSTANCES;
+	public static final SoundEvent SILENT;
 	public static final SoundEvent DRAGON_AMBIENT;
 	public static final SoundEvent DRAGON_AMBIENT_WATER;
 	public static final SoundEvent DRAGON_CHEST;
@@ -51,12 +53,13 @@ public class DMSounds {
 	public static final SoundEvent VARIATION_ORB_ACTIVATE;
 
 	static SoundEvent create(String name) {
-		ResourceLocation id = new ResourceLocation(DragonMountsTags.MOD_ID, name);
+		ResourceLocation id = makeId(name);
 		return new SoundEvent(id).setRegistryName(id);
 	}
 
 	static {
-		ObjectArrayList<SoundEvent> list = new ObjectArrayList<>();
+		ObjectArrayList<SoundEvent> list = new ObjectArrayList<>(41);
+		list.add(SILENT = create("silent"));
 		list.add(DRAGON_AMBIENT = create("entity.dragon.ambient"));
 		list.add(DRAGON_AMBIENT_WATER = create("entity.dragon.ambient.water"));
 		list.add(DRAGON_CHEST = create("entity.dragon.chest"));

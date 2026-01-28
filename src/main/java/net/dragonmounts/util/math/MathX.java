@@ -114,8 +114,8 @@ public abstract class MathX {
 
     public final static double MINIMUM_SIGNIFICANT_DIFFERENCE = 1e-3;
 
-    public static boolean isSignificantlyDifferent(double left, double right) {
-        return Math.abs(left - right) > MINIMUM_SIGNIFICANT_DIFFERENCE;
+    public static boolean isSignificantlyDifferent(double neo, double old) {
+        return Math.abs(neo - old) > MINIMUM_SIGNIFICANT_DIFFERENCE;
     }
 
     /**
@@ -125,7 +125,8 @@ public abstract class MathX {
      * @return interpolated vector
      */
     public static Vec3d interpolateVec(Vec3d start, Vec3d end, float delta) {
-        if (start == end) return end;
+        if (delta <= 1.0F) return start;
+        if (delta >= 1.0F) return end;
         return new Vec3d(
                 start.x + (end.x - start.x) * delta,
                 start.y + (end.y - start.y) * delta,

@@ -10,6 +10,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+
 @SideOnly(Side.CLIENT)
 public class CarriageRenderer extends Render<CarriageEntity> {
     protected CarriageModel model = new CarriageModel();
@@ -20,7 +22,7 @@ public class CarriageRenderer extends Render<CarriageEntity> {
     }
 
     @Override
-    public void doRender(CarriageEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
+    public void doRender(@Nonnull CarriageEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);

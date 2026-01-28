@@ -77,7 +77,7 @@ public class DragonEntityFixer implements IFixableData {
                     variant = isMale ? DragonVariants.ENDER_MALE : DragonVariants.ENDER_FEMALE;
                     break;
             }
-            tag.setString(DragonVariant.SERIALIZATION_KEY, variant.getSerializedName());
+            tag.setString(DragonVariant.SERIALIZATION_KEY, variant.getName());
             tag.removeTag("Breed");
         }
     }

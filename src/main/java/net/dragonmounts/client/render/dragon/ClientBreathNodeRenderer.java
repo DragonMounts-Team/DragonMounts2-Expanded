@@ -10,13 +10,15 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
+import javax.annotation.Nonnull;
+
 public class ClientBreathNodeRenderer extends Render<ClientBreathNodeEntity> {
     public ClientBreathNodeRenderer(RenderManager manager) {
         super(manager);
     }
 
     @Override
-    public void doRender(ClientBreathNodeEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
+    public void doRender(@Nonnull ClientBreathNodeEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
         GlStateManager.pushMatrix();
         GlStateManager.disableLighting();
         this.bindEntityTexture(entity);

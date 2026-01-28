@@ -1,10 +1,12 @@
 package net.dragonmounts.init;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+@MethodsReturnNonnullByDefault
 public class DMItemGroups {
     public static final CreativeTabs BLOCKS;
     public static final CreativeTabs ITEMS;

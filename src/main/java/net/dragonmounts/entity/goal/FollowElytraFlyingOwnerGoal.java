@@ -14,6 +14,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 
 /**
+ * @deprecated TODO merge into {@link DragonFollowOwnerGoal}
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public class FollowElytraFlyingOwnerGoal extends EntityAIBase {
@@ -22,46 +23,36 @@ public class FollowElytraFlyingOwnerGoal extends EntityAIBase {
 
     public FollowElytraFlyingOwnerGoal(ServerDragonEntity dragon) {
         this.dragon = dragon;
-        this.setMutexBits(3);
+        this.setMutexBits(0b11);
     }
 
     @Override
     public boolean shouldExecute() {
         ServerDragonEntity dragon = this.dragon;
-        if (!dragon.canFly())
-            return false;
-
-        // don't follow if sitting
-        if (dragon.isSitting())
-            return false;
-
-
-        if (dragon.getLeashed())
-            return false;
-
-        this.owner = dragon.getOwner();
-
-        // don't follow if ownerless 
-        if (this.owner == null) return false;
-
-        if (dragon.isRiding() || dragon.isPassenger(this.owner)) return false;
-
-        // follow only if the owner is using an Elytra
-        return this.owner.isElytraFlying();
+        // don't follow if leashed, sitting or already being ridden
+        if (dragon.isSitting()
+                || dragon.getLeashed()
+                || !dragon.isSaddled()
+                || dragon.isRiding()
+                || dragon.getControllingPlayer() != null
+        ) return false;
+        EntityLivingBase owner = this.owner = dragon.getOwner();
+        if (owner != null && owner.isElytraFlying()) {
+            // don't follow if owner is too far away
+            double range = dragon.getNavigator().getPathSearchRange();
+            return dragon.getDistanceSq(owner) < range * range;
+        }
+        return false;
     }
 
     @Override
     public void updateTask() {
         ServerDragonEntity dragon = this.dragon;
         EntityLivingBase owner = this.owner;
-        // liffoff
-        if (!dragon.isFlying()) dragon.liftOff();
-
-        // mount owner if close enough, otherwise move to owner
-        if (dragon.getDistance(owner) <= dragon.width || dragon.getDistance(owner) <= dragon.height || (owner.isSneaking() && dragon.isFlying()))
-            owner.startRiding(dragon);
-
+        if (!dragon.isFlying()) {
+            dragon.liftOff();
+        }
+        dragon.setBoosting(dragon.getDistanceSq(owner) > 25.0);
         dragon.getNavigator().tryMoveToXYZ(owner.posX, owner.posY, owner.posZ, 1);
-        dragon.setBoosting(dragon.getDistance(owner) > 18);
     }
 }

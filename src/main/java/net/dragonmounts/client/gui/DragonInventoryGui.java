@@ -1,7 +1,6 @@
 package net.dragonmounts.client.gui;
 
 import net.dragonmounts.DragonMounts;
-import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.client.ClientDragonEntity;
 import net.dragonmounts.client.ClientUtil;
 import net.dragonmounts.entity.TameableDragonEntity;
@@ -27,18 +26,21 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
+
+import static net.dragonmounts.DragonMounts.makeId;
 
 /**
  * @see net.minecraft.client.gui.GuiRepair
  */
 @SideOnly(Side.CLIENT)
+@ParametersAreNonnullByDefault
 public class DragonInventoryGui extends GuiContainer implements ISlotListener<FluteSlot> {
     /// 176 x 214
-    private static final ResourceLocation INVENTORY = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/dragon_inventory.png");
+    private static final ResourceLocation INVENTORY = makeId("textures/gui/dragon_inventory.png");
     /// 147 x 214
-    private static final ResourceLocation PANEL = new ResourceLocation(DragonMountsTags.MOD_ID, "textures/gui/dragon_panel.png");
+    private static final ResourceLocation PANEL = makeId("textures/gui/dragon_panel.png");
     private final DragonContainer<ClientDragonEntity> container;
     private final ClientDragonEntity dragon;
     private final EntityPlayer player;
@@ -266,7 +268,7 @@ public class DragonInventoryGui extends GuiContainer implements ISlotListener<Fl
         }
 
         @Override
-        public void drawButton(@Nonnull Minecraft minecraft, int mouseX, int mouseY, float partialTicks) {
+        public void drawButton(Minecraft minecraft, int mouseX, int mouseY, float partialTicks) {
             if (this.visible) {
                 int x = this.x, y = this.y, width = this.width, height = this.height, halfWidth = width / 2;
                 minecraft.getTextureManager().bindTexture(BUTTON_TEXTURES);

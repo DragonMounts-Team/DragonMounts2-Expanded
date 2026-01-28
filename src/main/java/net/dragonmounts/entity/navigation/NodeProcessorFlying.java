@@ -9,6 +9,7 @@
  */
 package net.dragonmounts.entity.navigation;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.dragonmounts.util.MutableBlockPosEx;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLiving;
@@ -19,13 +20,17 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Based on SwimNodeProcessor but for air blocks.
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class NodeProcessorFlying extends SwimNodeProcessor {
+    @Override
     public int findPathOptions(PathPoint[] options, PathPoint start, PathPoint dest, float maxDistance) {
         int len = 0;
         for (EnumFacing facing : EnumFacing.values()) {
@@ -41,8 +46,7 @@ public class NodeProcessorFlying extends SwimNodeProcessor {
         return len;
     }
 
-    @Nullable
-    private PathPoint getAirNode(int x, int y, int z) {
+    private @Nullable PathPoint getAirNode(int x, int y, int z) {
         return this.getType(x, y, z) == PathNodeType.WALKABLE ? this.openPoint(x, y, z) : null;
     }
 

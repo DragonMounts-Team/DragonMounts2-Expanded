@@ -15,8 +15,8 @@ public class LogUtil {
     }
 
     public static void once(Level level, String message, String key) {
-        if (LOGGED.contains(key)) return;
-        LOGGED.add(key);
-        LOGGER.log(level, message);
+        if (LOGGED.add(key)) {
+            LOGGER.log(level, message);
+        }
     }
 }

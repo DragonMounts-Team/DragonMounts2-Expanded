@@ -7,6 +7,8 @@ import net.dragonmounts.init.DragonTypes;
 import net.dragonmounts.registry.DragonType;
 import net.minecraft.util.IStringSerializable;
 
+import javax.annotation.Nonnull;
+
 public enum DragonTypeCompat implements IStringSerializable {
     AETHER(DragonTypes.AETHER),
     FIRE(DragonTypes.FIRE),
@@ -40,7 +42,7 @@ public enum DragonTypeCompat implements IStringSerializable {
     }
 
     @Override
-    public String getName() {
+    public @Nonnull String getName() {
         return this.identifier;
     }
 

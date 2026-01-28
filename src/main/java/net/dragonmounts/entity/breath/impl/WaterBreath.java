@@ -22,7 +22,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-
 /**
  * Created by TGG on 5/08/2015.
  */

@@ -1,7 +1,6 @@
 package net.dragonmounts.init;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import mcp.MethodsReturnNonnullByDefault;
 import net.dragonmounts.api.IDescribedArmorEffect;
 import net.dragonmounts.item.*;
 import net.dragonmounts.registry.DragonType;
@@ -19,9 +18,8 @@ import static net.dragonmounts.DragonMountsTags.TRANSLATION_KEY_PREFIX;
 import static net.dragonmounts.item.DragonArmorItem.*;
 import static net.dragonmounts.util.ItemUtil.localize;
 
-@MethodsReturnNonnullByDefault
 public class DMItems {
-    public static final ObjectArrayList<Item> ITEMS = new ObjectArrayList<>();
+    public static final ObjectArrayList<Item> ITEMS = new ObjectArrayList<>(DragonVariants.BUILTIN_VALUES.size() + 266);
     //Blocks
     public static final CraftableBlockItem DRAGON_NEST = createItem(
             "dragon_nest",
@@ -329,11 +327,7 @@ public class DMItems {
     public static final DragonAmuletItem WITHER_DRAGON_AMULET = createDragonAmuletItem("wither_dragon_amulet", DragonTypes.WITHER);
     public static final DragonAmuletItem DARK_DRAGON_AMULET = createDragonAmuletItem("dark_dragon_amulet", DragonTypes.DARK);
     //Tools
-    public static final DragonWandItem DRAGON_WAND = createItem(
-            "dragon_wand",
-            new DragonWandItem(),
-            item -> item.setTranslationKey(TRANSLATION_KEY_PREFIX + "dragon_wand")
-    );
+    public static final DragonWandItem DRAGON_WAND = createItem("dragon_wand", new DragonWandItem());
     public static final FluteItem FLUTE = createItem(
             "flute",
             new FluteItem(),

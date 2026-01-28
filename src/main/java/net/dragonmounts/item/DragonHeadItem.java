@@ -46,12 +46,12 @@ public class DragonHeadItem extends Item {
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, DISPENSER_BEHAVIOR);
     }
 
-    @Nullable
     @Override
-    public EntityEquipmentSlot getEquipmentSlot(ItemStack stack) {
+    public @Nullable EntityEquipmentSlot getEquipmentSlot(ItemStack stack) {
         return EntityEquipmentSlot.HEAD;
     }
 
+    @Override
     public EnumActionResult onItemUse(EntityPlayer player, World level, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         IBlockState state = level.getBlockState(pos);
         boolean flag = state.getBlock().isReplaceable(level, pos);
@@ -80,7 +80,7 @@ public class DragonHeadItem extends Item {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World level, List<String> tooltips, ITooltipFlag flag) {
-        tooltips.add(this.variant.type.getName());
+        tooltips.add(this.variant.type.getDisplayName());
     }
 
     @Override

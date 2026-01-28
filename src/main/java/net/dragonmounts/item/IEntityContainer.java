@@ -1,6 +1,5 @@
 package net.dragonmounts.item;
 
-
 import net.dragonmounts.compat.FixerCompat;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -14,7 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 
 import javax.annotation.Nullable;
-
 
 public interface IEntityContainer<T extends Entity> {
     static NBTTagCompound simplifyData(NBTTagCompound tag) {

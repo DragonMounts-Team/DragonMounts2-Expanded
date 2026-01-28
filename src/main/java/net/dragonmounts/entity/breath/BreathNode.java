@@ -5,7 +5,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
-import javax.annotation.Nonnull;
 import java.util.Random;
 
 /**
@@ -33,7 +32,7 @@ public class BreathNode {
 
   public final BreathPower power;
 
-  public BreathNode(@Nonnull BreathPower power) {
+  public BreathNode(BreathPower power) {
     this.power = power;
   }
 
@@ -157,7 +156,6 @@ public class BreathNode {
     return INITIAL_SIZE + (NODE_MAX_SIZE - INITIAL_SIZE) * MathHelper.clamp(fractionOfFullSize, 0.0F, 1.0F);
   }
 
-
   /**
    * returns the current intensity of the node (eg for flame = how hot it is)
    *
@@ -175,7 +173,6 @@ public class BreathNode {
     }
     return fractionOfFullPower * this.power.intensity;
   }
-
 
   public float getLifetimeFraction() {
     return MathHelper.clamp(this.ageTicks / this.getMaxLifeTime(), 0.0F, 1.0F);

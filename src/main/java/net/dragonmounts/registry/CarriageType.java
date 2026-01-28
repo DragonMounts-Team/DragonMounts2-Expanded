@@ -5,6 +5,7 @@ import net.dragonmounts.init.CarriageTypes;
 import net.dragonmounts.util.RegisteredObjectSerializer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.RegistryBuilder;
@@ -12,24 +13,25 @@ import net.minecraftforge.registries.RegistryBuilder;
 import java.util.function.Supplier;
 
 import static net.dragonmounts.DragonMounts.makeId;
+import static net.dragonmounts.util.DMUtils.parseIdentifier;
 
-public abstract class CarriageType extends IForgeRegistryEntry.Impl<CarriageType> {
+public abstract class CarriageType extends IForgeRegistryEntry.Impl<CarriageType> implements IStringSerializable {
     public static final ResourceLocation DEFAULT_KEY = makeId("oak");
     public static final DeferredRegistry<CarriageType> REGISTRY = new DeferredRegistry<>(makeId("carriage_type"), CarriageType.class, new RegistryBuilder<CarriageType>().setDefaultKey(DEFAULT_KEY));
     public static final RegisteredObjectSerializer<CarriageType> SERIALIZER = new RegisteredObjectSerializer<>(REGISTRY);
 
     public static CarriageType byName(String name) {
-        CarriageType type = REGISTRY.getValue(new ResourceLocation(name));
-        return type == null ? CarriageTypes.OAK : type;
+        return REGISTRY.getOrDefault(parseIdentifier(name), CarriageTypes.OAK);
     }
 
     public abstract ItemStack getItemStack(CarriageEntity entity);
 
     public abstract ResourceLocation getTexture(CarriageEntity entity);
 
-    public final ResourceLocation getSerializedName() {
+    @Override
+    public final String getName() {
         ResourceLocation key = this.getRegistryName();
-        return key == null ? DEFAULT_KEY : key;
+        return (key == null ? DEFAULT_KEY : key).toString();
     }
 
     public static class Default extends CarriageType {

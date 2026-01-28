@@ -3,6 +3,6 @@
         <annotation name='org.jetbrains.annotations.Nullable'/>
     </item>
     <item name='net.minecraft.entity.passive.EntityTameable net.minecraft.entity.ai.EntityAISit getAISit()'>
-        <annotation name='org.jetbrains.annotations.Nullable'/>
+        <annotation name='org.jetbrains.annotations.UnknownNullability'/>
     </item>
 </root>

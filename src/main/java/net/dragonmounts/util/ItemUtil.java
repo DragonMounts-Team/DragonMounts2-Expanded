@@ -2,6 +2,7 @@ package net.dragonmounts.util;
 
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.dragonmounts.DragonMountsTags;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -53,5 +54,13 @@ public class ItemUtil {
 
     public static Item localize(Item item, String name) {
         return item.setTranslationKey(DragonMountsTags.TRANSLATION_KEY_PREFIX + name);
+    }
+
+    /// Ignore {@link Item#getCreativeTab} to reserver it for recipe tab
+    public static boolean isInCreativeInventory(Item item, CreativeTabs tab) {
+        for (CreativeTabs candidate : item.getCreativeTabs()) {
+            if (candidate == tab) return true;
+        }
+        return tab == CreativeTabs.SEARCH;
     }
 }

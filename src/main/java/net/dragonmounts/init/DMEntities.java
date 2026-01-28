@@ -1,6 +1,5 @@
 package net.dragonmounts.init;
 
-import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.entity.CarriageEntity;
 import net.dragonmounts.entity.ServerDragonEntity;
 import net.dragonmounts.entity.TameableDragonEntity;
@@ -22,7 +21,7 @@ public class DMEntities {
     public static final EntityEntry CARRIAGE = EntityEntryBuilder.create()
             .entity(CarriageEntity.class)
             .factory(CarriageEntity::new)
-            .id(new ResourceLocation(DragonMountsTags.MOD_ID, "carriage"), 2)
+            .id(makeId("carriage"), 2)
             .tracker(32, 3, true)
             .name("carriage")
             .build();

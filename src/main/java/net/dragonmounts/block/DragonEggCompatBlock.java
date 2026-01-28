@@ -46,6 +46,7 @@ public class DragonEggCompatBlock extends HatchableDragonEggBlock {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
         return this.getDragonType(meta).getInstance(HatchableDragonEggBlock.class, DMBlocks.ENDER_DRAGON_EGG).getDefaultState();
     }

@@ -36,9 +36,8 @@ public class ArmorSuit<T extends ItemArmor> extends AbstractCollection<T> {
         }
     }
 
-    @Nonnull
     @Override
-    public Iterator<T> iterator() {
+    public @Nonnull Iterator<T> iterator() {
         return new ObjectArrayIterator<>(this.helmet, this.chestplate, this.leggings, this.boots);
     }
 

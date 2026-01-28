@@ -1,5 +1,6 @@
 package net.dragonmounts.block.entity;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.dragonmounts.DragonMountsTags;
 import net.dragonmounts.block.DragonCoreBlock;
 import net.dragonmounts.inventory.DragonCoreContainer;
@@ -25,6 +26,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 /**
@@ -32,7 +34,8 @@ import java.util.List;
  *
  * @author WolfShotz
  */
-
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class DragonCoreBlockEntity extends TileEntityLockableLoot implements ITickable {
     private final NonNullList<ItemStack> chestContents = NonNullList.withSize(1, ItemStack.EMPTY);
     public int numPlayersUsing, ticksSinceSync;

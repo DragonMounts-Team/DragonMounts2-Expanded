@@ -1,13 +1,11 @@
 /**
  * It is advised that you do not edit anything in the build.gradle; unless you are sure of what you are doing
  */
+
 import com.gtnewhorizons.retrofuturagradle.mcp.InjectTagsTask
-import groovy.json.JsonSlurper
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.gradle.ext.Gradle
 
-import java.time.LocalDate
-import java.time.temporal.IsoFields
 import java.util.regex.Pattern
 
 plugins {
@@ -46,7 +44,7 @@ setDefaultProperty 'extra_jvm_args', false, ''
 setDefaultProperty 'extra_tweak_classes', false, ''
 setDefaultProperty 'change_minecraft_sources', false, false
 
-version = propertyString('mod_version')
+version = resolveVersion()
 group = propertyString('root_package')
 
 base {
@@ -173,20 +171,6 @@ static String formatList(List<String> list) {
 }
 
 tasks.register('generateModInfo') {
-    def config = new File("run", "build.json")
-    if (config.exists()) {
-        inputs.file config
-        doFirst {
-            def json = new JsonSlurper().parseText(config.text)
-            def suffix = json.suffix as String
-            if (json.weekly) {
-                def date = LocalDate.now()
-                project.version = "$project.version-${'%dw%02d'.formatted(date.get(IsoFields.WEEK_BASED_YEAR) % 100, date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR))}${suffix ?: 'a'}"
-            } else if (suffix != null && !suffix.isBlank()) {
-                project.version = "$project.version-$suffix"
-            }
-        }
-    }
     inputs.property "version", project.version
     def info = layout.buildDirectory.file("generated/mcmod.info").get().asFile
     outputs.file info

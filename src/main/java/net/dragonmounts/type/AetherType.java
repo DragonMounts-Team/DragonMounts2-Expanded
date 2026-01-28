@@ -47,6 +47,6 @@ public class AetherType extends DragonType {
 
     @Override
     public boolean isInHabitat(Entity egg) {
-        return egg.posY > egg.world.getHeight() * 0.66;
+        return egg.posY > egg.world.provider.getActualHeight() * 0.66;
     }
 }

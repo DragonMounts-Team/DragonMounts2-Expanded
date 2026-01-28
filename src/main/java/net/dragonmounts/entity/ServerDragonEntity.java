@@ -56,7 +56,6 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.util.Constants;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.Random;
@@ -151,23 +150,28 @@ public class ServerDragonEntity extends TameableDragonEntity {
         }
         DragonLifeStage stage = this.stage;
         if (DragonLifeStage.EGG == stage) return;
+        boolean canFly = stage.isOldEnough(DragonLifeStage.FLEDGLING);
 
         // mutex 1: movement
         // mutex 2: looking
         // mutex 4: special state
-        tasks.addTask(0, new CatchOwnerGoal(this)); // mutex all
-        tasks.addTask(1, new ControlledByPlayerGoal(this)); // mutex all
-        tasks.addTask(2, this.getAISit()); // mutex 4+1
+        tasks.addTask(0, new ControlledByPlayerGoal(this)); // mutex all
+        tasks.addTask(1, this.getAISit()); // mutex 4+1
+        if (canFly) {
+            tasks.addTask(1, new CatchOwnerGoal(this)); // mutex 0b11
+        }
         tasks.addTask(2, new EntityAISwimming(this)); // mutex 4
         tasks.addTask(3, new DragonAttackGoal(this, 1)); // mutex 2+1
         tasks.addTask(4, new DragonDescendGoal(this, 0.25)); // mutex 1
-        tasks.addTask(6, new FollowElytraFlyingOwnerGoal(this)); // mutex 2+1
+        if (canFly) {
+            tasks.addTask(6, new FollowElytraFlyingOwnerGoal(this)); // mutex 2+1
+        }
         tasks.addTask(7, new DragonFollowOwnerGoal(this, 1, 18, 14)); // mutex 2+1
         tasks.addTask(9, new EntityAIMoveTowardsRestriction(this, 1)); // mutex 1
         tasks.addTask(11, new EntityAIWander(this, 1)); // mutex 1
         tasks.addTask(12, new EntityAILookIdle(this)); // mutex 2
         tasks.addTask(12, new LookAtOtherGoal(this, 16, 0.05F)); // mutex 2
-        if (stage.isBaby()) {
+        if (!canFly) {
             tasks.addTask(4, new EntityAILeapAtTarget(this, 0.7F)); // mutex 1
             tasks.addTask(7, new DragonTemptGoal(this, 0.75)); // mutex 2+1
             tasks.addTask(8, new DragonFollowParentGoal(this, 0.75));
@@ -190,7 +194,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
         nbt.setBoolean("AllowOtherPlayers", this.allowedOtherPlayers());
         nbt.setBoolean("FollowOwner", this.followOwner);
         nbt.setBoolean("FromVanillaEgg", this.fromVanillaEgg);
-        nbt.setString(DragonVariant.SERIALIZATION_KEY, this.getVariant().getSerializedName());
+        nbt.setString(DragonVariant.SERIALIZATION_KEY, this.getVariant().getName());
         nbt.setString(DragonLifeStage.SERIALIZATION_KEY, this.stage.getName());
         //        nbt.setBoolean("sleeping", this.isSleeping()); //unused as of now
         this.inventory.saveAdditionalData(nbt);
@@ -472,7 +476,10 @@ public class ServerDragonEntity extends TameableDragonEntity {
         rotationYaw = prevRotationYaw;
         rotationYawHead = prevRotationYawHead;
 
-        if (isEgg() || ++deathTime > getMaxDeathTime()) setDead();// actually delete entity after the time is up
+        if (isEgg() || ++this.deathTime > getMaxDeathTime()) {
+            // actually discard entity after the time is up
+            this.setDead();
+        }
     }
 
     @Override
@@ -545,8 +552,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
     }
 
     public void setSheared(int cooldown) {
-        this.shearCooldown = cooldown;
-        this.dataManager.set(DATA_CAN_SHEAR, cooldown <= 0);
+        this.dataManager.set(DATA_CAN_SHEAR, (this.shearCooldown = cooldown) <= 0);
     }
 
     public void setBodySize(float size) {
@@ -554,8 +560,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
     }
 
     public void setBreatheCollected(int cooldown) {
-        this.collectBreathCooldown = cooldown;
-        this.dataManager.set(DATA_CAN_COLLECT_BREATH, cooldown <= 0);
+        this.dataManager.set(DATA_CAN_COLLECT_BREATH, (this.collectBreathCooldown = cooldown) <= 0);
     }
 
     /**
@@ -599,12 +604,12 @@ public class ServerDragonEntity extends TameableDragonEntity {
     }
 
     @Override
-    public ServerDragonEntity createChild(EntityAgeable mate) {
+    public @Nullable ServerDragonEntity createChild(EntityAgeable mate) {
         return mate instanceof ServerDragonEntity ? this.reproductionHelper.createChild((ServerDragonEntity) mate) : null;
     }
 
     @Override
-    public @Nonnull ItemStack getPickedResult(RayTraceResult target) {
+    public ItemStack getPickedResult(RayTraceResult target) {
         return new ItemStack(this.isEgg()
                 ? Item.getItemFromBlock(this.getVariant().type.getInstance(HatchableDragonEggBlock.class, DMBlocks.ENDER_DRAGON_EGG))
                 : this.getVariant().type.getInstance(DragonSpawnEggItem.class, DMItems.ENDER_DRAGON_SPAWN_EGG)

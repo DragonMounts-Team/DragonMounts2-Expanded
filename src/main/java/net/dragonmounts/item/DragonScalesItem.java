@@ -26,6 +26,6 @@ public class DragonScalesItem extends Item {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltips, ITooltipFlag flag) {
-        tooltips.add(this.type.getName());
+        tooltips.add(this.type.getDisplayName());
     }
 }

@@ -15,6 +15,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+
 import static net.dragonmounts.DragonMounts.makeId;
 
 @SideOnly(Side.CLIENT)
@@ -23,7 +25,7 @@ public class DragonCoreBlockEntityRenderer extends TileEntitySpecialRenderer<Dra
     private static final DragonCoreModel MODEL = new DragonCoreModel();
 
     @Override
-    public void render(DragonCoreBlockEntity core, double x, double y, double z, float partialTicks, int destroy, float alpha) {
+    public void render(@Nonnull DragonCoreBlockEntity core, double x, double y, double z, float partialTicks, int destroy, float alpha) {
         TextureManager manager = this.rendererDispatcher.renderEngine;
         if (manager == null) return;
         MODEL.render(manager, this, (float) x, (float) y, (float) z, destroy, core.getProgress(partialTicks), 0.0625F, alpha);
@@ -54,6 +56,7 @@ public class DragonCoreBlockEntityRenderer extends TileEntitySpecialRenderer<Dra
             manager.bindTexture(TEXTURE);
         }
 
+        @Override
         public void renderByItem(ItemStack stack, float partialTicks) {
             Item item = stack.getItem();
             if (item instanceof ItemBlock && ((ItemBlock) item).getBlock() instanceof DragonCoreBlock) {

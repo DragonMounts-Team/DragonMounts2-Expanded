@@ -24,9 +24,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+
+import static net.dragonmounts.util.ItemUtil.isInCreativeInventory;
 
 public class HardShearsItem extends ItemShears implements IHardShears, ICapabilityProvider {
     public final ToolMaterial tier;
@@ -76,20 +77,17 @@ public class HardShearsItem extends ItemShears implements IHardShears, ICapabili
     }
 
     @Override
-    public @Nonnull CreativeTabs[] getCreativeTabs() {
+    public CreativeTabs[] getCreativeTabs() {
         return new CreativeTabs[]{DMItemGroups.ITEMS};
     }
 
     @Override
-    protected boolean isInCreativeTab(CreativeTabs targetTab) {
-        for (CreativeTabs tab : this.getCreativeTabs())
-            if (tab == targetTab) return true;
-        return targetTab == CreativeTabs.SEARCH;
+    protected boolean isInCreativeTab(CreativeTabs tab) {
+        return isInCreativeInventory(this, tab);
     }
 
-    @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+    public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
         return this;
     }
 
@@ -98,10 +96,9 @@ public class HardShearsItem extends ItemShears implements IHardShears, ICapabili
         return capability == DMCapabilities.HARD_SHEARS;
     }
 
-    @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T getCapability(@Nullable Capability<T> capability, @Nullable EnumFacing facing) {
+    public <T> @Nullable T getCapability(@Nullable Capability<T> capability, @Nullable EnumFacing facing) {
         return capability == DMCapabilities.HARD_SHEARS ? (T) this : null;
     }
 }

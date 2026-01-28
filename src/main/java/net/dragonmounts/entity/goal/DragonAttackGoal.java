@@ -83,6 +83,7 @@ public class DragonAttackGoal extends EntityAIBase {
     public void updateTask() {
         TameableDragonEntity dragon = this.dragon;
         EntityLivingBase target = dragon.getAttackTarget();
+        //noinspection DataFlowIssue
         dragon.getLookHelper().setLookPositionWithEntity(target, 30.0F, 30.0F);
         double targetDistSq = dragon.getDistanceSq(target.posX, target.getEntityBoundingBox().minY, target.posZ);
         --this.delayCounter;

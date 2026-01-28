@@ -1,5 +1,9 @@
+import groovy.json.JsonSlurper
 import groovy.text.SimpleTemplateEngine
 import org.codehaus.groovy.runtime.MethodClosure
+
+import java.time.LocalDate
+import java.time.temporal.IsoFields
 
 ext.propertyString = this.&propertyString as MethodClosure
 ext.propertyBool = this.&propertyBool as MethodClosure
@@ -9,6 +13,7 @@ ext.assertProperty = this.&assertProperty as MethodClosure
 ext.assertSubProperties = this.&assertSubProperties as MethodClosure
 ext.setDefaultProperty = this.&setDefaultProperty as MethodClosure
 ext.assertEnvironmentVariable = this.&assertEnvironmentVariable as MethodClosure
+ext.resolveVersion = this.&resolveVersion as MethodClosure
 
 String propertyString(String key) {
     return $property(key).toString()
@@ -93,4 +98,20 @@ void assertEnvironmentVariable(String propertyName) {
     if (property.isEmpty()) {
         throw new GradleException("Property $propertyName is empty!")
     }
+}
+
+String resolveVersion() {
+    def base = propertyString('mod_version')
+    def config = new File("run", "build.json")
+    if (config.exists()) {
+        def json = new JsonSlurper().parseText(config.text)
+        def suffix = json.suffix as String
+        if (json.weekly) {
+            def date = LocalDate.now()
+            return "$base-${'%dw%02d'.formatted(date.get(IsoFields.WEEK_BASED_YEAR) % 100, date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR))}${suffix ?: 'a'}"
+        } else if (suffix != null && !suffix.isBlank()) {
+            return "$base-$suffix"
+        }
+    }
+    return base
 }

@@ -34,6 +34,7 @@ public class DragonHeadWallBlock extends DragonHeadBlock {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess level, BlockPos pos) {
         return AABBS.getOrDefault(state.getValue(FACING), SHAPE);
     }
@@ -49,6 +50,7 @@ public class DragonHeadWallBlock extends DragonHeadBlock {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
     }
