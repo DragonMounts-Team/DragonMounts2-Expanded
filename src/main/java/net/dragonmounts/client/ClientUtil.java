@@ -13,7 +13,7 @@ import static net.dragonmounts.DragonMounts.makeId;
 
 @SideOnly(Side.CLIENT)
 public abstract class ClientUtil {
-    public static final ResourceLocation EFFECT_ICON = makeId("textures/gui/effects.png");
+    public static final ResourceLocation EFFECT_ICONS = makeId("textures/gui/effects.png");
 
     /// to avoid {@link ClassNotFoundException} when referencing Minecraft directly
     public static EntityPlayer getLocalPlayer() {
@@ -40,7 +40,7 @@ public abstract class ClientUtil {
     }
 
     public static void renderEffectIcon(Gui gui, int x, int y, int u, int v) {
-        Minecraft.getMinecraft().renderEngine.bindTexture(EFFECT_ICON);
+        Minecraft.getMinecraft().renderEngine.bindTexture(EFFECT_ICONS);
         gui.drawTexturedModalRect(x, y, u, v, 18, 18);
     }
 

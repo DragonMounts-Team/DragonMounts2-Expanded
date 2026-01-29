@@ -23,7 +23,6 @@ import net.dragonmounts.item.DragonArmorItem;
 import net.dragonmounts.network.SSyncDragonAgePacket;
 import net.dragonmounts.registry.DragonType;
 import net.dragonmounts.registry.DragonVariant;
-import net.dragonmounts.util.EntityUtil;
 import net.dragonmounts.util.MutableBlockPosEx;
 import net.dragonmounts.util.math.MathX;
 import net.minecraft.block.Block;
@@ -344,8 +343,20 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         World level = this.world;
         int startX = MathHelper.ceil(box.minX), endX = MathHelper.floor(box.maxX);
         int startZ = MathHelper.ceil(box.minZ), endZ = MathHelper.floor(box.maxZ);
+        int temp;
+        if (startX > endX) {
+            temp = startX;
+            startX = endX;
+            endX = temp;
+        }
+        if (startZ > endZ) {
+            temp = startZ;
+            startZ = endZ;
+            endZ = temp;
+        }
+        temp = MathHelper.ceil(box.minY);
         boolean hasController = this.getControllingPlayer() != null;
-        for (int endY = MathHelper.ceil(box.minY), y = endY - 3; y <= endY; ++y) {
+        for (int y = temp - 3; y <= temp; ++y) {
             for (int x = startX; x <= endX; ++x) {
                 for (int z = startZ; z <= endZ; ++z) {
                     Material material = level.getBlockState(pos.with(x, y, z)).getMaterial();
@@ -622,9 +633,6 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     }
 
     protected void tickRidden(EntityPlayer player, boolean forward) {
-        if (this.getVariant().type == DragonTypes.WATER && player.isInWater()) {
-            EntityUtil.addOrResetEffect(player, MobEffects.WATER_BREATHING, 200, 0, true, true, 21);
-        }
         float rotX;
         if (forward || this.isUsingBreathWeapon()) {
             rotX = player.rotationPitch * 0.75F;

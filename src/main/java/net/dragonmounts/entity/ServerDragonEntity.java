@@ -586,6 +586,9 @@ public class ServerDragonEntity extends TameableDragonEntity {
     @Override
     protected void tickRidden(EntityPlayer player, boolean forward) {
         super.tickRidden(player, forward);
+        if (player.isInWater() && this.getVariant().type == DragonTypes.WATER) {
+            EntityUtil.addOrResetEffect(player, MobEffects.WATER_BREATHING, 200, 0, true, true, 21);
+        }
         // lift off from a jump
         if (player.isJumping && !this.isFlying()) {
             this.liftOff();
