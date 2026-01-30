@@ -154,16 +154,6 @@ public class DebugOverlay {
         text.print(" Entity ");
         text.setColor(WHITE);
         text.printf("(#%s)\n", dragon.getEntityId());
-        text.println("Name: " + dragon.getName());
-
-        // variant
-        DragonVariant variant = dragon.getVariant();
-        text.print("Type: ");
-        text.setColor(variant.type.color);
-        text.println(ClientUtil.translateToLocal(variant.type.translationKey));
-        text.setColor(WHITE);
-        text.println("Variant: " + variant.getRegistryName());
-
         // position
         String px = dfShort.format(dragon.posX);
         String py = dfShort.format(dragon.posY);
@@ -211,6 +201,8 @@ public class DebugOverlay {
                 dfShort.format(dragon.width),
                 dfShort.format(dragon.height)
         ));
+        text.println("On Ground: " + dragon.onGround);
+        text.println("Flying: " + dragon.isFlying());
         text.println("Trust Other Players: " + dragon.allowedOtherPlayers());
         if (dragon instanceof ServerDragonEntity) {
             text.println("Love: " + dragon.isInLove());
@@ -228,6 +220,17 @@ public class DebugOverlay {
             text.println("No");
         }
         text.println("UUID: " + dragon.getUniqueID());
+        text.setOrigin(196, 8);
+        text.println("Name: " + dragon.getName());
+
+        // variant
+        DragonVariant variant = dragon.getVariant();
+        text.print("Type: ");
+        text.setColor(variant.type.color);
+        text.println(ClientUtil.translateToLocal(variant.type.translationKey));
+        text.setColor(WHITE);
+        text.println("Variant: " + variant.getRegistryName());
+
     }
 
     private static void renderAttributes(TameableDragonEntity dragon) {
@@ -250,19 +253,18 @@ public class DebugOverlay {
         text.setColor(YELLOW);
         text.println("Breed points");
         text.setColor(WHITE);
-        int top = text.getY();
-        int[] data = {0, 0};// lines, end
+        int top = text.getY(), lines = 0, end = 0;
         DragonVariantHelper helper = dragon.variantHelper;
         for (Reference2IntMap.Entry<DragonType> entry : helper.getBreedPoints().reference2IntEntrySet()) {
             text.setColor(entry.getKey().color);
             text.printf("%s: %d", ClientUtil.translateToLocal(entry.getKey().translationKey), entry.getIntValue());
-            if (text.getX() > data[1]) {
-                data[1] = text.getX();
+            if (text.getX() > end) {
+                end = text.getX();
             }
             text.println();
-            if (++data[0] > 4) {
-                data[0] = 0;
-                text.setOrigin(data[1] + 5, top);
+            if (++lines > 4) {
+                lines = 0;
+                text.setOrigin(end + 5, top);
             }
         }
     }
@@ -301,7 +303,6 @@ public class DebugOverlay {
         text.setColor(WHITE);
 
         text.println("Can fly: " + dragon.canFly());
-        text.println("Flying: " + dragon.isFlying());
         text.println("Altitude: " + dfLong.format(dragon.getAltitude()));
         text.println();
     }
@@ -327,7 +328,6 @@ public class DebugOverlay {
     }
 
     private static void renderAITasks(ServerDragonEntity dragon) {
-        text.setOrigin(196, 8);
         renderTasks("Running Goals", dragon.tasks.executingTaskEntries);
         renderTasks("Running Target Goals", dragon.targetTasks.executingTaskEntries);
         EntityLivingBase target = dragon.getAttackTarget();

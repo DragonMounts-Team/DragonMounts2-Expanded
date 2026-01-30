@@ -58,6 +58,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -632,7 +633,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         return this.getControllingPassenger() instanceof EntityPlayer;
     }
 
-    protected void tickRidden(EntityPlayer player, boolean forward) {
+    protected void tickRidden(EntityPlayer player, boolean forward) { // FIXME: yaw mismatches between client and server
         float rotX;
         if (forward || this.isUsingBreathWeapon()) {
             rotX = player.rotationPitch * 0.75F;
@@ -652,28 +653,28 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
     @Override
     public void travel(float strafe, float vertical, float forward) {
         Entity controller = this.getControllingPassenger();
-        if (controller instanceof EntityPlayer && !this.dead) {
-            this.moveStrafing = this.moveVertical = this.moveForward = 0.0F;
+        if (controller instanceof EntityPlayer) {
+            if (this.isDead) return;
             EntityPlayer player = (EntityPlayer) controller;
+            forward = player.moveForward;
             if (this.onGround) {
                 vertical = 0.0F;
                 strafe = player.moveStrafing * 0.5F;
-                forward = player.moveForward < 0.0F ? player.moveForward * 0.25F : player.moveForward;
+                if (forward < 0.0F) {
+                    forward *= 0.25F;
+                }
             } else {
                 strafe = player.moveStrafing * 0.75F;
                 vertical = player.isJumping ? 0.5F : this.isGoingDown() ? -0.5F : 0.0F;
-                if (player.moveForward == 0.0F) {
-                    forward = 0.0F;
-                } else if (this.isYLocked()) {
-                    forward = player.moveForward < 0.0F ? 0.5F : 1.0F;
-                } else {
-                    float facing = MathX.toRadians(player.rotationPitch), upward = -MathHelper.sin(facing);
-                    forward = MathHelper.cos(facing);
-                    if (player.moveForward < 0.0F) {
-                        forward *= -0.5F;
-                        upward *= -0.5F;
+                if (forward != 0.0F) {
+                    if (forward < 0.0F) {
+                        forward *= 0.5F;
                     }
-                    vertical += upward;
+                    if (!this.isYLocked()) {
+                        float facing = MathX.toRadians(player.rotationPitch);
+                        vertical += -MathHelper.sin(facing) * forward;
+                        forward = MathHelper.cos(facing) * forward;
+                    }
                 }
             }
             this.tickRidden(player, forward != 0.0F);
@@ -754,9 +755,9 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
             this.dismountRidingEntity();
             return;
         }
-        this.motionX = 0.0D;
-        this.motionY = 0.0D;
-        this.motionZ = 0.0D;
+        this.motionX = 0.0;
+        this.motionY = 0.0;
+        this.motionZ = 0.0;
         this.onUpdate();
         if (vehicle instanceof EntityPlayer) {
             // called when the dragon is riding on the shoulder of the player. Credits: Ice and Fire
@@ -817,22 +818,8 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         }
     }
 
-    /**
-     * Public wrapper for protected final setScale(), used by DragonLifeStageHelper.
-     */
     public void updateScale() {
-        boolean onGround = this.onGround;
-        float scale = this.getAgingScale();
-        this.stepHeight = 0.5F + scale * (float) DMConfig.BASE_STEP_HEIGHT.value;
-        float width = this.width;
-        this.setScale(MathHelper.clamp(scale * this.dataManager.get(DATA_BODY_SIZE), MIN_SCALE, MAX_SCALE));
-        // workaround for a vanilla bug; the position is apparently not set correctly
-        // after changing the entity size, causing asynchronous server/client
-        // positioning
-        if (this.world.isRemote && this.width > width && !this.firstUpdate) {
-            this.move(MoverType.SELF, width - this.width, 0.0D, width - this.width);
-        }
-        this.onGround = onGround;
+        this.stepHeight = 0.5F + this.getAgingScale() * (float) DMConfig.BASE_STEP_HEIGHT.value;
     }
 
     public void refreshForcedAgeTimer() {
@@ -885,21 +872,40 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
         }
     }
 
-    protected void applyStage(DragonLifeStage stage) {
-        float health = this.getHealth() / this.getMaxHealth();
+    protected void applyStage(DragonLifeStage stage, boolean onlyResize) {
         float scale = stage.getAverageScale();
-        AttributeModifier modifier = makeModifier(1, MathHelper.clamp(scale, 0.1, 1));
         AbstractAttributeMap attributes = this.getAttributeMap();
-        replaceAttributeModifier(attributes.getAttributeInstance(MAX_HEALTH), modifier);
-        replaceAttributeModifier(attributes.getAttributeInstance(ATTACK_DAMAGE), modifier);
-        replaceAttributeModifier(attributes.getAttributeInstance(ARMOR), makeModifier(0, Math.max(scale, 0.1F) * DMConfig.BASE_ARMOR.value));
+        float size = this.getAdjustedSize(scale);
+        AttributeModifier speed = makeModifier(Constants.AttributeModifierOperation.MULTIPLY, 0.25F - 0.5F / (1.0F + size));
+        replaceAttributeModifier(attributes.getAttributeInstance(MOVEMENT_SPEED), speed);
+        replaceAttributeModifier(attributes.getAttributeInstance(FLYING_SPEED), speed);
+        boolean onGround = this.onGround;
+        float width = this.width;
         if (DragonLifeStage.EGG == stage) {
             this.setSize(3.5F, 4.0F);
         } else {
             this.setSize(3.0F, 2.5F);
         }
+        this.setScale(size);
+        // workaround for a vanilla bug; the position is apparently not set correctly
+        // after changing the entity size, causing asynchronous server/client
+        // positioning
+        if (this.world.isRemote && this.width > width && !this.firstUpdate) {
+            this.move(MoverType.SELF, width - this.width, 0.0D, width - this.width);
+        }
+        this.onGround = onGround;
+        if (onlyResize) return;
+        replaceAttributeModifier(attributes.getAttributeInstance(ARMOR), makeModifier(0, Math.max(scale, 0.1F) * DMConfig.BASE_ARMOR.value));
+        float health = this.getHealth() / this.getMaxHealth();
+        AttributeModifier modifier = makeModifier(Constants.AttributeModifierOperation.ADD_MULTIPLE, MathHelper.clamp(scale, 0.1, 1));
+        replaceAttributeModifier(attributes.getAttributeInstance(MAX_HEALTH), modifier);
+        replaceAttributeModifier(attributes.getAttributeInstance(ATTACK_DAMAGE), modifier);
         if (this.world.isRemote) return;
         this.setHealth(health * this.getMaxHealth());
+    }
+
+    protected final float getAdjustedSize(float aging) {
+        return MathHelper.clamp(aging * this.dataManager.get(DATA_BODY_SIZE), MIN_SCALE, MAX_SCALE);
     }
 
     /**
@@ -907,8 +913,8 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
      *
      * @return body size
      */
-    public float getAdjustedSize() {
-        return MathHelper.clamp(this.getAgingScale() * this.dataManager.get(DATA_BODY_SIZE), MIN_SCALE, MAX_SCALE);
+    public final float getAdjustedSize() {
+        return this.getAdjustedSize(this.getAgingScale());
     }
 
     public float getAgingScale() {
@@ -1060,6 +1066,7 @@ public abstract class TameableDragonEntity extends EntityTameable implements IEn
             }
             this.saddled = saddled;
         } else if (DATA_BODY_SIZE.equals(key)) {
+            this.applyStage(this.stage, true);
             this.updateScale();
         }
     }

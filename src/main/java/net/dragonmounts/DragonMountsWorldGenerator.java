@@ -57,17 +57,17 @@ public class DragonMountsWorldGenerator implements IWorldGenerator {
         if (type == DimensionType.NETHER) {
             generateNestAtNether(world, random, x, z);
             generateZombieAtNether(world, random, x, z);
-        } else if (type == DimensionType.THE_END && (x > 2000 || z > 2000 || x < -2000 || z < 2000)) {
-            generateNestAtEnd(world, random, x, z);
-        } else {
+        } else if (type != DimensionType.THE_END) {
             generateNestAtSurface(world, random, x, z);
+        } else if (x > 2000 || z > 2000 || x < -2000 || z < -2000) {
+            generateNestAtEnd(world, random, x, z);
         }
     }
 
     private static MutableBlockPosEx getNetherHeight(World world, int x, int z) {
         MutableBlockPosEx pos = new MutableBlockPosEx(x, 1, z);
         for (int i = 1, end = world.provider.getActualHeight(); i < end; pos.withY(++i)) {
-            if (world.isAirBlock(pos) && world.getBlockState(pos.withY(i - 1)).getBlock() == Blocks.LAVA) {
+            if (world.isAirBlock(pos) && isLava(world, pos.withY(i - 1))) {
                 return pos;
             }
         }

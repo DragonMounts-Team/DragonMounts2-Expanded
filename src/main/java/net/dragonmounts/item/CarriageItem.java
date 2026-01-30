@@ -20,7 +20,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -103,7 +102,7 @@ public class CarriageItem extends Item {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World level, List<String> tooltips, ITooltipFlag flag) {
-        tooltips.add(TextFormatting.GRAY + ClientUtil.translateToLocal("tooltip.dragonmounts.carriage"));
+        tooltips.add(ClientUtil.translateToLocal("tooltip.dragonmounts.carriage"));
     }
 
     @Override

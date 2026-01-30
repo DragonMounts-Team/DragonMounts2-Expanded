@@ -157,8 +157,9 @@ public class DragonType extends IForgeRegistryEntry.Impl<DragonType> {
         return dragon.isChild() ? DMSounds.DRAGON_ROAR_HATCHLING : DMSounds.DRAGON_ROAR;
     }
 
+    /// DO NOT INVOKE THIS ON SERVER SIDE
     public String getDisplayName() {
-        return this.formatting + ClientUtil.translateToLocal(this.translationKey);
+        return ClientUtil.translateToLocal(this.formatting, this.translationKey);
     }
 
     public boolean isInvulnerableTo(DamageSource source) {

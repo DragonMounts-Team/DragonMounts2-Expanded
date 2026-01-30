@@ -162,14 +162,11 @@ public class FluteItem extends Item {
             } else if (root.hasKey("Type")) {
                 DragonType type = DragonType.REGISTRY.getIfPresent(parseIdentifier(root.getString("Type")));
                 if (type != null) {
-                    tooltip.add(I18n.format(
-                            "tooltip.dragonmounts.name",
-                            type.formatting + ClientUtil.translateToLocal(type.translationKey) + TextFormatting.RESET)
-                    );
+                    tooltip.add(I18n.format("tooltip.dragonmounts.name", type.getDisplayName()));
                 }
             }
-            tooltip.add(I18n.format("tooltip.dragonmounts.age", TextFormatting.AQUA + ClientUtil.translateToLocal(root.getString("Age")) + TextFormatting.RESET));
-            tooltip.add(I18n.format("tooltip.dragonmounts.owner", TextFormatting.GOLD + root.getString("OwnerName") + TextFormatting.RESET));
+            tooltip.add(I18n.format("tooltip.dragonmounts.age", ClientUtil.translateToLocal(TextFormatting.AQUA, root.getString("Age"))));
+            tooltip.add(I18n.format("tooltip.dragonmounts.owner", TextFormatting.GOLD + root.getString("OwnerName")));
         }
         tooltip.add(ClientUtil.translateToLocal("tooltip.dragonmounts.flute"));
     }

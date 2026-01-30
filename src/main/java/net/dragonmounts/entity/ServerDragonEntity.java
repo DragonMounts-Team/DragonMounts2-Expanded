@@ -92,7 +92,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
 
     @Override
     public void setLifeStage(DragonLifeStage stage, boolean reset, boolean sync) {
-        this.applyStage(stage);
+        this.applyStage(stage, false);
         if (this.stage == stage) return;
         this.stage = stage;
         if (reset) {
@@ -564,8 +564,8 @@ public class ServerDragonEntity extends TameableDragonEntity {
         if (canFly()) {
             boolean flag = isBeingRidden() || (isInWater() && isInLava());
             // stronger jump for an easier lift-off
-            motionY += flag ? 0.7 : 6;
-            inAirTicks += flag ? 3 : 4;
+            motionY += flag ? 6 : 0.7;
+            inAirTicks += flag ? 4 : 3;
             jump();
         }
     }
@@ -586,7 +586,7 @@ public class ServerDragonEntity extends TameableDragonEntity {
     @Override
     protected void tickRidden(EntityPlayer player, boolean forward) {
         super.tickRidden(player, forward);
-        if (player.isInWater() && this.getVariant().type == DragonTypes.WATER) {
+        if (this.getVariant().type == DragonTypes.WATER && player.isInWater()) {
             EntityUtil.addOrResetEffect(player, MobEffects.WATER_BREATHING, 200, 0, true, true, 21);
         }
         // lift off from a jump

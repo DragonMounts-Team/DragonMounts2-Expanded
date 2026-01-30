@@ -29,6 +29,7 @@ import static net.dragonmounts.entity.DragonModelContracts.*;
 public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
     public static final int JAW_OPENING_TIME_FOR_ATTACK = 5;
     public static final int JAW_OPENING_TIME_FOR_ROAR = 20;
+    public static final float SPEED_MAGIC = 0.05F;
     // interpolate between folded and unfolded wing angles
     private static final float[] FOLDED_FINGER_ROT = new float[]{2.7F, 2.8F, 2.9F, 3.0F};
     private static final float[] UNFOLDED_FINGER_ROT = new float[]{0.1F, 0.9F, 1.7F, 2.5F};
@@ -185,12 +186,12 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
         }
         boolean flying = dragon.isFlying();
 
-        float speedMax = 0.05F;
+        // FIXME: motion is not available on other client
         float speedEnt = (float) (dragon.motionX * dragon.motionX + dragon.motionZ * dragon.motionZ);
 
         // update main animation timer and depend timing speed on movement
         this.anim += flying
-                ? 0.070F - MathX.clamp(speedEnt / speedMax) * 0.035F // (2 - speedMulti) * 0.035F
+                ? 0.070F - MathX.clamp(speedEnt / SPEED_MAGIC) * 0.035F // (2 - speedMulti) * 0.035F
                 : 0.035F;
 
         // update ground transition
@@ -201,7 +202,7 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
         );
 
         // update Flutter transition
-        flutterTimer.add(flying && (speedEnt < speedMax || dragon.motionY > -0.1) ? 0.1f : -0.1f);
+        flutterTimer.add(flying && (speedEnt < SPEED_MAGIC || dragon.motionY > -0.1) ? 0.1f : -0.1f);
 
         // update walking and sitting transition
         if (dragon.isSitting()) {
@@ -239,7 +240,7 @@ public class DragonAnimator extends DragonHeadLocator<ClientDragonEntity> {
 
         // update speed transition
         speedTimer.add(!flying ||
-                speedEnt > speedMax ||
+                speedEnt > SPEED_MAGIC ||
                 dragon.isUnHovered() ||
                 dragon.getCachedPassengers().size() > 1 ||
                 dragon.getAltitude() < dragon.height * 2

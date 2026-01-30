@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 
 import static org.lwjgl.opengl.GL11.*;
 
+/// @see net.minecraft.client.renderer.tileentity.TileEntitySkullRenderer
 public class DragonHeadBlockEntityRenderer extends TileEntitySpecialRenderer<DragonHeadBlockEntity> {
     public static void render(
             TextureManager manager,
@@ -66,13 +67,14 @@ public class DragonHeadBlockEntityRenderer extends TileEntitySpecialRenderer<Dra
             GlStateManager.disableLighting();
             head.render(MathX.MOJANG_MODEL_SCALE);
             GlStateManager.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            GlStateManager.depthMask(true);
+            GlStateManager.enableLighting();
+            GlStateManager.popMatrix();
+        } else {
+            GlStateManager.popMatrix();
+            GlStateManager.matrixMode(5890);
+            GlStateManager.popMatrix();
+            GlStateManager.matrixMode(5888);
         }
-        GlStateManager.popMatrix();
-        if (normal) return;
-        GlStateManager.matrixMode(5890);
-        GlStateManager.popMatrix();
-        GlStateManager.matrixMode(5888);
     }
 
     @Override
@@ -86,11 +88,6 @@ public class DragonHeadBlockEntityRenderer extends TileEntitySpecialRenderer<Dra
         EnumFacing facing = head.getFacing(meta);
         float yRot;
         switch (facing) {
-            case UP:
-                x += 0.5;
-                z += 0.5;
-                yRot = 22.5F * meta;
-                break;
             case NORTH:
                 x += 0.5;
                 y += 0.25;
@@ -109,11 +106,16 @@ public class DragonHeadBlockEntityRenderer extends TileEntitySpecialRenderer<Dra
                 z += 0.5;
                 yRot = 90.0F;
                 break;
-            default:
+            case SOUTH:
                 x += 0.5;
                 y += 0.25;
                 z += 0.26;
                 yRot = 180.0F;
+                break;
+            default:
+                x += 0.5;
+                z += 0.5;
+                yRot = 22.5F * meta;
                 break;
         }
         render(

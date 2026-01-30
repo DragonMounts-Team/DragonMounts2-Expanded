@@ -17,17 +17,18 @@ public class DragonCoreModel extends ModelBase {
     public DragonCoreModel() {
         this.textureWidth = 64;
         this.textureHeight = 64;
-        this.lid = new ModelRenderer(this, 0, 0);
-        this.lid.setRotationPoint(0.0F, 24.0F, 0.0F);
-        this.lid.addBox(-8.0F, -16.0F, -8.0F, 16, 12, 16, 0.0F);
-        this.base = new ModelRenderer(this, 0, 28);
-        this.base.setRotationPoint(0.0F, 24.0F, 0.0F);
-        this.base.addBox(-8.0F, -8.0F, -8.0F, 16, 8, 16, 0.0F);
-        this.core = new ModelRenderer(this, 0, 52);
-        this.core.setRotationPoint(0.0F, 12.0F, 0.0F);
-        this.core.addBox(-3.0F, 0.0F, -3.0F, 6, 6, 6, 0.0F);
+        (this.lid = new ModelRenderer(this, 0, 0)
+                .addBox(-8.0F, -16.0F, -8.0F, 16, 12, 16)
+        ).rotationPointY = 24.0F;
+        (this.base = new ModelRenderer(this, 0, 28)
+                .addBox(-8.0F, -8.0F, -8.0F, 16, 8, 16)
+        ).rotationPointY = 24.0F;
+        (this.core = new ModelRenderer(this, 0, 52)
+                .addBox(-3.0F, 0.0F, -3.0F, 6, 6, 6)
+        ).rotationPointY = 12.0F;
     }
 
+    /// @see net.minecraft.client.renderer.tileentity.TileEntityShulkerBoxRenderer#render(net.minecraft.tileentity.TileEntityShulkerBox, double, double, double, float, int, float)
     public void render(TextureManager manager, IDragonCoreRenderer renderer, float x, float y, float z, int destroy, float progress, float scale, float alpha) {
         GlStateManager.enableDepth();
         GlStateManager.depthFunc(515);
@@ -42,8 +43,7 @@ public class DragonCoreModel extends ModelBase {
         GlStateManager.translate(x + 0.5F, y + 1.5F, z + 0.5F);
         GlStateManager.scale(1.0F, -1.0F, -1.0F);
         GlStateManager.translate(0.0F, 1.0F, 0.0F);
-        float f = 0.9995F;
-        GlStateManager.scale(f, f, f);
+        GlStateManager.scale(0.9995F, 0.9995F, 0.9995F);
         GlStateManager.translate(0.0F, -1.0F, 0.0F);
         this.base.render(scale);
         if (progress != 0.0F) {

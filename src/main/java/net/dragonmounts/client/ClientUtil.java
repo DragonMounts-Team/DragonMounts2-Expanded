@@ -5,6 +5,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.ArrayUtils;
@@ -24,8 +25,12 @@ public abstract class ClientUtil {
         return I18n.format(key, ArrayUtils.EMPTY_OBJECT_ARRAY);
     }
 
+    public static String translateToLocal(TextFormatting style, String key) {
+        return style + translateToLocal(key);
+    }
+
     public static String translateBothToLocal(String major, String minor) {
-        return I18n.format(major, I18n.format(minor, ArrayUtils.EMPTY_OBJECT_ARRAY));
+        return I18n.format(major, translateToLocal(minor));
     }
 
     /**

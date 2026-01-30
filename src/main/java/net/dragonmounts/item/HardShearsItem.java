@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -73,7 +72,7 @@ public class HardShearsItem extends ItemShears implements IHardShears, ICapabili
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World level, List<String> tooltips, ITooltipFlag flag) {
-        tooltips.add(TextFormatting.GRAY + ClientUtil.translateToLocal("tooltip.dragonmounts.hard_shears"));
+        tooltips.add(ClientUtil.translateToLocal("tooltip.dragonmounts.hard_shears"));
     }
 
     @Override

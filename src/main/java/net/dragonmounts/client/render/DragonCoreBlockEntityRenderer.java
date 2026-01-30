@@ -1,6 +1,5 @@
 package net.dragonmounts.client.render;
 
-import net.dragonmounts.block.DragonCoreBlock;
 import net.dragonmounts.block.entity.DragonCoreBlockEntity;
 import net.dragonmounts.client.model.DragonCoreModel;
 import net.minecraft.client.Minecraft;
@@ -8,8 +7,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,6 +16,7 @@ import javax.annotation.Nonnull;
 
 import static net.dragonmounts.DragonMounts.makeId;
 
+/// @see net.minecraft.client.renderer.tileentity.TileEntityShulkerBoxRenderer
 @SideOnly(Side.CLIENT)
 public class DragonCoreBlockEntityRenderer extends TileEntitySpecialRenderer<DragonCoreBlockEntity> implements IDragonCoreRenderer {
     private static final ResourceLocation TEXTURE = makeId("textures/blocks/dragon_core.png");
@@ -57,11 +55,9 @@ public class DragonCoreBlockEntityRenderer extends TileEntitySpecialRenderer<Dra
         }
 
         @Override
-        public void renderByItem(ItemStack stack, float partialTicks) {
-            Item item = stack.getItem();
-            if (item instanceof ItemBlock && ((ItemBlock) item).getBlock() instanceof DragonCoreBlock) {
-                TextureManager manager = Minecraft.getMinecraft().renderEngine;
-                if (manager == null) return;
+        public void renderByItem(@Nonnull ItemStack stack, float partialTicks) {
+            TextureManager manager = Minecraft.getMinecraft().renderEngine;
+            if (manager != null) {
                 MODEL.render(manager, this, 0.0F, 0.0F, 0.0F, -1, 0.0F, 0.0625F, 1.0F);
             }
         }

@@ -70,7 +70,7 @@ public class ClientDragonEntity extends TameableDragonEntity {
 
     @Override
     public void setLifeStage(DragonLifeStage stage, boolean reset, boolean sync) {
-        this.applyStage(stage);
+        this.applyStage(stage, false);
         if (this.stage == stage) return;
         this.stage = stage;
         if (reset) {

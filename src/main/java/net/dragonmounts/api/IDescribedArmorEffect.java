@@ -18,7 +18,10 @@ public interface IDescribedArmorEffect extends IArmorEffect {
     @SideOnly(Side.CLIENT)
     default void appendTriggerInfo(ItemStack stack, List<String> tooltips) {
         ArmorEffectManager manager = ArmorEffectManager.getLocal();
-        tooltips.add((manager != null && manager.isActive(this) ? TextFormatting.GREEN : TextFormatting.RESET) + ClientUtil.translateToLocal("tooltip.dragonmounts.armor_effect_piece_4"));
+        tooltips.add(ClientUtil.translateToLocal(
+                manager != null && manager.isActive(this) ? TextFormatting.GREEN : TextFormatting.RESET,
+                "tooltip.dragonmounts.armor_effect_piece_4")
+        );
     }
 
     @SideOnly(Side.CLIENT)
@@ -53,7 +56,7 @@ public interface IDescribedArmorEffect extends IArmorEffect {
         public void appendHoverText(ItemStack stack, List<String> tooltips, ITooltipFlag flag) {
             tooltips.add("");
             this.appendTriggerInfo(stack, tooltips);
-            tooltips.add(TextFormatting.RESET + ClientUtil.translateToLocal(this.description));
+            tooltips.add(ClientUtil.translateToLocal(TextFormatting.RESET, this.description));
             this.appendCooldownInfo(tooltips);
         }
 
